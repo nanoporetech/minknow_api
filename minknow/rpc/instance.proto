@@ -1,0 +1,184 @@
+syntax="proto3";
+
+package ont.rpc.instance;
+
+service InstanceService {
+    // Current version information includes:
+    // - Minknow version
+    // - Protocols version
+    rpc get_version_info (GetVersionInfoRequest) returns (GetVersionInfoResponse) {}
+
+    // Returns various directory locations where minknow is outputting data. The paths are absolute paths, 
+    // local to the machine where minknow is installed
+    //
+    // the `output` base directory can be changed internally
+    // the `logs` directory will not be changed and can be stored
+    // the `reads` directory is determined  by the read writer config
+    rpc get_output_directories (GetOutputDirectoriesRequest) returns (OutputDirectories) {}
+
+    // See `get_output_directories`, but this will always return the paths that are defined in the config when the instance
+    // of minknow has started
+    //
+    // Since 1.11
+    rpc get_default_output_directories(GetDefaultOutputDirectoriesRequest) returns (OutputDirectories) {}
+
+    // Set the base directory to where all data will be output. Must be an absolute directory
+    //
+    // Fails with INVALID_ARGUMENT if `value` is not absolute.
+    // Fails with FAILED_PRECONDITION if this is called during acquisition
+    //
+    // Since 1.11
+    rpc set_output_directory (SetOutputDirectoryRequest) returns (SetOutputDirectoryResponse) {}
+
+    // Set the reads directory where read files (hdf5, fastq, protobuf) will be output
+    //
+    // Fails with INVALID_ARGUMENT if `value` is not absolute.
+    // Fails with FAILED_PRECONDITION if this is called during acquisition
+    //
+    // Since 1.12
+    rpc set_reads_directory (SetReadsDirectoryRequest) returns (SetReadsDirectoryResponse) {}
+
+    // Returns information about the amount of disk space available, how much
+    // space is needed to stop an experiment cleanly and if MinKNOW thinks
+    // that the free disk-space is approaching or past this limit
+    //
+    // Since 1.11
+    rpc get_disk_space_info(GetDiskSpaceInfoRequest) returns (GetDiskSpaceInfoResponse) {}
+
+    // Find the machine id MinKNOW uses for this machine.
+    //
+    // This is expected to be a descriptive string for the machine, MinKNOW currently uses the network hostname.
+    //
+    // note: This is the identifier used when sending telemetry data for this instance.
+    //
+    // Since 1.11
+    rpc get_machine_id(GetMachineIdRequest) returns (GetMachineIdResponse) {}
+
+    // Find the host type MinKNOW is running on.
+    //
+    // This data describes the type of machine which MinKNOW is running on.
+    //
+    // Since 1.14
+    rpc get_host_type(GetHostTypeRequest) returns (GetHostTypeResponse) {}
+}
+
+message GetVersionInfoRequest {
+    
+}
+
+message GetVersionInfoResponse {
+    
+    message MinknowVersion {
+        int32 major = 1;
+        int32 minor = 2;
+        int32 patch = 3;
+        string full = 4;
+    }
+
+    // What minknow version is installed. Split into major, minor and patch versions
+    // Also includes the full version as a string, which contain the major, minor and patch numbers
+    // as well as if the version is pre-release version (-pre), whether it is a release candidate (-rc#)
+    // or whether it is a variant version (i.e. for conferences) (-variant). For non-release builds it also 
+    // includes the hash of the commit it is based on, and whether the working copy is different from that has (-dirty)
+    MinknowVersion minknow = 1;
+
+    // The protocols version specifies what version of bream is installed.
+    // By default is set to '0.0.0.0', but will otherwise be set to {minknow-version}.{patch}
+    string protocols = 2;
+}
+
+message GetOutputDirectoriesRequest {
+    
+}
+
+message OutputDirectories {
+    // The base output directory. Anything that is output to files is branched from this directory.
+    string output = 1;
+
+    // Directory where logs will be stored.
+    string log = 2;
+
+    // Base directory where reads will be outputted.
+    string reads = 3;
+}
+
+message GetDefaultOutputDirectoriesRequest {
+
+}
+
+message SetOutputDirectoryRequest {
+    string path = 1;
+}
+
+message SetOutputDirectoryResponse {
+
+}
+
+message SetReadsDirectoryRequest {
+    string path = 1;
+}
+
+message SetReadsDirectoryResponse {
+
+}
+
+// disk-usage information for one file-system
+message FilesystemDiskSpaceInfo {
+    // The name of the file-system
+    string filesystem_id = 1;
+
+    // How much space is left on the file-system
+    uint64 bytes_available = 2;
+
+    // The total capacity of the file-system when empty.
+    uint64 bytes_capacity = 3;
+
+    // A list of what MinKNOW stores on this file-system, eg: reads, logs,
+    // intermediate-files
+    repeated string what = 4;
+
+    // MinKNOW needs this much space to stop an experiment. If bytes_available
+    // goes below this number, data could be lost!
+    uint64 bytes_to_stop_cleanly = 5;
+
+    // The amount of space left on the file-system when recommend_alert
+    // was set true.
+    uint64 bytes_when_alert_issued = 6;
+
+    // MinKNOW recommends that you alert someone about the disk-usage
+    bool recommend_alert = 7;
+
+    // MinKNOW recommends that you stop the experiment due to disk-usage
+    // concerns
+    bool recommend_stop = 8;
+}
+
+message GetDiskSpaceInfoRequest {
+}
+
+message GetDiskSpaceInfoResponse {
+    repeated FilesystemDiskSpaceInfo filesystem_disk_space_info = 1;
+}
+
+message GetMachineIdRequest {
+}
+
+message GetMachineIdResponse {
+    // The machine_id MinKNOW uses for this host.
+    string machine_id = 1;
+}
+
+message GetHostTypeRequest {
+}
+
+message GetHostTypeResponse {
+    enum HostType {
+        PC = 0;
+        PROMETHION_ALPHA = 1;
+        GRIDION = 2;
+        PROMETHION_BETA = 3;
+        MINIT = 4;
+    }
+
+    HostType host_type = 1;
+}

@@ -1,0 +1,484 @@
+syntax="proto3";
+
+import "google/protobuf/wrappers.proto";
+import "minknow/rpc/rpc_options.proto";
+
+package ont.rpc.analysis_configuration;
+
+service AnalysisConfigurationService {
+    // Get the analysis configuration
+    rpc get_analysis_configuration (GetAnalysisConfigurationRequest) returns (AnalysisConfiguration) {};
+
+    // Sets the analysis configuration
+    //
+    // This sets the whole configuration as-is, so you have to specify the whole analysis configuration as any fields
+    // there previously will be overwritten. To preserve the current analysis configuration, use a get-modify-set
+    // approach. Use get_analysis_configuration to retrieve the current config and modify the fields on that copy.
+    // Then use this call to set the modified version.
+    //
+    // The AnalysisConfiguration message is converted to/from json in Minknow, but this will be removed from later
+    // versions of MinKNOW. The basecaller params are the first ones to move away from the jsn format. The old structure
+    // has been kept for backwards compatibility, but it will be removed.
+    //
+    // The AnalysisConfiguration message is intended to be used to convert easily from protobuf to json and back again.
+    // To convert from json to a protobuf message (assuming 'analysis_conf_json' holds the json data:
+    //
+    // >>> import minknow
+    // >>> from google.protobuf import json_format
+    // >>>
+    // >>> analysis_conf_pb = minknow.rpc.analysis_configuration_service.AnalysisConfiguration()
+    // >>> json_format.Parse(json.dumps(analysis_conf_json), analysis_conf_pb)
+    //
+    // To convert from a protobuf message to json:
+    //
+    // >>> json_data = json_format.MessageToJson(analysis_conf_resp, preserving_proto_field_name=True, including_default_value_fields=True)
+    //
+    // 'preserving_proto_field_name' is needed because json_format will try convert keys to json-standard(?) format, like converting
+    // my_key to myKey, and the key names as seen in the protobuf file are important to minknow
+    //
+    // 'including_default_value_fields' is needed because in proto3, primitive values that are default initialised (like a uint32 with value 0) 
+    // will not be sent on the wire, so the value wouldn't appear when converting to json. In practice, most values are wrapper types and this
+    // field won't have an affect in wrapper types, but it does affect enum types as the default initailised value is the 0th enum.
+    //
+    // NOTE: if the analysis configuration was set using the new parameters (with the filename for albacore config files), the old parameters
+    // from jsn will be ignored. So set_analysis_configuration must be used with either the old protobuf message for the basecaller parameters,
+    // or with the new one, but it cannot be used interleaved!
+    rpc set_analysis_configuration (AnalysisConfiguration) returns (SetAnalysisConfigurationResponse) {};
+
+    // Enable or disable analysis entirely.
+    rpc set_analysis_enabled_state (SetAnalysisEnabledStateRequest) returns (SetAnalysisEnabledStateResponse) {};
+
+    // Get a description of the possible channel states.
+    //
+    // This is a subset of the information included in the channel states section of the analysis
+    // configuration. It will change when the analysis configuration changes.
+    rpc get_channel_states_desc (GetChannelStatesDescRequest) returns (GetChannelStatesDescResponse) {};
+
+    // Get a brief summary of the analysis configuration.
+    //
+    // This is a high-level overview of what major parts of the analysis pipeline are enabled.
+    rpc get_summary (GetSummaryRequest) returns (GetSummaryResponse) {};
+}
+
+message EventDetection {
+    enum EventDetectionMode {
+        multittest_continuous = 0;
+    }
+
+    enum PeakDetectorType {
+        mixed = 0;
+        highland = 1;
+    }
+
+    // Choose the event detection mode
+    // Only suuports the 'multi t test' algorithm currently, which produces 2 tstats; one using 
+    // a short window size and one using a long window size. These tstats are then passed through
+    // 'highland' peak detector to determine the peaks in the tstats.
+    EventDetectionMode mode = 1;
+
+    // Choose the peak detector to use when detecting peaks across tstats
+    // Currently, 'highland' is used for the majority of our peak detection. 'mixed' is only used within testing
+    PeakDetectorType peak_detector = 2;
+
+    // The window size that the tstats are calculated from
+    google.protobuf.UInt32Value window_size = 3;
+
+    // See 'window_size'
+    google.protobuf.UInt32Value long_window_size = 4;
+
+    // The peak detection must be above this threshold at a minimum for it to be detected
+    // as an event.
+    google.protobuf.DoubleValue threshold = 5;
+
+    // See 'threshold'
+    google.protobuf.DoubleValue long_threshold = 6;
+
+    // Only affects 'mixed' peak detector
+    //
+    // Indicates how isolated a peak should be from other peaks for it to be determined as an event
+    // For example with an 'smallest_event' of 2, then a sequence such as 1,2,9,2,3 would be classed
+    // as an event, but 1,2,9,2,10 would not be.
+    google.protobuf.UInt32Value smallest_event = 7;
+
+    // See 'smallest_event'
+    google.protobuf.UInt32Value long_smallest_event = 8;
+
+    // When analysing the tstat peaks, if the jump between one value and another is higher than
+    // than 'peak_height', then it will "arm" the peak detector and move onto the next phase.
+    // 
+    // And what goes up must come down.
+    // Once it has detected a peak going up, it will also have to go down by 'peak_height'
+    // in order for the peak to be classified as a found event
+    google.protobuf.DoubleValue peak_height = 9;
+
+    // See 'peak_height'
+    google.protobuf.DoubleValue long_peak_height = 10;
+
+    google.protobuf.Int32Value use_dmean = 11;
+    google.protobuf.Int32Value long_use_dmean = 12;
+
+    google.protobuf.DoubleValue reset_threshold = 13;
+    google.protobuf.UInt32Value raw_summary_step = 14;
+    google.protobuf.BoolValue serialise_detected_events = 15;
+}
+
+message ReadDetectionParams {
+    enum ReadDetectionMode {
+        none = 0;
+        transition = 1;
+        lookback = 2;
+        minmax = 3;
+    }
+
+    ReadDetectionMode mode = 1;
+    google.protobuf.DoubleValue minimum_delta_mean = 2;
+    google.protobuf.UInt32Value look_back = 3;
+    google.protobuf.UInt32Value break_reads_after_events = 4;
+    google.protobuf.DoubleValue break_reads_after_seconds = 5;
+    google.protobuf.UInt32Value break_reads_on_mux_changes = 6;
+}
+
+message ReadClassificationParams {
+    enum Scheme {
+        none = 0;
+        parsed = 1;
+    }
+
+    message Parameters {
+        google.protobuf.StringValue type = 1;
+
+        // An execution rule has the following format:
+        //
+        // "pore = (median,gt,185)&(median,lt,260)&(median_sd,lt,40)"
+        //
+        // "median" and "median_sd" are apart of a small subset of variable values describing a read or read chunk, 
+        // that are exposed to execution rules. The full list of variable values and their descriptions are documented
+        // here: https://minknow.git.oxfordnanolabs.local/minknow-core/analysis/reads.html
+        //
+        // "gt" and "lt" describe how data can be compared:
+        // gt: greater than
+        // lt: less than
+        // eq: equal
+        // ne: not equal
+        //
+        // Constant values like "185" or "260" can also be specified. These can be real numbers also.
+        //
+        // Note that variables dont always have to be on the left and const values on the right. The 
+        // following sub rules are also valid:
+        //
+        // (200,lt,median_sd)
+        // (median_before,gt,median)
+        // (5,lt,10)
+        //
+        repeated google.protobuf.StringValue rules_in_execution_order = 2;
+    }
+
+    Scheme scheme_module = 1;
+
+    // This tells minknow the maximum number of means to store in memory before using a different strategy
+    // to calculate medians. If the number of means goes over this size then the strategy used may
+    // be less accurate, but will not use as much memory in minknow
+    google.protobuf.UInt64Value max_sample_size = 2;
+
+    // An anything-delimited list of classifications that are deemed interesting, and will be marked to
+    // be written out to file
+    google.protobuf.StringValue selected_classifications = 3;
+
+    // Determine how to classify a whole read based on the strategy
+    //
+    // 'ultimate':      Chooses the last (ultimate) read chunk's classification
+    // 'penultimate':   Chooses the second-to-last read chunk's clasification
+    // 'modal':         Chooses the most common classification out of the all read chunks
+    google.protobuf.StringValue classification_strategy = 4;
+    Parameters parameters = 5;
+}
+
+message HistogramDocument {
+    message Style {
+        google.protobuf.StringValue title = 1;
+        google.protobuf.StringValue x_axis_label = 2;
+        google.protobuf.StringValue y_axis_label = 3;
+    }
+
+    message Spec {
+        google.protobuf.StringValue type = 1;
+        google.protobuf.StringValue unit = 2;
+
+        // The minimum number of the left hand bucket
+        google.protobuf.DoubleValue min = 3;
+
+        // The width of the bins, so the left hand bucket would contain (min + bin_width)
+        // and so on from there
+        google.protobuf.DoubleValue bin_width = 4;
+        google.protobuf.UInt32Value bin_count = 5;
+
+        // is 2d even used?
+        //google.protobuf.StringValue unit_x = 6;
+        //google.protobuf.StringValue unit_y = 7;
+        //google.protobuf.DoubleValue min_x = 8;
+        //google.protobuf.DoubleValue min_y = 9;
+        //google.protobuf.DoubleValue bin_width_x = 10;
+        //google.protobuf.DoubleValue bin_width_y = 11;
+        //google.protobuf.UInt32Value bin_count_x = 12;
+        //google.protobuf.UInt32Value bin_count_y = 13;
+    }
+
+    Spec spec = 1;
+    Style style = 2;
+}
+
+message BasecallerParams {
+    message Pipeline {
+        enum PipelineType{
+
+            // Use this type if the pipeline uses raw basecalling (no event detector module).
+            // The current layout is: 
+            // raw_extractor - data trimmer - basecaller.
+            // (Please see conf/albacore/template_r9.4_450bps_raw.jsn)
+            RawBasecall = 0;
+
+            // Use this type if the pipeline has event detector in the modules, so the 
+            // basecaller is using events. The current layout is: 
+            // raw_extractor - data trimmer - event detector - basecaller.
+            // (Please see conf/albacore/linear.jsn)
+            RawEventBasecall = 1;
+        }
+
+        reserved 1;
+
+        // Tells minknow to setup a 1D or 2D basecalling pipeline
+        // For example: // "linear", "template_complement".
+        // Currently, only the linear type is supported.
+        google.protobuf.StringValue basecall_type = 2;
+
+        // Tells albacore to reset its internal cache of a channel either
+        // on a mux change or on a new read
+        google.protobuf.StringValue reset_mode = 3;
+
+        // Max files trailing the last one that minknow can access
+        google.protobuf.UInt64Value maximum_raw_file_count = 4;
+
+        reserved 5;
+
+        // Stops processing as soon as a protocol ends if true
+        google.protobuf.BoolValue skip_reads_on_experiment_end = 6;
+
+        // Whether we are using raw basecalling directly, or we are breaking raw data
+        // into events in the albacore pipeline. This type filed is used to select one
+        // of the conf/albacore/template_r9.4_450bps_raw.jsn or conf/albacore/linear.jsn.
+        // By default, it will be set to RawBasecall.
+        PipelineType type = 7;
+
+        // Specify how many bytes can be held in memory for basecalling
+        // when there is resource available.
+        google.protobuf.UInt64Value maximum_stored_memory_read_bytes = 8;
+
+        // Specify how many bytes can be held on disk for basecalling
+        // when there is resource available.
+        google.protobuf.UInt64Value maximum_stored_disk_read_bytes = 9;
+
+    }
+
+    message ReadFiltering {
+        google.protobuf.DoubleValue min_qscore = 1;
+        google.protobuf.UInt64Value min_samples = 2;
+        google.protobuf.UInt64Value max_samples = 3;
+        google.protobuf.UInt64Value min_bases = 4;
+        google.protobuf.UInt64Value max_bases = 5;
+        google.protobuf.UInt64Value max_failed_chunks = 6;
+    }
+
+    bool basecall_enabled = 1 [(rpc_required) = true];
+
+    // A list of absolute paths to albacore config files. Currently, only the first file in
+    // the list is used, and it should be the main config file used in albacore. The plan is to
+    // send all these configs to albacore (once we upgrade to the right version of albacore), in order
+    // to use barcoding.
+    // 
+    // Required if basecalling is enabled.
+    repeated string albacore_config_paths = 2;
+
+    // The absolute path to the directory where the model file is located. The model is specified in
+    // the albacore config, but the absolute path is not, therefore the presence of this field.
+    string albacore_model_directory = 3;
+    Pipeline pipeline_params = 4;
+    ReadFiltering read_filtering = 5;
+}
+
+message ChannelStates {
+    message Logic {
+        message Behaviour {
+            // these are ints but act like bools
+            google.protobuf.Int32Value reset_on_mux_change = 1;
+            google.protobuf.Int32Value reset_on_well_change = 2;
+
+            // If the latch value is set to true, then when the criteria for this channel state
+            // is active, then the latch will keep it active until the channel state is reset.
+            google.protobuf.Int32Value latch = 3;
+
+            // An 'effective mux change' is any mux change apart from the one triggered by the user 
+            // with the purpose of disconnecting a channel (turning a channel off). For example, if 
+            // a channel is in pore, and the user changes the channel configuration to 'disconnected',
+            // that mux change will not be an effective mux change. Any other mux change is considered
+            // an 'effective mux change'. So if a channel saturates,
+            // the mux change to disconnected is an effective mux change. Similarly, a 
+            // change from disconnected to a pore is an effective mux change.
+            //
+            // Use this reset mode to make the channel state persist on non-effective mux changes.
+            // For example, if a channel state is in 'multiple' and the user triggers a channel
+            // configuration change to 'disconnected', the state will remain in multiple if it has
+            // this option on. The multiple state will be reset at all other mux changes (i.e. effective
+            // mux changes).
+            google.protobuf.Int32Value reset_on_effective_mux_change = 4;
+        }
+
+        // Dont really like this way of doing it, but it has to match the old way...
+        message Ranges {
+            message Range {
+                google.protobuf.Int32Value lower_pa = 1;
+                google.protobuf.Int32Value upper_pa = 2;
+            }
+            Range range = 1;
+        }
+
+        google.protobuf.StringValue criteria = 1;
+        google.protobuf.BoolValue log = 2;
+
+        // Specifies the order in which channel state criteria will be evaluated; the
+        // smaller the number, the earlier it will be evaluated. The first criteria to match
+        // will be selected
+        google.protobuf.Int32Value rank = 3;
+
+        // Note that this is a regex based pattern for describing a read classification
+        // sequence. For example you can specify:
+        //      "unavailableunavailable"
+        // or:
+        //      "(unavailable)(unavailable)"
+        //
+        // to recognise two consecutive read chunks classified as unavailable.
+        //
+        // You can also use "?" at the end of one of the classifications in the sequence
+        // to indicate that it may or may not be present at that point. For example:
+        //      "(pore)(transition)?(event)"
+        //
+        // This will match both of the sequences:
+        //      pore, transition, event
+        //      pore, event
+        //
+        // The technical documentation has more information on the range of regex patterns you can
+        // apply. https://minknow.git.oxfordnanolabs.local/minknow-core/analysis/channel-states.html
+        google.protobuf.StringValue pattern = 4;
+
+        google.protobuf.StringValue classification = 5;
+
+        // Range is [lower_pa, upper_pa)
+        Ranges ranges = 6;
+        Behaviour behaviour = 7;
+    }
+
+    message Style {
+        google.protobuf.UInt32Value order = 1;
+        google.protobuf.StringValue label = 2;
+        google.protobuf.StringValue colour = 3;
+    }
+
+    message Group {
+        google.protobuf.StringValue name = 1;
+        Style style = 2;
+    }
+
+    google.protobuf.StringValue name = 1;
+    Group group = 2;
+    google.protobuf.StringValue description = 5;
+    Logic logic = 3;
+    Style style = 4;
+}
+
+message GetAnalysisConfigurationRequest {
+}
+
+message AnalysisConfiguration {
+    EventDetection event_detection = 1;
+    ReadDetectionParams read_detection = 2;
+    ReadDetectionParams read_detection_alt = 3;
+    ReadClassificationParams read_classification = 4;
+    map<string, HistogramDocument> histograms = 5;
+    map<string, ChannelStates> channel_states = 7;
+    BasecallerParams basecaller_params = 8;
+}
+
+message SetAnalysisConfigurationResponse {
+}
+
+message SetAnalysisEnabledStateRequest {
+    bool enable = 1 [(rpc_required) = true];
+}
+
+message SetAnalysisEnabledStateResponse {
+}
+
+message GetChannelStatesDescRequest {}
+message GetChannelStatesDescResponse {
+    message Style {
+        // The human-readable name to display when rendering this channel state or group.
+        string label = 1;
+        // A sentence describing the meaning of the channel state or group.
+        //
+        // This can be used as a tooltip, for example.
+        string description = 2;
+        // The colour to use when rendering this channel state or group.
+        //
+        // This is a six-digit hex string describing an RGB colour (eg: "ff00ff" for purple).
+        string colour = 3;
+    }
+    message ChannelState {
+        // The numeric identifier of the state.
+        //
+        // This is what is reported in any other APIs that return a channel state ID.
+        uint32 id = 1;
+        // The internal name of the state.
+        //
+        // This is what is reported in any other APIs that return a channel state name.
+        string name = 2;
+        // How to render the channel state in a graphical user interface.
+        //
+        // Note that the style may be missing from some channel states (such as the ones that are
+        // built in to MinKNOW).
+        Style style = 3;
+        // An order ranking for the channel states when they are ungrouped.
+        //
+        // This can be used to order the channel states after merging the groups.
+        uint32 global_order = 4;
+    }
+    message Group {
+        // The name of the group.
+        string name = 1;
+        // How to render the group in a graphical user interface.
+        //
+        // Note that the style may be missing from some groups (such as the ones that are built in
+        // to MinKNOW).
+        Style style = 2;
+        // The channel states contained in the group.
+        //
+        // The groups are ordered according to the "order" attribute of the channel state style in
+        // the channel states configuration.
+        repeated ChannelState states = 3;
+    }
+
+    // The groups of channel states.
+    //
+    // The groups are ordered according to the "order" attribute of the group style in the channel
+    // states configuration.
+    repeated Group groups = 1;
+}
+
+message GetSummaryRequest {}
+message GetSummaryResponse {
+    // Whether any analysis is enabled.
+    //
+    // If this is false, everything else will be false as well.
+    bool analysis_enabled = 1;
+
+    // Whether basecalling is enabled.
+    bool basecalling_enabled = 2;
+}

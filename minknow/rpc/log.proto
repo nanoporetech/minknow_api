@@ -1,0 +1,94 @@
+syntax="proto3";
+
+import "minknow/rpc/rpc_options.proto";
+import "google/protobuf/timestamp.proto";
+
+package ont.rpc.log;
+
+service LogService {
+    // Get a stream of user messages, updated with new messages as the are emitted in minknow.
+    //
+    // Since 1.11
+    rpc get_user_messages(GetUserMessagesRequest) returns (stream UserMessage) {}
+
+    // Send a log message to any listeners of messages (see get_user_messages)
+    //
+    // Any historical user messages are first sent to the caller,
+    //
+    // Since 1.11
+    rpc send_user_message(SendUserMessageRequest) returns (SendUserMessageResponse) {}
+
+    // Send a ping to the configured ping server (see system config for ping server url)
+    //
+    // The tracking_id and context_data section of the ping are filled in automatically by MinKNOW.
+    //
+    // The ping is queued internally for sending immediately, if MinKNOW fails to send the message it
+    // stores the message to send when possible.
+    //
+    // Since 1.11
+    rpc send_ping(SendPingRequest) returns (SendPingResponse) {}
+}
+
+message GetUserMessagesRequest {
+    // If set, any messages which have already been sent to listeners
+    // will be sent to the new stream again, before new messages are sent.
+    //
+    // If not specified - the default will not send messages that were sent previously.
+    //
+    // note: there is a limit on how many messages are recorded for replay.
+    bool include_old_messages = 1;
+}
+
+enum Severity {
+    // A debugging message
+    MESSAGE_SEVERITY_TRACE = 0;
+
+    // An informative user message
+    MESSAGE_SEVERITY_INFO = 1;
+
+    // A warning message
+    MESSAGE_SEVERITY_WARNING = 2;
+
+    // An error message
+    MESSAGE_SEVERITY_ERROR = 3;
+}
+
+message UserMessage {
+    // Timestamp for when the log message was emitted
+    google.protobuf.Timestamp time = 1;
+
+    // The severity of the message
+    Severity severity = 2;
+
+    // A short textual identifier for the message
+    string identifier = 3;
+
+    // A long user readable description of the message
+    string user_message = 4;
+
+    // Any extra data associated with the user message, as a map from key to data.
+    map<string, string> extra_data = 5;
+}
+
+message SendUserMessageRequest {
+    // The severity of the message to send
+    //
+    // note: TRACE messages cannot be sent using this interface (will throw an error).
+    Severity severity = 2 [(rpc_required) = true];
+
+    // The user message to send to any listeners.
+    string user_message = 1 [(rpc_required) = true];
+}
+
+message SendUserMessageResponse {
+}
+
+message SendPingRequest {
+    // The json data to send as a ping.
+    //
+    // note: if this string is not a valid json object, an error will be raised.
+    string ping_data = 1 [(rpc_required) = true];
+}
+
+message SendPingResponse {
+}

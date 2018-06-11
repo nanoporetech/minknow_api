@@ -1,0 +1,10 @@
+syntax="proto3";
+
+package ont.gui.experiment_groups;
+
+// List of experiment group names
+//
+// These are created by a user within the GUI
+message ExperimentGroups {
+    repeated string group_list = 1;
+}

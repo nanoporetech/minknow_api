@@ -1,0 +1,478 @@
+syntax="proto3";
+
+package ont.rpc.minion_device;
+
+import "google/protobuf/wrappers.proto";
+import "minknow/rpc/rpc_options.proto";
+
+// Interface to control MinION (and MinION-like) devices.
+service MinionDeviceService {
+    // Change the settings for the active device.
+    //
+    // If you omit a parameter, that setting will not be changed.
+    //
+    // This call is atomic: either all the settings will be applied, or none of them (if there is an
+    // error).
+    rpc change_settings(ChangeSettingsRequest) returns (ChangeSettingsResponse) {}
+
+    // Get the current settings for the active device.
+    rpc get_settings(GetSettingsRequest) returns (GetSettingsResponse) {}
+}
+
+// Temperature range.
+message TemperatureRange {
+    // The minimum temperature in degrees Celsius.
+    //
+    // If temperature control is enabled, the device will attempt to keep its temperature at or
+    // above this value.
+    //
+    // Must be less than or equal to max.
+    //
+    // When soft temperature control is enabled, this value is not used.
+    float min = 5;
+
+    // The maximum temperature in degrees Celsius.
+    //
+    // If temperature control is enabled, the device will attempt to keep its temperature at or
+    // below this value.
+    //
+    // Must be less than or equal to min.
+    //
+    // When soft temperature control is enabled, this is used as the target temperature, and ``min``
+    // is not used.
+    float max = 6;
+}
+
+// These values control the sampling frequency.
+message SamplingFrequencyParameters {
+    enum ClockSpeed {
+        CLOCK_128MHz = 0;
+        CLOCK_64MHz = 1;
+        CLOCK_32MHz = 2;
+        CLOCK_16MHz = 3;
+        CLOCK_8MHz = 4;
+    }
+
+    // Clock divider.
+    //
+    // Values over 31 cannot be set.
+    uint32 clock_divider = 1;
+
+    // The time spent sampling a data point, in microseconds.
+    //
+    // Must be between 30 and 1023 (inclusive).
+    //
+    // Note that setting the integration_time to less than 50 will force the sinc_decimation value
+    // to 32.
+    uint32 integration_time = 2;
+
+    // The speed of the high-speed clock.
+    ClockSpeed clock_speed = 3;
+}
+
+// Describes the MinION device settings.
+//
+// Both unset structures and *_KEEP values in enums indicate "no change". When changing settings,
+// these are the default values.
+message MinionDeviceSettings {
+    enum Gain {
+        GAIN_KEEP = 0;
+        GAIN_1 = 1;
+        GAIN_5 = 2;
+    }
+
+    enum Decimation {
+        DECIMATION_KEEP = 0;
+        DECIMATION_32 = 1;
+        DECIMATION_64 = 2;
+    }
+
+    enum LowPassFilter {
+        LPF_KEEP = 0;
+        LPF_5kHz = 1;
+        LPF_10kHz = 2;
+        LPF_20kHz = 3;
+        LPF_40kHz = 4;
+        LPF_80kHz = 5;
+        LPF_DISABLED = 6;
+    }
+
+    enum NonOverlapClock {
+        NOC_KEEP = 0;
+        NOC_1_HS_CLOCK = 1;
+        NOC_2_HS_CLOCK = 2;
+    }
+
+    enum IntegrationCapacitor {
+        INTCAP_KEEP = 0;
+        INTCAP_62_5fF = 1;
+        INTCAP_250fF = 2;
+        INTCAP_1pF = 3;
+        INTCAP_1_1875pF = 4;
+    }
+
+    enum FanSpeed {
+        FANSPEED_KEEP = 0;
+        FANSPEED_OFF = 1;
+        FANSPEED_LOW = 2;
+        FANSPEED_HIGH = 3;
+        FANSPEED_MAX = 4;
+    }
+
+    // The configuration for a channel.
+    enum ChannelConfig {
+        // Keep the existing channel configuration.
+        CHANNEL_CONFIG_KEEP = 0;
+
+        // Disconnect the channel completely.
+        DISCONNECTED = 1;
+
+        // Normal measurement through well 1.
+        //
+        // The voltage level can be adjusted with the bias_voltage setting.
+        WELL_1_BIAS_VOLTAGE = 2;
+
+        // Normal measurement through well 2.
+        //
+        // The voltage level can be adjusted with the bias_voltage setting.
+        WELL_2_BIAS_VOLTAGE = 3;
+
+        // Normal measurement through well 3.
+        //
+        // The voltage level can be adjusted with the bias_voltage setting.
+        WELL_3_BIAS_VOLTAGE = 4;
+
+        // Normal measurement through well 4.
+        //
+        // The voltage level can be adjusted with the bias_voltage setting.
+        WELL_4_BIAS_VOLTAGE = 5;
+
+        // Send a test current through the channel.
+        //
+        // This is an electronics-only connection: the channel is otherwise disconnected. It can be
+        // used for calibrating the measurement circuitry.
+        //
+        // The current level can be adjusted with the test_current setting.
+        TEST_CURRENT = 6;
+
+        // Reverse voltage through well 1.
+        //
+        // This can be used to clear the well.
+        WELL_1_UNBLOCK_VOLTAGE = 7;
+
+        // Reverse voltage through well 2.
+        //
+        // This can be used to clear the well.
+        WELL_2_UNBLOCK_VOLTAGE = 8;
+
+        // Reverse voltage through well 3.
+        //
+        // This can be used to clear the well.
+        WELL_3_UNBLOCK_VOLTAGE = 9;
+
+        // Reverse voltage through well 4.
+        //
+        // This can be used to clear the well.
+        WELL_4_UNBLOCK_VOLTAGE = 10;
+
+        // Send a test current via the switch circuit for well 1.
+        //
+        // This is only necessary for testing the chip electronics. It should not normally be used.
+        //
+        // The current level can be adjusted with the test_current setting.
+        TEST_CURRENT_VIA_WELL_1 = 11;
+
+        // Send a test current via the switch circuit for well 2.
+        //
+        // This is only necessary for testing the chip electronics. It should not normally be used.
+        //
+        // The current level can be adjusted with the test_current setting.
+        TEST_CURRENT_VIA_WELL_2 = 12;
+
+        // Send a test current via the switch circuit for well 3.
+        //
+        // This is only necessary for testing the chip electronics. It should not normally be used.
+        //
+        // The current level can be adjusted with the test_current setting.
+        TEST_CURRENT_VIA_WELL_3 = 13;
+
+        // Send a test current via the switch circuit for well 4.
+        //
+        // This is only necessary for testing the chip electronics. It should not normally be used.
+        //
+        // The current level can be adjusted with the test_current setting.
+        TEST_CURRENT_VIA_WELL_4 = 14;
+
+        // Connect the channel sensors to ground via a 4MOhm resistor.
+        //
+        // This is only necessary for testing the chip electronics. It should not normally be used.
+        GROUND_THROUGH_RESISTOR = 15;
+
+        // Connect the channel sensors to ground.
+        //
+        // This is only necessary for testing the chip electronics. It should not normally be used.
+        GROUND = 16;
+    }
+
+    // The voltage potential to be applied across the wells (in millivolts).
+    //
+    // This voltage drives the process of forcing molecules through the nanopores.
+    //
+    // The range of possible values is -1275 to 1275 inclusive, in 5mv steps.
+    //
+    // When setting this value, if the provided value is not a multiple of 5, an error will be
+    // returned.
+    google.protobuf.Int32Value bias_voltage = 1;
+
+    // The number of measurements to take each second.
+    //
+    // This value is derived from the sampling_frequency_params values, and so not all values are
+    // possible.
+    //
+    // When changing the sampling frequency, either this value can be provided, or the values in
+    // sampling_frequency_params can be provided (attempting to provide both will cause the RPC to
+    // fail with an error). If this value is provided, the nearest admissible value will be used
+    // (eg: if 3000Hz is requested, 3012Hz will be applied).
+    //
+    // This value cannot be changed during acquisition, and changing it will invalidate the current
+    // calibration.
+    //
+    // Note that setting the sampling frequency to over 20000Hz (20KHz) will force the
+    // sinc_decimation value to 32.
+    google.protobuf.UInt32Value sampling_frequency = 2;
+
+    // The per-channel configuration.
+    //
+    // Each channel can be set to one of 16 states, which specifies the set of electrical
+    // connections to make. This includes which, if any, of the four wells linked to the channel to
+    // use.
+    //
+    // Note that channel names start at 1. If you pass 0 as a key in this map, it will result in
+    // an error.
+    //
+    // When changing the device settings, any omitted channels (or channels set to
+    // CHANNEL_CONFIG_KEEP) will use the default value set in
+    // ChangeSettingsRequest.channel_config_default.
+    map<uint32, ChannelConfig> channel_config = 3;
+
+    // Whether to enable temperature control.
+    //
+    // If true, the device will attempt to keep its temperature within the bounds given by
+    // ``temperature_lower_bound`` and ``temperature_upper_bound``. If false, it will not do any
+    // temperature control.
+    //
+    // Default is enabled.
+    //
+    // It is recommended that this is enabled. If temperature control is disabled, the device may
+    // overheat. In this case, it will turn itself off, and must be unplugged and allowed to cool
+    // before using again.
+    google.protobuf.BoolValue enable_temperature_control = 4;
+
+    // The target temperature range for the device.
+    //
+    // If enable_temperature_control is set to true, the device will attempt to keep its temperature
+    // between the min and max values provided here.
+    //
+    // Default is defined in application config.
+    //
+    // Note that if soft temperature control is enabled, only the ``max`` temperature is used.
+    TemperatureRange temperature_target = 5;
+
+    // Integration capacitor value.
+    //
+    // This affects the sensitivity of the measurement: lower capacitor values give more
+    // sensitive measurements (but also more noise). Changing this will invalidate the current
+    // calibration.
+    //
+    // Default is 250.0
+    IntegrationCapacitor int_capacitor = 6;
+
+    // The level of current used in the TEST_CURRENT channel configuration.
+    //
+    // This can be set in the range 0pA to 350pA in 50pA intervals, default is 100.0
+    google.protobuf.UInt32Value test_current = 7;
+
+    // The unblock voltage potential (in millivolts).
+    //
+    // When a channel is set to one of the UNBLOCK configurations, the specified well will have this
+    // voltage applied across it, rather than bias_voltage.
+    //
+    // The range of possible values is -372 to 0 inclusive, in 12mv steps,  default is 0.
+    //
+    // When setting this value, if the provided value is not a multiple of 12, an error will be
+    // returned.
+    google.protobuf.Int32Value unblock_voltage = 8;
+
+    // Whether to enable detection of excessive current.
+    //
+    // The ADC output of a channel that trips the overcurrent depends on what track and hold gain
+    // has been set to.
+    //
+    // Default is enabled.
+    google.protobuf.BoolValue overcurrent_limit = 10;
+
+    // The the number of integrator resets per sample.
+    //
+    // The range of possible values is 0 to 255, default is 1
+    google.protobuf.UInt32Value samples_to_reset = 11;
+
+    // Track/Hold gain.
+    //
+    // Default is 5.0
+    Gain th_gain = 12;
+
+    // Delay from 2:1 mux switch to sinc filter enable in ADC clocks.
+    //
+    // The range of possible values is 0 to 15, default is 4.0
+    google.protobuf.UInt32Value sinc_delay = 13;
+
+    // Track/Hold sample time in microseconds (us).
+    //
+    // The range of possible values is 0.5us to 7.5us in steps of 0.5us, default is 0.5.
+    google.protobuf.FloatValue th_sample_time = 14;
+
+    // Integrator reset time in microseconds (us).
+    //
+    // This value forms a part of the integration time specified in the sampling frequency
+    // parameters.
+    //
+    // The range of possible values is 1us to 16us in steps of 0.5us, default is 3.5.
+    google.protobuf.FloatValue int_reset_time = 15;
+
+    // Decimation.
+    //
+    // If the integration time is set to less than 50us (or, equivalently, the sampling frequency is
+    // set to greater than 20KHz), this value will be forced to 32.
+    //
+    // Default is 64.0.
+    Decimation sinc_decimation = 16;
+
+    // Low pass filter that should be applied.
+    //
+    // Default is 40kHz
+    LowPassFilter low_pass_filter = 17;
+
+    // Amount of non-overlap for non-overlapping clocks.
+    //
+    // Default is NOC_1_HS_CLOCK.
+    NonOverlapClock non_overlap_clock = 18;
+
+    // Bias current.
+    //
+    // This can be set in the range 0 to 15 in intervals of 5, default is 5.
+    google.protobuf.UInt32Value bias_current = 19;
+
+    // Compensation capacitor value.
+    //
+    // This can be set in the range 0 to 49 in intervals of 7, default is 14.
+    google.protobuf.UInt32Value compensation_capacitor = 20;
+
+    // Sampling frequency parameters.
+    //
+    // The sampling_frequency value is calculated from these settings.
+    //
+    // When changing the sampling frequency, either the values here can be provided, or a
+    // sampling_frequency can be provided (attempting to provide both will cause the RPC to fail
+    // with an error).
+    //
+    // WARNING: This should not be used in a change_settings call without consulting the hardware
+    // documentation for permissible combinations of values. MinKNOW will only do minimal checking
+    // of the values given here; if you use invalid combinations of settings, the device will be
+    // unable to acquire data, and may even be permanently damaged.
+    //
+    // This value cannot be changed during acquisition.
+    SamplingFrequencyParameters sampling_frequency_params = 21;
+
+    // Enable ASIC analogue supply voltage.
+    //
+    // This must be enabled to heat and acquire data from the ASIC. It can be disabled to save
+    // power, but doing so will allow the ASIC to cool down, and it will take time to heat it up
+    // again.
+    //
+    // Default is true.
+    google.protobuf.BoolValue enable_asic_power = 22;
+
+    // The speed of the fan when temperature control is off.
+    //
+    // If ``enable_temperature_control`` is false, this setting will be ignored, as the temperature
+    // control routines on the device will control the speed of the fan.
+    //
+    // Note that this setting does not apply to GridIONs.
+    //
+    // Default is FANSPEED_MAX.
+    FanSpeed fan_speed = 23;
+
+    // Whether to allow the fan to completely stop.
+    //
+    // Allowing the fan to stop causes issues on some old MinION models.
+    //
+    // Note that this setting does not apply to GridIONs.
+    //
+    // Default is false.
+    google.protobuf.BoolValue allow_full_fan_stop = 24;
+
+    // Enable soft temperature control.
+    //
+    // "Soft" temperature control is a more intelligent temperature control algorithm. It works on a
+    // single target temperature, and dynamically adjusts the fan speed to reach that temperature
+    // quickly, and then mainains the target temperature with high precision.
+    //
+    // If this is disabled, "hard" temperature control is used instead. This is a naive algorithm
+    // that simply turns the fan up when dropping below the minimum temperature and turns it down
+    // when going above the maximum temperature.
+    //
+    // If ``enable_temperature_control`` is false, this setting is ignored.
+    //
+    // It is recommended that this is enabled.
+    //
+    // Default is true.
+    google.protobuf.BoolValue enable_soft_temperature_control = 25;
+
+    // Use the bias voltage lookup table to set the bias voltage.
+    //
+    // If this is enabled, the bias voltage will be updated every millisecond with each entry in the
+    // bias voltage lookup table (see ``bias_voltage_lookup_table``) in turn, cycling through when
+    // the end of the table is reached.
+    //
+    // This has the effect of producing a bias voltage waveform.
+    //
+    // When enabling this, it is required to either provide the lookup table entries at the same
+    // time, or to have already provided them in a previous call.
+    //
+    // Default is false.
+    google.protobuf.BoolValue enable_bias_voltage_lookup = 26;
+
+    // The bias voltage lookup table.
+    //
+    // If no entries are provided, the existing lookup table (if any) is preserved.
+    //
+    // See ``enable_bias_voltage_lookup``.
+    //
+    // Up to 75 values can be provided. The values have the same constraints as ``bias_voltage``.
+    repeated int32 bias_voltage_lookup_table = 27;
+}
+
+message ChangeSettingsRequest {
+    // MinION device settings
+    MinionDeviceSettings settings = 1 [(rpc_unwrap) = true];
+
+    // The default channel configuration.
+    //
+    // This provides the default configuration to apply to any channels not listed in
+    // settings.channel_config.
+    MinionDeviceSettings.ChannelConfig channel_config_default = 2;
+}
+
+message ChangeSettingsResponse {
+
+}
+
+// Request for MinIONDeviceService.get_settings
+message GetSettingsRequest {
+}
+
+// Response for MinIONDeviceService.get_settings
+message GetSettingsResponse {
+    // MinION device settings
+    MinionDeviceSettings settings = 1 [(rpc_unwrap) = true];
+}

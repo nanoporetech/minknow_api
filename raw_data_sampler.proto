@@ -1,0 +1,75 @@
+syntax = "proto2";
+package ont.raw_data_sampler.iface_pb;  // Temporary name, while migrating from Thrift.  Will lose the _pb when done.
+option optimize_for = SPEED;
+
+// TODO: Investigate using arena allocation in C++
+
+message Configuration {
+    optional uint32 num_channels = 1;
+    optional uint32 decimation = 2;
+    optional string first_channel_name = 3;
+    optional string last_channel_name = 4;
+}
+
+message ControlMessage {
+
+    enum ControlMessageType {
+        START = 0;
+        STOP = 1;
+        UPDATE_CONFIGURATION = 2;
+    }
+
+    required ControlMessageType message_type = 1;
+    optional sint32 id = 2;
+    optional Configuration configuration = 3;
+}
+
+// RawDataBlock contains a block of raw data for all selected channels.
+message RawDataBlock {
+    //ChannelData contains a block of raw data for one channel
+    message ChannelData
+    {
+        // Current values, in pA.
+        repeated sint32 raw_data = 1 [packed=true];  // Protobuf doesn't do 16-bit ints
+
+        message Window
+        {
+            // Min and max values in pA.
+            required sint32 min = 1;
+            required sint32 max = 2;
+        }
+
+        repeated Window window_stats = 2;
+    }
+
+    // One ChannelData object for each channel
+    repeated ChannelData channel_data = 1;
+
+
+}
+
+// ServerMessage is a message sent by the raw_data_sampler process.
+message ServerMessage {
+
+    enum ServerMessageType {
+        OK = 0;
+        FAIL = 1;
+        RAW_DATA_UPDATE = 2;
+    }
+
+    enum ErrorCode {
+        BAD_MESSAGE_FORMAT = 0;
+        UNKNOWN_COMMAND = 1;
+    }
+
+    required ServerMessageType message_type = 1;
+
+    // Match responses to requests.  Server should duplicate id on inital response.
+    optional sint32 id = 2;
+    optional uint32 pre_encode_time = 3;
+
+    optional ErrorCode error_code = 4;
+
+    // Send with a RAW_DATA_UPDATE message
+    optional RawDataBlock raw_data = 5;
+}

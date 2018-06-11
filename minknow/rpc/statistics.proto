@@ -1,0 +1,327 @@
+syntax="proto3";
+
+import "minknow/rpc/rpc_options.proto";
+
+package ont.rpc.statistics;
+
+service StatisticsService {
+    // Tracks how much time has been spent in each channel state, aggregated across all the channels
+    //
+    // Will fail with FAILED_PRECONDITION if minknow is not acquiring data unless `wait_for_processing` is set to True,
+    // then it will block and wait for data to start acquiring.
+    //
+    // The first response will give you all the data it can
+    //
+    // Since 1.13
+    rpc stream_duty_time (StreamDutyTimeRequest) returns (stream StreamDutyTimeResponse) {}
+
+    // Gets a decimated history of the duty time for a particular acquisition period. Minimum time is 15 minutes per bucket
+    //
+    // Since 1.14
+    rpc get_duty_time (GetDutyTimeRequest) returns (GetDutyTimeResponse) {}
+
+    // A histogram of estimated read lengths (based on events)
+    //
+    // The first response(s) will give you the latest data, then the responses after that will only 
+    // contain buckets that have changed. The initial state may be sent over multiple messages
+    //
+    // Currently unimplemented
+    //rpc stream_read_length (StreamReadLengthRequest) returns (stream StreamReadLengthResponse) {}
+
+    // A 2D histogram between basecall length and qscore
+    //
+    // The first response(s) will give you the latest data, then the responses after that will only 
+    // contain buckets that have changed. The initial state may be sent over multiple messages
+    //
+    // Currently unimplemented
+    //rpc stream_heatmap (StreamHeatmapRequest) returns (stream StreamHeatmapResponse) {}
+
+    // Tracks experiment throughput across all channels over time
+    //
+    // The first response will give you all the data it can.
+    //
+    // The stream will end once the current acquisition period ends, and a caller will need to
+    // reinvoke the rpc in order to get new throughput data.
+    //
+    // Since 1.14
+    rpc stream_throughput (StreamCumulativeThroughputRequest) returns (stream StreamCumulativeThroughputResponse) {}
+
+    // Gets a decimated history of the cumulative throughput for a particular acquisition period. Minimum time is 15 minutes per bucket
+    //
+    // Since 1.14
+    rpc get_throughput (GetCumulativeThroughputRequest) returns (GetCumulativeThroughputResponse) {}
+
+}
+
+enum TimeUnit {
+    SECONDS = 0;
+    MINUTES = 1;
+}
+
+message StreamDutyTimeRequest {
+    // Defines (in seconds) the bucket period of the duty time data
+    //
+    // Will fail with INVALID_ARGUMENT if `step` is below 60
+    // Will fail with INVALID_ARGUMENT if `step` is not a multiple of 60
+    // TODO: maximum size?
+    uint32 step = 1 [(rpc_required) = true];
+
+    // Specify the start time of the data since the start time of the experiment (in seconds). If not specified then will return data since the start of the experiment
+    //
+    // Will fail with INVALID_ARGUMENT if not a multiple of `step`. (TODO: maybe round to closest value instead of failing?)
+    //
+    // For example, if this was set to 600 with a step of 60, then the first 10 buckets will not be returned
+    // and the first bucket will be [600,660)
+    uint32 start_time = 2;
+
+    // Specify the end time of the data (in seconds). Call will return if the end time has been reached.
+    // If the end time has not yet been reached, then the stream will continue until it has, and then return.
+    // If not specified, then will stream forever
+    // If `end_time` is 0, then this will count as not specified and will stream forever
+    //
+    // Will fail with INVALID_ARGUMENT if not a multiple of `step`
+    // Will fail with INVALID_ARGUMENT if not more than `start_time`
+    //
+    // This specifies T1 for a bucket [T0, T1)
+    uint32 end_time = 3;
+
+    // If `wait_for_processing` is true, then will wait until minknow starts acquiring data instead
+    // of returning with an error
+    //
+    // Defaults to false
+    bool wait_for_processing = 4;
+
+}
+
+message StreamDutyTimeResponse {
+    message Bucket {
+        // Represents T0 for a bucket [T0, T1). So this will increase by 'step' for every bucket of duty time data
+        //
+        // Buckets are streamed whenever all channels have moved past a certain bucket point, so you will never
+        // see the same bucket twice
+        uint32 bucket = 1;
+
+        // How much time (in samples) spent in this channel state, within this time bucket
+        uint64 state_time = 2;
+    }
+
+    message ChannelStateData {
+        repeated Bucket buckets = 1;
+    }
+
+    // Map between channel state names, and a list of bucketed duty time data
+    map<string, ChannelStateData> channel_states = 1;
+}
+
+message GetDutyTimeRequest {
+    // The acquisition id of the experiment.
+    string run_id = 1 [(rpc_required) = true];
+
+    // Defines the bucket period of the duty time data. Cannot be below 15 minutes (900 seconds). The time unit is defined in `time_unit`.
+    //
+    // Will fail with INVALID_ARGUMENT if not a multiple of 15 minutes (or equivalent in seconds)
+    uint32 step = 2 [(rpc_required) = true];
+
+    // Specify the start time of the data since the start time of the experiment. If not specified then will return data since the start of the experiment. Time unit defined in `time_unit`
+    uint32 start_time = 3;
+
+    // Specify the end time of the data. Call will return if the end time has been reached. Time unit defined in `time_unit`
+    // If not specified then will return all the data till the end of the experiment
+    uint32 end_time = 4;
+
+    // What unit of time are the other arguments specified in. Defaults to SECONDS
+    TimeUnit time_unit = 5;
+}
+
+message GetDutyTimeResponse {
+    message Bucket {
+        // Represents T0 for a bucket [T0, T1). So this will increase by 'step' for every bucket of duty time data
+        //
+        // Buckets are streamed whenever all channels have moved past a certain bucket point, so you will never
+        // see the same bucket twice
+        uint32 bucket = 1;
+
+        // How much time (in samples) spent in this channel state, within this time bucket
+        uint64 state_time = 2;
+    }
+
+    message ChannelStateData {
+        repeated Bucket buckets = 1;
+    }
+
+    // Map between channel state names, and a list of bucketed duty time data
+    map<string, ChannelStateData> channel_states = 1;
+}
+
+message StreamReadLengthRequest {
+    bool is_cumulative = 1;
+}
+
+message StreamReadLengthResponse {
+    message Bucket {
+        // Represents T0 for a bucket [T0, T1)
+        uint32 bucket = 1;
+
+        // Setting `is_cumulative` to false will give `read_count`, setting to true will return `read_length`
+        //
+        // `read_count` is the number of reads we have seen in this bucket, so if this was bucket 0 and
+        // and there has been a read with length 30 and another with 20, then `read_count` will be 2
+        //
+        // `read_length` is the cumulative read length of the bucket. So using the previous example, 
+        // `read_length` will be 50
+        oneof read_type {
+            uint32 read_count = 2;
+            uint32 read_length = 3;
+        }
+    }
+
+    message Group {
+        // The width of the buckets in this group
+        uint32 width = 1;
+        repeated Bucket buckets = 2;
+    }
+
+    repeated Group bucket_groups = 1;
+}
+
+message StreamHeatmapRequest {
+    bool is_cumulative = 1;
+}
+
+message StreamHeatmapResponse {
+    message Bucket {
+        // Represents T0 for a bucket [T0, T1) for basecall length
+        uint32 basecall_length_bucket = 1;
+
+        // Represents T0 for a bucket [T0, T1) for qscore
+        float qscore_bucket = 2;
+
+        // Setting `is_cumulative` to false will give `read_count`, setting to true will return `read_length`
+        //
+        // `read_count` is the number of reads we have seen in this bucket, so if this was bucket 0 and
+        // and there has been a read with length 30 and another with 20, then `read_count` will be 2
+        //
+        // `read_length` is the cumulative read length of the bucket. So using the previous example, 
+        // `read_length` will be 50
+        oneof read_type {
+            uint32 read_count = 3;
+            uint32 read_length = 4;
+        }
+    }
+
+    message Group {
+        // The width of the bucket for the basecall length.
+        uint32 basecall_length_width = 1;
+
+        // The width of the bucket for the qscore
+        float qscore_width = 2;
+
+        repeated Bucket buckets = 3;
+    }
+
+    repeated Group bucket_groups = 1;
+}
+
+message StreamCumulativeThroughputRequest {
+    // Defines (in seconds) the bucket period of the throughput
+    //
+    // The minimum size for `step` is 60
+    // TODO: maximum size?
+    uint32 step = 1 [(rpc_required) = true];
+
+    // Specify the start time of the throughput data (in seconds). If not specified then will return data since the start of the experiment
+    //
+    // Will fail with INVALID_ARGUMENT if not a multiple of `step`. (TODO: maybe round to closest value instead of failing?)
+    //
+    // For example, if this was set to 600 with a step of 60, then the first 10 buckets will not be returned
+    // and the first bucket will be [600,660)
+    uint32 start_time = 2;
+
+    // Specify the end time of the data (in seconds). Call will return if the end time has been reached.
+    // If the end time has not yet been reached, then the stream will continue until it has, and then return.
+    // If not specified, then will stream forever
+    //
+    // Will fail with INVALID_ARGUMENT if not a multiple of `step`
+    // Will fail with INVALID_ARGUMENT if not more than `start_time`
+    //
+    // This specifies T1 for a bucket [T0, T1)
+    uint32 end_time = 3;
+
+    // If `wait_for_processing` is true, then will wait until minknow starts acquisiting data instead of returning with an error
+    //
+    // Defaults to false
+    bool wait_for_processing = 4;
+}
+
+message CumulativeThroughputBucket {
+    // Represents T0 for a bucket [T0, T1). So this will increase by 'step' for every bucket of throughput data
+    uint32 bucket = 1;
+
+    // Fields here are intended to mirror acquisition.AcquisitionYieldSummary
+    // TODO (major version change): unify this structure with statistics.CumulativeThroughputBucket
+
+    // Number of reads produced by the experiment
+    uint32 read_count = 2;
+
+    // Number of reads the live basecaller has called so far.
+    //
+    // Note: This data will remain at zero if MinKNOW is not basecalling.
+    uint32 basecalled_pass_read_count = 3;
+
+    // Number of reads the live basecaller has failed calling so far.
+    //
+    // Note: This data will remain at zero if MinKNOW is not basecalling.
+    uint32 basecalled_fail_read_count = 4;
+
+    // Number of reads the live basecaller has skipped so far.
+    //
+    // Note: This data will remain at zero if MinKNOW is not basecalling.
+    uint32 basecalled_skipped_read_count = 5;
+
+    // Number of samples in all reads produced.
+    uint64 selected_raw_samples = 6;
+
+    // Number of minknow events in all reads produced.
+    uint64 selected_minknow_events = 7;
+
+    // Number of bases (estimated from all selected reads produced) produced.
+    uint64 estimated_selected_bases = 8;
+
+    // Number of bases called using live basecalling.
+    //
+    // Note: This data will remain at zero if MinKNOW is not basecalling.
+    uint64 basecalled_bases = 9;
+
+    // Number of bases called using live basecalling.
+    //
+    // Note: This data will remain at zero if MinKNOW is not basecalling.
+    uint64 basecalled_samples = 10;
+}
+
+message StreamCumulativeThroughputResponse {
+    repeated CumulativeThroughputBucket buckets = 1;
+}
+
+message GetCumulativeThroughputRequest {
+    // The acquisition id of the experiment.
+    string run_id = 1 [(rpc_required) = true];
+
+    // Defines the bucket period of the throughput data. Cannot be below 15 minutes (900 seconds). The time unit is defined in `time_unit`.
+    //
+    // Will fail with INVALID_ARGUMENT if not a multiple of 15 minutes (or equivalent in seconds)
+    uint32 step = 2 [(rpc_required) = true];
+
+    // Specify the start time of the data since the start time of the experiment. If not specified then will return data since the start of the experiment. Time unit defined in `time_unit`
+    uint32 start_time = 3;
+
+    // Specify the end time of the data. Call will return if the end time has been reached. Time unit defined in `time_unit`
+    // If not specified then will return all the data till the end of the experiment
+    uint32 end_time = 4;
+
+    // What unit of time are the other arguments specified in. Defaults to SECONDS
+    TimeUnit time_unit = 5;
+}
+
+message GetCumulativeThroughputResponse {
+    repeated CumulativeThroughputBucket buckets = 1;
+}

@@ -1,0 +1,40 @@
+syntax = "proto3";
+import "google/protobuf/any.proto";
+
+package bream.script;
+
+message ResultHardwareCheck {
+    // True if calibration ends successfully
+    bool passed = 1;
+    // Number of channel that passed the calibration test
+    uint32 good_channels = 2;
+}
+
+message ResultFlowcellQualityControl {
+    // Until the EEPROM can store more information about the requirements and
+    // state of the flowcell, this will always be true.
+    bool passed = 1;
+    // number of good pores found in the flowcell
+    uint32 good_pores = 2;
+}
+
+message ResultSequencing {
+    // Placeholder
+}
+
+// Represent a single run of a script (run)
+message ScriptResult {
+    // UUID generated for the script by MinKNOW
+    string run_id = 1;
+    // Corresponds to the bream script name (typically the filename)
+    string name = 2;
+    
+    // Script specific information about the outcome
+    google.protobuf.Any result = 10;
+}
+
+// All the runs for the current instance of MinKNOW. This message is serialised into the protocol_return_info engine state.
+message History {
+    // all the results in chronological order.
+    repeated ScriptResult results = 1;
+}

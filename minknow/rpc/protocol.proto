@@ -1,0 +1,315 @@
+syntax="proto3";
+
+import "minknow/rpc/rpc_options.proto";
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/wrappers.proto";
+
+package ont.rpc.protocol;
+
+service ProtocolService {
+    // Initiates a python instance that runs the script specified by the `path` argument.
+    // `list_protocols` will give back a list of protocol scripts that can be started by this call
+    rpc start_protocol (StartProtocolRequest) returns (StartProtocolResponse) {}
+
+    // Stops the currently running protocol script instance
+    rpc stop_protocol (StopProtocolRequest) returns (StopProtocolResponse) {}
+
+    // Wait for a protocol run to finish.
+    //
+    // The call blocks until the run with the given run ID has finished (or returns immediately if
+    // it had already finished) and returns information about the protocol run.
+    //
+    // If no run has been started with the provided run ID (or no run ID is given), an error is
+    // returned.
+    //
+    // If NOTIFY_BEFORE_TERMINATION is specified for state, the protocol end time is an estimate, including
+    // the allowed timeout.
+    //
+    // Since 1.10
+    rpc wait_for_finished (WaitForFinishedRequest) returns (ProtocolRunInfo) {}
+
+    // Gets information about a protocol run.
+    //
+    // If no run ID is provided, information about the most recently started protocol run is
+    // provided.
+    //
+    // Since 1.10
+    rpc get_run_info (GetRunInfoRequest) returns (ProtocolRunInfo) {}
+
+    // List previously started protocol run ids (including any current protocol), in order of starting.
+    //
+    // The returned object can be used to find protocol information with get_run_info.
+    //
+    // Since 1.11
+    rpc list_protocol_runs (ListProtocolRunsRequest) returns (ListProtocolRunsResponse) {}
+
+    // Returns the name and run id of the currently running protocol.
+    //
+    // Will fail with FAILED_PRECONDITION if there is no protocol running
+    //
+    // Since 1.11
+    rpc get_current_protocol_run (GetCurrentProtocolRunRequest) returns (ProtocolRunInfo) {}
+
+    // Returns current protocol run info and streams any changes to the current protocol
+    //
+    // This call can be made even if there is no current protocol running. In this case, the next streamed
+    // response will be the start of a new protocol instance and you will receive updates for that protocol
+    // until it finishes
+    //
+    // If a protocol finishes this stream will still continue to run and you will be notified when a new protocol starts
+    //
+    // Since 1.12
+    rpc watch_current_protocol_run (WatchCurrentProtocolRunRequest) returns (stream ProtocolRunInfo) {}
+
+    // Gives back a list that contains info about each possible protocol script minknow is aware of.
+    // This will most likely be used to retrieve a suitable protocol script that can be passed on to `start_protocol`
+    //
+    // Since 1.10
+    rpc list_protocols (ListProtocolsRequest) returns (ListProtocolsResponse) {}
+
+    // Returns string-to-string map of the context tags
+    //
+    // Since 1.11
+    rpc get_context_info (GetContextInfoRequest) returns (GetContextInfoResponse) {}
+
+    // Store context tags as arbitary string-to-string map
+    //
+    // Since 1.11
+    rpc set_context_info (SetContextInfoRequest) returns (SetContextInfoResponse) {}
+
+    // Sample id is a value set from the GUI that is defined by the user to identify an experiment.
+    // This call gets this value
+    //
+    // Since 1.11
+    rpc get_sample_id (GetSampleIdRequest) returns (GetSampleIdResponse) {}
+
+    // Sets the sample id. Refer to get_sample_id for what sample id is used for
+    //
+    // Since 1.11
+    rpc set_sample_id (SetSampleIdRequest) returns (SetSampleIdResponse) {}
+
+    // Value set by protocol scripts to define the purpose of the script. Gets this value
+    //
+    // Since 1.11
+    rpc get_protocol_purpose (GetProtocolPurposeRequest) returns (GetProtocolPurposeResponse) {}
+
+    // Sets the protocol purpose. See also get_protocol_purpose
+    //
+    // Since 1.11
+    rpc set_protocol_purpose (SetProtocolPurposeRequest) returns (SetProtocolPurposeResponse) {}
+}
+
+message ProtocolRunUserInfo {
+    // The group which the experiment should be held in.
+    //
+    // note: This value could be unset if a user did not specify a group_id when starting the protocol.
+    google.protobuf.StringValue protocol_group_id = 1;
+}
+
+message StartProtocolRequest {
+    // The identifier of the protocol, as provided by list_protocols().
+    string identifier = 1 [(rpc_required) = true];
+
+    // The arguments to pass to the protocol.
+    repeated string args = 2;
+
+    // User input describing the protocol.
+    ProtocolRunUserInfo user_info = 3;
+}
+
+message StartProtocolResponse {
+    // UUID generated when the protocol is started, to uniquely represent this protocol instance
+    string run_id = 1;
+}
+
+message StopProtocolRequest {
+}
+
+message StopProtocolResponse {
+}
+
+message ListProtocolsRequest {
+
+}
+
+message ProtocolInfo {
+    message TagValue {
+        oneof tag_value {
+            string string_value = 1;
+            bool bool_value = 2;
+            int64 int_value = 3;
+            double double_value = 4;
+            string array_value = 5;
+            string object_value = 6;
+        }
+    }
+    message TagExtractionResult {
+        bool success = 1;
+        string error_report = 2;
+    }
+
+    string identifier = 1;
+    map<string,TagValue> tags = 2;
+    string name = 3;
+    TagExtractionResult tag_extraction_result = 4;
+}
+
+message ListProtocolsResponse {
+    repeated ProtocolInfo protocols = 1;
+}
+
+message WaitForFinishedRequest {
+    enum NotificationState {
+        // Request return just after the script was temrinated.
+        NOTIFY_ON_TERMINATION = 0;
+
+        // Request return prior to the script being termiated.
+        // note: will try to return 5s before killing the protocol.
+        NOTIFY_BEFORE_TERMINATION = 1;
+    };
+
+    // Only consider a specific protocol run.
+    string run_id = 1 [(rpc_required) = true];
+
+    // Control what to wait for.
+    //
+    // Specifying NOTIFY_BEFORE_TERMINATION allows a caller to be notified the script will be ended _soon_,
+    // and do final work to end cleanly.
+    //
+    // Since 1.11
+    NotificationState state = 2;
+}
+
+message GetRunInfoRequest {
+    // The protocol run to get information about.
+    string run_id = 1;
+}
+
+enum ProtocolState {
+    // The protocol is still running.
+    PROTOCOL_RUNNING = 0;
+
+    // The protocol is waiting for the device to reach temperature
+    //
+    // Since 1.15
+    PROTOCOL_WAITING_FOR_TEMPERATURE = 4;
+
+    // The protocol finished on its own and did not report an error.
+    //
+    // This is determined by the protocol process exiting with a zero exit code.
+    PROTOCOL_COMPLETED = 1;
+
+    // The protocol was terminated by the user.
+    PROTOCOL_STOPPED_BY_USER = 2;
+
+    // The protocol finished on its own and reported an error.
+    //
+    // This is determined by the protocol process exiting with a non-zero exit code or because of a
+    // signal. Often, this will be because an exception was raised in the Python code and not
+    // caught, but could also indicate that the Python process crashed or was killed by some
+    // mechanism other than by MinKNOW.
+    //
+    // This can also happen if MinKNOW stops the protocol because of some external error, such as
+    // issues with device communication.
+    PROTOCOL_FINISHED_WITH_ERROR = 3;
+}
+
+message ProtocolRunInfo {
+    // The unique identifier assigned to this run.
+    //
+    // This is guaranteed to be made of ASCII characters, and at most 40 characters. It is globally
+    // unique across all protocols runs on all MinKNOW instances.
+    string run_id = 1;
+
+    // The identifier of the protocol, as passed to start_protocol().
+    string protocol_id = 2;
+
+    // The arguments passed to start_protocol().
+    repeated string args = 3;
+
+    // Indicates the current state of the protocol run.
+    ProtocolState state = 4;
+
+    // When the protocol was started (UTC).
+    google.protobuf.Timestamp start_time = 5;
+
+    // When the protocol terminated (UTC).
+    //
+    // Unset if the protocol is still running.
+    google.protobuf.Timestamp end_time = 6;
+
+    // A list of acquisition periods started whilst this protocol was running.
+    //
+    repeated string acquisition_run_ids = 7;
+
+    // User specified information associated with the protocol at start time.
+    //
+    // Since 1.11.
+    ProtocolRunUserInfo user_info = 8;
+}
+
+message ListProtocolRunsRequest {
+}
+
+message ListProtocolRunsResponse {
+    repeated string run_ids = 1;
+}
+message GetCurrentProtocolRunRequest {
+    
+}
+
+message GetCurrentProtocolRunResponse {
+    ProtocolRunInfo run_info = 3;
+}
+
+message WatchCurrentProtocolRunRequest {
+    
+}
+
+message GetContextInfoRequest {
+    
+}
+
+message GetContextInfoResponse {
+    map<string, string> context_info = 1;
+}
+
+message SetContextInfoRequest {
+    map<string, string> context_info = 1;
+}
+
+message SetContextInfoResponse {
+    
+}
+
+message GetSampleIdRequest {
+    
+}
+
+message GetSampleIdResponse {
+    string sample_id = 1;
+}
+
+message SetSampleIdRequest {
+    string sample_id = 1;
+}
+
+message SetSampleIdResponse {
+    
+}
+
+message GetProtocolPurposeRequest {
+    
+}
+
+message GetProtocolPurposeResponse {
+    string purpose = 1;
+}
+
+message SetProtocolPurposeRequest {
+    string purpose = 1;
+}
+
+message SetProtocolPurposeResponse {
+    
+}

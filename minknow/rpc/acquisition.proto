@@ -1,0 +1,420 @@
+syntax="proto3";
+
+import "google/protobuf/timestamp.proto";
+
+package ont.rpc.acquisition;
+
+service AcquisitionService {
+    // Starts reading data from the device
+    //
+    // Some setup calls will need to be made before starting data acquisition: particularly setting the analysis configuration, 
+    // calibration, read writer and bulk writer config and some device calls such as setting the sampling frequency
+    //
+    // note: A run cannot be started if MinKNOW is already running.
+    rpc start (StartRequest) returns (StartResponse) {}
+
+    // Stops data acquisition.
+    //
+    // Can specify a stop mode that handles what is done with the data when data acquisition is stopped. Refer to the enum
+    // description for documentation on what each mode does.
+    //
+    // Be aware that this command will return as soon as Minknow enters the FINISHING state and not the READY state.
+    // So if starting a new experiment then you will have to wait for the READY state seperately
+    rpc stop (StopRequest) returns (StopResponse) {}
+
+    // Watches for status changes within MinKNOW. Status states are defined from MinknowStatus enum.
+    // This is a bi-directional stream where the incoming response stream will return everytime the status has changed
+    // and the request stream is used to stop the watcher. Refer to http://www.grpc.io/docs/tutorials/basic/python.html
+    // to see how bi-directoional streaming works in grpc, but essentially when calling this function the user will have 
+    // to pass in a generator that will eventually yield a WatchForStatusChangeRequest(stop=True) to the cpp side.
+    // A wrapper class for this is provided in the Python code.
+    //
+    // The function will first return with the current status that MinKNOW is in. Every response thereafter will be a 
+    // change from one status to another.
+    //
+    // The ERROR_STATUS state includes errors during transition between states. If that happens, MinKNOW will 
+    // try to revert to the READY state. It is up to the user to determine if they wish to try to wait for MinKNOW to
+    // correct itself or to try some other course of action
+    rpc watch_for_status_change (stream WatchForStatusChangeRequest) returns (stream WatchForStatusChangeResponse) {}
+
+    // Returns current acquisition run info and streams any changes to the current acquisition
+    //
+    // This call can be made even if there is no current protocol running. In this case, the next streamed
+    // response will be the start of a new acquisition and you will receive updates for that acquisition
+    // until it finishes.
+    //
+    // If an acquisition finishes this stream will still continue to run and you will be notified when a new acquisition starts.
+    //
+    // Note if you begin this stream before any acquisition is started in minknow the state is `ACQUISITION_COMPLETED`.
+    //
+    // Since 1.13
+    rpc watch_current_acquisition_run (WatchCurrentAcquisitionRunRequest) returns (stream AcquisitionRunInfo) {}
+
+    // Check the current status of MinKNOW.
+    rpc current_status (CurrentStatusRequest) returns (CurrentStatusResponse) {}
+
+    // Information on how much data has been acquired, processed and written.
+    rpc get_progress (GetProgressRequest) returns (GetProgressResponse) {}
+
+    // Gets information about an acquisition run, run within this instance on MinKNOW.
+    //
+    // If no run ID is provided, information about the most recently started acquisition run is
+    // provided.
+    //
+    // Since 1.11
+    rpc get_acquisition_info (GetAcquisitionRunInfoRequest) returns (AcquisitionRunInfo) {}
+
+    // Gets information about all previous protocol runs.
+    //
+    // Since 1.11
+    rpc list_acquisition_runs (ListAcquisitionRunsRequest) returns (ListAcquisitionRunsResponse) {}
+
+    // Returns the name and run id of the currently running acquisition.
+    //
+    // Will fail with FAILED_PRECONDITION if there is no acquisition running
+    //
+    // Since 1.11
+    rpc get_current_acquisition_run (GetCurrentAcquisitionRunRequest) returns (AcquisitionRunInfo) {}
+}
+
+//
+// Enums
+//
+
+enum MinknowStatus {
+    // ERROR_STATUS occurs when there is an error during a transition from one state to another.
+    // Minknow will try to revert into the READY state to try to stabalise itself, but there is no guarantee of 
+    // that succeeding
+    ERROR_STATUS = 0;
+
+    // READY occurs when minknow is ready for a new experiment to start.
+    READY = 1;
+
+    // STARTING occurs when minknow has received a call for an experiment to start and is setting up the environment
+    // for data acquisition to begin
+    STARTING = 2;
+
+    // PROCESSING occurs when minknow is reading data from the device.
+    PROCESSING = 3;
+
+    // FINISHING occurs when data acquisition has stopped (either from a explicit rpc request or the experiment naturally ended)
+    // and data is still being processed (albacore is still in catchup and processing reads).
+    FINISHING = 4;
+}
+
+//
+// Protobuf messages for input/output of RPC calls
+//
+
+message StartRequest {
+    // Defaults to false.
+    // If false will return as soon as minknow enters the STARTING state.
+    // If true then returns as soon as minknow enters the PROCESSING state.
+    bool wait_until_processing = 1;
+
+    // Prevent waiting until the device is ready to start acquisition
+    // before starting acquisition. Defaults to false.
+    //
+    // MinKNOW will wait for a device and flowcell combination which is ready
+    // for acquisition for a reasonable timeout before starting acquisition.
+    //
+    // Since 1.14
+    bool dont_wait_for_device_ready = 2;
+}
+
+message StartResponse {
+    // UUID generated when the protocol is started, to uniquely represent this protocol instance
+    string run_id = 1;
+}
+
+message StopRequest {
+    enum DataAction {
+        // The current default is set to FINISH_PROCESSING, but is subject to change
+        STOP_DEFAULT = 0;
+
+        // STOP_KEEP_ALL_DATA tells minknow to stop albacore catchup, but keep all of the read files
+        // Any reads that have not been successfully/unsucessfully basecalled will be classed as 'skipped'
+        STOP_KEEP_ALL_DATA = 1;
+
+        // FINISH_PROCESSING will allow albacore to continue catchup until all of the reads have been basecalled
+        STOP_FINISH_PROCESSING = 2;
+
+        // STOP_DISCARD_ALL_DATA = 3;
+    }
+
+    DataAction data_action_on_stop = 1;
+
+    // Defaults to false
+    // If false will return as soon as minknow enters the FINISHING state.
+    // If true then returns as soon as minknow enters the READY state.
+    bool wait_until_ready = 2;
+}
+
+message StopResponse {
+}
+
+message WatchForStatusChangeRequest {
+    bool stop = 1;
+}
+
+message WatchForStatusChangeResponse {
+    MinknowStatus status = 1;
+}
+
+message CurrentStatusRequest {
+}
+
+message CurrentStatusResponse {
+    MinknowStatus status = 1;
+}
+
+message GetProgressRequest {
+}
+
+message GetProgressResponse {
+    message RawPerChannel {
+        // Number of samples (per channel) acquired from the device.
+        uint64 acquired = 1;
+        // Number of samples (per channel) passed to the analysis pipeline
+        // for processing.
+        //
+        // This can be compared to acquired to see how far behind the analysis
+        // is lagging.
+        uint64 processed = 2;
+    }
+
+    // The amount of raw data (per channel) that has been acquired and
+    // processed.
+    RawPerChannel raw_per_channel = 1;
+}
+
+message GetAcquisitionRunInfoRequest {
+    // The protocol run to get information about.
+    string run_id = 1;
+}
+
+enum AcquisitionState {
+    // The acquisition period is starting up.
+    ACQUISITION_STARTING = 0;
+
+    // The acquisition period is still running.
+    ACQUISITION_RUNNING = 1;
+
+    // The acquisition period is finishing:
+    // ie. finishing processing and saving
+    // data produced during the run.
+    ACQUISITION_FINISHING = 2;
+
+    // The acquisition period finished on its own and
+    // did not report an error.
+    ACQUISITION_COMPLETED = 3;
+}
+
+enum AcquisitionStopReason {
+    // The acquisition has not yet stopped.
+    STOPPED_NOT_SET = 0;
+
+    // The user called the stop rpc.
+    STOPPED_USER_REQUESTED = 1;
+
+    // MinKNOW detected disk space was low and ended acquisition.
+    STOPPED_NO_DISK_SPACE = 2;
+
+    // The device stopped acquisition as it was unable to read data.
+    STOPPED_DEVICE_STOPPED_ACQUISITION = 3;
+
+    // Another acquisition run was requested, so the old one was stopped.
+    STOPPED_STARTING_ANOTHER_RUN = 4;
+
+    // The protocol ended, causing the acquisition to stop.
+    STOPPED_PROTOCOL_ENDED = 5;
+
+    // The device or asic was disconnected, causing the run to stop.
+    STOPPED_DEVICE_ERROR = 6;
+}
+
+message AcquisitionYieldSummary
+{
+    // Fields here are intended to mirror statistics.CumulativeThroughputBucket
+    // TODO (major version change): unify this structure with statistics.CumulativeThroughputBucket
+
+    // Number of reads selected by analysis as good reads.
+    //
+    // The reads in this counter are completed, but not necessarily on disk yet.
+    int64 read_count = 1;
+
+    // Number of reads written to disk.
+    //
+    // The reads which have been finalised and written to disk.
+    int64 written_read_count = 2;
+
+    // Number of reads successfully basecalled.
+    int64 basecalled_pass_read_count = 3;
+
+    // Number of reads which have failed to basecall.
+    int64 basecalled_fail_read_count = 4;
+
+    // Number of reads which have been skipped
+    int64 basecalled_skipped_read_count = 10;
+
+    // Number of bases which have been called.
+    int64 basecalled_bases = 5;
+
+    // Number of raw samples which have been called.
+    int64 basecalled_samples = 6;
+
+    // Number of minknow raw samples which have been selected
+    // for writing to disk as reads.
+    int64 selected_raw_samples = 7;
+
+    // Number of minknow events which have been selected
+    // for writing to disk as reads.
+    int64 selected_events = 8;
+
+    // Estimated number of bases MinKNOW has selected for writing.
+    // This is estimated based on already called bases and samples.
+    int64 estimated_selected_bases = 9;
+}
+
+message ChannelStateInfo {
+    message Style {
+        // The human-readable name to display when rendering this channel state or group.
+        string label = 1;
+        // A sentence describing the meaning of the channel state or group.
+        //
+        // This can be used as a tooltip, for example.
+        string description = 2;
+        // The colour to use when rendering this channel state or group.
+        //
+        // This is a six-digit hex string describing an RGB colour (eg: "ff00ff" for purple).
+        string colour = 3;
+    }
+    message ChannelState {
+        // The numeric identifier of the state.
+        //
+        // This is what is reported in any other APIs that return a channel state ID.
+        uint32 id = 1;
+        // The internal name of the state.
+        //
+        // This is what is reported in any other APIs that return a channel state name.
+        string name = 2;
+        // How to render the channel state in a graphical user interface.
+        //
+        // Note that the style may be missing from some channel states (such as the ones that are
+        // built in to MinKNOW).
+        Style style = 3;
+        // An order ranking for the channel states when they are ungrouped.
+        //
+        // This can be used to order the channel states after merging the groups.
+        uint32 global_order = 4;
+    }
+    message Group {
+        // The name of the group.
+        string name = 1;
+        // How to render the group in a graphical user interface.
+        //
+        // Note that the style may be missing from some groups (such as the ones that are built in
+        // to MinKNOW).
+        Style style = 2;
+        // The channel states contained in the group.
+        //
+        // The groups are ordered according to the "order" attribute of the channel state style in
+        // the channel states configuration.
+        repeated ChannelState states = 3;
+    }
+
+    // The groups of channel states.
+    //
+    // The groups are ordered according to the "order" attribute of the group style in the channel
+    // states configuration.
+    repeated Group groups = 1;
+}
+
+message AcquisitionConfigSummary {
+    // Was basecalling enabled for the run.
+    bool basecalling_enabled = 1;
+
+    // Root directory reads were written to for the run.
+    //
+    // Empty if no reads were enabled.
+    string reads_directory = 2;
+    // Directories reads are written to if the reads_directory is on the network
+    // and writes to it fail.
+    //
+    // Empty if no reads were enabled.
+    repeated string reads_fallback_directories = 3;
+
+    // Determine if fast5 reads were enabled for the run.
+    bool fast5_reads_enabled = 4;
+    // Determine if fastq reads were enabled for the run.
+    bool fastq_reads_enabled = 5;
+    // Determine if protobuf reads were enabled for the run.
+    bool protobuf_reads_enabled = 6;
+
+    // The path of the bulk file for the run.
+    //
+    // Empty if no reads were enabled.
+    string bulk_file_path = 7;
+    // Find if the bulk writer was enabled for a run.
+    bool bulk_file_enabled = 8;
+
+    // Channel state styling information
+    ChannelStateInfo channel_state_info = 9;
+}
+
+message AcquisitionRunInfo {
+    // The unique identifier assigned to this acquisition run.
+    //
+    // This is guaranteed to be made of ASCII characters, and at
+    // most 40 characters. It is globally unique across all
+    // protocols runs on all MinKNOW instances.
+    string run_id = 1;
+
+    // Indicates the current state of the protocol run.
+    AcquisitionState state = 2;
+
+    // The reason the acquisition period was ended.
+    AcquisitionStopReason stop_reason = 3;
+
+    // When the acquisition period was started (UTC).
+    google.protobuf.Timestamp start_time = 4;
+
+    // When MinKNOW began acquiring data (UTC).
+    //
+    // Unset if the acquisition is still starting up.
+    google.protobuf.Timestamp data_read_start_time = 5;
+
+    // When the MinKNOW stopped acquiring data (UTC).
+    //
+    // Unset if the acquisition is still acquiring.
+    google.protobuf.Timestamp data_read_end_time = 6;
+
+    // When the acquisition terminated (UTC).
+    //
+    // Unset if the protocol is still running.
+    google.protobuf.Timestamp end_time = 7;
+
+    // Summary of acquisition yields.
+    //
+    // Since 1.12
+    AcquisitionYieldSummary yield_summary = 8;
+
+    // Summary of the configuration settings for a run.
+    //
+    // Since 1.14
+    AcquisitionConfigSummary config_summary = 9;
+}
+
+message ListAcquisitionRunsRequest {
+}
+
+message ListAcquisitionRunsResponse {
+    repeated string run_ids = 1;
+}
+
+message GetCurrentAcquisitionRunRequest {
+}
+
+
+message WatchCurrentAcquisitionRunRequest {
+}

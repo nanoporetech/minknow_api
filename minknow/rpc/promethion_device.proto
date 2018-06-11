@@ -1,0 +1,322 @@
+syntax="proto3";
+
+package ont.rpc.promethion_device;
+
+import "google/protobuf/wrappers.proto";
+import "minknow/rpc/rpc_options.proto";
+
+// Interface to control PromethION devices.
+service PromethionDeviceService {
+
+    // Change the settings which apply to the whole device.
+    rpc change_device_settings(ChangeDeviceSettingsRequest) returns (ChangeDeviceSettingsResponse) {}
+
+    // Get the current settings which apply to the whole device.
+    rpc get_device_settings(GetDeviceSettingsRequest) returns (GetDeviceSettingsResponse) {}
+
+    // Change the settings which apply specific pixel blocks.
+    rpc change_pixel_block_settings(ChangePixelBlockSettingsRequest) returns (ChangePixelBlockSettingsResponse) {}
+
+    // Get the settings which apply to specific pixel blocks.
+    rpc get_pixel_block_settings(GetPixelBlockSettingsRequest) returns (GetPixelBlockSettingsResponse) {}
+
+    // Change the settings which apply to the referenced pixels.
+    rpc change_pixel_settings(ChangePixelSettingsRequest) returns (ChangePixelSettingsResponse) {}
+
+    // Get the pixel settings for the requested pixel's
+    rpc get_pixel_settings(GetPixelSettingsRequest) returns (GetPixelSettingsResponse) {}
+}
+
+message WaveformSettings {
+    // The waveform data applied to the device (in millivolts)
+    //
+    // Must contain 32 values, in order to be a valid waveform.
+    repeated double voltages = 1;
+
+    // The frequency of the applied waveform, in Hz.
+    //
+    // Valid values are between 7.8125Hz and 500Hz.
+    double frequency = 2;
+}
+
+message DeviceSettings {
+    // The number of measurements to take each second.
+    //
+    // Possible values are multiples of 1000, between 1000, and 10000.
+    // If the specified value is not possible in the hardware, the closest
+    // frequency is used.
+    // For example, if 1499 is specified, 1000 is used, if 2500 is
+    // specified, 3000 is used.
+    // 
+    // This value cannot be changed during acquisition.
+    google.protobuf.Int32Value sampling_frequency = 1;
+
+    // The value to apply as the ramp voltage (in millivolts)
+    // 
+    // Valid values are in the range -1250mv..1250mv 
+    google.protobuf.DoubleValue ramp_voltage = 2;
+
+    // Settings controlling the device bias voltage
+    oneof bias_voltage_setting {
+        // The value to apply as the bias voltage (in millivolts)
+        // 
+        // Valid values are in the range -1250mv..1250mv 
+        double bias_voltage = 3;
+
+        // The waveform settings
+        WaveformSettings bias_voltage_waveform = 4;
+    }
+
+    // Enables saturation control on the device
+    google.protobuf.BoolValue saturation_control_enabled = 5;
+
+    // Enable use of the fast calibration mode across the device
+    google.protobuf.BoolValue fast_calibration_enabled = 6;
+
+    // If the device is capable (see device.get_device_info().temperature_controllable)
+    // then this sets the minimum and maximum temperatures of the flow-cell.
+    //
+    // These values must be between the limits specified in the application config,
+    // see: min_user_setpoint_temperature_celsius and max_user_setpoint_temperature_celsius
+    google.protobuf.FloatValue temperature_target = 7;
+}
+
+message PixelBlockSettings {
+    // Voltage clamp for regeneration circuit (in millivolts)
+    //
+    // The voltage in the regeneration circuit is clamped under this value,
+    // whilst applying the current specified in each pixel's settings.
+    //
+    // The acceptable input range is -1000..1000 (inclusive)
+    google.protobuf.DoubleValue regen_current_voltage_clamp = 1;
+
+    // The unblock voltage to apply when a pixel is unblocking.
+    //
+    // The acceptable input range is -1000..1000 (inclusive)
+    google.protobuf.DoubleValue unblock_voltage = 2;
+}
+
+message PixelSettings {
+    message InputWell {
+        // Input config options
+        //
+        // Note: for 2 well promethion chips, wells 1-2 are valid.
+        // for 4 well, 1-4 are valid.
+        enum InputConfig {
+            // Disconnect the channel completely.
+            NONE = 0;
+            WELL_1 = 1;
+            WELL_2 = 2;
+            WELL_3 = 3;
+            WELL_4 = 4;
+            // Connect all wells - only valid for regeneration
+            ALL = 5;
+        }
+
+        // Control which well is driving the adc minknow reads from.
+        //
+        // ALL is not a valid value here (other values are acceptable).
+        InputConfig input_well = 1;
+        
+        // Control which wells are being regenerated (has the specified
+        // regeneration current driven to it).
+        //
+        // All possible Input values are acceptable, as long as the input
+        // is not the active adc input.
+        // For example, { input: 1, regeneration: all } is invalid, as an well
+        // cannot be both input and regenerated.
+        InputConfig regeneration_well = 2;
+    }
+
+    enum OverloadMode {
+        // Do not change the overload mode
+        OVERLOAD_KEEP = 0;
+
+        // Set a flag when overload occurs, but take no other action.
+        OVERLOAD_SET_FLAG = 1;
+
+        // Disable the channel when the overload occurs, until overload mode is set again.
+        OVERLOAD_LATCH_OFF = 2;
+
+        // Clear any existing latch conditions.
+        OVERLOAD_CLEAR = 3;
+
+        // Limit current output when saturation occurs, also flag the saturation.
+        OVERLOAD_LIMIT = 4;
+    }
+
+    enum LowPassFilter {
+        LPF_KEEP = 0;
+        LPF_10kHz = 1;
+        LPF_20kHz = 2;
+        LPF_30kHz = 3;
+        LPF_40kHz = 4;
+        LPF_50kHz = 5;
+        LPF_60kHz = 6;
+        LPF_70kHz = 7;
+        LPF_80kHz = 8;
+    }
+
+    enum GainMultiplier {
+        INTGAIN_KEEP = 0;
+        INTGAIN_2 = 1;
+        INTGAIN_4 = 2;
+    }
+
+    enum GainCapacitor {
+        INTCAP_KEEP = 0;
+        INTCAP_100fF = 1;
+        INTCAP_200fF = 2;
+        INTCAP_500fF = 3;
+        INTCAP_600fF = 4;
+    }
+
+    enum CalibrationMode {
+        CALIB_KEEP = 0;
+        CALIB_FAST = 1;
+        CALIB_SLOW = 2;
+    }
+
+    enum UnblockMode {
+        UNBLOCK_KEEP = 0;
+        UNBLOCK_ON = 1;
+        UNBLOCK_OFF = 2;
+    }
+
+    enum RegenerationCurrent {
+        REGEN_KEEP = 0;
+        REGEN_0pA = 1;
+        REGEN_50pA = 2;
+        REGEN_100pA = 3;
+        REGEN_150pA = 4;
+        REGEN_400pA = 5;
+        REGEN_450pA = 6;
+        REGEN_500pA = 7;
+        REGEN_550pA = 8;
+        REGEN_800pA = 9;
+        REGEN_850pA = 10;
+        REGEN_900pA = 11;
+        REGEN_950pA = 12;
+        REGEN_1200pA = 13;
+        REGEN_1250pA = 14;
+        REGEN_1300pA = 15;
+        REGEN_1350pA = 16;
+    }
+
+    enum BiasCurrent {
+        BIAS_KEEP = 0;
+        BIAS_OFF = 1;     //0 microA
+        BIAS_LOW = 2;     //390 microA
+        BIAS_HIGH = 3;    //808 microA
+        BIAS_NOMINAL = 4; //586 microA
+    }
+
+    // The input driving the adv
+    InputWell input = 1;
+
+    // The mode the asic uses to handle currents that go above its adc range.
+    OverloadMode overload_mode = 2;
+
+    // Signal filter for input adc signal.
+    LowPassFilter cutoff_frequency = 3;
+
+    // Signal gain multiplier, applied to the integrator circuit.
+    GainMultiplier gain_multiplier = 4; 
+
+    // Gain capacitor, used in the integrtor circuit.
+    GainCapacitor gain_capacitor = 5;
+
+    // The calibration mode to use.
+    CalibrationMode calibration_mode = 6;
+
+    // Controls the application of the unblock voltage to the pixel.
+    UnblockMode unblock_voltage = 7;
+
+    // Inverts the current's polarity.
+    google.protobuf.BoolValue current_inverted = 8;
+
+    // Control the state of the membrane simulation.
+    google.protobuf.BoolValue membrane_simulation_enabled = 9;
+
+    // Control the regeneration current used when regenerating well's.
+    RegenerationCurrent regeneration_current = 10;
+
+    // Control if the regeneration current test is enabled.
+    //
+    // This connects the regeneration current to the integration adc circuit and the input well.
+    // and allows users to read regen current via the channel adc value.
+    google.protobuf.BoolValue regeneration_current_test_enabled = 11;
+
+    // The bias current for the amplifier - this controls the level of noise of the signal. 
+    // The higher the bias current, the lower the noise, but the bigger the heat and power drawn by
+    // the amplifier. If it is set to off, no signal readings can be made.
+    BiasCurrent bias_current = 12;
+}
+
+
+message ChangeDeviceSettingsRequest {
+    DeviceSettings settings = 1 [(rpc_unwrap) = true];
+}
+
+message ChangeDeviceSettingsResponse {
+    // The sampling frequency actually applied to the hardware, as
+    // close as possible to the requested rate.
+    //
+    // Note: only returned if sampling rate was set as part of this call.
+    google.protobuf.Int32Value real_sampling_frequency = 1;
+
+}
+
+message GetDeviceSettingsRequest {
+}
+
+message GetDeviceSettingsResponse {
+    DeviceSettings settings = 1 [(rpc_unwrap) = true];
+}
+
+
+message ChangePixelBlockSettingsRequest {
+    // 1 based map of different pixel blocks settings, a sparse map
+    // is accepted, keys should be integers between 1 and 12.
+    map<uint32, PixelBlockSettings> pixel_blocks = 1;
+
+    // If supplied, contains settings applied to every block before then
+    // applying any specific settings in the per block settings.
+    PixelBlockSettings pixel_block_default = 2;
+}
+
+message ChangePixelBlockSettingsResponse {
+}
+
+message GetPixelBlockSettingsRequest {
+}
+
+message GetPixelBlockSettingsResponse {
+    // 1 based map of different pixel blocks settings, containing 12 entries.
+    map<uint32, PixelBlockSettings> pixel_blocks = 1;
+}
+
+
+message ChangePixelSettingsRequest {
+    // 1 based map of up to 3000 different pixel settings
+    map<uint32, PixelSettings> pixels = 1;
+
+    // If supplied, contains settings applied to every pixel before then
+    // applying any specific settings in the per pixel settings.
+    PixelSettings pixel_default = 2;
+}
+
+message ChangePixelSettingsResponse {
+}
+
+message GetPixelSettingsRequest {
+    // The channels (one based) to return data for.
+    // A sparse map is accepted
+    repeated uint32 pixels = 1 [(rpc_required) = true];
+}
+
+message GetPixelSettingsResponse {
+    // List of all requested pixel settings, in the order requested.
+    repeated PixelSettings pixels = 1;
+}
+

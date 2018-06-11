@@ -1,0 +1,45 @@
+syntax="proto3";
+
+package ont.data_output;
+
+message Read {
+    // The raw data signal read from the device
+    repeated sint32 signal = 1;
+
+    // A GUID value that uniquely represents the read
+    string id = 2;
+
+    // The current number of the read
+    //
+    // This number goes up sequentially for every read, per channel
+    // So for example channel 0 and channel 1 both start on read 0, then channel 0
+    // starts a new read which is read 1, then channel 1 gets a new read which is also read 1 and so on
+    uint32 number = 3;
+
+    // The absolute raw index that the read began on
+    uint64 start_raw_index = 4;
+}
+
+message Channel {
+    // Accumulation of all reads per channel
+    //
+    // At the moment, read files are all written out into separate files, so
+    // the size of this is going to be 1. But it could easily be changed so that
+    // reads could be accumulated before being written to a file
+    repeated Read reads = 1;
+
+    // Name of the channel, 1-indexed
+    string channel_name = 2;
+
+    // The range of ADC values that the device produces
+    int32 digitisation = 3;
+
+    // The ADC value that is represented at 0 picoamps
+    int32 offset = 4;
+
+    // The range of values in picoamps after calibration
+    float range = 5;
+
+    // The rate the data is acquired off of the device per second
+    uint32 sample_rate = 6;
+}

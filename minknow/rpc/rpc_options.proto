@@ -1,0 +1,43 @@
+syntax="proto3";
+
+import "google/protobuf/descriptor.proto";
+
+package ont.rpc;
+
+extend google.protobuf.FieldOptions {
+    // Marks a field as required.
+    //
+    // This is only used at the service layer, to error out before attempting
+    // the RPC if the value is not provided. It does not affect the wire format.
+    bool rpc_required = 50001;
+
+    // Unwrap a message field.
+    //
+    // If you have the following:
+    //
+    // message A {
+    //   bool  field1 = 1;
+    //   float field2 = 2;
+    // }
+    // message B {
+    //   A submessage = 1 [(rpc_unwrap) = true];
+    // }
+    //
+    // and message B is used as the arguments message for an RPC call, then the
+    // fields of message A will be accepted directly as parameters in the rpc
+    // call wrapper.
+    //
+    // Note that you must take care to avoid name clashes - if A and B both had
+    // a field with the same name, this would result in an error.
+    bool rpc_unwrap = 50002;
+}
+
+// TODO: requires this fix: https://github.com/google/protobuf/pull/2633
+//       (should be in protobuf 3.3)
+//extend google.protobuf.OneofOptions {
+//    // Indicate that at one of the fields in a oneof group must be provided.
+//    //
+//    // This is only used at the service layer, to error out before attempting
+//    // the RPC if the value is not provided. It does not affect the wire format.
+//    bool rpc_oneof_required = 50001;
+//}
