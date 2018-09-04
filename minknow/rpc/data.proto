@@ -132,6 +132,9 @@ service DataService {
     //      analysis_conf/read_detection.break_reads_after_seconds
     //
     rpc get_live_reads(stream GetLiveReadsRequest) returns (stream GetLiveReadsResponse) {}
+
+    // Collects summary statistics per channel, per channel configuration change, per classification
+    rpc get_read_statistics (GetReadStatisticsRequest) returns (GetReadStatisticsResponse) {}
 }
 
 message GetChannelStatesRequest {
@@ -592,3 +595,123 @@ message ResetChannelStatesRequest
 
 message ResetChannelStatesResponse
 {}
+
+message GetReadStatisticsRequest {
+  // List of channels required, indexed from 1.
+  repeated uint32 channels = 1;
+ 
+  // How long to collect the statistics for
+  oneof duration {
+    float seconds = 2;
+    uint64 samples = 3;
+  }
+
+  // Whether to do the statistics based on per read chunk, or based on a fully completed classification
+  enum ReadSplit {
+    CHUNK = 0;
+    COMPLETED_READ = 1;
+  }
+  ReadSplit read_split = 4 [(rpc_required) = true];
+}
+
+message GetReadStatisticsResponse {
+  message ReadsPerChannelPerConfigChange {
+  
+    message ReadStatistics {
+      double min = 1;
+      double max = 2;
+      double mean = 3;
+      double s_d = 4;
+      double sum = 5;
+      double median = 6;
+      double q_5 = 7; //Quantiles
+      double q_10 = 8;
+      double q_25 = 9;
+      double q_75 = 10;
+      double q_90 = 11;
+      double q_95 = 12;
+    }
+  
+    message ReadClassificationBlock {
+      // Using the active ReadClassificationParams(rules_in_execution_order) in
+      // analysis_configuration, before the experiment started, to classify
+      // either the chunks or complete read
+      // 'incomplete' if the read was cut off mid section
+      string classification = 1;
+  
+      // The duration statistics -> The values for the aggregation
+      // functions will be the duration for each of the read splits that
+      // match the classification.
+      // E.g. 1 second of pore read, ..., 2 seconds of pore read..., 1 second of pore read
+      // so the mean would be 1.3333, min 1, max 2, .....
+      ReadStatistics duration_statistics = 2;
+  
+      // Same thing but for the pA current medians across samples reads. The values for the
+      // aggregation will be what MinKNOW already does, which is the
+      // median sample in the chunk/complete read
+      ReadStatistics current_statistics = 3;
+  
+      // How many samples you aggregated over - How many of the read
+      // chunks/completed fell into this classification
+      uint32 count = 4;
+    }
+  
+    // Channel configuration for the channel whilst the reads were recorded
+    device.ChannelConfiguration channel_configuration = 1;
+  
+    // Recorded read data broken by analysed classification
+    repeated ReadClassificationBlock reads = 2;
+
+    // The number of samples collected before this configurations first sample.
+    uint64 samples_since_start = 3;
+
+    // The number of seconds elapsed since data acquisition started.
+    //
+    // This is the same as ``samples_since_start``, but expressed in seconds.
+    double seconds_since_start = 4;
+
+    // The number of samples collected for this channel configurations.
+    uint64 samples_duration = 5;
+
+    // The number of seconds of data captured for this session.
+    //
+    // This is the same as ``samples_duration``, but expressed in seconds.
+    double seconds_duration = 6;
+  }
+
+  message ReadsPerChannel {
+    // A list of reads (dependent on the channel config - we mainly want to tell a well change)
+    repeated ReadsPerChannelPerConfigChange reads_per_channel_per_config_change = 1;
+
+    // The number of samples collected before this channels first sample.
+    uint64 samples_since_start = 2;
+
+    // The number of seconds elapsed since data acquisition started.
+    //
+    // This is the same as ``samples_since_start``, but expressed in seconds.
+    double seconds_since_start = 3;
+
+    // The number of samples collected for this channel.
+    uint64 samples_duration = 4;
+
+    // The number of seconds of data captured for this session.
+    //
+    // This is the same as ``samples_duration``, but expressed in seconds.
+    double seconds_duration = 5;
+  }
+
+  // List of channels required, indexed from 1, matching up with the order requested.
+  repeated ReadsPerChannel reads_per_channel = 1;
+
+  // The number of samples collected before the first sample included in this response.
+  //
+  // This gives the position of the first data point which all channels share in the calculated
+  // statistics. Each individual channel may hace samples from read chunks previous to this sample
+  // due to read boundaries not being consistent across channels.
+  uint64 samples_since_start = 2;
+
+  // The number of seconds elapsed before the first sample included in this response.
+  //
+  // This is the same as ``samples_since_start``, but expressed in seconds.
+  double seconds_since_start = 3;
+}

@@ -135,6 +135,14 @@ service DeviceService {
     // will try to continue for the rest of the channels, ignoring the one with the wrong mux.
     rpc unblock (UnblockRequest) returns (UnblockResponse) {}
 
+    // Cancel in progress unblocks.
+    //
+    // Any unblocks registered with `device.unblock` will be stopped before this command returns.
+    // Unblocks are stopped by applying any actions required to return from unblock (mux changes, or hardware configuration).
+    //
+    // Since 1.15
+    rpc cancel_unblocks (CancelUnblocksRequest) returns (CancelUnblocksResponse) {}
+
     // Get the channel configuration for any number of channels
     //
     // The maximum addressable channel will depend on the device. Currently this will be 512 on a MinION/GridION
@@ -600,6 +608,19 @@ message UnblockRequest
     }
 }
 message UnblockResponse{}
+
+message CancelUnblocksRequest
+{
+}
+
+message CancelUnblocksResponse
+{   
+    // The number of unblocks which have been cancelled as part of this request.
+    //
+    // Should return the total number of unblock operations which have been cancelled.
+    //
+    uint32 cancelled_unblocks = 1;
+}
 
 enum SelectedWell {
     WELL_NONE   = 0;

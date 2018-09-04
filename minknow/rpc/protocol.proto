@@ -1,5 +1,6 @@
 syntax="proto3";
 
+import "minknow/rpc/acquisition.proto";
 import "minknow/rpc/rpc_options.proto";
 import "google/protobuf/timestamp.proto";
 import "google/protobuf/wrappers.proto";
@@ -11,7 +12,7 @@ service ProtocolService {
     // `list_protocols` will give back a list of protocol scripts that can be started by this call
     rpc start_protocol (StartProtocolRequest) returns (StartProtocolResponse) {}
 
-    // Stops the currently running protocol script instance
+    // Stops the currently running protocol script instance.
     rpc stop_protocol (StopProtocolRequest) returns (StopProtocolResponse) {}
 
     // Wait for a protocol run to finish.
@@ -123,6 +124,18 @@ message StartProtocolResponse {
 }
 
 message StopProtocolRequest {
+    // Specify how any running acquisition should
+    // be handled when stopping the protocol.
+    //
+    // Protocol state will enter PROTOCOL_WAITING_FOR_ACQUISITION whilst any running
+    // acquisition is finished.
+    //
+    // If a script ends on its own any analysis that was started is stopped, and it
+    // is allowed to catchup. If the caller wants to end catchup they can call stop_protocol
+    // to end catchup.
+    //
+    // Since 1.15
+    acquisition.StopRequest.DataAction data_action_on_stop = 1;
 }
 
 message StopProtocolResponse {
@@ -160,12 +173,15 @@ message ListProtocolsResponse {
 
 message WaitForFinishedRequest {
     enum NotificationState {
-        // Request return just after the script was temrinated.
+        // Request return just after the protocol has temrinated, including any acquisition periods completing.
         NOTIFY_ON_TERMINATION = 0;
 
         // Request return prior to the script being termiated.
-        // note: will try to return 5s before killing the protocol.
+        // note: will try to return 5s before killing the protocol script.
         NOTIFY_BEFORE_TERMINATION = 1;
+
+        // Notify as the protocol script finishes, not waiting for any in progress acquisition to complete.
+        NOTIFY_ON_SCRIPT_TERMINATION = 2;
     };
 
     // Only consider a specific protocol run.
@@ -178,6 +194,14 @@ message WaitForFinishedRequest {
     //
     // Since 1.11
     NotificationState state = 2;
+
+    // Timeout to wait for finished, if the timeout expires before the protocol is complete (in the state requested)
+    // then the response returns.
+    //
+    // By default the timeout will wait forever.
+    //
+    // Since 1.15
+    float timeout = 3;
 }
 
 message GetRunInfoRequest {
@@ -193,6 +217,10 @@ enum ProtocolState {
     //
     // Since 1.15
     PROTOCOL_WAITING_FOR_TEMPERATURE = 4;
+
+    // Occurs when data protocol has stopped (either from a explicit rpc request or the script naturally ended)
+    // and data is still being processed (albacore is still in catchup and processing reads).
+    PROTOCOL_WAITING_FOR_ACQUISITION = 5;
 
     // The protocol finished on its own and did not report an error.
     //
@@ -233,7 +261,15 @@ message ProtocolRunInfo {
     // When the protocol was started (UTC).
     google.protobuf.Timestamp start_time = 5;
 
-    // When the protocol terminated (UTC).
+    // When the protocol script terminated (UTC).
+    //
+    // Unset if the protocol script is still running.
+    //
+    // Note that the protocol may still run until final acquisiton completes.
+    google.protobuf.Timestamp script_end_time = 9;
+
+    // When the protocol terminated (UTC), indicating both the
+    // protocol script and the final acquisition were completed.
     //
     // Unset if the protocol is still running.
     google.protobuf.Timestamp end_time = 6;

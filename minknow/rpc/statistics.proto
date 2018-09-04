@@ -15,7 +15,10 @@ service StatisticsService {
     // Since 1.13
     rpc stream_duty_time (StreamDutyTimeRequest) returns (stream StreamDutyTimeResponse) {}
 
-    // Gets a decimated history of the duty time for a particular acquisition period. Minimum time is 15 minutes per bucket
+    // Gets duty time information for a completed acquisition period.
+    //
+    // Currently, all time values must be given in multiples of 1 minute (it is recommended that the
+    // time unit is set to minutes).
     //
     // Since 1.14
     rpc get_duty_time (GetDutyTimeRequest) returns (GetDutyTimeResponse) {}
@@ -46,7 +49,10 @@ service StatisticsService {
     // Since 1.14
     rpc stream_throughput (StreamCumulativeThroughputRequest) returns (stream StreamCumulativeThroughputResponse) {}
 
-    // Gets a decimated history of the cumulative throughput for a particular acquisition period. Minimum time is 15 minutes per bucket
+    // Gets cumultative throughput information for a completed acquisition period.
+    //
+    // Currently, all time values must be given in multiples of 1 minute (it is recommended that the
+    // time unit is set to minutes).
     //
     // Since 1.14
     rpc get_throughput (GetCumulativeThroughputRequest) returns (GetCumulativeThroughputResponse) {}
@@ -117,19 +123,31 @@ message GetDutyTimeRequest {
     // The acquisition id of the experiment.
     string run_id = 1 [(rpc_required) = true];
 
-    // Defines the bucket period of the duty time data. Cannot be below 15 minutes (900 seconds). The time unit is defined in `time_unit`.
-    //
-    // Will fail with INVALID_ARGUMENT if not a multiple of 15 minutes (or equivalent in seconds)
+    // Defines the bucket period of the duty time data, in multiples of `time_unit`.
     uint32 step = 2 [(rpc_required) = true];
 
-    // Specify the start time of the data since the start time of the experiment. If not specified then will return data since the start of the experiment. Time unit defined in `time_unit`
+    // Specify the start time of the data since the start time of the experiment in multiples of
+    // `time_unit`.
+    //
+    // Must be a multiple of `step`.
+    //
+    // If not specified then will return data since the start of the experiment.
     uint32 start_time = 3;
 
-    // Specify the end time of the data. Call will return if the end time has been reached. Time unit defined in `time_unit`
-    // If not specified then will return all the data till the end of the experiment
+    // Specify the end time of the data to return in multiples of `time_unit`. Only data from before
+    // this time will be returned.
+    //
+    // This does not need to be a multiple of `step` - you will get a smaller final bucket if it is
+    // not.
+    //
+    // If not specified then will return all the data till the end of the experiment.
+    // A time past the end of the experiment will be accepted, and treated in the same way.
     uint32 end_time = 4;
 
-    // What unit of time are the other arguments specified in. Defaults to SECONDS
+    // What unit of time are to use. Defaults to SECONDS
+    //
+    // This is used to interpret the other fields in this message as well as for the times in the
+    // response message.
     TimeUnit time_unit = 5;
 }
 
@@ -306,19 +324,31 @@ message GetCumulativeThroughputRequest {
     // The acquisition id of the experiment.
     string run_id = 1 [(rpc_required) = true];
 
-    // Defines the bucket period of the throughput data. Cannot be below 15 minutes (900 seconds). The time unit is defined in `time_unit`.
-    //
-    // Will fail with INVALID_ARGUMENT if not a multiple of 15 minutes (or equivalent in seconds)
+    // Defines the bucket period of the cumulative throughput data, in multiples of `time_unit`.
     uint32 step = 2 [(rpc_required) = true];
 
-    // Specify the start time of the data since the start time of the experiment. If not specified then will return data since the start of the experiment. Time unit defined in `time_unit`
+    // Specify the start time of the data since the start time of the experiment in multiples of
+    // `time_unit`.
+    //
+    // Must be a multiple of `step`.
+    //
+    // If not specified then will return data since the start of the experiment.
     uint32 start_time = 3;
 
-    // Specify the end time of the data. Call will return if the end time has been reached. Time unit defined in `time_unit`
-    // If not specified then will return all the data till the end of the experiment
+    // Specify the end time of the data to return in multiples of `time_unit`. Only data from before
+    // this time will be returned.
+    //
+    // This does not need to be a multiple of `step` - you will get a smaller final bucket if it is
+    // not.
+    //
+    // If not specified then will return all the data till the end of the experiment.
+    // A time past the end of the experiment will be accepted, and treated in the same way.
     uint32 end_time = 4;
 
-    // What unit of time are the other arguments specified in. Defaults to SECONDS
+    // What unit of time are to use. Defaults to SECONDS
+    //
+    // This is used to interpret the other fields in this message as well as for the times in the
+    // response message.
     TimeUnit time_unit = 5;
 }
 
