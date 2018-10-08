@@ -85,6 +85,25 @@ message GetVersionInfoResponse {
     // The protocols version specifies what version of bream is installed.
     // By default is set to '0.0.0.0', but will otherwise be set to {minknow-version}.{patch}
     string protocols = 2;
+
+    // Describes the distribution that this MinKNOW installation is part of, ususally
+    // this will be the Metapackage version number/identity, this will be "unknown"
+    // if the distribution-version hasn't been set. This information is also communicated
+    // in the Manager's DaemonMessage in daemon.proto
+    string distribution_version = 3;
+
+    enum DistributionStatus {
+        UNKNOWN  = 0; // The distribution status is unknown or can not be determined
+        STABLE   = 1; // Released software in that same configuration in which
+                      // it was distributed.
+        UNSTABLE = 2; // Pre-release or release-candidate software that has not
+                      // been fully tested, but has not been modified from how it
+                      // was distributed.
+        MODIFIED = 3; // Some or all components have been replaced after distribution
+    }
+    // Indicates if the MinKNOW distribution including components such as Bream
+    // are stable, unstable or have been modified.
+    DistributionStatus distribution_status = 4;
 }
 
 message GetOutputDirectoriesRequest {

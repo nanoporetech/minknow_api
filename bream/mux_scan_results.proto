@@ -1,0 +1,69 @@
+syntax="proto3";
+
+package ont.bream.mux_scan_results;
+
+// KEYSTORE KEY: bream.MUX_SCAN_RESULTS
+
+message MuxScanResults {
+    // A mapping of run ID to mux scan results
+    //
+    // This allows us to keep a history of previous runs and the
+    // mux scan results
+    map<string, RunMuxScanResults> results = 1;
+}
+
+
+message RunMuxScanResults {
+    // Mux scan period originally set in hours, can be a decimal
+    float mux_scan_period = 1;
+
+    // The styling for each mux state category
+    repeated MuxGroup muxGroups = 2;
+
+    // A list of mux scan Results
+    //
+    // Results should be updated every time new mux results are available
+    repeated Result results = 3;
+}
+
+message Result {
+    // A mapping of mux state category to count
+    //
+    // eg. 'sequencing': 1500
+    map<string, uint32> counts = 1;
+}
+
+message Style {
+    // The human-readable name to display when rendering this mux category or group.
+    string label = 1;
+
+    // A sentence describing the meaning of the mux category or group.
+    //
+    // This can be used as a tooltip, for example.
+    string description = 2;
+    
+    // The colour to use when rendering this mux category or group.
+    //
+    // This is a six-digit hex string describing an RGB colour (eg: "ff00ff" for purple).
+    string colour = 3;
+}
+message MuxCategory {
+    // Name of the category
+    string name = 1;
+
+    // How to render the mux category in a graphical user interface.
+    Style style = 2;
+
+    // An order ranking for the mux category when they are ungrouped.
+    uint32 global_order = 3;
+}
+message MuxGroup {
+    // The name of the group.
+    string name = 1;
+
+    // How to render the group in a graphical user interface.
+    Style style = 2;
+
+    // The mux state categories contained in the group.
+    repeated MuxCategory category = 3;
+}

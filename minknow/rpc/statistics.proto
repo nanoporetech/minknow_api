@@ -23,14 +23,6 @@ service StatisticsService {
     // Since 1.14
     rpc get_duty_time (GetDutyTimeRequest) returns (GetDutyTimeResponse) {}
 
-    // A histogram of estimated read lengths (based on events)
-    //
-    // The first response(s) will give you the latest data, then the responses after that will only 
-    // contain buckets that have changed. The initial state may be sent over multiple messages
-    //
-    // Currently unimplemented
-    //rpc stream_read_length (StreamReadLengthRequest) returns (stream StreamReadLengthResponse) {}
-
     // A 2D histogram between basecall length and qscore
     //
     // The first response(s) will give you the latest data, then the responses after that will only 
@@ -57,6 +49,17 @@ service StatisticsService {
     // Since 1.14
     rpc get_throughput (GetCumulativeThroughputRequest) returns (GetCumulativeThroughputResponse) {}
 
+    // A histogram of estimated read lengths (based on events)
+    //
+    // A whole new histogram will be sent everytime minknow polls for data (set by `poll_time`) and not just updates
+    //
+    // Since 3.0
+    rpc stream_read_length_histogram (StreamReadLengthHistogramRequest) returns (stream StreamReadLengthHistogramResponse) {}
+
+    // Gets the estimated read lengths for a particular acquisition period
+    //
+    // Since 3.0
+    rpc get_read_length_histogram (GetReadLengthHistogramRequest) returns (GetReadLengthHistogramResponse) {}
 }
 
 enum TimeUnit {
@@ -171,35 +174,149 @@ message GetDutyTimeResponse {
     map<string, ChannelStateData> channel_states = 1;
 }
 
-message StreamReadLengthRequest {
-    bool is_cumulative = 1;
+enum BucketValueType {
+    // Numbers for use in example below
+    // Reads: 5
+    // Events for each read: [20, 100, 30, 60, 110]
+    // Events to base ratio: 2.0
+
+    // Counts only total number of reads
+    //
+    // Using example above, the bucket value would be 5
+    READ_COUNTS = 0;
+
+    // Calculates the sum of the event counts for all the reads
+    //
+    // Using the example above, the bucket value would be 320
+    EVENTS = 1;
+
+    // Estimates the number of bases based on the events and an event to base ratio
+    //
+    // Using the example above, the bucket value would be 160
+    ESTIMATED_BASES = 2;
+
+    // This is the actual, basecalled number of bases for a read. As basecalling takes time
+    // then this may be delayed in comparision to the other types
+    BASECALLED_BASES = 3;
 }
 
-message StreamReadLengthResponse {
-    message Bucket {
-        // Represents T0 for a bucket [T0, T1)
-        uint32 bucket = 1;
+message StreamReadLengthHistogramRequest {
+    // Sets the desired width of the buckets. The actual width may not be the number set here
+    //
+    // If not set, then will set the minimum width possible
+    uint32 bucket_width = 1;
 
-        // Setting `is_cumulative` to false will give `read_count`, setting to true will return `read_length`
-        //
-        // `read_count` is the number of reads we have seen in this bucket, so if this was bucket 0 and
-        // and there has been a read with length 30 and another with 20, then `read_count` will be 2
-        //
-        // `read_length` is the cumulative read length of the bucket. So using the previous example, 
-        // `read_length` will be 50
-        oneof read_type {
-            uint32 read_count = 2;
-            uint32 read_length = 3;
-        }
-    }
+    // Sets the point of the leftmost bucket
+    //
+    // The leftmost bucket of the upscaled histogram will be the one that contains this value.
+    // The histogram will contain data for values starting at the minimum value for this bucket.
+    // Thus, the start value of the histogram may be lower than the value specified by this
+    // field.
+    //
+    // By default will start from 0
+    uint32 start = 2;
 
-    message Group {
-        // The width of the buckets in this group
-        uint32 width = 1;
-        repeated Bucket buckets = 2;
-    }
+    // Sets the point of the rightmost bucket
+    //
+    // If a non-zero value is specified, then the rightmost bucket of the upscaled histogram will be the one that contains this value.
+    // The histogram will contain data for values ending at the maximum value for this bucket.
+    // Thus, the end value of the histogram may be higher than the value specified by this
+    // field.
+    //
+    // If zero is specified, then the rightmost bucket will be the highest one which has data stored in it.
+    // This will be freshly determined with every streamed response.
+    // This means that the number of buckets can shrink or grow between 2 responses.
+    //
+    // Be default, this will be 0
+    uint32 end = 3;
 
-    repeated Group bucket_groups = 1;
+    // Determines what data is returned in the buckets
+    //
+    // See `BucketValueType` definition for a concrete example of what each type represents
+    BucketValueType bucket_value_type = 4;
+
+    // Sets how long minknow will take to poll the data and return a response, specified
+    // in [time_unit]
+    uint32 poll_time = 5;
+
+    // What unit of time are to use. Defaults to SECONDS
+    //
+    // This is used to interpret the other fields in this message as well as for the times in the
+    // response message.
+    TimeUnit time_unit = 6;
+}
+
+message StreamReadLengthHistogramResponse {
+
+    // Array of data for the histogram buckets.
+    // The values will be of the type represented by `bucket_value_type`
+    repeated uint64 buckets = 1;
+
+    // The size of the bucket
+    uint32 width = 2;
+
+    // Note that this can be different from what is requested if the type requested is not available for some reason 
+    // (e.g. requested ESTIMATED_BASES but events_to_base ratio is not set in minknow)
+    BucketValueType bucket_value_type = 3;
+    
+    // The lowest value in the range covered by the histogram
+    // (and, therefore, also the lowest value in the range covered by the first bucket of the histogram)
+    uint32 min_val = 4;    
+}
+
+message GetReadLengthHistogramRequest {
+    // The acquisition id of the experiment
+    string run_id = 1 [(rpc_required) = true];
+
+    // Sets the desired width of the buckets. The actual width may not be the number set here
+    //
+    // If not set, then will set the minimum width possible
+    uint32 bucket_width = 2;
+
+    // Sets the point of the leftmost bucket
+    //
+    // The leftmost bucket of the upscaled histogram will be the one that contains this value.
+    // The histogram will contain data for values starting at the minimum value for this bucket.
+    // Thus, the start value of the histogram may be lower than the value specified by this
+    // field.
+    //
+    // By default will start from 0
+    uint32 start = 3;
+
+    // Sets the point of the rightmost bucket
+    //
+    // If a non-zero value is specified, then the rightmost bucket of the upscaled histogram will be the one that contains this value.
+    // The histogram will contain data for values ending at the maximum value for this bucket.
+    // Thus, the end value of the histogram may be higher than the value specified by this
+    // field.
+    //
+    // If zero is specified, then the rightmost bucket will be the highest one which has data stored in it.
+    //
+    // Be default, this will be 0
+    uint32 end = 4;
+
+    // Determines what data is returned in the buckets
+    //
+    // See `BucketValueType` definition for a concrete example of what each type represents.
+    BucketValueType bucket_value_type = 5;
+}
+
+message GetReadLengthHistogramResponse {
+
+    // Array of data for the histogram buckets.
+    // The values will be of the type represented by `bucket_value_type`
+    repeated uint64 buckets = 1;
+
+    // The size of the bucket
+    uint32 width = 2;
+
+    // Note that this can be different from what is requested if the type requested is not available for some reason 
+    // (e.g. requested ESTIMATED_BASES but events_to_base ratio is not set in minknow)
+    BucketValueType bucket_value_type = 3;
+    
+    // The lowest value in the range covered by the histogram
+    // (and, therefore, also the lowest value in the range covered by the first bucket of the histogram)
+    uint32 min_val = 4;    
 }
 
 message StreamHeatmapRequest {

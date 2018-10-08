@@ -45,6 +45,13 @@ service AnalysisConfigurationService {
     // or with the new one, but it cannot be used interleaved!
     rpc set_analysis_configuration (AnalysisConfiguration) returns (SetAnalysisConfigurationResponse) {};
 
+    // Reset the analysis configuration
+    //
+    // The configuration will be set to the initial default configuration that was set on boot
+    //
+    // Since 3.0
+    rpc reset_analysis_configuration (ResetAnalysisConfigurationRequest) returns (ResetAnalysisConfigurationResponse) {};
+
     // Enable or disable analysis entirely.
     rpc set_analysis_enabled_state (SetAnalysisEnabledStateRequest) returns (SetAnalysisEnabledStateResponse) {};
 
@@ -58,6 +65,20 @@ service AnalysisConfigurationService {
     //
     // This is a high-level overview of what major parts of the analysis pipeline are enabled.
     rpc get_summary (GetSummaryRequest) returns (GetSummaryResponse) {};
+
+    // Configure the basecaller which will run during acquisition.
+    //
+    // This rpc will result in an error if invoked during acquisition.
+    //
+    // By default no basecalling is performed (enable = false).
+    //
+    // Since 3.0
+    rpc set_basecaller_configuration(SetBasecallerConfigurationRequest) returns (SetBasecallerConfigurationResponse) {}
+
+    // Find the current basecaller configuration (see #set_basecaller_configuration)
+    //
+    // Since 3.0
+    rpc get_basecaller_configuration(GetBasecallerConfigurationRequest) returns (BasecallerConfiguration) {}
 }
 
 message EventDetection {
@@ -227,84 +248,6 @@ message HistogramDocument {
     Style style = 2;
 }
 
-message BasecallerParams {
-    message Pipeline {
-        enum PipelineType{
-
-            // Use this type if the pipeline uses raw basecalling (no event detector module).
-            // The current layout is: 
-            // raw_extractor - data trimmer - basecaller.
-            // (Please see conf/albacore/template_r9.4_450bps_raw.jsn)
-            RawBasecall = 0;
-
-            // Use this type if the pipeline has event detector in the modules, so the 
-            // basecaller is using events. The current layout is: 
-            // raw_extractor - data trimmer - event detector - basecaller.
-            // (Please see conf/albacore/linear.jsn)
-            RawEventBasecall = 1;
-        }
-
-        reserved 1;
-
-        // Tells minknow to setup a 1D or 2D basecalling pipeline
-        // For example: // "linear", "template_complement".
-        // Currently, only the linear type is supported.
-        google.protobuf.StringValue basecall_type = 2;
-
-        // Tells albacore to reset its internal cache of a channel either
-        // on a mux change or on a new read
-        google.protobuf.StringValue reset_mode = 3;
-
-        // Max files trailing the last one that minknow can access
-        google.protobuf.UInt64Value maximum_raw_file_count = 4;
-
-        reserved 5;
-
-        // Stops processing as soon as a protocol ends if true
-        google.protobuf.BoolValue skip_reads_on_experiment_end = 6;
-
-        // Whether we are using raw basecalling directly, or we are breaking raw data
-        // into events in the albacore pipeline. This type filed is used to select one
-        // of the conf/albacore/template_r9.4_450bps_raw.jsn or conf/albacore/linear.jsn.
-        // By default, it will be set to RawBasecall.
-        PipelineType type = 7;
-
-        // Specify how many bytes can be held in memory for basecalling
-        // when there is resource available.
-        google.protobuf.UInt64Value maximum_stored_memory_read_bytes = 8;
-
-        // Specify how many bytes can be held on disk for basecalling
-        // when there is resource available.
-        google.protobuf.UInt64Value maximum_stored_disk_read_bytes = 9;
-
-    }
-
-    message ReadFiltering {
-        google.protobuf.DoubleValue min_qscore = 1;
-        google.protobuf.UInt64Value min_samples = 2;
-        google.protobuf.UInt64Value max_samples = 3;
-        google.protobuf.UInt64Value min_bases = 4;
-        google.protobuf.UInt64Value max_bases = 5;
-        google.protobuf.UInt64Value max_failed_chunks = 6;
-    }
-
-    bool basecall_enabled = 1 [(rpc_required) = true];
-
-    // A list of absolute paths to albacore config files. Currently, only the first file in
-    // the list is used, and it should be the main config file used in albacore. The plan is to
-    // send all these configs to albacore (once we upgrade to the right version of albacore), in order
-    // to use barcoding.
-    // 
-    // Required if basecalling is enabled.
-    repeated string albacore_config_paths = 2;
-
-    // The absolute path to the directory where the model file is located. The model is specified in
-    // the albacore config, but the absolute path is not, therefore the presence of this field.
-    string albacore_model_directory = 3;
-    Pipeline pipeline_params = 4;
-    ReadFiltering read_filtering = 5;
-}
-
 message ChannelStates {
     message Logic {
         message Behaviour {
@@ -398,17 +341,23 @@ message GetAnalysisConfigurationRequest {
 }
 
 message AnalysisConfiguration {
+    reserved "basecaller_params";
+    reserved 8;
+
     EventDetection event_detection = 1;
     ReadDetectionParams read_detection = 2;
     ReadDetectionParams read_detection_alt = 3;
     ReadClassificationParams read_classification = 4;
     map<string, HistogramDocument> histograms = 5;
     map<string, ChannelStates> channel_states = 7;
-    BasecallerParams basecaller_params = 8;
 }
 
 message SetAnalysisConfigurationResponse {
 }
+
+
+message ResetAnalysisConfigurationRequest {}
+message ResetAnalysisConfigurationResponse {}
 
 message SetAnalysisEnabledStateRequest {
     bool enable = 1 [(rpc_required) = true];
@@ -482,3 +431,43 @@ message GetSummaryResponse {
     // Whether basecalling is enabled.
     bool basecalling_enabled = 2;
 }
+
+
+// Since 3.0
+message BasecallerConfiguration
+{
+    message ReadFiltering {
+        google.protobuf.DoubleValue min_qscore = 1;
+        google.protobuf.UInt64Value min_samples = 2;
+        google.protobuf.UInt64Value max_samples = 3;
+        google.protobuf.UInt64Value min_bases = 4;
+        google.protobuf.UInt64Value max_bases = 5;
+        google.protobuf.UInt64Value max_failed_chunks = 6;
+    }
+
+    // Choose if guppy is enabled or disabled.
+    // 
+    // If set to false then no basecalling will take place, and the rest of the config is ignored.
+    bool enable = 2;
+
+    // The Guppy cfg file with all the settings.
+    //
+    // Filename can be absolute, or a basename (eg dna_r9.4_450bps.cfg) 
+    // which guppy should locate (see guppy application config entry: "data_path") 
+    string config_filename = 1;
+
+    // Control how read filtering is applied to output of basecaller.
+    //
+    // If no filtering parameters are provided then reads will not
+    // be filtered.
+    ReadFiltering read_filtering = 3;
+}
+
+message SetBasecallerConfigurationRequest
+{
+    BasecallerConfiguration configs = 1 [(rpc_unwrap) = true];
+}
+
+message SetBasecallerConfigurationResponse{}
+
+message GetBasecallerConfigurationRequest{}

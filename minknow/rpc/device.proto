@@ -551,6 +551,12 @@ message SetTemperatureRequest {
 
     // Settings which can be specified in order to wait for the temperature to be reached.
     //
+    // If this is not set at all, not waiting will be done. If it is set (even to an empty
+    // WaitForTemperatureSettings object), the call will not return until either the temperature was
+    // reached or the timeout was reached. In this case, on MinIONs and GridIONs, the ASIC power
+    // will be enabled if it was not already. See acquisition.StopRequest.keep_power_on for more
+    // details about the implications of this.
+    //
     // Since 1.15
     WaitForTemperatureSettings wait_for_temperature = 2;
 }

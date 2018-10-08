@@ -106,6 +106,42 @@ service DataService {
     /// processed.
     rpc reset_channel_states (ResetChannelStatesRequest) returns (ResetChannelStatesResponse) {}
 
+    /// Forces channels to be fixed on a custom channel state. The channels will not be re-evaluated until 
+    /// they are activated using unlock_channel_states.
+    /// To create a channel state that will never be entered unless manually set using this call, 
+    /// use the "never_evaluated" criteria:
+    /// "9": { "group": {...},
+    ///        "logic": {
+    ///            "rank": 0,
+    ///            "criteria": "never_evaluated"
+    ///             },
+    ///         "name": "custom_name_picked_by_the_user"
+    ///       }
+    ///
+    /// While the this RPC has the power of forcing a channel to any valid state other than 'unclassified',
+    /// it is intended to be used with channel states that are designed for this functionality (i.e. that 
+    /// are never evaluated).
+    /// Has to be called while acquiring data, fails otherwise.
+    /// The forced channels are reset (reset = every channel back to being evaluated) every time a 
+    /// new acquisition sequence is started.
+    ///
+    /// NOTE:
+    /// Calls to lock_channel_states and unlock_channel_states cannot be done in the same time.
+    /// If any of these two is called while any of these is already running, the grpc will return 
+    /// with an error.
+    rpc lock_channel_states(LockChannelStatesRequest) returns (LockChannelStatesResponse) {}
+
+    /// Re-activates channels that have been turned-off with force_channels_to_state.
+    /// Note that 'turning off' refers to channel states only, everything else is still applied on the channel
+    /// (e.g. mux changes, saturation, commands etc)
+    /// No action is taken if the channel is already active.
+    /// Has to be called while acquiring data, fails otherwise.
+    /// NOTE:
+    /// Calls to lock_channel_states and unlock_channel_states cannot be done in the same time.
+    /// If any of these two is called while any of these is already running, the grpc will return 
+    /// with an error.
+    rpc unlock_channel_states(UnlockChannelStatesRequest) returns (UnlockChannelStatesResponse) {}
+
     // Get live reads sent in order to control sequencing behaviour.
     //
     // This method sends current reads (reads that are currently in the sequencer) to the user along
@@ -715,3 +751,25 @@ message GetReadStatisticsResponse {
   // This is the same as ``samples_since_start``, but expressed in seconds.
   double seconds_since_start = 3;
 }
+
+message LockChannelStatesRequest {
+    /// The channels that we want to 'deactivate' = set them to the given state until we re-activate them
+    /// with unlock_channel_states
+    /// If the channels are already deactivated, it will update the state to the new forced state given (if different).
+    /// Channels are indexed from 1.
+    repeated uint64 channels = 1 [(rpc_required) = true];
+
+    /// Channel state name as specified in the channel state configuration. 
+    /// It HAS to be different to 'unclassified', which denotes that the channel is active, but had not met
+    /// any successful criteria yet.
+    string state_name = 2 [(rpc_required) = true];
+}
+
+message LockChannelStatesResponse {}
+
+message UnlockChannelStatesRequest {
+    /// The channels to activate (active = they will be considered for channel state evaluation in the future).  
+    /// Channels are indexed from 1.
+    repeated uint64 channels = 1 [(rpc_required) = true];
+}
+message UnlockChannelStatesResponse {}

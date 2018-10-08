@@ -112,6 +112,23 @@ message SoftwareUpdateNotifOutput {
     string installer_command = 3;
     // the list of the installer arguments
     repeated string installer_args = 4;
+
+    // The current version of the minknow distribution. This is the same information
+    // as in the InstanceService get_version_info response
+    string current_version = 14;
+
+    enum DistributionStatus {
+        UNKNOWN  = 0; // The distribution status is unknown or can not be determined
+        STABLE   = 1; // Released software in that same configuration in which
+                      // it was distributed.
+        UNSTABLE = 2; // Pre-release or release-candidate software that has not
+                      // been fully tested, but has not been modified from how it
+                      // was distributed.
+        MODIFIED = 3; // Some or all components have been replaced after distribution
+    }
+    // Indicates if the MinKNOW distribution including components such as Bream
+    // are stable, unstable or have been modified.
+    DistributionStatus distribution_status = 15;
 }
 
 // Replicates JSON-RPC

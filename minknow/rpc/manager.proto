@@ -1,0 +1,57 @@
+syntax="proto3";
+
+package ont.rpc.manager;
+
+service ManagerService {
+    // List all devices attached to this machine.
+    //
+    // Devices will be in 1 of 3 states: active, pending, inactive. Will provide port information
+    // for any devices that are active
+    rpc list_devices (ListDevicesRequest) returns (ListDevicesResponse) {}
+}
+
+message ListDevicesRequest {
+
+}
+
+message ListDevicesResponse {
+    message RpcPorts {
+        // Used for the old style of rpc using json
+        //
+        // Deprecated, as new rpc's are not being added to this service
+        uint32 jsonrpc = 1;
+
+        // Connects to ws_longpoll process and provides engine state updates
+        //
+        // Deprecated, as minknow is phasing out public access to engine states
+        uint32 json_websocket = 2; // Deprecated
+
+        // Secure connection to the grpc service over TLS
+        uint32 secure = 3;
+
+        // Direct connection to the (insecure) grpc connection. You would connect this via the method 
+        // described in the grpc documentation for your language.
+        //
+        // This is the "real" grpc port in that in connects directly to the grpc server. Most connections from python
+        // and other non-web languages should use this port
+        uint32 insecure_grpc = 4;
+
+        // Provides a HTTP/1.1 interface to the grpc connection. Intended for connecting with the browser over javascript
+        // https://github.com/improbable-eng/grpc-web
+        uint32 insecure_web = 5;
+    }
+    
+    message ActiveDevice {
+        string name = 1;
+        RpcPorts ports = 2;
+    }
+
+    // Devices that haven't been started
+    repeated string inactive = 1;
+
+    // Devices that are in the process of being started. A call to stop this device will not work until it has fully started
+    repeated string pending = 2;
+
+    // Devices that have started, along with their port information
+    repeated ActiveDevice active = 3;
+}

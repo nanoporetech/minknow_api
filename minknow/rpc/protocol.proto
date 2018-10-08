@@ -98,6 +98,11 @@ service ProtocolService {
     //
     // Since 1.11
     rpc set_protocol_purpose (SetProtocolPurposeRequest) returns (SetProtocolPurposeResponse) {}
+
+    // Links an epi2me workflow reference to a run id.
+    //
+    // Since 1.15
+    rpc add_epi2me_workflow (AddEpi2meWorkflowRequest) returns (AddEpi2meWorkflowResponse) {}
 }
 
 message ProtocolRunUserInfo {
@@ -242,6 +247,14 @@ enum ProtocolState {
     PROTOCOL_FINISHED_WITH_ERROR = 3;
 }
 
+message Epi2meWorkflowReference {
+    // The unique identifier for a workflow ( unique to a specific instance of epi2me )
+    int64 id = 1;
+
+    // URL that links to the workflow report. Syntax for a local workflow: file:// otherwise: http(s)://
+    string url = 2;
+}
+
 message ProtocolRunInfo {
     // The unique identifier assigned to this run.
     //
@@ -254,6 +267,11 @@ message ProtocolRunInfo {
 
     // The arguments passed to start_protocol().
     repeated string args = 3;
+
+    // Output location for protocol data (eg. reads).
+    //
+    // Since 1.16.
+    string output_path = 11;
 
     // Indicates the current state of the protocol run.
     ProtocolState state = 4;
@@ -282,6 +300,11 @@ message ProtocolRunInfo {
     //
     // Since 1.11.
     ProtocolRunUserInfo user_info = 8;
+
+    // List of workflows from epi2me associated with this protocol
+    //
+    // Since 1.15.
+    repeated Epi2meWorkflowReference epi2me_workflows = 10;
 }
 
 message ListProtocolRunsRequest {
@@ -348,4 +371,14 @@ message SetProtocolPurposeRequest {
 
 message SetProtocolPurposeResponse {
     
+}
+
+message AddEpi2meWorkflowRequest {
+    string run_id = 1 [(rpc_required) = true];
+
+    Epi2meWorkflowReference epi2me_workflow = 2 [(rpc_required) = true];
+}
+
+message AddEpi2meWorkflowResponse {
+
 }

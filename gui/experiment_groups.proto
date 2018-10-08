@@ -2,6 +2,8 @@ syntax="proto3";
 
 package ont.gui.experiment_groups;
 
+// KEYSTORE KEY: gui.EXPERIMENT_GROUPS
+
 // List of experiment group names
 //
 // These are created by a user within the GUI
