@@ -103,6 +103,11 @@ service ProtocolService {
     //
     // Since 1.15
     rpc add_epi2me_workflow (AddEpi2meWorkflowRequest) returns (AddEpi2meWorkflowResponse) {}
+
+    // List all used protocol group ids used in any previous protocol on the box.
+    //
+    // Since 3.2
+    rpc list_protocol_group_ids(ListProtocolGroupIdsRequest) returns (ListProtocolGroupIdsResponse) {}
 }
 
 message ProtocolRunUserInfo {
@@ -380,5 +385,14 @@ message AddEpi2meWorkflowRequest {
 }
 
 message AddEpi2meWorkflowResponse {
+}
 
+message ListProtocolGroupIdsRequest {
+}
+
+message ListProtocolGroupIdsResponse {
+    // A list of protocol group ids used in any
+    // protocol started on this instance of minknow.
+    //
+    repeated string protocol_group_ids = 1;
 }

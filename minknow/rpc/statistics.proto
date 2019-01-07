@@ -60,6 +60,62 @@ service StatisticsService {
     //
     // Since 3.0
     rpc get_read_length_histogram (GetReadLengthHistogramRequest) returns (GetReadLengthHistogramResponse) {}
+
+
+
+    
+    // Returns the speed by bases metric represented as datasets (i.e. boxplots).
+    // 
+    // Speed by bases is the pore speed measured in called bases: read length in bases / read length in seconds
+    // for all the reads that were successfully called.
+    //
+    // A dataset is a collection of quantiles (min, max, q50 etc - please see BoxplotDataset) recorded for
+    // a fixed period of time, say dt. dt is specified in the configs, and it defaults to 10 min for MinKNOW 3.2.
+    // When acquisition starts, MinKNOW accumulates these stats for each dt interval. Each dt generates 
+    // a dataset streamed by this rpc. The stream can request aggregated stats by averaging the stats from
+    // consecutive dt periods.
+    //
+    // Notes:
+    //
+    // Each streamed message will return ALL the datasets (i.e. boxplots) from the start of the experiment.
+    //
+    // When using this rpc, basecalling needs to be enabled.
+    //
+    // Since 3.2
+    rpc stream_pore_speed_in_bases_boxplots (StreamBoxplotRequest) returns (stream BoxplotResponse) {}
+
+    // Get the final representation of the speed by bases for a requested acquisition period.
+    // The acquisition must have finished at the time of this call, or the grpc will fail.
+    //
+    // Since 3.2
+    rpc get_pore_speed_in_bases_boxplots (GetBoxplotRequest) returns (BoxplotResponse) {}
+
+
+    
+    // Returns the qscore over time metric represented as datasets (i.e. boxplots).
+    //
+    // This metric applies to all the successfully called reads.
+    //
+    // A dataset is a collection of quantiles (min, max, q50 etc - please see BoxplotDataset) recorded for
+    // a fixed period of time, say dt. dt is specified in the configs, and it defaults to 10 min for MinKNOW 3.2.
+    // When acquisition starts, MinKNOW accumulates these stats for each dt interval. Each dt generates 
+    // a dataset streamed by this rpc. The stream can request aggregated stats by averaging the stats from
+    // consecutive dt periods.
+    //
+    // Notes:
+    //
+    // Each streamed message will return ALL the datasets (i.e. boxplots) from the start of the experiment.
+    //
+    // When using this rpc, basecalling needs to be enabled.
+    //
+    // Since 3.2
+    rpc stream_qscore_boxplots (StreamBoxplotRequest) returns (stream BoxplotResponse) {}
+
+    // Get the final representation of the qscore over time metric for a requested acquisition period.
+    // The acquisition must have finished at the time of this call, or the grpc will fail.
+    //
+    // Since 3.2
+    rpc get_qscore_boxplots (GetBoxplotRequest) returns (BoxplotResponse) {}
 }
 
 enum TimeUnit {
@@ -471,4 +527,67 @@ message GetCumulativeThroughputRequest {
 
 message GetCumulativeThroughputResponse {
     repeated CumulativeThroughputBucket buckets = 1;
+}
+
+message GetBoxplotRequest {
+    // The acquisition id of the experiment.
+    string run_id = 1 [(rpc_required) = true];
+
+    // Defines, in minutes, the width of each dataset.
+    // This is how much time should each boxplot be covering. Note that MinKNOW stores
+    // all stats at the default granularity (specified in the config file, usually 10 min).
+    // This dataset_width HAS to be a multiple of the default granularity!
+    //
+    // Note:
+    // When multiple buckets are aggregated into a single dataset, the resulting dataset will
+    // contain the average of the aggregated quantiles! This is not the same value as
+    // using a larger granularity in MinKNOW configs - the values that MinKNOW stores
+    // are the true quantiles. Averaging quantiles will give a rough approximation, but not a quantile.
+    // If the finest granularity is not required, we suggest changing the value in the config,
+    // not the dataset_width in the rpc.
+    uint32 dataset_width = 2;
+}
+
+message StreamBoxplotRequest {
+
+    // Defines, in minutes, the width of each dataset.
+    // This is how much time should each dataset (boxplot) cover. Note that MinKNOW stores
+    // all stats at a default granularity (specified in the config file, i.e. 10 min in MinKNOW 3.2).
+    // This dataset_width HAS to be a multiple of the default granularity!
+    //
+    // Note:
+    // When multiple buckets are aggregated into a single dataset, the resulting dataset will
+    // contain the average of the aggregated quantiles (with the exception of min/max)! This is not the 
+    // same as using a larger granularity in MinKNOW configs - the values that MinKNOW stores
+    // are the true quantiles. Averaging quantiles will give a rough approximation, but not a quantile.
+    // If the finest granularity is not required, we strongly suggest changing the time coverage in the config,
+    // not the dataset_width in the rpc.
+    uint32 dataset_width = 1;
+
+    // If `wait_for_processing` is true, then will wait until minknow starts acquiring data instead of returning with an error
+    //
+    // Defaults to false
+    bool wait_for_processing = 2;
+
+    // How often to return messages in this stream, specified in seconds. Note that this stream will
+    // return results regardless of the stats updates (because it always returns all the datasets). 
+    // poll_time should be larger than the basecalled stats update rate in MinKNOW - 
+    // please see basecalled_stats_refresh_rate_seconds in the configs
+    // (set to 1 second in MinKNOW 3.2).
+    uint32 poll_time = 3;
+}
+
+message BoxplotResponse {
+    // Result boxplots are stored in this array. This is an overview of the stored data
+    // from the START of the acquisition period. This includes ALL the basecalled stats
+    // from MinKNOW, not just updates since previous calls!
+    repeated BoxplotDataset datasets = 1;
+
+    message BoxplotDataset {
+        float min = 1;
+        float q25 = 2;
+        float q50 = 3;
+        float q75 = 4;
+        float max = 5;
+    }
 }

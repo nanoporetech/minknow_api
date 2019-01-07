@@ -79,6 +79,72 @@ message DeviceSettings {
     // These values must be between the limits specified in the application config,
     // see: min_user_setpoint_temperature_celsius and max_user_setpoint_temperature_celsius
     google.protobuf.FloatValue temperature_target = 7;
+
+    // If specified, the device will adopt these timings to set how
+    // long is spent at various stages of the current digitisation processes.
+    // The message includes a way of returning to default timings.
+    //
+    // This value cannot be changed during acquisition
+    TimingEnginePeriods timings = 8;
+}
+
+
+message TimingEnginePeriods {
+    // Timing-engine periods are specified in 5ns units. Some of the timing
+    // mechanism can only acheive 10ns accuracy, so even numbers are preferred.
+    //
+    // Note: There is a timing feature in the ASIC that requires the sum of
+    // the RST1 and DATA periods to be a multiple of 16
+
+    // Reset1 phase
+    //
+    // Note: Commands are written to the ASIC during this period, to allow
+    // sufficient time to write the commands, this should never be less than
+    // 1.2us or 240.
+    google.protobuf.UInt32Value RST1        = 1;
+
+    // Reset1 to CDS1 transition
+    google.protobuf.UInt32Value RST1_CDS1   = 2;
+
+    // CDS1 phase (Correlated Double Sampling) sample-point 1
+    google.protobuf.UInt32Value CDS1        = 3;
+
+    // CDS1 to DATA transiton
+    google.protobuf.UInt32Value CDS1_DATA   = 4;
+
+    // DATA transfer phase
+    google.protobuf.UInt32Value DATA        = 5;
+
+    // DATA transfer to Reset2 transition.
+    //
+    // NOTE: Setting this value has no effect, MinKNOW will choose a value for
+    // DATA_RST2 itself to maintain the required frame-rate. Reading it will
+    // return the chosen DATA_RST2 period.
+    google.protobuf.UInt32Value DATA_RST2   = 6;
+
+    // Reset2
+    google.protobuf.UInt32Value RST2        = 7;
+
+    // Reset2 to CDS2 transition
+    google.protobuf.UInt32Value RST2_CDS2   = 8;
+
+    // CDS2 Phase (sample-point 2)
+    google.protobuf.UInt32Value CDS2        = 9;
+
+    // CDS2 to SH transition
+    google.protobuf.UInt32Value CDS2_SH     = 10;
+
+    // SH phase (Sample and Hold)
+    google.protobuf.UInt32Value SH          = 11;
+
+    // SH to Reset1 transition
+    google.protobuf.UInt32Value SH_RST1     = 12;
+
+    // If written true, other fields will be ignored and the hardware will use
+    // default timings. When read will return true if previously set true,
+    // it will not tell you if the timing periods you previously entered
+    // are the same as the default values.
+    google.protobuf.BoolValue use_default_values = 13;
 }
 
 message PixelBlockSettings {

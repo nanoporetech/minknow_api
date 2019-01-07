@@ -37,12 +37,12 @@ enum HostType {
 ////////////////////////////////////////
 
 message InstanceInfo {
-    reserved 3, 6;
+    reserved 3, 4, 6;
     reserved "event_sampler_port";
+    reserved "raw_data_sampler_port";
 
     int32 port = 1;
     int32 long_poll_port = 2;
-    int32 raw_data_sampler_port = 4;
     int32 grpc_port = 5;
     int32 grpc_web_port = 7;
     int32 grpc_web_insecure_port = 8;

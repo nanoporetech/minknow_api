@@ -3,7 +3,7 @@
 # gRPC api.
 #
 # You need to have python 3 installed on your machine
-#
+# 
 # Python needs the grpc libraries installed in order to talk to MinKNOW:
 #
 # > pip install protobuf grpcio grpcio-tools
@@ -26,13 +26,11 @@
 # First we add the directory we generated into to the python path
 import os
 import sys
-sys.path.append(os.path.join(os.path.dirname(__file__), "generated"))
+sys.path.append(os.path.join(os.path.dirname(__file__), "generated")) 
 
 # Then import the generated api
 import minknow.rpc.protocol_pb2 as protocol
 import minknow.rpc.protocol_pb2_grpc as protocol_grpc
-import minknow.rpc.manager_pb2 as manager
-import minknow.rpc.manager_pb2_grpc as manager_grpc
 
 # Import the grpc libraries we installed earlier
 import grpc
@@ -60,35 +58,12 @@ def find_protocol(protocols, flow_cell, kit, experiment_type):
     raise Exception("Protocol %s %s %s not found!" % (flow_cell, kit, experiment_type))
 
 #-------------------------------------------------------------------------------
-# Connect to the running Manager instance:
-#
-# We can find a device to connect to using the
-# manager (see 'list_devices.py' example).
-#
-manager_channel = grpc.insecure_channel('localhost:9501')
-manager_stub = manager_grpc.ManagerServiceStub(manager_channel)
-
-list_devices_request = manager.ListDevicesRequest()
-list_devices_response = manager_stub.list_devices(list_devices_request)
-
-if len(list_devices_response.active) == 0:
-    raise Exception("No devices found to start protocol on")
-
-# See 'list_devices.py' to find out more about available devices.
-device = list_devices_response.active[0]
-print("Using device %s using gRPC port %s" % (device.name, device.ports.insecure_grpc))
-
-#-------------------------------------------------------------------------------
-
-
-
-#-------------------------------------------------------------------------------
 # Connect to the running MinKNOW instance:
+# 
+# We can connect to a running MinKNOW instance on the local computer (ports may
+# vary depending on setup)
 #
-# We can connect to a running MinKNOW instance on the local
-# computer (using port from above)
-#
-channel = grpc.insecure_channel('localhost:%s' % device.ports.insecure_grpc)
+channel = grpc.insecure_channel('minicol560:8004')
 stub = protocol_grpc.ProtocolServiceStub(channel)
 #-------------------------------------------------------------------------------
 

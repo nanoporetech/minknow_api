@@ -357,6 +357,9 @@ message GetFlowCellInfoResponse {
 
     // The unique identifier for the ASIC.
     //
+    // Note: This member is deprecated in favour of asic_id_str - it does not work for PromethION
+    //       asics, and will be removed in future.
+    //
     // This is a numerical value uniquely identifying the ASIC embedded in the flow cell. It will
     // always be set when a flow cell is present.
     //
@@ -371,6 +374,23 @@ message GetFlowCellInfoResponse {
     // * An ASIC can be recycled into a new flow cell, so this identifier may be re-used in the
     //   future (although it can be considered unique for the duration of a protocol run).
     uint32 asic_id = 5;
+
+    // The unique identifier for the ASIC (formatted as string).
+    //
+    // This is a value uniquely identifying the ASIC embedded in the flow cell. It will
+    // always be set when a flow cell is present.
+    //
+    // The intended use for this is to track the identity of the asic in the flow cell, eg. for
+    // displaying to users during production of chips.
+    //
+    // Caveats:
+    //
+    // * This value will not mean anything to a customer.
+    // * There is no guarantee that this field will contain the same identifier across
+    //   MinKNOW versions, even with the same flow cell.
+    // * An ASIC can be recycled into a new flow cell, so this identifier may be re-used in the
+    //   future (although it can be considered unique for the duration of a protocol run).
+    string asic_id_str = 13;
 
     // The product code for the flow cell.
     //
