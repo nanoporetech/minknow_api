@@ -36,7 +36,7 @@ service AnalysisConfigurationService {
     // 'preserving_proto_field_name' is needed because json_format will try convert keys to json-standard(?) format, like converting
     // my_key to myKey, and the key names as seen in the protobuf file are important to minknow
     //
-    // 'including_default_value_fields' is needed because in proto3, primitive values that are default initialised (like a uint32 with value 0) 
+    // 'including_default_value_fields' is needed because in proto3, primitive values that are default initialised (like a uint32 with value 0)
     // will not be sent on the wire, so the value wouldn't appear when converting to json. In practice, most values are wrapper types and this
     // field won't have an affect in wrapper types, but it does affect enum types as the default initailised value is the 0th enum.
     //
@@ -79,67 +79,114 @@ service AnalysisConfigurationService {
     //
     // Since 3.0
     rpc get_basecaller_configuration(GetBasecallerConfigurationRequest) returns (BasecallerConfiguration) {}
+
+    // Get the pore type configuration
+    //
+    // Since 3.2
+    rpc get_pore_type_configuration(GetPoreTypeConfigurationRequest) returns (PoreTypeConfiguration) {}
+
+    // Set the pore type configuration
+    //
+    // By default, the configuration for all wells is "not_set"
+    // (global_pore_type set to "not_set")
+    //
+    // This rpc will result in an error if invoked during acquisition.
+    //
+    // If an invalid PoreTypeConfiguration is supplied, an error will be returned
+    // Invalid PoreTypeConfiguration include those where:
+    //
+    //  - No pore_type_config is set
+    //  - A pore type is set to an empty string
+    //  - A pore type is set to "invalid"
+    //
+    // If an error is returned, the pore type configuration is not updated.
+    //
+    // Since 3.2
+    rpc set_pore_type_configuration(PoreTypeConfiguration) returns (SetPoreTypeConfigurationResponse) {}
+
+    // Set the writer configuration.
+    //
+    // Note: Calling this method overrides any previous settings stored for the writers.
+    // In order to preserve settings, you should call #get_writer_configuration, mutate
+    // the config, then call this method.
+    //
+    // Will fail with FAILED_PRECONDITION if acquisition is running.
+    //
+    // The default writer config is to write nothing to disk.
+    //
+    // Since 3.3
+    rpc set_writer_configuration (WriterConfiguration) returns (SetWriterConfigurationResponse) {}
+
+    // Get the currently active writer configuration.
+    //
+    // Since 3.3
+    rpc get_writer_configuration (GetWriterConfigurationRequest) returns (WriterConfiguration) {}
+
 }
 
 message EventDetection {
-    enum EventDetectionMode {
-        multittest_continuous = 0;
-    }
-
-    enum PeakDetectorType {
-        mixed = 0;
-        highland = 1;
-    }
-
-    // Choose the event detection mode
-    // Only suuports the 'multi t test' algorithm currently, which produces 2 tstats; one using 
-    // a short window size and one using a long window size. These tstats are then passed through
-    // 'highland' peak detector to determine the peaks in the tstats.
-    EventDetectionMode mode = 1;
-
-    // Choose the peak detector to use when detecting peaks across tstats
-    // Currently, 'highland' is used for the majority of our peak detection. 'mixed' is only used within testing
-    PeakDetectorType peak_detector = 2;
-
     // The window size that the tstats are calculated from
     google.protobuf.UInt32Value window_size = 3;
-
-    // See 'window_size'
-    google.protobuf.UInt32Value long_window_size = 4;
 
     // The peak detection must be above this threshold at a minimum for it to be detected
     // as an event.
     google.protobuf.DoubleValue threshold = 5;
 
-    // See 'threshold'
-    google.protobuf.DoubleValue long_threshold = 6;
-
-    // Only affects 'mixed' peak detector
-    //
-    // Indicates how isolated a peak should be from other peaks for it to be determined as an event
-    // For example with an 'smallest_event' of 2, then a sequence such as 1,2,9,2,3 would be classed
-    // as an event, but 1,2,9,2,10 would not be.
-    google.protobuf.UInt32Value smallest_event = 7;
-
-    // See 'smallest_event'
-    google.protobuf.UInt32Value long_smallest_event = 8;
-
     // When analysing the tstat peaks, if the jump between one value and another is higher than
     // than 'peak_height', then it will "arm" the peak detector and move onto the next phase.
-    // 
+    //
     // And what goes up must come down.
     // Once it has detected a peak going up, it will also have to go down by 'peak_height'
     // in order for the peak to be classified as a found event
     google.protobuf.DoubleValue peak_height = 9;
 
-    // See 'peak_height'
+    // Conversion factor used to convert from events to bases.
+    //
+    // This is used to estimate bases for various rpc feeds from minknow.
+    google.protobuf.DoubleValue events_to_base_ratio = 16;
+
+    // DEPRECATED
+    enum EventDetectionMode {
+        multittest_continuous = 0;
+    }
+
+    // DEPRECATED
+    enum PeakDetectorType {
+        highland = 0;
+        mixed = 1;
+    }
+
+    // DEPRECATED and IGNORED
+    EventDetectionMode mode = 1;
+
+    // DEPRECATED and IGNORED
+    PeakDetectorType peak_detector = 2;
+
+    // DEPRECATED and IGNORED
+    google.protobuf.UInt32Value long_window_size = 4;
+
+    // DEPRECATED and IGNORED
+    google.protobuf.DoubleValue long_threshold = 6;
+
+    // DEPRECATED and IGNORED
+    google.protobuf.UInt32Value smallest_event = 7;
+
+    // DEPRECATED and IGNORED
+    google.protobuf.UInt32Value long_smallest_event = 8;
+
+    // DEPRECATED and IGNORED
     google.protobuf.DoubleValue long_peak_height = 10;
 
+    // DEPRECATED and IGNORED
     google.protobuf.Int32Value use_dmean = 11;
+    // DEPRECATED and IGNORED
     google.protobuf.Int32Value long_use_dmean = 12;
 
+    // DEPRECATED and IGNORED
     google.protobuf.DoubleValue reset_threshold = 13;
+    // DEPRECATED and IGNORED
     google.protobuf.UInt32Value raw_summary_step = 14;
+    // DEPRECATED and IGNORED
     google.protobuf.BoolValue serialise_detected_events = 15;
 }
 
@@ -157,6 +204,8 @@ message ReadDetectionParams {
     google.protobuf.UInt32Value break_reads_after_events = 4;
     google.protobuf.DoubleValue break_reads_after_seconds = 5;
     google.protobuf.UInt32Value break_reads_on_mux_changes = 6;
+    google.protobuf.DoubleValue open_pore_min = 7;
+    google.protobuf.DoubleValue open_pore_max = 8;
 }
 
 message ReadClassificationParams {
@@ -172,7 +221,7 @@ message ReadClassificationParams {
         //
         // "pore = (median,gt,185)&(median,lt,260)&(median_sd,lt,40)"
         //
-        // "median" and "median_sd" are apart of a small subset of variable values describing a read or read chunk, 
+        // "median" and "median_sd" are apart of a small subset of variable values describing a read or read chunk,
         // that are exposed to execution rules. The full list of variable values and their descriptions are documented
         // here: https://minknow.git.oxfordnanolabs.local/minknow-core/analysis/reads.html
         //
@@ -184,7 +233,7 @@ message ReadClassificationParams {
         //
         // Constant values like "185" or "260" can also be specified. These can be real numbers also.
         //
-        // Note that variables dont always have to be on the left and const values on the right. The 
+        // Note that variables dont always have to be on the left and const values on the right. The
         // following sub rules are also valid:
         //
         // (200,lt,median_sd)
@@ -259,12 +308,12 @@ message ChannelStates {
             // is active, then the latch will keep it active until the channel state is reset.
             google.protobuf.Int32Value latch = 3;
 
-            // An 'effective mux change' is any mux change apart from the one triggered by the user 
-            // with the purpose of disconnecting a channel (turning a channel off). For example, if 
+            // An 'effective mux change' is any mux change apart from the one triggered by the user
+            // with the purpose of disconnecting a channel (turning a channel off). For example, if
             // a channel is in pore, and the user changes the channel configuration to 'disconnected',
             // that mux change will not be an effective mux change. Any other mux change is considered
             // an 'effective mux change'. So if a channel saturates,
-            // the mux change to disconnected is an effective mux change. Similarly, a 
+            // the mux change to disconnected is an effective mux change. Similarly, a
             // change from disconnected to a pore is an effective mux change.
             //
             // Use this reset mode to make the channel state persist on non-effective mux changes.
@@ -348,7 +397,8 @@ message AnalysisConfiguration {
     ReadDetectionParams read_detection = 2;
     ReadDetectionParams read_detection_alt = 3;
     ReadClassificationParams read_classification = 4;
-    map<string, HistogramDocument> histograms = 5;
+    map<string, HistogramDocument> histograms = 5; // Deprecated; this will be ignored.  Left in for compatibility with older HDF files.
+    reserved 6;
     map<string, ChannelStates> channel_states = 7;
 }
 
@@ -446,14 +496,14 @@ message BasecallerConfiguration
     }
 
     // Choose if guppy is enabled or disabled.
-    // 
+    //
     // If set to false then no basecalling will take place, and the rest of the config is ignored.
     bool enable = 2;
 
     // The Guppy cfg file with all the settings.
     //
-    // Filename can be absolute, or a basename (eg dna_r9.4_450bps.cfg) 
-    // which guppy should locate (see guppy application config entry: "data_path") 
+    // Filename can be absolute, or a basename (eg dna_r9.4_450bps.cfg)
+    // which guppy should locate (see guppy application config entry: "data_path")
     string config_filename = 1;
 
     // Control how read filtering is applied to output of basecaller.
@@ -471,3 +521,270 @@ message SetBasecallerConfigurationRequest
 message SetBasecallerConfigurationResponse{}
 
 message GetBasecallerConfigurationRequest{}
+
+message GetPoreTypeConfigurationRequest {}
+
+// The pore type configuration
+//
+// The ways of specifying a configuration are as follows:
+// - global_pore_type: all wells have a pore type of global_pore_type
+message PoreTypeConfiguration {
+    oneof pore_type_config {
+        string global_pore_type = 1;
+    }
+}
+
+message SetPoreTypeConfigurationResponse {}
+
+// Configuration for the output writers for MinKNOWs
+// analysis pipeline.
+//
+// Each writer has its own section in this message, where individual data elements
+// can be enabled or disabled.
+//
+// File pattern attributes
+// -----------------------
+// Writers have a 'file_pattern' field which controls where individual files will be
+// written to. The pattern is expanded for each individual read, and then the read
+// placed in the required file.
+// The tokens used to expand depend on the file type:
+//
+// Read centric files (fastq, (multi-)fast5, protobuf):
+//  - read_classification:  The classification applied to the completed read (eg. strand).
+//  - batch_number:         The batch number of this read, evaluated based on the destination file.
+//  - read_id:              Unique read id for each read, formatted as a hash.
+//  - read_number:          The read number (unique per channel, incrementing number assigned to each read by MinKNOW).
+//  - channel_name:         The name of the channel which produced the read.
+//  - read_start_time:      Read start time formatted in rfc3339 format.
+//  - basecall_status:      Basecalling output status (derived from WriterDefaults section in analysis config).
+//
+// General attributes:
+//  - daq_start_time:       Data acquisition start time formatted as YYYYMMDD_HHMM.
+//  - run_id:               Acquisition run id formatted as hash.
+//  - pore_type:            Type of pore (as specified by #set_pore_type_configuration).
+//  - asic_id:              Integer id assigned to the asic in the connected flow cell.
+//  - flow_cell_id:         Flow cell integer as read from eeprom.
+//  - machine_id:           Name of the machine (hostname or machine identifier depending on the sequencer type).
+//  - device_id:            Name of the connected sequencing device (eg. MN12345).
+//  - sample_id:            Sample id entered by the user when starting a protocol.
+//  - version_string:       Version string of the running MinKNOW instance
+//  - protocol_group_id:    Protocol group entered by user when starting a protocol.
+message WriterConfiguration {
+    // Used to control which channels for a specific
+    // data type emit data
+    message ChannelConfiguration {
+        message ChannelList
+        {
+            // List of channel names (one based)
+            // which should be enabled for writing.
+            repeated int32 channels = 1;
+        }
+
+        // Control the way channels are enabled for this data type.
+        oneof channels {
+            bool all_channels = 1;
+            ChannelList specific_channels = 2;
+        }
+    }
+
+    message ReadFast5Configuration {
+        // Control the level of compression applied to read data.
+        //
+        // 0:   No compression will be applied to data.
+        // 1-9: Passed to zlib compression, 1 is the fastest
+        //      compression, 9 is the smallest possible output.
+        int32 compression_level = 1;
+
+        // Raw data, stored with calibration data, and read attributes.
+        //
+        // Stored under /Raw/Reads_*/Signal
+        ChannelConfiguration raw = 2;
+
+        // Fastq data, stored as a string.
+        //
+        // Stored under /Analyses/Basecall_1D_*/BaseCalled_(template|complement)/Fastq
+        ChannelConfiguration fastq = 3;
+
+        // Basecall event data, stored as a table of markup against signal/base information.
+        //
+        // Stored under /Analyses/Basecall_1D_*/BaseCalled_(template|complement)/Events
+        ChannelConfiguration basecall_events = 4;
+
+        // Prevent reads which have successfully basecalled being written to fast5.
+        bool disable_writing_passed_reads = 5;
+        // Prevent reads which have failed basecalling being written to fast5.
+        bool disable_writing_failed_reads = 6;
+        // disable writing reads which have been force skipped by the basecaller.
+        bool disable_writing_force_skipped_reads = 7;
+
+        // The pattern used to find a fast5 files name.
+        //
+        // default: multi_fast5/{basecall_status}/{data_set}_{batch_number}.fast5
+        // Where each {xxx} section is replaced with an attribute from the minknow state
+        // when the file is written.
+        //
+        // See file pattern attributes above.
+        string file_pattern = 8;
+
+        // The pattern used to find a fastq header.
+        //
+        // default: {read_id} runid={run_id} read={read_number} ch={channel_name} start_time={read_start_time}
+        // Where each {xxx} section is replaced with an attribute from the minknow state
+        // when the fastq is generated.
+        string fastq_header_pattern = 9;
+
+        // How many reads are placed in each file (after batch_count files {batch_number}
+        // is increased in the filename).
+        uint32 batch_count = 10;
+    }
+
+    message ReadFastqConfiguration {
+        // Control if a fastq file should be generated per channel.
+        ChannelConfiguration enable = 1;
+
+        // The pattern used to find a fastq files name.
+        //
+        // default: fastq/{basecall_status}/fastq_runid_{run_id}_{batch_number}.fastq
+        // Where each {xxx} section is replaced with an attribute from the minknow state when the file is written.
+        //
+        // See file pattern attributes above.
+        string file_pattern = 2;
+
+        // The pattern used to find a fastq header.
+        //
+        // default: {read_id} runid={run_id} read={read_number} ch={channel_name} start_time={read_start_time}
+        // Where each {xxx} section is replaced with an attribute from the minknow state
+        // when the fastq is generated.
+        string header_pattern = 3;
+
+        // How many files are placed in each batch (after batch_count files {batch_number} is increased in the filename).
+        uint32 batch_count = 4;
+    }
+
+    message ReadProtobufConfiguration {
+        // Control if a protobuf file should be generated per channel.
+        ChannelConfiguration enable = 1;
+
+        // The pattern used to find a protobuf files name.
+        //
+        // default: pbread/{batch_number}/{data_set}_read_{read_number}_ch_{channel_name}.pbread
+        // Where each {xxx} section is replaced with an attribute from the minknow state
+        // when the file is written.
+        //
+        // See file pattern attributes above.
+        string file_pattern = 2;
+
+        // How many files are placed in each batch (after batch_count files {batch_number} is increased in the filename).
+        uint32 batch_count = 3;
+    }
+
+    message SequencingSummaryConfiguration {
+        // Should a sequencing summary file be generated
+        ChannelConfiguration enable = 1;
+
+        // The pattern used to find a summary files name.
+        //
+        // default: analysis_summary/{data_set}_analysis_summary.txt
+        // Where each {xxx} section is replaced with an attribute from the minknow
+        // state when the file is written.
+        //
+        // See file pattern attributes above.
+        string file_pattern = 2;
+    }
+
+    // Control settings for the bulk writer
+    message BulkConfiguration {
+        // Control the level of compression applied to read data.
+        //
+        // 0:   No compression will be applied to data.
+        // 1-9: Passed to zlib compression, 1 is the fastest
+        //      compression, 9 is the smallest possible output.
+        int32 compression_level = 2;
+
+        // Raw data, stored with channel calibration data
+        //
+        // Stored under /Raw/Channel_*/Signal
+        ChannelConfiguration raw = 3;
+
+        // Minknow event data
+        //
+        // Stored under /IntermediateData/Channel_*/Events
+        ChannelConfiguration events = 4;
+
+        // Minknow read data
+        //
+        // Stored under /IntermediateData/Channel_*/Reads
+        ChannelConfiguration reads = 5;
+
+        // Device multiplex data
+        //
+        // Stored under /MultiplexData/Channel_*/Multiplex
+        ChannelConfiguration multiplex = 6;
+
+        // Channel state data
+        //
+        // Stored under /StateData/Channel_*/States
+        ChannelConfiguration channel_states = 7;
+
+        // Basecall summary data
+        //
+        // Stored under /IntermediateData/Channel_*/BasecallSummary
+        ChannelConfiguration basecall_summary = 8;
+
+        // Basecall sequence data
+        //
+        // Stored under /IntermediateData/Channel_*/BasecallSequence
+        ChannelConfiguration basecall_bases = 9;
+
+        // Basecall events data
+        //
+        // Stored under /IntermediateData/Channel_*/BasecallEvents
+        ChannelConfiguration basecall_events = 10;
+
+        // Device metadata (bias and temperature information)
+        //
+        // Stored in a per frame sequence in /Device/MetaData
+        bool device_metadata = 11;
+
+        // Device commands
+        //
+        // Stored with the frame commands take effect sequence in /Device/AsicCommands
+        bool device_commands = 12;
+    }
+
+    // Configuration for the fast5 writer.
+    //
+    // If not specified, no multi fast5 outputs are generated.
+    ReadFast5Configuration read_fast5 = 2;
+
+    // Configuration for the old (single) fast5 writer.
+    //
+    // If not specified, no fast5 outputs are generated.
+    ReadFast5Configuration read_old_single_fast5 = 1;
+
+    // Configuration for the fastq writer.
+    //
+    // If not specified, no fastq outputs are generated.
+    ReadFastqConfiguration read_fastq = 3;
+
+    // Configuration for the protobuf writer.
+    //
+    // If not specified, no protobuf outputs are generated.
+    ReadProtobufConfiguration read_protobuf = 4;
+
+    // Configuration for Sequencing Summary file
+    //
+    // If not specified, no summary file is generated.
+    SequencingSummaryConfiguration sequencing_summary = 5;
+
+    // Configuration for the bulk writer.
+    //
+    // If not specified, a basic bulk output is generated.
+    BulkConfiguration bulk = 6;
+}
+
+message SetWriterConfigurationResponse {
+}
+
+message GetWriterConfigurationRequest {
+}

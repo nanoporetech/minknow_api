@@ -312,6 +312,21 @@ message GetDeviceInfoResponse {
     // An index that describes the position of the device in a linear order of devices (from
     // 0 onwards.)
     uint32 location_index = 9;
+
+    // Firmware versions of components associated with this device
+    //
+    // Depending on the hardware, there may be several components associated with
+    // this device, each with their own firmware version.
+    message ComponentVersion {
+        // Description of the component that has firmware
+        string component = 1;
+
+        // The firmware version, if this cannot be determined for a component where
+        // the firmware version would usually be available, this will contain
+        // "Unknown"
+        string version = 2;
+    }
+    repeated ComponentVersion firmware_version = 10;
 }
 
 message GetDeviceStateRequest {}

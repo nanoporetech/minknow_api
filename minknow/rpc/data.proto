@@ -221,6 +221,7 @@ message GetChannelStatesResponse {
         // we see in the bulk file, in the 'states' table 
         uint64 acquisition_raw_index = 4;
         uint64 analysis_raw_index = 5;
+        uint64 trigger_time = 7;
 
         // Channel config (mux state) the channel state was determined on.
         device.ChannelConfiguration config = 6;

@@ -10,7 +10,6 @@ This API is provided "as is" with limited support and under the Oxford Nanopore 
 
 Contents:
  * [minknow](minknow/rpc/) - MinKNOW gRPC API broken into service descriptions.
- * [gui](gui/) - Messages the GUI uses to manage and store internal state in MinKNOW's key store.
  * [protocol return info](protocol_return_info.proto) - Messages the GUI expects to receive from special protocol scripts.
  * [protocol ui](protocol_ui.proto) - Used to communicate UI between GUI and bream scripts.
  * [daemon](daemon.proto) - [deprecated] Interface details for the minknow instance manager.

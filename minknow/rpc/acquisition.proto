@@ -357,6 +357,20 @@ enum AcquisitionStopReason {
     STOPPED_DEVICE_ERROR = 6;
 }
 
+enum FinishingState {
+    // The default state for acquisition
+    FINISHING_UNKNOWN = 0;
+
+    // The acquisition is processing raw signal into reads 
+    FINISHING_PROCESSING_DEVICE_SIGNAL = 1;
+
+    // Processed reads are being basecalled
+    FINISHING_BASECALLING_READS = 2;
+
+    // Data is being written to disk (or copied to network storage)
+    FINISHING_SAVING_DATA = 3;
+}
+
 message AcquisitionYieldSummary
 {
     // Fields here are intended to mirror statistics.CumulativeThroughputBucket
@@ -398,6 +412,23 @@ message AcquisitionYieldSummary
     // Estimated number of bases MinKNOW has selected for writing.
     // This is estimated based on already called bases and samples.
     int64 estimated_selected_bases = 9;
+
+    // Number of bytes which minknow needs to write in order to
+    // finish the experiment.
+    //
+    // Since 3.3
+    int64 bytes_to_write_produced = 11;
+
+    // Number of bytes which minknow has failed to write to final location.
+    // These reads are instead contained in the fallback/tmp locations.
+    //
+    // Since 3.3
+    int64 bytes_to_write_failed = 12;
+
+    // Number of bytes which minknow has written to final location.
+    //
+    // Since 3.3
+    int64 bytes_to_write_completed = 13;
 }
 
 message ChannelStateInfo {
@@ -487,6 +518,16 @@ message AcquisitionConfigSummary {
 
     // Number of bases per event
     float events_to_base_ratio = 10;
+
+    // Sample rate for the acquisition.
+    //
+    // Since 3.3
+    uint32 sample_rate = 11;
+
+    // Channel count used in the acquisition.
+    //
+    // Since 3.3
+    uint32 channel_count = 12;
 }
 
 message AcquisitionRunInfo {
@@ -499,6 +540,10 @@ message AcquisitionRunInfo {
 
     // Indicates the current state of the protocol run.
     AcquisitionState state = 2;
+
+    // If the experiment is finishing, an extra piece of state
+    // describing the current finishing state.
+    FinishingState finishing_state = 10;
 
     // The reason the acquisition period was ended.
     AcquisitionStopReason stop_reason = 3;

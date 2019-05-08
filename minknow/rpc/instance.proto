@@ -1,11 +1,16 @@
 syntax="proto3";
 
+import "minknow/rpc/acquisition.proto";
+import "minknow/rpc/device.proto";
+import "minknow/rpc/protocol.proto";
+
 package ont.rpc.instance;
 
 service InstanceService {
     // Current version information includes:
     // - Minknow version
     // - Protocols version
+    // - Distribution version
     rpc get_version_info (GetVersionInfoRequest) returns (GetVersionInfoResponse) {}
 
     // Returns various directory locations where minknow is outputting data. The paths are absolute paths, 
@@ -60,6 +65,17 @@ service InstanceService {
     //
     // Since 1.14
     rpc get_host_type(GetHostTypeRequest) returns (GetHostTypeResponse) {}
+
+    // Find a summary of activity on the instance.
+    //
+    // The information available from this request is also available from other rpc's - this call is intended
+    // as a performance improvement for users who watch a large number of streams (specifically over
+    // web socket transport).
+    //
+    // Use this request to find information about the current device, flow cell, protocol and acquisition state.
+    // 
+    // Since 3.2
+    rpc stream_instance_activity(StreamInstanceActivityRequest) returns (stream StreamInstanceActivityResponse) {}
 }
 
 message GetVersionInfoRequest {
@@ -200,4 +216,38 @@ message GetHostTypeResponse {
     }
 
     HostType host_type = 1;
+}
+
+message StreamInstanceActivityRequest {}
+
+message DeviceInfo {
+    // The current state of the device
+    device.GetDeviceStateResponse.DeviceState device_state = 1;
+
+    // Information about the connected device (or no content if disconnected see: device_state)
+    device.GetDeviceInfoResponse device_info = 2;
+}
+
+message StreamInstanceActivityResponse {
+
+    oneof stream_value {
+        // Information about whether the device is connected or not, and if it is, gives
+        // information about the connected device
+        DeviceInfo device_info = 1;
+
+        // Information about the currently conected flow cell
+        // 
+        // Note: if no flow cell is connected this [flow_cell_info.has_flow_cell] will be false
+        device.GetFlowCellInfoResponse flow_cell_info = 2;
+
+        // Information about the in progress protocol.
+        //
+        // Note if no protocol is active this message will not be present.
+        protocol.ProtocolRunInfo protocol_run_info = 3;
+
+        // Information about the current acquisition run
+        //
+        // Note if no acquisition is active the message will not be present.
+        acquisition.AcquisitionRunInfo acquisition_run_info = 4;
+    }
 }

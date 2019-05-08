@@ -152,7 +152,12 @@ message StopProtocolResponse {
 }
 
 message ListProtocolsRequest {
-
+    // If this is false, then will try to use the cached value of the protocol list where possible
+    // (still subject to changes in flow cell).
+    // If this is true, then will force a reload of the protocol list
+    //
+    // Defaults to false
+    bool force_reload = 1;
 }
 
 message ProtocolInfo {

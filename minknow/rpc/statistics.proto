@@ -48,6 +48,38 @@ service StatisticsService {
     //
     // Since 1.14
     rpc get_throughput (GetCumulativeThroughputRequest) returns (GetCumulativeThroughputResponse) {}
+    
+    // Streams device temperature for a device. The first message will contain all of the temperatures up
+    // until the current live point, and then messages after that point will just be updates.
+    //
+    // Temperatures are averaged over a 1 minute period, and the value of each bucket is given in minute intervals
+    //
+    // Since 3.0
+    rpc stream_temperature (StreamTemperatureRequest) returns (stream StreamTemperatureResponse) {}
+
+    // Gets the history for device temperature for a particular acquisition period
+    //
+    // Will fail with INVALID_ARGUMENT if an unknown acquisition id is given
+    //
+    // Since 3.1
+    rpc get_temperature (GetTemperatureRequest) returns (GetTemperatureResponse) {}
+
+    // Streams when bias voltage changes occur, where the response given will be the acquisition
+    // index that the voltage changed at, and the voltage itself. The first message will contain
+    // all of the bias voltage changes up until the current live point, and then messages after 
+    // that period will just be updates
+    //
+    // Will fail with INVALID_ARGUMENT if an unknown acquisition id is given
+    //
+    // Since 3.2
+    rpc stream_bias_voltages (StreamBiasVoltagesRequest) returns (stream StreamBiasVoltagesResponse) {}
+
+    // Gets the history of bias volatge changes for a particular acquisition period
+    //
+    // Will fail with INVALID_ARGUMENT if an unknown acquisition id is given
+    //
+    // Since 3.2
+    rpc get_bias_voltages (GetBiasVoltagesRequest) returns (GetBiasVoltagesResponse) {}
 
     // A histogram of estimated read lengths (based on events)
     //
@@ -61,7 +93,10 @@ service StatisticsService {
     // Since 3.0
     rpc get_read_length_histogram (GetReadLengthHistogramRequest) returns (GetReadLengthHistogramResponse) {}
 
-
+    // Gets a list of the types of read-length values for which a histogram is available
+    //
+    // Since 3.2
+    rpc get_read_length_types (GetReadLengthTypesRequest) returns (GetReadLengthTypesResponse) {}
 
     
     // Returns the speed by bases metric represented as datasets (i.e. boxplots).
@@ -203,7 +238,7 @@ message GetDutyTimeRequest {
     // A time past the end of the experiment will be accepted, and treated in the same way.
     uint32 end_time = 4;
 
-    // What unit of time are to use. Defaults to SECONDS
+    // What unit of time to use. Defaults to SECONDS
     //
     // This is used to interpret the other fields in this message as well as for the times in the
     // response message.
@@ -233,36 +268,50 @@ message GetDutyTimeResponse {
 enum BucketValueType {
     // Numbers for use in example below
     // Reads: 5
-    // Events for each read: [20, 100, 30, 60, 110]
-    // Events to base ratio: 2.0
+    // Lengths of each read: [20, 100, 30, 60, 110]
 
     // Counts only total number of reads
     //
     // Using example above, the bucket value would be 5
     READ_COUNTS = 0;
 
-    // Calculates the sum of the event counts for all the reads
+    // Accumulates the sum of the lengths of reads.
+    // Note, this makes no assumptions about what measurement we're using for the length,
+    // e.g. events, or estimated bases.
     //
     // Using the example above, the bucket value would be 320
-    EVENTS = 1;
+    READ_LENGTHS = 1;
+}
+
+enum ReadLengthType {
+    // Numbers for use in example below
+    // Reads: 5
+    // Lengths of each read in EVENTS: [20, 100, 30, 60, 110]
+    // Events to base ratio: 2.0
+
+    // Calculates the sum of the event counts for all the reads
+    //
+    // Using the example above, with READ_LENGTHS, the bucket value would be 320
+    EVENTS = 0;
 
     // Estimates the number of bases based on the events and an event to base ratio
     //
-    // Using the example above, the bucket value would be 160
-    ESTIMATED_BASES = 2;
+    // Using the example above, with READ_LENGTHS, the bucket value would be 160
+    ESTIMATED_BASES = 1;
 
     // This is the actual, basecalled number of bases for a read. As basecalling takes time
     // then this may be delayed in comparision to the other types
-    BASECALLED_BASES = 3;
+    BASECALLED_BASES = 2;
 }
 
 message StreamReadLengthHistogramRequest {
-    // Sets the desired width of the buckets. The actual width may not be the number set here
+    // Sets the desired width of the buckets, in terms of the requested read length type. 
+    // The actual width of bins in the returned histogram may not be the number set here.
     //
     // If not set, then will set the minimum width possible
     uint32 bucket_width = 1;
 
-    // Sets the point of the leftmost bucket
+    // Sets the point of the leftmost bucket, in terms of the requested read length type. 
     //
     // The leftmost bucket of the upscaled histogram will be the one that contains this value.
     // The histogram will contain data for values starting at the minimum value for this bucket.
@@ -272,7 +321,7 @@ message StreamReadLengthHistogramRequest {
     // By default will start from 0
     uint32 start = 2;
 
-    // Sets the point of the rightmost bucket
+    // Sets the point of the rightmost bucket, in terms of the requested read length type. 
     //
     // If a non-zero value is specified, then the rightmost bucket of the upscaled histogram will be the one that contains this value.
     // The histogram will contain data for values ending at the maximum value for this bucket.
@@ -286,9 +335,9 @@ message StreamReadLengthHistogramRequest {
     // Be default, this will be 0
     uint32 end = 3;
 
-    // Determines what data is returned in the buckets
+    // Determines what type of value is in the buckets - counts or lengths.
     //
-    // See `BucketValueType` definition for a concrete example of what each type represents
+    // See `BucketValueType` definition for a concrete example of what each type represents.
     BucketValueType bucket_value_type = 4;
 
     // Sets how long minknow will take to poll the data and return a response, specified
@@ -300,12 +349,27 @@ message StreamReadLengthHistogramRequest {
     // This is used to interpret the other fields in this message as well as for the times in the
     // response message.
     TimeUnit time_unit = 6;
+
+    // If `wait_for_processing` is true, then will wait until minknow starts acquiring data instead
+    // of returning with an error
+    //
+    // Defaults to false
+    bool wait_for_processing = 7;
+    
+    // Determines how to measure read lengths 
+    //
+    // See `ReadLengthType` definition for a concrete example of what each type represents.
+    // If MinKNOW is unable to calculate the requested measurement, it will fall back to
+    // supplying data of a type it can calculate; the response will contain a field specifying
+    // the type of data actually calculated.
+    ReadLengthType read_length_type = 8;
 }
 
-message StreamReadLengthHistogramResponse {
+message ReadLengthHistogramData {
 
     // Array of data for the histogram buckets.
-    // The values will be of the type represented by `bucket_value_type`
+    // The values will be of the type represented by `bucket_value_type` in the request,
+    // measured as specified by `read_length_type` in this response.
     repeated uint64 buckets = 1;
 
     // The size of the bucket
@@ -313,23 +377,38 @@ message StreamReadLengthHistogramResponse {
 
     // Note that this can be different from what is requested if the type requested is not available for some reason 
     // (e.g. requested ESTIMATED_BASES but events_to_base ratio is not set in minknow)
-    BucketValueType bucket_value_type = 3;
+    ReadLengthType read_length_type = 3;
     
     // The lowest value in the range covered by the histogram
     // (and, therefore, also the lowest value in the range covered by the first bucket of the histogram)
-    uint32 min_val = 4;    
+    uint32 min_val = 4;
+    
+    // The highest value for which data exists in the histogram, within the entire range of data accumulated 
+    // by MinKNOW, regardless of the range specified by the client.  This will be the maximum value of the 
+    // highest upscaled bin containing data. 
+    uint32 actual_max_val = 5;
+}
+
+message StreamReadLengthHistogramResponse {
+
+    reserved 1, 2, 3, 4;
+    reserved "buckets", "width", "bucket_value_type", "min_val";
+    
+    // The histogram data
+    ReadLengthHistogramData histogram_data = 5;
 }
 
 message GetReadLengthHistogramRequest {
     // The acquisition id of the experiment
     string run_id = 1 [(rpc_required) = true];
 
-    // Sets the desired width of the buckets. The actual width may not be the number set here
+    // Sets the desired width of the buckets, in terms of the requested read length type. 
+    // The actual width of bins in the returned histogram may not be the number set here.
     //
     // If not set, then will set the minimum width possible
     uint32 bucket_width = 2;
 
-    // Sets the point of the leftmost bucket
+    // Sets the point of the leftmost bucket, in terms of the requested read length type. 
     //
     // The leftmost bucket of the upscaled histogram will be the one that contains this value.
     // The histogram will contain data for values starting at the minimum value for this bucket.
@@ -339,7 +418,7 @@ message GetReadLengthHistogramRequest {
     // By default will start from 0
     uint32 start = 3;
 
-    // Sets the point of the rightmost bucket
+    // Sets the point of the rightmost bucket, in terms of the requested read length type. 
     //
     // If a non-zero value is specified, then the rightmost bucket of the upscaled histogram will be the one that contains this value.
     // The histogram will contain data for values ending at the maximum value for this bucket.
@@ -351,29 +430,39 @@ message GetReadLengthHistogramRequest {
     // Be default, this will be 0
     uint32 end = 4;
 
-    // Determines what data is returned in the buckets
+    // Determines what type of value is in the buckets - counts or lengths.
     //
     // See `BucketValueType` definition for a concrete example of what each type represents.
     BucketValueType bucket_value_type = 5;
+
+    // Determines how to measure read lengths 
+    //
+    // See `ReadLengthType` definition for a concrete example of what each type represents.
+    // If MinKNOW is unable to calculate the requested measurement, it will fall back to
+    // supplying data of a type it can calculate; the response will contain a field specifying
+    // the type of data actually calculated.
+    ReadLengthType read_length_type = 6;
 }
 
 message GetReadLengthHistogramResponse {
 
-    // Array of data for the histogram buckets.
-    // The values will be of the type represented by `bucket_value_type`
-    repeated uint64 buckets = 1;
-
-    // The size of the bucket
-    uint32 width = 2;
-
-    // Note that this can be different from what is requested if the type requested is not available for some reason 
-    // (e.g. requested ESTIMATED_BASES but events_to_base ratio is not set in minknow)
-    BucketValueType bucket_value_type = 3;
+    reserved 1, 2, 3, 4;
+    reserved "buckets", "width", "bucket_value_type", "min_val";
     
-    // The lowest value in the range covered by the histogram
-    // (and, therefore, also the lowest value in the range covered by the first bucket of the histogram)
-    uint32 min_val = 4;    
+    // The histogram data
+    ReadLengthHistogramData histogram_data = 5;
 }
+
+message GetReadLengthTypesRequest {
+
+}
+
+message GetReadLengthTypesResponse {
+
+    // Array of the types of bucket for which a histogram is currently available
+    repeated ReadLengthType available_types = 1;
+}
+
 
 message StreamHeatmapRequest {
     bool is_cumulative = 1;
@@ -438,7 +527,7 @@ message StreamCumulativeThroughputRequest {
     // This specifies T1 for a bucket [T0, T1)
     uint32 end_time = 3;
 
-    // If `wait_for_processing` is true, then will wait until minknow starts acquisiting data instead of returning with an error
+    // If `wait_for_processing` is true, then will wait until minknow starts acquiring data instead of returning with an error
     //
     // Defaults to false
     bool wait_for_processing = 4;
@@ -518,7 +607,7 @@ message GetCumulativeThroughputRequest {
     // A time past the end of the experiment will be accepted, and treated in the same way.
     uint32 end_time = 4;
 
-    // What unit of time are to use. Defaults to SECONDS
+    // What unit of time to use. Defaults to SECONDS
     //
     // This is used to interpret the other fields in this message as well as for the times in the
     // response message.
@@ -527,6 +616,139 @@ message GetCumulativeThroughputRequest {
 
 message GetCumulativeThroughputResponse {
     repeated CumulativeThroughputBucket buckets = 1;
+}
+
+message StreamTemperatureRequest {
+    // Defines the bucket period of the temperatures in terms of `time_unit`
+    //
+    // Will fail with INVALID_ARGUMENT if the value is below 1 minute (or equivalent in another time unit)
+    uint32 step = 1 [(rpc_required) = true];
+
+    // Specify the inclusive start time of the data since the start of the experiment in multiples of
+    // `time_unit`. If not specified then will return data since the start of the experiment
+    //
+    // Will fail with INVALID_ARGUMENT if not a multiple of `step`. (TODO: maybe round to closest value instead of failing?)
+    //
+    // For example, if this was set to 600 with a step of 60, then the first 10 buckets will not be returned
+    // and the first bucket will be [600,660)
+    uint32 start_time = 2;
+
+    // Specify the exclusive end time of the data to return in multiples of `time_unit`. Only data from before
+    // this time will be returned. 
+    //
+    // Call will return if the end time has been reached.
+    // If the end time has not yet been reached, then the stream will continue until it has, and then return.
+    // If not specified, then will stream forever
+    //
+    // Will fail with INVALID_ARGUMENT if not a multiple of `step`
+    // Will fail with INVALID_ARGUMENT if not more than `start_time`
+    uint32 end_time = 3;
+
+    // If `wait_for_starting` is true, then will wait until minknow begins an acquisition period instead of returning with
+    // an error
+    //
+    // Defaults to false
+    bool wait_for_starting = 4;
+
+    // What unit of time to use. Defaults to SECONDS
+    //
+    // This is used to interpret the other fields in this message as well as for the times in the
+    // response message.
+    TimeUnit time_unit = 5;
+}
+
+message TemperaturePacket {
+    // Packet of temperatures appropriate for a MinION.
+    message MinIONTemperature
+    {
+        // Temperature as measured by the probe inside the asic.
+        double asic_temperature = 1;
+        // Temperature as measured by the probe in the minion heatsink.
+        double heatsink_temperature = 2;
+    }
+
+    // Packet of temperatures appropriate for a PromethION.
+    message PromethIONTemperature
+    {
+        // Temperature as measured by thermistor TH2 on the P-Chip.
+        double flowcell_temperature = 1;
+
+        // Mean of 12 pixel-blocks temperatures measured with sensors in the ASIC.
+        double chamber_temperature = 2;
+    }
+
+    oneof temperature {
+        MinIONTemperature minion = 1;
+        PromethIONTemperature promethion = 2;
+    }
+}
+
+message StreamTemperatureResponse {
+    repeated TemperaturePacket temperatures = 1;
+}
+
+// TODO: think about rolling common arguments together (GetThroughputRequest). Trade off between repeated code and flexibility of
+// changing types in the future
+message GetTemperatureRequest {
+    // The acquisition id of the experiment.
+    string run_id = 1 [(rpc_required) = true];
+
+    // Defines the bucket period of the cumulative throughput data, in multiples of `time_unit`.
+    uint32 step = 2 [(rpc_required) = true];
+
+    // Specify the start time of the data since the start time of the experiment in multiples of
+    // `time_unit`.
+    //
+    // Must be a multiple of `step`.
+    //
+    // If not specified then will return data since the start of the experiment.
+    uint32 start_time = 3;
+
+    // Specify the end time of the data to return in multiples of `time_unit`. Only data from before
+    // this time will be returned.
+    //
+    // This does not need to be a multiple of `step` - you will get a smaller final bucket if it is
+    // not.
+    //
+    // If not specified then will return all the data till the end of the experiment.
+    // A time past the end of the experiment will be accepted, and treated in the same way.
+    uint32 end_time = 4;
+
+    // What unit of time to use. Defaults to SECONDS
+    //
+    // This is used to interpret the other fields in this message as well as for the times in the
+    // response message.
+    TimeUnit time_unit = 5;
+}
+
+message GetTemperatureResponse {
+    repeated TemperaturePacket temperatures = 1;
+}
+
+message BiasVoltagePacket {
+    uint64 acquisition_index = 1;
+    double bias_voltage = 2;
+}
+
+message StreamBiasVoltagesRequest {
+    // If `wait_for_processing` is true, then will wait until minknow starts acquiring data instead
+    // of returning with an error
+    //
+    // Defaults to false
+    bool wait_for_processing = 1;
+}
+
+message StreamBiasVoltagesResponse {
+    repeated BiasVoltagePacket bias_voltages = 1;
+}
+
+message GetBiasVoltagesRequest {
+    // The acquisition id of the experiment.
+    string run_id = 1 [(rpc_required) = true];
+}
+
+message GetBiasVoltagesResponse {
+    repeated BiasVoltagePacket bias_voltages = 1;
 }
 
 message GetBoxplotRequest {
@@ -584,10 +806,18 @@ message BoxplotResponse {
     repeated BoxplotDataset datasets = 1;
 
     message BoxplotDataset {
+        // Minimum value for any point in the dataset.
         float min = 1;
+        // 25th quartile value for all points in the dataset.
         float q25 = 2;
+        // 50th quartile or median value for all points in the dataset.
         float q50 = 3;
+        // 75th quartile value for all points in the dataset.
         float q75 = 4;
+        // Maximum value for any point in the dataset.
         float max = 5;
+
+        // Number of items in this box plot's stats.
+        uint64 count = 6;
     }
 }
