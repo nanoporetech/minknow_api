@@ -21,15 +21,17 @@ enum DeviceType {
     PROMETHION = 2;
     GRIDION = 3;
     PROMETHIONBETA = 4;
+    MINION_MK1C = 5;
 }
 
 // The type of device this installation of MinKNOW knows about
 enum HostType {
     HOST_TYPE_PC = 0;
-    HOST_TYPE_PROMETHION_ALPHA = 1;
+    HOST_TYPE_PROMETHION_ALPHA = 1; // Deprecated - will never be returned by minknow
     HOST_TYPE_GRIDION = 2;
     HOST_TYPE_PROMETHION_BETA = 3;
     HOST_TYPE_MINIT = 4;
+    HOST_TYPE_MINION_MK1C = 5;
 }
 
 ////////////////////////////////////////

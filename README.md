@@ -16,36 +16,14 @@ Contents:
  * [raw data sampler](raw_data_sampler.proto) - [deprecated] Raw data from MinKNOW for the trace viewer.
  * [google](google/) - External google protobuf tools.
 
-We use [Google Protocol Buffers v3](https://developers.google.com/protocol-buffers/docs/proto3)
-to handle serialisation in MinKNOW and its supporting applications.
-
-Protobuf can be obtained from github: https://github.com/google/protobuf/releases
-
-MinKNOW currently uses Protobuf version 3.5.1 and gRPC 1.10.0
-
-Generating python interface
----------------------------
-
-An example of how to generate minknow GRPC interfaces from the contents of this repository is:
-
-```bash
-mkdir -p grpc_api/
-protoc --python_out=grpc_api/ minknow/rpc/*.proto
-```
-
 Navigating the gRPC API
 -----------------------
 
 The MinKNOW gRPC API is split into separate services, intended to provide functionality for
 different use cases. There are a few key areas of interest for clients:
 
-### [Protocol Management](minknow/rpc/protocol.proto)
+The API useful for LIMS integration is described in [LIMS API](LIMS_README.md).
 
-The protocol service contains methods to start and stop protocol scripts.
-
- * See ```list_protocols``` in order to list available protocols.
- * See ```start_protocol``` for documentation on starting a protocol (and also specifying the protocol_group_id).
- * See ```set_sample_id``` for setting the sample id for the active device.
 
 ### [Data Acquisition](minknow/rpc/acquisition.proto)
 

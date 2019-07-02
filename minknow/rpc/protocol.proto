@@ -1,6 +1,7 @@
 syntax="proto3";
 
 import "minknow/rpc/acquisition.proto";
+import "minknow/rpc/device.proto";
 import "minknow/rpc/rpc_options.proto";
 import "google/protobuf/timestamp.proto";
 import "google/protobuf/wrappers.proto";
@@ -80,14 +81,20 @@ service ProtocolService {
 
     // Sample id is a value set from the GUI that is defined by the user to identify an experiment.
     // This call gets this value
+    // Deprecated: The sample_id is provided in the ProtocolRunUserInfo
     //
     // Since 1.11
-    rpc get_sample_id (GetSampleIdRequest) returns (GetSampleIdResponse) {}
+    rpc get_sample_id (GetSampleIdRequest) returns (GetSampleIdResponse) {
+        option deprecated = true;
+    }
 
     // Sets the sample id. Refer to get_sample_id for what sample id is used for
+    // Deprecated: The sample_id should be set in the request when a protocol starts ( start_protocol() )
     //
     // Since 1.11
-    rpc set_sample_id (SetSampleIdRequest) returns (SetSampleIdResponse) {}
+    rpc set_sample_id (SetSampleIdRequest) returns (SetSampleIdResponse) {
+        option deprecated = true;
+    }
 
     // Value set by protocol scripts to define the purpose of the script. Gets this value
     //
@@ -115,6 +122,9 @@ message ProtocolRunUserInfo {
     //
     // note: This value could be unset if a user did not specify a group_id when starting the protocol.
     google.protobuf.StringValue protocol_group_id = 1;
+
+    // sample_id created by the user
+    google.protobuf.StringValue sample_id = 2;
 }
 
 message StartProtocolRequest {
@@ -251,10 +261,13 @@ enum ProtocolState {
     // signal. Often, this will be because an exception was raised in the Python code and not
     // caught, but could also indicate that the Python process crashed or was killed by some
     // mechanism other than by MinKNOW.
-    //
-    // This can also happen if MinKNOW stops the protocol because of some external error, such as
-    // issues with device communication.
     PROTOCOL_FINISHED_WITH_ERROR = 3;
+
+    // The protocol was terminated because the sequencing device encountered an error.
+    PROTOCOL_FINISHED_WITH_DEVICE_ERROR = 6;
+
+    // The protocol was terminated because MinKNOW could not send telemetry to start acquisition.
+    PROTOCOL_FINISHED_UNABLE_TO_SEND_TELEMETRY = 7;
 }
 
 message Epi2meWorkflowReference {
@@ -315,6 +328,16 @@ message ProtocolRunInfo {
     //
     // Since 1.15.
     repeated Epi2meWorkflowReference epi2me_workflows = 10;
+
+    // Information about the device a protocol was started with
+    //
+    // Since 3.4
+    device.GetDeviceInfoResponse device = 12;
+
+    // Information about the flow cell a protocol was started with
+    //
+    // Since 3.4
+    device.GetFlowCellInfoResponse flow_cell = 13;
 }
 
 message ListProtocolRunsRequest {

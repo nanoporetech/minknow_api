@@ -209,10 +209,11 @@ message GetHostTypeRequest {
 message GetHostTypeResponse {
     enum HostType {
         PC = 0;
-        PROMETHION_ALPHA = 1;
+        PROMETHION_ALPHA = 1; // Deprecated - will never be returned by minknow
         GRIDION = 2;
         PROMETHION_BETA = 3;
         MINIT = 4;
+        MINION_MK1C = 5;
     }
 
     HostType host_type = 1;
@@ -229,6 +230,13 @@ message DeviceInfo {
 }
 
 message StreamInstanceActivityResponse {
+
+    message FlowCellHealth {
+        // Map between channel state name and a percentage of how much time that state has been active with respect to all other channel states
+        //
+        // This is over one minute of time this is calculated over
+        map<string, float> channel_state_percentages = 1;
+    }
 
     oneof stream_value {
         // Information about whether the device is connected or not, and if it is, gives
@@ -249,5 +257,15 @@ message StreamInstanceActivityResponse {
         //
         // Note if no acquisition is active the message will not be present.
         acquisition.AcquisitionRunInfo acquisition_run_info = 4;
+
+        // Information about the health of the flow cell within the current run
+        //
+        // Note: only available if a run is in progress
+        FlowCellHealth flow_cell_health = 5;
+
+        // Acquisition yield information. Describes information such as number of reads,
+        // what number of those reads have passed or failed basecalling etc. Rate 
+        // limited to 1 second per update
+        acquisition.AcquisitionYieldSummary yield_summary = 6;
     }
 }

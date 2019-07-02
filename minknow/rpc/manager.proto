@@ -52,10 +52,26 @@ message ListDevicesResponse {
         // https://github.com/improbable-eng/grpc-web
         uint32 insecure_web = 5;
     }
+
+    // Message used to describe how a device is laid out on the physical device.
+    message DeviceLayout {
+        // Zero based index positioning device in the horizontal direction from a top-down orientation.
+        int32 x = 1;
+
+        // Zero based index positioning device in the vertical direction from a top-down orientation.
+        int32 y = 2;
+    }
     
     message ActiveDevice {
         string name = 1;
         RpcPorts ports = 2;
+
+        // Device layout information, inidcating this devices physical location.
+        //
+        // The information will be omitted in cases where there is not a fixed layout (eg. minion)
+        //
+        // Since 3.3
+        DeviceLayout layout = 3;
     }
 
     // Devices that haven't been started

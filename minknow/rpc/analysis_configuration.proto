@@ -145,6 +145,13 @@ message EventDetection {
     // This is used to estimate bases for various rpc feeds from minknow.
     google.protobuf.DoubleValue events_to_base_ratio = 16;
 
+    // Whether to break events on mux changes.
+    //
+    // This will eliminate "mux_uncertain" events and reads. Note that this will cause starting or
+    // stopping unblocking to break events as well (even though the mux does not normally change in
+    // this case).
+    google.protobuf.BoolValue break_on_mux_changes = 17;
+
     // DEPRECATED
     enum EventDetectionMode {
         multittest_continuous = 0;
@@ -395,7 +402,10 @@ message AnalysisConfiguration {
 
     EventDetection event_detection = 1;
     ReadDetectionParams read_detection = 2;
+
+    // Deprecated - unused internally.
     ReadDetectionParams read_detection_alt = 3;
+
     ReadClassificationParams read_classification = 4;
     map<string, HistogramDocument> histograms = 5; // Deprecated; this will be ignored.  Left in for compatibility with older HDF files.
     reserved 6;
@@ -605,10 +615,20 @@ message WriterConfiguration {
         // Stored under /Analyses/Basecall_1D_*/BaseCalled_(template|complement)/Fastq
         ChannelConfiguration fastq = 3;
 
-        // Basecall event data, stored as a table of markup against signal/base information.
+        // DEPRECATED - Basecall event data, stored as a table of markup against signal/base information.
         //
         // Stored under /Analyses/Basecall_1D_*/BaseCalled_(template|complement)/Events
         ChannelConfiguration basecall_events = 4;
+
+        // Trace table received from Guppy
+        //
+        // Stored under /Analyses/Basecall_1D_*/BaseCalled_template/Trace
+        ChannelConfiguration trace_table = 11;
+
+        // Move table received from Guppy
+        //
+        // Stored under /Analyses/Basecall_1D_*/BaseCalled_template/Move
+        ChannelConfiguration move_table = 12;
 
         // Prevent reads which have successfully basecalled being written to fast5.
         bool disable_writing_passed_reads = 5;
@@ -736,7 +756,7 @@ message WriterConfiguration {
         // Stored under /IntermediateData/Channel_*/BasecallSequence
         ChannelConfiguration basecall_bases = 9;
 
-        // Basecall events data
+        // DEPRECATED - Basecall events data
         //
         // Stored under /IntermediateData/Channel_*/BasecallEvents
         ChannelConfiguration basecall_events = 10;

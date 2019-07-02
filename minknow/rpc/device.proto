@@ -27,11 +27,6 @@ service DeviceService {
     // Since 1.13
     rpc stream_device_state (StreamDeviceStateRequest) returns (stream GetDeviceStateResponse) {}
 
-    // Reset all settings associate with the current device.
-    //
-    // This call will initialise all settings to their default state, ie the same as when MinKNOW boots.
-    rpc reset_device_settings(ResetDeviceSettingsRequest) returns (ResetDeviceSettingsResponse) {}
-
     // Get information about the flow cell (if any).
     //
     // This provides information about the flow_cell attached to the device (described by
@@ -64,6 +59,17 @@ service DeviceService {
     //
     // Since 1.12
     rpc set_user_specified_product_code (SetUserSpecifiedProductCodeRequest) returns (SetUserSpecifiedProductCodeResponse) {}
+
+    // Get information about the channel layout
+    //
+    // Since 1.14
+    rpc get_channels_layout (GetChannelsLayoutRequest) returns (GetChannelsLayoutResponse) {}
+
+    // MINKNOW_PUBLIC_EXCLUDE
+    // Reset all settings associate with the current device.
+    //
+    // This call will initialise all settings to their default state, ie the same as when MinKNOW boots.
+    rpc reset_device_settings(ResetDeviceSettingsRequest) returns (ResetDeviceSettingsResponse) {}
 
     // TODO: streaming version of get_flow_cell_info()
     // TODO: streaming version of get_device_info()? If we add device_connected and/or hardware ID?
@@ -195,10 +201,7 @@ service DeviceService {
 
     rpc set_bias_voltage (SetBiasVoltageRequest) returns (SetBiasVoltageResponse) {}
     
-    // Get information about the channel layout
-    //
-    // Since 1.14
-    rpc get_channels_layout (GetChannelsLayoutRequest) returns (GetChannelsLayoutResponse) {}
+    // MINKNOW_PUBLIC_EXCLUDE_END
 }
 
 // Describes the configuration of a channel on the device.
@@ -243,9 +246,10 @@ message GetDeviceInfoRequest {}
 message GetDeviceInfoResponse {
     enum DeviceType {
         MINION = 0;
-        PROMETHION = 1;
+        PROMETHION = 1; // Deprecated - will never be returned by minknow
         GRIDION = 2;
         PROMETHION_BETA = 3;
+        MINION_MK1C = 4;
     }
 
     // A unique identifier for the device.
@@ -493,6 +497,32 @@ message SetUserSpecifiedProductCodeRequest {
 
 message SetUserSpecifiedProductCodeResponse {}
 
+message GetChannelsLayoutRequest {
+}
+
+message GetChannelsLayoutResponse
+{
+    repeated ChannelRecord channel_records = 1;
+}
+
+message ChannelRecord
+{
+    message MuxRecord
+    {
+        uint32 id = 1;
+        uint32 phys_x = 2;
+        uint32 phys_y = 3;
+    }
+    uint32 id = 1;
+    string name = 2;
+    repeated MuxRecord mux_records = 3;
+}
+
+// MINKNOW_PUBLIC_EXCLUDE
+
+message ResetDeviceSettingsRequest {}
+message ResetDeviceSettingsResponse {}
+
 message SetCalibrationRequest {
     // The first channel included in calibration data.
     //
@@ -520,9 +550,6 @@ message SetCalibrationResponse {}
 
 message ClearCalibrationRequest {}
 message ClearCalibrationResponse {}
-
-message ResetDeviceSettingsRequest {}
-message ResetDeviceSettingsResponse {}
 
 message GetCalibrationRequest {
     // The first channel to get calibration data for.
@@ -563,10 +590,26 @@ message GetCalibrationResponse{
 
 message SetTemperatureRequest {
     message WaitForTemperatureSettings {
-        // Seconds timeout to wait for temperature to be reached.
+        // Maximum duration (in seconds) to wait for the device to reach temperature.
         //
         // Not specifying a value will wait for a maximum of 5 minutes.
         uint32 timeout = 1;
+        
+        // Minimum duration (in seconds) that the reported temperature must be
+        // continually within the target temperature range, before the device is
+        // considered to have reached temperature.
+        //
+        // A value of zero means that the device will be considered to have reached temperature
+        // as soon as the reported temperature is equal to the target temperature.
+        //
+        // Not specifying a value is equivalent to specifying a value of zero.
+        //
+        // The min_stable_duration must be less than or equal to the timeout duration
+        // (if it were greater, then the temperature would never be read as 'stable' before
+        // the time-out occurred).
+        //
+        // Since 3.4
+        uint32 min_stable_duration = 3;
 
         // Specify an optional tolerance to apply to the wait.
         //
@@ -857,23 +900,4 @@ message SetBiasVoltageResponse {
 
 }
 
-message GetChannelsLayoutRequest {
-}
-
-message GetChannelsLayoutResponse
-{
-    repeated ChannelRecord channel_records = 1;
-}
-
-message ChannelRecord
-{
-    message MuxRecord
-    {
-        uint32 id = 1;
-        uint32 phys_x = 2;
-        uint32 phys_y = 3;
-    }
-    uint32 id = 1;
-    string name = 2;
-    repeated MuxRecord mux_records = 3;
-}
+// MINKNOW_PUBLIC_EXCLUDE_END
