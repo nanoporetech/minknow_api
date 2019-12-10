@@ -4,6 +4,7 @@ package ont.rpc.data;
 
 import "minknow/rpc/rpc_options.proto";
 import "minknow/rpc/device.proto";
+import "google/protobuf/duration.proto";
 import "google/protobuf/wrappers.proto";
 
 service DataService {
@@ -172,6 +173,10 @@ service DataService {
     // Collects statistics about read (chunk) lengths and signal, split by channel, channel
     // configuration and read (chunk) classification.
     rpc get_read_statistics (GetReadStatisticsRequest) returns (GetReadStatisticsResponse) {}
+
+    // Returns various points of yield information for the ongoing experiment, such as complete 
+    // read information and basecaller progress.
+    rpc get_experiment_yield_info (GetExperimentYieldInfoRequest) returns (GetExperimentYieldInfoResponse) {}
 }
 
 message GetChannelStatesRequest {
@@ -195,6 +200,16 @@ message GetChannelStatesRequest {
     //
     // Defaults to false
     bool wait_for_processing = 4;
+
+    // Ensure the stream sends a message at least this often.
+    //
+    // There will usually be multiple channel updates a second, but in some circumstances (eg: a
+    // flow cell with no sample loaded) there can be long periods of time without updates.
+    //
+    // Setting this value will ensure that if this period of time passes without there being any
+    // channel state changes to report, an empty message will be sent. This can be useful to force a
+    // minimum wakeup interval in the client code.
+    google.protobuf.Duration heartbeat = 5;
 }
 
 message GetChannelStatesResponse {
@@ -776,3 +791,121 @@ message UnlockChannelStatesRequest {
     repeated uint64 channels = 1 [(rpc_required) = true];
 }
 message UnlockChannelStatesResponse {}
+
+message GetExperimentYieldInfoRequest {}
+
+message GetExperimentYieldInfoResponse{
+    message CompleteReadInfo {
+        uint64 pending_chunks = 1;
+        uint64 pending_memory_reads = 2;
+        uint64 pending_multi_disk_reads = 3;
+        uint64 pending_skipped_reads = 4;
+        uint64 pending_force_skipped_reads = 5;
+        uint64 processed_memory_reads = 6;
+        uint64 processed_disk_reads = 7;
+        uint64 processed_skipped_reads = 8;
+        uint64 processed_force_skipped_reads = 9;
+        uint64 stored_reads_bytes_memory = 10;
+        uint64 stored_reads_bytes_disk = 11;
+        uint64 discarded_error_bytes = 12;
+        uint64 channels_writing_to_disk = 13;
+        uint64 channels_writing_to_disk_tmp = 14;
+    }
+
+    message AcquisitionInfo {
+        uint64 raw_per_channel = 1;
+        uint64 frame_discontinuities = 2;
+    }
+
+    message AnalyserInfo {
+        uint64 raw_per_channel = 1;
+        uint64 total_selected_raw = 2;
+        uint64 total_selected_events = 3;
+        uint64 total_events = 4;
+        uint64 total_read_chunks = 5;
+        uint64 completed_selected_reads_count = 6;
+        uint64 completed_unselected_reads_count = 7;
+    }
+
+    message BulkInfo {
+        uint64 total_raw = 1;
+        uint64 total_events = 2;
+        uint64 total_fastq = 3;
+    }
+
+    message HdfWriterInfo {
+        uint64 pending_compressions = 1;
+        uint64 pending_writes = 2;
+        uint64 pending_hdf_tasks = 3;
+        uint64 completed_writes = 4;
+    }
+
+    message BasecallStatistics {
+        uint64 reads_in_progress = 1;
+        uint64 reads_processed = 2;
+        uint64 reads_skipped = 3;
+        uint64 reads_force_skipped = 4;
+        uint64 reads_failed_calling_filtered = 5;
+        uint64 reads_failed_calling = 6;
+        uint64 reads_called = 7;
+        uint64 samples_called = 8;
+        uint64 samples_skipped = 9;
+        uint64 bases_called = 10;
+        uint64 events_called = 11;
+    }
+
+    message HdfMultiReadWritingStatistics {
+        uint64 reads_written = 1;
+        uint64 passed_reads_written = 2;
+        uint64 failed_reads_written = 3;
+        uint64 force_skipped_reads_written = 4;
+        uint64 raw_bytes_written = 5;
+        uint64 fastq_bytes_written = 6;
+        uint64 basecall_events_bytes_written = 7;
+    }
+
+    message FastqReadWritingStatistics {
+        uint64 passed_reads_written = 1;
+        uint64 skipped_reads = 2;
+        uint64 forced_skipped = 3;
+        uint64 failed_reads_written = 4;
+        uint64 failed_reads_discarded = 5;
+    }
+
+    message ProtobufReadWritingStatistics {
+        uint64 read_chunks_written = 1;
+        uint64 read_chunks_discarded = 2;
+        uint64 reads_written = 3;
+        uint64 reads_discarded = 4;
+    }
+
+    message FileOperationQueueProgress {
+        message FileTypeInfo {
+            uint64 files_moved_successfully = 1;
+            uint64 files_moved_to_fallback = 2;
+            uint64 files_failed_to_move = 3;
+        }
+
+        uint64 pending_operations = 1;
+        uint64 complete_successful_operations = 2;
+        uint64 complete_failed_operations = 3;
+
+        uint64 bytes_to_move_posted = 4;
+        uint64 bytes_to_move_failed = 5;
+        uint64 bytes_to_move_completed = 6;
+
+        FileTypeInfo fast5 = 7;
+        FileTypeInfo fastq = 8;
+    }
+
+    CompleteReadInfo complete_read_info = 1;
+    AcquisitionInfo acquisition_info = 2;
+    AnalyserInfo analyser_info = 3;
+    BulkInfo bulk_info = 4;
+    HdfWriterInfo Hdf_writer_info = 5;
+    BasecallStatistics basecaller_statistics = 6;
+    HdfMultiReadWritingStatistics hdf_multi_read_writing_statisitics = 7;
+    FastqReadWritingStatistics fastq_read_writing_statistics = 8;
+    ProtobufReadWritingStatistics protobuf_read_writing_statistics = 9;
+    FileOperationQueueProgress file_operation_queue_progress = 10;
+}

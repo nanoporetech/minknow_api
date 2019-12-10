@@ -31,6 +31,9 @@ message Result {
     //
     // eg. 'sequencing': 1500
     map<string, uint32> counts = 1;
+
+    // When this mux scan result was added (Seconds since the start of the acquisition)
+    uint64 mux_scan_timestamp = 2;
 }
 
 message Style {
@@ -41,7 +44,7 @@ message Style {
     //
     // This can be used as a tooltip, for example.
     string description = 2;
-    
+
     // The colour to use when rendering this mux category or group.
     //
     // This is a six-digit hex string describing an RGB colour (eg: "ff00ff" for purple).

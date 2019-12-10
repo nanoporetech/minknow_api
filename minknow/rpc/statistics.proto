@@ -25,7 +25,7 @@ service StatisticsService {
 
     // A 2D histogram between basecall length and qscore
     //
-    // The first response(s) will give you the latest data, then the responses after that will only 
+    // The first response(s) will give you the latest data, then the responses after that will only
     // contain buckets that have changed. The initial state may be sent over multiple messages
     //
     // Currently unimplemented
@@ -48,7 +48,37 @@ service StatisticsService {
     //
     // Since 1.14
     rpc get_throughput (GetCumulativeThroughputRequest) returns (GetCumulativeThroughputResponse) {}
-    
+
+    // Tracks per-barcode throughput across all channels over time
+    //
+    // The first response will give you all the data it can.
+    //
+    // The stream will end once the current acquisition period ends, and a caller will need to
+    // reinvoke the rpc in order to get new throughput data.
+    //
+    // Since 3.6
+    rpc stream_per_barcode_throughput (StreamPerBarcodeCumulativeThroughputRequest) returns (stream StreamPerBarcodeCumulativeThroughputResponse) {}
+
+    // Gets per-barcode cumultative throughput information for a completed acquisition period.
+    //
+    // Currently, all time values must be given in multiples of 1 minute (it is recommended that the
+    // time unit is set to minutes).
+    //
+    // Since 3.6
+    rpc get_per_barcode_throughput (GetPerBarcodeCumulativeThroughputRequest) returns (GetPerBarcodeCumulativeThroughputResponse) {}
+
+    // Tracks which barcode names have been encountered
+    //
+    // When a new barcode name is encountered, a list of all encountered barcode names is returned
+    //
+    // Since 3.6
+    rpc stream_encountered_barcode_names (StreamEncounteredBarcodeNamesRequest) returns (stream StreamEncounteredBarcodeNamesResponse) {}
+
+    // Gets the barcode names which were encountered
+    //
+    // Since 3.6
+    rpc get_encountered_barcode_names (GetEncounteredBarcodeNamesRequest) returns (GetEncounteredBarcodeNamesResponse) {}
+
     // Streams device temperature for a device. The first message will contain all of the temperatures up
     // until the current live point, and then messages after that point will just be updates.
     //
@@ -66,7 +96,7 @@ service StatisticsService {
 
     // Streams when bias voltage changes occur, where the response given will be the acquisition
     // index that the voltage changed at, and the voltage itself. The first message will contain
-    // all of the bias voltage changes up until the current live point, and then messages after 
+    // all of the bias voltage changes up until the current live point, and then messages after
     // that period will just be updates
     //
     // Will fail with INVALID_ARGUMENT if an unknown acquisition id is given
@@ -98,15 +128,15 @@ service StatisticsService {
     // Since 3.2
     rpc get_read_length_types (GetReadLengthTypesRequest) returns (GetReadLengthTypesResponse) {}
 
-    
+
     // Returns the speed by bases metric represented as datasets (i.e. boxplots).
-    // 
+    //
     // Speed by bases is the pore speed measured in called bases: read length in bases / read length in seconds
     // for all the reads that were successfully called.
     //
     // A dataset is a collection of quantiles (min, max, q50 etc - please see BoxplotDataset) recorded for
     // a fixed period of time, say dt. dt is specified in the configs, and it defaults to 10 min for MinKNOW 3.2.
-    // When acquisition starts, MinKNOW accumulates these stats for each dt interval. Each dt generates 
+    // When acquisition starts, MinKNOW accumulates these stats for each dt interval. Each dt generates
     // a dataset streamed by this rpc. The stream can request aggregated stats by averaging the stats from
     // consecutive dt periods.
     //
@@ -126,14 +156,14 @@ service StatisticsService {
     rpc get_pore_speed_in_bases_boxplots (GetBoxplotRequest) returns (BoxplotResponse) {}
 
 
-    
+
     // Returns the qscore over time metric represented as datasets (i.e. boxplots).
     //
     // This metric applies to all the successfully called reads.
     //
     // A dataset is a collection of quantiles (min, max, q50 etc - please see BoxplotDataset) recorded for
     // a fixed period of time, say dt. dt is specified in the configs, and it defaults to 10 min for MinKNOW 3.2.
-    // When acquisition starts, MinKNOW accumulates these stats for each dt interval. Each dt generates 
+    // When acquisition starts, MinKNOW accumulates these stats for each dt interval. Each dt generates
     // a dataset streamed by this rpc. The stream can request aggregated stats by averaging the stats from
     // consecutive dt periods.
     //
@@ -305,13 +335,13 @@ enum ReadLengthType {
 }
 
 message StreamReadLengthHistogramRequest {
-    // Sets the desired width of the buckets, in terms of the requested read length type. 
+    // Sets the desired width of the buckets, in terms of the requested read length type.
     // The actual width of bins in the returned histogram may not be the number set here.
     //
     // If not set, then will set the minimum width possible
     uint32 bucket_width = 1;
 
-    // Sets the point of the leftmost bucket, in terms of the requested read length type. 
+    // Sets the point of the leftmost bucket, in terms of the requested read length type.
     //
     // The leftmost bucket of the upscaled histogram will be the one that contains this value.
     // The histogram will contain data for values starting at the minimum value for this bucket.
@@ -321,7 +351,7 @@ message StreamReadLengthHistogramRequest {
     // By default will start from 0
     uint32 start = 2;
 
-    // Sets the point of the rightmost bucket, in terms of the requested read length type. 
+    // Sets the point of the rightmost bucket, in terms of the requested read length type.
     //
     // If a non-zero value is specified, then the rightmost bucket of the upscaled histogram will be the one that contains this value.
     // The histogram will contain data for values ending at the maximum value for this bucket.
@@ -355,14 +385,25 @@ message StreamReadLengthHistogramRequest {
     //
     // Defaults to false
     bool wait_for_processing = 7;
-    
-    // Determines how to measure read lengths 
+
+    // Determines how to measure read lengths
     //
     // See `ReadLengthType` definition for a concrete example of what each type represents.
     // If MinKNOW is unable to calculate the requested measurement, it will fall back to
     // supplying data of a type it can calculate; the response will contain a field specifying
     // the type of data actually calculated.
     ReadLengthType read_length_type = 8;
+
+    // If set greater than zero then discard some percent of long reads at the upper
+    // end of the histogram, before calculating the histogram buckets.
+    //
+    // This is intended to assist with a few very long reads confusing the histogram axes.
+    //
+    // Defaults to 0 - no reads discarded - values should be specified in percent - a value of 0.05
+    // will filter 5% of reads from the upper end of the histogram.
+    //
+    // Since 3.6
+    float discard_outlier_percent = 9;
 }
 
 message ReadLengthHistogramData {
@@ -375,40 +416,52 @@ message ReadLengthHistogramData {
     // The size of the bucket
     uint32 width = 2;
 
-    // Note that this can be different from what is requested if the type requested is not available for some reason 
+    // Note that this can be different from what is requested if the type requested is not available for some reason
     // (e.g. requested ESTIMATED_BASES but events_to_base ratio is not set in minknow)
     ReadLengthType read_length_type = 3;
-    
+
     // The lowest value in the range covered by the histogram
     // (and, therefore, also the lowest value in the range covered by the first bucket of the histogram)
     uint32 min_val = 4;
-    
-    // The highest value for which data exists in the histogram, within the entire range of data accumulated 
-    // by MinKNOW, regardless of the range specified by the client.  This will be the maximum value of the 
-    // highest upscaled bin containing data. 
+
+    // The highest value for which data exists in the histogram, within the entire range of data accumulated
+    // by MinKNOW, regardless of the range specified by the client.  This will be the maximum value of the
+    // highest upscaled bin containing data.
     uint32 actual_max_val = 5;
 }
+
+message N50Data {
+    // The N50 value, measured in associated units
+    uint64 value = 1;
+
+    // The units of the N50 value
+    ReadLengthType read_length_type = 2;
+}
+
 
 message StreamReadLengthHistogramResponse {
 
     reserved 1, 2, 3, 4;
     reserved "buckets", "width", "bucket_value_type", "min_val";
-    
+
     // The histogram data
     ReadLengthHistogramData histogram_data = 5;
+
+    // The N50 data
+    N50Data n50_data = 6;
 }
 
 message GetReadLengthHistogramRequest {
     // The acquisition id of the experiment
     string run_id = 1 [(rpc_required) = true];
 
-    // Sets the desired width of the buckets, in terms of the requested read length type. 
+    // Sets the desired width of the buckets, in terms of the requested read length type.
     // The actual width of bins in the returned histogram may not be the number set here.
     //
     // If not set, then will set the minimum width possible
     uint32 bucket_width = 2;
 
-    // Sets the point of the leftmost bucket, in terms of the requested read length type. 
+    // Sets the point of the leftmost bucket, in terms of the requested read length type.
     //
     // The leftmost bucket of the upscaled histogram will be the one that contains this value.
     // The histogram will contain data for values starting at the minimum value for this bucket.
@@ -418,7 +471,7 @@ message GetReadLengthHistogramRequest {
     // By default will start from 0
     uint32 start = 3;
 
-    // Sets the point of the rightmost bucket, in terms of the requested read length type. 
+    // Sets the point of the rightmost bucket, in terms of the requested read length type.
     //
     // If a non-zero value is specified, then the rightmost bucket of the upscaled histogram will be the one that contains this value.
     // The histogram will contain data for values ending at the maximum value for this bucket.
@@ -435,26 +488,44 @@ message GetReadLengthHistogramRequest {
     // See `BucketValueType` definition for a concrete example of what each type represents.
     BucketValueType bucket_value_type = 5;
 
-    // Determines how to measure read lengths 
+    // Determines how to measure read lengths
     //
     // See `ReadLengthType` definition for a concrete example of what each type represents.
     // If MinKNOW is unable to calculate the requested measurement, it will fall back to
     // supplying data of a type it can calculate; the response will contain a field specifying
     // the type of data actually calculated.
     ReadLengthType read_length_type = 6;
+
+    // If set greater than zero then discard some percent of long reads at the upper
+    // end of the histogram, before calculating the histogram buckets.
+    //
+    // This is intended to assist with a few very long reads confusing the histogram axes.
+    //
+    // Defaults to 0 - no reads discarded - values should be specified in percent - a value of 0.05
+    // will filter 5% of reads from the upper end of the histogram.
+    //
+    // Since 3.6
+    float discard_outlier_percent = 7;
 }
 
 message GetReadLengthHistogramResponse {
 
     reserved 1, 2, 3, 4;
     reserved "buckets", "width", "bucket_value_type", "min_val";
-    
+
     // The histogram data
     ReadLengthHistogramData histogram_data = 5;
+
+    // The N50 data
+    N50Data n50_data = 6;
 }
 
 message GetReadLengthTypesRequest {
 
+    // The acquisition id of the experiment.  If this is not specifified, then it
+    // will be an empty string by default.  In this case, the current acquisition
+    // will be assumed.
+    string run_id = 1;
 }
 
 message GetReadLengthTypesResponse {
@@ -481,7 +552,7 @@ message StreamHeatmapResponse {
         // `read_count` is the number of reads we have seen in this bucket, so if this was bucket 0 and
         // and there has been a read with length 30 and another with 20, then `read_count` will be 2
         //
-        // `read_length` is the cumulative read length of the bucket. So using the previous example, 
+        // `read_length` is the cumulative read length of the bucket. So using the previous example,
         // `read_length` will be 50
         oneof read_type {
             uint32 read_count = 3;
@@ -576,6 +647,12 @@ message CumulativeThroughputBucket {
     //
     // Note: This data will remain at zero if MinKNOW is not basecalling.
     uint64 basecalled_samples = 10;
+
+    // Number of bytes which minknow has produced and are ready to be written to final location on disk.
+    uint64 produced_bytes = 11;
+
+    // Number of bytes which minknow has written to their final location on disk.
+    uint64 written_bytes = 12;
 }
 
 message StreamCumulativeThroughputResponse {
@@ -618,6 +695,108 @@ message GetCumulativeThroughputResponse {
     repeated CumulativeThroughputBucket buckets = 1;
 }
 
+message StreamPerBarcodeCumulativeThroughputRequest {
+    // Defines (in seconds) the bucket period of the throughput
+    //
+    // The minimum size for `step` is 60
+    uint32 step = 1 [(rpc_required) = true];
+
+    // Specify the start time of the throughput data (in seconds). If not specified then will return data since the start of the experiment
+    //
+    // Will fail with INVALID_ARGUMENT if not a multiple of `step`.
+    //
+    // For example, if this was set to 600 with a step of 60, then the first 10 buckets will not be returned
+    // and the first bucket will be [600,660)
+    uint32 start_time = 2;
+
+    // Specify the end time of the data (in seconds). Call will return if the end time has been reached.
+    // If the end time has not yet been reached, then the stream will continue until it has, and then return.
+    // If not specified, then will stream forever.
+    //
+    // Will fail with INVALID_ARGUMENT if not a multiple of `step`
+    // Will fail with INVALID_ARGUMENT if not more than `start_time`
+    //
+    // This specifies T1 for a bucket [T0, T1)
+    uint32 end_time = 3;
+
+    // If `wait_for_processing` is true, then will wait until minknow starts acquiring data instead of returning with an error
+    //
+    // Defaults to false
+    bool wait_for_processing = 4;
+
+    // What barcode names to return data for
+    // If no barcode names are specified, then data for all barcode names is returned
+    repeated string barcodes = 5;
+}
+
+message CumulativeThroughputBucketVector {
+    repeated CumulativeThroughputBucket buckets = 1;
+}
+
+message StreamPerBarcodeCumulativeThroughputResponse {
+    map<string, CumulativeThroughputBucketVector> per_barcode_throughput_data = 1;
+}
+
+message GetPerBarcodeCumulativeThroughputRequest {
+    // The acquisition id of the experiment.
+    string run_id = 1 [(rpc_required) = true];
+
+    // Defines the bucket period of the cumulative throughput data, in multiples of `time_unit`.
+    uint32 step = 2 [(rpc_required) = true];
+
+    // Specify the start time of the data since the start time of the experiment in multiples of
+    // `time_unit`.
+    //
+    // Must be a multiple of `step`.
+    //
+    // If not specified then will return data since the start of the experiment.
+    uint32 start_time = 3;
+
+    // Specify the end time of the data to return in multiples of `time_unit`. Only data from before
+    // this time will be returned.
+    //
+    // This does not need to be a multiple of `step` - you will get a smaller final bucket if it is
+    // not.
+    //
+    // If not specified then will return all the data till the end of the experiment.
+    // A time past the end of the experiment will be accepted, and treated in the same way.
+    uint32 end_time = 4;
+
+    // What unit of time to use. Defaults to SECONDS
+    //
+    // This is used to interpret the other fields in this message as well as for the times in the
+    // response message.
+    TimeUnit time_unit = 5;
+
+    // What barcode names to return data for
+    // If no barcode names are specified, then data for all barcode names is returned
+    repeated string barcodes = 6;
+}
+
+message GetPerBarcodeCumulativeThroughputResponse {
+    map<string, CumulativeThroughputBucketVector> per_barcode_throughput_data = 1;
+}
+
+message StreamEncounteredBarcodeNamesRequest {
+    // If `wait_for_processing` is true, then will wait until minknow starts acquiring data instead of returning with an error
+    //
+    // Defaults to false
+    bool wait_for_processing = 4;
+}
+
+message StreamEncounteredBarcodeNamesResponse {
+    repeated string barcode_names = 1;
+}
+
+message GetEncounteredBarcodeNamesRequest {
+    // The acquisition id of the experiment.
+    string run_id = 1 [(rpc_required) = true];
+}
+
+message GetEncounteredBarcodeNamesResponse {
+    repeated string barcode_names = 1;
+}
+
 message StreamTemperatureRequest {
     // Defines the bucket period of the temperatures in terms of `time_unit`
     //
@@ -634,7 +813,7 @@ message StreamTemperatureRequest {
     uint32 start_time = 2;
 
     // Specify the exclusive end time of the data to return in multiples of `time_unit`. Only data from before
-    // this time will be returned. 
+    // this time will be returned.
     //
     // Call will return if the end time has been reached.
     // If the end time has not yet been reached, then the stream will continue until it has, and then return.
@@ -728,6 +907,7 @@ message GetTemperatureResponse {
 message BiasVoltagePacket {
     uint64 acquisition_index = 1;
     double bias_voltage = 2;
+    uint64 time_seconds = 3;
 }
 
 message StreamBiasVoltagesRequest {
@@ -779,7 +959,7 @@ message StreamBoxplotRequest {
     //
     // Note:
     // When multiple buckets are aggregated into a single dataset, the resulting dataset will
-    // contain the average of the aggregated quantiles (with the exception of min/max)! This is not the 
+    // contain the average of the aggregated quantiles (with the exception of min/max)! This is not the
     // same as using a larger granularity in MinKNOW configs - the values that MinKNOW stores
     // are the true quantiles. Averaging quantiles will give a rough approximation, but not a quantile.
     // If the finest granularity is not required, we strongly suggest changing the time coverage in the config,
@@ -792,8 +972,8 @@ message StreamBoxplotRequest {
     bool wait_for_processing = 2;
 
     // How often to return messages in this stream, specified in seconds. Note that this stream will
-    // return results regardless of the stats updates (because it always returns all the datasets). 
-    // poll_time should be larger than the basecalled stats update rate in MinKNOW - 
+    // return results regardless of the stats updates (because it always returns all the datasets).
+    // poll_time should be larger than the basecalled stats update rate in MinKNOW -
     // please see basecalled_stats_refresh_rate_seconds in the configs
     // (set to 1 second in MinKNOW 3.2).
     uint32 poll_time = 3;

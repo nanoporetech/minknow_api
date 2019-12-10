@@ -423,6 +423,8 @@ message GetFlowCellInfoResponse {
     // In the event a flow cell does not have an eeprom, this field contains data input by the user
     // using set_flow_cell_info to record required data.
     //
+    // Only alpha-numeric, space, dash and underscore characters are allowed in this field.
+    //
     // Since 1.12
     string user_specified_flow_cell_id = 7;
 

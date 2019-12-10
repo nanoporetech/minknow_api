@@ -1,5 +1,6 @@
 syntax="proto3";
 
+import "minknow/rpc/rpc_options.proto";
 import "google/protobuf/timestamp.proto";
 
 package ont.rpc.acquisition;
@@ -42,7 +43,7 @@ service AcquisitionService {
 
     // Returns current acquisition run info and streams any changes to the current acquisition
     //
-    // This call can be made even if there is no current protocol running. In this case, the next streamed
+    // This call can be made even if acquisition is not running. In this case, the next streamed
     // response will be the start of a new acquisition and you will receive updates for that acquisition
     // until it finishes.
     //
@@ -67,7 +68,7 @@ service AcquisitionService {
     // Since 1.11
     rpc get_acquisition_info (GetAcquisitionRunInfoRequest) returns (AcquisitionRunInfo) {}
 
-    // Gets information about all previous protocol runs.
+    // Gets information about all previous acquisitions.
     //
     // Since 1.11
     rpc list_acquisition_runs (ListAcquisitionRunsRequest) returns (ListAcquisitionRunsResponse) {}
@@ -78,6 +79,11 @@ service AcquisitionService {
     //
     // Since 1.11
     rpc get_current_acquisition_run (GetCurrentAcquisitionRunRequest) returns (AcquisitionRunInfo) {}
+    
+    // Specify the signal reader to use
+    //
+    // Since 3.6
+    rpc set_signal_reader (SetSignalReaderRequest) returns (SetSignalReaderResponse) {}
 }
 
 //
@@ -229,10 +235,24 @@ message StartRequest {
     //
     // Since 3.2
     Option file_output = 8;
+
+    // Write a final_summary.txt file.
+    //
+    // If file_output is disabled, the final_summary.txt file will not be written regardless of
+    // this setting.
+    //
+    // The default setting (AUTO) will only enable writing a final_summary.txt file if the purpose
+    // is set to SEQUENCING.
+    //
+    // Since 3.5 (NB: in 3.3 and 3.4, final_summary.txt was always written out if file_output was
+    // enabled).
+    Option generate_final_summary = 9;
 }
 
 message StartResponse {
-    // UUID generated when the protocol is started, to uniquely represent this protocol instance
+    // Globally-unique identifier generated when the acquisition is started.
+    //
+    // This is guaranteed to unique, including aross sequencing devices.
     string run_id = 1;
 }
 
@@ -313,7 +333,7 @@ message GetProgressResponse {
 }
 
 message GetAcquisitionRunInfoRequest {
-    // The protocol run to get information about.
+    // The acquisition period to get information about.
     string run_id = 1;
 }
 
@@ -488,6 +508,8 @@ message ChannelStateInfo {
 message AcquisitionConfigSummary {
     // Was basecalling enabled for the run.
     bool basecalling_enabled = 1;
+    // Is barcoding enabled for the run
+    bool barcoding_enabled = 13;
 
     // Root directory reads were written to for the run.
     //
@@ -535,10 +557,10 @@ message AcquisitionRunInfo {
     //
     // This is guaranteed to be made of ASCII characters, and at
     // most 40 characters. It is globally unique across all
-    // protocols runs on all MinKNOW instances.
+    // acquisitions on all MinKNOW instances.
     string run_id = 1;
 
-    // Indicates the current state of the protocol run.
+    // Indicates the current state of the acquisition.
     AcquisitionState state = 2;
 
     // If the experiment is finishing, an extra piece of state
@@ -563,7 +585,7 @@ message AcquisitionRunInfo {
 
     // When the acquisition terminated (UTC).
     //
-    // Unset if the protocol is still running.
+    // Unset if the acquisition period is still running.
     google.protobuf.Timestamp end_time = 7;
 
     // Summary of acquisition yields.
@@ -590,3 +612,30 @@ message GetCurrentAcquisitionRunRequest {
 
 message WatchCurrentAcquisitionRunRequest {
 }
+
+message SetSignalReaderRequest {
+
+    // Available signal reader types
+    enum SignalReaderType {
+        HDF5 = 0; // Default value
+        DEVICE = 1;
+    }
+    
+    // The type of signal reader to use
+    SignalReaderType reader = 1 [(rpc_required) = true];
+    
+    // The following settings are optional, and only used when setting the reader to hdf5
+    string hdf_source = 2;
+    
+    enum SourceFileMode {
+        UNSPECIFIED = 0; // Default value
+        SINGLE_RUN = 1;
+        LOOP = 2;
+    }
+    
+    SourceFileMode hdf_mode = 3; // Defaults to UNSPECIFIED, since this setting is optional
+    
+    float sample_rate_scale_factor = 4;
+}
+
+message SetSignalReaderResponse {}

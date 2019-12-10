@@ -33,18 +33,30 @@ message ProtocolData {
   int32 bias_voltage_offset = 4;
 
 
+  // Reserved values: 2, 4
   enum ProtocolInternalState {
     RUNNING_MUX_SCAN = 0;
     RUNNING_SEQUENCING = 1;
-    PAUSE_REQUEST = 2;
     PAUSED = 3;
-    RESUME_REQUEST = 4;
+    PAUSING = 5;
+    RESUMING = 6;
+    PREPARING_FOR_MUX_SCAN = 7;
   }
 
   // State of the experiment
-  // UI will set to PAUSE_REQUEST and bream will change to PAUSED
-  // UI will set to RESUME_REQUEST and bream will change back to RUNNING_SEQUENCING
-  // UI will ideally not ask to pause during a mux scan as it won't be actioned immediately
   ProtocolInternalState state = 5;
 
+  message MuxScan {}
+  message Pause {}
+  message Resume {}
+
+  // UI will send MUX_SCAN and bream will set ProtocolInternalState to PREPARING_FOR_MUX_SCAN => RUNNING_MUX_SCAN
+  // UI will send PAUSE and bream will set ProtocolInternalState to PAUSING => PAUSED
+  // UI will send RESUME and bream will set ProtocolInternalState to RESUMING => RUNNING_SEQUENCING
+  // UI will ideally not ask to pause during a mux scan as it won't be actioned immediately
+  oneof protocol_event_trigger {
+    MuxScan mux_scan = 6;
+    Pause pause = 7;
+    Resume resume = 8;
+  };
 }

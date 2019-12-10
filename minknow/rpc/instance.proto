@@ -99,7 +99,7 @@ message GetVersionInfoResponse {
     MinknowVersion minknow = 1;
 
     // The protocols version specifies what version of bream is installed.
-    // By default is set to '0.0.0.0', but will otherwise be set to {minknow-version}.{patch}
+    // By default is set to '0.0.0.0', but will otherwise be set to a Bream release version.
     string protocols = 2;
 
     // Describes the distribution that this MinKNOW installation is part of, ususally
@@ -120,6 +120,12 @@ message GetVersionInfoResponse {
     // Indicates if the MinKNOW distribution including components such as Bream
     // are stable, unstable or have been modified.
     DistributionStatus distribution_status = 4;
+
+    // The configuration version specifies what version of ont-configuration (wanda) is installed.
+    // By default is set to '0.0.0.0', but will otherwise be set to a Wanda release version.
+    // 
+    // Since 3.6
+    string configuration = 5;
 }
 
 message GetOutputDirectoriesRequest {

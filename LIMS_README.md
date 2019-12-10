@@ -5,7 +5,7 @@ MinKNOW LIMS Interface
 
 MinKNOW is Oxford Nanopore Technologies Device Control software embedded in MinIT, GridION, PromethION and provided for installation on user PCs to run MinION.
 MinKNOW carries out several core tasks: data acquisition; real-time analysis and feedback; basecalling; data streaming; device control including selecting the run parameters; sample identification and tracking and ensuring that the platform chemistry is performing correctly to run the samples. 
-With the deployment of Oxford Nanopore devices into production sequencing environements, the ability to interface with MinKNOW and pull useful metadata such as Run IDs, Flow Cell IDs, run statistics becomes more important.
+With the deployment of Oxford Nanopore devices into production sequencing environments, the ability to interface with MinKNOW and pull useful metadata such as Run IDs, Flow Cell IDs, run statistics becomes more important.
 
 Getting Started
 ===============

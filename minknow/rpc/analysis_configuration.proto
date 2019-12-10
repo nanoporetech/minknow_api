@@ -152,6 +152,18 @@ message EventDetection {
     // this case).
     google.protobuf.BoolValue break_on_mux_changes = 17;
 
+    // Control the number of samples MinKNOW will shift mux changes back by in order to align mux changes
+    // with event boundaries.
+    //
+    // When break on mux changes is enabled its possible that mux changes recorded from the device and
+    // signal deltas caused by the config changes will not align exactly (the signal delta happen prior to the
+    // mux change due to the recorded sample indicating the command is fully applied). Setting this value to > 0
+    // will allow minknow to record the mux change as active up to this number of samples _before_ the device
+    // recorded the change as active. Mux changes are never shifted forwards.
+    //
+    // A value of 0 will disable shifting of mux changes.
+    uint32 max_mux_change_back_shift = 18;
+
     // DEPRECATED
     enum EventDetectionMode {
         multittest_continuous = 0;
@@ -211,8 +223,32 @@ message ReadDetectionParams {
     google.protobuf.UInt32Value break_reads_after_events = 4;
     google.protobuf.DoubleValue break_reads_after_seconds = 5;
     google.protobuf.UInt32Value break_reads_on_mux_changes = 6;
+
+    // The following parameters define a range of pA which a read must enter/leave in order
+    // to trigger a read break.
+    //
+    // The defined range can either be statically defined, or track with open_pore classifications
+    // (see ReadClassificationParams.open_pore_classifications)
+
+    // The minimum level which is considered open pore (this value is relative to open_pore_default
+    // or the tracked open_pore section, if tracking is being used.)
+    //
+    // This value must be <= 0.0 if tracking is being used.
     google.protobuf.DoubleValue open_pore_min = 7;
+
+    // The maximum level which is considered open pore (this value is relative to open_pore_default
+    // or the tracked open_pore section, if tracking is being used.)
+    //
+    // This value must be >= 0.0 if tracking is being used.
     google.protobuf.DoubleValue open_pore_max = 8;
+
+    // The default value to use for open pore, either when tracking isn't being used, or when
+    // open pore tracking has no value currently.
+    google.protobuf.DoubleValue open_pore_default = 9;
+
+    // Minimum number of seconds events must lie within the range of open pore in order to allow
+    // a read to break.
+    google.protobuf.DoubleValue open_pore_seconds_required = 10;
 }
 
 message ReadClassificationParams {
@@ -260,6 +296,18 @@ message ReadClassificationParams {
     // An anything-delimited list of classifications that are deemed interesting, and will be marked to
     // be written out to file
     google.protobuf.StringValue selected_classifications = 3;
+
+    // A set of classifications whose level should be tracked as the level of open pore (fed back into
+    // read detection analysis).
+    //
+    // Read chunks selected by this filter will be aggregated for use in read detection.
+    google.protobuf.StringValue open_pore_classifications = 6;
+
+    // A weighting figure for the exponentially weighted moving average given to the newest data.
+    // eg. 0.7 would weight new data with 0.3 and all previous data with 0.7.
+    //
+    // By default 0.5 is used.
+    google.protobuf.DoubleValue open_pore_ewma_weight = 7;
 
     // Determine how to classify a whole read based on the strategy
     //
@@ -315,7 +363,7 @@ message ChannelStates {
             // is active, then the latch will keep it active until the channel state is reset.
             google.protobuf.Int32Value latch = 3;
 
-            // An 'effective mux change' is any mux change apart from the one triggered by the user
+            // An 'effective mux change' is any mux change apart from the one triggered
             // with the purpose of disconnecting a channel (turning a channel off). For example, if
             // a channel is in pore, and the user changes the channel configuration to 'disconnected',
             // that mux change will not be an effective mux change. Any other mux change is considered
@@ -329,6 +377,19 @@ message ChannelStates {
             // this option on. The multiple state will be reset at all other mux changes (i.e. effective
             // mux changes).
             google.protobuf.Int32Value reset_on_effective_mux_change = 4;
+
+            // An 'effective well change' is any well change apart from the one triggered
+            // with the purpose of disconnecting a channel (turning a channel off). For example, if
+            // a channel is in well_1, and the user changes the channel configuration to 'unblock_1',
+            // that change will not be an effective well change. A change to disconnected is also
+            // not considered an effective well change.
+            //
+            // Use this reset mode to make the channel state persist on non-effective well changes.
+            // For example, if a channel state is in 'multiple' and the user triggers a channel
+            // configuration change to 'disconnected', the state will remain in multiple if it has
+            // this option on. The multiple state will be reset then when the mux is set to a different
+            // setting.
+            google.protobuf.Int32Value reset_on_effective_well_change = 5;
         }
 
         // Dont really like this way of doing it, but it has to match the old way...
@@ -493,6 +554,21 @@ message GetSummaryResponse {
 }
 
 
+// Since 3.5
+message BarcodingConfiguration
+{
+    // The barcoding kits in use
+    // One entry per kit
+    // If no barcoding kits are supplied, barcoding is disabled.
+    repeated string barcoding_kits = 1;
+
+    // Whether Guppy should trim barcodes
+    // If not specified, this value defaults to false (not triming barcodes)
+    // If barcoding is not enabled (e.g., because no barcoding kits are specified),
+    // this parameter has no effect
+    google.protobuf.BoolValue trim_barcodes = 2;
+}
+
 // Since 3.0
 message BasecallerConfiguration
 {
@@ -521,6 +597,12 @@ message BasecallerConfiguration
     // If no filtering parameters are provided then reads will not
     // be filtered.
     ReadFiltering read_filtering = 3;
+
+    // Control the barcoding configuration.
+    // If no barcoding configuration is supplied, barcoding is disabled.
+    //
+    // Since 3.5
+    BarcodingConfiguration barcoding_configuration = 4;
 }
 
 message SetBasecallerConfigurationRequest
@@ -567,11 +649,15 @@ message SetPoreTypeConfigurationResponse {}
 //  - channel_name:         The name of the channel which produced the read.
 //  - read_start_time:      Read start time formatted in rfc3339 format.
 //  - basecall_status:      Basecalling output status (derived from WriterDefaults section in analysis config).
+//  - pore_type:            Type of pore (as specified by #set_pore_type_configuration).
 //
 // General attributes:
-//  - daq_start_time:       Data acquisition start time formatted as YYYYMMDD_HHMM.
+//  - daq_start_time:       Data acquisition start time formatted as YYYYMMDD_hhmm.
+//  - protocol_start_time:  Time the current protocol was started.
 //  - run_id:               Acquisition run id formatted as hash.
-//  - pore_type:            Type of pore (as specified by #set_pore_type_configuration).
+//  - short_run_id:         Shortened version of acquisition run id formatted as hash.
+//  - protocol_run_id:      Protocol run id formatted as hash.
+//  - short_protocol_run_id: Shortened protocol run id formatted as hash.
 //  - asic_id:              Integer id assigned to the asic in the connected flow cell.
 //  - flow_cell_id:         Flow cell integer as read from eeprom.
 //  - machine_id:           Name of the machine (hostname or machine identifier depending on the sequencer type).
@@ -579,7 +665,20 @@ message SetPoreTypeConfigurationResponse {}
 //  - sample_id:            Sample id entered by the user when starting a protocol.
 //  - version_string:       Version string of the running MinKNOW instance
 //  - protocol_group_id:    Protocol group entered by user when starting a protocol.
+//  - protocol_purpose:     Prupose of protocol (see protocol.set_protocol_purpose())
+//  - data_set:             (deprecated) A unique identifier for an acquisition period, created automatically by MinKNOW.
+//                          By default, this identifier expands to the pattern "{machine_id}_{device_id}_{timestamp}",
+//                          where "{timestamp}" is the experiment start time, in the format "MMDDhhmmss"
 message WriterConfiguration {
+    // Control the type of compression applied to the read data.
+    //
+    // By default the vbz compressor is used (except in the single read case).
+    enum CompressionType {
+        DefaultCompression = 0;
+        ZlibCompression = 1;
+        VbzCompression = 2;
+    }
+
     // Used to control which channels for a specific
     // data type emit data
     message ChannelConfiguration {
@@ -605,6 +704,11 @@ message WriterConfiguration {
         //      compression, 9 is the smallest possible output.
         int32 compression_level = 1;
 
+        // Control the type of compression applied to the read data.
+        //
+        // By default the vbz compressor is used (except in the single read case).
+        CompressionType compression_type = 14;
+
         // Raw data, stored with calibration data, and read attributes.
         //
         // Stored under /Raw/Reads_*/Signal
@@ -629,6 +733,11 @@ message WriterConfiguration {
         //
         // Stored under /Analyses/Basecall_1D_*/BaseCalled_template/Move
         ChannelConfiguration move_table = 12;
+
+        // Base modification probability table
+        //
+        // Store under /Analyses/Basecall_1D_*/BaseCalled_template/ModBaseProbs
+        ChannelConfiguration modifications_table = 13;
 
         // Prevent reads which have successfully basecalled being written to fast5.
         bool disable_writing_passed_reads = 5;
@@ -679,6 +788,10 @@ message WriterConfiguration {
 
         // How many files are placed in each batch (after batch_count files {batch_number} is increased in the filename).
         uint32 batch_count = 4;
+
+        // Compress fastq files with gzip compression.
+        // default: false
+        bool compression = 5;
     }
 
     message ReadProtobufConfiguration {
@@ -704,7 +817,7 @@ message WriterConfiguration {
 
         // The pattern used to find a summary files name.
         //
-        // default: analysis_summary/{data_set}_analysis_summary.txt
+        // default: sequencing_summary_{flow_cell_id}_{short_run_id}.txt
         // Where each {xxx} section is replaced with an attribute from the minknow
         // state when the file is written.
         //
@@ -720,6 +833,21 @@ message WriterConfiguration {
         // 1-9: Passed to zlib compression, 1 is the fastest
         //      compression, 9 is the smallest possible output.
         int32 compression_level = 2;
+
+        // Control the type of compression applied to the read data.
+        //
+        // By default the vbz compressor is used (except in the single read case).
+        CompressionType compression_type = 13;
+
+        // The pattern used to find a bulk files name. If left empty but output is
+        // enabled a default pattern is used.
+        //
+        // default: {data_set}.fast5
+        // Where each {xxx} section is replaced with an attribute from the minknow
+        // state when the file is written.
+        //
+        // See file pattern attributes above.
+        string file_pattern = 14;
 
         // Raw data, stored with channel calibration data
         //
@@ -772,6 +900,59 @@ message WriterConfiguration {
         bool device_commands = 12;
     }
 
+    // Control settings for the report writer
+    message ReportConfiguration {
+        // The pattern used to find the pdf report filename. If left empty but output is
+        // enabled a default pattern is used.
+        //
+        // default: report_{flow_cell_id}_{start_time}_{short_protocol_run_id}.pdf
+        // Where each {xxx} section is replaced with an attribute from the minknow
+        // state when the file is written.
+        //
+        // See file pattern attributes above.
+        string pdf_report_file_pattern = 1;
+
+        // The pattern used to find the markdown report filename. If left empty but output is
+        // enabled a default pattern is used.
+        //
+        // default: report_{flow_cell_id}_{start_time}_{short_protocol_run_id}.md
+        // Where each {xxx} section is replaced with an attribute from the minknow
+        // state when the file is written.
+        //
+        // See file pattern attributes above.
+        string markdown_report_file_pattern = 2;
+
+        // The pattern used to find the duty time csv report. If left empty but output is
+        // enabled a default pattern is used.
+        //
+        // default: duty_time_{flow_cell_id}_{short_run_id}.csv
+        // Where each {xxx} section is replaced with an attribute from the minknow
+        // state when the file is written.
+        //
+        // See file pattern attributes above.
+        string duty_time_report_file_pattern = 3;
+
+        // The pattern used to find the throughput csv report. If left empty but output is
+        // enabled a default pattern is used.
+        //
+        // default: throughput_{flow_cell_id}_{short_run_id}.csv
+        // Where each {xxx} section is replaced with an attribute from the minknow
+        // state when the file is written.
+        //
+        // See file pattern attributes above.
+        string throughput_report_file_pattern = 4;
+
+        // The pattern used to find the final summary report. If left empty but output is
+        // enabled a default pattern is used.
+        //
+        // default: final_summary_{flow_cell_id}_{short_run_id}.txt
+        // Where each {xxx} section is replaced with an attribute from the minknow
+        // state when the file is written.
+        //
+        // See file pattern attributes above.
+        string final_summary_report_file_pattern = 5;
+    }
+
     // Configuration for the fast5 writer.
     //
     // If not specified, no multi fast5 outputs are generated.
@@ -801,6 +982,13 @@ message WriterConfiguration {
     //
     // If not specified, a basic bulk output is generated.
     BulkConfiguration bulk = 6;
+
+    // Configuration for the report writer
+    //
+    // If acquisition.StartRequest.generate_report is set for the
+    // acquisition period, and empty paths (or no report config) are supplied
+    // for reports default paths are used.
+    ReportConfiguration report = 7;
 }
 
 message SetWriterConfigurationResponse {
