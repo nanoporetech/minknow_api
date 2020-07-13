@@ -1,0 +1,320 @@
+syntax="proto3";
+
+package minknow_api.basecaller;
+
+option java_package = "com.nanoporetech.minknow_api";
+option objc_class_prefix = "MKAPI";
+
+import "google/protobuf/timestamp.proto";
+import "minknow_api/analysis_configuration.proto";
+
+// Basecall reads files from previous sequencing runs.
+//
+// NB: this is not available from a MinKNOW device instance. It should be accessed on its own
+// connection, using one of the ports provided by the
+// minknow_api.manager.ManagerService.basecaller_api() method.
+//
+// Since 3.5
+service Basecaller {
+    // List the available basecalling configurations sorted by flow cell and kit.
+    //
+    // Since 3.5
+    rpc list_configs_by_kit (ListConfigsByKitRequest) returns (ListConfigsByKitResponse) {}
+
+    // Start basecalling reads files.
+    //
+    // Since 4.0
+    rpc start_basecalling (StartBasecallingRequest) returns (StartBasecallingResponse) {}
+
+    // Start barcoding fastq files.
+    //
+    // Since 3.8
+    rpc start_barcoding (StartBarcodingRequest) returns (StartBarcodingResponse) {}
+
+
+    // Start aligning fastq files.
+    //
+    // Since 3.8
+    rpc start_alignment (StartAlignmentRequest) returns (StartAlignmentResponse) {}
+
+    // Stop a basecalling that was started by start_basecalling_reads().
+    //
+    // Since 3.5
+    rpc cancel (CancelRequest) returns (CancelResponse) {}
+
+    // Gets information about one or more basecalling operations.
+    //
+    // Since 3.5
+    rpc get_info (GetInfoRequest) returns (stream GetInfoResponse) {}
+
+    // Monitors basecalls, returning messages when basecalls are started, stopped or receive
+    // progress updates.
+    //
+    // The current state of all currently-running basecalls will be returned in the initial set of
+    // messages. Optionally, the state of all already-finished runs can be included. Note that this
+    // initial state may be split among several responses.
+    //
+    // Note that progress updates may be rate limited to avoid affecting performance.
+    //
+    // Since 3.5
+    rpc watch (WatchRequest) returns (stream WatchResponse) {}
+}
+
+message ListConfigsByKitRequest {
+}
+
+message ListConfigsByKitResponse {
+    message ConfigList {
+        // List of configuration names, to be used in ``StartRequest.configuration``
+        repeated string configs = 1;
+    }
+    message PerFlowCell {
+        // Key: kit name (eg: "SQK-LSK109")
+        // Value: list of configuration names
+        map<string, ConfigList> kit_configs = 1;
+    }
+
+    // Key: flow cell type (eg: "FLO-MIN107")
+    // Value: FlowCellConfigs describing configurations available for that flow cell.
+    map<string, PerFlowCell> flow_cell_configs = 1;
+}
+
+message StartBasecallingRequest {
+    // Input directories to search for reads to be basecalled.
+    //
+    // Currently, only one directory can be specified, but this definition allows for multiple in
+    // the future without breaking compatibility.
+    repeated string input_reads_directories = 1;
+
+    // Output directory where called reads will be placed.
+    //
+    // Reads will be sorted into subdirectories based on the sequencing run they came from.
+    string output_reads_directory = 2;
+
+    // The name of the basecalling configuration to use.
+    string configuration = 3;
+
+    // Enable output of .fast5 files containing original raw reads, event data/trace table from
+    // basecall and basecall result sequence.
+    //
+    // This causes .fast5 files to be output in addition to FASTQ files.
+    bool fast5_out = 4;
+
+    // Enable gzip compression of output FASTQ files.
+    bool compress_fastq = 5;
+
+    // Prevent events / trace tables being written to .fast5 files.
+    //
+    // If event tables are not required for downstream processing (eg: for 1d^2) then it is more
+    // efficient (and produces smaller files) to disable them.
+    //
+    // This has no effect if ``fast5_out`` is not enabled.
+    bool disable_events = 6;
+
+    // Recursively find fast5 files to basecall in the `input_reads_directories`.
+    //
+    // If False, only the fast5 files directly in one of the `input_reads_directories` will be
+    // basecalled. If True, subdirectories of those directories will also be searched recursively.
+    bool recursive = 7;
+
+    // Options to control barcoding performed once basecalling reads is complete.
+    analysis_configuration.BarcodingConfiguration barcoding_configuration = 10;
+
+    // Options to control alignment performed once basecalling reads is complete.
+    analysis_configuration.AlignmentConfiguration alignment_configuration = 11;
+}
+
+message StartBasecallingResponse {
+    // An identifier for the basecalling run that was started. This can be used to monitor or cancel
+    // the run.
+    string id = 1;
+}
+
+message StartBarcodingRequest {
+    // Input directories to search for reads to be basecalled.
+    //
+    // Currently, only one directory can be specified, but this definition allows for multiple in
+    // the future without breaking compatibility.
+    repeated string input_reads_directories = 1;
+
+    // Output directory where called reads will be placed.
+    //
+    // Reads will be sorted into subdirectories based on the sequencing run they came from.
+    string output_reads_directory = 2;
+
+    // Enable gzip compression of output FASTQ files.
+    bool compress_fastq = 4;
+
+    // Recursively find fast5 files to basecall in the `input_reads_directories`.
+    //
+    // If False, only the fast5 files directly in one of the `input_reads_directories` will be
+    // basecalled. If True, subdirectories of those directories will also be searched recursively.
+    bool recursive = 5;
+
+    // Options to control barcoding performed once basecalling reads is complete.
+    analysis_configuration.BarcodingConfiguration barcoding_configuration = 10;
+
+}
+
+message StartBarcodingResponse {
+    // An identifier for the basecalling run that was started. This can be used to monitor or cancel
+    // the run.
+    string id = 1;
+}
+
+message StartAlignmentRequest {
+    // Input directories to search for reads to be aligned.
+    //
+    // Currently, only one directory can be specified, but this definition allows for multiple in
+    // the future without breaking compatibility.
+    repeated string input_reads_directories = 1;
+
+    // Output directory where aligned reads will be placed.
+    string output_reads_directory = 2;
+
+    // Recursively find fast5 files to align in the `input_reads_directories`.
+    //
+    // If False, only the fast5 files directly in one of the `input_reads_directories` will be
+    // aligned. If True, subdirectories of those directories will also be searched recursively.
+    bool recursive = 4;
+
+    // Options to control alignment performed once basecalling reads is complete.
+    analysis_configuration.AlignmentConfiguration alignment_configuration = 6;
+}
+
+message StartAlignmentResponse {
+    // An identifier for the alignment run that was started. This can be used to monitor or cancel
+    // the run.
+    string id = 1;
+}
+
+message CancelRequest {
+    // An identifier as returned from a call to start() or list().
+    string id = 1;
+}
+
+message CancelResponse {}
+
+enum State {
+    // Basecalling is running.
+    STATE_RUNNING = 0;
+    // Basecalling has finished with no errors.
+    STATE_SUCCESS = 1;
+    // Basecalling has stopped due to errors.
+    //
+    // Note that not being able to basecall a read is not necessarily considered an error (eg: if it
+    // could not be basecalled because of poor data quality).
+    STATE_ERROR = 2;
+    // Basecalling was cancelled via a call to cancel().
+    STATE_CANCELLED = 3;
+}
+
+message RunInfo {
+    // The ID of the run, as returned by start().
+    string id = 1;
+
+    // The original message used to start the run.
+    oneof start_request_oneof {
+        // Set if basecalling reads
+        StartBasecallingRequest start_basecalling_request = 2;
+
+        // Set if barcoding reads
+        StartBarcodingRequest start_barcoding_request = 11;
+
+        // Set if aligning reads
+        StartAlignmentRequest start_alignment_request = 12;
+    }
+
+    // What state the run is in.
+    //
+    // While the basecalling is running the state field will be ``STATE_RUNNING``.
+    State state = 3;
+
+    // If state is STATE_ERROR, this will contain (some of) the errors encountered.
+    //
+    // Note that if there are a lot of errors, only some may be returned.
+    repeated string errors = 4;
+
+    // The number of files selected for input.
+    int32 files_discovered = 5;
+
+    // The current basecalling progress (with respect to progress_total).
+    //
+    // This is intended to be an estimate of how close to completion the basecalling run is. The
+    // numbers have no particular meaning other than as a proportion of progress_total.
+    //
+    // Note that this only really has useful meaning while state is STATE_RUNNING. On STATE_SUCCESS,
+    // it will always be the same as progress_total. On STATE_ERROR or STATE_CANCELLED, it may give
+    // some indication of how far through basecalling was when it failed or was cancelled.
+    int32 progress_current = 6;
+
+    // The maximum value of progress_current.
+    //
+    // (progress_current / progress_total) * 100 will give a percentage completion.
+    //
+    // If this is 0, it should be interpreted as "unknown progress".
+    int32 progress_total = 7;
+
+    // When basecalling was started (UTC).
+    google.protobuf.Timestamp start_time = 8;
+
+    // When basecalling ended (UTC).
+    //
+    // Unset if basecalling is still running.
+    google.protobuf.Timestamp end_time = 9;
+
+    // An estimate for when basecalling will end (UTC).
+    //
+    // Unset if basecalling has finished, or if an estimate cannot be calculated
+    // (eg: because the baescalling software does not support it).
+    //
+    // Since 3.6.
+    google.protobuf.Timestamp estimated_end_time = 10;
+}
+
+enum SelectionPreset {
+    // Return all currently-running basecall runs.
+    PRESET_ALL_RUNNING = 0;
+    // Return only the most recently-started run.
+    PRESET_MOST_RECENTLY_STARTED = 1;
+    // Return all basecall runs.
+    PRESET_ALL = 2;
+}
+
+message GetInfoRequest {
+    message IdList {
+        repeated string ids = 1;
+    }
+
+    // The selection of runs to return information about.
+    //
+    // If no selection is provided, the call will return all currently-running basecall runs (as
+    // though PRESET_ALL_RUNNING were selected).
+    oneof selection {
+        // A pre-determined selection of runs.
+        SelectionPreset preset = 1;
+
+        // An identifier, as returned by start().
+        string id = 2;
+
+        // A list of identifiers, as returned by start().
+        IdList list = 3;
+    }
+}
+
+message GetInfoResponse {
+    // Information about the requested runs.
+    repeated RunInfo runs = 1;
+}
+
+message WatchRequest {
+    // By default, no information will be sent about runs that were already finished when this call
+    // was made. Setting this to true will cause the state of already-finished runs to be returned.
+    bool send_finished_runs = 1;
+}
+
+message WatchResponse {
+    // The current state of some of the runs.
+    repeated RunInfo runs = 1;
+}
+

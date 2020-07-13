@@ -1,0 +1,496 @@
+syntax="proto3";
+
+package minknow_api.manager;
+
+option java_package = "com.nanoporetech.minknow_api";
+option objc_class_prefix = "MKAPI";
+
+import "minknow_api/instance.proto";
+
+service ManagerService {
+    // Get information about the machine running MinKNOW.
+    //
+    // Since 3.6
+    rpc describe_host (DescribeHostRequest) returns (DescribeHostResponse) {}
+
+    // List all known positions where flow cells can be inserted.
+    //
+    // Provides a snapshot of places where users can insert flow cells. It has a streamed response
+    // in case there are too many positions to fit into a single response, but normally there should
+    // only be a single response.
+    //
+    // Since 3.6
+    rpc flow_cell_positions (FlowCellPositionsRequest) returns (stream FlowCellPositionsResponse) {}
+
+    // Watch for changes in flow cell position availability and state.
+    //
+    // This is like flow_cell_positions, but updates are streamed as positions come and go (eg:
+    // MinIONs being plugged or unplugged), or their status otherwise changes.
+    //
+    // Since 3.6
+    rpc watch_flow_cell_positions (WatchFlowCellPositionsRequest) returns (stream WatchFlowCellPositionsResponse) {}
+
+    // Reset a flow cell position.
+    //
+    // If the hardware is in an error state or has been removed and the software is running, it will
+    // stop the software (causing the position to be forgotten if the hardware was removed).
+    //
+    // If the hardware is not in an error state
+    rpc reset_position (ResetPositionRequest) returns (ResetPositionResponse) {}
+
+    // Get the connection information for the basecaller API.
+    //
+    // This is the service that implements the minknow_api.basecaller interface for basecalling
+    // reads files.
+    //
+    // Since 3.5
+    rpc basecaller_api (BasecallerApiRequest) returns (BasecallerApiResponse) {}
+
+    // Current version information includes:
+    // - Minknow version
+    // - Protocols version (i.e. Bream-4 version)
+    // - Configuration version (i.e. Wanda version)
+    // - Distribution version
+    // - Guppy version
+    //
+    // See also: instance.get_version_info which provides some similar information on a per instance basis.
+    // Since 3.3
+    rpc get_version_info (GetVersionInfoRequest) returns (GetVersionInfoResponse) {}
+
+    // Returns all the files that are within the protocol output dir specified in the user_conf - or a descendant of that directory
+    // if `path` is supplied in the request.
+    //
+    // INVALID_ARGUMENT will be returned if the `path` argument in the request is not a descendant of the protocol output directory
+    //
+    // NOT_FOUND will be returned if the path does not exist. 'The path' being either the protocol output directory if the `path` argument is not specified
+    // or a valid `path` argument is specified but does not exist.
+    //
+    // Since 3.5
+    rpc list_protocol_output_dir_files (ListProtocolOutputDirFilesRequest) returns (stream ListProtocolOutputDirFilesResponse) {}
+
+    // Create a directory within the protocol output directory tree.
+    //
+    // Errors:
+    //     INVALID_ARGUMENT will be returned if the parent path (where the directory is requested to
+    //         be created) is not within the protocol output directory, or if invalid characters are
+    //         in the requested directory name.
+    //
+    //     FAILED_PRECONDITION will be returned if the parent path is not a directory.
+    //
+    //     NOT_FOUND will be returned if the parent path does not exist.
+    //
+    //     ALREADY_EXISTS will be returned if the directory exists and is not a directory (if the
+    //         directory already exists, this is treated as success).
+    //
+    // The possible valid parent paths can be determined using list_protocol_output_dir_files().
+    //
+    // Since 3.6
+    rpc create_directory (CreateDirectoryRequest) returns (CreateDirectoryResponse) {}
+
+    // Returns information about the amount of disk space available, how much
+    // space is needed to stop an experiment cleanly and if MinKNOW thinks
+    // that the free disk-space is approaching or past this limit
+    //
+    // Since 3.7
+    rpc get_disk_space_info (GetDiskSpaceInfoRequest) returns (GetDiskSpaceInfoResponse) {}
+
+    // Stream information about the amount of disk space available, how quickly
+    // it is being used, how much space is needed to stop an experiment cleanly
+    // and if MinKNOW thinks that the free disk-space is approaching or past
+    // this limit
+    //
+    // Since 4.0
+    rpc stream_disk_space_info(StreamDiskSpaceInfoRequest) returns (stream GetDiskSpaceInfoResponse) {}
+}
+
+message DescribeHostRequest {
+}
+
+message DescribeHostResponse {
+    // The product code for the host, if applicable.
+    //
+    // If this is an integrated Oxford Nanopore device, this will be the product code of the device,
+    // or the part of the device that runs MinKNOW (eg: several PromethION models have separate
+    // product codes for the sequencing unit where the flow cells are inserted and the compute
+    // unit - this would be the product code for the compute unit).
+    //
+    // Some example product codes:
+    //
+    // ============  =================
+    // Product Code  Name
+    // ============  =================
+    // GRD-X5B001    GridION X5
+    // GRD-X5B002    GridION X5
+    // GRD-X5B003    GridION X5 Mk1
+    // MIN-101B      MinIT
+    // MIN-101C      MinION Mk1C
+    // PRO-PRMC01    PromethION Beta
+    // PRO-PRC024    PromethION 24
+    // PRO-PRC048    PromethION 48
+    // ONT-314       PromethION (Production)
+    //
+    // If MinKNOW is running on a machine that is not provided by Oxford Nanopore (ie: their own
+    // laptop or desktop machine with a MinION plugged in), this field will be empty.
+    string product_code = 1;
+
+    // A human-readable name for the type of host.
+    //
+    // If `product_code` is set, it will be the name of the model of instrument (see the table in
+    // the `product_code` field). Otherwise it will be empty.
+    string description = 2;
+
+    // The serial of Nanopore device.
+    //
+    // If `product_code` is empty, this will also be empty.
+    //
+    // This uniquely identifies the device.
+    //
+    // See also `network_name`.
+    string serial = 3;
+
+    // The network name of the host.
+    //
+    // This is the name the host system believes it has on the network. This can be useful if an IP
+    // address was used to connect to the RPC system.
+    //
+    // For customer computers, this is the only available identfying information for the system.
+    string network_name = 4;
+}
+
+message FlowCellPosition {
+    // The name of the position.
+    //
+    // For MinIONs, this is the name of the MinION (eg: MN12345). For integrated positions, this is
+    // the label for the position on the sequencer (eg: X1 for GridION, 1-A1-D1 for PromethION).
+    string name = 1;
+
+    message Location {
+        // The column (counting from 0, left-to-right) of the flow cell position on the sequencing
+        // unit when viewed from above/in front.
+        int32 x = 1;
+
+        // The row (counting from 0, top-to-bottom) of the flow cell position on the sequencing
+        // unit when viewed from above/in front.
+        int32 y = 2;
+    }
+    // For integrated flow cell positions, indicates where it is on the sequencing unit.
+    //
+    // This information is not provided for MinIONs (except for the MinION Mk1C, in which case the
+    // position is always 0, 0).
+    Location location = 2;
+
+    enum State {
+        // The flow cell position is being initialised. This state should only last for a few
+        // seconds, before moving to `STATE_RUNNING` or one of the error states.
+        STATE_INITIALISING = 0;
+        // The flow cell position is in a basic state of operation, and an RPC interface is
+        // available for it.
+        //
+        // `rpc_ports` is guaranteed to be set in this tate. Note that port information may also be
+        // provided in the hardware error states if the software is still running.
+        //
+        // Note that many hardware and software errors are not detectable by the manager, so
+        // `STATE_RUNNING` may be set even when there is a problem. The interface provided over
+        // `rpc_ports` should be the canonical source of the state of the flow cell position when in
+        // `STATE_RUNNING`. In the future, more errors may be tracked properly here.
+        STATE_RUNNING = 1;
+        // After calling reset_position(), this state may be entered to indicate the software is in
+        // the process of being stopped.
+        //
+        // Typically, this state will either transition into STATE_INITIALISING or the position will
+        // be removed entirely (although it could return to one of the hardware error states).
+        STATE_RESETTING = 2;
+        // The hardware corresponding to the flow cell position was removed.
+        //
+        // Only set for removable positions (ie: USB MinIONs). This state indicates that the
+        // hardware was removed, but the software is still running. The software will not be stopped
+        // automatically to prevent possible data loss. Call reset_position() to stop the software
+        // and forget about the position.
+        STATE_HARDWARE_REMOVED = 3;
+        // Communication with the hardware failed.
+        //
+        // For built-in positions, this can include when the hardware was not found at all (eg: if a
+        // PromethION has not had one of its sequencing unit cables attached).
+        //
+        // More information may be available in `error_info`.
+        STATE_HARDWARE_ERROR = 4;
+        // The software corresponding to the flow cell position could not be started (or stopped
+        // unexpectedly).
+        //
+        // More information may be available in `error_info`.
+        STATE_SOFTWARE_ERROR = 5;
+    };
+    // The state of the flow cell position.
+    //
+    // If the state is not `STATE_RUNNING` or `STATE_INITIALISING`, the flow cell position can be
+    // assumed to be unusable, and the `error_info` field should be populated.
+    State state = 3;
+
+    message RpcPorts {
+        // A port providing the standard gRPC protocol over TLS
+        uint32 secure = 1;
+        // A port providing the standard gRPC protocol without TLS
+        uint32 insecure = 2;
+        // A port providing the gRPC-Web protocol over TLS
+        uint32 secure_grpc_web = 3;
+        // A port providing the gRPC-Web protocol without TLS
+        uint32 insecure_grpc_web = 4;
+    }
+    // The ports the APIs for this flow cell position are provided on.
+    //
+    // Always provided if `state` is `STATE_RUNNING`. May also be provided when `state` is one of
+    // the hardware errors if the software is still running.
+    RpcPorts rpc_ports = 4;
+
+    // Provides a textual description of error states.
+    //
+    // When `state` is not `STATE_INITIALISING`, `STATE_RUNNING` or `STATE_RESETTING`, this provides
+    // some information (in English) about the error. This will be a textual description of the
+    // value in `state`, possibly with extra information about the error (if available).
+    //
+    // This can be useful for dealing with (new) unknown states.
+    string error_info = 5;
+
+    // Some positions may share hardware. Positions that share hardware will have the same
+    // group-id. If positions do share hardware, to reset the hardware you will need to
+    // reset all positions in the group at the same time.
+    message SharedHardwareGroup {
+        uint32 group_id= 1;
+    }
+
+    SharedHardwareGroup shared_hardware_group = 6;
+}
+
+message FlowCellPositionsRequest {
+}
+
+message FlowCellPositionsResponse {
+    // How many positions are available in total.
+    //
+    // This is the same in every message returned from a single call, and allows the caller to
+    // easily see how many further positions might be in subsequent messages.
+    int32 total_count = 1;
+
+    // Known flow cell positions.
+    //
+    // Note that not all positions listed here are necessarily available. In particular, integrated
+    // flow cell positions (eg: on GridIONs or PromethIONs) will always be listed.
+    repeated FlowCellPosition positions = 2;
+}
+
+message WatchFlowCellPositionsRequest {
+}
+
+// Each flow cell position will first be listed in `additions`. After that, it may appear in
+// `changes` in zero or more messages. Then, it may appear in `removals` once, after which it will
+// either never appear again, or appear in `additions` again (restarting the cycle).
+//
+// No position will ever appear in more than one field in the same response message.
+message WatchFlowCellPositionsResponse {
+    // Flow cell positions that are new (to this call).
+    //
+    // Contains flow cell positions that have not been seen before on this call (or have re-appeared
+    // after being removed).
+    //
+    // Note that a flow cell position being listed here does not mean it is available. In
+    // particular, integrated flow cell positions (eg: on GridIONs or PromethIONs) will always be
+    // provided, so that they can be positioned appropriately.
+    repeated FlowCellPosition additions = 1;
+
+    // Flow cell positions that have changed state.
+    //
+    // Every flow cell position provided in this list will have previously been provided in
+    // `additions`.
+    repeated FlowCellPosition changes = 2;
+
+    // A flow cell position has been removed.
+    //
+    // Note that this can only happen with MinIONs - integrated flow cell positions are never
+    // removed (if they become unavailable, this will be noted in the `changes` field).
+    repeated string removals = 3;
+}
+
+message ResetPositionRequest {
+    // The names of positions to restart.
+    repeated string positions = 3;
+
+    // Force the software to be restarted even when it appears to be in a healthy state (ie:
+    // STATE_RUNNING).
+    bool force = 2;
+}
+
+message ResetPositionResponse {
+}
+
+message BasecallerApiRequest {}
+
+message BasecallerApiResponse {
+    // The port to use to access the minknow_api.basecaller API using the standard gRPC protocol
+    // over TLS
+    uint32 secure = 1;
+    // The port to use to access the minknow_api.basecaller API using the standard gRPC protocol
+    // without TLS
+    uint32 insecure = 2;
+    // The port to use to access the minknow_api.basecaller API using the gRPC-Web protocol over TLS
+    uint32 secure_grpc_web = 3;
+    // The port to use to access the minknow_api.basecaller API using the gRPC-Web protocol without
+    // TLS
+    uint32 insecure_grpc_web = 4;
+}
+
+message GetVersionInfoRequest {}
+
+message GetVersionInfoResponse {
+
+    enum InstallationType {
+        // For internal release. production.proto will be enabled for this type
+        ONT = 0;
+
+        // For customer releases
+        NC = 1;
+
+        // For production release. production.proto will be enabled for this type
+        PROD = 2;
+
+        // For Q releases (nanopore long term support release)
+        Q_RELEASE = 3;
+    }
+
+
+    // What minknow version is installed. Split into major, minor and patch versions
+    // Also includes the full version as a string, which contain the major, minor and patch numbers
+    // as well as if the version is pre-release version (-pre), whether it is a release candidate (-rc#)
+    // or whether it is a variant version (i.e. for conferences) (-variant). For non-release builds it also 
+    // includes the hash of the commit it is based on, and whether the working copy is different from that has (-dirty)
+    instance.GetVersionInfoResponse.MinknowVersion minknow = 1;
+
+    // The protocols version specifies what version of bream is installed.
+    // By default is set to '0.0.0.0', but will otherwise be set to a Bream release version.
+    string protocols = 2;
+
+    // Describes the distribution that this MinKNOW installation is part of, ususally
+    // this will be the Metapackage version number/identity, this will be "unknown"
+    // if the distribution-version hasn't been set. This information is also communicated
+    // in the Manager's DaemonMessage in daemon.proto
+    string distribution_version = 3;
+
+    // Indicates if the MinKNOW distribution including components such as Bream
+    // are stable, unstable or have been modified.
+    instance.GetVersionInfoResponse.DistributionStatus distribution_status = 4;
+
+    // Version of guppy MinKNOW was packaged against.
+    string guppy_build_version = 5;
+
+    // Version of guppy MinKNOW running with.
+    string guppy_connected_version = 6;
+
+    // The configuration version specifies what version of ont-configuration (wanda) is installed.
+    // By default is set to '0.0.0.0', but will otherwise be set to a Wanda release version.
+    // 
+    // Since 3.6
+    string configuration = 7;
+
+    // Indicates what installation type minknow was installed as. Certain installation
+    // types may turn features on or off depending on the type. For example,
+    // for ont and prod installs, the production.proto service will be enabled
+    // to make calls such as writing to the eeprom
+    InstallationType installation_type = 8;
+}
+
+message ListProtocolOutputDirFilesRequest {
+    // Specify the root path to list files from. If the path is left empty, then the base protocol output directory
+    // will be used.
+    //
+    // Note that the path specified HAS to be a descendant of the protocol output directory, otherwise a INVALID_ARGUMENT
+    // error will be returned
+    //
+    // If the path is left empty, and the path specified in the user config doesn't exist, then the NOT_FOUND error code
+    // will be returned
+    string path = 1;
+}
+
+message ListProtocolOutputDirFilesResponse {
+    message DirectoryInfo {
+        string name = 1;
+        int32 directory_count = 2;
+        int32 file_count = 3;
+    }
+
+    // List of sub-directories in the directory specified
+    repeated DirectoryInfo directories = 1;
+
+    // List of files in the directory specified
+    repeated string files = 2;
+
+    // The absolute directory that is being listed within this repsonse
+    string current_listed_path = 3;
+}
+
+message CreateDirectoryRequest {
+    // The path at which to create the directory.
+    //
+    // This must exist, be a directory, and be within the protocol output directory. This can be
+    // determined via calls to list_protocol_output_dir_files().
+    string parent_path = 1;
+
+    // The name of the directory to create.
+    //
+    // This must be a single path component (ie: it cannot contain '/' or '\'). There may be other
+    // restrictions on valid characters, depending on the operating system.
+    string name = 2;
+}
+
+message CreateDirectoryResponse {
+    // The path to the created directory.
+    string path = 1;
+}
+
+// disk-usage information for one file-system
+message FilesystemDiskSpaceInfo {
+    // The name of the file-system
+    string filesystem_id = 1;
+
+    // How much space is left on the file-system
+    uint64 bytes_available = 2;
+
+    // The total capacity of the file-system when empty.
+    uint64 bytes_capacity = 3;
+
+    // A list of what types of file MinKNOW stores on this file-system, eg:
+    // reads, logs, intermediate-files, etc.
+    repeated string file_types_stored = 4;
+
+    // MinKNOW needs this much space to stop experiments. If bytes_available
+    // goes below this number, data could be lost!
+    uint64 bytes_to_stop_cleanly = 5;
+
+    // The amount of space left on the file-system when recommend_alert
+    // was set true.
+    uint64 bytes_when_alert_issued = 6;
+
+    // MinKNOW recommends that you alert someone about the disk-usage
+    bool recommend_alert = 7;
+
+    // MinKNOW recommends that you stop experiments due to disk-usage
+    // concerns
+    bool recommend_stop = 8;
+
+    // Rate of change in bytes_available (per second) +'ve numbers indicate
+    // that bytes_available is decreasing and space is being used
+    // A value of 0 can indicate that this has not applicable or not available.
+    int64 bytes_per_second = 9;
+}
+
+message GetDiskSpaceInfoRequest {
+}
+
+message StreamDiskSpaceInfoRequest {
+    // Disk space information will be streamed with this value determining the
+    // period in seconds between updates.
+    // A period of 0 is invalid
+    uint32 period = 1;
+}
+
+message GetDiskSpaceInfoResponse {
+    repeated FilesystemDiskSpaceInfo filesystem_disk_space_info = 1;
+}

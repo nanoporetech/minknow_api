@@ -1,0 +1,277 @@
+syntax="proto3";
+
+package minknow_api.instance;
+
+option java_package = "com.nanoporetech.minknow_api";
+option objc_class_prefix = "MKAPI";
+
+import "minknow_api/acquisition.proto";
+import "minknow_api/device.proto";
+import "minknow_api/protocol.proto";
+
+service InstanceService {
+    // Current version information includes:
+    // - Minknow version
+    // - Protocols version
+    // - Distribution version
+    rpc get_version_info (GetVersionInfoRequest) returns (GetVersionInfoResponse) {}
+
+    // Returns various directory locations where minknow is outputting data. The paths are absolute paths, 
+    // local to the machine where minknow is installed
+    //
+    // the `output` base directory can be changed internally
+    // the `logs` directory will not be changed and can be stored
+    // the `reads` directory is determined  by the read writer config
+    rpc get_output_directories (GetOutputDirectoriesRequest) returns (OutputDirectories) {}
+
+    // See `get_output_directories`, but this will always return the paths that are defined in the config when the instance
+    // of minknow has started
+    //
+    // Since 1.11
+    rpc get_default_output_directories(GetDefaultOutputDirectoriesRequest) returns (OutputDirectories) {}
+
+    // Set the base directory to where all data will be output. Must be an absolute directory
+    //
+    // Fails with INVALID_ARGUMENT if `value` is not absolute.
+    // Fails with FAILED_PRECONDITION if this is called during acquisition
+    //
+    // Since 1.11
+    rpc set_output_directory (SetOutputDirectoryRequest) returns (SetOutputDirectoryResponse) {}
+
+    // Set the reads directory where read files (hdf5, fastq, protobuf) will be output
+    //
+    // Fails with INVALID_ARGUMENT if `value` is not absolute.
+    // Fails with FAILED_PRECONDITION if this is called during acquisition
+    //
+    // Since 1.12
+    rpc set_reads_directory (SetReadsDirectoryRequest) returns (SetReadsDirectoryResponse) {}
+
+    // Returns information about the amount of disk space available, how much
+    // space is needed to stop an experiment cleanly and if MinKNOW thinks
+    // that the free disk-space is approaching or past this limit
+    //
+    // Since 1.11
+    rpc get_disk_space_info(GetDiskSpaceInfoRequest) returns (GetDiskSpaceInfoResponse) {}
+
+    // Stream information about the amount of disk space available, how quickly
+    // it is being used, how much space is needed to stop an experiment cleanly
+    // and if MinKNOW thinks that the free disk-space is approaching or past
+    // this limit
+    //
+    // Since 4.0
+    rpc stream_disk_space_info(StreamDiskSpaceInfoRequest) returns (stream GetDiskSpaceInfoResponse) {}
+
+    // Find the machine id MinKNOW uses for this machine.
+    //
+    // This is expected to be a descriptive string for the machine, MinKNOW currently uses the network hostname.
+    //
+    // note: This is the identifier used when sending telemetry data for this instance.
+    //
+    // Since 1.11
+    rpc get_machine_id(GetMachineIdRequest) returns (GetMachineIdResponse) {}
+
+    // Find a summary of activity on the instance.
+    //
+    // The information available from this request is also available from other rpc's - this call is intended
+    // as a performance improvement for users who watch a large number of streams (specifically over
+    // web socket transport).
+    //
+    // Use this request to find information about the current device, flow cell, protocol and acquisition state.
+    // 
+    // Since 3.2
+    rpc stream_instance_activity(StreamInstanceActivityRequest) returns (stream StreamInstanceActivityResponse) {}
+}
+
+message GetVersionInfoRequest {
+    
+}
+
+message GetVersionInfoResponse {
+    
+    message MinknowVersion {
+        int32 major = 1;
+        int32 minor = 2;
+        int32 patch = 3;
+        string full = 4;
+    }
+
+    // What minknow version is installed. Split into major, minor and patch versions
+    // Also includes the full version as a string, which contain the major, minor and patch numbers
+    // as well as if the version is pre-release version (-pre), whether it is a release candidate (-rc#)
+    // or whether it is a variant version (i.e. for conferences) (-variant). For non-release builds it also 
+    // includes the hash of the commit it is based on, and whether the working copy is different from that has (-dirty)
+    MinknowVersion minknow = 1;
+
+    // The protocols version specifies what version of bream is installed.
+    // By default is set to '0.0.0.0', but will otherwise be set to a Bream release version.
+    string protocols = 2;
+
+    // Describes the distribution that this MinKNOW installation is part of, ususally
+    // this will be the Metapackage version number/identity, this will be "unknown"
+    // if the distribution-version hasn't been set. This information is also communicated
+    // in the Manager's DaemonMessage in daemon.proto
+    string distribution_version = 3;
+
+    enum DistributionStatus {
+        UNKNOWN  = 0; // The distribution status is unknown or can not be determined
+        STABLE   = 1; // Released software in that same configuration in which
+                      // it was distributed.
+        UNSTABLE = 2; // Pre-release or release-candidate software that has not
+                      // been fully tested, but has not been modified from how it
+                      // was distributed.
+        MODIFIED = 3; // Some or all components have been replaced after distribution
+    }
+    // Indicates if the MinKNOW distribution including components such as Bream
+    // are stable, unstable or have been modified.
+    DistributionStatus distribution_status = 4;
+
+    // The configuration version specifies what version of ont-configuration (wanda) is installed.
+    // By default is set to '0.0.0.0', but will otherwise be set to a Wanda release version.
+    // 
+    // Since 3.6
+    string configuration = 5;
+}
+
+message GetOutputDirectoriesRequest {
+    
+}
+
+message OutputDirectories {
+    // The base output directory. Anything that is output to files is branched from this directory.
+    string output = 1;
+
+    // Directory where logs will be stored.
+    string log = 2;
+
+    // Base directory where reads will be outputted.
+    string reads = 3;
+}
+
+message GetDefaultOutputDirectoriesRequest {
+
+}
+
+message SetOutputDirectoryRequest {
+    string path = 1;
+}
+
+message SetOutputDirectoryResponse {
+
+}
+
+message SetReadsDirectoryRequest {
+    string path = 1;
+}
+
+message SetReadsDirectoryResponse {
+
+}
+
+// disk-usage information for one file-system
+message FilesystemDiskSpaceInfo {
+    // The name of the file-system
+    string filesystem_id = 1;
+
+    // How much space is left on the file-system
+    uint64 bytes_available = 2;
+
+    // The total capacity of the file-system when empty.
+    uint64 bytes_capacity = 3;
+
+    // A list of what MinKNOW stores on this file-system, eg: reads, logs,
+    // intermediate-files
+    repeated string what = 4;
+
+    // MinKNOW needs this much space to stop an experiment. If bytes_available
+    // goes below this number, data could be lost!
+    uint64 bytes_to_stop_cleanly = 5;
+
+    // The amount of space left on the file-system when recommend_alert
+    // was set true.
+    uint64 bytes_when_alert_issued = 6;
+
+    // MinKNOW recommends that you alert someone about the disk-usage
+    bool recommend_alert = 7;
+
+    // MinKNOW recommends that you stop the experiment due to disk-usage
+    // concerns
+    bool recommend_stop = 8;
+
+    // Rate of change in bytes_available (per second) +'ve numbers indicate
+    // that bytes_available is decreasing and space is being used
+    // A value of 0 can indicate that this has not applicable or not available.
+    int64 bytes_per_second = 9;
+}
+
+message GetDiskSpaceInfoRequest {
+}
+
+message StreamDiskSpaceInfoRequest {
+    // Disk space information will be streamed with this value determining the
+    // period in seconds between updates.
+    // A period of 0 is invalid
+    uint32 period = 1;
+}
+
+message GetDiskSpaceInfoResponse {
+    repeated FilesystemDiskSpaceInfo filesystem_disk_space_info = 1;
+}
+
+message GetMachineIdRequest {
+}
+
+message GetMachineIdResponse {
+    // The machine_id MinKNOW uses for this host.
+    string machine_id = 1;
+}
+
+message StreamInstanceActivityRequest {}
+
+message DeviceInfo {
+    // The current state of the device
+    device.GetDeviceStateResponse.DeviceState device_state = 1;
+
+    // Information about the connected device (or no content if disconnected see: device_state)
+    device.GetDeviceInfoResponse device_info = 2;
+}
+
+message StreamInstanceActivityResponse {
+
+    message FlowCellHealth {
+        // Map between channel state name and a percentage of how much time that state has been active with respect to all other channel states
+        //
+        // This is over one minute of time this is calculated over
+        map<string, float> channel_state_percentages = 1;
+    }
+
+    oneof stream_value {
+        // Information about whether the device is connected or not, and if it is, gives
+        // information about the connected device
+        DeviceInfo device_info = 1;
+
+        // Information about the currently conected flow cell
+        // 
+        // Note: if no flow cell is connected this [flow_cell_info.has_flow_cell] will be false
+        device.GetFlowCellInfoResponse flow_cell_info = 2;
+
+        // Information about the in progress protocol.
+        //
+        // Note if no protocol is active this message will not be present.
+        protocol.ProtocolRunInfo protocol_run_info = 3;
+
+        // Information about the current acquisition run
+        //
+        // Note if no acquisition is active the message will not be present.
+        acquisition.AcquisitionRunInfo acquisition_run_info = 4;
+
+        // Information about the health of the flow cell within the current run
+        //
+        // Note: only available if a run is in progress
+        FlowCellHealth flow_cell_health = 5;
+
+        // Acquisition yield information. Describes information such as number of reads,
+        // what number of those reads have passed or failed basecalling etc. Rate 
+        // limited to 1 second per update
+        acquisition.AcquisitionYieldSummary yield_summary = 6;
+    }
+}

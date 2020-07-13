@@ -1,0 +1,609 @@
+syntax="proto3";
+
+package minknow_api.statistics;
+
+option java_package = "com.nanoporetech.minknow_api";
+option objc_class_prefix = "MKAPI";
+
+import "minknow_api/acquisition.proto";
+import "minknow_api/rpc_options.proto";
+
+service StatisticsService {
+    // Tracks how much time has been spent in each channel state, aggregated across all the channels
+    //
+    // Since 4.0
+    rpc stream_duty_time (StreamDutyTimeRequest) returns (stream StreamDutyTimeResponse) {}
+
+    // Tracks experiment output across various filters over time.
+    //
+    // The first response will give you all the data it can, and continue to provide updates
+    // if the acquisition period remains live.
+    //
+    // The stream will end once the current acquisition period ends, and a caller will need to
+    // reinvoke the rpc in order to get new data.
+    //
+    // Since 1.14
+    rpc stream_acquisition_output (StreamAcquisitionOutputRequest) returns (stream StreamAcquisitionOutputResponse) {}
+
+    // Tracks experiment writes across all channels over time
+    //
+    // The first response will give you all the data it can.
+    //
+    // The stream will end once the current acquisition period ends, and a caller will need to
+    // reinvoke the rpc in order to get new data.
+    //
+    // Since 4.0
+    rpc stream_writer_output (StreamWriterOutputRequest) returns (stream StreamWriterOutputResponse) {}
+
+    // Tracks which barcode names have been encountered
+    //
+    // When a new barcode name is encountered, a list of all encountered barcode names is returned
+    //
+    // Since 4.0
+    rpc stream_encountered_acquisition_output_keys (StreamEncounteredAcquisitionOutputKeysRequest) returns (stream StreamEncounteredAcquisitionOutputKeysResponse) {}
+
+    // Streams device temperature for a device. The first message will contain all of the temperatures up
+    // until the current live point, and then messages after that point will just be updates.
+    //
+    // Temperatures are averaged over a 1 minute period, and the value of each bucket is given in minute intervals
+    //
+    // Since 3.0
+    rpc stream_temperature (StreamTemperatureRequest) returns (stream StreamTemperatureResponse) {}
+
+    // Streams when bias voltage changes occur, where the response given will be the acquisition
+    // index that the voltage changed at, and the voltage itself. The first message will contain
+    // all of the bias voltage changes up until the current live point, and then messages after
+    // that period will just be updates
+    //
+    // Will fail with INVALID_ARGUMENT if an unknown acquisition id is given
+    //
+    // Since 3.2
+    rpc stream_bias_voltages (StreamBiasVoltagesRequest) returns (stream StreamBiasVoltagesResponse) {}
+
+    // A histogram of read lengths
+    //
+    // If the experiment is in-progress, then the latest histogram is streamed on a regular basis
+    // If the experiment is complete, then the final histogram is returned
+    //
+    // Since 4.0
+    rpc stream_read_length_histogram (StreamReadLengthHistogramRequest) returns (stream StreamReadLengthHistogramResponse) {}
+
+    // Gets a list of the types of read-length values for which a histogram is available
+    //
+    // Since 3.2
+    rpc get_read_length_types (GetReadLengthTypesRequest) returns (GetReadLengthTypesResponse) {}
+
+
+    // Returns the qscore over time metric represented as datasets (i.e. boxplots).
+    //
+    // These metrics apply to all the successfully called reads.
+    //
+    // A dataset is a collection of quantiles (min, max, q50 etc - please see BoxplotDataset) recorded for
+    // a fixed period of time, say dt. dt is specified in the configs, and it defaults to 10 min.
+    //
+    // When acquisition starts, MinKNOW accumulates these stats for each dt interval. Each dt generates
+    // a dataset streamed by this rpc. The stream can request aggregated stats by averaging the stats from
+    // consecutive dt periods.
+    //
+    // Notes:
+    //
+    // Each streamed message will return ALL the datasets (i.e. boxplots) from the start of the experiment.
+    //
+    // When using this rpc, basecalling needs to be enabled.
+    //
+    // Since 4.0
+    rpc stream_basecall_boxplots (StreamBoxplotRequest) returns (stream BoxplotResponse) {}
+}
+
+// Specify a desired data selection.
+//
+// Units for values are as specified in the corresponding Request
+//
+// The actual data selection used may differ from the desired one.  They are adjusted in the
+// following sequence:
+//
+//  1. All values are set equal to the corresponding desired value.
+//  2. Negative `start` or `end` values are fixed up by adding the current maximum value to the 
+//     specified value
+//      - Negative start and end values are only supported for certain requests; typically they are 
+//        supported for time-series data
+//      - If, after adding the current bucket count, the `start` value is still negative, then the 
+//        start value is adjusted to `0`
+//      - If, after adding the current bucket count, the `end` value is still negative, or is zero,
+//        then the data selection is empty
+//      - If data collection is still ongoing, then the current bucket count may change between rpc
+//        calls as more data is collected.
+//  3. Values which are not set, or which are set at `0`, are then adjusted to a default value:
+//      - `start` and `step` will be set to the minimum valid value
+//      - `end` will be set to the maximum valid value
+//  4. Values which are outside of the valid range are clamped to the nearest valid value:
+//      - Values less than minimum valid value will be set equal to the minimum valid value
+//      - Values greater than the maximum valid value will be set equal to the maximum valid value
+//  5. Finally, all values are 'rounded' to a nearby valid value
+//      - `start` and `step` will be rounded down to the first valid value less than or equal to
+//        their current values
+//      - `end` will be rounded up to the first valid value that is greater than or equal to its
+//        current value
+//      - This means that the range that is specified after rounding includes the range that was
+//        specified prior to rounding
+//
+// If (`end` - `start`) is not an exact integer multiple of `step`, then the final bucket will cover
+// a smaller range than that specified by `step`.
+//
+// Note also that the maximum valid start and end value may not be known if data collection is still
+// ongoing -- for example, the maximum valid time for time series data.  If this is the case, then
+// the maximum valid value will be determined when the experiment ends, and values in use will be
+// adjusted acordingly.
+//
+message DataSelection {
+    int64 start = 1;
+    uint64 step = 2;
+    int64 end = 3;
+}
+
+message StreamDutyTimeRequest {
+    // The acquisition id of the experiment.
+    string acquisition_run_id = 1 [(rpc_required) = true];
+
+    // The desired data selection.
+    //
+    // The units for all values are `seconds since the start of the experiment`.
+    //
+    DataSelection data_selection = 2;
+}
+
+message StreamDutyTimeResponse {
+
+    message BucketRange {
+        // The range covered by a bucket
+        // Values are in seconds
+        //
+        // The range [start, end) is half open (i.e. the start value is included, the end value is
+        // not).
+        uint32 start = 1;
+        uint32 end = 2;
+    }
+
+    // The range covered by each entry in state_times
+    repeated BucketRange bucket_ranges = 1;
+
+    message ChannelStateData {
+        // How much time (in samples) spent in this channel state, for each bucket
+        repeated uint64 state_times = 1;
+    }
+
+    // Map between channel state names, and a list of bucketed duty time data
+    map<string, ChannelStateData> channel_states = 2;
+}
+
+enum ReadLengthType {
+
+    // MinKNOW events are measured as reads are being read, and are available very soon after
+    // the read finishes
+    //
+    MinknowEvents = 0;
+
+    // Estimated bases are calculated from MinKNOW events, based on an approximate
+    // events-to-bases relationship.  Estimated bases become available at the same time as
+    // MinknowEvents become available.
+    //
+    EstimatedBases = 1;
+
+    // Basecalled bases are the number of bases reported by live base-calling.  This requires
+    // that live basecalling is enabled.  As basecalling takes time to complete, these values
+    // will update after the MinknowEvents or EstimatedBases histograms update.
+    //
+    BasecalledBases = 2;
+}
+
+
+// The data accumulated in read length histogram buckets
+enum BucketValueType {
+
+    // Histogram buckets contain the total number of reads with lengths that fall within the
+    // histogram bucket range
+    ReadCounts = 0;
+
+    // Histogram buckets contain the total number of events or basecalled bases contained
+    // within reads that fall within the histogram bucket range
+    //
+    // The units (events, estimated bases, basecalled bases) is determined by the
+    // `read_length_type` setting.
+    ReadLengths = 1;
+}
+
+message StreamReadLengthHistogramRequest {
+    // The `acquisition_run_id` of the acquisition to obtain data for
+    //
+    // If this is set to the `acquisition_run_id` of an acquisition which is in-progress, then
+    // updates containing the latest histogram data for that acquisition will be streamed regularly
+    // until that acquisition finishes (see `poll_time_seconds` below)
+    //
+    // Otherwise, if this is set to the `acquisition_run_id` of an acquisition which is finished,
+    // and for which final histogram data is available, then the final histogram data for that
+    // acquisition will be returned.  Final histogram data is available until it is cleared.
+    //
+    // Otherwise, if this parameter is not set, or is set to a value which is neither the
+    // `acquisition_run_id` of an acquisition which is in-progress, nor the `acquisition_run_id` of
+    // an acquisition for which final histogram data is available, then this call will fail with the
+    // status `INVALID_ARGUMENT`.
+    //
+    string acquisition_run_id = 1 [(rpc_required) = true];
+
+    // How often to return new histogram data, in seconds
+    //
+    // If not specified, or set to `0`, then the poll time will be set to 60 seconds
+    //
+    // If data is being returned for an acquisition which is in progress, then one update will be
+    // sent when the call is first performed, then subsequently every `poll_time` after that, and
+    // then finally once again when the acquisition finishes.
+    //
+    // Otherwise, if final histogram data is being returned for an acquisition that has already
+    // finished, this parameter has no effect.  The final histogram data will be returned, and the
+    // call will complete.
+    //
+    uint32 poll_time_seconds = 2;
+
+    // The source of the read lengths in the histogram
+    //
+    // If MinKNOW is unable to supply data from the requested source (e.g. if the user requests
+    // BasecalledBases, but basecalling is not enabled), then this call will fail with the status
+    // `FAILED_PRECONDITION`.
+    //
+    // See `ReadLengthType` for further information about the available options.
+    //
+    ReadLengthType read_length_type = 3;
+
+    // The desired read length range which histograms should cover.
+    // Units are as set in `read_length_type`, above.
+    //
+    DataSelection data_selection = 4;
+
+    // What data to accumulate in the read length histogram buckets
+    //
+    // See `BucketValueType` for further information about the available options.
+    //
+    BucketValueType bucket_value_type = 5;
+
+    // If set greater than zero then discard some percent of data at the upper end of the source
+    // data before producing histograms and N50 values.
+    //
+    // This is intended to assist in the case where a small number of outliers with very long read
+    // lengths cause the histogram axes and N50 to be skewed.
+    //
+    // Defaults to 0 - no data discarded.
+    // Values should be specified in percent - a value of 0.05 will cause the top 5% of the data
+    // to be discarded before producing outputs.
+    //
+    // For histograms, the data discarded depends on the bucket_value_type.  If `ReadCounts`, then
+    // a percentage of the total number of reads reads will be discarded; if `ReadLengths` then a
+    // percentage of the total read lengths will be discarded.
+    //
+    // For the N50 value, `discard_outlier_percent` always causes a percentage of the total
+    // read lengths to be discarded (since it is always calculated from read length data)
+    //
+    float discard_outlier_percent = 6;
+}
+
+message StreamReadLengthHistogramResponse {
+    // The data source for the histograms
+    //
+    // Also specifies the units for `data_selection` and `n50`
+    //
+    // See `ReadLengthType` for further information about the possible options.
+    //
+    ReadLengthType read_length_type = 1;
+
+    message BucketRange {
+        // The range covered by a bucket
+        // Units are as set in `read_length_type`, above
+        //
+        // The range [start, end) is half open (i.e. the start value is included, the end value is
+        // not).
+        uint64 start = 1;
+        uint64 end = 2;
+    }
+
+    // The range covered by each bucket in the histogram data
+    repeated BucketRange bucket_ranges = 2;
+
+    // The right hand edge of the last source bucket which contains data
+    //
+    // Measured across all source data, after excluding the reads specified by
+    // `discard_outlier_percent` in the stream request.
+    //
+    uint64 source_data_end = 5;
+
+    // The data accumulated in the read length histogram buckets
+    //
+    // See `BucketValueType` for further information about the possible options.
+    //
+    BucketValueType bucket_value_type = 3;
+
+    message ReadLengthHistogramData {
+
+        // Counts for each histogram bucket
+        //
+        // Units are as specified in `read_length_type`
+        // The range covered by each bucket is as in `bucket_ranges`
+        // The type of data accumulated in each bucket is given by `bucket_value_type`
+        //
+        repeated uint64 bucket_values = 1;
+
+        // The N50 value for the read length data for the selected `read_length_type` and
+        // `read_end_reasons`.
+        //
+        // Units are as specified by `read_length_type`.
+        //
+        // Measured across all source data, after excluding the reads specified by
+        // `discard_outlier_percent` in the stream request.
+        //
+        float n50 = 2;
+    }
+
+    // The histogram data
+    repeated ReadLengthHistogramData histogram_data = 4;
+}
+
+message GetReadLengthTypesRequest {
+    // The acquisition id of the experiment.
+    string acquisition_run_id = 1 [(rpc_required) = true];
+}
+
+message GetReadLengthTypesResponse {
+
+    // Array of the types of bucket for which a histogram is currently available
+    repeated ReadLengthType available_types = 1;
+}
+
+message AcquisitionOutputKey {
+    // Only return data for the given barcode.
+    //
+    // Special values: 
+    //   - Specify "unclassified" for data which does not have a barcode.
+    //   - Specify "classified" for all data which has a barcode.
+    //
+    // If unspecified all barcodes are returned.
+    string barcode_name = 1;
+
+    // Only return data for the given alignment reference.
+    //
+    // Special values: 
+    //   - Specify "unaligned" for data which does not align to a reference
+    //   - Specify "aligned" for all data which aligns to a reference
+    //
+    // If unspecified all alignment targets are returned.
+    string alignment_reference = 2;
+
+    // Only return data for the given target region.
+    //
+    // Target regions are defined in bed files.
+    //
+    // The region is a string which identifies an entry in the bed file.
+    //
+    // Special values: 
+    //   - Specify "offtarget" for data which does not have a bed region.
+    //   - Specify "ontarget" for all data which has a bed region.
+    //
+    // If unspecified all alignment regions are returned.
+    string alignment_bed_file_region = 3;
+}
+
+message AcquisitionOutputSplit {
+    // Split data for every individual barcode.
+    bool barcode_name = 1;
+
+    // Split data for each individual alignment reference.
+    //
+    // References are defined in alignment references.
+    bool alignment_reference = 2;
+
+    // Split data for each target region.
+    //
+    // Target regions are defined in bed files.
+    bool alignment_bed_file_region = 3;
+}
+
+message StreamAcquisitionOutputRequest {
+    // The acquisition id of the experiment.
+    string acquisition_run_id = 1 [(rpc_required) = true];
+
+    // The desired data selection.
+    //
+    // The units for all values are `seconds since the start of the experiment`.
+    //
+    DataSelection data_selection = 2;
+
+    // Define filtering parameters for streamed data.
+    repeated AcquisitionOutputKey filtering = 3;
+
+    // Define how results are split for returned data.
+    AcquisitionOutputSplit split = 4;
+}
+
+message AcquisitionOutputBucket {
+    // Represents T0 for a bucket [T0, T1). So this will increase by 'step' for every bucket of data.
+    uint32 bucket = 1;
+
+    // The yield summary data.
+    acquisition.AcquisitionYieldSummary yield_summary = 2;
+}
+
+message StreamAcquisitionOutputResponse {
+    message FilteredBuckets {
+        // The filtering parameters which contributed to this bucket.
+        repeated AcquisitionOutputKey filtering = 1;
+
+        repeated AcquisitionOutputBucket buckets = 2;
+    }
+
+    // Buckets split by requested filtering parameters.
+    repeated FilteredBuckets buckets = 1;
+}
+
+message StreamWriterOutputRequest {
+    // The acquisition id of the experiment.
+    string acquisition_run_id = 1 [(rpc_required) = true];
+
+    // The desired data selection.
+    //
+    // The units for all values are `seconds since the start of the experiment`.
+    //
+    DataSelection data_selection = 2;
+}
+
+message WriterOutputBucket {
+    // Represents T0 for a bucket [T0, T1). So this will increase by 'data_selection.step' for every bucket of data.
+    //
+    // This value represents the latest time the bucket represents, eg:
+    // For bucket 1, with a step of 60s, first bucket will be 60,
+    // as the latest data in the bucket is from 60s.
+    uint32 bucket = 1;
+
+    // The writer data for this bucket.
+    acquisition.AcquisitionWriterSummary writer_output = 2;
+}
+
+message StreamWriterOutputResponse {
+    repeated WriterOutputBucket buckets = 1;
+}
+
+message StreamEncounteredAcquisitionOutputKeysRequest {
+    // The acquisition id of the experiment.
+    string acquisition_run_id = 1 [(rpc_required) = true];
+}
+
+message StreamEncounteredAcquisitionOutputKeysResponse {
+    repeated AcquisitionOutputKey acquisition_output_keys = 1;
+}
+
+message StreamTemperatureRequest {
+
+    // The acquisition id of the experiment.
+    string acquisition_run_id = 1 [(rpc_required) = true];
+
+    // The desired data selection.
+    //
+    // The units for all values are `seconds since the start of the experiment`.
+    //
+    DataSelection data_selection = 2;
+}
+
+message TemperaturePacket {
+    // Packet of temperatures appropriate for a MinION.
+    message MinIONTemperature
+    {
+        // Temperature as measured by the probe inside the asic.
+        double asic_temperature = 1;
+        // Temperature as measured by the probe in the minion heatsink.
+        double heatsink_temperature = 2;
+    }
+
+    // Packet of temperatures appropriate for a PromethION.
+    message PromethIONTemperature
+    {
+        // Temperature as measured by thermistor TH2 on the P-Chip.
+        double flowcell_temperature = 1;
+
+        // Mean of 12 pixel-blocks temperatures measured with sensors in the ASIC.
+        double chamber_temperature = 2;
+    }
+
+    oneof temperature {
+        MinIONTemperature minion = 1;
+        PromethIONTemperature promethion = 2;
+    }
+}
+
+message StreamTemperatureResponse {
+    repeated TemperaturePacket temperatures = 1;
+}
+
+
+message BiasVoltagePacket {
+    uint64 acquisition_index = 1;
+    double bias_voltage = 2;
+    uint64 time_seconds = 3;
+}
+
+message StreamBiasVoltagesRequest {
+    // The acquisition id of the experiment.
+    string acquisition_run_id = 1 [(rpc_required) = true];
+}
+
+message StreamBiasVoltagesResponse {
+    repeated BiasVoltagePacket bias_voltages = 1;
+}
+
+message StreamBoxplotRequest {
+    // The acquisition id of the experiment.
+    string acquisition_run_id = 1 [(rpc_required) = true];
+
+    enum BoxplotType {
+        // Qscore of reads from the basecaller.
+        //
+        // Only available if basecalling
+        QSCORE = 0;
+
+        // Number of bases per second the data is moving through the sequencer.
+        //
+        // Only available if basecalling.
+        BASES_PER_SECOND = 1;
+
+        // Accuracy of reads aligned to provided reference.
+        //
+        // Accuracy is measured in percent 0-100.
+        //
+        // Only available if alignment is enabled.
+        ACCURACY = 2;
+    }
+
+    // Type of boxplot data to return.
+    BoxplotType data_type = 2;
+
+    // Defines, in minutes, the width of each dataset.
+    // This is how much time should each dataset (boxplot) cover. Note that MinKNOW stores
+    // all stats at a default granularity (specified in the config file, i.e. 10 min in MinKNOW 3.2).
+    // This dataset_width HAS to be a multiple of the default granularity!
+    //
+    // Note:
+    // When multiple buckets are aggregated into a single dataset, the resulting dataset will
+    // contain the average of the aggregated quantiles (with the exception of min/max)! This is not the
+    // same as using a larger granularity in MinKNOW configs - the values that MinKNOW stores
+    // are the true quantiles. Averaging quantiles will give a rough approximation, but not a quantile.
+    // If the finest granularity is not required, we strongly suggest changing the time coverage in the config,
+    // not the dataset_width in the rpc.
+    uint32 dataset_width = 3;
+
+    // How often to return messages in this stream, specified in seconds. Note that this stream will
+    // return results regardless of the stats updates (because it always returns all the datasets).
+    // poll_time should be larger than the basecalled stats update rate in MinKNOW -
+    // please see basecalled_stats_refresh_rate_seconds in the configs
+    // (set to 1 second in MinKNOW 3.2).
+    //
+    // If unspecified, defaults to 1 minute.
+    uint32 poll_time = 4;
+}
+
+message BoxplotResponse {
+    // Result boxplots are stored in this array. This is an overview of the stored data
+    // from the START of the acquisition period. This includes ALL the basecalled stats
+    // from MinKNOW, not just updates since previous calls!
+    repeated BoxplotDataset datasets = 1;
+
+    message BoxplotDataset {
+        // Minimum value for any point in the dataset.
+        float min = 1;
+        // 25th quartile value for all points in the dataset.
+        float q25 = 2;
+        // 50th quartile or median value for all points in the dataset.
+        float q50 = 3;
+        // 75th quartile value for all points in the dataset.
+        float q75 = 4;
+        // Maximum value for any point in the dataset.
+        float max = 5;
+
+        // Number of items in this box plot's stats.
+        uint64 count = 6;
+    }
+}

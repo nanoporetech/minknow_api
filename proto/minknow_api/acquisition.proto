@@ -1,0 +1,671 @@
+syntax="proto3";
+
+package minknow_api.acquisition;
+
+option java_package = "com.nanoporetech.minknow_api";
+option objc_class_prefix = "MKAPI";
+
+import "minknow_api/rpc_options.proto";
+import "google/protobuf/timestamp.proto";
+
+service AcquisitionService {
+    // Starts reading data from the device
+    //
+    // Some setup calls will need to be made before starting data acquisition: particularly setting the analysis configuration, 
+    // calibration, read writer and bulk writer config and some device calls such as setting the sampling frequency
+    //
+    // If acqusition is already running (even in the FINISHING state), this call will fail.
+    //
+    // On MinIONs and GridIONs, this will enable the ASIC power supply if it is not already enabled.
+    // See StopRequest.keep_power_on for more details about the implications of this.
+    //
+    // The rpc will return once `current_status` is "PROCESSING" or an error occurs and acqusition fails to start.
+    rpc start (StartRequest) returns (StartResponse) {}
+
+    // Stops data acquisition.
+    //
+    // Can specify a stop mode that handles what is done with the data when data acquisition is stopped. Refer to the enum
+    // description for documentation on what each mode does.
+    //
+    // Be aware that this command will return as soon as Minknow enters the FINISHING state and not the READY state.
+    // So if starting a new experiment then you will have to wait for the READY state seperately
+    rpc stop (StopRequest) returns (StopResponse) {}
+
+    // Watches for status changes within MinKNOW. Status states are defined from MinknowStatus enum.
+    // This is a bi-directional stream where the incoming response stream will return everytime the status has changed
+    // and the request stream is used to stop the watcher. Refer to http://www.grpc.io/docs/tutorials/basic/python.html
+    // to see how bi-directoional streaming works in grpc, but essentially when calling this function the user will have 
+    // to pass in a generator that will eventually yield a WatchForStatusChangeRequest(stop=True) to the cpp side.
+    // A wrapper class for this is provided in the Python code.
+    //
+    // The function will first return with the current status that MinKNOW is in. Every response thereafter will be a 
+    // change from one status to another.
+    //
+    // The ERROR_STATUS state includes errors during transition between states. If that happens, MinKNOW will 
+    // try to revert to the READY state. It is up to the user to determine if they wish to try to wait for MinKNOW to
+    // correct itself or to try some other course of action
+    rpc watch_for_status_change (stream WatchForStatusChangeRequest) returns (stream WatchForStatusChangeResponse) {}
+
+    // Returns current acquisition run info and streams any changes to the current acquisition
+    //
+    // This call can be made even if acquisition is not running. In this case, the next streamed
+    // response will be the start of a new acquisition and you will receive updates for that acquisition
+    // until it finishes.
+    //
+    // If an acquisition finishes this stream will still continue to run and you will be notified when a new acquisition starts.
+    //
+    // Note if you begin this stream before any acquisition is started in minknow the state is `ACQUISITION_COMPLETED`.
+    //
+    // Since 1.13
+    rpc watch_current_acquisition_run (WatchCurrentAcquisitionRunRequest) returns (stream AcquisitionRunInfo) {}
+
+    // Check the current status of MinKNOW.
+    rpc current_status (CurrentStatusRequest) returns (CurrentStatusResponse) {}
+
+    // Information on how much data has been acquired, processed and written.
+    rpc get_progress (GetProgressRequest) returns (GetProgressResponse) {}
+
+    // Gets information about an acquisition run, run within this instance on MinKNOW.
+    //
+    // If no run ID is provided, information about the most recently started acquisition run is
+    // provided.
+    //
+    // Since 1.11
+    rpc get_acquisition_info (GetAcquisitionRunInfoRequest) returns (AcquisitionRunInfo) {}
+
+    // Gets information about all previous acquisitions.
+    //
+    // Since 1.11
+    rpc list_acquisition_runs (ListAcquisitionRunsRequest) returns (ListAcquisitionRunsResponse) {}
+
+    // Returns the name and run id of the currently running acquisition.
+    //
+    // Will fail with FAILED_PRECONDITION if there is no acquisition running
+    //
+    // Since 1.11
+    rpc get_current_acquisition_run (GetCurrentAcquisitionRunRequest) returns (AcquisitionRunInfo) {}
+    
+    // Specify the signal reader to use
+    //
+    // Since 3.6
+    rpc set_signal_reader (SetSignalReaderRequest) returns (SetSignalReaderResponse) {}
+}
+
+//
+// Enums
+//
+
+enum MinknowStatus {
+    // ERROR_STATUS occurs when there is an error during a transition from one state to another.
+    // Minknow will try to revert into the READY state to try to stabalise itself, but there is no guarantee of 
+    // that succeeding
+    ERROR_STATUS = 0;
+
+    // READY occurs when minknow is ready for a new experiment to start.
+    READY = 1;
+
+    // STARTING occurs when minknow has received a call for an experiment to start and is setting up the environment
+    // for data acquisition to begin
+    STARTING = 2;
+
+    // PROCESSING occurs when minknow is reading data from the device.
+    PROCESSING = 3;
+
+    // FINISHING occurs when data acquisition has stopped (either from a explicit rpc request or the experiment naturally ended)
+    // and data is still being processed (albacore is still in catchup and processing reads).
+    FINISHING = 4;
+}
+
+// An on/off setting where MinKNOW can be allowed to choose a default.
+enum Option {
+    // Allow MinKNOW to choose the default it believes is appropriate.
+    AUTO = 0;
+    // Prevent the behaviour being controlled.
+    DISABLE = 1;
+    // Force the behaviour being controlled.
+    FORCE = 2;
+}
+
+enum Purpose {
+    // No specific purpose listed.
+    //
+    // Reports and sequencing metrics will be disabled by default. No modifications will be made to
+    // the analysis configuration.
+    OTHER_PURPOSE = 0;
+    // Indicates that the acquisition is for sequencing.
+    //
+    // This will enable reports and sequencing metrics by default.
+    SEQUENCING = 2;
+    // Indicates that the acquisition is for calibration.
+    //
+    // This will disable the entire analysis pipeline and all file output.
+    CALIBRATION = 3;
+}
+
+//
+// Protobuf messages for input/output of RPC calls
+//
+
+message StartRequest {
+    // Prevent waiting until the device is ready before starting acquisition.
+    //
+    // Defaults to false.
+    //
+    // By default, MinKNOW will block in the start() call for the device and flow cell to be ready
+    // for acquisition (which may take several seconds after plugging in the flow cell on some
+    // devices). Setting this option will cause the call to return with an error if the device is
+    // not already prepared to acquire data.
+    //
+    // Since 1.14
+    bool dont_wait_for_device_ready = 2;
+
+    // Generate duty time and throughput reports.
+    //
+    // Note that this setting will be ignored (and no reports will be generated) if no protocol is
+    // running at the time acquisition is started.
+    //
+    // The default setting (AUTO) will only generate reports if purpose is set to SEQUENCING.
+    //
+    // Since 3.0
+    Option generate_report = 3;
+
+    // Whether sequencing read metrics should be reported to Oxford Nanopore.
+    //
+    // These are performance metrics that are used to improve the sequencing technology. They do not
+    // include any actual sequencing data, only statistics about read lengths, duty time and similar
+    // generic performance information.
+    //
+    // The default setting (AUTO) will only send metrics if purpose is set to SEQUENCING.
+    //
+    // Since 3.0
+    Option send_sequencing_read_metrics = 4;
+
+    // Whether basecalling metrics should be reported to Oxford Nanopore.
+    //
+    // These are performance metrics that are used to improve the sequencing technology. They do not
+    // include any actual sequencing data, only statistics about basecalling performance.
+    //
+    // The default setting (AUTO) will only send metrics if purpose is set to SEQUENCING.
+    //
+    // NB: this setting is ignored if live basecalling is not enabled, since there will be no
+    // metrics to send.
+    //
+    // Since 3.2
+    Option send_basecalling_metrics = 5;
+
+    // Specify the purpose of this acquisition period.
+    //
+    // This affects various defaults (see the Purpose enum documentation for more details). It may
+    // also affect how the user interface presents the state of the protocol.
+    //
+    // Since 3.2
+    Purpose purpose = 6;
+
+    // Perform analysis for this acquisition period.
+    //
+    // If this is disabled, no reads, no events, no channel states and no basecalls will be
+    // generated. Any RPCs that depend on any of these will fail. No reads-based files will be
+    // produced at all, regardless of any other settings.
+    //
+    // This is mostly useful for calibration (although you should normally use the purpose field
+    // rather than setting this explicitly).
+    //
+    // The default setting (AUTO) will use the persistent setting from the analysis_configuraiton
+    // service, unless the purpose is set to CALIBRATION.
+    //
+    // Since 3.2
+    Option analysis = 7;
+
+    // Allow file output for this acquisition period.
+    //
+    // If this is disabled, the file output settings will be ignored for this acquisition period,
+    // and no data files will be produced. Note that reports are NOT managed by this setting.
+    //
+    // Note that setting this to FORCE will simply make file output respect the bulk and read writer
+    // configurations. If each file output type is disabled, you will still get no file output.
+    //
+    // This is mostly useful for calibration (although you should normally use the purpose field
+    // rather than setting this explicitly).
+    //
+    // The default setting (AUTO) will only suppress file output if purpose is set to CALIBRATION.
+    //
+    // Since 3.2
+    Option file_output = 8;
+
+    // Write a final_summary.txt file.
+    //
+    // If file_output is disabled, the final_summary.txt file will not be written regardless of
+    // this setting.
+    //
+    // The default setting (AUTO) will only enable writing a final_summary.txt file if the purpose
+    // is set to SEQUENCING.
+    //
+    // Since 3.5 (NB: in 3.3 and 3.4, final_summary.txt was always written out if file_output was
+    // enabled).
+    Option generate_final_summary = 9;
+}
+
+message StartResponse {
+    // Globally-unique identifier generated when the acquisition is started.
+    //
+    // This is guaranteed to unique, including aross sequencing devices.
+    string run_id = 1;
+}
+
+message StopRequest {
+    enum DataAction {
+        // The current default is set to FINISH_PROCESSING, but is subject to change
+        STOP_DEFAULT = 0;
+
+        // STOP_KEEP_ALL_DATA tells minknow to stop albacore catchup, but keep all of the read files
+        // Any reads that have not been successfully/unsucessfully basecalled will be classed as 'skipped'
+        STOP_KEEP_ALL_DATA = 1;
+
+        // FINISH_PROCESSING will allow albacore to continue catchup until all of the reads have been basecalled
+        STOP_FINISH_PROCESSING = 2;
+
+        // STOP_DISCARD_ALL_DATA = 3;
+    }
+
+    DataAction data_action_on_stop = 1;
+
+    // Defaults to false
+    // If false will return as soon as minknow enters the FINISHING state.
+    // If true then returns as soon as minknow enters the READY state.
+    bool wait_until_ready = 2;
+
+    // Keep the ASIC power on for GridIONs and MinIONs.
+    //
+    // Unless this option is set to true, the ASIC power will be disabled as soon as MinKNOW has
+    // stopped pulling data from it. This is because removing (or plugging in) a flow cell while the
+    // power is on can damage it. Disabling the power will also disable the heating element; this is
+    // likely to cause the device to cool down (particularly for MinIONs).
+    //
+    // You should normally only use this option if you are expecting to start acquisition again
+    // in a short amount of time.
+    //
+    // This option has no effect on PromethIONs.
+    //
+    // Since 1.15.2
+    bool keep_power_on = 3;
+}
+
+message StopResponse {
+}
+
+message WatchForStatusChangeRequest {
+    bool stop = 1;
+}
+
+message WatchForStatusChangeResponse {
+    MinknowStatus status = 1;
+}
+
+message CurrentStatusRequest {
+}
+
+message CurrentStatusResponse {
+    MinknowStatus status = 1;
+}
+
+message GetProgressRequest {
+}
+
+message GetProgressResponse {
+    message RawPerChannel {
+        // Number of samples (per channel) acquired from the device.
+        uint64 acquired = 1;
+        // Number of samples (per channel) passed to the analysis pipeline
+        // for processing.
+        //
+        // This can be compared to acquired to see how far behind the analysis
+        // is lagging.
+        uint64 processed = 2;
+    }
+
+    // The amount of raw data (per channel) that has been acquired and
+    // processed.
+    RawPerChannel raw_per_channel = 1;
+}
+
+message GetAcquisitionRunInfoRequest {
+    // The acquisition period to get information about.
+    string run_id = 1;
+}
+
+enum AcquisitionState {
+    // The acquisition period is starting up.
+    ACQUISITION_STARTING = 0;
+
+    // The acquisition period is still running.
+    ACQUISITION_RUNNING = 1;
+
+    // The acquisition period is finishing:
+    // ie. finishing processing and saving
+    // data produced during the run.
+    ACQUISITION_FINISHING = 2;
+
+    // The acquisition period finished on its own and
+    // did not report an error.
+    ACQUISITION_COMPLETED = 3;
+}
+
+enum AcquisitionStopReason {
+    // The acquisition has not yet stopped.
+    STOPPED_NOT_SET = 0;
+
+    // The user called the stop rpc.
+    STOPPED_USER_REQUESTED = 1;
+
+    // MinKNOW detected disk space was low and ended acquisition.
+    STOPPED_NO_DISK_SPACE = 2;
+
+    // The device stopped acquisition as it was unable to read data.
+    STOPPED_DEVICE_STOPPED_ACQUISITION = 3;
+
+    // Another acquisition run was requested, so the old one was stopped.
+    STOPPED_STARTING_ANOTHER_RUN = 4;
+
+    // The protocol ended, causing the acquisition to stop.
+    STOPPED_PROTOCOL_ENDED = 5;
+
+    // The device or asic was disconnected, causing the run to stop.
+    STOPPED_DEVICE_ERROR = 6;
+}
+
+enum FinishingState {
+    // The default state for acquisition
+    FINISHING_UNKNOWN = 0;
+
+    // The acquisition is processing raw signal into reads 
+    FINISHING_PROCESSING_DEVICE_SIGNAL = 1;
+
+    // Processed reads are being basecalled
+    FINISHING_BASECALLING_READS = 2;
+
+    // Data is being written to disk (or copied to network storage)
+    FINISHING_SAVING_DATA = 3;
+}
+
+message AcquisitionYieldSummary
+{
+    // Number of reads selected by analysis as good reads.
+    //
+    // The reads in this counter are completed, but not necessarily on disk yet.
+    int64 read_count = 1;
+
+    // Number of reads successfully basecalled.
+    int64 basecalled_pass_read_count = 3;
+
+    // Number of reads which have failed to basecall.
+    int64 basecalled_fail_read_count = 4;
+
+    // Number of reads which have been skipped
+    int64 basecalled_skipped_read_count = 10;
+
+    // Number of bases which have been called and classed as pass.
+    int64 basecalled_pass_bases = 5;
+
+    // Number of bases which have been called and were classed as fail.
+    int64 basecalled_fail_bases = 18;
+
+    // Number of raw samples which have been called.
+    int64 basecalled_samples = 6;
+
+    // Number of minknow raw samples which have been selected
+    // for writing to disk as reads.
+    int64 selected_raw_samples = 7;
+
+    // Number of minknow events which have been selected
+    // for writing to disk as reads.
+    int64 selected_events = 8;
+
+    // Estimated number of bases MinKNOW has selected for writing.
+    // This is estimated based on already called bases and samples.
+    int64 estimated_selected_bases = 9;
+
+    // Number of bases which have matched target reference.
+    //
+    // Only specified when running live alignment.
+    //
+    // Since 4.0
+    int64 alignment_matches = 14;
+
+    // Number of bases which have not matched target reference.
+    //
+    // Only specified when running live alignment.
+    //
+    // Since 4.0
+    int64 alignment_mismatches = 15;
+
+    // Number of bases which were inserted into
+    // alignments that matched the reference.
+    //
+    // Only specified when running live alignment.
+    //
+    // Since 4.0
+    int64 alignment_insertions = 16;
+
+    // Number of bases which were deleted from
+    // alignments that matched the reference.
+    //
+    // Only specified when running live alignment.
+    //
+    // Since 4.0
+    int64 alignment_deletions = 17;
+}
+
+message AcquisitionWriterSummary
+{
+    // Number of reads finished processing and written to disk.
+    //
+    // The reads which have been finalised and written to disk.
+    int64 written_read_count = 1;
+
+    // Number of bytes which minknow needs to write in order to
+    // finish the experiment.
+    int64 bytes_to_write_produced = 2;
+
+    // Number of bytes which minknow has failed to write to final location.
+    // These reads are instead contained in the fallback/tmp locations.
+    int64 bytes_to_write_failed = 3;
+
+    // Number of bytes which minknow has written to final location.
+    int64 bytes_to_write_completed = 4;
+}
+
+message ChannelStateInfo {
+    message Style {
+        // The human-readable name to display when rendering this channel state or group.
+        string label = 1;
+        // A sentence describing the meaning of the channel state or group.
+        //
+        // This can be used as a tooltip, for example.
+        string description = 2;
+        // The colour to use when rendering this channel state or group.
+        //
+        // This is a six-digit hex string describing an RGB colour (eg: "ff00ff" for purple).
+        string colour = 3;
+    }
+    message ChannelState {
+        // The numeric identifier of the state.
+        //
+        // This is what is reported in any other APIs that return a channel state ID.
+        uint32 id = 1;
+        // The internal name of the state.
+        //
+        // This is what is reported in any other APIs that return a channel state name.
+        string name = 2;
+        // How to render the channel state in a graphical user interface.
+        //
+        // Note that the style may be missing from some channel states (such as the ones that are
+        // built in to MinKNOW).
+        Style style = 3;
+        // An order ranking for the channel states when they are ungrouped.
+        //
+        // This can be used to order the channel states after merging the groups.
+        uint32 global_order = 4;
+    }
+    message Group {
+        // The name of the group.
+        string name = 1;
+        // How to render the group in a graphical user interface.
+        //
+        // Note that the style may be missing from some groups (such as the ones that are built in
+        // to MinKNOW).
+        Style style = 2;
+        // The channel states contained in the group.
+        //
+        // The groups are ordered according to the "order" attribute of the channel state style in
+        // the channel states configuration.
+        repeated ChannelState states = 3;
+    }
+
+    // The groups of channel states.
+    //
+    // The groups are ordered according to the "order" attribute of the group style in the channel
+    // states configuration.
+    repeated Group groups = 1;
+}
+
+message AcquisitionConfigSummary {
+    // Was basecalling enabled for the run.
+    bool basecalling_enabled = 1;
+    // Is barcoding enabled for the run
+    bool barcoding_enabled = 13;
+    // Is alignment enabled for the run
+    bool alignment_enabled = 14;
+
+    // Root directory reads were written to for the run.
+    //
+    // Empty if no reads were enabled.
+    string reads_directory = 2;
+    // Directories reads are written to if the reads_directory is on the network
+    // and writes to it fail.
+    //
+    // Empty if no reads were enabled.
+    repeated string reads_fallback_directories = 3;
+
+    // Determine if fast5 reads were enabled for the run.
+    bool fast5_reads_enabled = 4;
+    // Determine if fastq reads were enabled for the run.
+    bool fastq_reads_enabled = 5;
+    // Determine if protobuf reads were enabled for the run.
+    bool protobuf_reads_enabled = 6;
+
+    // The path of the bulk file for the run.
+    //
+    // Empty if no reads were enabled.
+    string bulk_file_path = 7;
+    // Find if the bulk writer was enabled for a run.
+    bool bulk_file_enabled = 8;
+
+    // Channel state styling information
+    ChannelStateInfo channel_state_info = 9;
+
+    // Number of bases per event
+    float events_to_base_ratio = 10;
+
+    // Sample rate for the acquisition.
+    //
+    // Since 3.3
+    uint32 sample_rate = 11;
+
+    // Channel count used in the acquisition.
+    //
+    // Since 3.3
+    uint32 channel_count = 12;
+}
+
+message AcquisitionRunInfo {
+    // The unique identifier assigned to this acquisition run.
+    //
+    // This is guaranteed to be made of ASCII characters, and at
+    // most 40 characters. It is globally unique across all
+    // acquisitions on all MinKNOW instances.
+    string run_id = 1;
+
+    // Indicates the current state of the acquisition.
+    AcquisitionState state = 2;
+
+    // If the experiment is finishing, an extra piece of state
+    // describing the current finishing state.
+    FinishingState finishing_state = 10;
+
+    // The reason the acquisition period was ended.
+    AcquisitionStopReason stop_reason = 3;
+
+    // When the acquisition period was started (UTC).
+    google.protobuf.Timestamp start_time = 4;
+
+    // When MinKNOW began acquiring data (UTC).
+    //
+    // Unset if the acquisition is still starting up.
+    google.protobuf.Timestamp data_read_start_time = 5;
+
+    // When the MinKNOW stopped acquiring data (UTC).
+    //
+    // Unset if the acquisition is still acquiring.
+    google.protobuf.Timestamp data_read_end_time = 6;
+
+    // When the acquisition terminated (UTC).
+    //
+    // Unset if the acquisition period is still running.
+    google.protobuf.Timestamp end_time = 7;
+
+    // Summary of acquisition yields.
+    //
+    // Since 1.12
+    AcquisitionYieldSummary yield_summary = 8;
+
+    // Summary of the configuration settings for a run.
+    //
+    // Since 1.14
+    AcquisitionConfigSummary config_summary = 9;
+
+    // Summary of writer yields.
+    //
+    // Since 4.0
+    AcquisitionWriterSummary writer_summary = 11;
+}
+
+message ListAcquisitionRunsRequest {
+}
+
+message ListAcquisitionRunsResponse {
+    repeated string run_ids = 1;
+}
+
+message GetCurrentAcquisitionRunRequest {
+}
+
+
+message WatchCurrentAcquisitionRunRequest {
+}
+
+message SetSignalReaderRequest {
+
+    // Available signal reader types
+    enum SignalReaderType {
+        HDF5 = 0; // Default value
+        DEVICE = 1;
+    }
+    
+    // The type of signal reader to use
+    SignalReaderType reader = 1 [(rpc_required) = true];
+    
+    // The following settings are optional, and only used when setting the reader to hdf5
+    string hdf_source = 2;
+    
+    enum SourceFileMode {
+        UNSPECIFIED = 0; // Default value
+        SINGLE_RUN = 1;
+        LOOP = 2;
+    }
+    
+    SourceFileMode hdf_mode = 3; // Defaults to UNSPECIFIED, since this setting is optional
+    
+    float sample_rate_scale_factor = 4;
+}
+
+message SetSignalReaderResponse {}
