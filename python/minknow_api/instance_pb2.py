@@ -23,7 +23,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='minknow_api.instance',
   syntax='proto3',
   serialized_options=_b('\n\034com.nanoporetech.minknow_api\242\002\005MKAPI'),
-  serialized_pb=_b('\n\x1aminknow_api/instance.proto\x12\x14minknow_api.instance\x1a\x1dminknow_api/acquisition.proto\x1a\x18minknow_api/device.proto\x1a\x1aminknow_api/protocol.proto\"\x17\n\x15GetVersionInfoRequest\"\xa4\x03\n\x16GetVersionInfoResponse\x12L\n\x07minknow\x18\x01 \x01(\x0b\x32;.minknow_api.instance.GetVersionInfoResponse.MinknowVersion\x12\x11\n\tprotocols\x18\x02 \x01(\t\x12\x1c\n\x14\x64istribution_version\x18\x03 \x01(\t\x12\\\n\x13\x64istribution_status\x18\x04 \x01(\x0e\x32?.minknow_api.instance.GetVersionInfoResponse.DistributionStatus\x12\x15\n\rconfiguration\x18\x05 \x01(\t\x1aK\n\x0eMinknowVersion\x12\r\n\x05major\x18\x01 \x01(\x05\x12\r\n\x05minor\x18\x02 \x01(\x05\x12\r\n\x05patch\x18\x03 \x01(\x05\x12\x0c\n\x04\x66ull\x18\x04 \x01(\t\"I\n\x12\x44istributionStatus\x12\x0b\n\x07UNKNOWN\x10\x00\x12\n\n\x06STABLE\x10\x01\x12\x0c\n\x08UNSTABLE\x10\x02\x12\x0c\n\x08MODIFIED\x10\x03\"\x1d\n\x1bGetOutputDirectoriesRequest\"?\n\x11OutputDirectories\x12\x0e\n\x06output\x18\x01 \x01(\t\x12\x0b\n\x03log\x18\x02 \x01(\t\x12\r\n\x05reads\x18\x03 \x01(\t\"$\n\"GetDefaultOutputDirectoriesRequest\")\n\x19SetOutputDirectoryRequest\x12\x0c\n\x04path\x18\x01 \x01(\t\"\x1c\n\x1aSetOutputDirectoryResponse\"(\n\x18SetReadsDirectoryRequest\x12\x0c\n\x04path\x18\x01 \x01(\t\"\x1b\n\x19SetReadsDirectoryResponse\"\xfa\x01\n\x17\x46ilesystemDiskSpaceInfo\x12\x15\n\rfilesystem_id\x18\x01 \x01(\t\x12\x17\n\x0f\x62ytes_available\x18\x02 \x01(\x04\x12\x16\n\x0e\x62ytes_capacity\x18\x03 \x01(\x04\x12\x0c\n\x04what\x18\x04 \x03(\t\x12\x1d\n\x15\x62ytes_to_stop_cleanly\x18\x05 \x01(\x04\x12\x1f\n\x17\x62ytes_when_alert_issued\x18\x06 \x01(\x04\x12\x17\n\x0frecommend_alert\x18\x07 \x01(\x08\x12\x16\n\x0erecommend_stop\x18\x08 \x01(\x08\x12\x18\n\x10\x62ytes_per_second\x18\t \x01(\x03\"\x19\n\x17GetDiskSpaceInfoRequest\",\n\x1aStreamDiskSpaceInfoRequest\x12\x0e\n\x06period\x18\x01 \x01(\r\"m\n\x18GetDiskSpaceInfoResponse\x12Q\n\x1a\x66ilesystem_disk_space_info\x18\x01 \x03(\x0b\x32-.minknow_api.instance.FilesystemDiskSpaceInfo\"\x15\n\x13GetMachineIdRequest\"*\n\x14GetMachineIdResponse\x12\x12\n\nmachine_id\x18\x01 \x01(\t\"\x1f\n\x1dStreamInstanceActivityRequest\"\x9a\x01\n\nDeviceInfo\x12L\n\x0c\x64\x65vice_state\x18\x01 \x01(\x0e\x32\x36.minknow_api.device.GetDeviceStateResponse.DeviceState\x12>\n\x0b\x64\x65vice_info\x18\x02 \x01(\x0b\x32).minknow_api.device.GetDeviceInfoResponse\"\xc6\x05\n\x1eStreamInstanceActivityResponse\x12\x37\n\x0b\x64\x65vice_info\x18\x01 \x01(\x0b\x32 .minknow_api.instance.DeviceInfoH\x00\x12\x45\n\x0e\x66low_cell_info\x18\x02 \x01(\x0b\x32+.minknow_api.device.GetFlowCellInfoResponseH\x00\x12\x42\n\x11protocol_run_info\x18\x03 \x01(\x0b\x32%.minknow_api.protocol.ProtocolRunInfoH\x00\x12K\n\x14\x61\x63quisition_run_info\x18\x04 \x01(\x0b\x32+.minknow_api.acquisition.AcquisitionRunInfoH\x00\x12_\n\x10\x66low_cell_health\x18\x05 \x01(\x0b\x32\x43.minknow_api.instance.StreamInstanceActivityResponse.FlowCellHealthH\x00\x12I\n\ryield_summary\x18\x06 \x01(\x0b\x32\x30.minknow_api.acquisition.AcquisitionYieldSummaryH\x00\x1a\xd6\x01\n\x0e\x46lowCellHealth\x12\x83\x01\n\x19\x63hannel_state_percentages\x18\x01 \x03(\x0b\x32`.minknow_api.instance.StreamInstanceActivityResponse.FlowCellHealth.ChannelStatePercentagesEntry\x1a>\n\x1c\x43hannelStatePercentagesEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\x02:\x02\x38\x01\x42\x0e\n\x0cstream_value2\xe8\x08\n\x0fInstanceService\x12o\n\x10get_version_info\x12+.minknow_api.instance.GetVersionInfoRequest\x1a,.minknow_api.instance.GetVersionInfoResponse\"\x00\x12v\n\x16get_output_directories\x12\x31.minknow_api.instance.GetOutputDirectoriesRequest\x1a\'.minknow_api.instance.OutputDirectories\"\x00\x12\x85\x01\n\x1eget_default_output_directories\x12\x38.minknow_api.instance.GetDefaultOutputDirectoriesRequest\x1a\'.minknow_api.instance.OutputDirectories\"\x00\x12{\n\x14set_output_directory\x12/.minknow_api.instance.SetOutputDirectoryRequest\x1a\x30.minknow_api.instance.SetOutputDirectoryResponse\"\x00\x12x\n\x13set_reads_directory\x12..minknow_api.instance.SetReadsDirectoryRequest\x1a/.minknow_api.instance.SetReadsDirectoryResponse\"\x00\x12v\n\x13get_disk_space_info\x12-.minknow_api.instance.GetDiskSpaceInfoRequest\x1a..minknow_api.instance.GetDiskSpaceInfoResponse\"\x00\x12~\n\x16stream_disk_space_info\x12\x30.minknow_api.instance.StreamDiskSpaceInfoRequest\x1a..minknow_api.instance.GetDiskSpaceInfoResponse\"\x00\x30\x01\x12i\n\x0eget_machine_id\x12).minknow_api.instance.GetMachineIdRequest\x1a*.minknow_api.instance.GetMachineIdResponse\"\x00\x12\x89\x01\n\x18stream_instance_activity\x12\x33.minknow_api.instance.StreamInstanceActivityRequest\x1a\x34.minknow_api.instance.StreamInstanceActivityResponse\"\x00\x30\x01\x42&\n\x1c\x63om.nanoporetech.minknow_api\xa2\x02\x05MKAPIb\x06proto3')
+  serialized_pb=_b('\n\x1aminknow_api/instance.proto\x12\x14minknow_api.instance\x1a\x1dminknow_api/acquisition.proto\x1a\x18minknow_api/device.proto\x1a\x1aminknow_api/protocol.proto\"\x17\n\x15GetVersionInfoRequest\"\xcd\x04\n\x16GetVersionInfoResponse\x12L\n\x07minknow\x18\x01 \x01(\x0b\x32;.minknow_api.instance.GetVersionInfoResponse.MinknowVersion\x12\x11\n\tprotocols\x18\x02 \x01(\t\x12\x1c\n\x14\x64istribution_version\x18\x03 \x01(\t\x12\\\n\x13\x64istribution_status\x18\x04 \x01(\x0e\x32?.minknow_api.instance.GetVersionInfoResponse.DistributionStatus\x12\x15\n\rconfiguration\x18\x05 \x01(\t\x12X\n\x11installation_type\x18\x06 \x01(\x0e\x32=.minknow_api.instance.GetVersionInfoResponse.InstallationType\x1aK\n\x0eMinknowVersion\x12\r\n\x05major\x18\x01 \x01(\x05\x12\r\n\x05minor\x18\x02 \x01(\x05\x12\r\n\x05patch\x18\x03 \x01(\x05\x12\x0c\n\x04\x66ull\x18\x04 \x01(\t\"I\n\x12\x44istributionStatus\x12\x0b\n\x07UNKNOWN\x10\x00\x12\n\n\x06STABLE\x10\x01\x12\x0c\n\x08UNSTABLE\x10\x02\x12\x0c\n\x08MODIFIED\x10\x03\"M\n\x10InstallationType\x12\x07\n\x03ONT\x10\x00\x12\x06\n\x02NC\x10\x01\x12\x08\n\x04PROD\x10\x02\x12\r\n\tQ_RELEASE\x10\x03\x12\x0f\n\x0bOND_RELEASE\x10\x04\"\x1d\n\x1bGetOutputDirectoriesRequest\"?\n\x11OutputDirectories\x12\x0e\n\x06output\x18\x01 \x01(\t\x12\x0b\n\x03log\x18\x02 \x01(\t\x12\r\n\x05reads\x18\x03 \x01(\t\"$\n\"GetDefaultOutputDirectoriesRequest\")\n\x19SetOutputDirectoryRequest\x12\x0c\n\x04path\x18\x01 \x01(\t\"\x1c\n\x1aSetOutputDirectoryResponse\"(\n\x18SetReadsDirectoryRequest\x12\x0c\n\x04path\x18\x01 \x01(\t\"\x1b\n\x19SetReadsDirectoryResponse\"\xfa\x01\n\x17\x46ilesystemDiskSpaceInfo\x12\x15\n\rfilesystem_id\x18\x01 \x01(\t\x12\x17\n\x0f\x62ytes_available\x18\x02 \x01(\x04\x12\x16\n\x0e\x62ytes_capacity\x18\x03 \x01(\x04\x12\x0c\n\x04what\x18\x04 \x03(\t\x12\x1d\n\x15\x62ytes_to_stop_cleanly\x18\x05 \x01(\x04\x12\x1f\n\x17\x62ytes_when_alert_issued\x18\x06 \x01(\x04\x12\x17\n\x0frecommend_alert\x18\x07 \x01(\x08\x12\x16\n\x0erecommend_stop\x18\x08 \x01(\x08\x12\x18\n\x10\x62ytes_per_second\x18\t \x01(\x03\"\x19\n\x17GetDiskSpaceInfoRequest\",\n\x1aStreamDiskSpaceInfoRequest\x12\x0e\n\x06period\x18\x01 \x01(\r\"m\n\x18GetDiskSpaceInfoResponse\x12Q\n\x1a\x66ilesystem_disk_space_info\x18\x01 \x03(\x0b\x32-.minknow_api.instance.FilesystemDiskSpaceInfo\"\x15\n\x13GetMachineIdRequest\"*\n\x14GetMachineIdResponse\x12\x12\n\nmachine_id\x18\x01 \x01(\t\"\x1f\n\x1dStreamInstanceActivityRequest\"\x9a\x01\n\nDeviceInfo\x12L\n\x0c\x64\x65vice_state\x18\x01 \x01(\x0e\x32\x36.minknow_api.device.GetDeviceStateResponse.DeviceState\x12>\n\x0b\x64\x65vice_info\x18\x02 \x01(\x0b\x32).minknow_api.device.GetDeviceInfoResponse\"\xc6\x05\n\x1eStreamInstanceActivityResponse\x12\x37\n\x0b\x64\x65vice_info\x18\x01 \x01(\x0b\x32 .minknow_api.instance.DeviceInfoH\x00\x12\x45\n\x0e\x66low_cell_info\x18\x02 \x01(\x0b\x32+.minknow_api.device.GetFlowCellInfoResponseH\x00\x12\x42\n\x11protocol_run_info\x18\x03 \x01(\x0b\x32%.minknow_api.protocol.ProtocolRunInfoH\x00\x12K\n\x14\x61\x63quisition_run_info\x18\x04 \x01(\x0b\x32+.minknow_api.acquisition.AcquisitionRunInfoH\x00\x12_\n\x10\x66low_cell_health\x18\x05 \x01(\x0b\x32\x43.minknow_api.instance.StreamInstanceActivityResponse.FlowCellHealthH\x00\x12I\n\ryield_summary\x18\x06 \x01(\x0b\x32\x30.minknow_api.acquisition.AcquisitionYieldSummaryH\x00\x1a\xd6\x01\n\x0e\x46lowCellHealth\x12\x83\x01\n\x19\x63hannel_state_percentages\x18\x01 \x03(\x0b\x32`.minknow_api.instance.StreamInstanceActivityResponse.FlowCellHealth.ChannelStatePercentagesEntry\x1a>\n\x1c\x43hannelStatePercentagesEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\x02:\x02\x38\x01\x42\x0e\n\x0cstream_value2\x84\t\n\x0fInstanceService\x12r\n\x10get_version_info\x12+.minknow_api.instance.GetVersionInfoRequest\x1a,.minknow_api.instance.GetVersionInfoResponse\"\x03\x90\x02\x01\x12y\n\x16get_output_directories\x12\x31.minknow_api.instance.GetOutputDirectoriesRequest\x1a\'.minknow_api.instance.OutputDirectories\"\x03\x90\x02\x01\x12\x88\x01\n\x1eget_default_output_directories\x12\x38.minknow_api.instance.GetDefaultOutputDirectoriesRequest\x1a\'.minknow_api.instance.OutputDirectories\"\x03\x90\x02\x01\x12~\n\x14set_output_directory\x12/.minknow_api.instance.SetOutputDirectoryRequest\x1a\x30.minknow_api.instance.SetOutputDirectoryResponse\"\x03\x90\x02\x02\x12{\n\x13set_reads_directory\x12..minknow_api.instance.SetReadsDirectoryRequest\x1a/.minknow_api.instance.SetReadsDirectoryResponse\"\x03\x90\x02\x02\x12y\n\x13get_disk_space_info\x12-.minknow_api.instance.GetDiskSpaceInfoRequest\x1a..minknow_api.instance.GetDiskSpaceInfoResponse\"\x03\x90\x02\x01\x12\x81\x01\n\x16stream_disk_space_info\x12\x30.minknow_api.instance.StreamDiskSpaceInfoRequest\x1a..minknow_api.instance.GetDiskSpaceInfoResponse\"\x03\x90\x02\x01\x30\x01\x12l\n\x0eget_machine_id\x12).minknow_api.instance.GetMachineIdRequest\x1a*.minknow_api.instance.GetMachineIdResponse\"\x03\x90\x02\x01\x12\x8c\x01\n\x18stream_instance_activity\x12\x33.minknow_api.instance.StreamInstanceActivityRequest\x1a\x34.minknow_api.instance.StreamInstanceActivityResponse\"\x03\x90\x02\x01\x30\x01\x42&\n\x1c\x63om.nanoporetech.minknow_api\xa2\x02\x05MKAPIb\x06proto3')
   ,
   dependencies=[minknow__api_dot_acquisition__pb2.DESCRIPTOR,minknow__api_dot_device__pb2.DESCRIPTOR,minknow__api_dot_protocol__pb2.DESCRIPTOR,])
 
@@ -54,10 +54,44 @@ _GETVERSIONINFORESPONSE_DISTRIBUTIONSTATUS = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=510,
-  serialized_end=583,
+  serialized_start=600,
+  serialized_end=673,
 )
 _sym_db.RegisterEnumDescriptor(_GETVERSIONINFORESPONSE_DISTRIBUTIONSTATUS)
+
+_GETVERSIONINFORESPONSE_INSTALLATIONTYPE = _descriptor.EnumDescriptor(
+  name='InstallationType',
+  full_name='minknow_api.instance.GetVersionInfoResponse.InstallationType',
+  filename=None,
+  file=DESCRIPTOR,
+  values=[
+    _descriptor.EnumValueDescriptor(
+      name='ONT', index=0, number=0,
+      serialized_options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='NC', index=1, number=1,
+      serialized_options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='PROD', index=2, number=2,
+      serialized_options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='Q_RELEASE', index=3, number=3,
+      serialized_options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='OND_RELEASE', index=4, number=4,
+      serialized_options=None,
+      type=None),
+  ],
+  containing_type=None,
+  serialized_options=None,
+  serialized_start=675,
+  serialized_end=752,
+)
+_sym_db.RegisterEnumDescriptor(_GETVERSIONINFORESPONSE_INSTALLATIONTYPE)
 
 
 _GETVERSIONINFOREQUEST = _descriptor.Descriptor(
@@ -131,8 +165,8 @@ _GETVERSIONINFORESPONSE_MINKNOWVERSION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=433,
-  serialized_end=508,
+  serialized_start=523,
+  serialized_end=598,
 )
 
 _GETVERSIONINFORESPONSE = _descriptor.Descriptor(
@@ -177,12 +211,20 @@ _GETVERSIONINFORESPONSE = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='installation_type', full_name='minknow_api.instance.GetVersionInfoResponse.installation_type', index=5,
+      number=6, type=14, cpp_type=8, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
   nested_types=[_GETVERSIONINFORESPONSE_MINKNOWVERSION, ],
   enum_types=[
     _GETVERSIONINFORESPONSE_DISTRIBUTIONSTATUS,
+    _GETVERSIONINFORESPONSE_INSTALLATIONTYPE,
   ],
   serialized_options=None,
   is_extendable=False,
@@ -191,7 +233,7 @@ _GETVERSIONINFORESPONSE = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=163,
-  serialized_end=583,
+  serialized_end=752,
 )
 
 
@@ -214,8 +256,8 @@ _GETOUTPUTDIRECTORIESREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=585,
-  serialized_end=614,
+  serialized_start=754,
+  serialized_end=783,
 )
 
 
@@ -259,8 +301,8 @@ _OUTPUTDIRECTORIES = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=616,
-  serialized_end=679,
+  serialized_start=785,
+  serialized_end=848,
 )
 
 
@@ -283,8 +325,8 @@ _GETDEFAULTOUTPUTDIRECTORIESREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=681,
-  serialized_end=717,
+  serialized_start=850,
+  serialized_end=886,
 )
 
 
@@ -314,8 +356,8 @@ _SETOUTPUTDIRECTORYREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=719,
-  serialized_end=760,
+  serialized_start=888,
+  serialized_end=929,
 )
 
 
@@ -338,8 +380,8 @@ _SETOUTPUTDIRECTORYRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=762,
-  serialized_end=790,
+  serialized_start=931,
+  serialized_end=959,
 )
 
 
@@ -369,8 +411,8 @@ _SETREADSDIRECTORYREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=792,
-  serialized_end=832,
+  serialized_start=961,
+  serialized_end=1001,
 )
 
 
@@ -393,8 +435,8 @@ _SETREADSDIRECTORYRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=834,
-  serialized_end=861,
+  serialized_start=1003,
+  serialized_end=1030,
 )
 
 
@@ -480,8 +522,8 @@ _FILESYSTEMDISKSPACEINFO = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=864,
-  serialized_end=1114,
+  serialized_start=1033,
+  serialized_end=1283,
 )
 
 
@@ -504,8 +546,8 @@ _GETDISKSPACEINFOREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1116,
-  serialized_end=1141,
+  serialized_start=1285,
+  serialized_end=1310,
 )
 
 
@@ -535,8 +577,8 @@ _STREAMDISKSPACEINFOREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1143,
-  serialized_end=1187,
+  serialized_start=1312,
+  serialized_end=1356,
 )
 
 
@@ -566,8 +608,8 @@ _GETDISKSPACEINFORESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1189,
-  serialized_end=1298,
+  serialized_start=1358,
+  serialized_end=1467,
 )
 
 
@@ -590,8 +632,8 @@ _GETMACHINEIDREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1300,
-  serialized_end=1321,
+  serialized_start=1469,
+  serialized_end=1490,
 )
 
 
@@ -621,8 +663,8 @@ _GETMACHINEIDRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1323,
-  serialized_end=1365,
+  serialized_start=1492,
+  serialized_end=1534,
 )
 
 
@@ -645,8 +687,8 @@ _STREAMINSTANCEACTIVITYREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1367,
-  serialized_end=1398,
+  serialized_start=1536,
+  serialized_end=1567,
 )
 
 
@@ -683,8 +725,8 @@ _DEVICEINFO = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1401,
-  serialized_end=1555,
+  serialized_start=1570,
+  serialized_end=1724,
 )
 
 
@@ -721,8 +763,8 @@ _STREAMINSTANCEACTIVITYRESPONSE_FLOWCELLHEALTH_CHANNELSTATEPERCENTAGESENTRY = _d
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2190,
-  serialized_end=2252,
+  serialized_start=2359,
+  serialized_end=2421,
 )
 
 _STREAMINSTANCEACTIVITYRESPONSE_FLOWCELLHEALTH = _descriptor.Descriptor(
@@ -751,8 +793,8 @@ _STREAMINSTANCEACTIVITYRESPONSE_FLOWCELLHEALTH = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2038,
-  serialized_end=2252,
+  serialized_start=2207,
+  serialized_end=2421,
 )
 
 _STREAMINSTANCEACTIVITYRESPONSE = _descriptor.Descriptor(
@@ -819,14 +861,16 @@ _STREAMINSTANCEACTIVITYRESPONSE = _descriptor.Descriptor(
       name='stream_value', full_name='minknow_api.instance.StreamInstanceActivityResponse.stream_value',
       index=0, containing_type=None, fields=[]),
   ],
-  serialized_start=1558,
-  serialized_end=2268,
+  serialized_start=1727,
+  serialized_end=2437,
 )
 
 _GETVERSIONINFORESPONSE_MINKNOWVERSION.containing_type = _GETVERSIONINFORESPONSE
 _GETVERSIONINFORESPONSE.fields_by_name['minknow'].message_type = _GETVERSIONINFORESPONSE_MINKNOWVERSION
 _GETVERSIONINFORESPONSE.fields_by_name['distribution_status'].enum_type = _GETVERSIONINFORESPONSE_DISTRIBUTIONSTATUS
+_GETVERSIONINFORESPONSE.fields_by_name['installation_type'].enum_type = _GETVERSIONINFORESPONSE_INSTALLATIONTYPE
 _GETVERSIONINFORESPONSE_DISTRIBUTIONSTATUS.containing_type = _GETVERSIONINFORESPONSE
+_GETVERSIONINFORESPONSE_INSTALLATIONTYPE.containing_type = _GETVERSIONINFORESPONSE
 _GETDISKSPACEINFORESPONSE.fields_by_name['filesystem_disk_space_info'].message_type = _FILESYSTEMDISKSPACEINFO
 _DEVICEINFO.fields_by_name['device_state'].enum_type = minknow__api_dot_device__pb2._GETDEVICESTATERESPONSE_DEVICESTATE
 _DEVICEINFO.fields_by_name['device_info'].message_type = minknow__api_dot_device__pb2._GETDEVICEINFORESPONSE
@@ -923,6 +967,12 @@ GetVersionInfoResponse = _reflection.GeneratedProtocolMessageType('GetVersionInf
           configuration (wanda) is installed. By default is set to
           '0.0.0.0', but will otherwise be set to a Wanda release
           version.  Since 3.6
+      installation_type:
+          Indicates what installation type minknow was installed as.
+          Certain installation types may turn features on or off
+          depending on the type. For example, for ont and prod installs,
+          the production.proto service will be enabled to make calls
+          such as writing to the eeprom  Since 4.1
   """,
   # @@protoc_insertion_point(class_scope:minknow_api.instance.GetVersionInfoResponse)
   })
@@ -1158,8 +1208,8 @@ _INSTANCESERVICE = _descriptor.ServiceDescriptor(
   file=DESCRIPTOR,
   index=0,
   serialized_options=None,
-  serialized_start=2271,
-  serialized_end=3399,
+  serialized_start=2440,
+  serialized_end=3596,
   methods=[
   _descriptor.MethodDescriptor(
     name='get_version_info',
@@ -1168,7 +1218,7 @@ _INSTANCESERVICE = _descriptor.ServiceDescriptor(
     containing_service=None,
     input_type=_GETVERSIONINFOREQUEST,
     output_type=_GETVERSIONINFORESPONSE,
-    serialized_options=None,
+    serialized_options=_b('\220\002\001'),
   ),
   _descriptor.MethodDescriptor(
     name='get_output_directories',
@@ -1177,7 +1227,7 @@ _INSTANCESERVICE = _descriptor.ServiceDescriptor(
     containing_service=None,
     input_type=_GETOUTPUTDIRECTORIESREQUEST,
     output_type=_OUTPUTDIRECTORIES,
-    serialized_options=None,
+    serialized_options=_b('\220\002\001'),
   ),
   _descriptor.MethodDescriptor(
     name='get_default_output_directories',
@@ -1186,7 +1236,7 @@ _INSTANCESERVICE = _descriptor.ServiceDescriptor(
     containing_service=None,
     input_type=_GETDEFAULTOUTPUTDIRECTORIESREQUEST,
     output_type=_OUTPUTDIRECTORIES,
-    serialized_options=None,
+    serialized_options=_b('\220\002\001'),
   ),
   _descriptor.MethodDescriptor(
     name='set_output_directory',
@@ -1195,7 +1245,7 @@ _INSTANCESERVICE = _descriptor.ServiceDescriptor(
     containing_service=None,
     input_type=_SETOUTPUTDIRECTORYREQUEST,
     output_type=_SETOUTPUTDIRECTORYRESPONSE,
-    serialized_options=None,
+    serialized_options=_b('\220\002\002'),
   ),
   _descriptor.MethodDescriptor(
     name='set_reads_directory',
@@ -1204,7 +1254,7 @@ _INSTANCESERVICE = _descriptor.ServiceDescriptor(
     containing_service=None,
     input_type=_SETREADSDIRECTORYREQUEST,
     output_type=_SETREADSDIRECTORYRESPONSE,
-    serialized_options=None,
+    serialized_options=_b('\220\002\002'),
   ),
   _descriptor.MethodDescriptor(
     name='get_disk_space_info',
@@ -1213,7 +1263,7 @@ _INSTANCESERVICE = _descriptor.ServiceDescriptor(
     containing_service=None,
     input_type=_GETDISKSPACEINFOREQUEST,
     output_type=_GETDISKSPACEINFORESPONSE,
-    serialized_options=None,
+    serialized_options=_b('\220\002\001'),
   ),
   _descriptor.MethodDescriptor(
     name='stream_disk_space_info',
@@ -1222,7 +1272,7 @@ _INSTANCESERVICE = _descriptor.ServiceDescriptor(
     containing_service=None,
     input_type=_STREAMDISKSPACEINFOREQUEST,
     output_type=_GETDISKSPACEINFORESPONSE,
-    serialized_options=None,
+    serialized_options=_b('\220\002\001'),
   ),
   _descriptor.MethodDescriptor(
     name='get_machine_id',
@@ -1231,7 +1281,7 @@ _INSTANCESERVICE = _descriptor.ServiceDescriptor(
     containing_service=None,
     input_type=_GETMACHINEIDREQUEST,
     output_type=_GETMACHINEIDRESPONSE,
-    serialized_options=None,
+    serialized_options=_b('\220\002\001'),
   ),
   _descriptor.MethodDescriptor(
     name='stream_instance_activity',
@@ -1240,7 +1290,7 @@ _INSTANCESERVICE = _descriptor.ServiceDescriptor(
     containing_service=None,
     input_type=_STREAMINSTANCEACTIVITYREQUEST,
     output_type=_STREAMINSTANCEACTIVITYRESPONSE,
-    serialized_options=None,
+    serialized_options=_b('\220\002\001'),
   ),
 ])
 _sym_db.RegisterServiceDescriptor(_INSTANCESERVICE)

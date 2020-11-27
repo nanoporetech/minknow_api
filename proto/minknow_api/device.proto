@@ -16,30 +16,45 @@ service DeviceService {
     //
     // The information returned by this call will not change (providing the MinKNOW instance
     // was started by the manager service).
-    rpc get_device_info (GetDeviceInfoRequest) returns (GetDeviceInfoResponse) {}
+    rpc get_device_info (GetDeviceInfoRequest) returns (GetDeviceInfoResponse) {
+        option idempotency_level = NO_SIDE_EFFECTS;
+    }
 
     // Get information about the current device state.
     //
     // Information in this call may change as the device is used with MinKNOW, for example,
     // by unplugging or plugging in the device.
+    //
+    // It includes information about whether the hardware is actually attached (in the case of
+    // MinIONs, which can be unplugged), as well as what types of flow cells can be inserted (which
+    // may be affected by flow cell adapters).
+    //
     // Since 1.12
-    rpc get_device_state (GetDeviceStateRequest) returns (GetDeviceStateResponse) {}
+    rpc get_device_state (GetDeviceStateRequest) returns (GetDeviceStateResponse) {
+        option idempotency_level = NO_SIDE_EFFECTS;
+    }
 
     // Streaming version of get_device_state
     //
     // Since 1.13
-    rpc stream_device_state (StreamDeviceStateRequest) returns (stream GetDeviceStateResponse) {}
+    rpc stream_device_state (StreamDeviceStateRequest) returns (stream GetDeviceStateResponse) {
+        option idempotency_level = NO_SIDE_EFFECTS;
+    }
 
     // Get information about the flow cell (if any).
     //
     // This provides information about the flow_cell attached to the device (described by
     // get_device_info()), if any.
-    rpc get_flow_cell_info (GetFlowCellInfoRequest) returns (GetFlowCellInfoResponse) {}
+    rpc get_flow_cell_info (GetFlowCellInfoRequest) returns (GetFlowCellInfoResponse) {
+        option idempotency_level = NO_SIDE_EFFECTS;
+    }
 
     // Streaming version of get_flow_cell_info
     //
     // Since 1.13
-    rpc stream_flow_cell_info (StreamFlowCellInfoRequest) returns (stream GetFlowCellInfoResponse) {}
+    rpc stream_flow_cell_info (StreamFlowCellInfoRequest) returns (stream GetFlowCellInfoResponse) {
+        option idempotency_level = NO_SIDE_EFFECTS;
+    }
 
     // Set the user specified flow cell id.
     //
@@ -50,7 +65,9 @@ service DeviceService {
     // This data is reset when the flow cell is disconnected.
     //
     // Since 1.12
-    rpc set_user_specified_flow_cell_id (SetUserSpecifiedFlowCellIdRequest) returns (SetUserSpecifiedFlowCellIdResponse) {}
+    rpc set_user_specified_flow_cell_id (SetUserSpecifiedFlowCellIdRequest) returns (SetUserSpecifiedFlowCellIdResponse) {
+        option idempotency_level = IDEMPOTENT;
+    }
 
     // Set the user specified product code.
     //
@@ -61,17 +78,23 @@ service DeviceService {
     // This data is reset when the flow cell is disconnected.
     //
     // Since 1.12
-    rpc set_user_specified_product_code (SetUserSpecifiedProductCodeRequest) returns (SetUserSpecifiedProductCodeResponse) {}
+    rpc set_user_specified_product_code (SetUserSpecifiedProductCodeRequest) returns (SetUserSpecifiedProductCodeResponse) {
+        option idempotency_level = IDEMPOTENT;
+    }
 
     // Get information about the channel layout
     //
     // Since 1.14
-    rpc get_channels_layout (GetChannelsLayoutRequest) returns (GetChannelsLayoutResponse) {}
+    rpc get_channels_layout (GetChannelsLayoutRequest) returns (GetChannelsLayoutResponse) {
+        option idempotency_level = NO_SIDE_EFFECTS;
+    }
 
     // Reset all settings associate with the current device.
     //
     // This call will initialise all settings to their default state, ie the same as when MinKNOW boots.
-    rpc reset_device_settings(ResetDeviceSettingsRequest) returns (ResetDeviceSettingsResponse) {}
+    rpc reset_device_settings(ResetDeviceSettingsRequest) returns (ResetDeviceSettingsResponse) {
+        option idempotency_level = IDEMPOTENT;
+    }
 
     // Set the calibration measurements to be used by MinKNOW.
     //
@@ -86,13 +109,17 @@ service DeviceService {
     //
     // On a MinION, the settings that a calibration depends on are sampling frequency and
     // integration capacitor.
-    rpc set_calibration (SetCalibrationRequest) returns (SetCalibrationResponse) {}
+    rpc set_calibration (SetCalibrationRequest) returns (SetCalibrationResponse) {
+        option idempotency_level = IDEMPOTENT;
+    }
 
     // Clear the current calibration.
     //
     // This is the same as setting the calibration to be the identity function (setting all offsets
     // to 0, and all pA ranges to the digitisation value).
-    rpc clear_calibration (ClearCalibrationRequest) returns (ClearCalibrationResponse) {}
+    rpc clear_calibration (ClearCalibrationRequest) returns (ClearCalibrationResponse) {
+        option idempotency_level = IDEMPOTENT;
+    }
 
     // The calibration measurements being used by MinKNOW.
     //
@@ -108,16 +135,22 @@ service DeviceService {
     // If there is no calibration (including if it was cleared with ``clear_calibration()`` or
     // invalidated because of device settings changes), this will return the identity calibration:
     // all offsets will be 0, and the pA ranges will be the same as the digitisation.
-    rpc get_calibration (GetCalibrationRequest) returns (GetCalibrationResponse) {}
+    rpc get_calibration (GetCalibrationRequest) returns (GetCalibrationResponse) {
+        option idempotency_level = NO_SIDE_EFFECTS;
+    }
 
     // If the device is capable (see GetDeviceInfoResponse.temperature_controllable)
     // then this sets the minimum and maximum temperatures of the flow-cell.
-    rpc set_temperature (SetTemperatureRequest) returns (SetTemperatureResponse) {}
+    rpc set_temperature (SetTemperatureRequest) returns (SetTemperatureResponse) {
+        option idempotency_level = IDEMPOTENT;
+    }
 
     // Get the current temperature of the device.
     //
     // Since 1.11
-    rpc get_temperature (GetTemperatureRequest) returns (GetTemperatureResponse) {}
+    rpc get_temperature (GetTemperatureRequest) returns (GetTemperatureResponse) {
+        option idempotency_level = NO_SIDE_EFFECTS;
+    }
 
     // Triggers an unblock for a list of channels for a given duration (Please see UnblockRequest).
     // It will start an unblock for every channel received as a parameter, then this RPC returns.
@@ -151,16 +184,22 @@ service DeviceService {
     // Get the channel configuration for any number of channels
     //
     // The maximum addressable channel will depend on the device. Currently this will be 512 on a MinION/GridION
-    // and 4096 on a PromethION
-    rpc get_channel_configuration (GetChannelConfigurationRequest) returns (GetChannelConfigurationResponse) {}
+    // and 3000 on a PromethION
+    rpc get_channel_configuration (GetChannelConfigurationRequest) returns (GetChannelConfigurationResponse) {
+        option idempotency_level = NO_SIDE_EFFECTS;
+    }
 
     // Set the channel configuration for any number of channels
     //
     // The maximum addressable channel will depend on the device. Currently this will be 512 on a MinION/GridION
-    // and 4096 on a PromethION.
-    rpc set_channel_configuration (SetChannelConfigurationRequest) returns (SetChannelConfigurationResponse) {}
+    // and 3000 on a PromethION.
+    rpc set_channel_configuration (SetChannelConfigurationRequest) returns (SetChannelConfigurationResponse) {
+        option idempotency_level = IDEMPOTENT;
+    }
 
-    rpc set_channel_configuration_all (SetChannelConfigurationAllRequest) returns (SetChannelConfigurationAllResponse) {}
+    rpc set_channel_configuration_all (SetChannelConfigurationAllRequest) returns (SetChannelConfigurationAllResponse) {
+        option idempotency_level = IDEMPOTENT;
+    }
 
     // Set the saturation control configuration.
     //
@@ -179,13 +218,17 @@ service DeviceService {
     //
     // The default configuration is specifed by the MinKNOW application configuration, the command returns the most
     // recently applied saturation config.
-    rpc get_saturation_config(GetSaturationConfigRequest) returns (GetSaturationConfigResponse) {}
+    rpc get_saturation_config(GetSaturationConfigRequest) returns (GetSaturationConfigResponse) {
+        option idempotency_level = NO_SIDE_EFFECTS;
+    }
 
     // Get the sample rate of the device
     //
     // Please refer to MinionDeviceService and PromethionDeviceService for the expected
     // return value for a minion and promethion respectively
-    rpc get_sample_rate (GetSampleRateRequest) returns (GetSampleRateResponse) {}
+    rpc get_sample_rate (GetSampleRateRequest) returns (GetSampleRateResponse) {
+        option idempotency_level = NO_SIDE_EFFECTS;
+    }
 
     // Set the sample rate of the device, and returns the actual value set on the device
     //
@@ -194,11 +237,17 @@ service DeviceService {
     // minion and promethion respectively
     //
     // Trying to set the sample rate during an acquisition period will result in an error
-    rpc set_sample_rate (SetSampleRateRequest) returns (SetSampleRateResponse) {}
+    rpc set_sample_rate (SetSampleRateRequest) returns (SetSampleRateResponse) {
+        option idempotency_level = IDEMPOTENT;
+    }
 
-    rpc get_bias_voltage (GetBiasVoltageRequest) returns (GetBiasVoltageResponse) {}
+    rpc get_bias_voltage (GetBiasVoltageRequest) returns (GetBiasVoltageResponse) {
+        option idempotency_level = NO_SIDE_EFFECTS;
+    }
 
-    rpc set_bias_voltage (SetBiasVoltageRequest) returns (SetBiasVoltageResponse) {}
+    rpc set_bias_voltage (SetBiasVoltageRequest) returns (SetBiasVoltageResponse) {
+        option idempotency_level = IDEMPOTENT;
+    }
 }
 
 // Describes the configuration of a channel on the device.
@@ -253,6 +302,31 @@ message ReturnedChannelConfiguration {
     // Provides a reverse potential across the connected well. This can be used to drive molecules
     // back out of the well.
     bool unblock = 4;
+}
+
+// Describes the type of flow cell connection.
+//
+// This means that this determines what flow cells can be inserted.
+//
+// Since 4.1
+enum FlowCellConnectorType {
+    // This is the default value when this enum is used in requests, and can be used to indicate
+    // that the caller doesn't care about flow cell connection types.
+    //
+    // It should not be returned by any RPCs (if you do see it returned, you may be using
+    // minknow_api from 4.1+ to call RPCs on MinKNOW Core 4.0).
+    FCCON_NOT_SET = 0;
+    // The flow cell position accepts PromethION-style flow cells.
+    FCCON_PROMETHION = 1;
+    // The flow cell position accepts MinION flow cells. MinION Mk1, Mk1B and Mk1C all accept these
+    // flow cells, as well as the GridION X5.
+    //
+    // Note that if a Flongle adapter is inserted, FCCON_FLONGLE will be returned instead.
+    FCCON_MINION_MK1 = 2;
+    // The flow cell position accepts Flongle flow cells.
+    //
+    // Currently, this means a MinION or GridION with a Flongle adapter inserted.
+    FCCON_FLONGLE = 3;
 }
 
 message GetDeviceInfoRequest {}
@@ -351,7 +425,18 @@ message GetDeviceStateResponse {
         DEVICE_READY = 1;
     }
 
+    // Whether the physical hardware is present.
+    //
+    // This is really only relevant to MinIONs, which could be unplugged by the user at any time.
     DeviceState device_state = 1;
+
+    // Indicates what sort of flow cell can be inserted.
+    //
+    // For example, if the user needs to set or override the flow cell product code, this can be
+    // used to limit the list of possible flow cell product codes to choose from.
+    //
+    // Since 4.1
+    FlowCellConnectorType flow_cell_connector = 2;
 }
 
 message StreamDeviceStateRequest {}

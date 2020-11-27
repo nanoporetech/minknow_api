@@ -13,6 +13,8 @@ from google.protobuf import symbol_database as _symbol_database
 _sym_db = _symbol_database.Default()
 
 
+from minknow_api import rpc_options_pb2 as minknow__api_dot_rpc__options__pb2
+from minknow_api import device_pb2 as minknow__api_dot_device__pb2
 from minknow_api import instance_pb2 as minknow__api_dot_instance__pb2
 
 
@@ -21,9 +23,9 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='minknow_api.manager',
   syntax='proto3',
   serialized_options=_b('\n\034com.nanoporetech.minknow_api\242\002\005MKAPI'),
-  serialized_pb=_b('\n\x19minknow_api/manager.proto\x12\x13minknow_api.manager\x1a\x1aminknow_api/instance.proto\"\x15\n\x13\x44\x65scribeHostRequest\"g\n\x14\x44\x65scribeHostResponse\x12\x14\n\x0cproduct_code\x18\x01 \x01(\t\x12\x13\n\x0b\x64\x65scription\x18\x02 \x01(\t\x12\x0e\n\x06serial\x18\x03 \x01(\t\x12\x14\n\x0cnetwork_name\x18\x04 \x01(\t\"\x96\x05\n\x10\x46lowCellPosition\x12\x0c\n\x04name\x18\x01 \x01(\t\x12@\n\x08location\x18\x02 \x01(\x0b\x32..minknow_api.manager.FlowCellPosition.Location\x12:\n\x05state\x18\x03 \x01(\x0e\x32+.minknow_api.manager.FlowCellPosition.State\x12\x41\n\trpc_ports\x18\x04 \x01(\x0b\x32..minknow_api.manager.FlowCellPosition.RpcPorts\x12\x12\n\nerror_info\x18\x05 \x01(\t\x12X\n\x15shared_hardware_group\x18\x06 \x01(\x0b\x32\x39.minknow_api.manager.FlowCellPosition.SharedHardwareGroup\x1a \n\x08Location\x12\t\n\x01x\x18\x01 \x01(\x05\x12\t\n\x01y\x18\x02 \x01(\x05\x1a`\n\x08RpcPorts\x12\x0e\n\x06secure\x18\x01 \x01(\r\x12\x10\n\x08insecure\x18\x02 \x01(\r\x12\x17\n\x0fsecure_grpc_web\x18\x03 \x01(\r\x12\x19\n\x11insecure_grpc_web\x18\x04 \x01(\r\x1a\'\n\x13SharedHardwareGroup\x12\x10\n\x08group_id\x18\x01 \x01(\r\"\x97\x01\n\x05State\x12\x16\n\x12STATE_INITIALISING\x10\x00\x12\x11\n\rSTATE_RUNNING\x10\x01\x12\x13\n\x0fSTATE_RESETTING\x10\x02\x12\x1a\n\x16STATE_HARDWARE_REMOVED\x10\x03\x12\x18\n\x14STATE_HARDWARE_ERROR\x10\x04\x12\x18\n\x14STATE_SOFTWARE_ERROR\x10\x05\"\x1a\n\x18\x46lowCellPositionsRequest\"j\n\x19\x46lowCellPositionsResponse\x12\x13\n\x0btotal_count\x18\x01 \x01(\x05\x12\x38\n\tpositions\x18\x02 \x03(\x0b\x32%.minknow_api.manager.FlowCellPosition\"\x1f\n\x1dWatchFlowCellPositionsRequest\"\xa4\x01\n\x1eWatchFlowCellPositionsResponse\x12\x38\n\tadditions\x18\x01 \x03(\x0b\x32%.minknow_api.manager.FlowCellPosition\x12\x36\n\x07\x63hanges\x18\x02 \x03(\x0b\x32%.minknow_api.manager.FlowCellPosition\x12\x10\n\x08removals\x18\x03 \x03(\t\"8\n\x14ResetPositionRequest\x12\x11\n\tpositions\x18\x03 \x03(\t\x12\r\n\x05\x66orce\x18\x02 \x01(\x08\"\x17\n\x15ResetPositionResponse\"\x16\n\x14\x42\x61secallerApiRequest\"m\n\x15\x42\x61secallerApiResponse\x12\x0e\n\x06secure\x18\x01 \x01(\r\x12\x10\n\x08insecure\x18\x02 \x01(\r\x12\x17\n\x0fsecure_grpc_web\x18\x03 \x01(\r\x12\x19\n\x11insecure_grpc_web\x18\x04 \x01(\r\"\x17\n\x15GetVersionInfoRequest\"\xe1\x03\n\x16GetVersionInfoResponse\x12L\n\x07minknow\x18\x01 \x01(\x0b\x32;.minknow_api.instance.GetVersionInfoResponse.MinknowVersion\x12\x11\n\tprotocols\x18\x02 \x01(\t\x12\x1c\n\x14\x64istribution_version\x18\x03 \x01(\t\x12\\\n\x13\x64istribution_status\x18\x04 \x01(\x0e\x32?.minknow_api.instance.GetVersionInfoResponse.DistributionStatus\x12\x1b\n\x13guppy_build_version\x18\x05 \x01(\t\x12\x1f\n\x17guppy_connected_version\x18\x06 \x01(\t\x12\x15\n\rconfiguration\x18\x07 \x01(\t\x12W\n\x11installation_type\x18\x08 \x01(\x0e\x32<.minknow_api.manager.GetVersionInfoResponse.InstallationType\"<\n\x10InstallationType\x12\x07\n\x03ONT\x10\x00\x12\x06\n\x02NC\x10\x01\x12\x08\n\x04PROD\x10\x02\x12\r\n\tQ_RELEASE\x10\x03\"1\n!ListProtocolOutputDirFilesRequest\x12\x0c\n\x04path\x18\x01 \x01(\t\"\xf8\x01\n\"ListProtocolOutputDirFilesResponse\x12Z\n\x0b\x64irectories\x18\x01 \x03(\x0b\x32\x45.minknow_api.manager.ListProtocolOutputDirFilesResponse.DirectoryInfo\x12\r\n\x05\x66iles\x18\x02 \x03(\t\x12\x1b\n\x13\x63urrent_listed_path\x18\x03 \x01(\t\x1aJ\n\rDirectoryInfo\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x17\n\x0f\x64irectory_count\x18\x02 \x01(\x05\x12\x12\n\nfile_count\x18\x03 \x01(\x05\";\n\x16\x43reateDirectoryRequest\x12\x13\n\x0bparent_path\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\"\'\n\x17\x43reateDirectoryResponse\x12\x0c\n\x04path\x18\x01 \x01(\t\"\x87\x02\n\x17\x46ilesystemDiskSpaceInfo\x12\x15\n\rfilesystem_id\x18\x01 \x01(\t\x12\x17\n\x0f\x62ytes_available\x18\x02 \x01(\x04\x12\x16\n\x0e\x62ytes_capacity\x18\x03 \x01(\x04\x12\x19\n\x11\x66ile_types_stored\x18\x04 \x03(\t\x12\x1d\n\x15\x62ytes_to_stop_cleanly\x18\x05 \x01(\x04\x12\x1f\n\x17\x62ytes_when_alert_issued\x18\x06 \x01(\x04\x12\x17\n\x0frecommend_alert\x18\x07 \x01(\x08\x12\x16\n\x0erecommend_stop\x18\x08 \x01(\x08\x12\x18\n\x10\x62ytes_per_second\x18\t \x01(\x03\"\x19\n\x17GetDiskSpaceInfoRequest\",\n\x1aStreamDiskSpaceInfoRequest\x12\x0e\n\x06period\x18\x01 \x01(\r\"l\n\x18GetDiskSpaceInfoResponse\x12P\n\x1a\x66ilesystem_disk_space_info\x18\x01 \x03(\x0b\x32,.minknow_api.manager.FilesystemDiskSpaceInfo2\xbf\t\n\x0eManagerService\x12\x66\n\rdescribe_host\x12(.minknow_api.manager.DescribeHostRequest\x1a).minknow_api.manager.DescribeHostResponse\"\x00\x12x\n\x13\x66low_cell_positions\x12-.minknow_api.manager.FlowCellPositionsRequest\x1a..minknow_api.manager.FlowCellPositionsResponse\"\x00\x30\x01\x12\x88\x01\n\x19watch_flow_cell_positions\x12\x32.minknow_api.manager.WatchFlowCellPositionsRequest\x1a\x33.minknow_api.manager.WatchFlowCellPositionsResponse\"\x00\x30\x01\x12i\n\x0ereset_position\x12).minknow_api.manager.ResetPositionRequest\x1a*.minknow_api.manager.ResetPositionResponse\"\x00\x12i\n\x0e\x62\x61secaller_api\x12).minknow_api.manager.BasecallerApiRequest\x1a*.minknow_api.manager.BasecallerApiResponse\"\x00\x12m\n\x10get_version_info\x12*.minknow_api.manager.GetVersionInfoRequest\x1a+.minknow_api.manager.GetVersionInfoResponse\"\x00\x12\x95\x01\n\x1elist_protocol_output_dir_files\x12\x36.minknow_api.manager.ListProtocolOutputDirFilesRequest\x1a\x37.minknow_api.manager.ListProtocolOutputDirFilesResponse\"\x00\x30\x01\x12o\n\x10\x63reate_directory\x12+.minknow_api.manager.CreateDirectoryRequest\x1a,.minknow_api.manager.CreateDirectoryResponse\"\x00\x12t\n\x13get_disk_space_info\x12,.minknow_api.manager.GetDiskSpaceInfoRequest\x1a-.minknow_api.manager.GetDiskSpaceInfoResponse\"\x00\x12|\n\x16stream_disk_space_info\x12/.minknow_api.manager.StreamDiskSpaceInfoRequest\x1a-.minknow_api.manager.GetDiskSpaceInfoResponse\"\x00\x30\x01\x42&\n\x1c\x63om.nanoporetech.minknow_api\xa2\x02\x05MKAPIb\x06proto3')
+  serialized_pb=_b('\n\x19minknow_api/manager.proto\x12\x13minknow_api.manager\x1a\x1dminknow_api/rpc_options.proto\x1a\x18minknow_api/device.proto\x1a\x1aminknow_api/instance.proto\"\x15\n\x13\x44\x65scribeHostRequest\"g\n\x14\x44\x65scribeHostResponse\x12\x14\n\x0cproduct_code\x18\x01 \x01(\t\x12\x13\n\x0b\x64\x65scription\x18\x02 \x01(\t\x12\x0e\n\x06serial\x18\x03 \x01(\t\x12\x14\n\x0cnetwork_name\x18\x04 \x01(\t\"\x96\x05\n\x10\x46lowCellPosition\x12\x0c\n\x04name\x18\x01 \x01(\t\x12@\n\x08location\x18\x02 \x01(\x0b\x32..minknow_api.manager.FlowCellPosition.Location\x12:\n\x05state\x18\x03 \x01(\x0e\x32+.minknow_api.manager.FlowCellPosition.State\x12\x41\n\trpc_ports\x18\x04 \x01(\x0b\x32..minknow_api.manager.FlowCellPosition.RpcPorts\x12\x12\n\nerror_info\x18\x05 \x01(\t\x12X\n\x15shared_hardware_group\x18\x06 \x01(\x0b\x32\x39.minknow_api.manager.FlowCellPosition.SharedHardwareGroup\x1a \n\x08Location\x12\t\n\x01x\x18\x01 \x01(\x05\x12\t\n\x01y\x18\x02 \x01(\x05\x1a`\n\x08RpcPorts\x12\x0e\n\x06secure\x18\x01 \x01(\r\x12\x10\n\x08insecure\x18\x02 \x01(\r\x12\x17\n\x0fsecure_grpc_web\x18\x03 \x01(\r\x12\x19\n\x11insecure_grpc_web\x18\x04 \x01(\r\x1a\'\n\x13SharedHardwareGroup\x12\x10\n\x08group_id\x18\x01 \x01(\r\"\x97\x01\n\x05State\x12\x16\n\x12STATE_INITIALISING\x10\x00\x12\x11\n\rSTATE_RUNNING\x10\x01\x12\x13\n\x0fSTATE_RESETTING\x10\x02\x12\x1a\n\x16STATE_HARDWARE_REMOVED\x10\x03\x12\x18\n\x14STATE_HARDWARE_ERROR\x10\x04\x12\x18\n\x14STATE_SOFTWARE_ERROR\x10\x05\"\x1a\n\x18\x46lowCellPositionsRequest\"j\n\x19\x46lowCellPositionsResponse\x12\x13\n\x0btotal_count\x18\x01 \x01(\x05\x12\x38\n\tpositions\x18\x02 \x03(\x0b\x32%.minknow_api.manager.FlowCellPosition\"\x1f\n\x1dWatchFlowCellPositionsRequest\"\xa4\x01\n\x1eWatchFlowCellPositionsResponse\x12\x38\n\tadditions\x18\x01 \x03(\x0b\x32%.minknow_api.manager.FlowCellPosition\x12\x36\n\x07\x63hanges\x18\x02 \x03(\x0b\x32%.minknow_api.manager.FlowCellPosition\x12\x10\n\x08removals\x18\x03 \x03(\t\"8\n\x14ResetPositionRequest\x12\x11\n\tpositions\x18\x03 \x03(\t\x12\r\n\x05\x66orce\x18\x02 \x01(\x08\"\x17\n\x15ResetPositionResponse\"\x16\n\x14\x42\x61secallerApiRequest\"m\n\x15\x42\x61secallerApiResponse\x12\x0e\n\x06secure\x18\x01 \x01(\r\x12\x10\n\x08insecure\x18\x02 \x01(\r\x12\x17\n\x0fsecure_grpc_web\x18\x03 \x01(\r\x12\x19\n\x11insecure_grpc_web\x18\x04 \x01(\r\"\x15\n\x13GetGuppyInfoRequest\"5\n\x14GetGuppyInfoResponse\x12\x0c\n\x04port\x18\x01 \x01(\r\x12\x0f\n\x07version\x18\x02 \x01(\t\"\x17\n\x15GetVersionInfoRequest\"\xf2\x03\n\x16GetVersionInfoResponse\x12L\n\x07minknow\x18\x01 \x01(\x0b\x32;.minknow_api.instance.GetVersionInfoResponse.MinknowVersion\x12\x11\n\tprotocols\x18\x02 \x01(\t\x12\x1c\n\x14\x64istribution_version\x18\x03 \x01(\t\x12\\\n\x13\x64istribution_status\x18\x04 \x01(\x0e\x32?.minknow_api.instance.GetVersionInfoResponse.DistributionStatus\x12\x1b\n\x13guppy_build_version\x18\x05 \x01(\t\x12\x1f\n\x17guppy_connected_version\x18\x06 \x01(\t\x12\x15\n\rconfiguration\x18\x07 \x01(\t\x12W\n\x11installation_type\x18\x08 \x01(\x0e\x32<.minknow_api.manager.GetVersionInfoResponse.InstallationType\"M\n\x10InstallationType\x12\x07\n\x03ONT\x10\x00\x12\x06\n\x02NC\x10\x01\x12\x08\n\x04PROD\x10\x02\x12\r\n\tQ_RELEASE\x10\x03\x12\x0f\n\x0bOND_RELEASE\x10\x04\"1\n!ListProtocolOutputDirFilesRequest\x12\x0c\n\x04path\x18\x01 \x01(\t\"\xf8\x01\n\"ListProtocolOutputDirFilesResponse\x12Z\n\x0b\x64irectories\x18\x01 \x03(\x0b\x32\x45.minknow_api.manager.ListProtocolOutputDirFilesResponse.DirectoryInfo\x12\r\n\x05\x66iles\x18\x02 \x03(\t\x12\x1b\n\x13\x63urrent_listed_path\x18\x03 \x01(\t\x1aJ\n\rDirectoryInfo\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x17\n\x0f\x64irectory_count\x18\x02 \x01(\x05\x12\x12\n\nfile_count\x18\x03 \x01(\x05\";\n\x16\x43reateDirectoryRequest\x12\x13\n\x0bparent_path\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\"\'\n\x17\x43reateDirectoryResponse\x12\x0c\n\x04path\x18\x01 \x01(\t\"\x87\x02\n\x17\x46ilesystemDiskSpaceInfo\x12\x15\n\rfilesystem_id\x18\x01 \x01(\t\x12\x17\n\x0f\x62ytes_available\x18\x02 \x01(\x04\x12\x16\n\x0e\x62ytes_capacity\x18\x03 \x01(\x04\x12\x19\n\x11\x66ile_types_stored\x18\x04 \x03(\t\x12\x1d\n\x15\x62ytes_to_stop_cleanly\x18\x05 \x01(\x04\x12\x1f\n\x17\x62ytes_when_alert_issued\x18\x06 \x01(\x04\x12\x17\n\x0frecommend_alert\x18\x07 \x01(\x08\x12\x16\n\x0erecommend_stop\x18\x08 \x01(\x08\x12\x18\n\x10\x62ytes_per_second\x18\t \x01(\x03\"\x19\n\x17GetDiskSpaceInfoRequest\",\n\x1aStreamDiskSpaceInfoRequest\x12\x0e\n\x06period\x18\x01 \x01(\r\"l\n\x18GetDiskSpaceInfoResponse\x12P\n\x1a\x66ilesystem_disk_space_info\x18\x01 \x03(\x0b\x32,.minknow_api.manager.FilesystemDiskSpaceInfo\"\x1a\n\x18GetBarcodeKitInfoRequest\"\xa8\x02\n\x19GetBarcodeKitInfoResponse\x12\\\n\x10\x62\x61rcode_kit_info\x18\x01 \x03(\x0b\x32\x42.minknow_api.manager.GetBarcodeKitInfoResponse.BarcodeKitInfoEntry\x1a\x37\n\x0e\x42\x61rcodeKitInfo\x12\x0f\n\x07is_dual\x18\x02 \x01(\x08\x12\x14\n\x0cis_both_ends\x18\x03 \x01(\x08\x1at\n\x13\x42\x61rcodeKitInfoEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12L\n\x05value\x18\x02 \x01(\x0b\x32=.minknow_api.manager.GetBarcodeKitInfoResponse.BarcodeKitInfo:\x02\x38\x01\"\x17\n\x15GetLampKitInfoRequest\"+\n\x16GetLampKitInfoResponse\x12\x11\n\tlamp_kits\x18\x02 \x03(\t\"I\n\x15GetBarcodeKeysRequest\x12\x19\n\x11\x62\x61rcode_kit_names\x18\x01 \x03(\t\x12\x15\n\rlamp_kit_name\x18\x02 \x01(\t\"X\n\x16GetBarcodeKeysResponse\x12\x14\n\x0c\x62\x61rcode_keys\x18\x01 \x03(\t\x12\x11\n\tlamp_keys\x18\x02 \x03(\t\x12\x15\n\rcombined_keys\x18\x03 \x03(\t\"\x19\n\x17GetFlowCellTypesRequest\"\xdc\x01\n\x18GetFlowCellTypesResponse\x12\x41\n\x05types\x18\x01 \x03(\x0b\x32\x32.minknow_api.manager.GetFlowCellTypesResponse.Info\x1a}\n\x04Info\x12\x14\n\x0cproduct_code\x18\x01 \x01(\t\x12\x41\n\x0e\x63onnector_type\x18\x02 \x01(\x0e\x32).minknow_api.device.FlowCellConnectorType\x12\x1c\n\x14\x63\x61nnot_live_basecall\x18\x03 \x01(\x08\":\n\x18GetSequencingKitsRequest\x12\x1e\n\x16\x66low_cell_product_code\x18\x01 \x01(\t\"\xf2\x03\n\x19GetSequencingKitsResponse\x12@\n\x04kits\x18\x01 \x03(\x0b\x32\x32.minknow_api.manager.GetSequencingKitsResponse.Kit\x12\x66\n\x18\x62\x61rcoding_expansion_kits\x18\x02 \x03(\x0b\x32\x44.minknow_api.manager.GetSequencingKitsResponse.BarcodingExpansionKit\x1a\xfb\x01\n\x03Kit\x12\x14\n\x0cproduct_code\x18\x01 \x01(\t\x12 \n\x18\x62\x61rcoding_expansion_kits\x18\x02 \x03(\x05\x12\x1a\n\x12includes_barcoding\x18\x03 \x01(\x08\x12\x10\n\x08lamp_kit\x18\x10 \x01(\x08\x12\x1c\n\x14has_control_protocol\x18\x04 \x01(\x08\x12\x1e\n\x16no_sequencing_protocol\x18\x11 \x01(\x08\x12\x17\n\x0f\x66requently_used\x18\x12 \x01(\x08\x12\x0b\n\x03\x64na\x18\x05 \x01(\x08\x12\x0b\n\x03rna\x18\x06 \x01(\x08\x12\x0b\n\x03pcr\x18\x07 \x01(\x08\x12\x10\n\x08pcr_free\x18\x08 \x01(\x08\x1a-\n\x15\x42\x61rcodingExpansionKit\x12\x14\n\x0cproduct_code\x18\x01 \x01(\t2\xa3\x0f\n\x0eManagerService\x12i\n\rdescribe_host\x12(.minknow_api.manager.DescribeHostRequest\x1a).minknow_api.manager.DescribeHostResponse\"\x03\x90\x02\x01\x12{\n\x13\x66low_cell_positions\x12-.minknow_api.manager.FlowCellPositionsRequest\x1a..minknow_api.manager.FlowCellPositionsResponse\"\x03\x90\x02\x01\x30\x01\x12\x8b\x01\n\x19watch_flow_cell_positions\x12\x32.minknow_api.manager.WatchFlowCellPositionsRequest\x1a\x33.minknow_api.manager.WatchFlowCellPositionsResponse\"\x03\x90\x02\x01\x30\x01\x12i\n\x0ereset_position\x12).minknow_api.manager.ResetPositionRequest\x1a*.minknow_api.manager.ResetPositionResponse\"\x00\x12l\n\x0e\x62\x61secaller_api\x12).minknow_api.manager.BasecallerApiRequest\x1a*.minknow_api.manager.BasecallerApiResponse\"\x03\x90\x02\x01\x12j\n\x0eget_guppy_info\x12(.minknow_api.manager.GetGuppyInfoRequest\x1a).minknow_api.manager.GetGuppyInfoResponse\"\x03\x90\x02\x01\x12p\n\x10get_version_info\x12*.minknow_api.manager.GetVersionInfoRequest\x1a+.minknow_api.manager.GetVersionInfoResponse\"\x03\x90\x02\x01\x12\x98\x01\n\x1elist_protocol_output_dir_files\x12\x36.minknow_api.manager.ListProtocolOutputDirFilesRequest\x1a\x37.minknow_api.manager.ListProtocolOutputDirFilesResponse\"\x03\x90\x02\x01\x30\x01\x12r\n\x10\x63reate_directory\x12+.minknow_api.manager.CreateDirectoryRequest\x1a,.minknow_api.manager.CreateDirectoryResponse\"\x03\x90\x02\x02\x12w\n\x13get_disk_space_info\x12,.minknow_api.manager.GetDiskSpaceInfoRequest\x1a-.minknow_api.manager.GetDiskSpaceInfoResponse\"\x03\x90\x02\x01\x12\x7f\n\x16stream_disk_space_info\x12/.minknow_api.manager.StreamDiskSpaceInfoRequest\x1a-.minknow_api.manager.GetDiskSpaceInfoResponse\"\x03\x90\x02\x01\x30\x01\x12z\n\x14get_barcode_kit_info\x12-.minknow_api.manager.GetBarcodeKitInfoRequest\x1a..minknow_api.manager.GetBarcodeKitInfoResponse\"\x03\x90\x02\x01\x12q\n\x11get_lamp_kit_info\x12*.minknow_api.manager.GetLampKitInfoRequest\x1a+.minknow_api.manager.GetLampKitInfoResponse\"\x03\x90\x02\x01\x12p\n\x10get_barcode_keys\x12*.minknow_api.manager.GetBarcodeKeysRequest\x1a+.minknow_api.manager.GetBarcodeKeysResponse\"\x03\x90\x02\x01\x12{\n\x13get_flow_cell_types\x12,.minknow_api.manager.GetFlowCellTypesRequest\x1a-.minknow_api.manager.GetFlowCellTypesResponse\"\x07\x90\x02\x01\x98\xb5\x18\x01\x12}\n\x13get_sequencing_kits\x12-.minknow_api.manager.GetSequencingKitsRequest\x1a..minknow_api.manager.GetSequencingKitsResponse\"\x07\x90\x02\x01\x98\xb5\x18\x01\x42&\n\x1c\x63om.nanoporetech.minknow_api\xa2\x02\x05MKAPIb\x06proto3')
   ,
-  dependencies=[minknow__api_dot_instance__pb2.DESCRIPTOR,])
+  dependencies=[minknow__api_dot_rpc__options__pb2.DESCRIPTOR,minknow__api_dot_device__pb2.DESCRIPTOR,minknow__api_dot_instance__pb2.DESCRIPTOR,])
 
 
 
@@ -60,8 +62,8 @@ _FLOWCELLPOSITION_STATE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=718,
-  serialized_end=869,
+  serialized_start=775,
+  serialized_end=926,
 )
 _sym_db.RegisterEnumDescriptor(_FLOWCELLPOSITION_STATE)
 
@@ -87,11 +89,15 @@ _GETVERSIONINFORESPONSE_INSTALLATIONTYPE = _descriptor.EnumDescriptor(
       name='Q_RELEASE', index=3, number=3,
       serialized_options=None,
       type=None),
+    _descriptor.EnumValueDescriptor(
+      name='OND_RELEASE', index=4, number=4,
+      serialized_options=None,
+      type=None),
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=1872,
-  serialized_end=1932,
+  serialized_start=2007,
+  serialized_end=2084,
 )
 _sym_db.RegisterEnumDescriptor(_GETVERSIONINFORESPONSE_INSTALLATIONTYPE)
 
@@ -115,8 +121,8 @@ _DESCRIBEHOSTREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=78,
-  serialized_end=99,
+  serialized_start=135,
+  serialized_end=156,
 )
 
 
@@ -167,8 +173,8 @@ _DESCRIBEHOSTRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=101,
-  serialized_end=204,
+  serialized_start=158,
+  serialized_end=261,
 )
 
 
@@ -205,8 +211,8 @@ _FLOWCELLPOSITION_LOCATION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=544,
-  serialized_end=576,
+  serialized_start=601,
+  serialized_end=633,
 )
 
 _FLOWCELLPOSITION_RPCPORTS = _descriptor.Descriptor(
@@ -256,8 +262,8 @@ _FLOWCELLPOSITION_RPCPORTS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=578,
-  serialized_end=674,
+  serialized_start=635,
+  serialized_end=731,
 )
 
 _FLOWCELLPOSITION_SHAREDHARDWAREGROUP = _descriptor.Descriptor(
@@ -286,8 +292,8 @@ _FLOWCELLPOSITION_SHAREDHARDWAREGROUP = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=676,
-  serialized_end=715,
+  serialized_start=733,
+  serialized_end=772,
 )
 
 _FLOWCELLPOSITION = _descriptor.Descriptor(
@@ -352,8 +358,8 @@ _FLOWCELLPOSITION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=207,
-  serialized_end=869,
+  serialized_start=264,
+  serialized_end=926,
 )
 
 
@@ -376,8 +382,8 @@ _FLOWCELLPOSITIONSREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=871,
-  serialized_end=897,
+  serialized_start=928,
+  serialized_end=954,
 )
 
 
@@ -414,8 +420,8 @@ _FLOWCELLPOSITIONSRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=899,
-  serialized_end=1005,
+  serialized_start=956,
+  serialized_end=1062,
 )
 
 
@@ -438,8 +444,8 @@ _WATCHFLOWCELLPOSITIONSREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1007,
-  serialized_end=1038,
+  serialized_start=1064,
+  serialized_end=1095,
 )
 
 
@@ -483,8 +489,8 @@ _WATCHFLOWCELLPOSITIONSRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1041,
-  serialized_end=1205,
+  serialized_start=1098,
+  serialized_end=1262,
 )
 
 
@@ -521,8 +527,8 @@ _RESETPOSITIONREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1207,
-  serialized_end=1263,
+  serialized_start=1264,
+  serialized_end=1320,
 )
 
 
@@ -545,8 +551,8 @@ _RESETPOSITIONRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1265,
-  serialized_end=1288,
+  serialized_start=1322,
+  serialized_end=1345,
 )
 
 
@@ -569,8 +575,8 @@ _BASECALLERAPIREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1290,
-  serialized_end=1312,
+  serialized_start=1347,
+  serialized_end=1369,
 )
 
 
@@ -621,8 +627,70 @@ _BASECALLERAPIRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1314,
-  serialized_end=1423,
+  serialized_start=1371,
+  serialized_end=1480,
+)
+
+
+_GETGUPPYINFOREQUEST = _descriptor.Descriptor(
+  name='GetGuppyInfoRequest',
+  full_name='minknow_api.manager.GetGuppyInfoRequest',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=1482,
+  serialized_end=1503,
+)
+
+
+_GETGUPPYINFORESPONSE = _descriptor.Descriptor(
+  name='GetGuppyInfoResponse',
+  full_name='minknow_api.manager.GetGuppyInfoResponse',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='port', full_name='minknow_api.manager.GetGuppyInfoResponse.port', index=0,
+      number=1, type=13, cpp_type=3, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='version', full_name='minknow_api.manager.GetGuppyInfoResponse.version', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=1505,
+  serialized_end=1558,
 )
 
 
@@ -645,8 +713,8 @@ _GETVERSIONINFOREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1425,
-  serialized_end=1448,
+  serialized_start=1560,
+  serialized_end=1583,
 )
 
 
@@ -726,8 +794,8 @@ _GETVERSIONINFORESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1451,
-  serialized_end=1932,
+  serialized_start=1586,
+  serialized_end=2084,
 )
 
 
@@ -757,8 +825,8 @@ _LISTPROTOCOLOUTPUTDIRFILESREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1934,
-  serialized_end=1983,
+  serialized_start=2086,
+  serialized_end=2135,
 )
 
 
@@ -802,8 +870,8 @@ _LISTPROTOCOLOUTPUTDIRFILESRESPONSE_DIRECTORYINFO = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2160,
-  serialized_end=2234,
+  serialized_start=2312,
+  serialized_end=2386,
 )
 
 _LISTPROTOCOLOUTPUTDIRFILESRESPONSE = _descriptor.Descriptor(
@@ -846,8 +914,8 @@ _LISTPROTOCOLOUTPUTDIRFILESRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1986,
-  serialized_end=2234,
+  serialized_start=2138,
+  serialized_end=2386,
 )
 
 
@@ -884,8 +952,8 @@ _CREATEDIRECTORYREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2236,
-  serialized_end=2295,
+  serialized_start=2388,
+  serialized_end=2447,
 )
 
 
@@ -915,8 +983,8 @@ _CREATEDIRECTORYRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2297,
-  serialized_end=2336,
+  serialized_start=2449,
+  serialized_end=2488,
 )
 
 
@@ -1002,8 +1070,8 @@ _FILESYSTEMDISKSPACEINFO = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2339,
-  serialized_end=2602,
+  serialized_start=2491,
+  serialized_end=2754,
 )
 
 
@@ -1026,8 +1094,8 @@ _GETDISKSPACEINFOREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2604,
-  serialized_end=2629,
+  serialized_start=2756,
+  serialized_end=2781,
 )
 
 
@@ -1057,8 +1125,8 @@ _STREAMDISKSPACEINFOREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2631,
-  serialized_end=2675,
+  serialized_start=2783,
+  serialized_end=2827,
 )
 
 
@@ -1088,8 +1156,573 @@ _GETDISKSPACEINFORESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2677,
-  serialized_end=2785,
+  serialized_start=2829,
+  serialized_end=2937,
+)
+
+
+_GETBARCODEKITINFOREQUEST = _descriptor.Descriptor(
+  name='GetBarcodeKitInfoRequest',
+  full_name='minknow_api.manager.GetBarcodeKitInfoRequest',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=2939,
+  serialized_end=2965,
+)
+
+
+_GETBARCODEKITINFORESPONSE_BARCODEKITINFO = _descriptor.Descriptor(
+  name='BarcodeKitInfo',
+  full_name='minknow_api.manager.GetBarcodeKitInfoResponse.BarcodeKitInfo',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='is_dual', full_name='minknow_api.manager.GetBarcodeKitInfoResponse.BarcodeKitInfo.is_dual', index=0,
+      number=2, type=8, cpp_type=7, label=1,
+      has_default_value=False, default_value=False,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='is_both_ends', full_name='minknow_api.manager.GetBarcodeKitInfoResponse.BarcodeKitInfo.is_both_ends', index=1,
+      number=3, type=8, cpp_type=7, label=1,
+      has_default_value=False, default_value=False,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=3091,
+  serialized_end=3146,
+)
+
+_GETBARCODEKITINFORESPONSE_BARCODEKITINFOENTRY = _descriptor.Descriptor(
+  name='BarcodeKitInfoEntry',
+  full_name='minknow_api.manager.GetBarcodeKitInfoResponse.BarcodeKitInfoEntry',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='key', full_name='minknow_api.manager.GetBarcodeKitInfoResponse.BarcodeKitInfoEntry.key', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='value', full_name='minknow_api.manager.GetBarcodeKitInfoResponse.BarcodeKitInfoEntry.value', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=_b('8\001'),
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=3148,
+  serialized_end=3264,
+)
+
+_GETBARCODEKITINFORESPONSE = _descriptor.Descriptor(
+  name='GetBarcodeKitInfoResponse',
+  full_name='minknow_api.manager.GetBarcodeKitInfoResponse',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='barcode_kit_info', full_name='minknow_api.manager.GetBarcodeKitInfoResponse.barcode_kit_info', index=0,
+      number=1, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[_GETBARCODEKITINFORESPONSE_BARCODEKITINFO, _GETBARCODEKITINFORESPONSE_BARCODEKITINFOENTRY, ],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=2968,
+  serialized_end=3264,
+)
+
+
+_GETLAMPKITINFOREQUEST = _descriptor.Descriptor(
+  name='GetLampKitInfoRequest',
+  full_name='minknow_api.manager.GetLampKitInfoRequest',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=3266,
+  serialized_end=3289,
+)
+
+
+_GETLAMPKITINFORESPONSE = _descriptor.Descriptor(
+  name='GetLampKitInfoResponse',
+  full_name='minknow_api.manager.GetLampKitInfoResponse',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='lamp_kits', full_name='minknow_api.manager.GetLampKitInfoResponse.lamp_kits', index=0,
+      number=2, type=9, cpp_type=9, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=3291,
+  serialized_end=3334,
+)
+
+
+_GETBARCODEKEYSREQUEST = _descriptor.Descriptor(
+  name='GetBarcodeKeysRequest',
+  full_name='minknow_api.manager.GetBarcodeKeysRequest',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='barcode_kit_names', full_name='minknow_api.manager.GetBarcodeKeysRequest.barcode_kit_names', index=0,
+      number=1, type=9, cpp_type=9, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='lamp_kit_name', full_name='minknow_api.manager.GetBarcodeKeysRequest.lamp_kit_name', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=3336,
+  serialized_end=3409,
+)
+
+
+_GETBARCODEKEYSRESPONSE = _descriptor.Descriptor(
+  name='GetBarcodeKeysResponse',
+  full_name='minknow_api.manager.GetBarcodeKeysResponse',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='barcode_keys', full_name='minknow_api.manager.GetBarcodeKeysResponse.barcode_keys', index=0,
+      number=1, type=9, cpp_type=9, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='lamp_keys', full_name='minknow_api.manager.GetBarcodeKeysResponse.lamp_keys', index=1,
+      number=2, type=9, cpp_type=9, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='combined_keys', full_name='minknow_api.manager.GetBarcodeKeysResponse.combined_keys', index=2,
+      number=3, type=9, cpp_type=9, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=3411,
+  serialized_end=3499,
+)
+
+
+_GETFLOWCELLTYPESREQUEST = _descriptor.Descriptor(
+  name='GetFlowCellTypesRequest',
+  full_name='minknow_api.manager.GetFlowCellTypesRequest',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=3501,
+  serialized_end=3526,
+)
+
+
+_GETFLOWCELLTYPESRESPONSE_INFO = _descriptor.Descriptor(
+  name='Info',
+  full_name='minknow_api.manager.GetFlowCellTypesResponse.Info',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='product_code', full_name='minknow_api.manager.GetFlowCellTypesResponse.Info.product_code', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='connector_type', full_name='minknow_api.manager.GetFlowCellTypesResponse.Info.connector_type', index=1,
+      number=2, type=14, cpp_type=8, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='cannot_live_basecall', full_name='minknow_api.manager.GetFlowCellTypesResponse.Info.cannot_live_basecall', index=2,
+      number=3, type=8, cpp_type=7, label=1,
+      has_default_value=False, default_value=False,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=3624,
+  serialized_end=3749,
+)
+
+_GETFLOWCELLTYPESRESPONSE = _descriptor.Descriptor(
+  name='GetFlowCellTypesResponse',
+  full_name='minknow_api.manager.GetFlowCellTypesResponse',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='types', full_name='minknow_api.manager.GetFlowCellTypesResponse.types', index=0,
+      number=1, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[_GETFLOWCELLTYPESRESPONSE_INFO, ],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=3529,
+  serialized_end=3749,
+)
+
+
+_GETSEQUENCINGKITSREQUEST = _descriptor.Descriptor(
+  name='GetSequencingKitsRequest',
+  full_name='minknow_api.manager.GetSequencingKitsRequest',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='flow_cell_product_code', full_name='minknow_api.manager.GetSequencingKitsRequest.flow_cell_product_code', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=3751,
+  serialized_end=3809,
+)
+
+
+_GETSEQUENCINGKITSRESPONSE_KIT = _descriptor.Descriptor(
+  name='Kit',
+  full_name='minknow_api.manager.GetSequencingKitsResponse.Kit',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='product_code', full_name='minknow_api.manager.GetSequencingKitsResponse.Kit.product_code', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='barcoding_expansion_kits', full_name='minknow_api.manager.GetSequencingKitsResponse.Kit.barcoding_expansion_kits', index=1,
+      number=2, type=5, cpp_type=1, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='includes_barcoding', full_name='minknow_api.manager.GetSequencingKitsResponse.Kit.includes_barcoding', index=2,
+      number=3, type=8, cpp_type=7, label=1,
+      has_default_value=False, default_value=False,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='lamp_kit', full_name='minknow_api.manager.GetSequencingKitsResponse.Kit.lamp_kit', index=3,
+      number=16, type=8, cpp_type=7, label=1,
+      has_default_value=False, default_value=False,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='has_control_protocol', full_name='minknow_api.manager.GetSequencingKitsResponse.Kit.has_control_protocol', index=4,
+      number=4, type=8, cpp_type=7, label=1,
+      has_default_value=False, default_value=False,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='no_sequencing_protocol', full_name='minknow_api.manager.GetSequencingKitsResponse.Kit.no_sequencing_protocol', index=5,
+      number=17, type=8, cpp_type=7, label=1,
+      has_default_value=False, default_value=False,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='frequently_used', full_name='minknow_api.manager.GetSequencingKitsResponse.Kit.frequently_used', index=6,
+      number=18, type=8, cpp_type=7, label=1,
+      has_default_value=False, default_value=False,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='dna', full_name='minknow_api.manager.GetSequencingKitsResponse.Kit.dna', index=7,
+      number=5, type=8, cpp_type=7, label=1,
+      has_default_value=False, default_value=False,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='rna', full_name='minknow_api.manager.GetSequencingKitsResponse.Kit.rna', index=8,
+      number=6, type=8, cpp_type=7, label=1,
+      has_default_value=False, default_value=False,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='pcr', full_name='minknow_api.manager.GetSequencingKitsResponse.Kit.pcr', index=9,
+      number=7, type=8, cpp_type=7, label=1,
+      has_default_value=False, default_value=False,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='pcr_free', full_name='minknow_api.manager.GetSequencingKitsResponse.Kit.pcr_free', index=10,
+      number=8, type=8, cpp_type=7, label=1,
+      has_default_value=False, default_value=False,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=4012,
+  serialized_end=4263,
+)
+
+_GETSEQUENCINGKITSRESPONSE_BARCODINGEXPANSIONKIT = _descriptor.Descriptor(
+  name='BarcodingExpansionKit',
+  full_name='minknow_api.manager.GetSequencingKitsResponse.BarcodingExpansionKit',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='product_code', full_name='minknow_api.manager.GetSequencingKitsResponse.BarcodingExpansionKit.product_code', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=4265,
+  serialized_end=4310,
+)
+
+_GETSEQUENCINGKITSRESPONSE = _descriptor.Descriptor(
+  name='GetSequencingKitsResponse',
+  full_name='minknow_api.manager.GetSequencingKitsResponse',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='kits', full_name='minknow_api.manager.GetSequencingKitsResponse.kits', index=0,
+      number=1, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='barcoding_expansion_kits', full_name='minknow_api.manager.GetSequencingKitsResponse.barcoding_expansion_kits', index=1,
+      number=2, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[_GETSEQUENCINGKITSRESPONSE_KIT, _GETSEQUENCINGKITSRESPONSE_BARCODINGEXPANSIONKIT, ],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=3812,
+  serialized_end=4310,
 )
 
 _FLOWCELLPOSITION_LOCATION.containing_type = _FLOWCELLPOSITION
@@ -1110,6 +1743,17 @@ _GETVERSIONINFORESPONSE_INSTALLATIONTYPE.containing_type = _GETVERSIONINFORESPON
 _LISTPROTOCOLOUTPUTDIRFILESRESPONSE_DIRECTORYINFO.containing_type = _LISTPROTOCOLOUTPUTDIRFILESRESPONSE
 _LISTPROTOCOLOUTPUTDIRFILESRESPONSE.fields_by_name['directories'].message_type = _LISTPROTOCOLOUTPUTDIRFILESRESPONSE_DIRECTORYINFO
 _GETDISKSPACEINFORESPONSE.fields_by_name['filesystem_disk_space_info'].message_type = _FILESYSTEMDISKSPACEINFO
+_GETBARCODEKITINFORESPONSE_BARCODEKITINFO.containing_type = _GETBARCODEKITINFORESPONSE
+_GETBARCODEKITINFORESPONSE_BARCODEKITINFOENTRY.fields_by_name['value'].message_type = _GETBARCODEKITINFORESPONSE_BARCODEKITINFO
+_GETBARCODEKITINFORESPONSE_BARCODEKITINFOENTRY.containing_type = _GETBARCODEKITINFORESPONSE
+_GETBARCODEKITINFORESPONSE.fields_by_name['barcode_kit_info'].message_type = _GETBARCODEKITINFORESPONSE_BARCODEKITINFOENTRY
+_GETFLOWCELLTYPESRESPONSE_INFO.fields_by_name['connector_type'].enum_type = minknow__api_dot_device__pb2._FLOWCELLCONNECTORTYPE
+_GETFLOWCELLTYPESRESPONSE_INFO.containing_type = _GETFLOWCELLTYPESRESPONSE
+_GETFLOWCELLTYPESRESPONSE.fields_by_name['types'].message_type = _GETFLOWCELLTYPESRESPONSE_INFO
+_GETSEQUENCINGKITSRESPONSE_KIT.containing_type = _GETSEQUENCINGKITSRESPONSE
+_GETSEQUENCINGKITSRESPONSE_BARCODINGEXPANSIONKIT.containing_type = _GETSEQUENCINGKITSRESPONSE
+_GETSEQUENCINGKITSRESPONSE.fields_by_name['kits'].message_type = _GETSEQUENCINGKITSRESPONSE_KIT
+_GETSEQUENCINGKITSRESPONSE.fields_by_name['barcoding_expansion_kits'].message_type = _GETSEQUENCINGKITSRESPONSE_BARCODINGEXPANSIONKIT
 DESCRIPTOR.message_types_by_name['DescribeHostRequest'] = _DESCRIBEHOSTREQUEST
 DESCRIPTOR.message_types_by_name['DescribeHostResponse'] = _DESCRIBEHOSTRESPONSE
 DESCRIPTOR.message_types_by_name['FlowCellPosition'] = _FLOWCELLPOSITION
@@ -1121,6 +1765,8 @@ DESCRIPTOR.message_types_by_name['ResetPositionRequest'] = _RESETPOSITIONREQUEST
 DESCRIPTOR.message_types_by_name['ResetPositionResponse'] = _RESETPOSITIONRESPONSE
 DESCRIPTOR.message_types_by_name['BasecallerApiRequest'] = _BASECALLERAPIREQUEST
 DESCRIPTOR.message_types_by_name['BasecallerApiResponse'] = _BASECALLERAPIRESPONSE
+DESCRIPTOR.message_types_by_name['GetGuppyInfoRequest'] = _GETGUPPYINFOREQUEST
+DESCRIPTOR.message_types_by_name['GetGuppyInfoResponse'] = _GETGUPPYINFORESPONSE
 DESCRIPTOR.message_types_by_name['GetVersionInfoRequest'] = _GETVERSIONINFOREQUEST
 DESCRIPTOR.message_types_by_name['GetVersionInfoResponse'] = _GETVERSIONINFORESPONSE
 DESCRIPTOR.message_types_by_name['ListProtocolOutputDirFilesRequest'] = _LISTPROTOCOLOUTPUTDIRFILESREQUEST
@@ -1131,6 +1777,16 @@ DESCRIPTOR.message_types_by_name['FilesystemDiskSpaceInfo'] = _FILESYSTEMDISKSPA
 DESCRIPTOR.message_types_by_name['GetDiskSpaceInfoRequest'] = _GETDISKSPACEINFOREQUEST
 DESCRIPTOR.message_types_by_name['StreamDiskSpaceInfoRequest'] = _STREAMDISKSPACEINFOREQUEST
 DESCRIPTOR.message_types_by_name['GetDiskSpaceInfoResponse'] = _GETDISKSPACEINFORESPONSE
+DESCRIPTOR.message_types_by_name['GetBarcodeKitInfoRequest'] = _GETBARCODEKITINFOREQUEST
+DESCRIPTOR.message_types_by_name['GetBarcodeKitInfoResponse'] = _GETBARCODEKITINFORESPONSE
+DESCRIPTOR.message_types_by_name['GetLampKitInfoRequest'] = _GETLAMPKITINFOREQUEST
+DESCRIPTOR.message_types_by_name['GetLampKitInfoResponse'] = _GETLAMPKITINFORESPONSE
+DESCRIPTOR.message_types_by_name['GetBarcodeKeysRequest'] = _GETBARCODEKEYSREQUEST
+DESCRIPTOR.message_types_by_name['GetBarcodeKeysResponse'] = _GETBARCODEKEYSRESPONSE
+DESCRIPTOR.message_types_by_name['GetFlowCellTypesRequest'] = _GETFLOWCELLTYPESREQUEST
+DESCRIPTOR.message_types_by_name['GetFlowCellTypesResponse'] = _GETFLOWCELLTYPESRESPONSE
+DESCRIPTOR.message_types_by_name['GetSequencingKitsRequest'] = _GETSEQUENCINGKITSREQUEST
+DESCRIPTOR.message_types_by_name['GetSequencingKitsResponse'] = _GETSEQUENCINGKITSRESPONSE
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
 DescribeHostRequest = _reflection.GeneratedProtocolMessageType('DescribeHostRequest', (_message.Message,), {
@@ -1214,7 +1870,9 @@ FlowCellPosition = _reflection.GeneratedProtocolMessageType('FlowCellPosition', 
         secure_grpc_web:
             A port providing the gRPC-Web protocol over TLS
         insecure_grpc_web:
-            A port providing the gRPC-Web protocol without TLS
+            DEPRECATED: A port providing the gRPC-Web protocol without TLS
+            From 4.1, this field is now deprecated and will only ever
+            return a value of 0
     """,
     # @@protoc_insertion_point(class_scope:minknow_api.manager.FlowCellPosition.RpcPorts)
     })
@@ -1383,12 +2041,35 @@ BasecallerApiResponse = _reflection.GeneratedProtocolMessageType('BasecallerApiR
           The port to use to access the minknow_api.basecaller API using
           the gRPC-Web protocol over TLS
       insecure_grpc_web:
-          The port to use to access the minknow_api.basecaller API using
-          the gRPC-Web protocol without TLS
+          DEPRECATED: The port to use to access the
+          minknow_api.basecaller API using the gRPC-Web protocol without
+          TLS  From 4.1, this field is now deprecated and will only ever
+          return a value of 0
   """,
   # @@protoc_insertion_point(class_scope:minknow_api.manager.BasecallerApiResponse)
   })
 _sym_db.RegisterMessage(BasecallerApiResponse)
+
+GetGuppyInfoRequest = _reflection.GeneratedProtocolMessageType('GetGuppyInfoRequest', (_message.Message,), {
+  'DESCRIPTOR' : _GETGUPPYINFOREQUEST,
+  '__module__' : 'minknow_api.manager_pb2'
+  # @@protoc_insertion_point(class_scope:minknow_api.manager.GetGuppyInfoRequest)
+  })
+_sym_db.RegisterMessage(GetGuppyInfoRequest)
+
+GetGuppyInfoResponse = _reflection.GeneratedProtocolMessageType('GetGuppyInfoResponse', (_message.Message,), {
+  'DESCRIPTOR' : _GETGUPPYINFORESPONSE,
+  '__module__' : 'minknow_api.manager_pb2'
+  ,
+  '__doc__': """Attributes:
+      port:
+          The port Guppy is listening on.
+      version:
+          The Guppy server version.
+  """,
+  # @@protoc_insertion_point(class_scope:minknow_api.manager.GetGuppyInfoResponse)
+  })
+_sym_db.RegisterMessage(GetGuppyInfoResponse)
 
 GetVersionInfoRequest = _reflection.GeneratedProtocolMessageType('GetVersionInfoRequest', (_message.Message,), {
   'DESCRIPTOR' : _GETVERSIONINFOREQUEST,
@@ -1409,7 +2090,7 @@ GetVersionInfoResponse = _reflection.GeneratedProtocolMessageType('GetVersionInf
           the version is pre-release version (-pre), whether it is a
           release candidate (-rc#) or whether it is a variant version
           (i.e. for conferences) (-variant). For non-release builds it
-          also  includes the hash of the commit it is based on, and
+          also includes the hash of the commit it is based on, and
           whether the working copy is different from that has (-dirty)
       protocols:
           The protocols version specifies what version of bream is
@@ -1584,8 +2265,272 @@ GetDiskSpaceInfoResponse = _reflection.GeneratedProtocolMessageType('GetDiskSpac
   })
 _sym_db.RegisterMessage(GetDiskSpaceInfoResponse)
 
+GetBarcodeKitInfoRequest = _reflection.GeneratedProtocolMessageType('GetBarcodeKitInfoRequest', (_message.Message,), {
+  'DESCRIPTOR' : _GETBARCODEKITINFOREQUEST,
+  '__module__' : 'minknow_api.manager_pb2'
+  # @@protoc_insertion_point(class_scope:minknow_api.manager.GetBarcodeKitInfoRequest)
+  })
+_sym_db.RegisterMessage(GetBarcodeKitInfoRequest)
+
+GetBarcodeKitInfoResponse = _reflection.GeneratedProtocolMessageType('GetBarcodeKitInfoResponse', (_message.Message,), {
+
+  'BarcodeKitInfo' : _reflection.GeneratedProtocolMessageType('BarcodeKitInfo', (_message.Message,), {
+    'DESCRIPTOR' : _GETBARCODEKITINFORESPONSE_BARCODEKITINFO,
+    '__module__' : 'minknow_api.manager_pb2'
+    # @@protoc_insertion_point(class_scope:minknow_api.manager.GetBarcodeKitInfoResponse.BarcodeKitInfo)
+    })
+  ,
+
+  'BarcodeKitInfoEntry' : _reflection.GeneratedProtocolMessageType('BarcodeKitInfoEntry', (_message.Message,), {
+    'DESCRIPTOR' : _GETBARCODEKITINFORESPONSE_BARCODEKITINFOENTRY,
+    '__module__' : 'minknow_api.manager_pb2'
+    # @@protoc_insertion_point(class_scope:minknow_api.manager.GetBarcodeKitInfoResponse.BarcodeKitInfoEntry)
+    })
+  ,
+  'DESCRIPTOR' : _GETBARCODEKITINFORESPONSE,
+  '__module__' : 'minknow_api.manager_pb2'
+  ,
+  '__doc__': """Attributes:
+      barcode_kit_info:
+          Map of barcode kit name to barcode kit info
+  """,
+  # @@protoc_insertion_point(class_scope:minknow_api.manager.GetBarcodeKitInfoResponse)
+  })
+_sym_db.RegisterMessage(GetBarcodeKitInfoResponse)
+_sym_db.RegisterMessage(GetBarcodeKitInfoResponse.BarcodeKitInfo)
+_sym_db.RegisterMessage(GetBarcodeKitInfoResponse.BarcodeKitInfoEntry)
+
+GetLampKitInfoRequest = _reflection.GeneratedProtocolMessageType('GetLampKitInfoRequest', (_message.Message,), {
+  'DESCRIPTOR' : _GETLAMPKITINFOREQUEST,
+  '__module__' : 'minknow_api.manager_pb2'
+  # @@protoc_insertion_point(class_scope:minknow_api.manager.GetLampKitInfoRequest)
+  })
+_sym_db.RegisterMessage(GetLampKitInfoRequest)
+
+GetLampKitInfoResponse = _reflection.GeneratedProtocolMessageType('GetLampKitInfoResponse', (_message.Message,), {
+  'DESCRIPTOR' : _GETLAMPKITINFORESPONSE,
+  '__module__' : 'minknow_api.manager_pb2'
+  ,
+  '__doc__': """Attributes:
+      lamp_kits:
+          Lamp kit names
+  """,
+  # @@protoc_insertion_point(class_scope:minknow_api.manager.GetLampKitInfoResponse)
+  })
+_sym_db.RegisterMessage(GetLampKitInfoResponse)
+
+GetBarcodeKeysRequest = _reflection.GeneratedProtocolMessageType('GetBarcodeKeysRequest', (_message.Message,), {
+  'DESCRIPTOR' : _GETBARCODEKEYSREQUEST,
+  '__module__' : 'minknow_api.manager_pb2'
+  ,
+  '__doc__': """Attributes:
+      barcode_kit_names:
+          Names of barcode kits to obtain barcode names for  Fails with
+          INVALID_ARGUMENT if any of the requested `barcode_kit_names`
+          are unavailable
+      lamp_kit_name:
+          Name of lamp kit to obtain barcode names for.  Fails with
+          INVALID_ARGUMENT if the requested `lamp_kit_name` is
+          unavailable.
+  """,
+  # @@protoc_insertion_point(class_scope:minknow_api.manager.GetBarcodeKeysRequest)
+  })
+_sym_db.RegisterMessage(GetBarcodeKeysRequest)
+
+GetBarcodeKeysResponse = _reflection.GeneratedProtocolMessageType('GetBarcodeKeysResponse', (_message.Message,), {
+  'DESCRIPTOR' : _GETBARCODEKEYSRESPONSE,
+  '__module__' : 'minknow_api.manager_pb2'
+  ,
+  '__doc__': """Attributes:
+      barcode_keys:
+          Returned barcode keys.
+      lamp_keys:
+          Returned lamp barcode ids.
+      combined_keys:
+          Combined barcode and lamp keys.  Returned keys are joined
+          strings of all requested barcode kits, giving the caller a
+          unique string to identify each barcode pair.  eg. if both a
+          lamp kit + barcode kit are specified, NxM barcode keys are
+          returned:  - barcode01_lamp01  - barcode01_lamp02  -
+          barcode01_lamp03  - barcode02_lamp01  - barcode02_lamp02  -
+          barcode02_lamp03
+  """,
+  # @@protoc_insertion_point(class_scope:minknow_api.manager.GetBarcodeKeysResponse)
+  })
+_sym_db.RegisterMessage(GetBarcodeKeysResponse)
+
+GetFlowCellTypesRequest = _reflection.GeneratedProtocolMessageType('GetFlowCellTypesRequest', (_message.Message,), {
+  'DESCRIPTOR' : _GETFLOWCELLTYPESREQUEST,
+  '__module__' : 'minknow_api.manager_pb2'
+  ,
+  '__doc__': """Request message for `ManagerService.get_flow_cell_types`.""",
+  # @@protoc_insertion_point(class_scope:minknow_api.manager.GetFlowCellTypesRequest)
+  })
+_sym_db.RegisterMessage(GetFlowCellTypesRequest)
+
+GetFlowCellTypesResponse = _reflection.GeneratedProtocolMessageType('GetFlowCellTypesResponse', (_message.Message,), {
+
+  'Info' : _reflection.GeneratedProtocolMessageType('Info', (_message.Message,), {
+    'DESCRIPTOR' : _GETFLOWCELLTYPESRESPONSE_INFO,
+    '__module__' : 'minknow_api.manager_pb2'
+    ,
+    '__doc__': """Information about a flow cell type.
+    
+    Attributes:
+        product_code:
+            The product code for the flow cell type.  This is the user-
+            visible name for the flow cell type. It is the name used to
+            order flow cells, and is also displayed on the packaging.
+            While most product codes are 10 characters, be aware that
+            longer product codes can exist and have been used in the past.
+            Example: "FLO-MIN106".
+        connector_type:
+            The connector type of this flow cell type.  This determines
+            which flow cell positions it is possible to insert this flow
+            cell into. The connector type for a given flow cell position
+            can be determined using
+            `minknow_api.device.DeviceService.get_device_state`.  This
+            will never be ``FCCON_NOT_SET``.
+        cannot_live_basecall:
+            Indicates that live basecalling is not possible on the flow
+            cell.  Note that almost all flow cell types can be basecalled
+            on: that is why this indicates a negative (saving some bytes
+            on the wire by allowing the common case of basecalling being
+            possible to be omitted entirely).
+    """,
+    # @@protoc_insertion_point(class_scope:minknow_api.manager.GetFlowCellTypesResponse.Info)
+    })
+  ,
+  'DESCRIPTOR' : _GETFLOWCELLTYPESRESPONSE,
+  '__module__' : 'minknow_api.manager_pb2'
+  ,
+  '__doc__': """Response message for `ManagerService.get_flow_cell_types`.
+  
+  Attributes:
+      types:
+          The flow cell types.
+  """,
+  # @@protoc_insertion_point(class_scope:minknow_api.manager.GetFlowCellTypesResponse)
+  })
+_sym_db.RegisterMessage(GetFlowCellTypesResponse)
+_sym_db.RegisterMessage(GetFlowCellTypesResponse.Info)
+
+GetSequencingKitsRequest = _reflection.GeneratedProtocolMessageType('GetSequencingKitsRequest', (_message.Message,), {
+  'DESCRIPTOR' : _GETSEQUENCINGKITSREQUEST,
+  '__module__' : 'minknow_api.manager_pb2'
+  ,
+  '__doc__': """Request message for `ManagerService.get_sequencing_kits`.
+  
+  Attributes:
+      flow_cell_product_code:
+          The product code of the flow cell that will be used for
+          sequencing.  Only kits compatible with this flow cell type
+          will be returned (currently, this means that there is at least
+          one (sequencing or control) protocol that is compatible with
+          both the kit and this flow cell product code).  This may also
+          affect the returned information about the kit. For example, if
+          it isn't possible to basecall on the flow cell, none of the
+          kits will claim to be barcoding capable (or compatible with
+          any barcoding expansion kits).
+  """,
+  # @@protoc_insertion_point(class_scope:minknow_api.manager.GetSequencingKitsRequest)
+  })
+_sym_db.RegisterMessage(GetSequencingKitsRequest)
+
+GetSequencingKitsResponse = _reflection.GeneratedProtocolMessageType('GetSequencingKitsResponse', (_message.Message,), {
+
+  'Kit' : _reflection.GeneratedProtocolMessageType('Kit', (_message.Message,), {
+    'DESCRIPTOR' : _GETSEQUENCINGKITSRESPONSE_KIT,
+    '__module__' : 'minknow_api.manager_pb2'
+    ,
+    '__doc__': """Information about a sequencing kit.
+    
+    Attributes:
+        product_code:
+            The product code for the sequencing kit.  This is the user-
+            visible name for the kit. It is the name used to order kits,
+            and is also displayed on the packaging.  While most product
+            codes are 10-15 characters, be aware that longer (or shorter)
+            product codes can exist.  Examples: "SQK-LSK109", "OND-SQK-
+            LP0096S".
+        barcoding_expansion_kits:
+            Compatible barcoding expansion kits.  These are indexes into
+            the GetSequencingKitsResponse.barcoding_expansion_kits list.
+            For example, 0 would indicate the first kit in that list. The
+            values are guaranteed to be unique and valid indexes for that
+            list.
+        includes_barcoding:
+            Whether barcoding support is part of the sequencing kit.  If
+            this is set, barcoding can be done without any expansion kits
+            (and, in fact, barcoding is an integral part of the kit).
+        lamp_kit:
+            Whether the kit can be used for LamPORE diagnostics.
+        has_control_protocol:
+            Whether there is a "control" protocol available for this kit.
+        no_sequencing_protocol:
+            Indicates there is no sequencing protocol available for this
+            kit.  This is an unusual situation. If a kit is known about,
+            it should generally have a sequencing protocol associated with
+            it, and it would be strange to have a control protocol
+            available but no sequencing protocol.
+        frequently_used:
+            Indicates that the sequencing kit is one of the most commonly
+            used ones.  This can be used to display such kits first, or
+            otherwise highlight them in some way.
+        dna:
+            The kit can be used with DNA samples.
+        rna:
+            The kit can be used with RNA samples.
+        pcr:
+            The kit can be used with samples that have had PCR applied to
+            them.
+        pcr_free:
+            The kit can be used without a PCR step.
+    """,
+    # @@protoc_insertion_point(class_scope:minknow_api.manager.GetSequencingKitsResponse.Kit)
+    })
+  ,
+
+  'BarcodingExpansionKit' : _reflection.GeneratedProtocolMessageType('BarcodingExpansionKit', (_message.Message,), {
+    'DESCRIPTOR' : _GETSEQUENCINGKITSRESPONSE_BARCODINGEXPANSIONKIT,
+    '__module__' : 'minknow_api.manager_pb2'
+    ,
+    '__doc__': """Information about a barcoding expansion kit.  In the future, this may
+    include compatibility information for dual barcoding, for example.
+    
+    Attributes:
+        product_code:
+            The product code for the barcoding expansion kit.  This is the
+            user-visible name for the kit. It is the name used to order
+            kits, and is also displayed on the packaging.  While most
+            product codes are 10 characters, be aware that longer product
+            codes can exist.  Example: "EXP-NBD104".
+    """,
+    # @@protoc_insertion_point(class_scope:minknow_api.manager.GetSequencingKitsResponse.BarcodingExpansionKit)
+    })
+  ,
+  'DESCRIPTOR' : _GETSEQUENCINGKITSRESPONSE,
+  '__module__' : 'minknow_api.manager_pb2'
+  ,
+  '__doc__': """Response message for `ManagerService.get_sequencing_kits`.
+  
+  Attributes:
+      kits:
+          The known sequencing kits.
+      barcoding_expansion_kits:
+          The possible barcoding expansion kits.  These are kits that
+          can be used in combination with certain sequencing kits to add
+          (or extend) barcoding functionality.
+  """,
+  # @@protoc_insertion_point(class_scope:minknow_api.manager.GetSequencingKitsResponse)
+  })
+_sym_db.RegisterMessage(GetSequencingKitsResponse)
+_sym_db.RegisterMessage(GetSequencingKitsResponse.Kit)
+_sym_db.RegisterMessage(GetSequencingKitsResponse.BarcodingExpansionKit)
+
 
 DESCRIPTOR._options = None
+_GETBARCODEKITINFORESPONSE_BARCODEKITINFOENTRY._options = None
 
 _MANAGERSERVICE = _descriptor.ServiceDescriptor(
   name='ManagerService',
@@ -1593,8 +2538,8 @@ _MANAGERSERVICE = _descriptor.ServiceDescriptor(
   file=DESCRIPTOR,
   index=0,
   serialized_options=None,
-  serialized_start=2788,
-  serialized_end=4003,
+  serialized_start=4313,
+  serialized_end=6268,
   methods=[
   _descriptor.MethodDescriptor(
     name='describe_host',
@@ -1603,7 +2548,7 @@ _MANAGERSERVICE = _descriptor.ServiceDescriptor(
     containing_service=None,
     input_type=_DESCRIBEHOSTREQUEST,
     output_type=_DESCRIBEHOSTRESPONSE,
-    serialized_options=None,
+    serialized_options=_b('\220\002\001'),
   ),
   _descriptor.MethodDescriptor(
     name='flow_cell_positions',
@@ -1612,7 +2557,7 @@ _MANAGERSERVICE = _descriptor.ServiceDescriptor(
     containing_service=None,
     input_type=_FLOWCELLPOSITIONSREQUEST,
     output_type=_FLOWCELLPOSITIONSRESPONSE,
-    serialized_options=None,
+    serialized_options=_b('\220\002\001'),
   ),
   _descriptor.MethodDescriptor(
     name='watch_flow_cell_positions',
@@ -1621,7 +2566,7 @@ _MANAGERSERVICE = _descriptor.ServiceDescriptor(
     containing_service=None,
     input_type=_WATCHFLOWCELLPOSITIONSREQUEST,
     output_type=_WATCHFLOWCELLPOSITIONSRESPONSE,
-    serialized_options=None,
+    serialized_options=_b('\220\002\001'),
   ),
   _descriptor.MethodDescriptor(
     name='reset_position',
@@ -1639,52 +2584,106 @@ _MANAGERSERVICE = _descriptor.ServiceDescriptor(
     containing_service=None,
     input_type=_BASECALLERAPIREQUEST,
     output_type=_BASECALLERAPIRESPONSE,
-    serialized_options=None,
+    serialized_options=_b('\220\002\001'),
+  ),
+  _descriptor.MethodDescriptor(
+    name='get_guppy_info',
+    full_name='minknow_api.manager.ManagerService.get_guppy_info',
+    index=5,
+    containing_service=None,
+    input_type=_GETGUPPYINFOREQUEST,
+    output_type=_GETGUPPYINFORESPONSE,
+    serialized_options=_b('\220\002\001'),
   ),
   _descriptor.MethodDescriptor(
     name='get_version_info',
     full_name='minknow_api.manager.ManagerService.get_version_info',
-    index=5,
+    index=6,
     containing_service=None,
     input_type=_GETVERSIONINFOREQUEST,
     output_type=_GETVERSIONINFORESPONSE,
-    serialized_options=None,
+    serialized_options=_b('\220\002\001'),
   ),
   _descriptor.MethodDescriptor(
     name='list_protocol_output_dir_files',
     full_name='minknow_api.manager.ManagerService.list_protocol_output_dir_files',
-    index=6,
+    index=7,
     containing_service=None,
     input_type=_LISTPROTOCOLOUTPUTDIRFILESREQUEST,
     output_type=_LISTPROTOCOLOUTPUTDIRFILESRESPONSE,
-    serialized_options=None,
+    serialized_options=_b('\220\002\001'),
   ),
   _descriptor.MethodDescriptor(
     name='create_directory',
     full_name='minknow_api.manager.ManagerService.create_directory',
-    index=7,
+    index=8,
     containing_service=None,
     input_type=_CREATEDIRECTORYREQUEST,
     output_type=_CREATEDIRECTORYRESPONSE,
-    serialized_options=None,
+    serialized_options=_b('\220\002\002'),
   ),
   _descriptor.MethodDescriptor(
     name='get_disk_space_info',
     full_name='minknow_api.manager.ManagerService.get_disk_space_info',
-    index=8,
+    index=9,
     containing_service=None,
     input_type=_GETDISKSPACEINFOREQUEST,
     output_type=_GETDISKSPACEINFORESPONSE,
-    serialized_options=None,
+    serialized_options=_b('\220\002\001'),
   ),
   _descriptor.MethodDescriptor(
     name='stream_disk_space_info',
     full_name='minknow_api.manager.ManagerService.stream_disk_space_info',
-    index=9,
+    index=10,
     containing_service=None,
     input_type=_STREAMDISKSPACEINFOREQUEST,
     output_type=_GETDISKSPACEINFORESPONSE,
-    serialized_options=None,
+    serialized_options=_b('\220\002\001'),
+  ),
+  _descriptor.MethodDescriptor(
+    name='get_barcode_kit_info',
+    full_name='minknow_api.manager.ManagerService.get_barcode_kit_info',
+    index=11,
+    containing_service=None,
+    input_type=_GETBARCODEKITINFOREQUEST,
+    output_type=_GETBARCODEKITINFORESPONSE,
+    serialized_options=_b('\220\002\001'),
+  ),
+  _descriptor.MethodDescriptor(
+    name='get_lamp_kit_info',
+    full_name='minknow_api.manager.ManagerService.get_lamp_kit_info',
+    index=12,
+    containing_service=None,
+    input_type=_GETLAMPKITINFOREQUEST,
+    output_type=_GETLAMPKITINFORESPONSE,
+    serialized_options=_b('\220\002\001'),
+  ),
+  _descriptor.MethodDescriptor(
+    name='get_barcode_keys',
+    full_name='minknow_api.manager.ManagerService.get_barcode_keys',
+    index=13,
+    containing_service=None,
+    input_type=_GETBARCODEKEYSREQUEST,
+    output_type=_GETBARCODEKEYSRESPONSE,
+    serialized_options=_b('\220\002\001'),
+  ),
+  _descriptor.MethodDescriptor(
+    name='get_flow_cell_types',
+    full_name='minknow_api.manager.ManagerService.get_flow_cell_types',
+    index=14,
+    containing_service=None,
+    input_type=_GETFLOWCELLTYPESREQUEST,
+    output_type=_GETFLOWCELLTYPESRESPONSE,
+    serialized_options=_b('\220\002\001\230\265\030\001'),
+  ),
+  _descriptor.MethodDescriptor(
+    name='get_sequencing_kits',
+    full_name='minknow_api.manager.ManagerService.get_sequencing_kits',
+    index=15,
+    containing_service=None,
+    input_type=_GETSEQUENCINGKITSREQUEST,
+    output_type=_GETSEQUENCINGKITSRESPONSE,
+    serialized_options=_b('\220\002\001\230\265\030\001'),
   ),
 ])
 _sym_db.RegisterServiceDescriptor(_MANAGERSERVICE)

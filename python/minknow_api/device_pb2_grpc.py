@@ -163,6 +163,11 @@ class DeviceServiceServicer(object):
 
     Information in this call may change as the device is used with MinKNOW, for example,
     by unplugging or plugging in the device.
+
+    It includes information about whether the hardware is actually attached (in the case of
+    MinIONs, which can be unplugged), as well as what types of flow cells can be inserted (which
+    may be affected by flow cell adapters).
+
     Since 1.12
     """
     context.set_code(grpc.StatusCode.UNIMPLEMENTED)
@@ -352,7 +357,7 @@ class DeviceServiceServicer(object):
     """Get the channel configuration for any number of channels
 
     The maximum addressable channel will depend on the device. Currently this will be 512 on a MinION/GridION
-    and 4096 on a PromethION
+    and 3000 on a PromethION
     """
     context.set_code(grpc.StatusCode.UNIMPLEMENTED)
     context.set_details('Method not implemented!')
@@ -362,7 +367,7 @@ class DeviceServiceServicer(object):
     """Set the channel configuration for any number of channels
 
     The maximum addressable channel will depend on the device. Currently this will be 512 on a MinION/GridION
-    and 4096 on a PromethION.
+    and 3000 on a PromethION.
     """
     context.set_code(grpc.StatusCode.UNIMPLEMENTED)
     context.set_details('Method not implemented!')

@@ -44,7 +44,9 @@ service AcquisitionService {
     // The ERROR_STATUS state includes errors during transition between states. If that happens, MinKNOW will 
     // try to revert to the READY state. It is up to the user to determine if they wish to try to wait for MinKNOW to
     // correct itself or to try some other course of action
-    rpc watch_for_status_change (stream WatchForStatusChangeRequest) returns (stream WatchForStatusChangeResponse) {}
+    rpc watch_for_status_change (stream WatchForStatusChangeRequest) returns (stream WatchForStatusChangeResponse) {
+        option idempotency_level = NO_SIDE_EFFECTS;
+    }
 
     // Returns current acquisition run info and streams any changes to the current acquisition
     //
@@ -57,13 +59,19 @@ service AcquisitionService {
     // Note if you begin this stream before any acquisition is started in minknow the state is `ACQUISITION_COMPLETED`.
     //
     // Since 1.13
-    rpc watch_current_acquisition_run (WatchCurrentAcquisitionRunRequest) returns (stream AcquisitionRunInfo) {}
+    rpc watch_current_acquisition_run (WatchCurrentAcquisitionRunRequest) returns (stream AcquisitionRunInfo) {
+        option idempotency_level = NO_SIDE_EFFECTS;
+    }
 
     // Check the current status of MinKNOW.
-    rpc current_status (CurrentStatusRequest) returns (CurrentStatusResponse) {}
+    rpc current_status (CurrentStatusRequest) returns (CurrentStatusResponse) {
+        option idempotency_level = NO_SIDE_EFFECTS;
+    }
 
     // Information on how much data has been acquired, processed and written.
-    rpc get_progress (GetProgressRequest) returns (GetProgressResponse) {}
+    rpc get_progress (GetProgressRequest) returns (GetProgressResponse) {
+        option idempotency_level = NO_SIDE_EFFECTS;
+    }
 
     // Gets information about an acquisition run, run within this instance on MinKNOW.
     //
@@ -71,24 +79,32 @@ service AcquisitionService {
     // provided.
     //
     // Since 1.11
-    rpc get_acquisition_info (GetAcquisitionRunInfoRequest) returns (AcquisitionRunInfo) {}
+    rpc get_acquisition_info (GetAcquisitionRunInfoRequest) returns (AcquisitionRunInfo) {
+        option idempotency_level = NO_SIDE_EFFECTS;
+    }
 
     // Gets information about all previous acquisitions.
     //
     // Since 1.11
-    rpc list_acquisition_runs (ListAcquisitionRunsRequest) returns (ListAcquisitionRunsResponse) {}
+    rpc list_acquisition_runs (ListAcquisitionRunsRequest) returns (ListAcquisitionRunsResponse) {
+        option idempotency_level = NO_SIDE_EFFECTS;
+    }
 
     // Returns the name and run id of the currently running acquisition.
     //
     // Will fail with FAILED_PRECONDITION if there is no acquisition running
     //
     // Since 1.11
-    rpc get_current_acquisition_run (GetCurrentAcquisitionRunRequest) returns (AcquisitionRunInfo) {}
+    rpc get_current_acquisition_run (GetCurrentAcquisitionRunRequest) returns (AcquisitionRunInfo) {
+        option idempotency_level = NO_SIDE_EFFECTS;
+    }
     
     // Specify the signal reader to use
     //
     // Since 3.6
-    rpc set_signal_reader (SetSignalReaderRequest) returns (SetSignalReaderResponse) {}
+    rpc set_signal_reader (SetSignalReaderRequest) returns (SetSignalReaderResponse) {
+        option idempotency_level = IDEMPOTENT;
+    }
 }
 
 //
@@ -371,6 +387,10 @@ enum AcquisitionStopReason {
 
     // The device or asic was disconnected, causing the run to stop.
     STOPPED_DEVICE_ERROR = 6;
+
+    // The temperature was out of a safe range (either got extremely hot or was too 
+    // far from the set-point for a certain amount of time)
+    STOPPED_BAD_TEMPERATURE = 7;
 }
 
 enum FinishingState {
@@ -535,6 +555,8 @@ message AcquisitionConfigSummary {
     bool barcoding_enabled = 13;
     // Is alignment enabled for the run
     bool alignment_enabled = 14;
+    // Is lamp enabled for the run
+    bool lamp_enabled = 15;
 
     // Root directory reads were written to for the run.
     //

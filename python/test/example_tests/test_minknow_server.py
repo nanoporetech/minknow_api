@@ -8,15 +8,32 @@ import socket
 import typing
 
 import grpc
+from minknow_api import acquisition_pb2, acquisition_pb2_grpc
 from minknow_api import device_pb2, device_pb2_grpc
 from minknow_api import instance_pb2, instance_pb2_grpc
 from minknow_api import manager_pb2, manager_pb2_grpc
 from minknow_api import protocol_pb2, protocol_pb2_grpc
+from minknow_api import statistics_pb2, statistics_pb2_grpc
 
 LOGGER = logging.getLogger(__name__)
 
 PositionInfo = namedtuple("PositionInfo", ["position_name",])
 FlowCellInfo = namedtuple("PositionInfo", ["flow_cell_id", "has_flow_cell"])
+
+
+class AcquisitionService(acquisition_pb2_grpc.AcquisitionServiceServicer):
+    def __init__(self, position_info):
+        self.acquisition_runs = []
+
+    def get_acquisition_info(
+        self, request: acquisition_pb2.GetAcquisitionRunInfoRequest, _context
+    ) -> acquisition_pb2.AcquisitionRunInfo:
+        """Find info on previously run acquisition"""
+        for acquisition in self.acquisition_runs:
+            if acquisition.run_id == request.run_id:
+                return acquisition
+
+        raise Exception("Failed to find acquisition %s" % request.run_id)
 
 
 class DeviceService(device_pb2_grpc.DeviceServiceServicer):
@@ -50,6 +67,18 @@ class InstanceService(instance_pb2_grpc.InstanceServiceServicer):
                 major=4, minor=0, patch=0, full="4.0.0"
             )
         )
+
+
+class StatisticsService(statistics_pb2_grpc.StatisticsServiceServicer):
+    def __init__(self, position_info):
+        self.acquisition_outputs_per_run = {}
+
+    def stream_acquisition_output(
+        self, request: statistics_pb2.StreamAcquisitionOutputRequest, _context
+    ) -> statistics_pb2.StreamAcquisitionOutputResponse:
+        """Stream acquisition output data from a requested acquisition"""
+        for packet in self.acquisition_outputs_per_run[request.acquisition_run_id]:
+            yield packet
 
 
 class ManagerService(manager_pb2_grpc.ManagerServiceServicer):
@@ -89,21 +118,38 @@ class ProtocolService(protocol_pb2_grpc.ProtocolServiceServicer):
     def __init__(self, position_info):
         self.position_info = position_info
         self.protocol_list = []
-        self.started_protocols = []
+        self.protocol_runs = []
 
     def list_protocols(
         self, _request: protocol_pb2.ListProtocolsRequest, _context
     ) -> protocol_pb2.ListProtocolsResponse:
-        """Find the version information for the connected flow cell"""
+        """Find the available protocols to start"""
         return protocol_pb2.ListProtocolsResponse(protocols=self.protocol_list)
 
     def start_protocol(
         self, request: protocol_pb2.StartProtocolRequest, _context
     ) -> protocol_pb2.StartProtocolResponse:
-        self.started_protocols.append(request)
-        return protocol_pb2.StartProtocolResponse(
-            run_id=str(len(self.started_protocols))
+        """Start a new protocol"""
+        self.protocol_runs.append(request)
+        return protocol_pb2.StartProtocolResponse(run_id=str(len(self.protocol_runs)))
+
+    def list_protocol_runs(
+        self, _request: protocol_pb2.ListProtocolsRequest, _context
+    ) -> protocol_pb2.ListProtocolRunsResponse:
+        """List all previously run protocols"""
+        return protocol_pb2.ListProtocolRunsResponse(
+            run_ids=[p.run_id for p in self.protocol_runs]
         )
+
+    def get_run_info(
+        self, request: protocol_pb2.GetRunInfoRequest, _context
+    ) -> protocol_pb2.ProtocolRunInfo:
+        """Find info on previously run protocols"""
+        for protocol in self.protocol_runs:
+            if protocol.run_id == request.run_id:
+                return protocol
+
+        raise Exception("Failed to find protocol %s" % request.run_id)
 
 
 def get_free_network_port() -> int:
@@ -155,6 +201,11 @@ class SequencingPositionTestServer:
             self.port = get_free_network_port()
         self.server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
 
+        self.acquisition_service = AcquisitionService(position_info)
+        acquisition_pb2_grpc.add_AcquisitionServiceServicer_to_server(
+            self.acquisition_service, self.server
+        )
+
         self.device_service = DeviceService(position_info)
         device_pb2_grpc.add_DeviceServiceServicer_to_server(
             self.device_service, self.server
@@ -169,6 +220,11 @@ class SequencingPositionTestServer:
             self.protocol_service, self.server
         )
 
+        self.statistics_service = StatisticsService(position_info)
+        statistics_pb2_grpc.add_StatisticsServiceServicer_to_server(
+            self.statistics_service, self.server
+        )
+
         LOGGER.info("Starting server. Listening on port %s.", self.port)
         self.server.add_insecure_port("[::]:%s" % self.port)
         self.server.start()
@@ -180,6 +236,22 @@ class SequencingPositionTestServer:
     def set_protocol_list(self, protocol_list):
         """Set available protocols on the position"""
         self.protocol_service.protocol_list = protocol_list
+
+    def set_protocol_runs(self, protocol_runs):
+        """Set list of protocols which have been run on the position"""
+        self.protocol_service.protocol_runs = protocol_runs
+
+    def set_acquisition_runs(self, acquisition_runs):
+        """Set list of protocols which have been run on the position"""
+        self.acquisition_service.acquisition_runs = acquisition_runs
+
+    def set_acquisition_output_statistics(
+        self, acquisition_run_id, acquisition_statistics
+    ):
+        """Set list of protocols which have been run on the position"""
+        self.statistics_service.acquisition_outputs_per_run[
+            acquisition_run_id
+        ] = acquisition_statistics
 
     def stop(self):
         """Stop grpc server"""

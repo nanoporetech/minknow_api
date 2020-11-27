@@ -1,0 +1,5 @@
+flow_cell_id,barcode,alias,type
+FC001,barcode01,alias01,test_sample
+FC001,barcode02,alias02,positive_control
+FC001,barcode03,alias03,negative_control
+FC001,barcode04,alias04,no_template_control

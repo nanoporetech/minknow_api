@@ -135,8 +135,8 @@ def test_basic_start_protocol():
                 )[0]
                 == 0
             )
-            assert len(sequencing_position.protocol_service.started_protocols) == 1
-            protocol = sequencing_position.protocol_service.started_protocols[-1]
+            assert len(sequencing_position.protocol_service.protocol_runs) == 1
+            protocol = sequencing_position.protocol_service.protocol_runs[-1]
             assert protocol.identifier == TEST_PROTOCOL_IDENTIFIER
             assert protocol.user_info.sample_id.value == ""
             assert protocol.user_info.protocol_group_id.value == ""
@@ -146,7 +146,7 @@ def test_basic_start_protocol():
                 "--fastq=off",
                 "--bam=off",
                 "--active_channel_selection=on",
-                "--mux-scan-period=1.5",
+                "--mux_scan_period=1.5",
             ]
 
             sequencing_position.set_flow_cell_info(
@@ -159,8 +159,8 @@ def test_basic_start_protocol():
                 )[0]
                 == 0
             )
-            assert len(sequencing_position.protocol_service.started_protocols) == 2
-            protocol = sequencing_position.protocol_service.started_protocols[-1]
+            assert len(sequencing_position.protocol_service.protocol_runs) == 2
+            protocol = sequencing_position.protocol_service.protocol_runs[-1]
             assert protocol.identifier == TEST_PROTOCOL_IDENTIFIER
             assert protocol.user_info.sample_id.value == ""
             assert protocol.user_info.protocol_group_id.value == ""
@@ -170,7 +170,7 @@ def test_basic_start_protocol():
                 "--fastq=off",
                 "--bam=off",
                 "--active_channel_selection=on",
-                "--mux-scan-period=1.5",
+                "--mux_scan_period=1.5",
             ]
 
 
@@ -215,8 +215,8 @@ def test_naming_start_protocol():
                 )[0]
                 == 0
             )
-            assert len(sequencing_position.protocol_service.started_protocols) == 1
-            protocol = sequencing_position.protocol_service.started_protocols[-1]
+            assert len(sequencing_position.protocol_service.protocol_runs) == 1
+            protocol = sequencing_position.protocol_service.protocol_runs[-1]
             assert protocol.identifier == TEST_PROTOCOL_IDENTIFIER
             assert protocol.user_info.sample_id.value == "my-sample-id"
             assert protocol.user_info.protocol_group_id.value == "my-experiment-group"
@@ -226,7 +226,7 @@ def test_naming_start_protocol():
                 "--fastq=off",
                 "--bam=off",
                 "--active_channel_selection=on",
-                "--mux-scan-period=1.5",
+                "--mux_scan_period=1.5",
             ]
 
 
@@ -268,8 +268,8 @@ def test_basecalling_start_protocol():
                 )[0]
                 == 0
             )
-            assert len(sequencing_position.protocol_service.started_protocols) == 1
-            protocol = sequencing_position.protocol_service.started_protocols[-1]
+            assert len(sequencing_position.protocol_service.protocol_runs) == 1
+            protocol = sequencing_position.protocol_service.protocol_runs[-1]
             assert protocol.identifier == TEST_PROTOCOL_IDENTIFIER
             assert protocol.args == [
                 "--base_calling=on",
@@ -278,7 +278,7 @@ def test_basecalling_start_protocol():
                 "--fastq=off",
                 "--bam=off",
                 "--active_channel_selection=on",
-                "--mux-scan-period=1.5",
+                "--mux_scan_period=1.5",
             ]
 
             # Basecalling enabled
@@ -297,8 +297,8 @@ def test_basecalling_start_protocol():
                 )[0]
                 == 0
             )
-            assert len(sequencing_position.protocol_service.started_protocols) == 2
-            protocol = sequencing_position.protocol_service.started_protocols[-1]
+            assert len(sequencing_position.protocol_service.protocol_runs) == 2
+            protocol = sequencing_position.protocol_service.protocol_runs[-1]
             assert protocol.identifier == TEST_PROTOCOL_IDENTIFIER
             assert protocol.args == [
                 "--base_calling=on",
@@ -308,7 +308,7 @@ def test_basecalling_start_protocol():
                 "--fastq=off",
                 "--bam=off",
                 "--active_channel_selection=on",
-                "--mux-scan-period=1.5",
+                "--mux_scan_period=1.5",
             ]
 
 
@@ -369,8 +369,8 @@ def test_barcoding_start_protocol():
                 == 0
             )
 
-            assert len(sequencing_position.protocol_service.started_protocols) == 1
-            protocol = sequencing_position.protocol_service.started_protocols[-1]
+            assert len(sequencing_position.protocol_service.protocol_runs) == 1
+            protocol = sequencing_position.protocol_service.protocol_runs[-1]
             assert protocol.identifier == TEST_PROTOCOL_IDENTIFIER
             assert protocol.args == [
                 "--base_calling=on",
@@ -380,7 +380,7 @@ def test_barcoding_start_protocol():
                 "--fastq=off",
                 "--bam=off",
                 "--active_channel_selection=on",
-                "--mux-scan-period=1.5",
+                "--mux_scan_period=1.5",
             ]
 
             # Barcoding with all options
@@ -410,8 +410,8 @@ def test_barcoding_start_protocol():
                 == 0
             )
 
-            assert len(sequencing_position.protocol_service.started_protocols) == 2
-            protocol = sequencing_position.protocol_service.started_protocols[-1]
+            assert len(sequencing_position.protocol_service.protocol_runs) == 2
+            protocol = sequencing_position.protocol_service.protocol_runs[-1]
             assert protocol.identifier == TEST_PROTOCOL_IDENTIFIER
             assert protocol.args == [
                 "--base_calling=on",
@@ -428,7 +428,7 @@ def test_barcoding_start_protocol():
                 "--fastq=off",
                 "--bam=off",
                 "--active_channel_selection=on",
-                "--mux-scan-period=1.5",
+                "--mux_scan_period=1.5",
             ]
 
 
@@ -509,8 +509,8 @@ def test_alignment_start_protocol():
                 == 0
             )
 
-            assert len(sequencing_position.protocol_service.started_protocols) == 1
-            protocol = sequencing_position.protocol_service.started_protocols[-1]
+            assert len(sequencing_position.protocol_service.protocol_runs) == 1
+            protocol = sequencing_position.protocol_service.protocol_runs[-1]
             assert protocol.identifier == TEST_PROTOCOL_IDENTIFIER
             assert protocol.args == [
                 "--base_calling=on",
@@ -521,7 +521,7 @@ def test_alignment_start_protocol():
                 "--fastq=off",
                 "--bam=off",
                 "--active_channel_selection=on",
-                "--mux-scan-period=1.5",
+                "--mux_scan_period=1.5",
             ]
 
             # Alignment with bed file
@@ -543,8 +543,8 @@ def test_alignment_start_protocol():
                 == 0
             )
 
-            assert len(sequencing_position.protocol_service.started_protocols) == 2
-            protocol = sequencing_position.protocol_service.started_protocols[-1]
+            assert len(sequencing_position.protocol_service.protocol_runs) == 2
+            protocol = sequencing_position.protocol_service.protocol_runs[-1]
             assert protocol.identifier == TEST_PROTOCOL_IDENTIFIER
             assert protocol.args == [
                 "--base_calling=on",
@@ -556,7 +556,7 @@ def test_alignment_start_protocol():
                 "--fastq=off",
                 "--bam=off",
                 "--active_channel_selection=on",
-                "--mux-scan-period=1.5",
+                "--mux_scan_period=1.5",
             ]
 
 
@@ -600,8 +600,8 @@ def test_output_start_protocol():
                 )[0]
                 == 0
             )
-            assert len(sequencing_position.protocol_service.started_protocols) == 1
-            protocol = sequencing_position.protocol_service.started_protocols[-1]
+            assert len(sequencing_position.protocol_service.protocol_runs) == 1
+            protocol = sequencing_position.protocol_service.protocol_runs[-1]
             assert protocol.identifier == TEST_PROTOCOL_IDENTIFIER
             assert protocol.user_info.sample_id.value == ""
             assert protocol.user_info.protocol_group_id.value == ""
@@ -614,7 +614,7 @@ def test_output_start_protocol():
                 "--fastq_reads_per_file=5000",
                 "--bam=off",
                 "--active_channel_selection=on",
-                "--mux-scan-period=1.5",
+                "--mux_scan_period=1.5",
             ]
 
             # Fast5
@@ -633,8 +633,8 @@ def test_output_start_protocol():
                 )[0]
                 == 0
             )
-            assert len(sequencing_position.protocol_service.started_protocols) == 2
-            protocol = sequencing_position.protocol_service.started_protocols[-1]
+            assert len(sequencing_position.protocol_service.protocol_runs) == 2
+            protocol = sequencing_position.protocol_service.protocol_runs[-1]
             assert protocol.identifier == TEST_PROTOCOL_IDENTIFIER
             assert protocol.user_info.sample_id.value == ""
             assert protocol.user_info.protocol_group_id.value == ""
@@ -650,7 +650,7 @@ def test_output_start_protocol():
                 "--fastq=off",
                 "--bam=off",
                 "--active_channel_selection=on",
-                "--mux-scan-period=1.5",
+                "--mux_scan_period=1.5",
             ]
 
             # BAM
@@ -667,8 +667,8 @@ def test_output_start_protocol():
                 )[0]
                 == 0
             )
-            assert len(sequencing_position.protocol_service.started_protocols) == 3
-            protocol = sequencing_position.protocol_service.started_protocols[-1]
+            assert len(sequencing_position.protocol_service.protocol_runs) == 3
+            protocol = sequencing_position.protocol_service.protocol_runs[-1]
             assert protocol.identifier == TEST_PROTOCOL_IDENTIFIER
             assert protocol.user_info.sample_id.value == ""
             assert protocol.user_info.protocol_group_id.value == ""
@@ -678,5 +678,5 @@ def test_output_start_protocol():
                 "--fastq=off",
                 "--bam=on",
                 "--active_channel_selection=on",
-                "--mux-scan-period=1.5",
+                "--mux_scan_period=1.5",
             ]

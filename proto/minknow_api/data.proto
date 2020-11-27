@@ -35,14 +35,18 @@ service DataService {
     // change their state we will receive another message containing those and so on. Note that
     // MinKNOW tries to group as many channel state changes in a single message, up to the message
     // limit size, which is currently set to 32kB.
-    rpc get_channel_states (GetChannelStatesRequest) returns (stream GetChannelStatesResponse) {}
+    rpc get_channel_states (GetChannelStatesRequest) returns (stream GetChannelStatesResponse) {
+        option idempotency_level = NO_SIDE_EFFECTS;
+    }
 
     // Get the data types of data items produced by this service.
     //
     // In order to allow clients to efficiently deal with large volumes of data in languages such as
     // Python, this service can provide data as raw bytes. This call can be used to determine how to
     // interpret those bytes. This can be used to construct an appropriate numpy dtype, for example.
-    rpc get_data_types (GetDataTypesRequest) returns (GetDataTypesResponse) {}
+    rpc get_data_types (GetDataTypesRequest) returns (GetDataTypesResponse) {
+        option idempotency_level = NO_SIDE_EFFECTS;
+    }
 
     // Get signal data from the device.
     //
@@ -74,7 +78,9 @@ service DataService {
     // Note that the data is returned as bytes fields. See the GetSignalBytesResponse documentation
     // for more details about how to interpret the value. In Python code, the minknow.Device class
     // provides a convenience wrapper method to convert the data into numpy arrays.
-    rpc get_signal_bytes (GetSignalBytesRequest) returns (stream GetSignalBytesResponse) {}
+    rpc get_signal_bytes (GetSignalBytesRequest) returns (stream GetSignalBytesResponse) {
+        option idempotency_level = NO_SIDE_EFFECTS;
+    }
 
     // Get summarised signal data from the device.
     //
@@ -94,7 +100,9 @@ service DataService {
     //
     // The response will be streamed. In order to limit the size of each response message, any given
     // message may include data from only a subset of the requested channels.
-    rpc get_signal_min_max (GetSignalMinMaxRequest) returns (stream GetSignalMinMaxResponse) {}
+    rpc get_signal_min_max (GetSignalMinMaxRequest) returns (stream GetSignalMinMaxResponse) {
+        option idempotency_level = NO_SIDE_EFFECTS;
+    }
 
     // Call this to force re-evaluating the channel states. This will make sure the next
     // channel state evaluated will be 'unclassified_following_reset'. If the analyser is behind,
@@ -179,15 +187,21 @@ service DataService {
     // The maximum read chunk size - changing the size read chunks are processed in minknow:
     //      analysis_conf/read_detection.break_reads_after_seconds
     //
-    rpc get_live_reads(stream GetLiveReadsRequest) returns (stream GetLiveReadsResponse) {}
+    rpc get_live_reads(stream GetLiveReadsRequest) returns (stream GetLiveReadsResponse) {
+        option idempotency_level = NO_SIDE_EFFECTS;
+    }
 
     // Collects statistics about read (chunk) lengths and signal, split by channel, channel
     // configuration and read (chunk) classification.
-    rpc get_read_statistics (GetReadStatisticsRequest) returns (GetReadStatisticsResponse) {}
+    rpc get_read_statistics (GetReadStatisticsRequest) returns (GetReadStatisticsResponse) {
+        option idempotency_level = NO_SIDE_EFFECTS;
+    }
 
     // Returns various points of yield information for the ongoing experiment, such as complete
     // read information and basecaller progress.
-    rpc get_experiment_yield_info (GetExperimentYieldInfoRequest) returns (GetExperimentYieldInfoResponse) {}
+    rpc get_experiment_yield_info (GetExperimentYieldInfoRequest) returns (GetExperimentYieldInfoResponse) {
+        option idempotency_level = NO_SIDE_EFFECTS;
+    }
 }
 
 message GetChannelStatesRequest {
@@ -547,6 +561,23 @@ message GetLiveReadsRequest {
 
         // Minimum chunk size read data is returned in.
         uint64 sample_minimum_chunk_size = 4;
+
+        // Maximum read length MinKNOW will attempt to unblock
+        // reads beyond this length will not be unblocked when Action's request,
+        // instead minknow will skip any further data from the read.
+        oneof max_unblock_read_length {
+            // Maximum read length MinKNOW will attempt to unblock (in samples).
+            //
+            // A value of 0 will cause minknow to unblock reads of any length.
+            // 
+            uint64 max_unblock_read_length_samples = 5;
+
+            // Maximum read length MinKNOW will attempt to unblock (in seconds).
+            //
+            // A value of 0.0 will cause minknow to unblock reads of any length.
+            // 
+            double max_unblock_read_length_seconds = 6;
+        }
     }
 
     message Actions {
@@ -619,6 +650,7 @@ message GetLiveReadsResponse {
         enum Response {
             SUCCESS = 0;
             FAILED_READ_FINISHED = 1;
+            FAILED_READ_TOO_LONG = 2;
         }
 
         Response response = 2;

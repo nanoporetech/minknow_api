@@ -253,7 +253,7 @@ overriding the name that gRPC will check the certificate against using
 
 ```python
 channel = grpc.secure_channel("gxb1234:9502",
-                              credentials=grpc_credentials)
+                              credentials=grpc_credentials,
                               options=(("grpc.ssl_target_name_override", "localhost"),))
 ```
 

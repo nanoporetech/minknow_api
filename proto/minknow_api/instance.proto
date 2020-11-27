@@ -14,7 +14,9 @@ service InstanceService {
     // - Minknow version
     // - Protocols version
     // - Distribution version
-    rpc get_version_info (GetVersionInfoRequest) returns (GetVersionInfoResponse) {}
+    rpc get_version_info (GetVersionInfoRequest) returns (GetVersionInfoResponse) {
+        option idempotency_level = NO_SIDE_EFFECTS;
+    }
 
     // Returns various directory locations where minknow is outputting data. The paths are absolute paths, 
     // local to the machine where minknow is installed
@@ -22,13 +24,17 @@ service InstanceService {
     // the `output` base directory can be changed internally
     // the `logs` directory will not be changed and can be stored
     // the `reads` directory is determined  by the read writer config
-    rpc get_output_directories (GetOutputDirectoriesRequest) returns (OutputDirectories) {}
+    rpc get_output_directories (GetOutputDirectoriesRequest) returns (OutputDirectories) {
+        option idempotency_level = NO_SIDE_EFFECTS;
+    }
 
     // See `get_output_directories`, but this will always return the paths that are defined in the config when the instance
     // of minknow has started
     //
     // Since 1.11
-    rpc get_default_output_directories(GetDefaultOutputDirectoriesRequest) returns (OutputDirectories) {}
+    rpc get_default_output_directories(GetDefaultOutputDirectoriesRequest) returns (OutputDirectories) {
+        option idempotency_level = NO_SIDE_EFFECTS;
+    }
 
     // Set the base directory to where all data will be output. Must be an absolute directory
     //
@@ -36,7 +42,9 @@ service InstanceService {
     // Fails with FAILED_PRECONDITION if this is called during acquisition
     //
     // Since 1.11
-    rpc set_output_directory (SetOutputDirectoryRequest) returns (SetOutputDirectoryResponse) {}
+    rpc set_output_directory (SetOutputDirectoryRequest) returns (SetOutputDirectoryResponse) {
+        option idempotency_level = IDEMPOTENT;
+    }
 
     // Set the reads directory where read files (hdf5, fastq, protobuf) will be output
     //
@@ -44,14 +52,18 @@ service InstanceService {
     // Fails with FAILED_PRECONDITION if this is called during acquisition
     //
     // Since 1.12
-    rpc set_reads_directory (SetReadsDirectoryRequest) returns (SetReadsDirectoryResponse) {}
+    rpc set_reads_directory (SetReadsDirectoryRequest) returns (SetReadsDirectoryResponse) {
+        option idempotency_level = IDEMPOTENT;
+    }
 
     // Returns information about the amount of disk space available, how much
     // space is needed to stop an experiment cleanly and if MinKNOW thinks
     // that the free disk-space is approaching or past this limit
     //
     // Since 1.11
-    rpc get_disk_space_info(GetDiskSpaceInfoRequest) returns (GetDiskSpaceInfoResponse) {}
+    rpc get_disk_space_info(GetDiskSpaceInfoRequest) returns (GetDiskSpaceInfoResponse) {
+        option idempotency_level = NO_SIDE_EFFECTS;
+    }
 
     // Stream information about the amount of disk space available, how quickly
     // it is being used, how much space is needed to stop an experiment cleanly
@@ -59,7 +71,9 @@ service InstanceService {
     // this limit
     //
     // Since 4.0
-    rpc stream_disk_space_info(StreamDiskSpaceInfoRequest) returns (stream GetDiskSpaceInfoResponse) {}
+    rpc stream_disk_space_info(StreamDiskSpaceInfoRequest) returns (stream GetDiskSpaceInfoResponse) {
+        option idempotency_level = NO_SIDE_EFFECTS;
+    }
 
     // Find the machine id MinKNOW uses for this machine.
     //
@@ -68,7 +82,9 @@ service InstanceService {
     // note: This is the identifier used when sending telemetry data for this instance.
     //
     // Since 1.11
-    rpc get_machine_id(GetMachineIdRequest) returns (GetMachineIdResponse) {}
+    rpc get_machine_id(GetMachineIdRequest) returns (GetMachineIdResponse) {
+        option idempotency_level = NO_SIDE_EFFECTS;
+    }
 
     // Find a summary of activity on the instance.
     //
@@ -79,7 +95,9 @@ service InstanceService {
     // Use this request to find information about the current device, flow cell, protocol and acquisition state.
     // 
     // Since 3.2
-    rpc stream_instance_activity(StreamInstanceActivityRequest) returns (stream StreamInstanceActivityResponse) {}
+    rpc stream_instance_activity(StreamInstanceActivityRequest) returns (stream StreamInstanceActivityResponse) {
+        option idempotency_level = NO_SIDE_EFFECTS;
+    }
 }
 
 message GetVersionInfoRequest {
@@ -130,6 +148,32 @@ message GetVersionInfoResponse {
     // 
     // Since 3.6
     string configuration = 5;
+
+    // Note that InstallationType is duplicated in manager.proto, the two definitions should be kept in sync.
+    enum InstallationType {
+        // For internal release. production.proto will be enabled for this type
+        ONT = 0;
+
+        // For customer releases
+        NC = 1;
+
+        // For production release. production.proto will be enabled for this type
+        PROD = 2;
+
+        // For Q releases (nanopore long term support release)
+        Q_RELEASE = 3;
+
+        // Oxford Nanopore Diagnostic
+        OND_RELEASE = 4;
+    }
+
+    // Indicates what installation type minknow was installed as. Certain installation
+    // types may turn features on or off depending on the type. For example,
+    // for ont and prod installs, the production.proto service will be enabled
+    // to make calls such as writing to the eeprom
+    //
+    // Since 4.1
+    InstallationType installation_type = 6;
 }
 
 message GetOutputDirectoriesRequest {

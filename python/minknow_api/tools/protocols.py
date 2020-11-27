@@ -294,7 +294,7 @@ def make_protocol_arguments(
             "--active_channel_selection=" + on_off(not disable_active_channel_selection)
         )
         if not disable_active_channel_selection:
-            protocol_args.append("--mux-scan-period={}".format(mux_scan_period))
+            protocol_args.append("--mux_scan_period={}".format(mux_scan_period))
 
     protocol_args.extend(args)
 

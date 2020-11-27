@@ -34,3 +34,10 @@ extend google.protobuf.FieldOptions {
     // a field with the same name, this would result in an error.
     bool rpc_unwrap = 50002;
 }
+
+extend google.protobuf.MethodOptions {
+    // Marks a field as required.
+    //
+    // This is only used at the service layer, to warn when called.
+    bool experimental = 50003;
+}

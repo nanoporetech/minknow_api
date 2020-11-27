@@ -31,7 +31,9 @@ service ProtocolService {
     // the allowed timeout.
     //
     // Since 1.10
-    rpc wait_for_finished (WaitForFinishedRequest) returns (ProtocolRunInfo) {}
+    rpc wait_for_finished (WaitForFinishedRequest) returns (ProtocolRunInfo) {
+        option idempotency_level = NO_SIDE_EFFECTS;
+    }
 
     // Gets information about a protocol run.
     //
@@ -39,21 +41,27 @@ service ProtocolService {
     // provided.
     //
     // Since 1.10
-    rpc get_run_info (GetRunInfoRequest) returns (ProtocolRunInfo) {}
+    rpc get_run_info (GetRunInfoRequest) returns (ProtocolRunInfo) {
+        option idempotency_level = NO_SIDE_EFFECTS;
+    }
 
     // List previously started protocol run ids (including any current protocol), in order of starting.
     //
     // The returned object can be used to find protocol information with get_run_info.
     //
     // Since 1.11
-    rpc list_protocol_runs (ListProtocolRunsRequest) returns (ListProtocolRunsResponse) {}
+    rpc list_protocol_runs (ListProtocolRunsRequest) returns (ListProtocolRunsResponse) {
+        option idempotency_level = NO_SIDE_EFFECTS;
+    }
 
     // Returns the name and run id of the currently running protocol.
     //
     // Will fail with FAILED_PRECONDITION if there is no protocol running
     //
     // Since 1.11
-    rpc get_current_protocol_run (GetCurrentProtocolRunRequest) returns (ProtocolRunInfo) {}
+    rpc get_current_protocol_run (GetCurrentProtocolRunRequest) returns (ProtocolRunInfo) {
+        option idempotency_level = NO_SIDE_EFFECTS;
+    }
 
     // Returns current protocol run info and streams any changes to the current protocol
     //
@@ -64,33 +72,45 @@ service ProtocolService {
     // If a protocol finishes this stream will still continue to run and you will be notified when a new protocol starts
     //
     // Since 1.12
-    rpc watch_current_protocol_run (WatchCurrentProtocolRunRequest) returns (stream ProtocolRunInfo) {}
+    rpc watch_current_protocol_run (WatchCurrentProtocolRunRequest) returns (stream ProtocolRunInfo) {
+        option idempotency_level = NO_SIDE_EFFECTS;
+    }
 
     // Gives back a list that contains info about each possible protocol script minknow is aware of.
     // This will most likely be used to retrieve a suitable protocol script that can be passed on to `start_protocol`
     //
     // Since 1.10
-    rpc list_protocols (ListProtocolsRequest) returns (ListProtocolsResponse) {}
+    rpc list_protocols (ListProtocolsRequest) returns (ListProtocolsResponse) {
+        option idempotency_level = IDEMPOTENT;
+    }
 
     // Returns string-to-string map of the context tags
     //
     // Since 1.11
-    rpc get_context_info (GetContextInfoRequest) returns (GetContextInfoResponse) {}
+    rpc get_context_info (GetContextInfoRequest) returns (GetContextInfoResponse) {
+        option idempotency_level = NO_SIDE_EFFECTS;
+    }
 
     // Store context tags as arbitary string-to-string map
     //
     // Since 1.11
-    rpc set_context_info (SetContextInfoRequest) returns (SetContextInfoResponse) {}
+    rpc set_context_info (SetContextInfoRequest) returns (SetContextInfoResponse) {
+        option idempotency_level = IDEMPOTENT;
+    }
 
     // Value set by protocol scripts to define the purpose of the script. Gets this value
     //
     // Since 1.11
-    rpc get_protocol_purpose (GetProtocolPurposeRequest) returns (GetProtocolPurposeResponse) {}
+    rpc get_protocol_purpose (GetProtocolPurposeRequest) returns (GetProtocolPurposeResponse) {
+        option idempotency_level = NO_SIDE_EFFECTS;
+    }
 
     // Sets the protocol purpose. See also get_protocol_purpose
     //
     // Since 1.11
-    rpc set_protocol_purpose (SetProtocolPurposeRequest) returns (SetProtocolPurposeResponse) {}
+    rpc set_protocol_purpose (SetProtocolPurposeRequest) returns (SetProtocolPurposeResponse) {
+        option idempotency_level = IDEMPOTENT;
+    }
 
     // Links an epi2me workflow reference to a run id.
     //
@@ -100,7 +120,37 @@ service ProtocolService {
     // List all used protocol group ids used in any previous protocol on the box.
     //
     // Since 3.2
-    rpc list_protocol_group_ids(ListProtocolGroupIdsRequest) returns (ListProtocolGroupIdsResponse) {}
+    rpc list_protocol_group_ids(ListProtocolGroupIdsRequest) returns (ListProtocolGroupIdsResponse) {
+        option idempotency_level = NO_SIDE_EFFECTS;
+    }
+}
+
+message BarcodeUserData {
+    enum SampleType {
+        // The barcode sample is a real sample being tested.
+        test_sample = 0;
+
+        // The barcode sample is a control which is expected to result in positive identification.
+        positive_control = 1;
+
+        // The barcode sample is a control which is expected to result in negative identification.
+        negative_control = 2;
+
+        // Indended to show that a result has not occured due to contamination.
+        no_template_control = 3;
+    }
+
+    // Barcode name the user data applies to, eg: "barcode02"
+    string barcode_name = 1;
+
+    // Lamp barcode id the user data applies to, eg: "FIP04"
+    string lamp_barcode_id = 2;
+
+    // User defined string alias for the barcode.
+    string alias = 3;
+
+    // Sample type grouping for the barcode.
+    SampleType type = 4;
 }
 
 message ProtocolRunUserInfo {
@@ -111,6 +161,9 @@ message ProtocolRunUserInfo {
 
     // sample_id created by the user
     google.protobuf.StringValue sample_id = 2;
+
+    // User supplied info for barcodes
+    repeated BarcodeUserData barcode_user_info = 3;
 }
 
 message StartProtocolRequest {
@@ -324,7 +377,7 @@ message ProtocolRunInfo {
     //
     // Since 3.4
     device.GetFlowCellInfoResponse flow_cell = 13;
-    
+
     // Meta-info about the protocol
     //
     // Since 3.8
@@ -338,7 +391,7 @@ message ListProtocolRunsResponse {
     repeated string run_ids = 1;
 }
 message GetCurrentProtocolRunRequest {
-    
+
 }
 
 message GetCurrentProtocolRunResponse {
@@ -346,11 +399,11 @@ message GetCurrentProtocolRunResponse {
 }
 
 message WatchCurrentProtocolRunRequest {
-    
+
 }
 
 message GetContextInfoRequest {
-    
+
 }
 
 message GetContextInfoResponse {
@@ -362,11 +415,11 @@ message SetContextInfoRequest {
 }
 
 message SetContextInfoResponse {
-    
+
 }
 
 message GetProtocolPurposeRequest {
-    
+
 }
 
 message GetProtocolPurposeResponse {
@@ -378,7 +431,7 @@ message SetProtocolPurposeRequest {
 }
 
 message SetProtocolPurposeResponse {
-    
+
 }
 
 message AddEpi2meWorkflowRequest {

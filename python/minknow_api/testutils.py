@@ -44,6 +44,9 @@ from minknow_api import _services, _optional_services
 
 LOGGER = logging.getLogger(__name__)
 VERSION = parse(minknow_api.__version__)
+# Get major, minor, micro from base_version over using the attrs as this
+#   allows us to use older packaging versions
+MAJOR, MINOR, MICRO = map(int, VERSION.base_version.split("."))
 DEFAULT_SERVER_PORT = 0
 
 
@@ -52,10 +55,7 @@ class InstanceService(minknow_api.instance_pb2_grpc.InstanceServiceServicer):
         """Find the version information for the instance"""
         return minknow_api.instance_pb2.GetVersionInfoResponse(
             minknow=minknow_api.instance_pb2.GetVersionInfoResponse.MinknowVersion(
-                major=VERSION.major,
-                minor=VERSION.minor,
-                patch=VERSION.micro,
-                full=minknow_api.__version__,
+                major=MAJOR, minor=MINOR, patch=MICRO, full=minknow_api.__version__,
             )
         )
 

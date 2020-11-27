@@ -1,0 +1,3 @@
+flow_cell_id,fip_barcode,rapid_barcode,alias
+FC001,FIP01,barcode01,alias01
+FC001,FIP01,barcode02,alias02

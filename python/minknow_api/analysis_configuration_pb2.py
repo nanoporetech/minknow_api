@@ -22,7 +22,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='minknow_api.analysis_configuration',
   syntax='proto3',
   serialized_options=_b('\n\034com.nanoporetech.minknow_api\242\002\005MKAPI'),
-  serialized_pb=_b('\n(minknow_api/analysis_configuration.proto\x12\"minknow_api.analysis_configuration\x1a\x1egoogle/protobuf/wrappers.proto\x1a\x1dminknow_api/rpc_options.proto\"\xca\x01\n\x0e\x45ventDetection\x12\x13\n\x0bwindow_size\x18\x03 \x01(\r\x12\x11\n\tthreshold\x18\x05 \x01(\x01\x12\x13\n\x0bpeak_height\x18\t \x01(\x01\x12:\n\x14\x65vents_to_base_ratio\x18\x10 \x01(\x0b\x32\x1c.google.protobuf.DoubleValue\x12\x1c\n\x14\x62reak_on_mux_changes\x18\x11 \x01(\x08\x12!\n\x19max_mux_change_back_shift\x18\x12 \x01(\r\"\xf0\x04\n\x13ReadDetectionParams\x12W\n\x04mode\x18\x01 \x01(\x0e\x32I.minknow_api.analysis_configuration.ReadDetectionParams.ReadDetectionMode\x12\x1a\n\x12minimum_delta_mean\x18\x02 \x01(\x01\x12\x11\n\tlook_back\x18\x03 \x01(\r\x12>\n\x18\x62reak_reads_after_events\x18\x04 \x01(\x0b\x32\x1c.google.protobuf.UInt32Value\x12?\n\x19\x62reak_reads_after_seconds\x18\x05 \x01(\x0b\x32\x1c.google.protobuf.DoubleValue\x12\"\n\x1a\x62reak_reads_on_mux_changes\x18\x06 \x01(\x08\x12\x33\n\ropen_pore_min\x18\x07 \x01(\x0b\x32\x1c.google.protobuf.DoubleValue\x12\x33\n\ropen_pore_max\x18\x08 \x01(\x0b\x32\x1c.google.protobuf.DoubleValue\x12\x37\n\x11open_pore_default\x18\t \x01(\x0b\x32\x1c.google.protobuf.DoubleValue\x12@\n\x1aopen_pore_seconds_required\x18\n \x01(\x0b\x32\x1c.google.protobuf.DoubleValue\"G\n\x11ReadDetectionMode\x12\x08\n\x04none\x10\x00\x12\x0e\n\ntransition\x10\x01\x12\x0c\n\x08lookback\x10\x02\x12\n\n\x06minmax\x10\x03\"\xfd\x03\n\x18ReadClassificationParams\x12Z\n\rscheme_module\x18\x01 \x01(\x0e\x32\x43.minknow_api.analysis_configuration.ReadClassificationParams.Scheme\x12\x35\n\x0fmax_sample_size\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.UInt64Value\x12 \n\x18selected_classifications\x18\x03 \x03(\t\x12!\n\x19open_pore_classifications\x18\x06 \x03(\t\x12;\n\x15open_pore_ewma_weight\x18\x07 \x01(\x0b\x32\x1c.google.protobuf.DoubleValue\x12\x1f\n\x17\x63lassification_strategy\x18\x04 \x01(\t\x12[\n\nparameters\x18\x05 \x01(\x0b\x32G.minknow_api.analysis_configuration.ReadClassificationParams.Parameters\x1a.\n\nParameters\x12 \n\x18rules_in_execution_order\x18\x02 \x03(\t\"\x1e\n\x06Scheme\x12\x08\n\x04none\x10\x00\x12\n\n\x06parsed\x10\x01\"\xdd\x07\n\rChannelStates\x12\x46\n\x05group\x18\x02 \x01(\x0b\x32\x37.minknow_api.analysis_configuration.ChannelStates.Group\x12\x13\n\x0b\x64\x65scription\x18\x05 \x01(\t\x12\x46\n\x05logic\x18\x03 \x01(\x0b\x32\x37.minknow_api.analysis_configuration.ChannelStates.Logic\x12\x46\n\x05style\x18\x04 \x01(\x0b\x32\x37.minknow_api.analysis_configuration.ChannelStates.Style\x1a\xaa\x04\n\x05Logic\x12\x10\n\x08\x63riteria\x18\x01 \x01(\t\x12\x0c\n\x04rank\x18\x03 \x01(\x05\x12\x0f\n\x07pattern\x18\x04 \x01(\t\x12\x16\n\x0e\x63lassification\x18\x05 \x01(\t\x12N\n\x06ranges\x18\x06 \x01(\x0b\x32>.minknow_api.analysis_configuration.ChannelStates.Logic.Ranges\x12T\n\tbehaviour\x18\x07 \x01(\x0b\x32\x41.minknow_api.analysis_configuration.ChannelStates.Logic.Behaviour\x1a\xa4\x01\n\tBehaviour\x12\x1b\n\x13reset_on_mux_change\x18\x01 \x01(\x05\x12\x1c\n\x14reset_on_well_change\x18\x02 \x01(\x05\x12\r\n\x05latch\x18\x03 \x01(\x05\x12%\n\x1dreset_on_effective_mux_change\x18\x04 \x01(\x05\x12&\n\x1ereset_on_effective_well_change\x18\x05 \x01(\x05\x1a\x8a\x01\n\x06Ranges\x12S\n\x05range\x18\x01 \x01(\x0b\x32\x44.minknow_api.analysis_configuration.ChannelStates.Logic.Ranges.Range\x1a+\n\x05Range\x12\x10\n\x08lower_pa\x18\x01 \x01(\x05\x12\x10\n\x08upper_pa\x18\x02 \x01(\x05\x1aS\n\x05Style\x12+\n\x05order\x18\x01 \x01(\x0b\x32\x1c.google.protobuf.UInt32Value\x12\r\n\x05label\x18\x02 \x01(\t\x12\x0e\n\x06\x63olour\x18\x03 \x01(\t\x1a]\n\x05Group\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x46\n\x05style\x18\x02 \x01(\x0b\x32\x37.minknow_api.analysis_configuration.ChannelStates.Style\"!\n\x1fGetAnalysisConfigurationRequest\"\xdf\x03\n\x15\x41nalysisConfiguration\x12K\n\x0f\x65vent_detection\x18\x01 \x01(\x0b\x32\x32.minknow_api.analysis_configuration.EventDetection\x12O\n\x0eread_detection\x18\x02 \x01(\x0b\x32\x37.minknow_api.analysis_configuration.ReadDetectionParams\x12Y\n\x13read_classification\x18\x04 \x01(\x0b\x32<.minknow_api.analysis_configuration.ReadClassificationParams\x12\x64\n\x0e\x63hannel_states\x18\x07 \x03(\x0b\x32L.minknow_api.analysis_configuration.AnalysisConfiguration.ChannelStatesEntry\x1ag\n\x12\x43hannelStatesEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12@\n\x05value\x18\x02 \x01(\x0b\x32\x31.minknow_api.analysis_configuration.ChannelStates:\x02\x38\x01\"\"\n SetAnalysisConfigurationResponse\"#\n!ResetAnalysisConfigurationRequest\"$\n\"ResetAnalysisConfigurationResponse\"6\n\x1eSetAnalysisEnabledStateRequest\x12\x14\n\x06\x65nable\x18\x01 \x01(\x08\x42\x04\x88\xb5\x18\x01\"!\n\x1fSetAnalysisEnabledStateResponse\"\x1d\n\x1bGetChannelStatesDescRequest\"\x99\x04\n\x1cGetChannelStatesDescResponse\x12V\n\x06groups\x18\x01 \x03(\x0b\x32\x46.minknow_api.analysis_configuration.GetChannelStatesDescResponse.Group\x1a;\n\x05Style\x12\r\n\x05label\x18\x01 \x01(\t\x12\x13\n\x0b\x64\x65scription\x18\x02 \x01(\t\x12\x0e\n\x06\x63olour\x18\x03 \x01(\t\x1a\x95\x01\n\x0c\x43hannelState\x12\n\n\x02id\x18\x01 \x01(\r\x12\x0c\n\x04name\x18\x02 \x01(\t\x12U\n\x05style\x18\x03 \x01(\x0b\x32\x46.minknow_api.analysis_configuration.GetChannelStatesDescResponse.Style\x12\x14\n\x0cglobal_order\x18\x04 \x01(\r\x1a\xcb\x01\n\x05Group\x12\x0c\n\x04name\x18\x01 \x01(\t\x12U\n\x05style\x18\x02 \x01(\x0b\x32\x46.minknow_api.analysis_configuration.GetChannelStatesDescResponse.Style\x12]\n\x06states\x18\x03 \x03(\x0b\x32M.minknow_api.analysis_configuration.GetChannelStatesDescResponse.ChannelState\"\x13\n\x11GetSummaryRequest\"K\n\x12GetSummaryResponse\x12\x18\n\x10\x61nalysis_enabled\x18\x01 \x01(\x08\x12\x1b\n\x13\x62\x61secalling_enabled\x18\x02 \x01(\x08\"\xa8\x02\n\x16\x42\x61rcodingConfiguration\x12\x16\n\x0e\x62\x61rcoding_kits\x18\x01 \x03(\t\x12\x15\n\rtrim_barcodes\x18\x02 \x01(\x08\x12\"\n\x1arequire_barcodes_both_ends\x18\x03 \x01(\x08\x12\"\n\x1a\x64\x65tect_mid_strand_barcodes\x18\x04 \x01(\x08\x12.\n\tmin_score\x18\x05 \x01(\x0b\x32\x1b.google.protobuf.FloatValue\x12\x33\n\x0emin_score_rear\x18\x06 \x01(\x0b\x32\x1b.google.protobuf.FloatValue\x12\x32\n\rmin_score_mid\x18\x07 \x01(\x0b\x32\x1b.google.protobuf.FloatValue\"z\n\x16\x41lignmentConfiguration\x12\x17\n\x0freference_files\x18\x01 \x03(\t\x12\x10\n\x08\x62\x65\x64_file\x18\x02 \x01(\t\x12\x35\n\x10minimum_coverage\x18\x03 \x01(\x0b\x32\x1b.google.protobuf.FloatValue\"\xb3\x07\n\x17\x42\x61secallerConfiguration\x12\x0e\n\x06\x65nable\x18\x02 \x01(\x08\x12\x17\n\x0f\x63onfig_filename\x18\x01 \x01(\t\x12\x61\n\x0eread_filtering\x18\x03 \x01(\x0b\x32I.minknow_api.analysis_configuration.BasecallerConfiguration.ReadFiltering\x12[\n\x17\x62\x61rcoding_configuration\x18\x04 \x01(\x0b\x32:.minknow_api.analysis_configuration.BarcodingConfiguration\x12\x65\n\x10target_filtering\x18\x05 \x01(\x0b\x32K.minknow_api.analysis_configuration.BasecallerConfiguration.TargetFiltering\x12[\n\x17\x61lignment_configuration\x18\x06 \x01(\x0b\x32:.minknow_api.analysis_configuration.AlignmentConfiguration\x1a\xc2\x02\n\rReadFiltering\x12\x30\n\nmin_qscore\x18\x01 \x01(\x0b\x32\x1c.google.protobuf.DoubleValue\x12\x31\n\x0bmin_samples\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.UInt64Value\x12\x31\n\x0bmax_samples\x18\x03 \x01(\x0b\x32\x1c.google.protobuf.UInt64Value\x12/\n\tmin_bases\x18\x04 \x01(\x0b\x32\x1c.google.protobuf.UInt64Value\x12/\n\tmax_bases\x18\x05 \x01(\x0b\x32\x1c.google.protobuf.UInt64Value\x12\x37\n\x11max_failed_chunks\x18\x06 \x01(\x0b\x32\x1c.google.protobuf.UInt64Value\x1a\xa5\x01\n\x0fTargetFiltering\x12\x30\n\nmin_qscore\x18\x01 \x01(\x0b\x32\x1c.google.protobuf.DoubleValue\x12/\n\tmin_bases\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.UInt64Value\x12/\n\tmax_bases\x18\x03 \x01(\x0b\x32\x1c.google.protobuf.UInt64Value\"w\n!SetBasecallerConfigurationRequest\x12R\n\x07\x63onfigs\x18\x01 \x01(\x0b\x32;.minknow_api.analysis_configuration.BasecallerConfigurationB\x04\x90\xb5\x18\x01\"$\n\"SetBasecallerConfigurationResponse\"#\n!GetBasecallerConfigurationRequest\"!\n\x1fGetPoreTypeConfigurationRequest\"\xab\x05\n\x15PoreTypeConfiguration\x12\x1a\n\x10global_pore_type\x18\x01 \x01(\tH\x00\x12~\n\x17\x63hannel_well_pore_types\x18\x02 \x01(\x0b\x32[.minknow_api.analysis_configuration.PoreTypeConfiguration.ChannelWellPoreTypeConfigurationsH\x00\x1a,\n\x0b\x43hannelWell\x12\x0f\n\x07\x63hannel\x18\x01 \x01(\r\x12\x0c\n\x04well\x18\x02 \x01(\r\x1a\xb3\x03\n!ChannelWellPoreTypeConfigurations\x12~\n\npore_types\x18\x01 \x03(\x0b\x32j.minknow_api.analysis_configuration.PoreTypeConfiguration.ChannelWellPoreTypeConfigurations.PoreTypesEntry\x1an\n\x0f\x43hannelWellList\x12[\n\x0c\x63hannel_well\x18\x01 \x03(\x0b\x32\x45.minknow_api.analysis_configuration.PoreTypeConfiguration.ChannelWell\x1a\x9d\x01\n\x0ePoreTypesEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12z\n\x05value\x18\x02 \x01(\x0b\x32k.minknow_api.analysis_configuration.PoreTypeConfiguration.ChannelWellPoreTypeConfigurations.ChannelWellList:\x02\x38\x01\x42\x12\n\x10pore_type_config\"\"\n SetPoreTypeConfigurationResponse\"\x80\x1b\n\x13WriterConfiguration\x12\x62\n\nread_fast5\x18\x02 \x01(\x0b\x32N.minknow_api.analysis_configuration.WriterConfiguration.ReadFast5Configuration\x12\x62\n\nread_fastq\x18\x03 \x01(\x0b\x32N.minknow_api.analysis_configuration.WriterConfiguration.ReadFastqConfiguration\x12^\n\x08read_bam\x18\x08 \x01(\x0b\x32L.minknow_api.analysis_configuration.WriterConfiguration.ReadBamConfiguration\x12h\n\rread_protobuf\x18\x04 \x01(\x0b\x32Q.minknow_api.analysis_configuration.WriterConfiguration.ReadProtobufConfiguration\x12r\n\x12sequencing_summary\x18\x05 \x01(\x0b\x32V.minknow_api.analysis_configuration.WriterConfiguration.SequencingSummaryConfiguration\x12W\n\x04\x62ulk\x18\x06 \x01(\x0b\x32I.minknow_api.analysis_configuration.WriterConfiguration.BulkConfiguration\x12[\n\x06report\x18\x07 \x01(\x0b\x32K.minknow_api.analysis_configuration.WriterConfiguration.ReportConfiguration\x1a\xd2\x01\n\x14\x43hannelConfiguration\x12\x16\n\x0c\x61ll_channels\x18\x01 \x01(\x08H\x00\x12u\n\x11specific_channels\x18\x02 \x01(\x0b\x32X.minknow_api.analysis_configuration.WriterConfiguration.ChannelConfiguration.ChannelListH\x00\x1a\x1f\n\x0b\x43hannelList\x12\x10\n\x08\x63hannels\x18\x01 \x03(\x05\x42\n\n\x08\x63hannels\x1a\xc0\x06\n\x16ReadFast5Configuration\x12\x19\n\x11\x63ompression_level\x18\x01 \x01(\x05\x12\x61\n\x10\x63ompression_type\x18\x0e \x01(\x0e\x32G.minknow_api.analysis_configuration.WriterConfiguration.CompressionType\x12Y\n\x03raw\x18\x02 \x01(\x0b\x32L.minknow_api.analysis_configuration.WriterConfiguration.ChannelConfiguration\x12[\n\x05\x66\x61stq\x18\x03 \x01(\x0b\x32L.minknow_api.analysis_configuration.WriterConfiguration.ChannelConfiguration\x12\x61\n\x0btrace_table\x18\x0b \x01(\x0b\x32L.minknow_api.analysis_configuration.WriterConfiguration.ChannelConfiguration\x12`\n\nmove_table\x18\x0c \x01(\x0b\x32L.minknow_api.analysis_configuration.WriterConfiguration.ChannelConfiguration\x12i\n\x13modifications_table\x18\r \x01(\x0b\x32L.minknow_api.analysis_configuration.WriterConfiguration.ChannelConfiguration\x12$\n\x1c\x64isable_writing_passed_reads\x18\x05 \x01(\x08\x12$\n\x1c\x64isable_writing_failed_reads\x18\x06 \x01(\x08\x12+\n#disable_writing_force_skipped_reads\x18\x07 \x01(\x08\x12\x14\n\x0c\x66ile_pattern\x18\x08 \x01(\t\x12\x1c\n\x14\x66\x61stq_header_pattern\x18\t \x01(\t\x12\x13\n\x0b\x62\x61tch_count\x18\n \x01(\r\x1a\xce\x01\n\x16ReadFastqConfiguration\x12\\\n\x06\x65nable\x18\x01 \x01(\x0b\x32L.minknow_api.analysis_configuration.WriterConfiguration.ChannelConfiguration\x12\x14\n\x0c\x66ile_pattern\x18\x02 \x01(\t\x12\x16\n\x0eheader_pattern\x18\x03 \x01(\t\x12\x13\n\x0b\x62\x61tch_count\x18\x04 \x01(\r\x12\x13\n\x0b\x63ompression\x18\x05 \x01(\x08\x1a\x9f\x01\n\x14ReadBamConfiguration\x12\\\n\x06\x65nable\x18\x01 \x01(\x0b\x32L.minknow_api.analysis_configuration.WriterConfiguration.ChannelConfiguration\x12\x14\n\x0c\x66ile_pattern\x18\x02 \x01(\t\x12\x13\n\x0b\x62\x61tch_count\x18\x03 \x01(\r\x1a\xa4\x01\n\x19ReadProtobufConfiguration\x12\\\n\x06\x65nable\x18\x01 \x01(\x0b\x32L.minknow_api.analysis_configuration.WriterConfiguration.ChannelConfiguration\x12\x14\n\x0c\x66ile_pattern\x18\x02 \x01(\t\x12\x13\n\x0b\x62\x61tch_count\x18\x03 \x01(\r\x1a\x94\x01\n\x1eSequencingSummaryConfiguration\x12\\\n\x06\x65nable\x18\x01 \x01(\x0b\x32L.minknow_api.analysis_configuration.WriterConfiguration.ChannelConfiguration\x12\x14\n\x0c\x66ile_pattern\x18\x02 \x01(\t\x1a\xb6\x05\n\x11\x42ulkConfiguration\x12\x19\n\x11\x63ompression_level\x18\x02 \x01(\x05\x12\x61\n\x10\x63ompression_type\x18\r \x01(\x0e\x32G.minknow_api.analysis_configuration.WriterConfiguration.CompressionType\x12\x14\n\x0c\x66ile_pattern\x18\x0e \x01(\t\x12Y\n\x03raw\x18\x03 \x01(\x0b\x32L.minknow_api.analysis_configuration.WriterConfiguration.ChannelConfiguration\x12\\\n\x06\x65vents\x18\x04 \x01(\x0b\x32L.minknow_api.analysis_configuration.WriterConfiguration.ChannelConfiguration\x12[\n\x05reads\x18\x05 \x01(\x0b\x32L.minknow_api.analysis_configuration.WriterConfiguration.ChannelConfiguration\x12_\n\tmultiplex\x18\x06 \x01(\x0b\x32L.minknow_api.analysis_configuration.WriterConfiguration.ChannelConfiguration\x12\x64\n\x0e\x63hannel_states\x18\x07 \x01(\x0b\x32L.minknow_api.analysis_configuration.WriterConfiguration.ChannelConfiguration\x12\x17\n\x0f\x64\x65vice_metadata\x18\x0b \x01(\x08\x12\x17\n\x0f\x64\x65vice_commands\x18\x0c \x01(\x08\x1a\xd6\x01\n\x13ReportConfiguration\x12\x1f\n\x17pdf_report_file_pattern\x18\x01 \x01(\t\x12$\n\x1cmarkdown_report_file_pattern\x18\x02 \x01(\t\x12%\n\x1d\x64uty_time_report_file_pattern\x18\x03 \x01(\t\x12&\n\x1ethroughput_report_file_pattern\x18\x04 \x01(\t\x12)\n!final_summary_report_file_pattern\x18\x05 \x01(\t\"R\n\x0f\x43ompressionType\x12\x16\n\x12\x44\x65\x66\x61ultCompression\x10\x00\x12\x13\n\x0fZlibCompression\x10\x01\x12\x12\n\x0eVbzCompression\x10\x02\" \n\x1eSetWriterConfigurationResponse\"\x1f\n\x1dGetWriterConfigurationRequest\"\x1f\n\x1dGetReadClassificationsRequest\"\xd7\x01\n\x1eGetReadClassificationsResponse\x12y\n\x14read_classifications\x18\x01 \x03(\x0b\x32[.minknow_api.analysis_configuration.GetReadClassificationsResponse.ReadClassificationsEntry\x1a:\n\x18ReadClassificationsEntry\x12\x0b\n\x03key\x18\x01 \x01(\x05\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\x32\xd9\x10\n\x1c\x41nalysisConfigurationService\x12\x9e\x01\n\x1aget_analysis_configuration\x12\x43.minknow_api.analysis_configuration.GetAnalysisConfigurationRequest\x1a\x39.minknow_api.analysis_configuration.AnalysisConfiguration\"\x00\x12\x9f\x01\n\x1aset_analysis_configuration\x12\x39.minknow_api.analysis_configuration.AnalysisConfiguration\x1a\x44.minknow_api.analysis_configuration.SetAnalysisConfigurationResponse\"\x00\x12\xaf\x01\n\x1creset_analysis_configuration\x12\x45.minknow_api.analysis_configuration.ResetAnalysisConfigurationRequest\x1a\x46.minknow_api.analysis_configuration.ResetAnalysisConfigurationResponse\"\x00\x12\xa7\x01\n\x1aset_analysis_enabled_state\x12\x42.minknow_api.analysis_configuration.SetAnalysisEnabledStateRequest\x1a\x43.minknow_api.analysis_configuration.SetAnalysisEnabledStateResponse\"\x00\x12\x9e\x01\n\x17get_channel_states_desc\x12?.minknow_api.analysis_configuration.GetChannelStatesDescRequest\x1a@.minknow_api.analysis_configuration.GetChannelStatesDescResponse\"\x00\x12~\n\x0bget_summary\x12\x35.minknow_api.analysis_configuration.GetSummaryRequest\x1a\x36.minknow_api.analysis_configuration.GetSummaryResponse\"\x00\x12\xaf\x01\n\x1cset_basecaller_configuration\x12\x45.minknow_api.analysis_configuration.SetBasecallerConfigurationRequest\x1a\x46.minknow_api.analysis_configuration.SetBasecallerConfigurationResponse\"\x00\x12\xa4\x01\n\x1cget_basecaller_configuration\x12\x45.minknow_api.analysis_configuration.GetBasecallerConfigurationRequest\x1a;.minknow_api.analysis_configuration.BasecallerConfiguration\"\x00\x12\x9f\x01\n\x1bget_pore_type_configuration\x12\x43.minknow_api.analysis_configuration.GetPoreTypeConfigurationRequest\x1a\x39.minknow_api.analysis_configuration.PoreTypeConfiguration\"\x00\x12\xa0\x01\n\x1bset_pore_type_configuration\x12\x39.minknow_api.analysis_configuration.PoreTypeConfiguration\x1a\x44.minknow_api.analysis_configuration.SetPoreTypeConfigurationResponse\"\x00\x12\x99\x01\n\x18set_writer_configuration\x12\x37.minknow_api.analysis_configuration.WriterConfiguration\x1a\x42.minknow_api.analysis_configuration.SetWriterConfigurationResponse\"\x00\x12\x98\x01\n\x18get_writer_configuration\x12\x41.minknow_api.analysis_configuration.GetWriterConfigurationRequest\x1a\x37.minknow_api.analysis_configuration.WriterConfiguration\"\x00\x12\xa3\x01\n\x18get_read_classifications\x12\x41.minknow_api.analysis_configuration.GetReadClassificationsRequest\x1a\x42.minknow_api.analysis_configuration.GetReadClassificationsResponse\"\x00\x42&\n\x1c\x63om.nanoporetech.minknow_api\xa2\x02\x05MKAPIb\x06proto3')
+  serialized_pb=_b('\n(minknow_api/analysis_configuration.proto\x12\"minknow_api.analysis_configuration\x1a\x1egoogle/protobuf/wrappers.proto\x1a\x1dminknow_api/rpc_options.proto\"\xca\x01\n\x0e\x45ventDetection\x12\x13\n\x0bwindow_size\x18\x03 \x01(\r\x12\x11\n\tthreshold\x18\x05 \x01(\x01\x12\x13\n\x0bpeak_height\x18\t \x01(\x01\x12:\n\x14\x65vents_to_base_ratio\x18\x10 \x01(\x0b\x32\x1c.google.protobuf.DoubleValue\x12\x1c\n\x14\x62reak_on_mux_changes\x18\x11 \x01(\x08\x12!\n\x19max_mux_change_back_shift\x18\x12 \x01(\r\"\xf0\x04\n\x13ReadDetectionParams\x12W\n\x04mode\x18\x01 \x01(\x0e\x32I.minknow_api.analysis_configuration.ReadDetectionParams.ReadDetectionMode\x12\x1a\n\x12minimum_delta_mean\x18\x02 \x01(\x01\x12\x11\n\tlook_back\x18\x03 \x01(\r\x12>\n\x18\x62reak_reads_after_events\x18\x04 \x01(\x0b\x32\x1c.google.protobuf.UInt32Value\x12?\n\x19\x62reak_reads_after_seconds\x18\x05 \x01(\x0b\x32\x1c.google.protobuf.DoubleValue\x12\"\n\x1a\x62reak_reads_on_mux_changes\x18\x06 \x01(\x08\x12\x33\n\ropen_pore_min\x18\x07 \x01(\x0b\x32\x1c.google.protobuf.DoubleValue\x12\x33\n\ropen_pore_max\x18\x08 \x01(\x0b\x32\x1c.google.protobuf.DoubleValue\x12\x37\n\x11open_pore_default\x18\t \x01(\x0b\x32\x1c.google.protobuf.DoubleValue\x12@\n\x1aopen_pore_seconds_required\x18\n \x01(\x0b\x32\x1c.google.protobuf.DoubleValue\"G\n\x11ReadDetectionMode\x12\x08\n\x04none\x10\x00\x12\x0e\n\ntransition\x10\x01\x12\x0c\n\x08lookback\x10\x02\x12\n\n\x06minmax\x10\x03\"\xfd\x03\n\x18ReadClassificationParams\x12Z\n\rscheme_module\x18\x01 \x01(\x0e\x32\x43.minknow_api.analysis_configuration.ReadClassificationParams.Scheme\x12\x35\n\x0fmax_sample_size\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.UInt64Value\x12 \n\x18selected_classifications\x18\x03 \x03(\t\x12!\n\x19open_pore_classifications\x18\x06 \x03(\t\x12;\n\x15open_pore_ewma_weight\x18\x07 \x01(\x0b\x32\x1c.google.protobuf.DoubleValue\x12\x1f\n\x17\x63lassification_strategy\x18\x04 \x01(\t\x12[\n\nparameters\x18\x05 \x01(\x0b\x32G.minknow_api.analysis_configuration.ReadClassificationParams.Parameters\x1a.\n\nParameters\x12 \n\x18rules_in_execution_order\x18\x02 \x03(\t\"\x1e\n\x06Scheme\x12\x08\n\x04none\x10\x00\x12\n\n\x06parsed\x10\x01\"\xdd\x07\n\rChannelStates\x12\x46\n\x05group\x18\x02 \x01(\x0b\x32\x37.minknow_api.analysis_configuration.ChannelStates.Group\x12\x13\n\x0b\x64\x65scription\x18\x05 \x01(\t\x12\x46\n\x05logic\x18\x03 \x01(\x0b\x32\x37.minknow_api.analysis_configuration.ChannelStates.Logic\x12\x46\n\x05style\x18\x04 \x01(\x0b\x32\x37.minknow_api.analysis_configuration.ChannelStates.Style\x1a\xaa\x04\n\x05Logic\x12\x10\n\x08\x63riteria\x18\x01 \x01(\t\x12\x0c\n\x04rank\x18\x03 \x01(\x05\x12\x0f\n\x07pattern\x18\x04 \x01(\t\x12\x16\n\x0e\x63lassification\x18\x05 \x01(\t\x12N\n\x06ranges\x18\x06 \x01(\x0b\x32>.minknow_api.analysis_configuration.ChannelStates.Logic.Ranges\x12T\n\tbehaviour\x18\x07 \x01(\x0b\x32\x41.minknow_api.analysis_configuration.ChannelStates.Logic.Behaviour\x1a\xa4\x01\n\tBehaviour\x12\x1b\n\x13reset_on_mux_change\x18\x01 \x01(\x05\x12\x1c\n\x14reset_on_well_change\x18\x02 \x01(\x05\x12\r\n\x05latch\x18\x03 \x01(\x05\x12%\n\x1dreset_on_effective_mux_change\x18\x04 \x01(\x05\x12&\n\x1ereset_on_effective_well_change\x18\x05 \x01(\x05\x1a\x8a\x01\n\x06Ranges\x12S\n\x05range\x18\x01 \x01(\x0b\x32\x44.minknow_api.analysis_configuration.ChannelStates.Logic.Ranges.Range\x1a+\n\x05Range\x12\x10\n\x08lower_pa\x18\x01 \x01(\x05\x12\x10\n\x08upper_pa\x18\x02 \x01(\x05\x1aS\n\x05Style\x12+\n\x05order\x18\x01 \x01(\x0b\x32\x1c.google.protobuf.UInt32Value\x12\r\n\x05label\x18\x02 \x01(\t\x12\x0e\n\x06\x63olour\x18\x03 \x01(\t\x1a]\n\x05Group\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x46\n\x05style\x18\x02 \x01(\x0b\x32\x37.minknow_api.analysis_configuration.ChannelStates.Style\"!\n\x1fGetAnalysisConfigurationRequest\"\xdf\x03\n\x15\x41nalysisConfiguration\x12K\n\x0f\x65vent_detection\x18\x01 \x01(\x0b\x32\x32.minknow_api.analysis_configuration.EventDetection\x12O\n\x0eread_detection\x18\x02 \x01(\x0b\x32\x37.minknow_api.analysis_configuration.ReadDetectionParams\x12Y\n\x13read_classification\x18\x04 \x01(\x0b\x32<.minknow_api.analysis_configuration.ReadClassificationParams\x12\x64\n\x0e\x63hannel_states\x18\x07 \x03(\x0b\x32L.minknow_api.analysis_configuration.AnalysisConfiguration.ChannelStatesEntry\x1ag\n\x12\x43hannelStatesEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12@\n\x05value\x18\x02 \x01(\x0b\x32\x31.minknow_api.analysis_configuration.ChannelStates:\x02\x38\x01\"\"\n SetAnalysisConfigurationResponse\"#\n!ResetAnalysisConfigurationRequest\"$\n\"ResetAnalysisConfigurationResponse\"6\n\x1eSetAnalysisEnabledStateRequest\x12\x14\n\x06\x65nable\x18\x01 \x01(\x08\x42\x04\x88\xb5\x18\x01\"!\n\x1fSetAnalysisEnabledStateResponse\"\x1d\n\x1bGetChannelStatesDescRequest\"\x99\x04\n\x1cGetChannelStatesDescResponse\x12V\n\x06groups\x18\x01 \x03(\x0b\x32\x46.minknow_api.analysis_configuration.GetChannelStatesDescResponse.Group\x1a;\n\x05Style\x12\r\n\x05label\x18\x01 \x01(\t\x12\x13\n\x0b\x64\x65scription\x18\x02 \x01(\t\x12\x0e\n\x06\x63olour\x18\x03 \x01(\t\x1a\x95\x01\n\x0c\x43hannelState\x12\n\n\x02id\x18\x01 \x01(\r\x12\x0c\n\x04name\x18\x02 \x01(\t\x12U\n\x05style\x18\x03 \x01(\x0b\x32\x46.minknow_api.analysis_configuration.GetChannelStatesDescResponse.Style\x12\x14\n\x0cglobal_order\x18\x04 \x01(\r\x1a\xcb\x01\n\x05Group\x12\x0c\n\x04name\x18\x01 \x01(\t\x12U\n\x05style\x18\x02 \x01(\x0b\x32\x46.minknow_api.analysis_configuration.GetChannelStatesDescResponse.Style\x12]\n\x06states\x18\x03 \x03(\x0b\x32M.minknow_api.analysis_configuration.GetChannelStatesDescResponse.ChannelState\"\x13\n\x11GetSummaryRequest\"K\n\x12GetSummaryResponse\x12\x18\n\x10\x61nalysis_enabled\x18\x01 \x01(\x08\x12\x1b\n\x13\x62\x61secalling_enabled\x18\x02 \x01(\x08\"\xa8\x02\n\x16\x42\x61rcodingConfiguration\x12\x16\n\x0e\x62\x61rcoding_kits\x18\x01 \x03(\t\x12\x15\n\rtrim_barcodes\x18\x02 \x01(\x08\x12\"\n\x1arequire_barcodes_both_ends\x18\x03 \x01(\x08\x12\"\n\x1a\x64\x65tect_mid_strand_barcodes\x18\x04 \x01(\x08\x12.\n\tmin_score\x18\x05 \x01(\x0b\x32\x1b.google.protobuf.FloatValue\x12\x33\n\x0emin_score_rear\x18\x06 \x01(\x0b\x32\x1b.google.protobuf.FloatValue\x12\x32\n\rmin_score_mid\x18\x07 \x01(\x0b\x32\x1b.google.protobuf.FloatValue\"\xae\x01\n\x16\x41lignmentConfiguration\x12\x17\n\x0freference_files\x18\x01 \x03(\t\x12\x10\n\x08\x62\x65\x64_file\x18\x02 \x01(\t\x12\x35\n\x10minimum_coverage\x18\x03 \x01(\x0b\x32\x1b.google.protobuf.FloatValue\x12\x32\n*aggregate_statistics_for_multiple_bed_hits\x18\x04 \x01(\x08\"\xcc\x01\n\x11LampConfiguration\x12\x10\n\x08lamp_kit\x18\x01 \x01(\t\x12\x37\n\x12min_score_barcodes\x18\x02 \x01(\x0b\x32\x1b.google.protobuf.FloatValue\x12\x34\n\x0fmin_score_masks\x18\x03 \x01(\x0b\x32\x1b.google.protobuf.FloatValue\x12\x36\n\x11min_score_targets\x18\x04 \x01(\x0b\x32\x1b.google.protobuf.FloatValue\"\x86\x08\n\x17\x42\x61secallerConfiguration\x12\x0e\n\x06\x65nable\x18\x02 \x01(\x08\x12\x17\n\x0f\x63onfig_filename\x18\x01 \x01(\t\x12\x61\n\x0eread_filtering\x18\x03 \x01(\x0b\x32I.minknow_api.analysis_configuration.BasecallerConfiguration.ReadFiltering\x12[\n\x17\x62\x61rcoding_configuration\x18\x04 \x01(\x0b\x32:.minknow_api.analysis_configuration.BarcodingConfiguration\x12\x65\n\x10target_filtering\x18\x05 \x01(\x0b\x32K.minknow_api.analysis_configuration.BasecallerConfiguration.TargetFiltering\x12[\n\x17\x61lignment_configuration\x18\x06 \x01(\x0b\x32:.minknow_api.analysis_configuration.AlignmentConfiguration\x12Q\n\x12lamp_configuration\x18\x07 \x01(\x0b\x32\x35.minknow_api.analysis_configuration.LampConfiguration\x1a\xc2\x02\n\rReadFiltering\x12\x30\n\nmin_qscore\x18\x01 \x01(\x0b\x32\x1c.google.protobuf.DoubleValue\x12\x31\n\x0bmin_samples\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.UInt64Value\x12\x31\n\x0bmax_samples\x18\x03 \x01(\x0b\x32\x1c.google.protobuf.UInt64Value\x12/\n\tmin_bases\x18\x04 \x01(\x0b\x32\x1c.google.protobuf.UInt64Value\x12/\n\tmax_bases\x18\x05 \x01(\x0b\x32\x1c.google.protobuf.UInt64Value\x12\x37\n\x11max_failed_chunks\x18\x06 \x01(\x0b\x32\x1c.google.protobuf.UInt64Value\x1a\xa5\x01\n\x0fTargetFiltering\x12\x30\n\nmin_qscore\x18\x01 \x01(\x0b\x32\x1c.google.protobuf.DoubleValue\x12/\n\tmin_bases\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.UInt64Value\x12/\n\tmax_bases\x18\x03 \x01(\x0b\x32\x1c.google.protobuf.UInt64Value\"w\n!SetBasecallerConfigurationRequest\x12R\n\x07\x63onfigs\x18\x01 \x01(\x0b\x32;.minknow_api.analysis_configuration.BasecallerConfigurationB\x04\x90\xb5\x18\x01\"$\n\"SetBasecallerConfigurationResponse\"#\n!GetBasecallerConfigurationRequest\"!\n\x1fGetPoreTypeConfigurationRequest\"\xab\x05\n\x15PoreTypeConfiguration\x12\x1a\n\x10global_pore_type\x18\x01 \x01(\tH\x00\x12~\n\x17\x63hannel_well_pore_types\x18\x02 \x01(\x0b\x32[.minknow_api.analysis_configuration.PoreTypeConfiguration.ChannelWellPoreTypeConfigurationsH\x00\x1a,\n\x0b\x43hannelWell\x12\x0f\n\x07\x63hannel\x18\x01 \x01(\r\x12\x0c\n\x04well\x18\x02 \x01(\r\x1a\xb3\x03\n!ChannelWellPoreTypeConfigurations\x12~\n\npore_types\x18\x01 \x03(\x0b\x32j.minknow_api.analysis_configuration.PoreTypeConfiguration.ChannelWellPoreTypeConfigurations.PoreTypesEntry\x1an\n\x0f\x43hannelWellList\x12[\n\x0c\x63hannel_well\x18\x01 \x03(\x0b\x32\x45.minknow_api.analysis_configuration.PoreTypeConfiguration.ChannelWell\x1a\x9d\x01\n\x0ePoreTypesEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12z\n\x05value\x18\x02 \x01(\x0b\x32k.minknow_api.analysis_configuration.PoreTypeConfiguration.ChannelWellPoreTypeConfigurations.ChannelWellList:\x02\x38\x01\x42\x12\n\x10pore_type_config\"\"\n SetPoreTypeConfigurationResponse\"\xd5\x1b\n\x13WriterConfiguration\x12\x62\n\nread_fast5\x18\x02 \x01(\x0b\x32N.minknow_api.analysis_configuration.WriterConfiguration.ReadFast5Configuration\x12\x62\n\nread_fastq\x18\x03 \x01(\x0b\x32N.minknow_api.analysis_configuration.WriterConfiguration.ReadFastqConfiguration\x12^\n\x08read_bam\x18\x08 \x01(\x0b\x32L.minknow_api.analysis_configuration.WriterConfiguration.ReadBamConfiguration\x12h\n\rread_protobuf\x18\x04 \x01(\x0b\x32Q.minknow_api.analysis_configuration.WriterConfiguration.ReadProtobufConfiguration\x12r\n\x12sequencing_summary\x18\x05 \x01(\x0b\x32V.minknow_api.analysis_configuration.WriterConfiguration.SequencingSummaryConfiguration\x12W\n\x04\x62ulk\x18\x06 \x01(\x0b\x32I.minknow_api.analysis_configuration.WriterConfiguration.BulkConfiguration\x12[\n\x06report\x18\x07 \x01(\x0b\x32K.minknow_api.analysis_configuration.WriterConfiguration.ReportConfiguration\x1a\xd2\x01\n\x14\x43hannelConfiguration\x12\x16\n\x0c\x61ll_channels\x18\x01 \x01(\x08H\x00\x12u\n\x11specific_channels\x18\x02 \x01(\x0b\x32X.minknow_api.analysis_configuration.WriterConfiguration.ChannelConfiguration.ChannelListH\x00\x1a\x1f\n\x0b\x43hannelList\x12\x10\n\x08\x63hannels\x18\x01 \x03(\x05\x42\n\n\x08\x63hannels\x1a\xc0\x06\n\x16ReadFast5Configuration\x12\x19\n\x11\x63ompression_level\x18\x01 \x01(\x05\x12\x61\n\x10\x63ompression_type\x18\x0e \x01(\x0e\x32G.minknow_api.analysis_configuration.WriterConfiguration.CompressionType\x12Y\n\x03raw\x18\x02 \x01(\x0b\x32L.minknow_api.analysis_configuration.WriterConfiguration.ChannelConfiguration\x12[\n\x05\x66\x61stq\x18\x03 \x01(\x0b\x32L.minknow_api.analysis_configuration.WriterConfiguration.ChannelConfiguration\x12\x61\n\x0btrace_table\x18\x0b \x01(\x0b\x32L.minknow_api.analysis_configuration.WriterConfiguration.ChannelConfiguration\x12`\n\nmove_table\x18\x0c \x01(\x0b\x32L.minknow_api.analysis_configuration.WriterConfiguration.ChannelConfiguration\x12i\n\x13modifications_table\x18\r \x01(\x0b\x32L.minknow_api.analysis_configuration.WriterConfiguration.ChannelConfiguration\x12$\n\x1c\x64isable_writing_passed_reads\x18\x05 \x01(\x08\x12$\n\x1c\x64isable_writing_failed_reads\x18\x06 \x01(\x08\x12+\n#disable_writing_force_skipped_reads\x18\x07 \x01(\x08\x12\x14\n\x0c\x66ile_pattern\x18\x08 \x01(\t\x12\x1c\n\x14\x66\x61stq_header_pattern\x18\t \x01(\t\x12\x13\n\x0b\x62\x61tch_count\x18\n \x01(\r\x1a\xce\x01\n\x16ReadFastqConfiguration\x12\\\n\x06\x65nable\x18\x01 \x01(\x0b\x32L.minknow_api.analysis_configuration.WriterConfiguration.ChannelConfiguration\x12\x14\n\x0c\x66ile_pattern\x18\x02 \x01(\t\x12\x16\n\x0eheader_pattern\x18\x03 \x01(\t\x12\x13\n\x0b\x62\x61tch_count\x18\x04 \x01(\r\x12\x13\n\x0b\x63ompression\x18\x05 \x01(\x08\x1a\x9f\x01\n\x14ReadBamConfiguration\x12\\\n\x06\x65nable\x18\x01 \x01(\x0b\x32L.minknow_api.analysis_configuration.WriterConfiguration.ChannelConfiguration\x12\x14\n\x0c\x66ile_pattern\x18\x02 \x01(\t\x12\x13\n\x0b\x62\x61tch_count\x18\x03 \x01(\r\x1a\xa4\x01\n\x19ReadProtobufConfiguration\x12\\\n\x06\x65nable\x18\x01 \x01(\x0b\x32L.minknow_api.analysis_configuration.WriterConfiguration.ChannelConfiguration\x12\x14\n\x0c\x66ile_pattern\x18\x02 \x01(\t\x12\x13\n\x0b\x62\x61tch_count\x18\x03 \x01(\r\x1a\x94\x01\n\x1eSequencingSummaryConfiguration\x12\\\n\x06\x65nable\x18\x01 \x01(\x0b\x32L.minknow_api.analysis_configuration.WriterConfiguration.ChannelConfiguration\x12\x14\n\x0c\x66ile_pattern\x18\x02 \x01(\t\x1a\xb6\x05\n\x11\x42ulkConfiguration\x12\x19\n\x11\x63ompression_level\x18\x02 \x01(\x05\x12\x61\n\x10\x63ompression_type\x18\r \x01(\x0e\x32G.minknow_api.analysis_configuration.WriterConfiguration.CompressionType\x12\x14\n\x0c\x66ile_pattern\x18\x0e \x01(\t\x12Y\n\x03raw\x18\x03 \x01(\x0b\x32L.minknow_api.analysis_configuration.WriterConfiguration.ChannelConfiguration\x12\\\n\x06\x65vents\x18\x04 \x01(\x0b\x32L.minknow_api.analysis_configuration.WriterConfiguration.ChannelConfiguration\x12[\n\x05reads\x18\x05 \x01(\x0b\x32L.minknow_api.analysis_configuration.WriterConfiguration.ChannelConfiguration\x12_\n\tmultiplex\x18\x06 \x01(\x0b\x32L.minknow_api.analysis_configuration.WriterConfiguration.ChannelConfiguration\x12\x64\n\x0e\x63hannel_states\x18\x07 \x01(\x0b\x32L.minknow_api.analysis_configuration.WriterConfiguration.ChannelConfiguration\x12\x17\n\x0f\x64\x65vice_metadata\x18\x0b \x01(\x08\x12\x17\n\x0f\x64\x65vice_commands\x18\x0c \x01(\x08\x1a\xab\x02\n\x13ReportConfiguration\x12\x1f\n\x17pdf_report_file_pattern\x18\x01 \x01(\t\x12$\n\x1cmarkdown_report_file_pattern\x18\x02 \x01(\t\x12%\n\x1d\x64uty_time_report_file_pattern\x18\x03 \x01(\t\x12&\n\x1ethroughput_report_file_pattern\x18\x04 \x01(\t\x12)\n!final_summary_report_file_pattern\x18\x05 \x01(\t\x12-\n%barcode_alignment_report_file_pattern\x18\x06 \x01(\t\x12$\n\x1c\x63ustom_report_suffix_pattern\x18\x07 \x01(\t\"R\n\x0f\x43ompressionType\x12\x16\n\x12\x44\x65\x66\x61ultCompression\x10\x00\x12\x13\n\x0fZlibCompression\x10\x01\x12\x12\n\x0eVbzCompression\x10\x02\" \n\x1eSetWriterConfigurationResponse\"\x1f\n\x1dGetWriterConfigurationRequest\"\x1f\n\x1dGetReadClassificationsRequest\"\xd7\x01\n\x1eGetReadClassificationsResponse\x12y\n\x14read_classifications\x18\x01 \x03(\x0b\x32[.minknow_api.analysis_configuration.GetReadClassificationsResponse.ReadClassificationsEntry\x1a:\n\x18ReadClassificationsEntry\x12\x0b\n\x03key\x18\x01 \x01(\x05\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\x32\xba\x12\n\x1c\x41nalysisConfigurationService\x12\xa1\x01\n\x1aget_analysis_configuration\x12\x43.minknow_api.analysis_configuration.GetAnalysisConfigurationRequest\x1a\x39.minknow_api.analysis_configuration.AnalysisConfiguration\"\x03\x90\x02\x01\x12\xa2\x01\n\x1aset_analysis_configuration\x12\x39.minknow_api.analysis_configuration.AnalysisConfiguration\x1a\x44.minknow_api.analysis_configuration.SetAnalysisConfigurationResponse\"\x03\x90\x02\x02\x12\xb2\x01\n\x1creset_analysis_configuration\x12\x45.minknow_api.analysis_configuration.ResetAnalysisConfigurationRequest\x1a\x46.minknow_api.analysis_configuration.ResetAnalysisConfigurationResponse\"\x03\x90\x02\x02\x12\xaa\x01\n\x1aset_analysis_enabled_state\x12\x42.minknow_api.analysis_configuration.SetAnalysisEnabledStateRequest\x1a\x43.minknow_api.analysis_configuration.SetAnalysisEnabledStateResponse\"\x03\x90\x02\x02\x12\xa1\x01\n\x17get_channel_states_desc\x12?.minknow_api.analysis_configuration.GetChannelStatesDescRequest\x1a@.minknow_api.analysis_configuration.GetChannelStatesDescResponse\"\x03\x90\x02\x01\x12\x81\x01\n\x0bget_summary\x12\x35.minknow_api.analysis_configuration.GetSummaryRequest\x1a\x36.minknow_api.analysis_configuration.GetSummaryResponse\"\x03\x90\x02\x01\x12\xb2\x01\n\x1cset_basecaller_configuration\x12\x45.minknow_api.analysis_configuration.SetBasecallerConfigurationRequest\x1a\x46.minknow_api.analysis_configuration.SetBasecallerConfigurationResponse\"\x03\x90\x02\x02\x12\xb6\x01\n preload_basecaller_configuration\x12\x45.minknow_api.analysis_configuration.SetBasecallerConfigurationRequest\x1a\x46.minknow_api.analysis_configuration.SetBasecallerConfigurationResponse\"\x03\x90\x02\x02\x12\xa7\x01\n\x1cget_basecaller_configuration\x12\x45.minknow_api.analysis_configuration.GetBasecallerConfigurationRequest\x1a;.minknow_api.analysis_configuration.BasecallerConfiguration\"\x03\x90\x02\x01\x12\xa2\x01\n\x1bget_pore_type_configuration\x12\x43.minknow_api.analysis_configuration.GetPoreTypeConfigurationRequest\x1a\x39.minknow_api.analysis_configuration.PoreTypeConfiguration\"\x03\x90\x02\x01\x12\xa3\x01\n\x1bset_pore_type_configuration\x12\x39.minknow_api.analysis_configuration.PoreTypeConfiguration\x1a\x44.minknow_api.analysis_configuration.SetPoreTypeConfigurationResponse\"\x03\x90\x02\x02\x12\x9c\x01\n\x18set_writer_configuration\x12\x37.minknow_api.analysis_configuration.WriterConfiguration\x1a\x42.minknow_api.analysis_configuration.SetWriterConfigurationResponse\"\x03\x90\x02\x02\x12\x9b\x01\n\x18get_writer_configuration\x12\x41.minknow_api.analysis_configuration.GetWriterConfigurationRequest\x1a\x37.minknow_api.analysis_configuration.WriterConfiguration\"\x03\x90\x02\x01\x12\xa6\x01\n\x18get_read_classifications\x12\x41.minknow_api.analysis_configuration.GetReadClassificationsRequest\x1a\x42.minknow_api.analysis_configuration.GetReadClassificationsResponse\"\x03\x90\x02\x01\x42&\n\x1c\x63om.nanoporetech.minknow_api\xa2\x02\x05MKAPIb\x06proto3')
   ,
   dependencies=[google_dot_protobuf_dot_wrappers__pb2.DESCRIPTOR,minknow__api_dot_rpc__options__pb2.DESCRIPTOR,])
 
@@ -101,8 +101,8 @@ _WRITERCONFIGURATION_COMPRESSIONTYPE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=9568,
-  serialized_end=9650,
+  serialized_start=9996,
+  serialized_end=10078,
 )
 _sym_db.RegisterEnumDescriptor(_WRITERCONFIGURATION_COMPRESSIONTYPE)
 
@@ -1292,6 +1292,13 @@ _ALIGNMENTCONFIGURATION = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='aggregate_statistics_for_multiple_bed_hits', full_name='minknow_api.analysis_configuration.AlignmentConfiguration.aggregate_statistics_for_multiple_bed_hits', index=3,
+      number=4, type=8, cpp_type=7, label=1,
+      has_default_value=False, default_value=False,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -1304,8 +1311,60 @@ _ALIGNMENTCONFIGURATION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=4166,
-  serialized_end=4288,
+  serialized_start=4167,
+  serialized_end=4341,
+)
+
+
+_LAMPCONFIGURATION = _descriptor.Descriptor(
+  name='LampConfiguration',
+  full_name='minknow_api.analysis_configuration.LampConfiguration',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='lamp_kit', full_name='minknow_api.analysis_configuration.LampConfiguration.lamp_kit', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='min_score_barcodes', full_name='minknow_api.analysis_configuration.LampConfiguration.min_score_barcodes', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='min_score_masks', full_name='minknow_api.analysis_configuration.LampConfiguration.min_score_masks', index=2,
+      number=3, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='min_score_targets', full_name='minknow_api.analysis_configuration.LampConfiguration.min_score_targets', index=3,
+      number=4, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=4344,
+  serialized_end=4548,
 )
 
 
@@ -1370,8 +1429,8 @@ _BASECALLERCONFIGURATION_READFILTERING = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=4748,
-  serialized_end=5070,
+  serialized_start=5091,
+  serialized_end=5413,
 )
 
 _BASECALLERCONFIGURATION_TARGETFILTERING = _descriptor.Descriptor(
@@ -1414,8 +1473,8 @@ _BASECALLERCONFIGURATION_TARGETFILTERING = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=5073,
-  serialized_end=5238,
+  serialized_start=5416,
+  serialized_end=5581,
 )
 
 _BASECALLERCONFIGURATION = _descriptor.Descriptor(
@@ -1467,6 +1526,13 @@ _BASECALLERCONFIGURATION = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='lamp_configuration', full_name='minknow_api.analysis_configuration.BasecallerConfiguration.lamp_configuration', index=6,
+      number=7, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -1479,8 +1545,8 @@ _BASECALLERCONFIGURATION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=4291,
-  serialized_end=5238,
+  serialized_start=4551,
+  serialized_end=5581,
 )
 
 
@@ -1510,8 +1576,8 @@ _SETBASECALLERCONFIGURATIONREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=5240,
-  serialized_end=5359,
+  serialized_start=5583,
+  serialized_end=5702,
 )
 
 
@@ -1534,8 +1600,8 @@ _SETBASECALLERCONFIGURATIONRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=5361,
-  serialized_end=5397,
+  serialized_start=5704,
+  serialized_end=5740,
 )
 
 
@@ -1558,8 +1624,8 @@ _GETBASECALLERCONFIGURATIONREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=5399,
-  serialized_end=5434,
+  serialized_start=5742,
+  serialized_end=5777,
 )
 
 
@@ -1582,8 +1648,8 @@ _GETPORETYPECONFIGURATIONREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=5436,
-  serialized_end=5469,
+  serialized_start=5779,
+  serialized_end=5812,
 )
 
 
@@ -1620,8 +1686,8 @@ _PORETYPECONFIGURATION_CHANNELWELL = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=5653,
-  serialized_end=5697,
+  serialized_start=5996,
+  serialized_end=6040,
 )
 
 _PORETYPECONFIGURATION_CHANNELWELLPORETYPECONFIGURATIONS_CHANNELWELLLIST = _descriptor.Descriptor(
@@ -1650,8 +1716,8 @@ _PORETYPECONFIGURATION_CHANNELWELLPORETYPECONFIGURATIONS_CHANNELWELLLIST = _desc
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=5865,
-  serialized_end=5975,
+  serialized_start=6208,
+  serialized_end=6318,
 )
 
 _PORETYPECONFIGURATION_CHANNELWELLPORETYPECONFIGURATIONS_PORETYPESENTRY = _descriptor.Descriptor(
@@ -1687,8 +1753,8 @@ _PORETYPECONFIGURATION_CHANNELWELLPORETYPECONFIGURATIONS_PORETYPESENTRY = _descr
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=5978,
-  serialized_end=6135,
+  serialized_start=6321,
+  serialized_end=6478,
 )
 
 _PORETYPECONFIGURATION_CHANNELWELLPORETYPECONFIGURATIONS = _descriptor.Descriptor(
@@ -1717,8 +1783,8 @@ _PORETYPECONFIGURATION_CHANNELWELLPORETYPECONFIGURATIONS = _descriptor.Descripto
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=5700,
-  serialized_end=6135,
+  serialized_start=6043,
+  serialized_end=6478,
 )
 
 _PORETYPECONFIGURATION = _descriptor.Descriptor(
@@ -1757,8 +1823,8 @@ _PORETYPECONFIGURATION = _descriptor.Descriptor(
       name='pore_type_config', full_name='minknow_api.analysis_configuration.PoreTypeConfiguration.pore_type_config',
       index=0, containing_type=None, fields=[]),
   ],
-  serialized_start=5472,
-  serialized_end=6155,
+  serialized_start=5815,
+  serialized_end=6498,
 )
 
 
@@ -1781,8 +1847,8 @@ _SETPORETYPECONFIGURATIONRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=6157,
-  serialized_end=6191,
+  serialized_start=6500,
+  serialized_end=6534,
 )
 
 
@@ -1812,8 +1878,8 @@ _WRITERCONFIGURATION_CHANNELCONFIGURATION_CHANNELLIST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=7085,
-  serialized_end=7116,
+  serialized_start=7428,
+  serialized_end=7459,
 )
 
 _WRITERCONFIGURATION_CHANNELCONFIGURATION = _descriptor.Descriptor(
@@ -1852,8 +1918,8 @@ _WRITERCONFIGURATION_CHANNELCONFIGURATION = _descriptor.Descriptor(
       name='channels', full_name='minknow_api.analysis_configuration.WriterConfiguration.ChannelConfiguration.channels',
       index=0, containing_type=None, fields=[]),
   ],
-  serialized_start=6918,
-  serialized_end=7128,
+  serialized_start=7261,
+  serialized_end=7471,
 )
 
 _WRITERCONFIGURATION_READFAST5CONFIGURATION = _descriptor.Descriptor(
@@ -1966,8 +2032,8 @@ _WRITERCONFIGURATION_READFAST5CONFIGURATION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=7131,
-  serialized_end=7963,
+  serialized_start=7474,
+  serialized_end=8306,
 )
 
 _WRITERCONFIGURATION_READFASTQCONFIGURATION = _descriptor.Descriptor(
@@ -2024,8 +2090,8 @@ _WRITERCONFIGURATION_READFASTQCONFIGURATION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=7966,
-  serialized_end=8172,
+  serialized_start=8309,
+  serialized_end=8515,
 )
 
 _WRITERCONFIGURATION_READBAMCONFIGURATION = _descriptor.Descriptor(
@@ -2068,8 +2134,8 @@ _WRITERCONFIGURATION_READBAMCONFIGURATION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=8175,
-  serialized_end=8334,
+  serialized_start=8518,
+  serialized_end=8677,
 )
 
 _WRITERCONFIGURATION_READPROTOBUFCONFIGURATION = _descriptor.Descriptor(
@@ -2112,8 +2178,8 @@ _WRITERCONFIGURATION_READPROTOBUFCONFIGURATION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=8337,
-  serialized_end=8501,
+  serialized_start=8680,
+  serialized_end=8844,
 )
 
 _WRITERCONFIGURATION_SEQUENCINGSUMMARYCONFIGURATION = _descriptor.Descriptor(
@@ -2149,8 +2215,8 @@ _WRITERCONFIGURATION_SEQUENCINGSUMMARYCONFIGURATION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=8504,
-  serialized_end=8652,
+  serialized_start=8847,
+  serialized_end=8995,
 )
 
 _WRITERCONFIGURATION_BULKCONFIGURATION = _descriptor.Descriptor(
@@ -2242,8 +2308,8 @@ _WRITERCONFIGURATION_BULKCONFIGURATION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=8655,
-  serialized_end=9349,
+  serialized_start=8998,
+  serialized_end=9692,
 )
 
 _WRITERCONFIGURATION_REPORTCONFIGURATION = _descriptor.Descriptor(
@@ -2288,6 +2354,20 @@ _WRITERCONFIGURATION_REPORTCONFIGURATION = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='barcode_alignment_report_file_pattern', full_name='minknow_api.analysis_configuration.WriterConfiguration.ReportConfiguration.barcode_alignment_report_file_pattern', index=5,
+      number=6, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='custom_report_suffix_pattern', full_name='minknow_api.analysis_configuration.WriterConfiguration.ReportConfiguration.custom_report_suffix_pattern', index=6,
+      number=7, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -2300,8 +2380,8 @@ _WRITERCONFIGURATION_REPORTCONFIGURATION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=9352,
-  serialized_end=9566,
+  serialized_start=9695,
+  serialized_end=9994,
 )
 
 _WRITERCONFIGURATION = _descriptor.Descriptor(
@@ -2373,8 +2453,8 @@ _WRITERCONFIGURATION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=6194,
-  serialized_end=9650,
+  serialized_start=6537,
+  serialized_end=10078,
 )
 
 
@@ -2397,8 +2477,8 @@ _SETWRITERCONFIGURATIONRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=9652,
-  serialized_end=9684,
+  serialized_start=10080,
+  serialized_end=10112,
 )
 
 
@@ -2421,8 +2501,8 @@ _GETWRITERCONFIGURATIONREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=9686,
-  serialized_end=9717,
+  serialized_start=10114,
+  serialized_end=10145,
 )
 
 
@@ -2445,8 +2525,8 @@ _GETREADCLASSIFICATIONSREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=9719,
-  serialized_end=9750,
+  serialized_start=10147,
+  serialized_end=10178,
 )
 
 
@@ -2483,8 +2563,8 @@ _GETREADCLASSIFICATIONSRESPONSE_READCLASSIFICATIONSENTRY = _descriptor.Descripto
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=9910,
-  serialized_end=9968,
+  serialized_start=10338,
+  serialized_end=10396,
 )
 
 _GETREADCLASSIFICATIONSRESPONSE = _descriptor.Descriptor(
@@ -2513,8 +2593,8 @@ _GETREADCLASSIFICATIONSRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=9753,
-  serialized_end=9968,
+  serialized_start=10181,
+  serialized_end=10396,
 )
 
 _EVENTDETECTION.fields_by_name['events_to_base_ratio'].message_type = google_dot_protobuf_dot_wrappers__pb2._DOUBLEVALUE
@@ -2563,6 +2643,9 @@ _BARCODINGCONFIGURATION.fields_by_name['min_score'].message_type = google_dot_pr
 _BARCODINGCONFIGURATION.fields_by_name['min_score_rear'].message_type = google_dot_protobuf_dot_wrappers__pb2._FLOATVALUE
 _BARCODINGCONFIGURATION.fields_by_name['min_score_mid'].message_type = google_dot_protobuf_dot_wrappers__pb2._FLOATVALUE
 _ALIGNMENTCONFIGURATION.fields_by_name['minimum_coverage'].message_type = google_dot_protobuf_dot_wrappers__pb2._FLOATVALUE
+_LAMPCONFIGURATION.fields_by_name['min_score_barcodes'].message_type = google_dot_protobuf_dot_wrappers__pb2._FLOATVALUE
+_LAMPCONFIGURATION.fields_by_name['min_score_masks'].message_type = google_dot_protobuf_dot_wrappers__pb2._FLOATVALUE
+_LAMPCONFIGURATION.fields_by_name['min_score_targets'].message_type = google_dot_protobuf_dot_wrappers__pb2._FLOATVALUE
 _BASECALLERCONFIGURATION_READFILTERING.fields_by_name['min_qscore'].message_type = google_dot_protobuf_dot_wrappers__pb2._DOUBLEVALUE
 _BASECALLERCONFIGURATION_READFILTERING.fields_by_name['min_samples'].message_type = google_dot_protobuf_dot_wrappers__pb2._UINT64VALUE
 _BASECALLERCONFIGURATION_READFILTERING.fields_by_name['max_samples'].message_type = google_dot_protobuf_dot_wrappers__pb2._UINT64VALUE
@@ -2578,6 +2661,7 @@ _BASECALLERCONFIGURATION.fields_by_name['read_filtering'].message_type = _BASECA
 _BASECALLERCONFIGURATION.fields_by_name['barcoding_configuration'].message_type = _BARCODINGCONFIGURATION
 _BASECALLERCONFIGURATION.fields_by_name['target_filtering'].message_type = _BASECALLERCONFIGURATION_TARGETFILTERING
 _BASECALLERCONFIGURATION.fields_by_name['alignment_configuration'].message_type = _ALIGNMENTCONFIGURATION
+_BASECALLERCONFIGURATION.fields_by_name['lamp_configuration'].message_type = _LAMPCONFIGURATION
 _SETBASECALLERCONFIGURATIONREQUEST.fields_by_name['configs'].message_type = _BASECALLERCONFIGURATION
 _PORETYPECONFIGURATION_CHANNELWELL.containing_type = _PORETYPECONFIGURATION
 _PORETYPECONFIGURATION_CHANNELWELLPORETYPECONFIGURATIONS_CHANNELWELLLIST.fields_by_name['channel_well'].message_type = _PORETYPECONFIGURATION_CHANNELWELL
@@ -2652,6 +2736,7 @@ DESCRIPTOR.message_types_by_name['GetSummaryRequest'] = _GETSUMMARYREQUEST
 DESCRIPTOR.message_types_by_name['GetSummaryResponse'] = _GETSUMMARYRESPONSE
 DESCRIPTOR.message_types_by_name['BarcodingConfiguration'] = _BARCODINGCONFIGURATION
 DESCRIPTOR.message_types_by_name['AlignmentConfiguration'] = _ALIGNMENTCONFIGURATION
+DESCRIPTOR.message_types_by_name['LampConfiguration'] = _LAMPCONFIGURATION
 DESCRIPTOR.message_types_by_name['BasecallerConfiguration'] = _BASECALLERCONFIGURATION
 DESCRIPTOR.message_types_by_name['SetBasecallerConfigurationRequest'] = _SETBASECALLERCONFIGURATIONREQUEST
 DESCRIPTOR.message_types_by_name['SetBasecallerConfigurationResponse'] = _SETBASECALLERCONFIGURATIONRESPONSE
@@ -3139,10 +3224,39 @@ AlignmentConfiguration = _reflection.GeneratedProtocolMessageType('AlignmentConf
           Minimum coverage for guppy to accept an alignment.  If not
           specified a default value is used.  Note: this option cannot
           be used during live basecalling.
+      aggregate_statistics_for_multiple_bed_hits:
+          Control how statistics for bed results are aggregated.  If set
+          to false only the bed hit with the highest overlap is used
+          when computing heatmap/throughput graphs with bed hits.  If
+          set to true each bed hit is considered and bases for all hits
+          are counted. This may give more honest representation of
+          individual bed hit results but will skew read count statistics
+          - as each hit will be counted for every bed hit.  Note: this
+          option has no effect in offline basecalling.
   """,
   # @@protoc_insertion_point(class_scope:minknow_api.analysis_configuration.AlignmentConfiguration)
   })
 _sym_db.RegisterMessage(AlignmentConfiguration)
+
+LampConfiguration = _reflection.GeneratedProtocolMessageType('LampConfiguration', (_message.Message,), {
+  'DESCRIPTOR' : _LAMPCONFIGURATION,
+  '__module__' : 'minknow_api.analysis_configuration_pb2'
+  ,
+  '__doc__': """Since 4.1
+  
+  Attributes:
+      lamp_kit:
+          Set the lamp kit being used.
+      min_score_barcodes:
+          Optionally specify a min score to detect a valid lamp barcode.
+      min_score_masks:
+          Optionally set the minimimum valid score for a lamp mask.
+      min_score_targets:
+          Optionally specify a minimum score for lamp targets.
+  """,
+  # @@protoc_insertion_point(class_scope:minknow_api.analysis_configuration.LampConfiguration)
+  })
+_sym_db.RegisterMessage(LampConfiguration)
 
 BasecallerConfiguration = _reflection.GeneratedProtocolMessageType('BasecallerConfiguration', (_message.Message,), {
 
@@ -3188,8 +3302,11 @@ BasecallerConfiguration = _reflection.GeneratedProtocolMessageType('BasecallerCo
           basecaller.  If no filtering parameters are provided then
           reads will not be target-filtered.  Since 3.7
       alignment_configuration:
-          Alignment configuration parameters. If no configuration
-          alignment is disabled.  Since 4.0
+          Alignment configuration parameters. If no configuration is
+          specified alignment is disabled.  Since 4.0
+      lamp_configuration:
+          Lamp configuration parameters. If no configuration is
+          specified lamp is disabled.  Since 4.1
   """,
   # @@protoc_insertion_point(class_scope:minknow_api.analysis_configuration.BasecallerConfiguration)
   })
@@ -3568,6 +3685,20 @@ WriterConfiguration = _reflection.GeneratedProtocolMessageType('WriterConfigurat
             each {xxx} section is replaced with an attribute from the
             minknow state when the file is written.  See file pattern
             attributes above.
+        barcode_alignment_report_file_pattern:
+            The pattern used to name the barcode-alignment report. If left
+            empty but output is enabled a default pattern is used.
+            default: barcode_alignment_{flow_cell_id}_{short_run_id}.tsv
+            Where each {xxx} section is replaced with an attribute from
+            the minknow state when the file is written.  See file pattern
+            attributes above.
+        custom_report_suffix_pattern:
+            The pattern used to suffix custom reports.  default:
+            "_{flow_cell_id}_{short_run_id}" Where each {xxx} section is
+            replaced with an attribute from the minknow state when the
+            file is written.  Custom reports use this to build filenames:
+            - "custom_report{suffix}.txt"  See file pattern attributes
+            above.
     """,
     # @@protoc_insertion_point(class_scope:minknow_api.analysis_configuration.WriterConfiguration.ReportConfiguration)
     })
@@ -3699,8 +3830,8 @@ _ANALYSISCONFIGURATIONSERVICE = _descriptor.ServiceDescriptor(
   file=DESCRIPTOR,
   index=0,
   serialized_options=None,
-  serialized_start=9971,
-  serialized_end=12108,
+  serialized_start=10399,
+  serialized_end=12761,
   methods=[
   _descriptor.MethodDescriptor(
     name='get_analysis_configuration',
@@ -3709,7 +3840,7 @@ _ANALYSISCONFIGURATIONSERVICE = _descriptor.ServiceDescriptor(
     containing_service=None,
     input_type=_GETANALYSISCONFIGURATIONREQUEST,
     output_type=_ANALYSISCONFIGURATION,
-    serialized_options=None,
+    serialized_options=_b('\220\002\001'),
   ),
   _descriptor.MethodDescriptor(
     name='set_analysis_configuration',
@@ -3718,7 +3849,7 @@ _ANALYSISCONFIGURATIONSERVICE = _descriptor.ServiceDescriptor(
     containing_service=None,
     input_type=_ANALYSISCONFIGURATION,
     output_type=_SETANALYSISCONFIGURATIONRESPONSE,
-    serialized_options=None,
+    serialized_options=_b('\220\002\002'),
   ),
   _descriptor.MethodDescriptor(
     name='reset_analysis_configuration',
@@ -3727,7 +3858,7 @@ _ANALYSISCONFIGURATIONSERVICE = _descriptor.ServiceDescriptor(
     containing_service=None,
     input_type=_RESETANALYSISCONFIGURATIONREQUEST,
     output_type=_RESETANALYSISCONFIGURATIONRESPONSE,
-    serialized_options=None,
+    serialized_options=_b('\220\002\002'),
   ),
   _descriptor.MethodDescriptor(
     name='set_analysis_enabled_state',
@@ -3736,7 +3867,7 @@ _ANALYSISCONFIGURATIONSERVICE = _descriptor.ServiceDescriptor(
     containing_service=None,
     input_type=_SETANALYSISENABLEDSTATEREQUEST,
     output_type=_SETANALYSISENABLEDSTATERESPONSE,
-    serialized_options=None,
+    serialized_options=_b('\220\002\002'),
   ),
   _descriptor.MethodDescriptor(
     name='get_channel_states_desc',
@@ -3745,7 +3876,7 @@ _ANALYSISCONFIGURATIONSERVICE = _descriptor.ServiceDescriptor(
     containing_service=None,
     input_type=_GETCHANNELSTATESDESCREQUEST,
     output_type=_GETCHANNELSTATESDESCRESPONSE,
-    serialized_options=None,
+    serialized_options=_b('\220\002\001'),
   ),
   _descriptor.MethodDescriptor(
     name='get_summary',
@@ -3754,7 +3885,7 @@ _ANALYSISCONFIGURATIONSERVICE = _descriptor.ServiceDescriptor(
     containing_service=None,
     input_type=_GETSUMMARYREQUEST,
     output_type=_GETSUMMARYRESPONSE,
-    serialized_options=None,
+    serialized_options=_b('\220\002\001'),
   ),
   _descriptor.MethodDescriptor(
     name='set_basecaller_configuration',
@@ -3763,61 +3894,70 @@ _ANALYSISCONFIGURATIONSERVICE = _descriptor.ServiceDescriptor(
     containing_service=None,
     input_type=_SETBASECALLERCONFIGURATIONREQUEST,
     output_type=_SETBASECALLERCONFIGURATIONRESPONSE,
-    serialized_options=None,
+    serialized_options=_b('\220\002\002'),
+  ),
+  _descriptor.MethodDescriptor(
+    name='preload_basecaller_configuration',
+    full_name='minknow_api.analysis_configuration.AnalysisConfigurationService.preload_basecaller_configuration',
+    index=7,
+    containing_service=None,
+    input_type=_SETBASECALLERCONFIGURATIONREQUEST,
+    output_type=_SETBASECALLERCONFIGURATIONRESPONSE,
+    serialized_options=_b('\220\002\002'),
   ),
   _descriptor.MethodDescriptor(
     name='get_basecaller_configuration',
     full_name='minknow_api.analysis_configuration.AnalysisConfigurationService.get_basecaller_configuration',
-    index=7,
+    index=8,
     containing_service=None,
     input_type=_GETBASECALLERCONFIGURATIONREQUEST,
     output_type=_BASECALLERCONFIGURATION,
-    serialized_options=None,
+    serialized_options=_b('\220\002\001'),
   ),
   _descriptor.MethodDescriptor(
     name='get_pore_type_configuration',
     full_name='minknow_api.analysis_configuration.AnalysisConfigurationService.get_pore_type_configuration',
-    index=8,
+    index=9,
     containing_service=None,
     input_type=_GETPORETYPECONFIGURATIONREQUEST,
     output_type=_PORETYPECONFIGURATION,
-    serialized_options=None,
+    serialized_options=_b('\220\002\001'),
   ),
   _descriptor.MethodDescriptor(
     name='set_pore_type_configuration',
     full_name='minknow_api.analysis_configuration.AnalysisConfigurationService.set_pore_type_configuration',
-    index=9,
+    index=10,
     containing_service=None,
     input_type=_PORETYPECONFIGURATION,
     output_type=_SETPORETYPECONFIGURATIONRESPONSE,
-    serialized_options=None,
+    serialized_options=_b('\220\002\002'),
   ),
   _descriptor.MethodDescriptor(
     name='set_writer_configuration',
     full_name='minknow_api.analysis_configuration.AnalysisConfigurationService.set_writer_configuration',
-    index=10,
+    index=11,
     containing_service=None,
     input_type=_WRITERCONFIGURATION,
     output_type=_SETWRITERCONFIGURATIONRESPONSE,
-    serialized_options=None,
+    serialized_options=_b('\220\002\002'),
   ),
   _descriptor.MethodDescriptor(
     name='get_writer_configuration',
     full_name='minknow_api.analysis_configuration.AnalysisConfigurationService.get_writer_configuration',
-    index=11,
+    index=12,
     containing_service=None,
     input_type=_GETWRITERCONFIGURATIONREQUEST,
     output_type=_WRITERCONFIGURATION,
-    serialized_options=None,
+    serialized_options=_b('\220\002\001'),
   ),
   _descriptor.MethodDescriptor(
     name='get_read_classifications',
     full_name='minknow_api.analysis_configuration.AnalysisConfigurationService.get_read_classifications',
-    index=12,
+    index=13,
     containing_service=None,
     input_type=_GETREADCLASSIFICATIONSREQUEST,
     output_type=_GETREADCLASSIFICATIONSRESPONSE,
-    serialized_options=None,
+    serialized_options=_b('\220\002\001'),
   ),
 ])
 _sym_db.RegisterServiceDescriptor(_ANALYSISCONFIGURATIONSERVICE)

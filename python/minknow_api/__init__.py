@@ -142,6 +142,13 @@ logger = logging.getLogger(__name__)
 # Connection helpers
 #
 
+GRPC_CHANNEL_OPTIONS = [
+    ("grpc.max_send_message_length", 16 * 1024 * 1024),
+    ("grpc.max_receive_message_length", 16 * 1024 * 1024),
+    ("grpc.http2.min_time_between_pings_ms", 1000),
+    ("grpc.ssl_target_name_override", "localhost",),  # that's what our cert's CN is
+]
+
 
 class MissingMinknowSSlCertError(Exception):
     pass
@@ -259,16 +266,6 @@ class Connection(object):
             port = int(os.environ["MINKNOW_RPC_PORT"])
         self.port = port
 
-        channel_opts = [
-            ("grpc.max_send_message_length", 16 * 1024 * 1024),
-            ("grpc.max_receive_message_length", 16 * 1024 * 1024),
-            ("grpc.http2.min_time_between_pings_ms", 1000),
-            (
-                "grpc.ssl_target_name_override",
-                "localhost",
-            ),  # that's what our cert's CN is
-        ]
-
         error = None
         retry_count = 5
         for i in range(retry_count):
@@ -276,11 +273,11 @@ class Connection(object):
                 self.channel = grpc.secure_channel(
                     "{}:{}".format(host, port),
                     credentials=grpc_credentials(),
-                    options=channel_opts,
+                    options=GRPC_CHANNEL_OPTIONS,
                 )
             else:
                 self.channel = grpc.insecure_channel(
-                    "{}:{}".format(host, port), options=channel_opts
+                    "{}:{}".format(host, port), options=GRPC_CHANNEL_OPTIONS
                 )
 
             # One entry for each service

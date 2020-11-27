@@ -1,0 +1,3 @@
+flow_cell_id,barcode,alias
+FC001,barcode01,alias
+FC001,barcode01,other_alias

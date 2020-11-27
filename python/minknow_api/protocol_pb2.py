@@ -26,7 +26,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='minknow_api.protocol',
   syntax='proto3',
   serialized_options=_b('\n\034com.nanoporetech.minknow_api\242\002\005MKAPI'),
-  serialized_pb=_b('\n\x1aminknow_api/protocol.proto\x12\x14minknow_api.protocol\x1a\x1dminknow_api/acquisition.proto\x1a\x18minknow_api/device.proto\x1a\x1dminknow_api/rpc_options.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1egoogle/protobuf/wrappers.proto\"\x7f\n\x13ProtocolRunUserInfo\x12\x37\n\x11protocol_group_id\x18\x01 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12/\n\tsample_id\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.StringValue\"|\n\x14StartProtocolRequest\x12\x18\n\nidentifier\x18\x01 \x01(\tB\x04\x88\xb5\x18\x01\x12\x0c\n\x04\x61rgs\x18\x02 \x03(\t\x12<\n\tuser_info\x18\x03 \x01(\x0b\x32).minknow_api.protocol.ProtocolRunUserInfo\"\'\n\x15StartProtocolResponse\x12\x0e\n\x06run_id\x18\x01 \x01(\t\"c\n\x13StopProtocolRequest\x12L\n\x13\x64\x61ta_action_on_stop\x18\x01 \x01(\x0e\x32/.minknow_api.acquisition.StopRequest.DataAction\"\x16\n\x14StopProtocolResponse\",\n\x14ListProtocolsRequest\x12\x14\n\x0c\x66orce_reload\x18\x01 \x01(\x08\"\xff\x03\n\x0cProtocolInfo\x12\x12\n\nidentifier\x18\x01 \x01(\t\x12:\n\x04tags\x18\x02 \x03(\x0b\x32,.minknow_api.protocol.ProtocolInfo.TagsEntry\x12\x0c\n\x04name\x18\x03 \x01(\t\x12U\n\x15tag_extraction_result\x18\x04 \x01(\x0b\x32\x36.minknow_api.protocol.ProtocolInfo.TagExtractionResult\x1a\xa1\x01\n\x08TagValue\x12\x16\n\x0cstring_value\x18\x01 \x01(\tH\x00\x12\x14\n\nbool_value\x18\x02 \x01(\x08H\x00\x12\x13\n\tint_value\x18\x03 \x01(\x03H\x00\x12\x16\n\x0c\x64ouble_value\x18\x04 \x01(\x01H\x00\x12\x15\n\x0b\x61rray_value\x18\x05 \x01(\tH\x00\x12\x16\n\x0cobject_value\x18\x06 \x01(\tH\x00\x42\x0b\n\ttag_value\x1a<\n\x13TagExtractionResult\x12\x0f\n\x07success\x18\x01 \x01(\x08\x12\x14\n\x0c\x65rror_report\x18\x02 \x01(\t\x1aX\n\tTagsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12:\n\x05value\x18\x02 \x01(\x0b\x32+.minknow_api.protocol.ProtocolInfo.TagValue:\x02\x38\x01\"N\n\x15ListProtocolsResponse\x12\x35\n\tprotocols\x18\x01 \x03(\x0b\x32\".minknow_api.protocol.ProtocolInfo\"\xff\x01\n\x16WaitForFinishedRequest\x12\x14\n\x06run_id\x18\x01 \x01(\tB\x04\x88\xb5\x18\x01\x12M\n\x05state\x18\x02 \x01(\x0e\x32>.minknow_api.protocol.WaitForFinishedRequest.NotificationState\x12\x0f\n\x07timeout\x18\x03 \x01(\x02\"o\n\x11NotificationState\x12\x19\n\x15NOTIFY_ON_TERMINATION\x10\x00\x12\x1d\n\x19NOTIFY_BEFORE_TERMINATION\x10\x01\x12 \n\x1cNOTIFY_ON_SCRIPT_TERMINATION\x10\x02\"#\n\x11GetRunInfoRequest\x12\x0e\n\x06run_id\x18\x01 \x01(\t\"2\n\x17\x45pi2meWorkflowReference\x12\n\n\x02id\x18\x01 \x01(\x03\x12\x0b\n\x03url\x18\x02 \x01(\t\"\xf6\x04\n\x0fProtocolRunInfo\x12\x0e\n\x06run_id\x18\x01 \x01(\t\x12\x13\n\x0bprotocol_id\x18\x02 \x01(\t\x12\x0c\n\x04\x61rgs\x18\x03 \x03(\t\x12\x13\n\x0boutput_path\x18\x0b \x01(\t\x12\x32\n\x05state\x18\x04 \x01(\x0e\x32#.minknow_api.protocol.ProtocolState\x12.\n\nstart_time\x18\x05 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x33\n\x0fscript_end_time\x18\t \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12,\n\x08\x65nd_time\x18\x06 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x1b\n\x13\x61\x63quisition_run_ids\x18\x07 \x03(\t\x12<\n\tuser_info\x18\x08 \x01(\x0b\x32).minknow_api.protocol.ProtocolRunUserInfo\x12G\n\x10\x65pi2me_workflows\x18\n \x03(\x0b\x32-.minknow_api.protocol.Epi2meWorkflowReference\x12\x39\n\x06\x64\x65vice\x18\x0c \x01(\x0b\x32).minknow_api.device.GetDeviceInfoResponse\x12>\n\tflow_cell\x18\r \x01(\x0b\x32+.minknow_api.device.GetFlowCellInfoResponse\x12\x35\n\tmeta_info\x18\x0e \x01(\x0b\x32\".minknow_api.protocol.ProtocolInfo\"\x19\n\x17ListProtocolRunsRequest\"+\n\x18ListProtocolRunsResponse\x12\x0f\n\x07run_ids\x18\x01 \x03(\t\"\x1e\n\x1cGetCurrentProtocolRunRequest\"X\n\x1dGetCurrentProtocolRunResponse\x12\x37\n\x08run_info\x18\x03 \x01(\x0b\x32%.minknow_api.protocol.ProtocolRunInfo\" \n\x1eWatchCurrentProtocolRunRequest\"\x17\n\x15GetContextInfoRequest\"\xa1\x01\n\x16GetContextInfoResponse\x12S\n\x0c\x63ontext_info\x18\x01 \x03(\x0b\x32=.minknow_api.protocol.GetContextInfoResponse.ContextInfoEntry\x1a\x32\n\x10\x43ontextInfoEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\x9f\x01\n\x15SetContextInfoRequest\x12R\n\x0c\x63ontext_info\x18\x01 \x03(\x0b\x32<.minknow_api.protocol.SetContextInfoRequest.ContextInfoEntry\x1a\x32\n\x10\x43ontextInfoEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\x18\n\x16SetContextInfoResponse\"\x1b\n\x19GetProtocolPurposeRequest\"-\n\x1aGetProtocolPurposeResponse\x12\x0f\n\x07purpose\x18\x01 \x01(\t\",\n\x19SetProtocolPurposeRequest\x12\x0f\n\x07purpose\x18\x01 \x01(\t\"\x1c\n\x1aSetProtocolPurposeResponse\"~\n\x18\x41\x64\x64\x45pi2meWorkflowRequest\x12\x14\n\x06run_id\x18\x01 \x01(\tB\x04\x88\xb5\x18\x01\x12L\n\x0f\x65pi2me_workflow\x18\x02 \x01(\x0b\x32-.minknow_api.protocol.Epi2meWorkflowReferenceB\x04\x88\xb5\x18\x01\"\x1b\n\x19\x41\x64\x64\x45pi2meWorkflowResponse\"\x1d\n\x1bListProtocolGroupIdsRequest\":\n\x1cListProtocolGroupIdsResponse\x12\x1a\n\x12protocol_group_ids\x18\x01 \x03(\t*\xa2\x02\n\rProtocolState\x12\x14\n\x10PROTOCOL_RUNNING\x10\x00\x12$\n PROTOCOL_WAITING_FOR_TEMPERATURE\x10\x04\x12$\n PROTOCOL_WAITING_FOR_ACQUISITION\x10\x05\x12\x16\n\x12PROTOCOL_COMPLETED\x10\x01\x12\x1c\n\x18PROTOCOL_STOPPED_BY_USER\x10\x02\x12 \n\x1cPROTOCOL_FINISHED_WITH_ERROR\x10\x03\x12\'\n#PROTOCOL_FINISHED_WITH_DEVICE_ERROR\x10\x06\x12.\n*PROTOCOL_FINISHED_UNABLE_TO_SEND_TELEMETRY\x10\x07\x32\xed\x0c\n\x0fProtocolService\x12k\n\x0estart_protocol\x12*.minknow_api.protocol.StartProtocolRequest\x1a+.minknow_api.protocol.StartProtocolResponse\"\x00\x12h\n\rstop_protocol\x12).minknow_api.protocol.StopProtocolRequest\x1a*.minknow_api.protocol.StopProtocolResponse\"\x00\x12j\n\x11wait_for_finished\x12,.minknow_api.protocol.WaitForFinishedRequest\x1a%.minknow_api.protocol.ProtocolRunInfo\"\x00\x12`\n\x0cget_run_info\x12\'.minknow_api.protocol.GetRunInfoRequest\x1a%.minknow_api.protocol.ProtocolRunInfo\"\x00\x12u\n\x12list_protocol_runs\x12-.minknow_api.protocol.ListProtocolRunsRequest\x1a..minknow_api.protocol.ListProtocolRunsResponse\"\x00\x12w\n\x18get_current_protocol_run\x12\x32.minknow_api.protocol.GetCurrentProtocolRunRequest\x1a%.minknow_api.protocol.ProtocolRunInfo\"\x00\x12}\n\x1awatch_current_protocol_run\x12\x34.minknow_api.protocol.WatchCurrentProtocolRunRequest\x1a%.minknow_api.protocol.ProtocolRunInfo\"\x00\x30\x01\x12k\n\x0elist_protocols\x12*.minknow_api.protocol.ListProtocolsRequest\x1a+.minknow_api.protocol.ListProtocolsResponse\"\x00\x12o\n\x10get_context_info\x12+.minknow_api.protocol.GetContextInfoRequest\x1a,.minknow_api.protocol.GetContextInfoResponse\"\x00\x12o\n\x10set_context_info\x12+.minknow_api.protocol.SetContextInfoRequest\x1a,.minknow_api.protocol.SetContextInfoResponse\"\x00\x12{\n\x14get_protocol_purpose\x12/.minknow_api.protocol.GetProtocolPurposeRequest\x1a\x30.minknow_api.protocol.GetProtocolPurposeResponse\"\x00\x12{\n\x14set_protocol_purpose\x12/.minknow_api.protocol.SetProtocolPurposeRequest\x1a\x30.minknow_api.protocol.SetProtocolPurposeResponse\"\x00\x12x\n\x13\x61\x64\x64_epi2me_workflow\x12..minknow_api.protocol.AddEpi2meWorkflowRequest\x1a/.minknow_api.protocol.AddEpi2meWorkflowResponse\"\x00\x12\x82\x01\n\x17list_protocol_group_ids\x12\x31.minknow_api.protocol.ListProtocolGroupIdsRequest\x1a\x32.minknow_api.protocol.ListProtocolGroupIdsResponse\"\x00\x42&\n\x1c\x63om.nanoporetech.minknow_api\xa2\x02\x05MKAPIb\x06proto3')
+  serialized_pb=_b('\n\x1aminknow_api/protocol.proto\x12\x14minknow_api.protocol\x1a\x1dminknow_api/acquisition.proto\x1a\x18minknow_api/device.proto\x1a\x1dminknow_api/rpc_options.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1egoogle/protobuf/wrappers.proto\"\xf3\x01\n\x0f\x42\x61rcodeUserData\x12\x14\n\x0c\x62\x61rcode_name\x18\x01 \x01(\t\x12\x17\n\x0flamp_barcode_id\x18\x02 \x01(\t\x12\r\n\x05\x61lias\x18\x03 \x01(\t\x12>\n\x04type\x18\x04 \x01(\x0e\x32\x30.minknow_api.protocol.BarcodeUserData.SampleType\"b\n\nSampleType\x12\x0f\n\x0btest_sample\x10\x00\x12\x14\n\x10positive_control\x10\x01\x12\x14\n\x10negative_control\x10\x02\x12\x17\n\x13no_template_control\x10\x03\"\xc1\x01\n\x13ProtocolRunUserInfo\x12\x37\n\x11protocol_group_id\x18\x01 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12/\n\tsample_id\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12@\n\x11\x62\x61rcode_user_info\x18\x03 \x03(\x0b\x32%.minknow_api.protocol.BarcodeUserData\"|\n\x14StartProtocolRequest\x12\x18\n\nidentifier\x18\x01 \x01(\tB\x04\x88\xb5\x18\x01\x12\x0c\n\x04\x61rgs\x18\x02 \x03(\t\x12<\n\tuser_info\x18\x03 \x01(\x0b\x32).minknow_api.protocol.ProtocolRunUserInfo\"\'\n\x15StartProtocolResponse\x12\x0e\n\x06run_id\x18\x01 \x01(\t\"c\n\x13StopProtocolRequest\x12L\n\x13\x64\x61ta_action_on_stop\x18\x01 \x01(\x0e\x32/.minknow_api.acquisition.StopRequest.DataAction\"\x16\n\x14StopProtocolResponse\",\n\x14ListProtocolsRequest\x12\x14\n\x0c\x66orce_reload\x18\x01 \x01(\x08\"\xff\x03\n\x0cProtocolInfo\x12\x12\n\nidentifier\x18\x01 \x01(\t\x12:\n\x04tags\x18\x02 \x03(\x0b\x32,.minknow_api.protocol.ProtocolInfo.TagsEntry\x12\x0c\n\x04name\x18\x03 \x01(\t\x12U\n\x15tag_extraction_result\x18\x04 \x01(\x0b\x32\x36.minknow_api.protocol.ProtocolInfo.TagExtractionResult\x1a\xa1\x01\n\x08TagValue\x12\x16\n\x0cstring_value\x18\x01 \x01(\tH\x00\x12\x14\n\nbool_value\x18\x02 \x01(\x08H\x00\x12\x13\n\tint_value\x18\x03 \x01(\x03H\x00\x12\x16\n\x0c\x64ouble_value\x18\x04 \x01(\x01H\x00\x12\x15\n\x0b\x61rray_value\x18\x05 \x01(\tH\x00\x12\x16\n\x0cobject_value\x18\x06 \x01(\tH\x00\x42\x0b\n\ttag_value\x1a<\n\x13TagExtractionResult\x12\x0f\n\x07success\x18\x01 \x01(\x08\x12\x14\n\x0c\x65rror_report\x18\x02 \x01(\t\x1aX\n\tTagsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12:\n\x05value\x18\x02 \x01(\x0b\x32+.minknow_api.protocol.ProtocolInfo.TagValue:\x02\x38\x01\"N\n\x15ListProtocolsResponse\x12\x35\n\tprotocols\x18\x01 \x03(\x0b\x32\".minknow_api.protocol.ProtocolInfo\"\xff\x01\n\x16WaitForFinishedRequest\x12\x14\n\x06run_id\x18\x01 \x01(\tB\x04\x88\xb5\x18\x01\x12M\n\x05state\x18\x02 \x01(\x0e\x32>.minknow_api.protocol.WaitForFinishedRequest.NotificationState\x12\x0f\n\x07timeout\x18\x03 \x01(\x02\"o\n\x11NotificationState\x12\x19\n\x15NOTIFY_ON_TERMINATION\x10\x00\x12\x1d\n\x19NOTIFY_BEFORE_TERMINATION\x10\x01\x12 \n\x1cNOTIFY_ON_SCRIPT_TERMINATION\x10\x02\"#\n\x11GetRunInfoRequest\x12\x0e\n\x06run_id\x18\x01 \x01(\t\"2\n\x17\x45pi2meWorkflowReference\x12\n\n\x02id\x18\x01 \x01(\x03\x12\x0b\n\x03url\x18\x02 \x01(\t\"\xf6\x04\n\x0fProtocolRunInfo\x12\x0e\n\x06run_id\x18\x01 \x01(\t\x12\x13\n\x0bprotocol_id\x18\x02 \x01(\t\x12\x0c\n\x04\x61rgs\x18\x03 \x03(\t\x12\x13\n\x0boutput_path\x18\x0b \x01(\t\x12\x32\n\x05state\x18\x04 \x01(\x0e\x32#.minknow_api.protocol.ProtocolState\x12.\n\nstart_time\x18\x05 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x33\n\x0fscript_end_time\x18\t \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12,\n\x08\x65nd_time\x18\x06 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x1b\n\x13\x61\x63quisition_run_ids\x18\x07 \x03(\t\x12<\n\tuser_info\x18\x08 \x01(\x0b\x32).minknow_api.protocol.ProtocolRunUserInfo\x12G\n\x10\x65pi2me_workflows\x18\n \x03(\x0b\x32-.minknow_api.protocol.Epi2meWorkflowReference\x12\x39\n\x06\x64\x65vice\x18\x0c \x01(\x0b\x32).minknow_api.device.GetDeviceInfoResponse\x12>\n\tflow_cell\x18\r \x01(\x0b\x32+.minknow_api.device.GetFlowCellInfoResponse\x12\x35\n\tmeta_info\x18\x0e \x01(\x0b\x32\".minknow_api.protocol.ProtocolInfo\"\x19\n\x17ListProtocolRunsRequest\"+\n\x18ListProtocolRunsResponse\x12\x0f\n\x07run_ids\x18\x01 \x03(\t\"\x1e\n\x1cGetCurrentProtocolRunRequest\"X\n\x1dGetCurrentProtocolRunResponse\x12\x37\n\x08run_info\x18\x03 \x01(\x0b\x32%.minknow_api.protocol.ProtocolRunInfo\" \n\x1eWatchCurrentProtocolRunRequest\"\x17\n\x15GetContextInfoRequest\"\xa1\x01\n\x16GetContextInfoResponse\x12S\n\x0c\x63ontext_info\x18\x01 \x03(\x0b\x32=.minknow_api.protocol.GetContextInfoResponse.ContextInfoEntry\x1a\x32\n\x10\x43ontextInfoEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\x9f\x01\n\x15SetContextInfoRequest\x12R\n\x0c\x63ontext_info\x18\x01 \x03(\x0b\x32<.minknow_api.protocol.SetContextInfoRequest.ContextInfoEntry\x1a\x32\n\x10\x43ontextInfoEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\x18\n\x16SetContextInfoResponse\"\x1b\n\x19GetProtocolPurposeRequest\"-\n\x1aGetProtocolPurposeResponse\x12\x0f\n\x07purpose\x18\x01 \x01(\t\",\n\x19SetProtocolPurposeRequest\x12\x0f\n\x07purpose\x18\x01 \x01(\t\"\x1c\n\x1aSetProtocolPurposeResponse\"~\n\x18\x41\x64\x64\x45pi2meWorkflowRequest\x12\x14\n\x06run_id\x18\x01 \x01(\tB\x04\x88\xb5\x18\x01\x12L\n\x0f\x65pi2me_workflow\x18\x02 \x01(\x0b\x32-.minknow_api.protocol.Epi2meWorkflowReferenceB\x04\x88\xb5\x18\x01\"\x1b\n\x19\x41\x64\x64\x45pi2meWorkflowResponse\"\x1d\n\x1bListProtocolGroupIdsRequest\":\n\x1cListProtocolGroupIdsResponse\x12\x1a\n\x12protocol_group_ids\x18\x01 \x03(\t*\xa2\x02\n\rProtocolState\x12\x14\n\x10PROTOCOL_RUNNING\x10\x00\x12$\n PROTOCOL_WAITING_FOR_TEMPERATURE\x10\x04\x12$\n PROTOCOL_WAITING_FOR_ACQUISITION\x10\x05\x12\x16\n\x12PROTOCOL_COMPLETED\x10\x01\x12\x1c\n\x18PROTOCOL_STOPPED_BY_USER\x10\x02\x12 \n\x1cPROTOCOL_FINISHED_WITH_ERROR\x10\x03\x12\'\n#PROTOCOL_FINISHED_WITH_DEVICE_ERROR\x10\x06\x12.\n*PROTOCOL_FINISHED_UNABLE_TO_SEND_TELEMETRY\x10\x07\x32\x8f\r\n\x0fProtocolService\x12k\n\x0estart_protocol\x12*.minknow_api.protocol.StartProtocolRequest\x1a+.minknow_api.protocol.StartProtocolResponse\"\x00\x12h\n\rstop_protocol\x12).minknow_api.protocol.StopProtocolRequest\x1a*.minknow_api.protocol.StopProtocolResponse\"\x00\x12m\n\x11wait_for_finished\x12,.minknow_api.protocol.WaitForFinishedRequest\x1a%.minknow_api.protocol.ProtocolRunInfo\"\x03\x90\x02\x01\x12\x63\n\x0cget_run_info\x12\'.minknow_api.protocol.GetRunInfoRequest\x1a%.minknow_api.protocol.ProtocolRunInfo\"\x03\x90\x02\x01\x12x\n\x12list_protocol_runs\x12-.minknow_api.protocol.ListProtocolRunsRequest\x1a..minknow_api.protocol.ListProtocolRunsResponse\"\x03\x90\x02\x01\x12z\n\x18get_current_protocol_run\x12\x32.minknow_api.protocol.GetCurrentProtocolRunRequest\x1a%.minknow_api.protocol.ProtocolRunInfo\"\x03\x90\x02\x01\x12\x80\x01\n\x1awatch_current_protocol_run\x12\x34.minknow_api.protocol.WatchCurrentProtocolRunRequest\x1a%.minknow_api.protocol.ProtocolRunInfo\"\x03\x90\x02\x01\x30\x01\x12n\n\x0elist_protocols\x12*.minknow_api.protocol.ListProtocolsRequest\x1a+.minknow_api.protocol.ListProtocolsResponse\"\x03\x90\x02\x02\x12r\n\x10get_context_info\x12+.minknow_api.protocol.GetContextInfoRequest\x1a,.minknow_api.protocol.GetContextInfoResponse\"\x03\x90\x02\x01\x12r\n\x10set_context_info\x12+.minknow_api.protocol.SetContextInfoRequest\x1a,.minknow_api.protocol.SetContextInfoResponse\"\x03\x90\x02\x02\x12~\n\x14get_protocol_purpose\x12/.minknow_api.protocol.GetProtocolPurposeRequest\x1a\x30.minknow_api.protocol.GetProtocolPurposeResponse\"\x03\x90\x02\x01\x12~\n\x14set_protocol_purpose\x12/.minknow_api.protocol.SetProtocolPurposeRequest\x1a\x30.minknow_api.protocol.SetProtocolPurposeResponse\"\x03\x90\x02\x02\x12x\n\x13\x61\x64\x64_epi2me_workflow\x12..minknow_api.protocol.AddEpi2meWorkflowRequest\x1a/.minknow_api.protocol.AddEpi2meWorkflowResponse\"\x00\x12\x85\x01\n\x17list_protocol_group_ids\x12\x31.minknow_api.protocol.ListProtocolGroupIdsRequest\x1a\x32.minknow_api.protocol.ListProtocolGroupIdsResponse\"\x03\x90\x02\x01\x42&\n\x1c\x63om.nanoporetech.minknow_api\xa2\x02\x05MKAPIb\x06proto3')
   ,
   dependencies=[minknow__api_dot_acquisition__pb2.DESCRIPTOR,minknow__api_dot_device__pb2.DESCRIPTOR,minknow__api_dot_rpc__options__pb2.DESCRIPTOR,google_dot_protobuf_dot_timestamp__pb2.DESCRIPTOR,google_dot_protobuf_dot_wrappers__pb2.DESCRIPTOR,])
 
@@ -71,8 +71,8 @@ _PROTOCOLSTATE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=3252,
-  serialized_end=3542,
+  serialized_start=3565,
+  serialized_end=3855,
 )
 _sym_db.RegisterEnumDescriptor(_PROTOCOLSTATE)
 
@@ -86,6 +86,36 @@ PROTOCOL_FINISHED_WITH_ERROR = 3
 PROTOCOL_FINISHED_WITH_DEVICE_ERROR = 6
 PROTOCOL_FINISHED_UNABLE_TO_SEND_TELEMETRY = 7
 
+
+_BARCODEUSERDATA_SAMPLETYPE = _descriptor.EnumDescriptor(
+  name='SampleType',
+  full_name='minknow_api.protocol.BarcodeUserData.SampleType',
+  filename=None,
+  file=DESCRIPTOR,
+  values=[
+    _descriptor.EnumValueDescriptor(
+      name='test_sample', index=0, number=0,
+      serialized_options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='positive_control', index=1, number=1,
+      serialized_options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='negative_control', index=2, number=2,
+      serialized_options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='no_template_control', index=3, number=3,
+      serialized_options=None,
+      type=None),
+  ],
+  containing_type=None,
+  serialized_options=None,
+  serialized_start=351,
+  serialized_end=449,
+)
+_sym_db.RegisterEnumDescriptor(_BARCODEUSERDATA_SAMPLETYPE)
 
 _WAITFORFINISHEDREQUEST_NOTIFICATIONSTATE = _descriptor.EnumDescriptor(
   name='NotificationState',
@@ -108,10 +138,63 @@ _WAITFORFINISHEDREQUEST_NOTIFICATIONSTATE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=1411,
-  serialized_end=1522,
+  serialized_start=1724,
+  serialized_end=1835,
 )
 _sym_db.RegisterEnumDescriptor(_WAITFORFINISHEDREQUEST_NOTIFICATIONSTATE)
+
+
+_BARCODEUSERDATA = _descriptor.Descriptor(
+  name='BarcodeUserData',
+  full_name='minknow_api.protocol.BarcodeUserData',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='barcode_name', full_name='minknow_api.protocol.BarcodeUserData.barcode_name', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='lamp_barcode_id', full_name='minknow_api.protocol.BarcodeUserData.lamp_barcode_id', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='alias', full_name='minknow_api.protocol.BarcodeUserData.alias', index=2,
+      number=3, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=_b("").decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='type', full_name='minknow_api.protocol.BarcodeUserData.type', index=3,
+      number=4, type=14, cpp_type=8, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+    _BARCODEUSERDATA_SAMPLETYPE,
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=206,
+  serialized_end=449,
+)
 
 
 _PROTOCOLRUNUSERINFO = _descriptor.Descriptor(
@@ -135,6 +218,13 @@ _PROTOCOLRUNUSERINFO = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='barcode_user_info', full_name='minknow_api.protocol.ProtocolRunUserInfo.barcode_user_info', index=2,
+      number=3, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -147,8 +237,8 @@ _PROTOCOLRUNUSERINFO = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=205,
-  serialized_end=332,
+  serialized_start=452,
+  serialized_end=645,
 )
 
 
@@ -192,8 +282,8 @@ _STARTPROTOCOLREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=334,
-  serialized_end=458,
+  serialized_start=647,
+  serialized_end=771,
 )
 
 
@@ -223,8 +313,8 @@ _STARTPROTOCOLRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=460,
-  serialized_end=499,
+  serialized_start=773,
+  serialized_end=812,
 )
 
 
@@ -254,8 +344,8 @@ _STOPPROTOCOLREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=501,
-  serialized_end=600,
+  serialized_start=814,
+  serialized_end=913,
 )
 
 
@@ -278,8 +368,8 @@ _STOPPROTOCOLRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=602,
-  serialized_end=624,
+  serialized_start=915,
+  serialized_end=937,
 )
 
 
@@ -309,8 +399,8 @@ _LISTPROTOCOLSREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=626,
-  serialized_end=670,
+  serialized_start=939,
+  serialized_end=983,
 )
 
 
@@ -378,8 +468,8 @@ _PROTOCOLINFO_TAGVALUE = _descriptor.Descriptor(
       name='tag_value', full_name='minknow_api.protocol.ProtocolInfo.TagValue.tag_value',
       index=0, containing_type=None, fields=[]),
   ],
-  serialized_start=871,
-  serialized_end=1032,
+  serialized_start=1184,
+  serialized_end=1345,
 )
 
 _PROTOCOLINFO_TAGEXTRACTIONRESULT = _descriptor.Descriptor(
@@ -415,8 +505,8 @@ _PROTOCOLINFO_TAGEXTRACTIONRESULT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1034,
-  serialized_end=1094,
+  serialized_start=1347,
+  serialized_end=1407,
 )
 
 _PROTOCOLINFO_TAGSENTRY = _descriptor.Descriptor(
@@ -452,8 +542,8 @@ _PROTOCOLINFO_TAGSENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1096,
-  serialized_end=1184,
+  serialized_start=1409,
+  serialized_end=1497,
 )
 
 _PROTOCOLINFO = _descriptor.Descriptor(
@@ -503,8 +593,8 @@ _PROTOCOLINFO = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=673,
-  serialized_end=1184,
+  serialized_start=986,
+  serialized_end=1497,
 )
 
 
@@ -534,8 +624,8 @@ _LISTPROTOCOLSRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1186,
-  serialized_end=1264,
+  serialized_start=1499,
+  serialized_end=1577,
 )
 
 
@@ -580,8 +670,8 @@ _WAITFORFINISHEDREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1267,
-  serialized_end=1522,
+  serialized_start=1580,
+  serialized_end=1835,
 )
 
 
@@ -611,8 +701,8 @@ _GETRUNINFOREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1524,
-  serialized_end=1559,
+  serialized_start=1837,
+  serialized_end=1872,
 )
 
 
@@ -649,8 +739,8 @@ _EPI2MEWORKFLOWREFERENCE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1561,
-  serialized_end=1611,
+  serialized_start=1874,
+  serialized_end=1924,
 )
 
 
@@ -771,8 +861,8 @@ _PROTOCOLRUNINFO = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1614,
-  serialized_end=2244,
+  serialized_start=1927,
+  serialized_end=2557,
 )
 
 
@@ -795,8 +885,8 @@ _LISTPROTOCOLRUNSREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2246,
-  serialized_end=2271,
+  serialized_start=2559,
+  serialized_end=2584,
 )
 
 
@@ -826,8 +916,8 @@ _LISTPROTOCOLRUNSRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2273,
-  serialized_end=2316,
+  serialized_start=2586,
+  serialized_end=2629,
 )
 
 
@@ -850,8 +940,8 @@ _GETCURRENTPROTOCOLRUNREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2318,
-  serialized_end=2348,
+  serialized_start=2631,
+  serialized_end=2661,
 )
 
 
@@ -881,8 +971,8 @@ _GETCURRENTPROTOCOLRUNRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2350,
-  serialized_end=2438,
+  serialized_start=2663,
+  serialized_end=2751,
 )
 
 
@@ -905,8 +995,8 @@ _WATCHCURRENTPROTOCOLRUNREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2440,
-  serialized_end=2472,
+  serialized_start=2753,
+  serialized_end=2785,
 )
 
 
@@ -929,8 +1019,8 @@ _GETCONTEXTINFOREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2474,
-  serialized_end=2497,
+  serialized_start=2787,
+  serialized_end=2810,
 )
 
 
@@ -967,8 +1057,8 @@ _GETCONTEXTINFORESPONSE_CONTEXTINFOENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2611,
-  serialized_end=2661,
+  serialized_start=2924,
+  serialized_end=2974,
 )
 
 _GETCONTEXTINFORESPONSE = _descriptor.Descriptor(
@@ -997,8 +1087,8 @@ _GETCONTEXTINFORESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2500,
-  serialized_end=2661,
+  serialized_start=2813,
+  serialized_end=2974,
 )
 
 
@@ -1035,8 +1125,8 @@ _SETCONTEXTINFOREQUEST_CONTEXTINFOENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2611,
-  serialized_end=2661,
+  serialized_start=2924,
+  serialized_end=2974,
 )
 
 _SETCONTEXTINFOREQUEST = _descriptor.Descriptor(
@@ -1065,8 +1155,8 @@ _SETCONTEXTINFOREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2664,
-  serialized_end=2823,
+  serialized_start=2977,
+  serialized_end=3136,
 )
 
 
@@ -1089,8 +1179,8 @@ _SETCONTEXTINFORESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2825,
-  serialized_end=2849,
+  serialized_start=3138,
+  serialized_end=3162,
 )
 
 
@@ -1113,8 +1203,8 @@ _GETPROTOCOLPURPOSEREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2851,
-  serialized_end=2878,
+  serialized_start=3164,
+  serialized_end=3191,
 )
 
 
@@ -1144,8 +1234,8 @@ _GETPROTOCOLPURPOSERESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2880,
-  serialized_end=2925,
+  serialized_start=3193,
+  serialized_end=3238,
 )
 
 
@@ -1175,8 +1265,8 @@ _SETPROTOCOLPURPOSEREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2927,
-  serialized_end=2971,
+  serialized_start=3240,
+  serialized_end=3284,
 )
 
 
@@ -1199,8 +1289,8 @@ _SETPROTOCOLPURPOSERESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2973,
-  serialized_end=3001,
+  serialized_start=3286,
+  serialized_end=3314,
 )
 
 
@@ -1237,8 +1327,8 @@ _ADDEPI2MEWORKFLOWREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3003,
-  serialized_end=3129,
+  serialized_start=3316,
+  serialized_end=3442,
 )
 
 
@@ -1261,8 +1351,8 @@ _ADDEPI2MEWORKFLOWRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3131,
-  serialized_end=3158,
+  serialized_start=3444,
+  serialized_end=3471,
 )
 
 
@@ -1285,8 +1375,8 @@ _LISTPROTOCOLGROUPIDSREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3160,
-  serialized_end=3189,
+  serialized_start=3473,
+  serialized_end=3502,
 )
 
 
@@ -1316,12 +1406,15 @@ _LISTPROTOCOLGROUPIDSRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3191,
-  serialized_end=3249,
+  serialized_start=3504,
+  serialized_end=3562,
 )
 
+_BARCODEUSERDATA.fields_by_name['type'].enum_type = _BARCODEUSERDATA_SAMPLETYPE
+_BARCODEUSERDATA_SAMPLETYPE.containing_type = _BARCODEUSERDATA
 _PROTOCOLRUNUSERINFO.fields_by_name['protocol_group_id'].message_type = google_dot_protobuf_dot_wrappers__pb2._STRINGVALUE
 _PROTOCOLRUNUSERINFO.fields_by_name['sample_id'].message_type = google_dot_protobuf_dot_wrappers__pb2._STRINGVALUE
+_PROTOCOLRUNUSERINFO.fields_by_name['barcode_user_info'].message_type = _BARCODEUSERDATA
 _STARTPROTOCOLREQUEST.fields_by_name['user_info'].message_type = _PROTOCOLRUNUSERINFO
 _STOPPROTOCOLREQUEST.fields_by_name['data_action_on_stop'].enum_type = minknow__api_dot_acquisition__pb2._STOPREQUEST_DATAACTION
 _PROTOCOLINFO_TAGVALUE.containing_type = _PROTOCOLINFO
@@ -1366,6 +1459,7 @@ _GETCONTEXTINFORESPONSE.fields_by_name['context_info'].message_type = _GETCONTEX
 _SETCONTEXTINFOREQUEST_CONTEXTINFOENTRY.containing_type = _SETCONTEXTINFOREQUEST
 _SETCONTEXTINFOREQUEST.fields_by_name['context_info'].message_type = _SETCONTEXTINFOREQUEST_CONTEXTINFOENTRY
 _ADDEPI2MEWORKFLOWREQUEST.fields_by_name['epi2me_workflow'].message_type = _EPI2MEWORKFLOWREFERENCE
+DESCRIPTOR.message_types_by_name['BarcodeUserData'] = _BARCODEUSERDATA
 DESCRIPTOR.message_types_by_name['ProtocolRunUserInfo'] = _PROTOCOLRUNUSERINFO
 DESCRIPTOR.message_types_by_name['StartProtocolRequest'] = _STARTPROTOCOLREQUEST
 DESCRIPTOR.message_types_by_name['StartProtocolResponse'] = _STARTPROTOCOLRESPONSE
@@ -1398,6 +1492,24 @@ DESCRIPTOR.message_types_by_name['ListProtocolGroupIdsResponse'] = _LISTPROTOCOL
 DESCRIPTOR.enum_types_by_name['ProtocolState'] = _PROTOCOLSTATE
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
+BarcodeUserData = _reflection.GeneratedProtocolMessageType('BarcodeUserData', (_message.Message,), {
+  'DESCRIPTOR' : _BARCODEUSERDATA,
+  '__module__' : 'minknow_api.protocol_pb2'
+  ,
+  '__doc__': """Attributes:
+      barcode_name:
+          Barcode name the user data applies to, eg: "barcode02"
+      lamp_barcode_id:
+          Lamp barcode id the user data applies to, eg: "FIP04"
+      alias:
+          User defined string alias for the barcode.
+      type:
+          Sample type grouping for the barcode.
+  """,
+  # @@protoc_insertion_point(class_scope:minknow_api.protocol.BarcodeUserData)
+  })
+_sym_db.RegisterMessage(BarcodeUserData)
+
 ProtocolRunUserInfo = _reflection.GeneratedProtocolMessageType('ProtocolRunUserInfo', (_message.Message,), {
   'DESCRIPTOR' : _PROTOCOLRUNUSERINFO,
   '__module__' : 'minknow_api.protocol_pb2'
@@ -1409,6 +1521,8 @@ ProtocolRunUserInfo = _reflection.GeneratedProtocolMessageType('ProtocolRunUserI
           starting the protocol.
       sample_id:
           sample_id created by the user
+      barcode_user_info:
+          User supplied info for barcodes
   """,
   # @@protoc_insertion_point(class_scope:minknow_api.protocol.ProtocolRunUserInfo)
   })
@@ -1779,8 +1893,8 @@ _PROTOCOLSERVICE = _descriptor.ServiceDescriptor(
   file=DESCRIPTOR,
   index=0,
   serialized_options=None,
-  serialized_start=3545,
-  serialized_end=5190,
+  serialized_start=3858,
+  serialized_end=5537,
   methods=[
   _descriptor.MethodDescriptor(
     name='start_protocol',
@@ -1807,7 +1921,7 @@ _PROTOCOLSERVICE = _descriptor.ServiceDescriptor(
     containing_service=None,
     input_type=_WAITFORFINISHEDREQUEST,
     output_type=_PROTOCOLRUNINFO,
-    serialized_options=None,
+    serialized_options=_b('\220\002\001'),
   ),
   _descriptor.MethodDescriptor(
     name='get_run_info',
@@ -1816,7 +1930,7 @@ _PROTOCOLSERVICE = _descriptor.ServiceDescriptor(
     containing_service=None,
     input_type=_GETRUNINFOREQUEST,
     output_type=_PROTOCOLRUNINFO,
-    serialized_options=None,
+    serialized_options=_b('\220\002\001'),
   ),
   _descriptor.MethodDescriptor(
     name='list_protocol_runs',
@@ -1825,7 +1939,7 @@ _PROTOCOLSERVICE = _descriptor.ServiceDescriptor(
     containing_service=None,
     input_type=_LISTPROTOCOLRUNSREQUEST,
     output_type=_LISTPROTOCOLRUNSRESPONSE,
-    serialized_options=None,
+    serialized_options=_b('\220\002\001'),
   ),
   _descriptor.MethodDescriptor(
     name='get_current_protocol_run',
@@ -1834,7 +1948,7 @@ _PROTOCOLSERVICE = _descriptor.ServiceDescriptor(
     containing_service=None,
     input_type=_GETCURRENTPROTOCOLRUNREQUEST,
     output_type=_PROTOCOLRUNINFO,
-    serialized_options=None,
+    serialized_options=_b('\220\002\001'),
   ),
   _descriptor.MethodDescriptor(
     name='watch_current_protocol_run',
@@ -1843,7 +1957,7 @@ _PROTOCOLSERVICE = _descriptor.ServiceDescriptor(
     containing_service=None,
     input_type=_WATCHCURRENTPROTOCOLRUNREQUEST,
     output_type=_PROTOCOLRUNINFO,
-    serialized_options=None,
+    serialized_options=_b('\220\002\001'),
   ),
   _descriptor.MethodDescriptor(
     name='list_protocols',
@@ -1852,7 +1966,7 @@ _PROTOCOLSERVICE = _descriptor.ServiceDescriptor(
     containing_service=None,
     input_type=_LISTPROTOCOLSREQUEST,
     output_type=_LISTPROTOCOLSRESPONSE,
-    serialized_options=None,
+    serialized_options=_b('\220\002\002'),
   ),
   _descriptor.MethodDescriptor(
     name='get_context_info',
@@ -1861,7 +1975,7 @@ _PROTOCOLSERVICE = _descriptor.ServiceDescriptor(
     containing_service=None,
     input_type=_GETCONTEXTINFOREQUEST,
     output_type=_GETCONTEXTINFORESPONSE,
-    serialized_options=None,
+    serialized_options=_b('\220\002\001'),
   ),
   _descriptor.MethodDescriptor(
     name='set_context_info',
@@ -1870,7 +1984,7 @@ _PROTOCOLSERVICE = _descriptor.ServiceDescriptor(
     containing_service=None,
     input_type=_SETCONTEXTINFOREQUEST,
     output_type=_SETCONTEXTINFORESPONSE,
-    serialized_options=None,
+    serialized_options=_b('\220\002\002'),
   ),
   _descriptor.MethodDescriptor(
     name='get_protocol_purpose',
@@ -1879,7 +1993,7 @@ _PROTOCOLSERVICE = _descriptor.ServiceDescriptor(
     containing_service=None,
     input_type=_GETPROTOCOLPURPOSEREQUEST,
     output_type=_GETPROTOCOLPURPOSERESPONSE,
-    serialized_options=None,
+    serialized_options=_b('\220\002\001'),
   ),
   _descriptor.MethodDescriptor(
     name='set_protocol_purpose',
@@ -1888,7 +2002,7 @@ _PROTOCOLSERVICE = _descriptor.ServiceDescriptor(
     containing_service=None,
     input_type=_SETPROTOCOLPURPOSEREQUEST,
     output_type=_SETPROTOCOLPURPOSERESPONSE,
-    serialized_options=None,
+    serialized_options=_b('\220\002\002'),
   ),
   _descriptor.MethodDescriptor(
     name='add_epi2me_workflow',
@@ -1906,7 +2020,7 @@ _PROTOCOLSERVICE = _descriptor.ServiceDescriptor(
     containing_service=None,
     input_type=_LISTPROTOCOLGROUPIDSREQUEST,
     output_type=_LISTPROTOCOLGROUPIDSRESPONSE,
-    serialized_options=None,
+    serialized_options=_b('\220\002\001'),
   ),
 ])
 _sym_db.RegisterServiceDescriptor(_PROTOCOLSERVICE)

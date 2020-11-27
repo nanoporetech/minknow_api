@@ -39,6 +39,11 @@ class ManagerServiceStub(object):
         request_serializer=minknow__api_dot_manager__pb2.BasecallerApiRequest.SerializeToString,
         response_deserializer=minknow__api_dot_manager__pb2.BasecallerApiResponse.FromString,
         )
+    self.get_guppy_info = channel.unary_unary(
+        '/minknow_api.manager.ManagerService/get_guppy_info',
+        request_serializer=minknow__api_dot_manager__pb2.GetGuppyInfoRequest.SerializeToString,
+        response_deserializer=minknow__api_dot_manager__pb2.GetGuppyInfoResponse.FromString,
+        )
     self.get_version_info = channel.unary_unary(
         '/minknow_api.manager.ManagerService/get_version_info',
         request_serializer=minknow__api_dot_manager__pb2.GetVersionInfoRequest.SerializeToString,
@@ -63,6 +68,31 @@ class ManagerServiceStub(object):
         '/minknow_api.manager.ManagerService/stream_disk_space_info',
         request_serializer=minknow__api_dot_manager__pb2.StreamDiskSpaceInfoRequest.SerializeToString,
         response_deserializer=minknow__api_dot_manager__pb2.GetDiskSpaceInfoResponse.FromString,
+        )
+    self.get_barcode_kit_info = channel.unary_unary(
+        '/minknow_api.manager.ManagerService/get_barcode_kit_info',
+        request_serializer=minknow__api_dot_manager__pb2.GetBarcodeKitInfoRequest.SerializeToString,
+        response_deserializer=minknow__api_dot_manager__pb2.GetBarcodeKitInfoResponse.FromString,
+        )
+    self.get_lamp_kit_info = channel.unary_unary(
+        '/minknow_api.manager.ManagerService/get_lamp_kit_info',
+        request_serializer=minknow__api_dot_manager__pb2.GetLampKitInfoRequest.SerializeToString,
+        response_deserializer=minknow__api_dot_manager__pb2.GetLampKitInfoResponse.FromString,
+        )
+    self.get_barcode_keys = channel.unary_unary(
+        '/minknow_api.manager.ManagerService/get_barcode_keys',
+        request_serializer=minknow__api_dot_manager__pb2.GetBarcodeKeysRequest.SerializeToString,
+        response_deserializer=minknow__api_dot_manager__pb2.GetBarcodeKeysResponse.FromString,
+        )
+    self.get_flow_cell_types = channel.unary_unary(
+        '/minknow_api.manager.ManagerService/get_flow_cell_types',
+        request_serializer=minknow__api_dot_manager__pb2.GetFlowCellTypesRequest.SerializeToString,
+        response_deserializer=minknow__api_dot_manager__pb2.GetFlowCellTypesResponse.FromString,
+        )
+    self.get_sequencing_kits = channel.unary_unary(
+        '/minknow_api.manager.ManagerService/get_sequencing_kits',
+        request_serializer=minknow__api_dot_manager__pb2.GetSequencingKitsRequest.SerializeToString,
+        response_deserializer=minknow__api_dot_manager__pb2.GetSequencingKitsResponse.FromString,
         )
 
 
@@ -123,6 +153,15 @@ class ManagerServiceServicer(object):
     reads files.
 
     Since 3.5
+    """
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
+  def get_guppy_info(self, request, context):
+    """Get information about Guppy, including the port to connect to it on.
+
+    Since 4.1
     """
     context.set_code(grpc.StatusCode.UNIMPLEMENTED)
     context.set_details('Method not implemented!')
@@ -204,6 +243,61 @@ class ManagerServiceServicer(object):
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
 
+  def get_barcode_kit_info(self, request, context):
+    """Get info about all available barcoding kits
+
+    Since 4.1
+    """
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
+  def get_lamp_kit_info(self, request, context):
+    """Get info about all available lamp kits
+
+    Since 4.1
+    """
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
+  def get_barcode_keys(self, request, context):
+    """List all barcode keys associated with the specified barcoding kits
+
+    Since 4.1
+    """
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
+  def get_flow_cell_types(self, request, context):
+    """List all known types of flow cell.
+
+    The primary purpose of this RPC is to provide a list of flow cell types for a user to select
+    from (although most flow cells are capable of telling MinKNOW their product code, making user
+    selection unnecessary).
+
+    A secondary benefit of this call is it allows extra information about flow cell types to be
+    given.
+
+    Since 4.1
+    """
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
+  def get_sequencing_kits(self, request, context):
+    """List all known sequencing kits.
+
+    The intention is to provide a list of sequencing kits for a user to select from, plus extra
+    information that can be used to filter that list.
+
+    Since 4.1
+    """
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
 
 def add_ManagerServiceServicer_to_server(servicer, server):
   rpc_method_handlers = {
@@ -232,6 +326,11 @@ def add_ManagerServiceServicer_to_server(servicer, server):
           request_deserializer=minknow__api_dot_manager__pb2.BasecallerApiRequest.FromString,
           response_serializer=minknow__api_dot_manager__pb2.BasecallerApiResponse.SerializeToString,
       ),
+      'get_guppy_info': grpc.unary_unary_rpc_method_handler(
+          servicer.get_guppy_info,
+          request_deserializer=minknow__api_dot_manager__pb2.GetGuppyInfoRequest.FromString,
+          response_serializer=minknow__api_dot_manager__pb2.GetGuppyInfoResponse.SerializeToString,
+      ),
       'get_version_info': grpc.unary_unary_rpc_method_handler(
           servicer.get_version_info,
           request_deserializer=minknow__api_dot_manager__pb2.GetVersionInfoRequest.FromString,
@@ -256,6 +355,31 @@ def add_ManagerServiceServicer_to_server(servicer, server):
           servicer.stream_disk_space_info,
           request_deserializer=minknow__api_dot_manager__pb2.StreamDiskSpaceInfoRequest.FromString,
           response_serializer=minknow__api_dot_manager__pb2.GetDiskSpaceInfoResponse.SerializeToString,
+      ),
+      'get_barcode_kit_info': grpc.unary_unary_rpc_method_handler(
+          servicer.get_barcode_kit_info,
+          request_deserializer=minknow__api_dot_manager__pb2.GetBarcodeKitInfoRequest.FromString,
+          response_serializer=minknow__api_dot_manager__pb2.GetBarcodeKitInfoResponse.SerializeToString,
+      ),
+      'get_lamp_kit_info': grpc.unary_unary_rpc_method_handler(
+          servicer.get_lamp_kit_info,
+          request_deserializer=minknow__api_dot_manager__pb2.GetLampKitInfoRequest.FromString,
+          response_serializer=minknow__api_dot_manager__pb2.GetLampKitInfoResponse.SerializeToString,
+      ),
+      'get_barcode_keys': grpc.unary_unary_rpc_method_handler(
+          servicer.get_barcode_keys,
+          request_deserializer=minknow__api_dot_manager__pb2.GetBarcodeKeysRequest.FromString,
+          response_serializer=minknow__api_dot_manager__pb2.GetBarcodeKeysResponse.SerializeToString,
+      ),
+      'get_flow_cell_types': grpc.unary_unary_rpc_method_handler(
+          servicer.get_flow_cell_types,
+          request_deserializer=minknow__api_dot_manager__pb2.GetFlowCellTypesRequest.FromString,
+          response_serializer=minknow__api_dot_manager__pb2.GetFlowCellTypesResponse.SerializeToString,
+      ),
+      'get_sequencing_kits': grpc.unary_unary_rpc_method_handler(
+          servicer.get_sequencing_kits,
+          request_deserializer=minknow__api_dot_manager__pb2.GetSequencingKitsRequest.FromString,
+          response_serializer=minknow__api_dot_manager__pb2.GetSequencingKitsResponse.SerializeToString,
       ),
   }
   generic_handler = grpc.method_handlers_generic_handler(

@@ -49,6 +49,11 @@ class AnalysisConfigurationServiceStub(object):
         request_serializer=minknow__api_dot_analysis__configuration__pb2.SetBasecallerConfigurationRequest.SerializeToString,
         response_deserializer=minknow__api_dot_analysis__configuration__pb2.SetBasecallerConfigurationResponse.FromString,
         )
+    self.preload_basecaller_configuration = channel.unary_unary(
+        '/minknow_api.analysis_configuration.AnalysisConfigurationService/preload_basecaller_configuration',
+        request_serializer=minknow__api_dot_analysis__configuration__pb2.SetBasecallerConfigurationRequest.SerializeToString,
+        response_deserializer=minknow__api_dot_analysis__configuration__pb2.SetBasecallerConfigurationResponse.FromString,
+        )
     self.get_basecaller_configuration = channel.unary_unary(
         '/minknow_api.analysis_configuration.AnalysisConfigurationService/get_basecaller_configuration',
         request_serializer=minknow__api_dot_analysis__configuration__pb2.GetBasecallerConfigurationRequest.SerializeToString,
@@ -182,6 +187,21 @@ class AnalysisConfigurationServiceServicer(object):
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
 
+  def preload_basecaller_configuration(self, request, context):
+    """Inform MinKNOW the passed basecall configuration will be used at some point in the future, and could be loaded now
+    to reduce wait time in the future.
+
+    This rpc will result in an error if invoked during acquisition.
+
+    The call will block until any previous call to preload configs is complete, but does not block while the config
+    is loaded, no errors are reported to the caller if the config is invalid.
+
+    Since 4.1
+    """
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
   def get_basecaller_configuration(self, request, context):
     """Find the current basecaller configuration (see #set_basecaller_configuration)
 
@@ -294,6 +314,11 @@ def add_AnalysisConfigurationServiceServicer_to_server(servicer, server):
       ),
       'set_basecaller_configuration': grpc.unary_unary_rpc_method_handler(
           servicer.set_basecaller_configuration,
+          request_deserializer=minknow__api_dot_analysis__configuration__pb2.SetBasecallerConfigurationRequest.FromString,
+          response_serializer=minknow__api_dot_analysis__configuration__pb2.SetBasecallerConfigurationResponse.SerializeToString,
+      ),
+      'preload_basecaller_configuration': grpc.unary_unary_rpc_method_handler(
+          servicer.preload_basecaller_configuration,
           request_deserializer=minknow__api_dot_analysis__configuration__pb2.SetBasecallerConfigurationRequest.FromString,
           response_serializer=minknow__api_dot_analysis__configuration__pb2.SetBasecallerConfigurationResponse.SerializeToString,
       ),

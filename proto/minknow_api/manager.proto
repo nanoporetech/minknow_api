@@ -5,13 +5,17 @@ package minknow_api.manager;
 option java_package = "com.nanoporetech.minknow_api";
 option objc_class_prefix = "MKAPI";
 
+import "minknow_api/rpc_options.proto";
+import "minknow_api/device.proto";
 import "minknow_api/instance.proto";
 
 service ManagerService {
     // Get information about the machine running MinKNOW.
     //
     // Since 3.6
-    rpc describe_host (DescribeHostRequest) returns (DescribeHostResponse) {}
+    rpc describe_host (DescribeHostRequest) returns (DescribeHostResponse) {
+        option idempotency_level = NO_SIDE_EFFECTS;
+    }
 
     // List all known positions where flow cells can be inserted.
     //
@@ -20,7 +24,9 @@ service ManagerService {
     // only be a single response.
     //
     // Since 3.6
-    rpc flow_cell_positions (FlowCellPositionsRequest) returns (stream FlowCellPositionsResponse) {}
+    rpc flow_cell_positions (FlowCellPositionsRequest) returns (stream FlowCellPositionsResponse) {
+        option idempotency_level = NO_SIDE_EFFECTS;
+    }
 
     // Watch for changes in flow cell position availability and state.
     //
@@ -28,7 +34,9 @@ service ManagerService {
     // MinIONs being plugged or unplugged), or their status otherwise changes.
     //
     // Since 3.6
-    rpc watch_flow_cell_positions (WatchFlowCellPositionsRequest) returns (stream WatchFlowCellPositionsResponse) {}
+    rpc watch_flow_cell_positions (WatchFlowCellPositionsRequest) returns (stream WatchFlowCellPositionsResponse) {
+        option idempotency_level = NO_SIDE_EFFECTS;
+    }
 
     // Reset a flow cell position.
     //
@@ -44,7 +52,16 @@ service ManagerService {
     // reads files.
     //
     // Since 3.5
-    rpc basecaller_api (BasecallerApiRequest) returns (BasecallerApiResponse) {}
+    rpc basecaller_api (BasecallerApiRequest) returns (BasecallerApiResponse) {
+        option idempotency_level = NO_SIDE_EFFECTS;
+    }
+
+    // Get information about Guppy, including the port to connect to it on.
+    //
+    // Since 4.1
+    rpc get_guppy_info (GetGuppyInfoRequest) returns (GetGuppyInfoResponse) {
+        option idempotency_level = NO_SIDE_EFFECTS;
+    }
 
     // Current version information includes:
     // - Minknow version
@@ -55,7 +72,9 @@ service ManagerService {
     //
     // See also: instance.get_version_info which provides some similar information on a per instance basis.
     // Since 3.3
-    rpc get_version_info (GetVersionInfoRequest) returns (GetVersionInfoResponse) {}
+    rpc get_version_info (GetVersionInfoRequest) returns (GetVersionInfoResponse) {
+        option idempotency_level = NO_SIDE_EFFECTS;
+    }
 
     // Returns all the files that are within the protocol output dir specified in the user_conf - or a descendant of that directory
     // if `path` is supplied in the request.
@@ -66,7 +85,9 @@ service ManagerService {
     // or a valid `path` argument is specified but does not exist.
     //
     // Since 3.5
-    rpc list_protocol_output_dir_files (ListProtocolOutputDirFilesRequest) returns (stream ListProtocolOutputDirFilesResponse) {}
+    rpc list_protocol_output_dir_files (ListProtocolOutputDirFilesRequest) returns (stream ListProtocolOutputDirFilesResponse) {
+        option idempotency_level = NO_SIDE_EFFECTS;
+    }
 
     // Create a directory within the protocol output directory tree.
     //
@@ -85,14 +106,18 @@ service ManagerService {
     // The possible valid parent paths can be determined using list_protocol_output_dir_files().
     //
     // Since 3.6
-    rpc create_directory (CreateDirectoryRequest) returns (CreateDirectoryResponse) {}
+    rpc create_directory (CreateDirectoryRequest) returns (CreateDirectoryResponse) {
+        option idempotency_level = IDEMPOTENT;
+    }
 
     // Returns information about the amount of disk space available, how much
     // space is needed to stop an experiment cleanly and if MinKNOW thinks
     // that the free disk-space is approaching or past this limit
     //
     // Since 3.7
-    rpc get_disk_space_info (GetDiskSpaceInfoRequest) returns (GetDiskSpaceInfoResponse) {}
+    rpc get_disk_space_info (GetDiskSpaceInfoRequest) returns (GetDiskSpaceInfoResponse) {
+        option idempotency_level = NO_SIDE_EFFECTS;
+    }
 
     // Stream information about the amount of disk space available, how quickly
     // it is being used, how much space is needed to stop an experiment cleanly
@@ -100,7 +125,56 @@ service ManagerService {
     // this limit
     //
     // Since 4.0
-    rpc stream_disk_space_info(StreamDiskSpaceInfoRequest) returns (stream GetDiskSpaceInfoResponse) {}
+    rpc stream_disk_space_info(StreamDiskSpaceInfoRequest) returns (stream GetDiskSpaceInfoResponse) {
+        option idempotency_level = NO_SIDE_EFFECTS;
+    }
+
+    // Get info about all available barcoding kits
+    //
+    // Since 4.1
+    rpc get_barcode_kit_info(GetBarcodeKitInfoRequest) returns (GetBarcodeKitInfoResponse) {
+        option idempotency_level = NO_SIDE_EFFECTS;
+    }
+
+    // Get info about all available lamp kits
+    //
+    // Since 4.1
+    rpc get_lamp_kit_info(GetLampKitInfoRequest) returns (GetLampKitInfoResponse) {
+        option idempotency_level = NO_SIDE_EFFECTS;
+    }
+
+    // List all barcode keys associated with the specified barcoding kits
+    //
+    // Since 4.1
+    rpc get_barcode_keys(GetBarcodeKeysRequest) returns (GetBarcodeKeysResponse) {
+        option idempotency_level = NO_SIDE_EFFECTS;
+    }
+
+    // List all known types of flow cell.
+    //
+    // The primary purpose of this RPC is to provide a list of flow cell types for a user to select
+    // from (although most flow cells are capable of telling MinKNOW their product code, making user
+    // selection unnecessary).
+    //
+    // A secondary benefit of this call is it allows extra information about flow cell types to be
+    // given.
+    //
+    // Since 4.1
+    rpc get_flow_cell_types(GetFlowCellTypesRequest) returns (GetFlowCellTypesResponse) {
+        option idempotency_level = NO_SIDE_EFFECTS;
+        option (experimental) = true;
+    }
+
+    // List all known sequencing kits.
+    //
+    // The intention is to provide a list of sequencing kits for a user to select from, plus extra
+    // information that can be used to filter that list.
+    //
+    // Since 4.1
+    rpc get_sequencing_kits(GetSequencingKitsRequest) returns (GetSequencingKitsResponse) {
+        option idempotency_level = NO_SIDE_EFFECTS;
+        option (experimental) = true;
+    }
 }
 
 message DescribeHostRequest {
@@ -233,7 +307,10 @@ message FlowCellPosition {
         uint32 insecure = 2;
         // A port providing the gRPC-Web protocol over TLS
         uint32 secure_grpc_web = 3;
-        // A port providing the gRPC-Web protocol without TLS
+        // DEPRECATED: A port providing the gRPC-Web protocol without TLS
+        //
+        // From 4.1, this field is now deprecated and will only ever 
+        // return a value of 0
         uint32 insecure_grpc_web = 4;
     }
     // The ports the APIs for this flow cell position are provided on.
@@ -333,15 +410,29 @@ message BasecallerApiResponse {
     uint32 insecure = 2;
     // The port to use to access the minknow_api.basecaller API using the gRPC-Web protocol over TLS
     uint32 secure_grpc_web = 3;
-    // The port to use to access the minknow_api.basecaller API using the gRPC-Web protocol without
+    // DEPRECATED: The port to use to access the minknow_api.basecaller API using the gRPC-Web protocol without
     // TLS
+    //
+    // From 4.1, this field is now deprecated and will only ever 
+    // return a value of 0
     uint32 insecure_grpc_web = 4;
+}
+
+message GetGuppyInfoRequest {}
+
+message GetGuppyInfoResponse {
+    // The port Guppy is listening on.
+    uint32 port = 1;
+
+    // The Guppy server version.
+    string version = 2;
 }
 
 message GetVersionInfoRequest {}
 
 message GetVersionInfoResponse {
 
+    // Note that InstallationType is duplicated in instance.proto, the two definitions should be kept in sync.
     enum InstallationType {
         // For internal release. production.proto will be enabled for this type
         ONT = 0;
@@ -354,13 +445,16 @@ message GetVersionInfoResponse {
 
         // For Q releases (nanopore long term support release)
         Q_RELEASE = 3;
+
+        // Oxford Nanopore Diagnostic
+        OND_RELEASE = 4;
     }
 
 
     // What minknow version is installed. Split into major, minor and patch versions
     // Also includes the full version as a string, which contain the major, minor and patch numbers
     // as well as if the version is pre-release version (-pre), whether it is a release candidate (-rc#)
-    // or whether it is a variant version (i.e. for conferences) (-variant). For non-release builds it also 
+    // or whether it is a variant version (i.e. for conferences) (-variant). For non-release builds it also
     // includes the hash of the commit it is based on, and whether the working copy is different from that has (-dirty)
     instance.GetVersionInfoResponse.MinknowVersion minknow = 1;
 
@@ -386,7 +480,7 @@ message GetVersionInfoResponse {
 
     // The configuration version specifies what version of ont-configuration (wanda) is installed.
     // By default is set to '0.0.0.0', but will otherwise be set to a Wanda release version.
-    // 
+    //
     // Since 3.6
     string configuration = 7;
 
@@ -493,4 +587,193 @@ message StreamDiskSpaceInfoRequest {
 
 message GetDiskSpaceInfoResponse {
     repeated FilesystemDiskSpaceInfo filesystem_disk_space_info = 1;
+}
+
+
+message GetBarcodeKitInfoRequest{}
+
+message GetBarcodeKitInfoResponse{
+    message BarcodeKitInfo{
+        bool is_dual = 2;
+        bool is_both_ends = 3;
+    }
+
+    // Map of barcode kit name to barcode kit info
+    map<string, BarcodeKitInfo> barcode_kit_info = 1;
+}
+
+message GetLampKitInfoRequest{}
+
+message GetLampKitInfoResponse{
+    // Lamp kit names
+    repeated string lamp_kits = 2;
+}
+
+
+message GetBarcodeKeysRequest{
+    // Names of barcode kits to obtain barcode names for
+    //
+    // Fails with INVALID_ARGUMENT if any of the requested `barcode_kit_names` are unavailable
+    //
+    repeated string barcode_kit_names = 1;
+
+    // Name of lamp kit to obtain barcode names for.
+    //
+    // Fails with INVALID_ARGUMENT if the requested `lamp_kit_name` is unavailable.
+    string lamp_kit_name = 2;
+}
+
+message GetBarcodeKeysResponse {
+    // Returned barcode keys.
+    repeated string barcode_keys = 1;
+
+    // Returned lamp barcode ids.
+    repeated string lamp_keys = 2;
+
+    // Combined barcode and lamp keys.
+    //
+    // Returned keys are joined strings of all requested barcode kits, giving the caller
+    // a unique string to identify each barcode pair.
+    //
+    // eg. if both a lamp kit + barcode kit are specified, NxM barcode keys are returned:
+    //  - barcode01_lamp01
+    //  - barcode01_lamp02
+    //  - barcode01_lamp03
+    //  - barcode02_lamp01
+    //  - barcode02_lamp02
+    //  - barcode02_lamp03
+    repeated string combined_keys = 3;
+}
+
+// Request message for `ManagerService.get_flow_cell_types`.
+message GetFlowCellTypesRequest {
+}
+
+// Response message for `ManagerService.get_flow_cell_types`.
+message GetFlowCellTypesResponse {
+    // Information about a flow cell type.
+    message Info {
+        // The product code for the flow cell type.
+        //
+        // This is the user-visible name for the flow cell type. It is the name used to order flow
+        // cells, and is also displayed on the packaging.
+        //
+        // While most product codes are 10 characters, be aware that longer product codes can exist
+        // and have been used in the past.
+        //
+        // Example: "FLO-MIN106".
+        string product_code = 1;
+
+        // The connector type of this flow cell type.
+        //
+        // This determines which flow cell positions it is possible to insert this flow cell into.
+        // The connector type for a given flow cell position can be determined using
+        // `minknow_api.device.DeviceService.get_device_state`.
+        //
+        // This will never be ``FCCON_NOT_SET``.
+        device.FlowCellConnectorType connector_type = 2;
+
+        // Indicates that live basecalling is not possible on the flow cell.
+        //
+        // Note that almost all flow cell types can be basecalled on: that is why this indicates a
+        // negative (saving some bytes on the wire by allowing the common case of basecalling being
+        // possible to be omitted entirely).
+        bool cannot_live_basecall = 3;
+    }
+
+    // The flow cell types.
+    repeated Info types = 1;
+}
+
+// Request message for `ManagerService.get_sequencing_kits`.
+message GetSequencingKitsRequest {
+    // The product code of the flow cell that will be used for sequencing.
+    //
+    // Only kits compatible with this flow cell type will be returned (currently, this means that
+    // there is at least one (sequencing or control) protocol that is compatible with both the kit
+    // and this flow cell product code).
+    //
+    // This may also affect the returned information about the kit. For example, if it isn't
+    // possible to basecall on the flow cell, none of the kits will claim to be barcoding capable
+    // (or compatible with any barcoding expansion kits).
+    string flow_cell_product_code = 1;
+}
+
+// Response message for `ManagerService.get_sequencing_kits`.
+message GetSequencingKitsResponse {
+    // Information about a sequencing kit.
+    message Kit {
+        // The product code for the sequencing kit.
+        //
+        // This is the user-visible name for the kit. It is the name used to order kits, and is also
+        // displayed on the packaging.
+        //
+        // While most product codes are 10-15 characters, be aware that longer (or shorter) product
+        // codes can exist.
+        //
+        // Examples: "SQK-LSK109", "OND-SQK-LP0096S".
+        string product_code = 1;
+
+        // Compatible barcoding expansion kits.
+        //
+        // These are indexes into the GetSequencingKitsResponse.barcoding_expansion_kits list. For
+        // example, 0 would indicate the first kit in that list. The values are guaranteed to be
+        // unique and valid indexes for that list.
+        repeated int32 barcoding_expansion_kits = 2;
+
+        // Whether barcoding support is part of the sequencing kit.
+        //
+        // If this is set, barcoding can be done without any expansion kits (and, in fact, barcoding
+        // is an integral part of the kit).
+        bool includes_barcoding = 3;
+
+        // Whether the kit can be used for LamPORE diagnostics.
+        bool lamp_kit = 16;
+
+        // Whether there is a "control" protocol available for this kit.
+        bool has_control_protocol = 4;
+
+        // Indicates there is no sequencing protocol available for this kit.
+        //
+        // This is an unusual situation. If a kit is known about, it should generally have a
+        // sequencing protocol associated with it, and it would be strange to have a control
+        // protocol available but no sequencing protocol.
+        bool no_sequencing_protocol = 17;
+
+        // Indicates that the sequencing kit is one of the most commonly used ones.
+        //
+        // This can be used to display such kits first, or otherwise highlight them in some way.
+        bool frequently_used = 18;
+
+        // The kit can be used with DNA samples.
+        bool dna = 5;
+        // The kit can be used with RNA samples.
+        bool rna = 6;
+        // The kit can be used with samples that have had PCR applied to them.
+        bool pcr = 7;
+        // The kit can be used without a PCR step.
+        bool pcr_free = 8;
+    }
+    // The known sequencing kits.
+    repeated Kit kits = 1;
+
+    // Information about a barcoding expansion kit.
+    //
+    // In the future, this may include compatibility information for dual barcoding, for example.
+    message BarcodingExpansionKit {
+        // The product code for the barcoding expansion kit.
+        //
+        // This is the user-visible name for the kit. It is the name used to order kits, and is also
+        // displayed on the packaging.
+        //
+        // While most product codes are 10 characters, be aware that longer product codes can exist.
+        //
+        // Example: "EXP-NBD104".
+        string product_code = 1;
+    }
+    // The possible barcoding expansion kits.
+    //
+    // These are kits that can be used in combination with certain sequencing kits to add (or
+    // extend) barcoding functionality.
+    repeated BarcodingExpansionKit barcoding_expansion_kits = 2;
 }

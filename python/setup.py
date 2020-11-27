@@ -12,7 +12,7 @@ INSTALL_REQUIRES = [
     "grpcio~=1.25",
     "numpy~=1.11",  # minknow_api.data
     "protobuf~=3.11",
-    "packaging>=14.1",
+    "packaging>=15.0",
 ]
 
 setup(

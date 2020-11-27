@@ -12,22 +12,34 @@ import "minknow_api/rpc_options.proto";
 service PromethionDeviceService {
 
     // Change the settings which apply to the whole device.
-    rpc change_device_settings(ChangeDeviceSettingsRequest) returns (ChangeDeviceSettingsResponse) {}
+    rpc change_device_settings(ChangeDeviceSettingsRequest) returns (ChangeDeviceSettingsResponse) {
+        option idempotency_level = IDEMPOTENT;
+    }
 
     // Get the current settings which apply to the whole device.
-    rpc get_device_settings(GetDeviceSettingsRequest) returns (GetDeviceSettingsResponse) {}
+    rpc get_device_settings(GetDeviceSettingsRequest) returns (GetDeviceSettingsResponse) {
+        option idempotency_level = NO_SIDE_EFFECTS;
+    }
 
     // Change the settings which apply specific pixel blocks.
-    rpc change_pixel_block_settings(ChangePixelBlockSettingsRequest) returns (ChangePixelBlockSettingsResponse) {}
+    rpc change_pixel_block_settings(ChangePixelBlockSettingsRequest) returns (ChangePixelBlockSettingsResponse) {
+        option idempotency_level = IDEMPOTENT;
+    }
 
     // Get the settings which apply to specific pixel blocks.
-    rpc get_pixel_block_settings(GetPixelBlockSettingsRequest) returns (GetPixelBlockSettingsResponse) {}
+    rpc get_pixel_block_settings(GetPixelBlockSettingsRequest) returns (GetPixelBlockSettingsResponse) {
+        option idempotency_level = NO_SIDE_EFFECTS;
+    }
 
     // Change the settings which apply to the referenced pixels.
-    rpc change_pixel_settings(ChangePixelSettingsRequest) returns (ChangePixelSettingsResponse) {}
+    rpc change_pixel_settings(ChangePixelSettingsRequest) returns (ChangePixelSettingsResponse) {
+        option idempotency_level = IDEMPOTENT;
+    }
 
     // Get the pixel settings for the requested pixel's
-    rpc get_pixel_settings(GetPixelSettingsRequest) returns (GetPixelSettingsResponse) {}
+    rpc get_pixel_settings(GetPixelSettingsRequest) returns (GetPixelSettingsResponse) {
+        option idempotency_level = NO_SIDE_EFFECTS;
+    }
 }
 
 message WaveformSettings {

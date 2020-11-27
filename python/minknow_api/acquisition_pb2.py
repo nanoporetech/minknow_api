@@ -23,7 +23,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='minknow_api.acquisition',
   syntax='proto3',
   serialized_options=_b('\n\034com.nanoporetech.minknow_api\242\002\005MKAPI'),
-  serialized_pb=_b('\n\x1dminknow_api/acquisition.proto\x12\x17minknow_api.acquisition\x1a\x1dminknow_api/rpc_options.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\xd3\x03\n\x0cStartRequest\x12\"\n\x1a\x64ont_wait_for_device_ready\x18\x02 \x01(\x08\x12\x38\n\x0fgenerate_report\x18\x03 \x01(\x0e\x32\x1f.minknow_api.acquisition.Option\x12\x45\n\x1csend_sequencing_read_metrics\x18\x04 \x01(\x0e\x32\x1f.minknow_api.acquisition.Option\x12\x41\n\x18send_basecalling_metrics\x18\x05 \x01(\x0e\x32\x1f.minknow_api.acquisition.Option\x12\x31\n\x07purpose\x18\x06 \x01(\x0e\x32 .minknow_api.acquisition.Purpose\x12\x31\n\x08\x61nalysis\x18\x07 \x01(\x0e\x32\x1f.minknow_api.acquisition.Option\x12\x34\n\x0b\x66ile_output\x18\x08 \x01(\x0e\x32\x1f.minknow_api.acquisition.Option\x12?\n\x16generate_final_summary\x18\t \x01(\x0e\x32\x1f.minknow_api.acquisition.Option\"\x1f\n\rStartResponse\x12\x0e\n\x06run_id\x18\x01 \x01(\t\"\xe0\x01\n\x0bStopRequest\x12L\n\x13\x64\x61ta_action_on_stop\x18\x01 \x01(\x0e\x32/.minknow_api.acquisition.StopRequest.DataAction\x12\x18\n\x10wait_until_ready\x18\x02 \x01(\x08\x12\x15\n\rkeep_power_on\x18\x03 \x01(\x08\"R\n\nDataAction\x12\x10\n\x0cSTOP_DEFAULT\x10\x00\x12\x16\n\x12STOP_KEEP_ALL_DATA\x10\x01\x12\x1a\n\x16STOP_FINISH_PROCESSING\x10\x02\"\x0e\n\x0cStopResponse\"+\n\x1bWatchForStatusChangeRequest\x12\x0c\n\x04stop\x18\x01 \x01(\x08\"V\n\x1cWatchForStatusChangeResponse\x12\x36\n\x06status\x18\x01 \x01(\x0e\x32&.minknow_api.acquisition.MinknowStatus\"\x16\n\x14\x43urrentStatusRequest\"O\n\x15\x43urrentStatusResponse\x12\x36\n\x06status\x18\x01 \x01(\x0e\x32&.minknow_api.acquisition.MinknowStatus\"\x14\n\x12GetProgressRequest\"\xa0\x01\n\x13GetProgressResponse\x12S\n\x0fraw_per_channel\x18\x01 \x01(\x0b\x32:.minknow_api.acquisition.GetProgressResponse.RawPerChannel\x1a\x34\n\rRawPerChannel\x12\x10\n\x08\x61\x63quired\x18\x01 \x01(\x04\x12\x11\n\tprocessed\x18\x02 \x01(\x04\".\n\x1cGetAcquisitionRunInfoRequest\x12\x0e\n\x06run_id\x18\x01 \x01(\t\"\xc3\x03\n\x17\x41\x63quisitionYieldSummary\x12\x12\n\nread_count\x18\x01 \x01(\x03\x12\"\n\x1a\x62\x61secalled_pass_read_count\x18\x03 \x01(\x03\x12\"\n\x1a\x62\x61secalled_fail_read_count\x18\x04 \x01(\x03\x12%\n\x1d\x62\x61secalled_skipped_read_count\x18\n \x01(\x03\x12\x1d\n\x15\x62\x61secalled_pass_bases\x18\x05 \x01(\x03\x12\x1d\n\x15\x62\x61secalled_fail_bases\x18\x12 \x01(\x03\x12\x1a\n\x12\x62\x61secalled_samples\x18\x06 \x01(\x03\x12\x1c\n\x14selected_raw_samples\x18\x07 \x01(\x03\x12\x17\n\x0fselected_events\x18\x08 \x01(\x03\x12 \n\x18\x65stimated_selected_bases\x18\t \x01(\x03\x12\x19\n\x11\x61lignment_matches\x18\x0e \x01(\x03\x12\x1c\n\x14\x61lignment_mismatches\x18\x0f \x01(\x03\x12\x1c\n\x14\x61lignment_insertions\x18\x10 \x01(\x03\x12\x1b\n\x13\x61lignment_deletions\x18\x11 \x01(\x03\"\x98\x01\n\x18\x41\x63quisitionWriterSummary\x12\x1a\n\x12written_read_count\x18\x01 \x01(\x03\x12\x1f\n\x17\x62ytes_to_write_produced\x18\x02 \x01(\x03\x12\x1d\n\x15\x62ytes_to_write_failed\x18\x03 \x01(\x03\x12 \n\x18\x62ytes_to_write_completed\x18\x04 \x01(\x03\"\xb0\x03\n\x10\x43hannelStateInfo\x12?\n\x06groups\x18\x01 \x03(\x0b\x32/.minknow_api.acquisition.ChannelStateInfo.Group\x1a;\n\x05Style\x12\r\n\x05label\x18\x01 \x01(\t\x12\x13\n\x0b\x64\x65scription\x18\x02 \x01(\t\x12\x0e\n\x06\x63olour\x18\x03 \x01(\t\x1a~\n\x0c\x43hannelState\x12\n\n\x02id\x18\x01 \x01(\r\x12\x0c\n\x04name\x18\x02 \x01(\t\x12>\n\x05style\x18\x03 \x01(\x0b\x32/.minknow_api.acquisition.ChannelStateInfo.Style\x12\x14\n\x0cglobal_order\x18\x04 \x01(\r\x1a\x9d\x01\n\x05Group\x12\x0c\n\x04name\x18\x01 \x01(\t\x12>\n\x05style\x18\x02 \x01(\x0b\x32/.minknow_api.acquisition.ChannelStateInfo.Style\x12\x46\n\x06states\x18\x03 \x03(\x0b\x32\x36.minknow_api.acquisition.ChannelStateInfo.ChannelState\"\xc8\x03\n\x18\x41\x63quisitionConfigSummary\x12\x1b\n\x13\x62\x61secalling_enabled\x18\x01 \x01(\x08\x12\x19\n\x11\x62\x61rcoding_enabled\x18\r \x01(\x08\x12\x19\n\x11\x61lignment_enabled\x18\x0e \x01(\x08\x12\x17\n\x0freads_directory\x18\x02 \x01(\t\x12\"\n\x1areads_fallback_directories\x18\x03 \x03(\t\x12\x1b\n\x13\x66\x61st5_reads_enabled\x18\x04 \x01(\x08\x12\x1b\n\x13\x66\x61stq_reads_enabled\x18\x05 \x01(\x08\x12\x1e\n\x16protobuf_reads_enabled\x18\x06 \x01(\x08\x12\x16\n\x0e\x62ulk_file_path\x18\x07 \x01(\t\x12\x19\n\x11\x62ulk_file_enabled\x18\x08 \x01(\x08\x12\x45\n\x12\x63hannel_state_info\x18\t \x01(\x0b\x32).minknow_api.acquisition.ChannelStateInfo\x12\x1c\n\x14\x65vents_to_base_ratio\x18\n \x01(\x02\x12\x13\n\x0bsample_rate\x18\x0b \x01(\r\x12\x15\n\rchannel_count\x18\x0c \x01(\r\"\x94\x05\n\x12\x41\x63quisitionRunInfo\x12\x0e\n\x06run_id\x18\x01 \x01(\t\x12\x38\n\x05state\x18\x02 \x01(\x0e\x32).minknow_api.acquisition.AcquisitionState\x12@\n\x0f\x66inishing_state\x18\n \x01(\x0e\x32\'.minknow_api.acquisition.FinishingState\x12\x43\n\x0bstop_reason\x18\x03 \x01(\x0e\x32..minknow_api.acquisition.AcquisitionStopReason\x12.\n\nstart_time\x18\x04 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x38\n\x14\x64\x61ta_read_start_time\x18\x05 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x36\n\x12\x64\x61ta_read_end_time\x18\x06 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12,\n\x08\x65nd_time\x18\x07 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12G\n\ryield_summary\x18\x08 \x01(\x0b\x32\x30.minknow_api.acquisition.AcquisitionYieldSummary\x12I\n\x0e\x63onfig_summary\x18\t \x01(\x0b\x32\x31.minknow_api.acquisition.AcquisitionConfigSummary\x12I\n\x0ewriter_summary\x18\x0b \x01(\x0b\x32\x31.minknow_api.acquisition.AcquisitionWriterSummary\"\x1c\n\x1aListAcquisitionRunsRequest\".\n\x1bListAcquisitionRunsResponse\x12\x0f\n\x07run_ids\x18\x01 \x03(\t\"!\n\x1fGetCurrentAcquisitionRunRequest\"#\n!WatchCurrentAcquisitionRunRequest\"\xdf\x02\n\x16SetSignalReaderRequest\x12V\n\x06reader\x18\x01 \x01(\x0e\x32@.minknow_api.acquisition.SetSignalReaderRequest.SignalReaderTypeB\x04\x88\xb5\x18\x01\x12\x12\n\nhdf_source\x18\x02 \x01(\t\x12P\n\x08hdf_mode\x18\x03 \x01(\x0e\x32>.minknow_api.acquisition.SetSignalReaderRequest.SourceFileMode\x12 \n\x18sample_rate_scale_factor\x18\x04 \x01(\x02\"(\n\x10SignalReaderType\x12\x08\n\x04HDF5\x10\x00\x12\n\n\x06\x44\x45VICE\x10\x01\";\n\x0eSourceFileMode\x12\x0f\n\x0bUNSPECIFIED\x10\x00\x12\x0e\n\nSINGLE_RUN\x10\x01\x12\x08\n\x04LOOP\x10\x02\"\x19\n\x17SetSignalReaderResponse*Y\n\rMinknowStatus\x12\x10\n\x0c\x45RROR_STATUS\x10\x00\x12\t\n\x05READY\x10\x01\x12\x0c\n\x08STARTING\x10\x02\x12\x0e\n\nPROCESSING\x10\x03\x12\r\n\tFINISHING\x10\x04**\n\x06Option\x12\x08\n\x04\x41UTO\x10\x00\x12\x0b\n\x07\x44ISABLE\x10\x01\x12\t\n\x05\x46ORCE\x10\x02*=\n\x07Purpose\x12\x11\n\rOTHER_PURPOSE\x10\x00\x12\x0e\n\nSEQUENCING\x10\x02\x12\x0f\n\x0b\x43\x41LIBRATION\x10\x03*{\n\x10\x41\x63quisitionState\x12\x18\n\x14\x41\x43QUISITION_STARTING\x10\x00\x12\x17\n\x13\x41\x43QUISITION_RUNNING\x10\x01\x12\x19\n\x15\x41\x43QUISITION_FINISHING\x10\x02\x12\x19\n\x15\x41\x43QUISITION_COMPLETED\x10\x03*\xe3\x01\n\x15\x41\x63quisitionStopReason\x12\x13\n\x0fSTOPPED_NOT_SET\x10\x00\x12\x1a\n\x16STOPPED_USER_REQUESTED\x10\x01\x12\x19\n\x15STOPPED_NO_DISK_SPACE\x10\x02\x12&\n\"STOPPED_DEVICE_STOPPED_ACQUISITION\x10\x03\x12 \n\x1cSTOPPED_STARTING_ANOTHER_RUN\x10\x04\x12\x1a\n\x16STOPPED_PROTOCOL_ENDED\x10\x05\x12\x18\n\x14STOPPED_DEVICE_ERROR\x10\x06*\x8b\x01\n\x0e\x46inishingState\x12\x15\n\x11\x46INISHING_UNKNOWN\x10\x00\x12&\n\"FINISHING_PROCESSING_DEVICE_SIGNAL\x10\x01\x12\x1f\n\x1b\x46INISHING_BASECALLING_READS\x10\x02\x12\x19\n\x15\x46INISHING_SAVING_DATA\x10\x03\x32\xcb\t\n\x12\x41\x63quisitionService\x12X\n\x05start\x12%.minknow_api.acquisition.StartRequest\x1a&.minknow_api.acquisition.StartResponse\"\x00\x12U\n\x04stop\x12$.minknow_api.acquisition.StopRequest\x1a%.minknow_api.acquisition.StopResponse\"\x00\x12\x8c\x01\n\x17watch_for_status_change\x12\x34.minknow_api.acquisition.WatchForStatusChangeRequest\x1a\x35.minknow_api.acquisition.WatchForStatusChangeResponse\"\x00(\x01\x30\x01\x12\x8c\x01\n\x1dwatch_current_acquisition_run\x12:.minknow_api.acquisition.WatchCurrentAcquisitionRunRequest\x1a+.minknow_api.acquisition.AcquisitionRunInfo\"\x00\x30\x01\x12q\n\x0e\x63urrent_status\x12-.minknow_api.acquisition.CurrentStatusRequest\x1a..minknow_api.acquisition.CurrentStatusResponse\"\x00\x12k\n\x0cget_progress\x12+.minknow_api.acquisition.GetProgressRequest\x1a,.minknow_api.acquisition.GetProgressResponse\"\x00\x12|\n\x14get_acquisition_info\x12\x35.minknow_api.acquisition.GetAcquisitionRunInfoRequest\x1a+.minknow_api.acquisition.AcquisitionRunInfo\"\x00\x12\x84\x01\n\x15list_acquisition_runs\x12\x33.minknow_api.acquisition.ListAcquisitionRunsRequest\x1a\x34.minknow_api.acquisition.ListAcquisitionRunsResponse\"\x00\x12\x86\x01\n\x1bget_current_acquisition_run\x12\x38.minknow_api.acquisition.GetCurrentAcquisitionRunRequest\x1a+.minknow_api.acquisition.AcquisitionRunInfo\"\x00\x12x\n\x11set_signal_reader\x12/.minknow_api.acquisition.SetSignalReaderRequest\x1a\x30.minknow_api.acquisition.SetSignalReaderResponse\"\x00\x42&\n\x1c\x63om.nanoporetech.minknow_api\xa2\x02\x05MKAPIb\x06proto3')
+  serialized_pb=_b('\n\x1dminknow_api/acquisition.proto\x12\x17minknow_api.acquisition\x1a\x1dminknow_api/rpc_options.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\xd3\x03\n\x0cStartRequest\x12\"\n\x1a\x64ont_wait_for_device_ready\x18\x02 \x01(\x08\x12\x38\n\x0fgenerate_report\x18\x03 \x01(\x0e\x32\x1f.minknow_api.acquisition.Option\x12\x45\n\x1csend_sequencing_read_metrics\x18\x04 \x01(\x0e\x32\x1f.minknow_api.acquisition.Option\x12\x41\n\x18send_basecalling_metrics\x18\x05 \x01(\x0e\x32\x1f.minknow_api.acquisition.Option\x12\x31\n\x07purpose\x18\x06 \x01(\x0e\x32 .minknow_api.acquisition.Purpose\x12\x31\n\x08\x61nalysis\x18\x07 \x01(\x0e\x32\x1f.minknow_api.acquisition.Option\x12\x34\n\x0b\x66ile_output\x18\x08 \x01(\x0e\x32\x1f.minknow_api.acquisition.Option\x12?\n\x16generate_final_summary\x18\t \x01(\x0e\x32\x1f.minknow_api.acquisition.Option\"\x1f\n\rStartResponse\x12\x0e\n\x06run_id\x18\x01 \x01(\t\"\xe0\x01\n\x0bStopRequest\x12L\n\x13\x64\x61ta_action_on_stop\x18\x01 \x01(\x0e\x32/.minknow_api.acquisition.StopRequest.DataAction\x12\x18\n\x10wait_until_ready\x18\x02 \x01(\x08\x12\x15\n\rkeep_power_on\x18\x03 \x01(\x08\"R\n\nDataAction\x12\x10\n\x0cSTOP_DEFAULT\x10\x00\x12\x16\n\x12STOP_KEEP_ALL_DATA\x10\x01\x12\x1a\n\x16STOP_FINISH_PROCESSING\x10\x02\"\x0e\n\x0cStopResponse\"+\n\x1bWatchForStatusChangeRequest\x12\x0c\n\x04stop\x18\x01 \x01(\x08\"V\n\x1cWatchForStatusChangeResponse\x12\x36\n\x06status\x18\x01 \x01(\x0e\x32&.minknow_api.acquisition.MinknowStatus\"\x16\n\x14\x43urrentStatusRequest\"O\n\x15\x43urrentStatusResponse\x12\x36\n\x06status\x18\x01 \x01(\x0e\x32&.minknow_api.acquisition.MinknowStatus\"\x14\n\x12GetProgressRequest\"\xa0\x01\n\x13GetProgressResponse\x12S\n\x0fraw_per_channel\x18\x01 \x01(\x0b\x32:.minknow_api.acquisition.GetProgressResponse.RawPerChannel\x1a\x34\n\rRawPerChannel\x12\x10\n\x08\x61\x63quired\x18\x01 \x01(\x04\x12\x11\n\tprocessed\x18\x02 \x01(\x04\".\n\x1cGetAcquisitionRunInfoRequest\x12\x0e\n\x06run_id\x18\x01 \x01(\t\"\xc3\x03\n\x17\x41\x63quisitionYieldSummary\x12\x12\n\nread_count\x18\x01 \x01(\x03\x12\"\n\x1a\x62\x61secalled_pass_read_count\x18\x03 \x01(\x03\x12\"\n\x1a\x62\x61secalled_fail_read_count\x18\x04 \x01(\x03\x12%\n\x1d\x62\x61secalled_skipped_read_count\x18\n \x01(\x03\x12\x1d\n\x15\x62\x61secalled_pass_bases\x18\x05 \x01(\x03\x12\x1d\n\x15\x62\x61secalled_fail_bases\x18\x12 \x01(\x03\x12\x1a\n\x12\x62\x61secalled_samples\x18\x06 \x01(\x03\x12\x1c\n\x14selected_raw_samples\x18\x07 \x01(\x03\x12\x17\n\x0fselected_events\x18\x08 \x01(\x03\x12 \n\x18\x65stimated_selected_bases\x18\t \x01(\x03\x12\x19\n\x11\x61lignment_matches\x18\x0e \x01(\x03\x12\x1c\n\x14\x61lignment_mismatches\x18\x0f \x01(\x03\x12\x1c\n\x14\x61lignment_insertions\x18\x10 \x01(\x03\x12\x1b\n\x13\x61lignment_deletions\x18\x11 \x01(\x03\"\x98\x01\n\x18\x41\x63quisitionWriterSummary\x12\x1a\n\x12written_read_count\x18\x01 \x01(\x03\x12\x1f\n\x17\x62ytes_to_write_produced\x18\x02 \x01(\x03\x12\x1d\n\x15\x62ytes_to_write_failed\x18\x03 \x01(\x03\x12 \n\x18\x62ytes_to_write_completed\x18\x04 \x01(\x03\"\xb0\x03\n\x10\x43hannelStateInfo\x12?\n\x06groups\x18\x01 \x03(\x0b\x32/.minknow_api.acquisition.ChannelStateInfo.Group\x1a;\n\x05Style\x12\r\n\x05label\x18\x01 \x01(\t\x12\x13\n\x0b\x64\x65scription\x18\x02 \x01(\t\x12\x0e\n\x06\x63olour\x18\x03 \x01(\t\x1a~\n\x0c\x43hannelState\x12\n\n\x02id\x18\x01 \x01(\r\x12\x0c\n\x04name\x18\x02 \x01(\t\x12>\n\x05style\x18\x03 \x01(\x0b\x32/.minknow_api.acquisition.ChannelStateInfo.Style\x12\x14\n\x0cglobal_order\x18\x04 \x01(\r\x1a\x9d\x01\n\x05Group\x12\x0c\n\x04name\x18\x01 \x01(\t\x12>\n\x05style\x18\x02 \x01(\x0b\x32/.minknow_api.acquisition.ChannelStateInfo.Style\x12\x46\n\x06states\x18\x03 \x03(\x0b\x32\x36.minknow_api.acquisition.ChannelStateInfo.ChannelState\"\xde\x03\n\x18\x41\x63quisitionConfigSummary\x12\x1b\n\x13\x62\x61secalling_enabled\x18\x01 \x01(\x08\x12\x19\n\x11\x62\x61rcoding_enabled\x18\r \x01(\x08\x12\x19\n\x11\x61lignment_enabled\x18\x0e \x01(\x08\x12\x14\n\x0clamp_enabled\x18\x0f \x01(\x08\x12\x17\n\x0freads_directory\x18\x02 \x01(\t\x12\"\n\x1areads_fallback_directories\x18\x03 \x03(\t\x12\x1b\n\x13\x66\x61st5_reads_enabled\x18\x04 \x01(\x08\x12\x1b\n\x13\x66\x61stq_reads_enabled\x18\x05 \x01(\x08\x12\x1e\n\x16protobuf_reads_enabled\x18\x06 \x01(\x08\x12\x16\n\x0e\x62ulk_file_path\x18\x07 \x01(\t\x12\x19\n\x11\x62ulk_file_enabled\x18\x08 \x01(\x08\x12\x45\n\x12\x63hannel_state_info\x18\t \x01(\x0b\x32).minknow_api.acquisition.ChannelStateInfo\x12\x1c\n\x14\x65vents_to_base_ratio\x18\n \x01(\x02\x12\x13\n\x0bsample_rate\x18\x0b \x01(\r\x12\x15\n\rchannel_count\x18\x0c \x01(\r\"\x94\x05\n\x12\x41\x63quisitionRunInfo\x12\x0e\n\x06run_id\x18\x01 \x01(\t\x12\x38\n\x05state\x18\x02 \x01(\x0e\x32).minknow_api.acquisition.AcquisitionState\x12@\n\x0f\x66inishing_state\x18\n \x01(\x0e\x32\'.minknow_api.acquisition.FinishingState\x12\x43\n\x0bstop_reason\x18\x03 \x01(\x0e\x32..minknow_api.acquisition.AcquisitionStopReason\x12.\n\nstart_time\x18\x04 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x38\n\x14\x64\x61ta_read_start_time\x18\x05 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x36\n\x12\x64\x61ta_read_end_time\x18\x06 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12,\n\x08\x65nd_time\x18\x07 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12G\n\ryield_summary\x18\x08 \x01(\x0b\x32\x30.minknow_api.acquisition.AcquisitionYieldSummary\x12I\n\x0e\x63onfig_summary\x18\t \x01(\x0b\x32\x31.minknow_api.acquisition.AcquisitionConfigSummary\x12I\n\x0ewriter_summary\x18\x0b \x01(\x0b\x32\x31.minknow_api.acquisition.AcquisitionWriterSummary\"\x1c\n\x1aListAcquisitionRunsRequest\".\n\x1bListAcquisitionRunsResponse\x12\x0f\n\x07run_ids\x18\x01 \x03(\t\"!\n\x1fGetCurrentAcquisitionRunRequest\"#\n!WatchCurrentAcquisitionRunRequest\"\xdf\x02\n\x16SetSignalReaderRequest\x12V\n\x06reader\x18\x01 \x01(\x0e\x32@.minknow_api.acquisition.SetSignalReaderRequest.SignalReaderTypeB\x04\x88\xb5\x18\x01\x12\x12\n\nhdf_source\x18\x02 \x01(\t\x12P\n\x08hdf_mode\x18\x03 \x01(\x0e\x32>.minknow_api.acquisition.SetSignalReaderRequest.SourceFileMode\x12 \n\x18sample_rate_scale_factor\x18\x04 \x01(\x02\"(\n\x10SignalReaderType\x12\x08\n\x04HDF5\x10\x00\x12\n\n\x06\x44\x45VICE\x10\x01\";\n\x0eSourceFileMode\x12\x0f\n\x0bUNSPECIFIED\x10\x00\x12\x0e\n\nSINGLE_RUN\x10\x01\x12\x08\n\x04LOOP\x10\x02\"\x19\n\x17SetSignalReaderResponse*Y\n\rMinknowStatus\x12\x10\n\x0c\x45RROR_STATUS\x10\x00\x12\t\n\x05READY\x10\x01\x12\x0c\n\x08STARTING\x10\x02\x12\x0e\n\nPROCESSING\x10\x03\x12\r\n\tFINISHING\x10\x04**\n\x06Option\x12\x08\n\x04\x41UTO\x10\x00\x12\x0b\n\x07\x44ISABLE\x10\x01\x12\t\n\x05\x46ORCE\x10\x02*=\n\x07Purpose\x12\x11\n\rOTHER_PURPOSE\x10\x00\x12\x0e\n\nSEQUENCING\x10\x02\x12\x0f\n\x0b\x43\x41LIBRATION\x10\x03*{\n\x10\x41\x63quisitionState\x12\x18\n\x14\x41\x43QUISITION_STARTING\x10\x00\x12\x17\n\x13\x41\x43QUISITION_RUNNING\x10\x01\x12\x19\n\x15\x41\x43QUISITION_FINISHING\x10\x02\x12\x19\n\x15\x41\x43QUISITION_COMPLETED\x10\x03*\x80\x02\n\x15\x41\x63quisitionStopReason\x12\x13\n\x0fSTOPPED_NOT_SET\x10\x00\x12\x1a\n\x16STOPPED_USER_REQUESTED\x10\x01\x12\x19\n\x15STOPPED_NO_DISK_SPACE\x10\x02\x12&\n\"STOPPED_DEVICE_STOPPED_ACQUISITION\x10\x03\x12 \n\x1cSTOPPED_STARTING_ANOTHER_RUN\x10\x04\x12\x1a\n\x16STOPPED_PROTOCOL_ENDED\x10\x05\x12\x18\n\x14STOPPED_DEVICE_ERROR\x10\x06\x12\x1b\n\x17STOPPED_BAD_TEMPERATURE\x10\x07*\x8b\x01\n\x0e\x46inishingState\x12\x15\n\x11\x46INISHING_UNKNOWN\x10\x00\x12&\n\"FINISHING_PROCESSING_DEVICE_SIGNAL\x10\x01\x12\x1f\n\x1b\x46INISHING_BASECALLING_READS\x10\x02\x12\x19\n\x15\x46INISHING_SAVING_DATA\x10\x03\x32\xe3\t\n\x12\x41\x63quisitionService\x12X\n\x05start\x12%.minknow_api.acquisition.StartRequest\x1a&.minknow_api.acquisition.StartResponse\"\x00\x12U\n\x04stop\x12$.minknow_api.acquisition.StopRequest\x1a%.minknow_api.acquisition.StopResponse\"\x00\x12\x8f\x01\n\x17watch_for_status_change\x12\x34.minknow_api.acquisition.WatchForStatusChangeRequest\x1a\x35.minknow_api.acquisition.WatchForStatusChangeResponse\"\x03\x90\x02\x01(\x01\x30\x01\x12\x8f\x01\n\x1dwatch_current_acquisition_run\x12:.minknow_api.acquisition.WatchCurrentAcquisitionRunRequest\x1a+.minknow_api.acquisition.AcquisitionRunInfo\"\x03\x90\x02\x01\x30\x01\x12t\n\x0e\x63urrent_status\x12-.minknow_api.acquisition.CurrentStatusRequest\x1a..minknow_api.acquisition.CurrentStatusResponse\"\x03\x90\x02\x01\x12n\n\x0cget_progress\x12+.minknow_api.acquisition.GetProgressRequest\x1a,.minknow_api.acquisition.GetProgressResponse\"\x03\x90\x02\x01\x12\x7f\n\x14get_acquisition_info\x12\x35.minknow_api.acquisition.GetAcquisitionRunInfoRequest\x1a+.minknow_api.acquisition.AcquisitionRunInfo\"\x03\x90\x02\x01\x12\x87\x01\n\x15list_acquisition_runs\x12\x33.minknow_api.acquisition.ListAcquisitionRunsRequest\x1a\x34.minknow_api.acquisition.ListAcquisitionRunsResponse\"\x03\x90\x02\x01\x12\x89\x01\n\x1bget_current_acquisition_run\x12\x38.minknow_api.acquisition.GetCurrentAcquisitionRunRequest\x1a+.minknow_api.acquisition.AcquisitionRunInfo\"\x03\x90\x02\x01\x12{\n\x11set_signal_reader\x12/.minknow_api.acquisition.SetSignalReaderRequest\x1a\x30.minknow_api.acquisition.SetSignalReaderResponse\"\x03\x90\x02\x02\x42&\n\x1c\x63om.nanoporetech.minknow_api\xa2\x02\x05MKAPIb\x06proto3')
   ,
   dependencies=[minknow__api_dot_rpc__options__pb2.DESCRIPTOR,google_dot_protobuf_dot_timestamp__pb2.DESCRIPTOR,])
 
@@ -56,8 +56,8 @@ _MINKNOWSTATUS = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=4036,
-  serialized_end=4125,
+  serialized_start=4058,
+  serialized_end=4147,
 )
 _sym_db.RegisterEnumDescriptor(_MINKNOWSTATUS)
 
@@ -83,8 +83,8 @@ _OPTION = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=4127,
-  serialized_end=4169,
+  serialized_start=4149,
+  serialized_end=4191,
 )
 _sym_db.RegisterEnumDescriptor(_OPTION)
 
@@ -110,8 +110,8 @@ _PURPOSE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=4171,
-  serialized_end=4232,
+  serialized_start=4193,
+  serialized_end=4254,
 )
 _sym_db.RegisterEnumDescriptor(_PURPOSE)
 
@@ -141,8 +141,8 @@ _ACQUISITIONSTATE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=4234,
-  serialized_end=4357,
+  serialized_start=4256,
+  serialized_end=4379,
 )
 _sym_db.RegisterEnumDescriptor(_ACQUISITIONSTATE)
 
@@ -181,11 +181,15 @@ _ACQUISITIONSTOPREASON = _descriptor.EnumDescriptor(
       name='STOPPED_DEVICE_ERROR', index=6, number=6,
       serialized_options=None,
       type=None),
+    _descriptor.EnumValueDescriptor(
+      name='STOPPED_BAD_TEMPERATURE', index=7, number=7,
+      serialized_options=None,
+      type=None),
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=4360,
-  serialized_end=4587,
+  serialized_start=4382,
+  serialized_end=4638,
 )
 _sym_db.RegisterEnumDescriptor(_ACQUISITIONSTOPREASON)
 
@@ -215,8 +219,8 @@ _FINISHINGSTATE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=4590,
-  serialized_end=4729,
+  serialized_start=4641,
+  serialized_end=4780,
 )
 _sym_db.RegisterEnumDescriptor(_FINISHINGSTATE)
 
@@ -243,6 +247,7 @@ STOPPED_DEVICE_STOPPED_ACQUISITION = 3
 STOPPED_STARTING_ANOTHER_RUN = 4
 STOPPED_PROTOCOL_ENDED = 5
 STOPPED_DEVICE_ERROR = 6
+STOPPED_BAD_TEMPERATURE = 7
 FINISHING_UNKNOWN = 0
 FINISHING_PROCESSING_DEVICE_SIGNAL = 1
 FINISHING_BASECALLING_READS = 2
@@ -292,8 +297,8 @@ _SETSIGNALREADERREQUEST_SIGNALREADERTYPE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=3906,
-  serialized_end=3946,
+  serialized_start=3928,
+  serialized_end=3968,
 )
 _sym_db.RegisterEnumDescriptor(_SETSIGNALREADERREQUEST_SIGNALREADERTYPE)
 
@@ -318,8 +323,8 @@ _SETSIGNALREADERREQUEST_SOURCEFILEMODE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=3948,
-  serialized_end=4007,
+  serialized_start=3970,
+  serialized_end=4029,
 )
 _sym_db.RegisterEnumDescriptor(_SETSIGNALREADERREQUEST_SOURCEFILEMODE)
 
@@ -1118,77 +1123,84 @@ _ACQUISITIONCONFIGSUMMARY = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='reads_directory', full_name='minknow_api.acquisition.AcquisitionConfigSummary.reads_directory', index=3,
+      name='lamp_enabled', full_name='minknow_api.acquisition.AcquisitionConfigSummary.lamp_enabled', index=3,
+      number=15, type=8, cpp_type=7, label=1,
+      has_default_value=False, default_value=False,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='reads_directory', full_name='minknow_api.acquisition.AcquisitionConfigSummary.reads_directory', index=4,
       number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='reads_fallback_directories', full_name='minknow_api.acquisition.AcquisitionConfigSummary.reads_fallback_directories', index=4,
+      name='reads_fallback_directories', full_name='minknow_api.acquisition.AcquisitionConfigSummary.reads_fallback_directories', index=5,
       number=3, type=9, cpp_type=9, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='fast5_reads_enabled', full_name='minknow_api.acquisition.AcquisitionConfigSummary.fast5_reads_enabled', index=5,
+      name='fast5_reads_enabled', full_name='minknow_api.acquisition.AcquisitionConfigSummary.fast5_reads_enabled', index=6,
       number=4, type=8, cpp_type=7, label=1,
       has_default_value=False, default_value=False,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='fastq_reads_enabled', full_name='minknow_api.acquisition.AcquisitionConfigSummary.fastq_reads_enabled', index=6,
+      name='fastq_reads_enabled', full_name='minknow_api.acquisition.AcquisitionConfigSummary.fastq_reads_enabled', index=7,
       number=5, type=8, cpp_type=7, label=1,
       has_default_value=False, default_value=False,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='protobuf_reads_enabled', full_name='minknow_api.acquisition.AcquisitionConfigSummary.protobuf_reads_enabled', index=7,
+      name='protobuf_reads_enabled', full_name='minknow_api.acquisition.AcquisitionConfigSummary.protobuf_reads_enabled', index=8,
       number=6, type=8, cpp_type=7, label=1,
       has_default_value=False, default_value=False,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='bulk_file_path', full_name='minknow_api.acquisition.AcquisitionConfigSummary.bulk_file_path', index=8,
+      name='bulk_file_path', full_name='minknow_api.acquisition.AcquisitionConfigSummary.bulk_file_path', index=9,
       number=7, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=_b("").decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='bulk_file_enabled', full_name='minknow_api.acquisition.AcquisitionConfigSummary.bulk_file_enabled', index=9,
+      name='bulk_file_enabled', full_name='minknow_api.acquisition.AcquisitionConfigSummary.bulk_file_enabled', index=10,
       number=8, type=8, cpp_type=7, label=1,
       has_default_value=False, default_value=False,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='channel_state_info', full_name='minknow_api.acquisition.AcquisitionConfigSummary.channel_state_info', index=10,
+      name='channel_state_info', full_name='minknow_api.acquisition.AcquisitionConfigSummary.channel_state_info', index=11,
       number=9, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='events_to_base_ratio', full_name='minknow_api.acquisition.AcquisitionConfigSummary.events_to_base_ratio', index=11,
+      name='events_to_base_ratio', full_name='minknow_api.acquisition.AcquisitionConfigSummary.events_to_base_ratio', index=12,
       number=10, type=2, cpp_type=6, label=1,
       has_default_value=False, default_value=float(0),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='sample_rate', full_name='minknow_api.acquisition.AcquisitionConfigSummary.sample_rate', index=12,
+      name='sample_rate', full_name='minknow_api.acquisition.AcquisitionConfigSummary.sample_rate', index=13,
       number=11, type=13, cpp_type=3, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='channel_count', full_name='minknow_api.acquisition.AcquisitionConfigSummary.channel_count', index=13,
+      name='channel_count', full_name='minknow_api.acquisition.AcquisitionConfigSummary.channel_count', index=14,
       number=12, type=13, cpp_type=3, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
@@ -1207,7 +1219,7 @@ _ACQUISITIONCONFIGSUMMARY = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=2384,
-  serialized_end=2840,
+  serialized_end=2862,
 )
 
 
@@ -1307,8 +1319,8 @@ _ACQUISITIONRUNINFO = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2843,
-  serialized_end=3503,
+  serialized_start=2865,
+  serialized_end=3525,
 )
 
 
@@ -1331,8 +1343,8 @@ _LISTACQUISITIONRUNSREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3505,
-  serialized_end=3533,
+  serialized_start=3527,
+  serialized_end=3555,
 )
 
 
@@ -1362,8 +1374,8 @@ _LISTACQUISITIONRUNSRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3535,
-  serialized_end=3581,
+  serialized_start=3557,
+  serialized_end=3603,
 )
 
 
@@ -1386,8 +1398,8 @@ _GETCURRENTACQUISITIONRUNREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3583,
-  serialized_end=3616,
+  serialized_start=3605,
+  serialized_end=3638,
 )
 
 
@@ -1410,8 +1422,8 @@ _WATCHCURRENTACQUISITIONRUNREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3618,
-  serialized_end=3653,
+  serialized_start=3640,
+  serialized_end=3675,
 )
 
 
@@ -1464,8 +1476,8 @@ _SETSIGNALREADERREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3656,
-  serialized_end=4007,
+  serialized_start=3678,
+  serialized_end=4029,
 )
 
 
@@ -1488,8 +1500,8 @@ _SETSIGNALREADERRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=4009,
-  serialized_end=4034,
+  serialized_start=4031,
+  serialized_end=4056,
 )
 
 _STARTREQUEST.fields_by_name['generate_report'].enum_type = _OPTION
@@ -1920,6 +1932,8 @@ AcquisitionConfigSummary = _reflection.GeneratedProtocolMessageType('Acquisition
           Is barcoding enabled for the run
       alignment_enabled:
           Is alignment enabled for the run
+      lamp_enabled:
+          Is lamp enabled for the run
       reads_directory:
           Root directory reads were written to for the run.  Empty if no
           reads were enabled.
@@ -2052,8 +2066,8 @@ _ACQUISITIONSERVICE = _descriptor.ServiceDescriptor(
   file=DESCRIPTOR,
   index=0,
   serialized_options=None,
-  serialized_start=4732,
-  serialized_end=5959,
+  serialized_start=4783,
+  serialized_end=6034,
   methods=[
   _descriptor.MethodDescriptor(
     name='start',
@@ -2080,7 +2094,7 @@ _ACQUISITIONSERVICE = _descriptor.ServiceDescriptor(
     containing_service=None,
     input_type=_WATCHFORSTATUSCHANGEREQUEST,
     output_type=_WATCHFORSTATUSCHANGERESPONSE,
-    serialized_options=None,
+    serialized_options=_b('\220\002\001'),
   ),
   _descriptor.MethodDescriptor(
     name='watch_current_acquisition_run',
@@ -2089,7 +2103,7 @@ _ACQUISITIONSERVICE = _descriptor.ServiceDescriptor(
     containing_service=None,
     input_type=_WATCHCURRENTACQUISITIONRUNREQUEST,
     output_type=_ACQUISITIONRUNINFO,
-    serialized_options=None,
+    serialized_options=_b('\220\002\001'),
   ),
   _descriptor.MethodDescriptor(
     name='current_status',
@@ -2098,7 +2112,7 @@ _ACQUISITIONSERVICE = _descriptor.ServiceDescriptor(
     containing_service=None,
     input_type=_CURRENTSTATUSREQUEST,
     output_type=_CURRENTSTATUSRESPONSE,
-    serialized_options=None,
+    serialized_options=_b('\220\002\001'),
   ),
   _descriptor.MethodDescriptor(
     name='get_progress',
@@ -2107,7 +2121,7 @@ _ACQUISITIONSERVICE = _descriptor.ServiceDescriptor(
     containing_service=None,
     input_type=_GETPROGRESSREQUEST,
     output_type=_GETPROGRESSRESPONSE,
-    serialized_options=None,
+    serialized_options=_b('\220\002\001'),
   ),
   _descriptor.MethodDescriptor(
     name='get_acquisition_info',
@@ -2116,7 +2130,7 @@ _ACQUISITIONSERVICE = _descriptor.ServiceDescriptor(
     containing_service=None,
     input_type=_GETACQUISITIONRUNINFOREQUEST,
     output_type=_ACQUISITIONRUNINFO,
-    serialized_options=None,
+    serialized_options=_b('\220\002\001'),
   ),
   _descriptor.MethodDescriptor(
     name='list_acquisition_runs',
@@ -2125,7 +2139,7 @@ _ACQUISITIONSERVICE = _descriptor.ServiceDescriptor(
     containing_service=None,
     input_type=_LISTACQUISITIONRUNSREQUEST,
     output_type=_LISTACQUISITIONRUNSRESPONSE,
-    serialized_options=None,
+    serialized_options=_b('\220\002\001'),
   ),
   _descriptor.MethodDescriptor(
     name='get_current_acquisition_run',
@@ -2134,7 +2148,7 @@ _ACQUISITIONSERVICE = _descriptor.ServiceDescriptor(
     containing_service=None,
     input_type=_GETCURRENTACQUISITIONRUNREQUEST,
     output_type=_ACQUISITIONRUNINFO,
-    serialized_options=None,
+    serialized_options=_b('\220\002\001'),
   ),
   _descriptor.MethodDescriptor(
     name='set_signal_reader',
@@ -2143,7 +2157,7 @@ _ACQUISITIONSERVICE = _descriptor.ServiceDescriptor(
     containing_service=None,
     input_type=_SETSIGNALREADERREQUEST,
     output_type=_SETSIGNALREADERRESPONSE,
-    serialized_options=None,
+    serialized_options=_b('\220\002\002'),
   ),
 ])
 _sym_db.RegisterServiceDescriptor(_ACQUISITIONSERVICE)

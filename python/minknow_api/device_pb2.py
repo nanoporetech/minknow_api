@@ -23,10 +23,41 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='minknow_api.device',
   syntax='proto3',
   serialized_options=_b('\n\034com.nanoporetech.minknow_api\242\002\005MKAPI'),
-  serialized_pb=_b('\n\x18minknow_api/device.proto\x12\x12minknow_api.device\x1a\x1dminknow_api/rpc_options.proto\x1a\x1egoogle/protobuf/wrappers.proto\":\n\x14\x43hannelConfiguration\x12\x0c\n\x04well\x18\x01 \x01(\r\x12\x14\n\x0ctest_current\x18\x02 \x01(\x08\"S\n\x1cReturnedChannelConfiguration\x12\x0c\n\x04well\x18\x01 \x01(\r\x12\x14\n\x0ctest_current\x18\x02 \x01(\x08\x12\x0f\n\x07unblock\x18\x04 \x01(\x08\"\x16\n\x14GetDeviceInfoRequest\"\xf2\x03\n\x15GetDeviceInfoResponse\x12\x11\n\tdevice_id\x18\x01 \x01(\t\x12I\n\x0b\x64\x65vice_type\x18\x02 \x01(\x0e\x32\x34.minknow_api.device.GetDeviceInfoResponse.DeviceType\x12\x14\n\x0cis_simulated\x18\x03 \x01(\x08\x12\x19\n\x11max_channel_count\x18\x04 \x01(\r\x12\x1d\n\x15max_wells_per_channel\x18\x05 \x01(\r\x12\x1b\n\x13\x63\x61n_set_temperature\x18\x06 \x01(\x08\x12\x14\n\x0c\x64igitisation\x18\x07 \x01(\r\x12T\n\x10\x66irmware_version\x18\n \x03(\x0b\x32:.minknow_api.device.GetDeviceInfoResponse.ComponentVersion\x1aM\n\x10\x43omponentVersion\x12\x11\n\tcomponent\x18\x01 \x01(\t\x12\x0f\n\x07version\x18\x02 \x01(\t\x12\x15\n\rserial_number\x18\x03 \x01(\t\"S\n\nDeviceType\x12\n\n\x06MINION\x10\x00\x12\x0b\n\x07GRIDION\x10\x02\x12\x0e\n\nPROMETHION\x10\x03\x12\x0f\n\x0bMINION_MK1C\x10\x04\x12\x0b\n\x07TRAXION\x10\x05\"\x17\n\x15GetDeviceStateRequest\"\xa0\x01\n\x16GetDeviceStateResponse\x12L\n\x0c\x64\x65vice_state\x18\x01 \x01(\x0e\x32\x36.minknow_api.device.GetDeviceStateResponse.DeviceState\"8\n\x0b\x44\x65viceState\x12\x17\n\x13\x44\x45VICE_DISCONNECTED\x10\x00\x12\x10\n\x0c\x44\x45VICE_READY\x10\x01\"\x1a\n\x18StreamDeviceStateRequest\"\x18\n\x16GetFlowCellInfoRequest\"\xe9\x02\n\x17GetFlowCellInfoResponse\x12\x15\n\rhas_flow_cell\x18\x01 \x01(\x08\x12\x15\n\rchannel_count\x18\x02 \x01(\r\x12\x19\n\x11wells_per_channel\x18\x03 \x01(\r\x12\x14\n\x0c\x66low_cell_id\x18\x04 \x01(\t\x12\x13\n\x0b\x61sic_id_str\x18\r \x01(\t\x12\x14\n\x0cproduct_code\x18\x06 \x01(\t\x12#\n\x1buser_specified_flow_cell_id\x18\x07 \x01(\t\x12#\n\x1buser_specified_product_code\x18\x08 \x01(\t\x12\x13\n\x0bhas_adapter\x18\t \x01(\x08\x12\x12\n\nadapter_id\x18\n \x01(\t\x12\x1c\n\x12temperature_offset\x18\x0b \x01(\x02H\x00\x12\x14\n\x0c\x61sic_version\x18\x0c \x01(\tB\x1d\n\x1btemperature_offset_nullable\"\x1b\n\x19StreamFlowCellInfoRequest\"5\n!SetUserSpecifiedFlowCellIdRequest\x12\x10\n\x02id\x18\x01 \x01(\tB\x04\x88\xb5\x18\x01\"$\n\"SetUserSpecifiedFlowCellIdResponse\"8\n\"SetUserSpecifiedProductCodeRequest\x12\x12\n\x04\x63ode\x18\x01 \x01(\tB\x04\x88\xb5\x18\x01\"%\n#SetUserSpecifiedProductCodeResponse\"\x1a\n\x18GetChannelsLayoutRequest\"W\n\x19GetChannelsLayoutResponse\x12:\n\x0f\x63hannel_records\x18\x01 \x03(\x0b\x32!.minknow_api.device.ChannelRecord\"\xa4\x01\n\rChannelRecord\x12\n\n\x02id\x18\x01 \x01(\r\x12\x0c\n\x04name\x18\x02 \x01(\t\x12@\n\x0bmux_records\x18\x03 \x03(\x0b\x32+.minknow_api.device.ChannelRecord.MuxRecord\x1a\x37\n\tMuxRecord\x12\n\n\x02id\x18\x01 \x01(\r\x12\x0e\n\x06phys_x\x18\x02 \x01(\r\x12\x0e\n\x06phys_y\x18\x03 \x01(\r\"\x1c\n\x1aResetDeviceSettingsRequest\"\x1d\n\x1bResetDeviceSettingsResponse\"\x80\x01\n\x15SetCalibrationRequest\x12\x1b\n\rfirst_channel\x18\x01 \x01(\rB\x04\x88\xb5\x18\x01\x12\x1a\n\x0clast_channel\x18\x02 \x01(\rB\x04\x88\xb5\x18\x01\x12\x15\n\x07offsets\x18\x03 \x03(\x02\x42\x04\x88\xb5\x18\x01\x12\x17\n\tpa_ranges\x18\x04 \x03(\x02\x42\x04\x88\xb5\x18\x01\"\x18\n\x16SetCalibrationResponse\"\x19\n\x17\x43learCalibrationRequest\"\x1a\n\x18\x43learCalibrationResponse\"P\n\x15GetCalibrationRequest\x12\x1b\n\rfirst_channel\x18\x01 \x01(\rB\x04\x88\xb5\x18\x01\x12\x1a\n\x0clast_channel\x18\x02 \x01(\rB\x04\x88\xb5\x18\x01\"k\n\x16GetCalibrationResponse\x12\x14\n\x0c\x64igitisation\x18\x01 \x01(\r\x12\x0f\n\x07offsets\x18\x02 \x03(\x02\x12\x11\n\tpa_ranges\x18\x03 \x03(\x02\x12\x17\n\x0fhas_calibration\x18\x04 \x01(\x08\"\xef\x01\n\x15SetTemperatureRequest\x12\x13\n\x0btemperature\x18\x01 \x01(\x02\x12\x62\n\x14wait_for_temperature\x18\x02 \x01(\x0b\x32\x44.minknow_api.device.SetTemperatureRequest.WaitForTemperatureSettings\x1a]\n\x1aWaitForTemperatureSettings\x12\x0f\n\x07timeout\x18\x01 \x01(\r\x12\x1b\n\x13min_stable_duration\x18\x03 \x01(\r\x12\x11\n\ttolerance\x18\x02 \x01(\x02\"C\n\x16SetTemperatureResponse\x12)\n!timed_out_waiting_for_temperature\x18\x01 \x01(\x08\"\x17\n\x15GetTemperatureRequest\"\x9f\x04\n\x16GetTemperatureResponse\x12N\n\x06minion\x18\x01 \x01(\x0b\x32<.minknow_api.device.GetTemperatureResponse.MinIONTemperatureH\x00\x12V\n\npromethion\x18\x02 \x01(\x0b\x32@.minknow_api.device.GetTemperatureResponse.PromethIONTemperatureH\x00\x12\x37\n\x12target_temperature\x18\x03 \x01(\x0b\x32\x1b.google.protobuf.FloatValue\x1a\x85\x01\n\x11MinIONTemperature\x12\x35\n\x10\x61sic_temperature\x18\x01 \x01(\x0b\x32\x1b.google.protobuf.FloatValue\x12\x39\n\x14heatsink_temperature\x18\x02 \x01(\x0b\x32\x1b.google.protobuf.FloatValue\x1a\x8c\x01\n\x15PromethIONTemperature\x12\x39\n\x14\x66lowcell_temperature\x18\x01 \x01(\x0b\x32\x1b.google.protobuf.FloatValue\x12\x38\n\x13\x63hamber_temperature\x18\x02 \x01(\x0b\x32\x1b.google.protobuf.FloatValueB\r\n\x0btemperature\"q\n\x0eUnblockRequest\x12\x10\n\x08\x63hannels\x18\x01 \x03(\r\x12\x1d\n\x13\x64uration_in_seconds\x18\x02 \x01(\rH\x00\x12\"\n\x18\x64uration_in_milliseconds\x18\x03 \x01(\rH\x00\x42\n\n\x08\x64uration\"\x11\n\x0fUnblockResponse\"\x17\n\x15\x43\x61ncelUnblocksRequest\"4\n\x16\x43\x61ncelUnblocksResponse\x12\x1a\n\x12\x63\x61ncelled_unblocks\x18\x01 \x01(\r\"2\n\x1eGetChannelConfigurationRequest\x12\x10\n\x08\x63hannels\x18\x01 \x03(\r\"s\n\x1fGetChannelConfigurationResponse\x12P\n\x16\x63hannel_configurations\x18\x01 \x03(\x0b\x32\x30.minknow_api.device.ReturnedChannelConfiguration\"\xf7\x01\n\x1eSetChannelConfigurationRequest\x12m\n\x16\x63hannel_configurations\x18\x01 \x03(\x0b\x32M.minknow_api.device.SetChannelConfigurationRequest.ChannelConfigurationsEntry\x1a\x66\n\x1a\x43hannelConfigurationsEntry\x12\x0b\n\x03key\x18\x01 \x01(\r\x12\x37\n\x05value\x18\x02 \x01(\x0b\x32(.minknow_api.device.ChannelConfiguration:\x02\x38\x01\"!\n\x1fSetChannelConfigurationResponse\"r\n!SetChannelConfigurationAllRequest\x12M\n\x15\x63hannel_configuration\x18\x01 \x01(\x0b\x32(.minknow_api.device.ChannelConfigurationB\x04\x90\xb5\x18\x01\"$\n\"SetChannelConfigurationAllResponse\"\xc6\x06\n\x10SaturationConfig\x12\x43\n\nthresholds\x18\x01 \x01(\x0b\x32/.minknow_api.device.SaturationConfig.Thresholds\x12T\n\x13software_saturation\x18\x02 \x01(\x0b\x32\x37.minknow_api.device.SaturationConfig.SoftwareSaturation\x12_\n\x19user_threshold_saturation\x18\x03 \x01(\x0b\x32<.minknow_api.device.SaturationConfig.UserThresholdSaturation\x1a\xfa\x01\n\nThresholds\x12\x37\n\x11general_threshold\x18\x01 \x01(\x0b\x32\x1c.google.protobuf.UInt32Value\x12\x37\n\x11unblock_threshold\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.UInt32Value\x12<\n\x16user_general_threshold\x18\x03 \x01(\x0b\x32\x1c.google.protobuf.UInt32Value\x12<\n\x16user_unblock_threshold\x18\x04 \x01(\x0b\x32\x1c.google.protobuf.UInt32Value\x1a\x93\x01\n\x12SoftwareSaturation\x12\x0f\n\x07\x65nabled\x18\x01 \x01(\x08\x12\x35\n\x10software_min_adc\x18\x02 \x01(\x0b\x32\x1b.google.protobuf.Int32Value\x12\x35\n\x10software_max_adc\x18\x03 \x01(\x0b\x32\x1b.google.protobuf.Int32Value\x1a\xa2\x01\n\x17UserThresholdSaturation\x12\x0f\n\x07\x65nabled\x18\x01 \x01(\x08\x12:\n\x15user_threshold_min_pa\x18\x02 \x01(\x0b\x32\x1b.google.protobuf.FloatValue\x12:\n\x15user_threshold_max_pa\x18\x03 \x01(\x0b\x32\x1b.google.protobuf.FloatValue\"Z\n\x1aSetSaturationConfigRequest\x12<\n\x08settings\x18\x01 \x01(\x0b\x32$.minknow_api.device.SaturationConfigB\x04\x90\xb5\x18\x01\"\x1d\n\x1bSetSaturationConfigResponse\"\x1c\n\x1aGetSaturationConfigRequest\"[\n\x1bGetSaturationConfigResponse\x12<\n\x08settings\x18\x01 \x01(\x0b\x32$.minknow_api.device.SaturationConfigB\x04\x90\xb5\x18\x01\"\x16\n\x14GetSampleRateRequest\",\n\x15GetSampleRateResponse\x12\x13\n\x0bsample_rate\x18\x01 \x01(\r\"1\n\x14SetSampleRateRequest\x12\x19\n\x0bsample_rate\x18\x01 \x01(\rB\x04\x88\xb5\x18\x01\"1\n\x15SetSampleRateResponse\x12\x18\n\x10real_sample_rate\x18\x01 \x01(\r\"\x17\n\x15GetBiasVoltageRequest\".\n\x16GetBiasVoltageResponse\x12\x14\n\x0c\x62ias_voltage\x18\x01 \x01(\x01\"3\n\x15SetBiasVoltageRequest\x12\x1a\n\x0c\x62ias_voltage\x18\x01 \x01(\x01\x42\x04\x88\xb5\x18\x01\"\x18\n\x16SetBiasVoltageResponse*]\n\x0cSelectedWell\x12\r\n\tWELL_NONE\x10\x00\x12\n\n\x06WELL_1\x10\x01\x12\n\n\x06WELL_2\x10\x02\x12\n\n\x06WELL_3\x10\x03\x12\n\n\x06WELL_4\x10\x04\x12\x0e\n\nWELL_OTHER\x10\x05\x32\x92\x17\n\rDeviceService\x12h\n\x0fget_device_info\x12(.minknow_api.device.GetDeviceInfoRequest\x1a).minknow_api.device.GetDeviceInfoResponse\"\x00\x12k\n\x10get_device_state\x12).minknow_api.device.GetDeviceStateRequest\x1a*.minknow_api.device.GetDeviceStateResponse\"\x00\x12s\n\x13stream_device_state\x12,.minknow_api.device.StreamDeviceStateRequest\x1a*.minknow_api.device.GetDeviceStateResponse\"\x00\x30\x01\x12o\n\x12get_flow_cell_info\x12*.minknow_api.device.GetFlowCellInfoRequest\x1a+.minknow_api.device.GetFlowCellInfoResponse\"\x00\x12w\n\x15stream_flow_cell_info\x12-.minknow_api.device.StreamFlowCellInfoRequest\x1a+.minknow_api.device.GetFlowCellInfoResponse\"\x00\x30\x01\x12\x92\x01\n\x1fset_user_specified_flow_cell_id\x12\x35.minknow_api.device.SetUserSpecifiedFlowCellIdRequest\x1a\x36.minknow_api.device.SetUserSpecifiedFlowCellIdResponse\"\x00\x12\x94\x01\n\x1fset_user_specified_product_code\x12\x36.minknow_api.device.SetUserSpecifiedProductCodeRequest\x1a\x37.minknow_api.device.SetUserSpecifiedProductCodeResponse\"\x00\x12t\n\x13get_channels_layout\x12,.minknow_api.device.GetChannelsLayoutRequest\x1a-.minknow_api.device.GetChannelsLayoutResponse\"\x00\x12z\n\x15reset_device_settings\x12..minknow_api.device.ResetDeviceSettingsRequest\x1a/.minknow_api.device.ResetDeviceSettingsResponse\"\x00\x12j\n\x0fset_calibration\x12).minknow_api.device.SetCalibrationRequest\x1a*.minknow_api.device.SetCalibrationResponse\"\x00\x12p\n\x11\x63lear_calibration\x12+.minknow_api.device.ClearCalibrationRequest\x1a,.minknow_api.device.ClearCalibrationResponse\"\x00\x12j\n\x0fget_calibration\x12).minknow_api.device.GetCalibrationRequest\x1a*.minknow_api.device.GetCalibrationResponse\"\x00\x12j\n\x0fset_temperature\x12).minknow_api.device.SetTemperatureRequest\x1a*.minknow_api.device.SetTemperatureResponse\"\x00\x12j\n\x0fget_temperature\x12).minknow_api.device.GetTemperatureRequest\x1a*.minknow_api.device.GetTemperatureResponse\"\x00\x12T\n\x07unblock\x12\".minknow_api.device.UnblockRequest\x1a#.minknow_api.device.UnblockResponse\"\x00\x12j\n\x0f\x63\x61ncel_unblocks\x12).minknow_api.device.CancelUnblocksRequest\x1a*.minknow_api.device.CancelUnblocksResponse\"\x00\x12\x86\x01\n\x19get_channel_configuration\x12\x32.minknow_api.device.GetChannelConfigurationRequest\x1a\x33.minknow_api.device.GetChannelConfigurationResponse\"\x00\x12\x86\x01\n\x19set_channel_configuration\x12\x32.minknow_api.device.SetChannelConfigurationRequest\x1a\x33.minknow_api.device.SetChannelConfigurationResponse\"\x00\x12\x90\x01\n\x1dset_channel_configuration_all\x12\x35.minknow_api.device.SetChannelConfigurationAllRequest\x1a\x36.minknow_api.device.SetChannelConfigurationAllResponse\"\x00\x12z\n\x15set_saturation_config\x12..minknow_api.device.SetSaturationConfigRequest\x1a/.minknow_api.device.SetSaturationConfigResponse\"\x00\x12z\n\x15get_saturation_config\x12..minknow_api.device.GetSaturationConfigRequest\x1a/.minknow_api.device.GetSaturationConfigResponse\"\x00\x12h\n\x0fget_sample_rate\x12(.minknow_api.device.GetSampleRateRequest\x1a).minknow_api.device.GetSampleRateResponse\"\x00\x12h\n\x0fset_sample_rate\x12(.minknow_api.device.SetSampleRateRequest\x1a).minknow_api.device.SetSampleRateResponse\"\x00\x12k\n\x10get_bias_voltage\x12).minknow_api.device.GetBiasVoltageRequest\x1a*.minknow_api.device.GetBiasVoltageResponse\"\x00\x12k\n\x10set_bias_voltage\x12).minknow_api.device.SetBiasVoltageRequest\x1a*.minknow_api.device.SetBiasVoltageResponse\"\x00\x42&\n\x1c\x63om.nanoporetech.minknow_api\xa2\x02\x05MKAPIb\x06proto3')
+  serialized_pb=_b('\n\x18minknow_api/device.proto\x12\x12minknow_api.device\x1a\x1dminknow_api/rpc_options.proto\x1a\x1egoogle/protobuf/wrappers.proto\":\n\x14\x43hannelConfiguration\x12\x0c\n\x04well\x18\x01 \x01(\r\x12\x14\n\x0ctest_current\x18\x02 \x01(\x08\"S\n\x1cReturnedChannelConfiguration\x12\x0c\n\x04well\x18\x01 \x01(\r\x12\x14\n\x0ctest_current\x18\x02 \x01(\x08\x12\x0f\n\x07unblock\x18\x04 \x01(\x08\"\x16\n\x14GetDeviceInfoRequest\"\xf2\x03\n\x15GetDeviceInfoResponse\x12\x11\n\tdevice_id\x18\x01 \x01(\t\x12I\n\x0b\x64\x65vice_type\x18\x02 \x01(\x0e\x32\x34.minknow_api.device.GetDeviceInfoResponse.DeviceType\x12\x14\n\x0cis_simulated\x18\x03 \x01(\x08\x12\x19\n\x11max_channel_count\x18\x04 \x01(\r\x12\x1d\n\x15max_wells_per_channel\x18\x05 \x01(\r\x12\x1b\n\x13\x63\x61n_set_temperature\x18\x06 \x01(\x08\x12\x14\n\x0c\x64igitisation\x18\x07 \x01(\r\x12T\n\x10\x66irmware_version\x18\n \x03(\x0b\x32:.minknow_api.device.GetDeviceInfoResponse.ComponentVersion\x1aM\n\x10\x43omponentVersion\x12\x11\n\tcomponent\x18\x01 \x01(\t\x12\x0f\n\x07version\x18\x02 \x01(\t\x12\x15\n\rserial_number\x18\x03 \x01(\t\"S\n\nDeviceType\x12\n\n\x06MINION\x10\x00\x12\x0b\n\x07GRIDION\x10\x02\x12\x0e\n\nPROMETHION\x10\x03\x12\x0f\n\x0bMINION_MK1C\x10\x04\x12\x0b\n\x07TRAXION\x10\x05\"\x17\n\x15GetDeviceStateRequest\"\xe8\x01\n\x16GetDeviceStateResponse\x12L\n\x0c\x64\x65vice_state\x18\x01 \x01(\x0e\x32\x36.minknow_api.device.GetDeviceStateResponse.DeviceState\x12\x46\n\x13\x66low_cell_connector\x18\x02 \x01(\x0e\x32).minknow_api.device.FlowCellConnectorType\"8\n\x0b\x44\x65viceState\x12\x17\n\x13\x44\x45VICE_DISCONNECTED\x10\x00\x12\x10\n\x0c\x44\x45VICE_READY\x10\x01\"\x1a\n\x18StreamDeviceStateRequest\"\x18\n\x16GetFlowCellInfoRequest\"\xe9\x02\n\x17GetFlowCellInfoResponse\x12\x15\n\rhas_flow_cell\x18\x01 \x01(\x08\x12\x15\n\rchannel_count\x18\x02 \x01(\r\x12\x19\n\x11wells_per_channel\x18\x03 \x01(\r\x12\x14\n\x0c\x66low_cell_id\x18\x04 \x01(\t\x12\x13\n\x0b\x61sic_id_str\x18\r \x01(\t\x12\x14\n\x0cproduct_code\x18\x06 \x01(\t\x12#\n\x1buser_specified_flow_cell_id\x18\x07 \x01(\t\x12#\n\x1buser_specified_product_code\x18\x08 \x01(\t\x12\x13\n\x0bhas_adapter\x18\t \x01(\x08\x12\x12\n\nadapter_id\x18\n \x01(\t\x12\x1c\n\x12temperature_offset\x18\x0b \x01(\x02H\x00\x12\x14\n\x0c\x61sic_version\x18\x0c \x01(\tB\x1d\n\x1btemperature_offset_nullable\"\x1b\n\x19StreamFlowCellInfoRequest\"5\n!SetUserSpecifiedFlowCellIdRequest\x12\x10\n\x02id\x18\x01 \x01(\tB\x04\x88\xb5\x18\x01\"$\n\"SetUserSpecifiedFlowCellIdResponse\"8\n\"SetUserSpecifiedProductCodeRequest\x12\x12\n\x04\x63ode\x18\x01 \x01(\tB\x04\x88\xb5\x18\x01\"%\n#SetUserSpecifiedProductCodeResponse\"\x1a\n\x18GetChannelsLayoutRequest\"W\n\x19GetChannelsLayoutResponse\x12:\n\x0f\x63hannel_records\x18\x01 \x03(\x0b\x32!.minknow_api.device.ChannelRecord\"\xa4\x01\n\rChannelRecord\x12\n\n\x02id\x18\x01 \x01(\r\x12\x0c\n\x04name\x18\x02 \x01(\t\x12@\n\x0bmux_records\x18\x03 \x03(\x0b\x32+.minknow_api.device.ChannelRecord.MuxRecord\x1a\x37\n\tMuxRecord\x12\n\n\x02id\x18\x01 \x01(\r\x12\x0e\n\x06phys_x\x18\x02 \x01(\r\x12\x0e\n\x06phys_y\x18\x03 \x01(\r\"\x1c\n\x1aResetDeviceSettingsRequest\"\x1d\n\x1bResetDeviceSettingsResponse\"\x80\x01\n\x15SetCalibrationRequest\x12\x1b\n\rfirst_channel\x18\x01 \x01(\rB\x04\x88\xb5\x18\x01\x12\x1a\n\x0clast_channel\x18\x02 \x01(\rB\x04\x88\xb5\x18\x01\x12\x15\n\x07offsets\x18\x03 \x03(\x02\x42\x04\x88\xb5\x18\x01\x12\x17\n\tpa_ranges\x18\x04 \x03(\x02\x42\x04\x88\xb5\x18\x01\"\x18\n\x16SetCalibrationResponse\"\x19\n\x17\x43learCalibrationRequest\"\x1a\n\x18\x43learCalibrationResponse\"P\n\x15GetCalibrationRequest\x12\x1b\n\rfirst_channel\x18\x01 \x01(\rB\x04\x88\xb5\x18\x01\x12\x1a\n\x0clast_channel\x18\x02 \x01(\rB\x04\x88\xb5\x18\x01\"k\n\x16GetCalibrationResponse\x12\x14\n\x0c\x64igitisation\x18\x01 \x01(\r\x12\x0f\n\x07offsets\x18\x02 \x03(\x02\x12\x11\n\tpa_ranges\x18\x03 \x03(\x02\x12\x17\n\x0fhas_calibration\x18\x04 \x01(\x08\"\xef\x01\n\x15SetTemperatureRequest\x12\x13\n\x0btemperature\x18\x01 \x01(\x02\x12\x62\n\x14wait_for_temperature\x18\x02 \x01(\x0b\x32\x44.minknow_api.device.SetTemperatureRequest.WaitForTemperatureSettings\x1a]\n\x1aWaitForTemperatureSettings\x12\x0f\n\x07timeout\x18\x01 \x01(\r\x12\x1b\n\x13min_stable_duration\x18\x03 \x01(\r\x12\x11\n\ttolerance\x18\x02 \x01(\x02\"C\n\x16SetTemperatureResponse\x12)\n!timed_out_waiting_for_temperature\x18\x01 \x01(\x08\"\x17\n\x15GetTemperatureRequest\"\x9f\x04\n\x16GetTemperatureResponse\x12N\n\x06minion\x18\x01 \x01(\x0b\x32<.minknow_api.device.GetTemperatureResponse.MinIONTemperatureH\x00\x12V\n\npromethion\x18\x02 \x01(\x0b\x32@.minknow_api.device.GetTemperatureResponse.PromethIONTemperatureH\x00\x12\x37\n\x12target_temperature\x18\x03 \x01(\x0b\x32\x1b.google.protobuf.FloatValue\x1a\x85\x01\n\x11MinIONTemperature\x12\x35\n\x10\x61sic_temperature\x18\x01 \x01(\x0b\x32\x1b.google.protobuf.FloatValue\x12\x39\n\x14heatsink_temperature\x18\x02 \x01(\x0b\x32\x1b.google.protobuf.FloatValue\x1a\x8c\x01\n\x15PromethIONTemperature\x12\x39\n\x14\x66lowcell_temperature\x18\x01 \x01(\x0b\x32\x1b.google.protobuf.FloatValue\x12\x38\n\x13\x63hamber_temperature\x18\x02 \x01(\x0b\x32\x1b.google.protobuf.FloatValueB\r\n\x0btemperature\"q\n\x0eUnblockRequest\x12\x10\n\x08\x63hannels\x18\x01 \x03(\r\x12\x1d\n\x13\x64uration_in_seconds\x18\x02 \x01(\rH\x00\x12\"\n\x18\x64uration_in_milliseconds\x18\x03 \x01(\rH\x00\x42\n\n\x08\x64uration\"\x11\n\x0fUnblockResponse\"\x17\n\x15\x43\x61ncelUnblocksRequest\"4\n\x16\x43\x61ncelUnblocksResponse\x12\x1a\n\x12\x63\x61ncelled_unblocks\x18\x01 \x01(\r\"2\n\x1eGetChannelConfigurationRequest\x12\x10\n\x08\x63hannels\x18\x01 \x03(\r\"s\n\x1fGetChannelConfigurationResponse\x12P\n\x16\x63hannel_configurations\x18\x01 \x03(\x0b\x32\x30.minknow_api.device.ReturnedChannelConfiguration\"\xf7\x01\n\x1eSetChannelConfigurationRequest\x12m\n\x16\x63hannel_configurations\x18\x01 \x03(\x0b\x32M.minknow_api.device.SetChannelConfigurationRequest.ChannelConfigurationsEntry\x1a\x66\n\x1a\x43hannelConfigurationsEntry\x12\x0b\n\x03key\x18\x01 \x01(\r\x12\x37\n\x05value\x18\x02 \x01(\x0b\x32(.minknow_api.device.ChannelConfiguration:\x02\x38\x01\"!\n\x1fSetChannelConfigurationResponse\"r\n!SetChannelConfigurationAllRequest\x12M\n\x15\x63hannel_configuration\x18\x01 \x01(\x0b\x32(.minknow_api.device.ChannelConfigurationB\x04\x90\xb5\x18\x01\"$\n\"SetChannelConfigurationAllResponse\"\xc6\x06\n\x10SaturationConfig\x12\x43\n\nthresholds\x18\x01 \x01(\x0b\x32/.minknow_api.device.SaturationConfig.Thresholds\x12T\n\x13software_saturation\x18\x02 \x01(\x0b\x32\x37.minknow_api.device.SaturationConfig.SoftwareSaturation\x12_\n\x19user_threshold_saturation\x18\x03 \x01(\x0b\x32<.minknow_api.device.SaturationConfig.UserThresholdSaturation\x1a\xfa\x01\n\nThresholds\x12\x37\n\x11general_threshold\x18\x01 \x01(\x0b\x32\x1c.google.protobuf.UInt32Value\x12\x37\n\x11unblock_threshold\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.UInt32Value\x12<\n\x16user_general_threshold\x18\x03 \x01(\x0b\x32\x1c.google.protobuf.UInt32Value\x12<\n\x16user_unblock_threshold\x18\x04 \x01(\x0b\x32\x1c.google.protobuf.UInt32Value\x1a\x93\x01\n\x12SoftwareSaturation\x12\x0f\n\x07\x65nabled\x18\x01 \x01(\x08\x12\x35\n\x10software_min_adc\x18\x02 \x01(\x0b\x32\x1b.google.protobuf.Int32Value\x12\x35\n\x10software_max_adc\x18\x03 \x01(\x0b\x32\x1b.google.protobuf.Int32Value\x1a\xa2\x01\n\x17UserThresholdSaturation\x12\x0f\n\x07\x65nabled\x18\x01 \x01(\x08\x12:\n\x15user_threshold_min_pa\x18\x02 \x01(\x0b\x32\x1b.google.protobuf.FloatValue\x12:\n\x15user_threshold_max_pa\x18\x03 \x01(\x0b\x32\x1b.google.protobuf.FloatValue\"Z\n\x1aSetSaturationConfigRequest\x12<\n\x08settings\x18\x01 \x01(\x0b\x32$.minknow_api.device.SaturationConfigB\x04\x90\xb5\x18\x01\"\x1d\n\x1bSetSaturationConfigResponse\"\x1c\n\x1aGetSaturationConfigRequest\"[\n\x1bGetSaturationConfigResponse\x12<\n\x08settings\x18\x01 \x01(\x0b\x32$.minknow_api.device.SaturationConfigB\x04\x90\xb5\x18\x01\"\x16\n\x14GetSampleRateRequest\",\n\x15GetSampleRateResponse\x12\x13\n\x0bsample_rate\x18\x01 \x01(\r\"1\n\x14SetSampleRateRequest\x12\x19\n\x0bsample_rate\x18\x01 \x01(\rB\x04\x88\xb5\x18\x01\"1\n\x15SetSampleRateResponse\x12\x18\n\x10real_sample_rate\x18\x01 \x01(\r\"\x17\n\x15GetBiasVoltageRequest\".\n\x16GetBiasVoltageResponse\x12\x14\n\x0c\x62ias_voltage\x18\x01 \x01(\x01\"3\n\x15SetBiasVoltageRequest\x12\x1a\n\x0c\x62ias_voltage\x18\x01 \x01(\x01\x42\x04\x88\xb5\x18\x01\"\x18\n\x16SetBiasVoltageResponse*i\n\x15\x46lowCellConnectorType\x12\x11\n\rFCCON_NOT_SET\x10\x00\x12\x14\n\x10\x46\x43\x43ON_PROMETHION\x10\x01\x12\x14\n\x10\x46\x43\x43ON_MINION_MK1\x10\x02\x12\x11\n\rFCCON_FLONGLE\x10\x03*]\n\x0cSelectedWell\x12\r\n\tWELL_NONE\x10\x00\x12\n\n\x06WELL_1\x10\x01\x12\n\n\x06WELL_2\x10\x02\x12\n\n\x06WELL_3\x10\x03\x12\n\n\x06WELL_4\x10\x04\x12\x0e\n\nWELL_OTHER\x10\x05\x32\xd4\x17\n\rDeviceService\x12k\n\x0fget_device_info\x12(.minknow_api.device.GetDeviceInfoRequest\x1a).minknow_api.device.GetDeviceInfoResponse\"\x03\x90\x02\x01\x12n\n\x10get_device_state\x12).minknow_api.device.GetDeviceStateRequest\x1a*.minknow_api.device.GetDeviceStateResponse\"\x03\x90\x02\x01\x12v\n\x13stream_device_state\x12,.minknow_api.device.StreamDeviceStateRequest\x1a*.minknow_api.device.GetDeviceStateResponse\"\x03\x90\x02\x01\x30\x01\x12r\n\x12get_flow_cell_info\x12*.minknow_api.device.GetFlowCellInfoRequest\x1a+.minknow_api.device.GetFlowCellInfoResponse\"\x03\x90\x02\x01\x12z\n\x15stream_flow_cell_info\x12-.minknow_api.device.StreamFlowCellInfoRequest\x1a+.minknow_api.device.GetFlowCellInfoResponse\"\x03\x90\x02\x01\x30\x01\x12\x95\x01\n\x1fset_user_specified_flow_cell_id\x12\x35.minknow_api.device.SetUserSpecifiedFlowCellIdRequest\x1a\x36.minknow_api.device.SetUserSpecifiedFlowCellIdResponse\"\x03\x90\x02\x02\x12\x97\x01\n\x1fset_user_specified_product_code\x12\x36.minknow_api.device.SetUserSpecifiedProductCodeRequest\x1a\x37.minknow_api.device.SetUserSpecifiedProductCodeResponse\"\x03\x90\x02\x02\x12w\n\x13get_channels_layout\x12,.minknow_api.device.GetChannelsLayoutRequest\x1a-.minknow_api.device.GetChannelsLayoutResponse\"\x03\x90\x02\x01\x12}\n\x15reset_device_settings\x12..minknow_api.device.ResetDeviceSettingsRequest\x1a/.minknow_api.device.ResetDeviceSettingsResponse\"\x03\x90\x02\x02\x12m\n\x0fset_calibration\x12).minknow_api.device.SetCalibrationRequest\x1a*.minknow_api.device.SetCalibrationResponse\"\x03\x90\x02\x02\x12s\n\x11\x63lear_calibration\x12+.minknow_api.device.ClearCalibrationRequest\x1a,.minknow_api.device.ClearCalibrationResponse\"\x03\x90\x02\x02\x12m\n\x0fget_calibration\x12).minknow_api.device.GetCalibrationRequest\x1a*.minknow_api.device.GetCalibrationResponse\"\x03\x90\x02\x01\x12m\n\x0fset_temperature\x12).minknow_api.device.SetTemperatureRequest\x1a*.minknow_api.device.SetTemperatureResponse\"\x03\x90\x02\x02\x12m\n\x0fget_temperature\x12).minknow_api.device.GetTemperatureRequest\x1a*.minknow_api.device.GetTemperatureResponse\"\x03\x90\x02\x01\x12T\n\x07unblock\x12\".minknow_api.device.UnblockRequest\x1a#.minknow_api.device.UnblockResponse\"\x00\x12j\n\x0f\x63\x61ncel_unblocks\x12).minknow_api.device.CancelUnblocksRequest\x1a*.minknow_api.device.CancelUnblocksResponse\"\x00\x12\x89\x01\n\x19get_channel_configuration\x12\x32.minknow_api.device.GetChannelConfigurationRequest\x1a\x33.minknow_api.device.GetChannelConfigurationResponse\"\x03\x90\x02\x01\x12\x89\x01\n\x19set_channel_configuration\x12\x32.minknow_api.device.SetChannelConfigurationRequest\x1a\x33.minknow_api.device.SetChannelConfigurationResponse\"\x03\x90\x02\x02\x12\x93\x01\n\x1dset_channel_configuration_all\x12\x35.minknow_api.device.SetChannelConfigurationAllRequest\x1a\x36.minknow_api.device.SetChannelConfigurationAllResponse\"\x03\x90\x02\x02\x12z\n\x15set_saturation_config\x12..minknow_api.device.SetSaturationConfigRequest\x1a/.minknow_api.device.SetSaturationConfigResponse\"\x00\x12}\n\x15get_saturation_config\x12..minknow_api.device.GetSaturationConfigRequest\x1a/.minknow_api.device.GetSaturationConfigResponse\"\x03\x90\x02\x01\x12k\n\x0fget_sample_rate\x12(.minknow_api.device.GetSampleRateRequest\x1a).minknow_api.device.GetSampleRateResponse\"\x03\x90\x02\x01\x12k\n\x0fset_sample_rate\x12(.minknow_api.device.SetSampleRateRequest\x1a).minknow_api.device.SetSampleRateResponse\"\x03\x90\x02\x02\x12n\n\x10get_bias_voltage\x12).minknow_api.device.GetBiasVoltageRequest\x1a*.minknow_api.device.GetBiasVoltageResponse\"\x03\x90\x02\x01\x12n\n\x10set_bias_voltage\x12).minknow_api.device.SetBiasVoltageRequest\x1a*.minknow_api.device.SetBiasVoltageResponse\"\x03\x90\x02\x02\x42&\n\x1c\x63om.nanoporetech.minknow_api\xa2\x02\x05MKAPIb\x06proto3')
   ,
   dependencies=[minknow__api_dot_rpc__options__pb2.DESCRIPTOR,google_dot_protobuf_dot_wrappers__pb2.DESCRIPTOR,])
 
+_FLOWCELLCONNECTORTYPE = _descriptor.EnumDescriptor(
+  name='FlowCellConnectorType',
+  full_name='minknow_api.device.FlowCellConnectorType',
+  filename=None,
+  file=DESCRIPTOR,
+  values=[
+    _descriptor.EnumValueDescriptor(
+      name='FCCON_NOT_SET', index=0, number=0,
+      serialized_options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='FCCON_PROMETHION', index=1, number=1,
+      serialized_options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='FCCON_MINION_MK1', index=2, number=2,
+      serialized_options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='FCCON_FLONGLE', index=3, number=3,
+      serialized_options=None,
+      type=None),
+  ],
+  containing_type=None,
+  serialized_options=None,
+  serialized_start=5540,
+  serialized_end=5645,
+)
+_sym_db.RegisterEnumDescriptor(_FLOWCELLCONNECTORTYPE)
+
+FlowCellConnectorType = enum_type_wrapper.EnumTypeWrapper(_FLOWCELLCONNECTORTYPE)
 _SELECTEDWELL = _descriptor.EnumDescriptor(
   name='SelectedWell',
   full_name='minknow_api.device.SelectedWell',
@@ -60,12 +91,16 @@ _SELECTEDWELL = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=5468,
-  serialized_end=5561,
+  serialized_start=5647,
+  serialized_end=5740,
 )
 _sym_db.RegisterEnumDescriptor(_SELECTEDWELL)
 
 SelectedWell = enum_type_wrapper.EnumTypeWrapper(_SELECTEDWELL)
+FCCON_NOT_SET = 0
+FCCON_PROMETHION = 1
+FCCON_MINION_MK1 = 2
+FCCON_FLONGLE = 3
 WELL_NONE = 0
 WELL_1 = 1
 WELL_2 = 2
@@ -125,8 +160,8 @@ _GETDEVICESTATERESPONSE_DEVICESTATE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=911,
-  serialized_end=967,
+  serialized_start=983,
+  serialized_end=1039,
 )
 _sym_db.RegisterEnumDescriptor(_GETDEVICESTATERESPONSE_DEVICESTATE)
 
@@ -401,6 +436,13 @@ _GETDEVICESTATERESPONSE = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
+    _descriptor.FieldDescriptor(
+      name='flow_cell_connector', full_name='minknow_api.device.GetDeviceStateResponse.flow_cell_connector', index=1,
+      number=2, type=14, cpp_type=8, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -415,7 +457,7 @@ _GETDEVICESTATERESPONSE = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=807,
-  serialized_end=967,
+  serialized_end=1039,
 )
 
 
@@ -438,8 +480,8 @@ _STREAMDEVICESTATEREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=969,
-  serialized_end=995,
+  serialized_start=1041,
+  serialized_end=1067,
 )
 
 
@@ -462,8 +504,8 @@ _GETFLOWCELLINFOREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=997,
-  serialized_end=1021,
+  serialized_start=1069,
+  serialized_end=1093,
 )
 
 
@@ -573,8 +615,8 @@ _GETFLOWCELLINFORESPONSE = _descriptor.Descriptor(
       name='temperature_offset_nullable', full_name='minknow_api.device.GetFlowCellInfoResponse.temperature_offset_nullable',
       index=0, containing_type=None, fields=[]),
   ],
-  serialized_start=1024,
-  serialized_end=1385,
+  serialized_start=1096,
+  serialized_end=1457,
 )
 
 
@@ -597,8 +639,8 @@ _STREAMFLOWCELLINFOREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1387,
-  serialized_end=1414,
+  serialized_start=1459,
+  serialized_end=1486,
 )
 
 
@@ -628,8 +670,8 @@ _SETUSERSPECIFIEDFLOWCELLIDREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1416,
-  serialized_end=1469,
+  serialized_start=1488,
+  serialized_end=1541,
 )
 
 
@@ -652,8 +694,8 @@ _SETUSERSPECIFIEDFLOWCELLIDRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1471,
-  serialized_end=1507,
+  serialized_start=1543,
+  serialized_end=1579,
 )
 
 
@@ -683,8 +725,8 @@ _SETUSERSPECIFIEDPRODUCTCODEREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1509,
-  serialized_end=1565,
+  serialized_start=1581,
+  serialized_end=1637,
 )
 
 
@@ -707,8 +749,8 @@ _SETUSERSPECIFIEDPRODUCTCODERESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1567,
-  serialized_end=1604,
+  serialized_start=1639,
+  serialized_end=1676,
 )
 
 
@@ -731,8 +773,8 @@ _GETCHANNELSLAYOUTREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1606,
-  serialized_end=1632,
+  serialized_start=1678,
+  serialized_end=1704,
 )
 
 
@@ -762,8 +804,8 @@ _GETCHANNELSLAYOUTRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1634,
-  serialized_end=1721,
+  serialized_start=1706,
+  serialized_end=1793,
 )
 
 
@@ -807,8 +849,8 @@ _CHANNELRECORD_MUXRECORD = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1833,
-  serialized_end=1888,
+  serialized_start=1905,
+  serialized_end=1960,
 )
 
 _CHANNELRECORD = _descriptor.Descriptor(
@@ -851,8 +893,8 @@ _CHANNELRECORD = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1724,
-  serialized_end=1888,
+  serialized_start=1796,
+  serialized_end=1960,
 )
 
 
@@ -875,8 +917,8 @@ _RESETDEVICESETTINGSREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1890,
-  serialized_end=1918,
+  serialized_start=1962,
+  serialized_end=1990,
 )
 
 
@@ -899,8 +941,8 @@ _RESETDEVICESETTINGSRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1920,
-  serialized_end=1949,
+  serialized_start=1992,
+  serialized_end=2021,
 )
 
 
@@ -951,8 +993,8 @@ _SETCALIBRATIONREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1952,
-  serialized_end=2080,
+  serialized_start=2024,
+  serialized_end=2152,
 )
 
 
@@ -975,8 +1017,8 @@ _SETCALIBRATIONRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2082,
-  serialized_end=2106,
+  serialized_start=2154,
+  serialized_end=2178,
 )
 
 
@@ -999,8 +1041,8 @@ _CLEARCALIBRATIONREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2108,
-  serialized_end=2133,
+  serialized_start=2180,
+  serialized_end=2205,
 )
 
 
@@ -1023,8 +1065,8 @@ _CLEARCALIBRATIONRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2135,
-  serialized_end=2161,
+  serialized_start=2207,
+  serialized_end=2233,
 )
 
 
@@ -1061,8 +1103,8 @@ _GETCALIBRATIONREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2163,
-  serialized_end=2243,
+  serialized_start=2235,
+  serialized_end=2315,
 )
 
 
@@ -1113,8 +1155,8 @@ _GETCALIBRATIONRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2245,
-  serialized_end=2352,
+  serialized_start=2317,
+  serialized_end=2424,
 )
 
 
@@ -1158,8 +1200,8 @@ _SETTEMPERATUREREQUEST_WAITFORTEMPERATURESETTINGS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2501,
-  serialized_end=2594,
+  serialized_start=2573,
+  serialized_end=2666,
 )
 
 _SETTEMPERATUREREQUEST = _descriptor.Descriptor(
@@ -1195,8 +1237,8 @@ _SETTEMPERATUREREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2355,
-  serialized_end=2594,
+  serialized_start=2427,
+  serialized_end=2666,
 )
 
 
@@ -1226,8 +1268,8 @@ _SETTEMPERATURERESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2596,
-  serialized_end=2663,
+  serialized_start=2668,
+  serialized_end=2735,
 )
 
 
@@ -1250,8 +1292,8 @@ _GETTEMPERATUREREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2665,
-  serialized_end=2688,
+  serialized_start=2737,
+  serialized_end=2760,
 )
 
 
@@ -1288,8 +1330,8 @@ _GETTEMPERATURERESPONSE_MINIONTEMPERATURE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2943,
-  serialized_end=3076,
+  serialized_start=3015,
+  serialized_end=3148,
 )
 
 _GETTEMPERATURERESPONSE_PROMETHIONTEMPERATURE = _descriptor.Descriptor(
@@ -1325,8 +1367,8 @@ _GETTEMPERATURERESPONSE_PROMETHIONTEMPERATURE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3079,
-  serialized_end=3219,
+  serialized_start=3151,
+  serialized_end=3291,
 )
 
 _GETTEMPERATURERESPONSE = _descriptor.Descriptor(
@@ -1372,8 +1414,8 @@ _GETTEMPERATURERESPONSE = _descriptor.Descriptor(
       name='temperature', full_name='minknow_api.device.GetTemperatureResponse.temperature',
       index=0, containing_type=None, fields=[]),
   ],
-  serialized_start=2691,
-  serialized_end=3234,
+  serialized_start=2763,
+  serialized_end=3306,
 )
 
 
@@ -1420,8 +1462,8 @@ _UNBLOCKREQUEST = _descriptor.Descriptor(
       name='duration', full_name='minknow_api.device.UnblockRequest.duration',
       index=0, containing_type=None, fields=[]),
   ],
-  serialized_start=3236,
-  serialized_end=3349,
+  serialized_start=3308,
+  serialized_end=3421,
 )
 
 
@@ -1444,8 +1486,8 @@ _UNBLOCKRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3351,
-  serialized_end=3368,
+  serialized_start=3423,
+  serialized_end=3440,
 )
 
 
@@ -1468,8 +1510,8 @@ _CANCELUNBLOCKSREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3370,
-  serialized_end=3393,
+  serialized_start=3442,
+  serialized_end=3465,
 )
 
 
@@ -1499,8 +1541,8 @@ _CANCELUNBLOCKSRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3395,
-  serialized_end=3447,
+  serialized_start=3467,
+  serialized_end=3519,
 )
 
 
@@ -1530,8 +1572,8 @@ _GETCHANNELCONFIGURATIONREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3449,
-  serialized_end=3499,
+  serialized_start=3521,
+  serialized_end=3571,
 )
 
 
@@ -1561,8 +1603,8 @@ _GETCHANNELCONFIGURATIONRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3501,
-  serialized_end=3616,
+  serialized_start=3573,
+  serialized_end=3688,
 )
 
 
@@ -1599,8 +1641,8 @@ _SETCHANNELCONFIGURATIONREQUEST_CHANNELCONFIGURATIONSENTRY = _descriptor.Descrip
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3764,
-  serialized_end=3866,
+  serialized_start=3836,
+  serialized_end=3938,
 )
 
 _SETCHANNELCONFIGURATIONREQUEST = _descriptor.Descriptor(
@@ -1629,8 +1671,8 @@ _SETCHANNELCONFIGURATIONREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3619,
-  serialized_end=3866,
+  serialized_start=3691,
+  serialized_end=3938,
 )
 
 
@@ -1653,8 +1695,8 @@ _SETCHANNELCONFIGURATIONRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3868,
-  serialized_end=3901,
+  serialized_start=3940,
+  serialized_end=3973,
 )
 
 
@@ -1684,8 +1726,8 @@ _SETCHANNELCONFIGURATIONALLREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3903,
-  serialized_end=4017,
+  serialized_start=3975,
+  serialized_end=4089,
 )
 
 
@@ -1708,8 +1750,8 @@ _SETCHANNELCONFIGURATIONALLRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=4019,
-  serialized_end=4055,
+  serialized_start=4091,
+  serialized_end=4127,
 )
 
 
@@ -1760,8 +1802,8 @@ _SATURATIONCONFIG_THRESHOLDS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=4331,
-  serialized_end=4581,
+  serialized_start=4403,
+  serialized_end=4653,
 )
 
 _SATURATIONCONFIG_SOFTWARESATURATION = _descriptor.Descriptor(
@@ -1804,8 +1846,8 @@ _SATURATIONCONFIG_SOFTWARESATURATION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=4584,
-  serialized_end=4731,
+  serialized_start=4656,
+  serialized_end=4803,
 )
 
 _SATURATIONCONFIG_USERTHRESHOLDSATURATION = _descriptor.Descriptor(
@@ -1848,8 +1890,8 @@ _SATURATIONCONFIG_USERTHRESHOLDSATURATION = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=4734,
-  serialized_end=4896,
+  serialized_start=4806,
+  serialized_end=4968,
 )
 
 _SATURATIONCONFIG = _descriptor.Descriptor(
@@ -1892,8 +1934,8 @@ _SATURATIONCONFIG = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=4058,
-  serialized_end=4896,
+  serialized_start=4130,
+  serialized_end=4968,
 )
 
 
@@ -1923,8 +1965,8 @@ _SETSATURATIONCONFIGREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=4898,
-  serialized_end=4988,
+  serialized_start=4970,
+  serialized_end=5060,
 )
 
 
@@ -1947,8 +1989,8 @@ _SETSATURATIONCONFIGRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=4990,
-  serialized_end=5019,
+  serialized_start=5062,
+  serialized_end=5091,
 )
 
 
@@ -1971,8 +2013,8 @@ _GETSATURATIONCONFIGREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=5021,
-  serialized_end=5049,
+  serialized_start=5093,
+  serialized_end=5121,
 )
 
 
@@ -2002,8 +2044,8 @@ _GETSATURATIONCONFIGRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=5051,
-  serialized_end=5142,
+  serialized_start=5123,
+  serialized_end=5214,
 )
 
 
@@ -2026,8 +2068,8 @@ _GETSAMPLERATEREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=5144,
-  serialized_end=5166,
+  serialized_start=5216,
+  serialized_end=5238,
 )
 
 
@@ -2057,8 +2099,8 @@ _GETSAMPLERATERESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=5168,
-  serialized_end=5212,
+  serialized_start=5240,
+  serialized_end=5284,
 )
 
 
@@ -2088,8 +2130,8 @@ _SETSAMPLERATEREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=5214,
-  serialized_end=5263,
+  serialized_start=5286,
+  serialized_end=5335,
 )
 
 
@@ -2119,8 +2161,8 @@ _SETSAMPLERATERESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=5265,
-  serialized_end=5314,
+  serialized_start=5337,
+  serialized_end=5386,
 )
 
 
@@ -2143,8 +2185,8 @@ _GETBIASVOLTAGEREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=5316,
-  serialized_end=5339,
+  serialized_start=5388,
+  serialized_end=5411,
 )
 
 
@@ -2174,8 +2216,8 @@ _GETBIASVOLTAGERESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=5341,
-  serialized_end=5387,
+  serialized_start=5413,
+  serialized_end=5459,
 )
 
 
@@ -2205,8 +2247,8 @@ _SETBIASVOLTAGEREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=5389,
-  serialized_end=5440,
+  serialized_start=5461,
+  serialized_end=5512,
 )
 
 
@@ -2229,8 +2271,8 @@ _SETBIASVOLTAGERESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=5442,
-  serialized_end=5466,
+  serialized_start=5514,
+  serialized_end=5538,
 )
 
 _GETDEVICEINFORESPONSE_COMPONENTVERSION.containing_type = _GETDEVICEINFORESPONSE
@@ -2238,6 +2280,7 @@ _GETDEVICEINFORESPONSE.fields_by_name['device_type'].enum_type = _GETDEVICEINFOR
 _GETDEVICEINFORESPONSE.fields_by_name['firmware_version'].message_type = _GETDEVICEINFORESPONSE_COMPONENTVERSION
 _GETDEVICEINFORESPONSE_DEVICETYPE.containing_type = _GETDEVICEINFORESPONSE
 _GETDEVICESTATERESPONSE.fields_by_name['device_state'].enum_type = _GETDEVICESTATERESPONSE_DEVICESTATE
+_GETDEVICESTATERESPONSE.fields_by_name['flow_cell_connector'].enum_type = _FLOWCELLCONNECTORTYPE
 _GETDEVICESTATERESPONSE_DEVICESTATE.containing_type = _GETDEVICESTATERESPONSE
 _GETFLOWCELLINFORESPONSE.oneofs_by_name['temperature_offset_nullable'].fields.append(
   _GETFLOWCELLINFORESPONSE.fields_by_name['temperature_offset'])
@@ -2341,6 +2384,7 @@ DESCRIPTOR.message_types_by_name['GetBiasVoltageRequest'] = _GETBIASVOLTAGEREQUE
 DESCRIPTOR.message_types_by_name['GetBiasVoltageResponse'] = _GETBIASVOLTAGERESPONSE
 DESCRIPTOR.message_types_by_name['SetBiasVoltageRequest'] = _SETBIASVOLTAGEREQUEST
 DESCRIPTOR.message_types_by_name['SetBiasVoltageResponse'] = _SETBIASVOLTAGERESPONSE
+DESCRIPTOR.enum_types_by_name['FlowCellConnectorType'] = _FLOWCELLCONNECTORTYPE
 DESCRIPTOR.enum_types_by_name['SelectedWell'] = _SELECTEDWELL
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
@@ -2505,6 +2549,18 @@ _sym_db.RegisterMessage(GetDeviceStateRequest)
 GetDeviceStateResponse = _reflection.GeneratedProtocolMessageType('GetDeviceStateResponse', (_message.Message,), {
   'DESCRIPTOR' : _GETDEVICESTATERESPONSE,
   '__module__' : 'minknow_api.device_pb2'
+  ,
+  '__doc__': """Attributes:
+      device_state:
+          Whether the physical hardware is present.  This is really only
+          relevant to MinIONs, which could be unplugged by the user at
+          any time.
+      flow_cell_connector:
+          Indicates what sort of flow cell can be inserted.  For
+          example, if the user needs to set or override the flow cell
+          product code, this can be used to limit the list of possible
+          flow cell product codes to choose from.  Since 4.1
+  """,
   # @@protoc_insertion_point(class_scope:minknow_api.device.GetDeviceStateResponse)
   })
 _sym_db.RegisterMessage(GetDeviceStateResponse)
@@ -3252,8 +3308,8 @@ _DEVICESERVICE = _descriptor.ServiceDescriptor(
   file=DESCRIPTOR,
   index=0,
   serialized_options=None,
-  serialized_start=5564,
-  serialized_end=8526,
+  serialized_start=5743,
+  serialized_end=8771,
   methods=[
   _descriptor.MethodDescriptor(
     name='get_device_info',
@@ -3262,7 +3318,7 @@ _DEVICESERVICE = _descriptor.ServiceDescriptor(
     containing_service=None,
     input_type=_GETDEVICEINFOREQUEST,
     output_type=_GETDEVICEINFORESPONSE,
-    serialized_options=None,
+    serialized_options=_b('\220\002\001'),
   ),
   _descriptor.MethodDescriptor(
     name='get_device_state',
@@ -3271,7 +3327,7 @@ _DEVICESERVICE = _descriptor.ServiceDescriptor(
     containing_service=None,
     input_type=_GETDEVICESTATEREQUEST,
     output_type=_GETDEVICESTATERESPONSE,
-    serialized_options=None,
+    serialized_options=_b('\220\002\001'),
   ),
   _descriptor.MethodDescriptor(
     name='stream_device_state',
@@ -3280,7 +3336,7 @@ _DEVICESERVICE = _descriptor.ServiceDescriptor(
     containing_service=None,
     input_type=_STREAMDEVICESTATEREQUEST,
     output_type=_GETDEVICESTATERESPONSE,
-    serialized_options=None,
+    serialized_options=_b('\220\002\001'),
   ),
   _descriptor.MethodDescriptor(
     name='get_flow_cell_info',
@@ -3289,7 +3345,7 @@ _DEVICESERVICE = _descriptor.ServiceDescriptor(
     containing_service=None,
     input_type=_GETFLOWCELLINFOREQUEST,
     output_type=_GETFLOWCELLINFORESPONSE,
-    serialized_options=None,
+    serialized_options=_b('\220\002\001'),
   ),
   _descriptor.MethodDescriptor(
     name='stream_flow_cell_info',
@@ -3298,7 +3354,7 @@ _DEVICESERVICE = _descriptor.ServiceDescriptor(
     containing_service=None,
     input_type=_STREAMFLOWCELLINFOREQUEST,
     output_type=_GETFLOWCELLINFORESPONSE,
-    serialized_options=None,
+    serialized_options=_b('\220\002\001'),
   ),
   _descriptor.MethodDescriptor(
     name='set_user_specified_flow_cell_id',
@@ -3307,7 +3363,7 @@ _DEVICESERVICE = _descriptor.ServiceDescriptor(
     containing_service=None,
     input_type=_SETUSERSPECIFIEDFLOWCELLIDREQUEST,
     output_type=_SETUSERSPECIFIEDFLOWCELLIDRESPONSE,
-    serialized_options=None,
+    serialized_options=_b('\220\002\002'),
   ),
   _descriptor.MethodDescriptor(
     name='set_user_specified_product_code',
@@ -3316,7 +3372,7 @@ _DEVICESERVICE = _descriptor.ServiceDescriptor(
     containing_service=None,
     input_type=_SETUSERSPECIFIEDPRODUCTCODEREQUEST,
     output_type=_SETUSERSPECIFIEDPRODUCTCODERESPONSE,
-    serialized_options=None,
+    serialized_options=_b('\220\002\002'),
   ),
   _descriptor.MethodDescriptor(
     name='get_channels_layout',
@@ -3325,7 +3381,7 @@ _DEVICESERVICE = _descriptor.ServiceDescriptor(
     containing_service=None,
     input_type=_GETCHANNELSLAYOUTREQUEST,
     output_type=_GETCHANNELSLAYOUTRESPONSE,
-    serialized_options=None,
+    serialized_options=_b('\220\002\001'),
   ),
   _descriptor.MethodDescriptor(
     name='reset_device_settings',
@@ -3334,7 +3390,7 @@ _DEVICESERVICE = _descriptor.ServiceDescriptor(
     containing_service=None,
     input_type=_RESETDEVICESETTINGSREQUEST,
     output_type=_RESETDEVICESETTINGSRESPONSE,
-    serialized_options=None,
+    serialized_options=_b('\220\002\002'),
   ),
   _descriptor.MethodDescriptor(
     name='set_calibration',
@@ -3343,7 +3399,7 @@ _DEVICESERVICE = _descriptor.ServiceDescriptor(
     containing_service=None,
     input_type=_SETCALIBRATIONREQUEST,
     output_type=_SETCALIBRATIONRESPONSE,
-    serialized_options=None,
+    serialized_options=_b('\220\002\002'),
   ),
   _descriptor.MethodDescriptor(
     name='clear_calibration',
@@ -3352,7 +3408,7 @@ _DEVICESERVICE = _descriptor.ServiceDescriptor(
     containing_service=None,
     input_type=_CLEARCALIBRATIONREQUEST,
     output_type=_CLEARCALIBRATIONRESPONSE,
-    serialized_options=None,
+    serialized_options=_b('\220\002\002'),
   ),
   _descriptor.MethodDescriptor(
     name='get_calibration',
@@ -3361,7 +3417,7 @@ _DEVICESERVICE = _descriptor.ServiceDescriptor(
     containing_service=None,
     input_type=_GETCALIBRATIONREQUEST,
     output_type=_GETCALIBRATIONRESPONSE,
-    serialized_options=None,
+    serialized_options=_b('\220\002\001'),
   ),
   _descriptor.MethodDescriptor(
     name='set_temperature',
@@ -3370,7 +3426,7 @@ _DEVICESERVICE = _descriptor.ServiceDescriptor(
     containing_service=None,
     input_type=_SETTEMPERATUREREQUEST,
     output_type=_SETTEMPERATURERESPONSE,
-    serialized_options=None,
+    serialized_options=_b('\220\002\002'),
   ),
   _descriptor.MethodDescriptor(
     name='get_temperature',
@@ -3379,7 +3435,7 @@ _DEVICESERVICE = _descriptor.ServiceDescriptor(
     containing_service=None,
     input_type=_GETTEMPERATUREREQUEST,
     output_type=_GETTEMPERATURERESPONSE,
-    serialized_options=None,
+    serialized_options=_b('\220\002\001'),
   ),
   _descriptor.MethodDescriptor(
     name='unblock',
@@ -3406,7 +3462,7 @@ _DEVICESERVICE = _descriptor.ServiceDescriptor(
     containing_service=None,
     input_type=_GETCHANNELCONFIGURATIONREQUEST,
     output_type=_GETCHANNELCONFIGURATIONRESPONSE,
-    serialized_options=None,
+    serialized_options=_b('\220\002\001'),
   ),
   _descriptor.MethodDescriptor(
     name='set_channel_configuration',
@@ -3415,7 +3471,7 @@ _DEVICESERVICE = _descriptor.ServiceDescriptor(
     containing_service=None,
     input_type=_SETCHANNELCONFIGURATIONREQUEST,
     output_type=_SETCHANNELCONFIGURATIONRESPONSE,
-    serialized_options=None,
+    serialized_options=_b('\220\002\002'),
   ),
   _descriptor.MethodDescriptor(
     name='set_channel_configuration_all',
@@ -3424,7 +3480,7 @@ _DEVICESERVICE = _descriptor.ServiceDescriptor(
     containing_service=None,
     input_type=_SETCHANNELCONFIGURATIONALLREQUEST,
     output_type=_SETCHANNELCONFIGURATIONALLRESPONSE,
-    serialized_options=None,
+    serialized_options=_b('\220\002\002'),
   ),
   _descriptor.MethodDescriptor(
     name='set_saturation_config',
@@ -3442,7 +3498,7 @@ _DEVICESERVICE = _descriptor.ServiceDescriptor(
     containing_service=None,
     input_type=_GETSATURATIONCONFIGREQUEST,
     output_type=_GETSATURATIONCONFIGRESPONSE,
-    serialized_options=None,
+    serialized_options=_b('\220\002\001'),
   ),
   _descriptor.MethodDescriptor(
     name='get_sample_rate',
@@ -3451,7 +3507,7 @@ _DEVICESERVICE = _descriptor.ServiceDescriptor(
     containing_service=None,
     input_type=_GETSAMPLERATEREQUEST,
     output_type=_GETSAMPLERATERESPONSE,
-    serialized_options=None,
+    serialized_options=_b('\220\002\001'),
   ),
   _descriptor.MethodDescriptor(
     name='set_sample_rate',
@@ -3460,7 +3516,7 @@ _DEVICESERVICE = _descriptor.ServiceDescriptor(
     containing_service=None,
     input_type=_SETSAMPLERATEREQUEST,
     output_type=_SETSAMPLERATERESPONSE,
-    serialized_options=None,
+    serialized_options=_b('\220\002\002'),
   ),
   _descriptor.MethodDescriptor(
     name='get_bias_voltage',
@@ -3469,7 +3525,7 @@ _DEVICESERVICE = _descriptor.ServiceDescriptor(
     containing_service=None,
     input_type=_GETBIASVOLTAGEREQUEST,
     output_type=_GETBIASVOLTAGERESPONSE,
-    serialized_options=None,
+    serialized_options=_b('\220\002\001'),
   ),
   _descriptor.MethodDescriptor(
     name='set_bias_voltage',
@@ -3478,7 +3534,7 @@ _DEVICESERVICE = _descriptor.ServiceDescriptor(
     containing_service=None,
     input_type=_SETBIASVOLTAGEREQUEST,
     output_type=_SETBIASVOLTAGERESPONSE,
-    serialized_options=None,
+    serialized_options=_b('\220\002\002'),
   ),
 ])
 _sym_db.RegisterServiceDescriptor(_DEVICESERVICE)

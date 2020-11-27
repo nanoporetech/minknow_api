@@ -33,10 +33,14 @@ class ServiceBase(object):
         self.port = port
         if use_tls:
             self.channel = grpc.secure_channel(
-                host + ":" + str(port), minknow_api.grpc_credentials()
+                host + ":" + str(port),
+                minknow_api.grpc_credentials(),
+                options=minknow_api.GRPC_CHANNEL_OPTIONS,
             )
         else:
-            self.channel = grpc.insecure_channel(host + ":" + str(port))
+            self.channel = grpc.insecure_channel(
+                host + ":" + str(port), options=minknow_api.GRPC_CHANNEL_OPTIONS
+            )
         self.rpc = serviceclass(self.channel)
         self.stub = self.rpc._stub
 
@@ -181,6 +185,22 @@ class Manager(ServiceBase):
             parent_path=parent_path, name=name
         )
         return self.stub.create_directory(request, timeout=timeout).path
+
+    def guppy_port(self, timeout=DEFAULT_TIMEOUT):
+        """Get the port that Guppy is listening on.
+
+        This can be used to directly connect to the Guppy server using the pyguppy client.
+
+        Args:
+            timeout (float, optional): The maximum time to wait for the call to complete. Should
+                usually be left at the default.
+
+        Returns:
+            int: The port Guppy is listening on
+        """
+        return self.stub.get_guppy_info(
+            minknow_api.manager_service.GetGuppyInfoRequest(), timeout=timeout
+        ).port
 
     def describe_host(self, timeout=DEFAULT_TIMEOUT):
         """Get information about the machine running MinKNOW.

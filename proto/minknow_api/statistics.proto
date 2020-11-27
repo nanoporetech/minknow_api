@@ -12,7 +12,9 @@ service StatisticsService {
     // Tracks how much time has been spent in each channel state, aggregated across all the channels
     //
     // Since 4.0
-    rpc stream_duty_time (StreamDutyTimeRequest) returns (stream StreamDutyTimeResponse) {}
+    rpc stream_duty_time (StreamDutyTimeRequest) returns (stream StreamDutyTimeResponse) {
+        option idempotency_level = NO_SIDE_EFFECTS;
+    }
 
     // Tracks experiment output across various filters over time.
     //
@@ -23,7 +25,9 @@ service StatisticsService {
     // reinvoke the rpc in order to get new data.
     //
     // Since 1.14
-    rpc stream_acquisition_output (StreamAcquisitionOutputRequest) returns (stream StreamAcquisitionOutputResponse) {}
+    rpc stream_acquisition_output (StreamAcquisitionOutputRequest) returns (stream StreamAcquisitionOutputResponse) {
+        option idempotency_level = NO_SIDE_EFFECTS;
+    }
 
     // Tracks experiment writes across all channels over time
     //
@@ -33,14 +37,18 @@ service StatisticsService {
     // reinvoke the rpc in order to get new data.
     //
     // Since 4.0
-    rpc stream_writer_output (StreamWriterOutputRequest) returns (stream StreamWriterOutputResponse) {}
+    rpc stream_writer_output (StreamWriterOutputRequest) returns (stream StreamWriterOutputResponse) {
+        option idempotency_level = NO_SIDE_EFFECTS;
+    }
 
     // Tracks which barcode names have been encountered
     //
     // When a new barcode name is encountered, a list of all encountered barcode names is returned
     //
     // Since 4.0
-    rpc stream_encountered_acquisition_output_keys (StreamEncounteredAcquisitionOutputKeysRequest) returns (stream StreamEncounteredAcquisitionOutputKeysResponse) {}
+    rpc stream_encountered_acquisition_output_keys (StreamEncounteredAcquisitionOutputKeysRequest) returns (stream StreamEncounteredAcquisitionOutputKeysResponse) {
+        option idempotency_level = NO_SIDE_EFFECTS;
+    }
 
     // Streams device temperature for a device. The first message will contain all of the temperatures up
     // until the current live point, and then messages after that point will just be updates.
@@ -48,7 +56,9 @@ service StatisticsService {
     // Temperatures are averaged over a 1 minute period, and the value of each bucket is given in minute intervals
     //
     // Since 3.0
-    rpc stream_temperature (StreamTemperatureRequest) returns (stream StreamTemperatureResponse) {}
+    rpc stream_temperature (StreamTemperatureRequest) returns (stream StreamTemperatureResponse) {
+        option idempotency_level = NO_SIDE_EFFECTS;
+    }
 
     // Streams when bias voltage changes occur, where the response given will be the acquisition
     // index that the voltage changed at, and the voltage itself. The first message will contain
@@ -58,7 +68,9 @@ service StatisticsService {
     // Will fail with INVALID_ARGUMENT if an unknown acquisition id is given
     //
     // Since 3.2
-    rpc stream_bias_voltages (StreamBiasVoltagesRequest) returns (stream StreamBiasVoltagesResponse) {}
+    rpc stream_bias_voltages (StreamBiasVoltagesRequest) returns (stream StreamBiasVoltagesResponse) {
+        option idempotency_level = NO_SIDE_EFFECTS;
+    }
 
     // A histogram of read lengths
     //
@@ -66,12 +78,16 @@ service StatisticsService {
     // If the experiment is complete, then the final histogram is returned
     //
     // Since 4.0
-    rpc stream_read_length_histogram (StreamReadLengthHistogramRequest) returns (stream StreamReadLengthHistogramResponse) {}
+    rpc stream_read_length_histogram (StreamReadLengthHistogramRequest) returns (stream StreamReadLengthHistogramResponse) {
+        option idempotency_level = NO_SIDE_EFFECTS;
+    }
 
     // Gets a list of the types of read-length values for which a histogram is available
     //
     // Since 3.2
-    rpc get_read_length_types (GetReadLengthTypesRequest) returns (GetReadLengthTypesResponse) {}
+    rpc get_read_length_types (GetReadLengthTypesRequest) returns (GetReadLengthTypesResponse) {
+        option idempotency_level = NO_SIDE_EFFECTS;
+    }
 
 
     // Returns the qscore over time metric represented as datasets (i.e. boxplots).
@@ -92,7 +108,9 @@ service StatisticsService {
     // When using this rpc, basecalling needs to be enabled.
     //
     // Since 4.0
-    rpc stream_basecall_boxplots (StreamBoxplotRequest) returns (stream BoxplotResponse) {}
+    rpc stream_basecall_boxplots (StreamBoxplotRequest) returns (stream BoxplotResponse) {
+    option idempotency_level = NO_SIDE_EFFECTS;
+    }
 }
 
 // Specify a desired data selection.
@@ -103,11 +121,11 @@ service StatisticsService {
 // following sequence:
 //
 //  1. All values are set equal to the corresponding desired value.
-//  2. Negative `start` or `end` values are fixed up by adding the current maximum value to the 
+//  2. Negative `start` or `end` values are fixed up by adding the current maximum value to the
 //     specified value
-//      - Negative start and end values are only supported for certain requests; typically they are 
+//      - Negative start and end values are only supported for certain requests; typically they are
 //        supported for time-series data
-//      - If, after adding the current bucket count, the `start` value is still negative, then the 
+//      - If, after adding the current bucket count, the `start` value is still negative, then the
 //        start value is adjusted to `0`
 //      - If, after adding the current bucket count, the `end` value is still negative, or is zero,
 //        then the data selection is empty
@@ -212,6 +230,33 @@ enum BucketValueType {
     ReadLengths = 1;
 }
 
+enum ReadEndReason {
+    All = 0;
+    Unknown = 1;
+    Partial = 2;
+    MuxChange = 3;
+    UnblockMuxChange = 4;
+    SignalPositive = 5;
+    SignalNegative = 6;
+    DataServiceUnblockMuxChange = 7;
+};
+
+message ReadLengthHistogramKey {
+    // Only return data for the given ReadEndReason.
+    //
+    // Special values:
+    //   - Specify `ReadEndReason::All` to return data for all read end reasons
+    //
+    // If unspecified all read end reasons are returned.
+    ReadEndReason read_end_reason = 1;
+}
+
+message ReadLengthHistogramSplit {
+    // Split returned data by read_end_reason
+    bool read_end_reason = 1;
+}
+
+
 message StreamReadLengthHistogramRequest {
     // The `acquisition_run_id` of the acquisition to obtain data for
     //
@@ -283,6 +328,12 @@ message StreamReadLengthHistogramRequest {
     // read lengths to be discarded (since it is always calculated from read length data)
     //
     float discard_outlier_percent = 6;
+
+    // Define filtering parameters for streamed data.
+    repeated ReadLengthHistogramKey filtering = 7;
+
+    // Define how results are split for returned data.
+    ReadLengthHistogramSplit split = 8;
 }
 
 message StreamReadLengthHistogramResponse {
@@ -321,6 +372,8 @@ message StreamReadLengthHistogramResponse {
     BucketValueType bucket_value_type = 3;
 
     message ReadLengthHistogramData {
+        // The filtering parameters which contributed to this bucket.
+        repeated ReadLengthHistogramKey filtering = 3;
 
         // Counts for each histogram bucket
         //
@@ -359,7 +412,7 @@ message GetReadLengthTypesResponse {
 message AcquisitionOutputKey {
     // Only return data for the given barcode.
     //
-    // Special values: 
+    // Special values:
     //   - Specify "unclassified" for data which does not have a barcode.
     //   - Specify "classified" for all data which has a barcode.
     //
@@ -368,7 +421,7 @@ message AcquisitionOutputKey {
 
     // Only return data for the given alignment reference.
     //
-    // Special values: 
+    // Special values:
     //   - Specify "unaligned" for data which does not align to a reference
     //   - Specify "aligned" for all data which aligns to a reference
     //
@@ -381,12 +434,34 @@ message AcquisitionOutputKey {
     //
     // The region is a string which identifies an entry in the bed file.
     //
-    // Special values: 
+    // Special values:
     //   - Specify "offtarget" for data which does not have a bed region.
     //   - Specify "ontarget" for all data which has a bed region.
     //
     // If unspecified all alignment regions are returned.
     string alignment_bed_file_region = 3;
+
+    // Only return data for the given lamp barcode.
+    //
+    // Special values:
+    //   - Specify "unclassified" for data which does not have a lamp barcode.
+    //   - Specify "classified" for all data which has a lamp barcode.
+    //
+    // If unspecified all lamp barcodes are returned.
+    string lamp_barcode_id = 4;
+
+    // Only return data for the given lamp target.
+    //
+    // Special values:
+    //   - Specify "unclassified" for data which does not have a lamp target.
+    //   - Specify "classified" for all data which has a lamp target.
+    // Using barcode terms here as lamp is part of barcoding pipeline
+    //
+    // If unspecified all lamp target are returned.
+    string lamp_target_id = 5;
+
+    // The barcode alias corresponding to the `barcode_name` and `lamp_barcode_id`
+    string barcode_alias = 6;
 }
 
 message AcquisitionOutputSplit {
@@ -402,6 +477,16 @@ message AcquisitionOutputSplit {
     //
     // Target regions are defined in bed files.
     bool alignment_bed_file_region = 3;
+
+    // Split data for each lamp barcode id.
+    //
+    // Lamp barcodes are defined by the active lamp kit.
+    bool lamp_barcode_id = 4;
+
+    // Split data for each lamp targets id.
+    //
+    // Lamp targets are defined by the active lamp kit.
+    bool lamp_target_id = 5;
 }
 
 message StreamAcquisitionOutputRequest {
@@ -421,8 +506,14 @@ message StreamAcquisitionOutputRequest {
     AcquisitionOutputSplit split = 4;
 }
 
+// A snapshot of acquisition output data, for a given set of filtering criteria.
 message AcquisitionOutputBucket {
-    // Represents T0 for a bucket [T0, T1). So this will increase by 'step' for every bucket of data.
+    // The time the snapshot was collected, in seconds.
+    //
+    // This type + field have misleading names - this message really reflects a snapshot of data
+    // at a given time point (`bucket` indicates the time point).
+    //
+    // TODO (major version change): resolve naming inconsistencies.
     uint32 bucket = 1;
 
     // The yield summary data.
@@ -452,12 +543,14 @@ message StreamWriterOutputRequest {
     DataSelection data_selection = 2;
 }
 
+// A snapshot of writer data.
 message WriterOutputBucket {
-    // Represents T0 for a bucket [T0, T1). So this will increase by 'data_selection.step' for every bucket of data.
+    // The time the snapshot was collected, in seconds.
     //
-    // This value represents the latest time the bucket represents, eg:
-    // For bucket 1, with a step of 60s, first bucket will be 60,
-    // as the latest data in the bucket is from 60s.
+    // This type + field have misleading names - this message really reflects a snapshot of data
+    // at a given time point (`bucket` indicates the time point).
+    //
+    // TODO (major version change): resolve naming inconsistencies.
     uint32 bucket = 1;
 
     // The writer data for this bucket.

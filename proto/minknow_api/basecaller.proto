@@ -19,7 +19,9 @@ service Basecaller {
     // List the available basecalling configurations sorted by flow cell and kit.
     //
     // Since 3.5
-    rpc list_configs_by_kit (ListConfigsByKitRequest) returns (ListConfigsByKitResponse) {}
+    rpc list_configs_by_kit (ListConfigsByKitRequest) returns (ListConfigsByKitResponse) {
+        option idempotency_level = NO_SIDE_EFFECTS;
+    }
 
     // Start basecalling reads files.
     //
@@ -40,12 +42,16 @@ service Basecaller {
     // Stop a basecalling that was started by start_basecalling_reads().
     //
     // Since 3.5
-    rpc cancel (CancelRequest) returns (CancelResponse) {}
+    rpc cancel (CancelRequest) returns (CancelResponse) {
+        option idempotency_level = IDEMPOTENT;
+    }
 
     // Gets information about one or more basecalling operations.
     //
     // Since 3.5
-    rpc get_info (GetInfoRequest) returns (stream GetInfoResponse) {}
+    rpc get_info (GetInfoRequest) returns (stream GetInfoResponse) {
+        option idempotency_level = NO_SIDE_EFFECTS;
+    }
 
     // Monitors basecalls, returning messages when basecalls are started, stopped or receive
     // progress updates.
@@ -57,7 +63,9 @@ service Basecaller {
     // Note that progress updates may be rate limited to avoid affecting performance.
     //
     // Since 3.5
-    rpc watch (WatchRequest) returns (stream WatchResponse) {}
+    rpc watch (WatchRequest) returns (stream WatchResponse) {
+        option idempotency_level = NO_SIDE_EFFECTS;
+    }
 }
 
 message ListConfigsByKitRequest {

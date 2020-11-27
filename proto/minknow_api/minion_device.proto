@@ -16,10 +16,14 @@ service MinionDeviceService {
     //
     // This call is atomic: either all the settings will be applied, or none of them (if there is an
     // error).
-    rpc change_settings(ChangeSettingsRequest) returns (ChangeSettingsResponse) {}
+    rpc change_settings(ChangeSettingsRequest) returns (ChangeSettingsResponse) {
+        option idempotency_level = IDEMPOTENT;
+    }
 
     // Get the current settings for the active device.
-    rpc get_settings(GetSettingsRequest) returns (GetSettingsResponse) {}
+    rpc get_settings(GetSettingsRequest) returns (GetSettingsResponse) {
+        option idempotency_level = NO_SIDE_EFFECTS;
+    }
 }
 
 // Temperature range.

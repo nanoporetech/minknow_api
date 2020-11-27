@@ -1,0 +1,3 @@
+flow_cell_id,internal_barcode,external_barcode,alias
+FC001,internal01,external01,alias01
+FC001,internal01,external02,alias02
