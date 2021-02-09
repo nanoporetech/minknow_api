@@ -22,7 +22,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='minknow_api.minion_device',
   syntax='proto3',
   serialized_options=_b('\n\034com.nanoporetech.minknow_api\242\002\005MKAPI'),
-  serialized_pb=_b('\n\x1fminknow_api/minion_device.proto\x12\x19minknow_api.minion_device\x1a\x1egoogle/protobuf/wrappers.proto\x1a\x1dminknow_api/rpc_options.proto\",\n\x10TemperatureRange\x12\x0b\n\x03min\x18\x05 \x01(\x02\x12\x0b\n\x03max\x18\x06 \x01(\x02\"\x89\x02\n\x1bSamplingFrequencyParameters\x12\x15\n\rclock_divider\x18\x01 \x01(\r\x12\x18\n\x10integration_time\x18\x02 \x01(\r\x12V\n\x0b\x63lock_speed\x18\x03 \x01(\x0e\x32\x41.minknow_api.minion_device.SamplingFrequencyParameters.ClockSpeed\"a\n\nClockSpeed\x12\x10\n\x0c\x43LOCK_128MHz\x10\x00\x12\x0f\n\x0b\x43LOCK_64MHz\x10\x01\x12\x0f\n\x0b\x43LOCK_32MHz\x10\x02\x12\x0f\n\x0b\x43LOCK_16MHz\x10\x03\x12\x0e\n\nCLOCK_8MHz\x10\x04\"\x88\x16\n\x14MinionDeviceSettings\x12\x31\n\x0c\x62ias_voltage\x18\x01 \x01(\x0b\x32\x1b.google.protobuf.Int32Value\x12\x38\n\x12sampling_frequency\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.UInt32Value\x12Z\n\x0e\x63hannel_config\x18\x03 \x03(\x0b\x32\x42.minknow_api.minion_device.MinionDeviceSettings.ChannelConfigEntry\x12>\n\x1a\x65nable_temperature_control\x18\x04 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12G\n\x12temperature_target\x18\x05 \x01(\x0b\x32+.minknow_api.minion_device.TemperatureRange\x12[\n\rint_capacitor\x18\x06 \x01(\x0e\x32\x44.minknow_api.minion_device.MinionDeviceSettings.IntegrationCapacitor\x12\x32\n\x0ctest_current\x18\x07 \x01(\x0b\x32\x1c.google.protobuf.UInt32Value\x12\x34\n\x0funblock_voltage\x18\x08 \x01(\x0b\x32\x1b.google.protobuf.Int32Value\x12\x35\n\x11overcurrent_limit\x18\n \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12\x36\n\x10samples_to_reset\x18\x0b \x01(\x0b\x32\x1c.google.protobuf.UInt32Value\x12\x45\n\x07th_gain\x18\x0c \x01(\x0e\x32\x34.minknow_api.minion_device.MinionDeviceSettings.Gain\x12\x30\n\nsinc_delay\x18\r \x01(\x0b\x32\x1c.google.protobuf.UInt32Value\x12\x33\n\x0eth_sample_time\x18\x0e \x01(\x0b\x32\x1b.google.protobuf.FloatValue\x12\x33\n\x0eint_reset_time\x18\x0f \x01(\x0b\x32\x1b.google.protobuf.FloatValue\x12S\n\x0fsinc_decimation\x18\x10 \x01(\x0e\x32:.minknow_api.minion_device.MinionDeviceSettings.Decimation\x12V\n\x0flow_pass_filter\x18\x11 \x01(\x0e\x32=.minknow_api.minion_device.MinionDeviceSettings.LowPassFilter\x12Z\n\x11non_overlap_clock\x18\x12 \x01(\x0e\x32?.minknow_api.minion_device.MinionDeviceSettings.NonOverlapClock\x12\x32\n\x0c\x62ias_current\x18\x13 \x01(\x0b\x32\x1c.google.protobuf.UInt32Value\x12<\n\x16\x63ompensation_capacitor\x18\x14 \x01(\x0b\x32\x1c.google.protobuf.UInt32Value\x12Y\n\x19sampling_frequency_params\x18\x15 \x01(\x0b\x32\x36.minknow_api.minion_device.SamplingFrequencyParameters\x12\x35\n\x11\x65nable_asic_power\x18\x16 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12K\n\tfan_speed\x18\x17 \x01(\x0e\x32\x38.minknow_api.minion_device.MinionDeviceSettings.FanSpeed\x12\x37\n\x13\x61llow_full_fan_stop\x18\x18 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12\x43\n\x1f\x65nable_soft_temperature_control\x18\x19 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12>\n\x1a\x65nable_bias_voltage_lookup\x18\x1a \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12!\n\x19\x62ias_voltage_lookup_table\x18\x1b \x03(\x05\x1as\n\x12\x43hannelConfigEntry\x12\x0b\n\x03key\x18\x01 \x01(\r\x12L\n\x05value\x18\x02 \x01(\x0e\x32=.minknow_api.minion_device.MinionDeviceSettings.ChannelConfig:\x02\x38\x01\"-\n\x04Gain\x12\r\n\tGAIN_KEEP\x10\x00\x12\n\n\x06GAIN_1\x10\x01\x12\n\n\x06GAIN_5\x10\x02\"G\n\nDecimation\x12\x13\n\x0f\x44\x45\x43IMATION_KEEP\x10\x00\x12\x11\n\rDECIMATION_32\x10\x01\x12\x11\n\rDECIMATION_64\x10\x02\"y\n\rLowPassFilter\x12\x0c\n\x08LPF_KEEP\x10\x00\x12\x0c\n\x08LPF_5kHz\x10\x01\x12\r\n\tLPF_10kHz\x10\x02\x12\r\n\tLPF_20kHz\x10\x03\x12\r\n\tLPF_40kHz\x10\x04\x12\r\n\tLPF_80kHz\x10\x05\x12\x10\n\x0cLPF_DISABLED\x10\x06\"G\n\x0fNonOverlapClock\x12\x0c\n\x08NOC_KEEP\x10\x00\x12\x12\n\x0eNOC_1_HS_CLOCK\x10\x01\x12\x12\n\x0eNOC_2_HS_CLOCK\x10\x02\"q\n\x14IntegrationCapacitor\x12\x0f\n\x0bINTCAP_KEEP\x10\x00\x12\x11\n\rINTCAP_62_5fF\x10\x01\x12\x10\n\x0cINTCAP_250fF\x10\x02\x12\x0e\n\nINTCAP_1pF\x10\x03\x12\x13\n\x0fINTCAP_1_1875pF\x10\x04\"f\n\x08\x46\x61nSpeed\x12\x11\n\rFANSPEED_KEEP\x10\x00\x12\x10\n\x0c\x46\x41NSPEED_OFF\x10\x01\x12\x10\n\x0c\x46\x41NSPEED_LOW\x10\x02\x12\x11\n\rFANSPEED_HIGH\x10\x03\x12\x10\n\x0c\x46\x41NSPEED_MAX\x10\x04\"\xbd\x03\n\rChannelConfig\x12\x17\n\x13\x43HANNEL_CONFIG_KEEP\x10\x00\x12\x10\n\x0c\x44ISCONNECTED\x10\x01\x12\x17\n\x13WELL_1_BIAS_VOLTAGE\x10\x02\x12\x17\n\x13WELL_2_BIAS_VOLTAGE\x10\x03\x12\x17\n\x13WELL_3_BIAS_VOLTAGE\x10\x04\x12\x17\n\x13WELL_4_BIAS_VOLTAGE\x10\x05\x12\x10\n\x0cTEST_CURRENT\x10\x06\x12\x1a\n\x16WELL_1_UNBLOCK_VOLTAGE\x10\x07\x12\x1a\n\x16WELL_2_UNBLOCK_VOLTAGE\x10\x08\x12\x1a\n\x16WELL_3_UNBLOCK_VOLTAGE\x10\t\x12\x1a\n\x16WELL_4_UNBLOCK_VOLTAGE\x10\n\x12\x1b\n\x17TEST_CURRENT_VIA_WELL_1\x10\x0b\x12\x1b\n\x17TEST_CURRENT_VIA_WELL_2\x10\x0c\x12\x1b\n\x17TEST_CURRENT_VIA_WELL_3\x10\r\x12\x1b\n\x17TEST_CURRENT_VIA_WELL_4\x10\x0e\x12\x1b\n\x17GROUND_THROUGH_RESISTOR\x10\x0f\x12\n\n\x06GROUND\x10\x10\"\xbf\x01\n\x15\x43hangeSettingsRequest\x12G\n\x08settings\x18\x01 \x01(\x0b\x32/.minknow_api.minion_device.MinionDeviceSettingsB\x04\x90\xb5\x18\x01\x12]\n\x16\x63hannel_config_default\x18\x02 \x01(\x0e\x32=.minknow_api.minion_device.MinionDeviceSettings.ChannelConfig\"\x18\n\x16\x43hangeSettingsResponse\"\x14\n\x12GetSettingsRequest\"^\n\x13GetSettingsResponse\x12G\n\x08settings\x18\x01 \x01(\x0b\x32/.minknow_api.minion_device.MinionDeviceSettingsB\x04\x90\xb5\x18\x01\x32\x86\x02\n\x13MinionDeviceService\x12{\n\x0f\x63hange_settings\x12\x30.minknow_api.minion_device.ChangeSettingsRequest\x1a\x31.minknow_api.minion_device.ChangeSettingsResponse\"\x03\x90\x02\x02\x12r\n\x0cget_settings\x12-.minknow_api.minion_device.GetSettingsRequest\x1a..minknow_api.minion_device.GetSettingsResponse\"\x03\x90\x02\x01\x42&\n\x1c\x63om.nanoporetech.minknow_api\xa2\x02\x05MKAPIb\x06proto3')
+  serialized_pb=_b('\n\x1fminknow_api/minion_device.proto\x12\x19minknow_api.minion_device\x1a\x1egoogle/protobuf/wrappers.proto\x1a\x1dminknow_api/rpc_options.proto\",\n\x10TemperatureRange\x12\x0b\n\x03min\x18\x05 \x01(\x02\x12\x0b\n\x03max\x18\x06 \x01(\x02\"\x89\x02\n\x1bSamplingFrequencyParameters\x12\x15\n\rclock_divider\x18\x01 \x01(\r\x12\x18\n\x10integration_time\x18\x02 \x01(\r\x12V\n\x0b\x63lock_speed\x18\x03 \x01(\x0e\x32\x41.minknow_api.minion_device.SamplingFrequencyParameters.ClockSpeed\"a\n\nClockSpeed\x12\x10\n\x0c\x43LOCK_128MHz\x10\x00\x12\x0f\n\x0b\x43LOCK_64MHz\x10\x01\x12\x0f\n\x0b\x43LOCK_32MHz\x10\x02\x12\x0f\n\x0b\x43LOCK_16MHz\x10\x03\x12\x0e\n\nCLOCK_8MHz\x10\x04\"\x88\x16\n\x14MinionDeviceSettings\x12\x31\n\x0c\x62ias_voltage\x18\x01 \x01(\x0b\x32\x1b.google.protobuf.Int32Value\x12\x38\n\x12sampling_frequency\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.UInt32Value\x12Z\n\x0e\x63hannel_config\x18\x03 \x03(\x0b\x32\x42.minknow_api.minion_device.MinionDeviceSettings.ChannelConfigEntry\x12>\n\x1a\x65nable_temperature_control\x18\x04 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12G\n\x12temperature_target\x18\x05 \x01(\x0b\x32+.minknow_api.minion_device.TemperatureRange\x12[\n\rint_capacitor\x18\x06 \x01(\x0e\x32\x44.minknow_api.minion_device.MinionDeviceSettings.IntegrationCapacitor\x12\x32\n\x0ctest_current\x18\x07 \x01(\x0b\x32\x1c.google.protobuf.UInt32Value\x12\x34\n\x0funblock_voltage\x18\x08 \x01(\x0b\x32\x1b.google.protobuf.Int32Value\x12\x35\n\x11overcurrent_limit\x18\n \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12\x36\n\x10samples_to_reset\x18\x0b \x01(\x0b\x32\x1c.google.protobuf.UInt32Value\x12\x45\n\x07th_gain\x18\x0c \x01(\x0e\x32\x34.minknow_api.minion_device.MinionDeviceSettings.Gain\x12\x30\n\nsinc_delay\x18\r \x01(\x0b\x32\x1c.google.protobuf.UInt32Value\x12\x33\n\x0eth_sample_time\x18\x0e \x01(\x0b\x32\x1b.google.protobuf.FloatValue\x12\x33\n\x0eint_reset_time\x18\x0f \x01(\x0b\x32\x1b.google.protobuf.FloatValue\x12S\n\x0fsinc_decimation\x18\x10 \x01(\x0e\x32:.minknow_api.minion_device.MinionDeviceSettings.Decimation\x12V\n\x0flow_pass_filter\x18\x11 \x01(\x0e\x32=.minknow_api.minion_device.MinionDeviceSettings.LowPassFilter\x12Z\n\x11non_overlap_clock\x18\x12 \x01(\x0e\x32?.minknow_api.minion_device.MinionDeviceSettings.NonOverlapClock\x12\x32\n\x0c\x62ias_current\x18\x13 \x01(\x0b\x32\x1c.google.protobuf.UInt32Value\x12<\n\x16\x63ompensation_capacitor\x18\x14 \x01(\x0b\x32\x1c.google.protobuf.UInt32Value\x12Y\n\x19sampling_frequency_params\x18\x15 \x01(\x0b\x32\x36.minknow_api.minion_device.SamplingFrequencyParameters\x12\x35\n\x11\x65nable_asic_power\x18\x16 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12K\n\tfan_speed\x18\x17 \x01(\x0e\x32\x38.minknow_api.minion_device.MinionDeviceSettings.FanSpeed\x12\x37\n\x13\x61llow_full_fan_stop\x18\x18 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12\x43\n\x1f\x65nable_soft_temperature_control\x18\x19 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12>\n\x1a\x65nable_bias_voltage_lookup\x18\x1a \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12!\n\x19\x62ias_voltage_lookup_table\x18\x1b \x03(\x05\x1as\n\x12\x43hannelConfigEntry\x12\x0b\n\x03key\x18\x01 \x01(\r\x12L\n\x05value\x18\x02 \x01(\x0e\x32=.minknow_api.minion_device.MinionDeviceSettings.ChannelConfig:\x02\x38\x01\"-\n\x04Gain\x12\r\n\tGAIN_KEEP\x10\x00\x12\n\n\x06GAIN_1\x10\x01\x12\n\n\x06GAIN_5\x10\x02\"G\n\nDecimation\x12\x13\n\x0f\x44\x45\x43IMATION_KEEP\x10\x00\x12\x11\n\rDECIMATION_32\x10\x01\x12\x11\n\rDECIMATION_64\x10\x02\"y\n\rLowPassFilter\x12\x0c\n\x08LPF_KEEP\x10\x00\x12\x0c\n\x08LPF_5kHz\x10\x01\x12\r\n\tLPF_10kHz\x10\x02\x12\r\n\tLPF_20kHz\x10\x03\x12\r\n\tLPF_40kHz\x10\x04\x12\r\n\tLPF_80kHz\x10\x05\x12\x10\n\x0cLPF_DISABLED\x10\x06\"G\n\x0fNonOverlapClock\x12\x0c\n\x08NOC_KEEP\x10\x00\x12\x12\n\x0eNOC_1_HS_CLOCK\x10\x01\x12\x12\n\x0eNOC_2_HS_CLOCK\x10\x02\"q\n\x14IntegrationCapacitor\x12\x0f\n\x0bINTCAP_KEEP\x10\x00\x12\x11\n\rINTCAP_62_5fF\x10\x01\x12\x10\n\x0cINTCAP_250fF\x10\x02\x12\x0e\n\nINTCAP_1pF\x10\x03\x12\x13\n\x0fINTCAP_1_1875pF\x10\x04\"f\n\x08\x46\x61nSpeed\x12\x11\n\rFANSPEED_KEEP\x10\x00\x12\x10\n\x0c\x46\x41NSPEED_OFF\x10\x01\x12\x10\n\x0c\x46\x41NSPEED_LOW\x10\x02\x12\x11\n\rFANSPEED_HIGH\x10\x03\x12\x10\n\x0c\x46\x41NSPEED_MAX\x10\x04\"\xbd\x03\n\rChannelConfig\x12\x17\n\x13\x43HANNEL_CONFIG_KEEP\x10\x00\x12\x10\n\x0c\x44ISCONNECTED\x10\x01\x12\x17\n\x13WELL_1_BIAS_VOLTAGE\x10\x02\x12\x17\n\x13WELL_2_BIAS_VOLTAGE\x10\x03\x12\x17\n\x13WELL_3_BIAS_VOLTAGE\x10\x04\x12\x17\n\x13WELL_4_BIAS_VOLTAGE\x10\x05\x12\x10\n\x0cTEST_CURRENT\x10\x06\x12\x1a\n\x16WELL_1_UNBLOCK_VOLTAGE\x10\x07\x12\x1a\n\x16WELL_2_UNBLOCK_VOLTAGE\x10\x08\x12\x1a\n\x16WELL_3_UNBLOCK_VOLTAGE\x10\t\x12\x1a\n\x16WELL_4_UNBLOCK_VOLTAGE\x10\n\x12\x1b\n\x17TEST_CURRENT_VIA_WELL_1\x10\x0b\x12\x1b\n\x17TEST_CURRENT_VIA_WELL_2\x10\x0c\x12\x1b\n\x17TEST_CURRENT_VIA_WELL_3\x10\r\x12\x1b\n\x17TEST_CURRENT_VIA_WELL_4\x10\x0e\x12\x1b\n\x17GROUND_THROUGH_RESISTOR\x10\x0f\x12\n\n\x06GROUND\x10\x10\"\xbf\x01\n\x15\x43hangeSettingsRequest\x12G\n\x08settings\x18\x01 \x01(\x0b\x32/.minknow_api.minion_device.MinionDeviceSettingsB\x04\x90\xb5\x18\x01\x12]\n\x16\x63hannel_config_default\x18\x02 \x01(\x0e\x32=.minknow_api.minion_device.MinionDeviceSettings.ChannelConfig\"\x18\n\x16\x43hangeSettingsResponse\"\x14\n\x12GetSettingsRequest\"^\n\x13GetSettingsResponse\x12G\n\x08settings\x18\x01 \x01(\x0b\x32/.minknow_api.minion_device.MinionDeviceSettingsB\x04\x90\xb5\x18\x01\"\x14\n\x12GetFanSpeedRequest\"\"\n\x13GetFanSpeedResponse\x12\x0b\n\x03rpm\x18\x01 \x01(\r2\xfb\x02\n\x13MinionDeviceService\x12{\n\x0f\x63hange_settings\x12\x30.minknow_api.minion_device.ChangeSettingsRequest\x1a\x31.minknow_api.minion_device.ChangeSettingsResponse\"\x03\x90\x02\x02\x12r\n\x0cget_settings\x12-.minknow_api.minion_device.GetSettingsRequest\x1a..minknow_api.minion_device.GetSettingsResponse\"\x03\x90\x02\x01\x12s\n\rget_fan_speed\x12-.minknow_api.minion_device.GetFanSpeedRequest\x1a..minknow_api.minion_device.GetFanSpeedResponse\"\x03\x90\x02\x01\x42&\n\x1c\x63om.nanoporetech.minknow_api\xa2\x02\x05MKAPIb\x06proto3')
   ,
   dependencies=[google_dot_protobuf_dot_wrappers__pb2.DESCRIPTOR,minknow__api_dot_rpc__options__pb2.DESCRIPTOR,])
 
@@ -783,6 +783,61 @@ _GETSETTINGSRESPONSE = _descriptor.Descriptor(
   serialized_end=3602,
 )
 
+
+_GETFANSPEEDREQUEST = _descriptor.Descriptor(
+  name='GetFanSpeedRequest',
+  full_name='minknow_api.minion_device.GetFanSpeedRequest',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=3604,
+  serialized_end=3624,
+)
+
+
+_GETFANSPEEDRESPONSE = _descriptor.Descriptor(
+  name='GetFanSpeedResponse',
+  full_name='minknow_api.minion_device.GetFanSpeedResponse',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='rpm', full_name='minknow_api.minion_device.GetFanSpeedResponse.rpm', index=0,
+      number=1, type=13, cpp_type=3, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=3626,
+  serialized_end=3660,
+)
+
 _SAMPLINGFREQUENCYPARAMETERS.fields_by_name['clock_speed'].enum_type = _SAMPLINGFREQUENCYPARAMETERS_CLOCKSPEED
 _SAMPLINGFREQUENCYPARAMETERS_CLOCKSPEED.containing_type = _SAMPLINGFREQUENCYPARAMETERS
 _MINIONDEVICESETTINGS_CHANNELCONFIGENTRY.fields_by_name['value'].enum_type = _MINIONDEVICESETTINGS_CHANNELCONFIG
@@ -829,6 +884,8 @@ DESCRIPTOR.message_types_by_name['ChangeSettingsRequest'] = _CHANGESETTINGSREQUE
 DESCRIPTOR.message_types_by_name['ChangeSettingsResponse'] = _CHANGESETTINGSRESPONSE
 DESCRIPTOR.message_types_by_name['GetSettingsRequest'] = _GETSETTINGSREQUEST
 DESCRIPTOR.message_types_by_name['GetSettingsResponse'] = _GETSETTINGSRESPONSE
+DESCRIPTOR.message_types_by_name['GetFanSpeedRequest'] = _GETFANSPEEDREQUEST
+DESCRIPTOR.message_types_by_name['GetFanSpeedResponse'] = _GETFANSPEEDRESPONSE
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
 TemperatureRange = _reflection.GeneratedProtocolMessageType('TemperatureRange', (_message.Message,), {
@@ -1101,6 +1158,20 @@ GetSettingsResponse = _reflection.GeneratedProtocolMessageType('GetSettingsRespo
   })
 _sym_db.RegisterMessage(GetSettingsResponse)
 
+GetFanSpeedRequest = _reflection.GeneratedProtocolMessageType('GetFanSpeedRequest', (_message.Message,), {
+  'DESCRIPTOR' : _GETFANSPEEDREQUEST,
+  '__module__' : 'minknow_api.minion_device_pb2'
+  # @@protoc_insertion_point(class_scope:minknow_api.minion_device.GetFanSpeedRequest)
+  })
+_sym_db.RegisterMessage(GetFanSpeedRequest)
+
+GetFanSpeedResponse = _reflection.GeneratedProtocolMessageType('GetFanSpeedResponse', (_message.Message,), {
+  'DESCRIPTOR' : _GETFANSPEEDRESPONSE,
+  '__module__' : 'minknow_api.minion_device_pb2'
+  # @@protoc_insertion_point(class_scope:minknow_api.minion_device.GetFanSpeedResponse)
+  })
+_sym_db.RegisterMessage(GetFanSpeedResponse)
+
 
 DESCRIPTOR._options = None
 _MINIONDEVICESETTINGS_CHANNELCONFIGENTRY._options = None
@@ -1113,8 +1184,8 @@ _MINIONDEVICESERVICE = _descriptor.ServiceDescriptor(
   file=DESCRIPTOR,
   index=0,
   serialized_options=None,
-  serialized_start=3605,
-  serialized_end=3867,
+  serialized_start=3663,
+  serialized_end=4042,
   methods=[
   _descriptor.MethodDescriptor(
     name='change_settings',
@@ -1132,6 +1203,15 @@ _MINIONDEVICESERVICE = _descriptor.ServiceDescriptor(
     containing_service=None,
     input_type=_GETSETTINGSREQUEST,
     output_type=_GETSETTINGSRESPONSE,
+    serialized_options=_b('\220\002\001'),
+  ),
+  _descriptor.MethodDescriptor(
+    name='get_fan_speed',
+    full_name='minknow_api.minion_device.MinionDeviceService.get_fan_speed',
+    index=2,
+    containing_service=None,
+    input_type=_GETFANSPEEDREQUEST,
+    output_type=_GETFANSPEEDRESPONSE,
     serialized_options=_b('\220\002\001'),
   ),
 ])

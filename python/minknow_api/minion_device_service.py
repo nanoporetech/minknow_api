@@ -16,6 +16,8 @@ __all__ = [
     "ChangeSettingsResponse",
     "GetSettingsRequest",
     "GetSettingsResponse",
+    "GetFanSpeedRequest",
+    "GetFanSpeedResponse",
 ]
 
 def run_with_retry(method, message, timeout, unwraps, full_name):
@@ -421,4 +423,43 @@ class MinionDeviceService(object):
         return run_with_retry(self._stub.get_settings,
                               _message, _timeout,
                               ['settings'],
+                              "minknow_api.minion_device.MinionDeviceService")
+    def get_fan_speed(self, _message=None, _timeout=None, **kwargs):
+        """Get the rotational rate of the fan cooling the heat-sink. (Not available
+        on all MinION platforms.)
+
+        This RPC has no side effects. Calling it will have no effect on the state of the
+        system. It is safe to call repeatedly, or to retry on failure, although there is no
+        guarantee it will return the same information each time.
+
+        Args:
+            _message (minknow_api.minion_device_pb2.GetFanSpeedRequest, optional): The message to send.
+                This can be passed instead of the keyword arguments.
+            _timeout (float, optional): The call will be cancelled after this number of seconds
+                if it has not been completed.
+
+        Returns:
+            minknow_api.minion_device_pb2.GetFanSpeedResponse
+
+        Note that the returned messages are actually wrapped in a type that collapses
+        submessages for fields marked with ``[rpc_unwrap]``.
+        """
+        if _message is not None:
+            if isinstance(_message, MessageWrapper):
+                _message = _message._message
+            return run_with_retry(self._stub.get_fan_speed,
+                                  _message, _timeout,
+                                  [],
+                                  "minknow_api.minion_device.MinionDeviceService")
+
+        unused_args = set(kwargs.keys())
+
+        _message = GetFanSpeedRequest()
+
+        if len(unused_args) > 0:
+            raise ArgumentError("Unexpected keyword arguments to get_fan_speed: '{}'".format(", ".join(unused_args)))
+
+        return run_with_retry(self._stub.get_fan_speed,
+                              _message, _timeout,
+                              [],
                               "minknow_api.minion_device.MinionDeviceService")

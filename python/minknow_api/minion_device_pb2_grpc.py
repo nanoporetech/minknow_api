@@ -24,6 +24,11 @@ class MinionDeviceServiceStub(object):
         request_serializer=minknow__api_dot_minion__device__pb2.GetSettingsRequest.SerializeToString,
         response_deserializer=minknow__api_dot_minion__device__pb2.GetSettingsResponse.FromString,
         )
+    self.get_fan_speed = channel.unary_unary(
+        '/minknow_api.minion_device.MinionDeviceService/get_fan_speed',
+        request_serializer=minknow__api_dot_minion__device__pb2.GetFanSpeedRequest.SerializeToString,
+        response_deserializer=minknow__api_dot_minion__device__pb2.GetFanSpeedResponse.FromString,
+        )
 
 
 class MinionDeviceServiceServicer(object):
@@ -49,6 +54,14 @@ class MinionDeviceServiceServicer(object):
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
 
+  def get_fan_speed(self, request, context):
+    """Get the rotational rate of the fan cooling the heat-sink. (Not available
+    on all MinION platforms.)
+    """
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
 
 def add_MinionDeviceServiceServicer_to_server(servicer, server):
   rpc_method_handlers = {
@@ -61,6 +74,11 @@ def add_MinionDeviceServiceServicer_to_server(servicer, server):
           servicer.get_settings,
           request_deserializer=minknow__api_dot_minion__device__pb2.GetSettingsRequest.FromString,
           response_serializer=minknow__api_dot_minion__device__pb2.GetSettingsResponse.SerializeToString,
+      ),
+      'get_fan_speed': grpc.unary_unary_rpc_method_handler(
+          servicer.get_fan_speed,
+          request_deserializer=minknow__api_dot_minion__device__pb2.GetFanSpeedRequest.FromString,
+          response_serializer=minknow__api_dot_minion__device__pb2.GetFanSpeedResponse.SerializeToString,
       ),
   }
   generic_handler = grpc.method_handlers_generic_handler(

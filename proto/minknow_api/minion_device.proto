@@ -24,6 +24,12 @@ service MinionDeviceService {
     rpc get_settings(GetSettingsRequest) returns (GetSettingsResponse) {
         option idempotency_level = NO_SIDE_EFFECTS;
     }
+
+    // Get the rotational rate of the fan cooling the heat-sink. (Not available
+    // on all MinION platforms.)
+    rpc get_fan_speed(GetFanSpeedRequest) returns (GetFanSpeedResponse) {
+        option idempotency_level = NO_SIDE_EFFECTS;
+    }
 }
 
 // Temperature range.
@@ -482,4 +488,11 @@ message GetSettingsRequest {
 message GetSettingsResponse {
     // MinION device settings
     MinionDeviceSettings settings = 1 [(rpc_unwrap) = true];
+}
+
+message GetFanSpeedRequest {
+}
+
+message GetFanSpeedResponse {
+    uint32 rpm = 1;
 }

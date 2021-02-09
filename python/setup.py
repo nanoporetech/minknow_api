@@ -24,4 +24,10 @@ setup(
     packages=find_packages(),
     install_requires=INSTALL_REQUIRES,
     entry_points={"console_scripts": []},
+    classifiers=[
+        "Development Status :: 5 - Production/Stable",
+        "License :: OSI Approved :: Mozilla Public License 2.0 (MPL 2.0)",
+        "Programming Language :: Python :: 3 :: Only",
+        "Topic :: Scientific/Engineering :: Bio-Informatics",
+    ],
 )
