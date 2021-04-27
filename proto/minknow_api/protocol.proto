@@ -138,6 +138,12 @@ message BarcodeUserData {
 
         // Indended to show that a result has not occured due to contamination.
         no_template_control = 3;
+        
+        // Separate positive controls for when kits expect 2.
+        positive_control_1 = 4;
+
+        // Separate positive controls for when kits expect 2.
+        positive_control_2 = 5;
     }
 
     // Barcode name the user data applies to, eg: "barcode02"

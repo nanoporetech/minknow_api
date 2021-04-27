@@ -44,7 +44,11 @@ def parse_args():
         help="IP address of the machine running MinKNOW (defaults to localhost)",
     )
     parser.add_argument(
-        "--port", help="Port to connect to on host (defaults to standard MinKNOW port)",
+        "--port",
+        help="Port to connect to on host (defaults to standard MinKNOW port based on tls setting)",
+    )
+    parser.add_argument(
+        "--no-tls", help="Disable tls connection", default=False, action="store_true"
     )
     parser.add_argument("--verbose", action="store_true", help="Enable debug logging")
 
@@ -182,6 +186,22 @@ def parse_args():
         help="set the number of reads combined into one BAM file.",
     )
 
+    # Read until
+    parser.add_argument(
+        "--read-until-reference", type=str, help="Reference file to use in read until",
+    )
+
+    parser.add_argument(
+        "--read-until-bed-file", type=str, help="Bed file to use in read until",
+    )
+
+    parser.add_argument(
+        "--read-until-filter",
+        type=str,
+        choices=["deplete", "enrich"],
+        help="Filter type to use in read until",
+    )
+
     # Experiment
     parser.add_argument(
         "--experiment-duration",
@@ -213,6 +233,21 @@ def parse_args():
     args = parser.parse_args()
 
     # Further argument checks
+
+    # Read until must have a reference and a filter type, if enabled:
+    if (
+        args.read_until_filter is not None
+        or args.read_until_reference is not None
+        or args.read_until_bed_file is not None
+    ):
+        if args.read_until_filter is None:
+            print("Unable to specify read until arguments without a filter type.")
+            sys.exit(1)
+
+        if args.read_until_reference is None:
+            print("Unable to specify read until arguments without a reference type.")
+            sys.exit(1)
+
     if args.bed_file and not args.alignment_reference:
         print("Unable to specify `--bed-file` without `--alignment-reference`.")
         sys.exit(1)
@@ -265,7 +300,7 @@ def main():
         logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
 
     # Construct a manager using the host + port provided:
-    manager = Manager(host=args.host, port=args.port, use_tls=False)
+    manager = Manager(host=args.host, port=args.port, use_tls=not args.no_tls)
 
     # Find which positions we are going to start protocol on:
     positions = manager.flow_cell_positions()
@@ -370,6 +405,16 @@ def main():
                 alignment=alignment_args,
             )
 
+        read_until_args = None
+        if args.read_until_filter:
+            read_until_args = protocols.ReadUntilArgs(
+                filter_type=args.read_until_filter,
+                reference_files=[args.read_until_reference],
+                bed_file=args.read_until_bed_file,
+                first_channel=None,  # These default to all channels.
+                last_channel=None,
+            )
+
         def build_output_arguments(args, name):
             if not getattr(args, name):
                 return None
@@ -388,6 +433,7 @@ def main():
             sample_id=args.sample_id,
             experiment_group=args.experiment_group,
             basecalling=basecalling_args,
+            read_until=read_until_args,
             fastq_arguments=fastq_arguments,
             fast5_arguments=fast5_arguments,
             bam_arguments=bam_arguments,

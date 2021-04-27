@@ -97,9 +97,11 @@ def find_protocol(
         if tags["barcoding"].bool_value != barcoding:
             if barcoding:
                 LOGGER.debug("Protocol does not support barcoding")
+                continue
             else:
+                if basecalling:
+                    LOGGER.warning("Not using barcoding for a barcoding kit")
                 LOGGER.debug("Protocol requires barcoding")
-            continue
 
         supported_kits = tags["barcoding kits"].array_value
         # workaround for the set of barcoding kits being returned as a string rather
@@ -108,6 +110,8 @@ def find_protocol(
             supported_kits = (
                 tags["barcoding kits"].array_value[1:-1].replace('"', "").split(",")
             )
+        if tags["barcoding"].bool_value:
+            supported_kits.append(tags["kit"].string_value)
         if barcoding_kits and not set(barcoding_kits).issubset(supported_kits):
             LOGGER.debug(
                 "barcoding kits specified %s not amongst those supported %s",
@@ -156,10 +160,27 @@ BasecallingArgs = collections.namedtuple(
 )
 OutputArgs = collections.namedtuple("OutputArgs", ["reads_per_file"])
 
+ReadUntilArgs = collections.namedtuple(
+    "ReadUntilArgs",
+    [
+        # "enrich", or "deplete"
+        "filter_type",
+        # List of reference files to pass to guppy for read until (only one file supported at the moment).
+        "reference_files",
+        # Bed file to pass to guppy for read until
+        "bed_file",
+        # First channel for read until to operate on.
+        "first_channel",
+        # Last channel for read until to operate on.
+        "last_channel",
+    ],
+)
+
 
 def make_protocol_arguments(
     experiment_duration: float = 72,
     basecalling: BasecallingArgs = None,
+    read_until: ReadUntilArgs = None,
     fastq_arguments: OutputArgs = None,
     fast5_arguments: OutputArgs = None,
     bam_arguments: OutputArgs = None,
@@ -175,6 +196,7 @@ def make_protocol_arguments(
     Args:
         experiment_duration(float):             Length of the experiment in hours.
         basecalling(:obj:`BasecallingArgs`):    Arguments to control basecalling.
+        read_until(:obj:`ReadUntilArgs):        Arguments to control read until.
         fastq_arguments(:obj:`OutputArgs`):     Control fastq file generation.
         fast5_arguments(:obj:`OutputArgs`):     Control fastq file generation.
         bam_arguments(:obj:`OutputArgs`):       Control bam file generation.
@@ -263,6 +285,29 @@ def make_protocol_arguments(
                     "bed_file='{}'".format(basecalling.alignment.bed_file)
                 )
             protocol_args.extend(["--alignment"] + alignment_args)
+
+    if read_until:
+        read_until_args = []
+        if read_until.filter_type:
+            read_until_args.append("filter_type={}".format(read_until.filter_type))
+
+        if read_until.reference_files:
+            read_until_args.append(
+                "reference_files=['" + "','".join(read_until.reference_files) + "',]"
+            )
+
+        if read_until.bed_file:
+            read_until_args.append("bed_file='{}'".format(read_until.bed_file))
+
+        if read_until.first_channel:
+            read_until_args.append("first_channel={}".format(read_until.first_channel))
+
+        if read_until.last_channel:
+            read_until_args.append("last_channel={}".format(read_until.last_channel))
+
+        # --read_until filter_type='enrich' reference_files=['/data/my-alignment-file'] bed_file='/data/bed_file.bed' first_channel=1 last_channel=512
+        print(read_until_args)
+        protocol_args.extend(["--read_until"] + read_until_args)
 
     protocol_args.append("--experiment_time={}".format(experiment_duration))
     protocol_args.append("--fast5=" + on_off(fast5_arguments))

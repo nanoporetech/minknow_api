@@ -61,7 +61,14 @@ TEST_BARCODING_PROTOCOL = protocol_pb2.ProtocolInfo(
 
 def run_start_protocol_example(port, args):
     p = subprocess.run(
-        [sys.executable, str(start_protocol_source), "--port", str(port), "--verbose"]
+        [
+            sys.executable,
+            str(start_protocol_source),
+            "--port",
+            str(port),
+            "--no-tls",
+            "--verbose",
+        ]
         + args,
         stdout=subprocess.PIPE,
         stderr=subprocess.STDOUT,
@@ -677,6 +684,123 @@ def test_output_start_protocol():
                 "--fast5=off",
                 "--fastq=off",
                 "--bam=on",
+                "--active_channel_selection=on",
+                "--mux_scan_period=1.5",
+            ]
+
+
+def test_read_until_start_protocol():
+    """Verify read until arguments work as expected."""
+
+    position_info = PositionInfo(position_name="MN00000")
+
+    with SequencingPositionTestServer(position_info) as sequencing_position:
+        test_positions = [
+            manager_pb2.FlowCellPosition(
+                name=position_info.position_name,
+                state=manager_pb2.FlowCellPosition.State.STATE_RUNNING,
+                rpc_ports=manager_pb2.FlowCellPosition.RpcPorts(
+                    secure=0, insecure=sequencing_position.port
+                ),
+            ),
+        ]
+
+        with ManagerTestServer(positions=test_positions) as server:
+            # Setup for experiment
+            test_flow_cell_id = "foo-bar-flow-cell"
+            sequencing_position.set_flow_cell_info(
+                FlowCellInfo(has_flow_cell=True, flow_cell_id=test_flow_cell_id)
+            )
+            sequencing_position.set_protocol_list([TEST_PROTOCOL])
+
+            # Running without filter type:
+            assert (
+                run_start_protocol_example(
+                    server.port,
+                    [
+                        "--kit",
+                        TEST_KIT_NAME,
+                        "--position",
+                        position_info.position_name,
+                        "--read-until-reference",
+                        "test.fasta",
+                        "--read-until-bed-file",
+                        "test.bed",
+                    ],
+                )[0]
+                != 0
+            )
+
+            # Running without reference file:
+            assert (
+                run_start_protocol_example(
+                    server.port,
+                    [
+                        "--kit",
+                        TEST_KIT_NAME,
+                        "--position",
+                        position_info.position_name,
+                        "--read-until-bed-file",
+                        "test.bed",
+                        "--read-until-filter",
+                        "enrich",
+                    ],
+                )[0]
+                != 0
+            )
+
+            # Incorrect filter type
+            assert (
+                run_start_protocol_example(
+                    server.port,
+                    [
+                        "--kit",
+                        TEST_KIT_NAME,
+                        "--position",
+                        position_info.position_name,
+                        "--read-until-reference",
+                        "test.fasta",
+                        "--read-until-bed-file",
+                        "test.bed",
+                        "--read-until-filter",
+                        "foo",
+                    ],
+                )[0]
+                != 0
+            )
+
+            # Read until enabled
+            assert (
+                run_start_protocol_example(
+                    server.port,
+                    [
+                        "--kit",
+                        TEST_KIT_NAME,
+                        "--position",
+                        position_info.position_name,
+                        "--read-until-reference",
+                        "test.fasta",
+                        "--read-until-bed-file",
+                        "test.bed",
+                        "--read-until-filter",
+                        "deplete",
+                    ],
+                )[0]
+                == 0
+            )
+            assert len(sequencing_position.protocol_service.protocol_runs) == 1
+            protocol = sequencing_position.protocol_service.protocol_runs[-1]
+            assert protocol.identifier == TEST_PROTOCOL_IDENTIFIER
+            print(protocol.args)
+            assert protocol.args == [
+                "--read_until",
+                "filter_type=deplete",
+                "reference_files=['test.fasta',]",
+                "bed_file='test.bed'",
+                "--experiment_time=72",
+                "--fast5=off",
+                "--fastq=off",
+                "--bam=off",
                 "--active_channel_selection=on",
                 "--mux_scan_period=1.5",
             ]
