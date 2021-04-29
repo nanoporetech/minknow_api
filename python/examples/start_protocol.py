@@ -439,6 +439,7 @@ def main():
             bam_arguments=bam_arguments,
             disable_active_channel_selection=args.no_active_channel_selection,
             mux_scan_period=args.mux_scan_period,
+            experiment_duration=args.experiment_duration,
             args=args.extra_args,  # Any extra args passed.
         )
 
