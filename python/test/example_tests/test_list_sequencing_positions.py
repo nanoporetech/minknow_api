@@ -7,7 +7,10 @@ from minknow_api import manager_pb2
 from test_minknow_server import ManagerTestServer
 
 list_positions_source = (
-    Path(__file__).parent.parent.parent / "examples" / "list_sequencing_positions.py"
+    Path(__file__).parent.parent.parent
+    / "minknow_api"
+    / "examples"
+    / "list_sequencing_positions.py"
 )
 
 

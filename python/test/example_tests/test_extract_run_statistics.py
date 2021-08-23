@@ -12,7 +12,7 @@ from test_minknow_server import (
     SequencingPositionTestServer,
 )
 
-example_root = Path(__file__).parent.parent.parent / "examples"
+example_root = Path(__file__).parent.parent.parent / "minknow_api" / "examples"
 
 start_protocol_source = example_root / "extract_run_statistics.py"
 

@@ -339,7 +339,7 @@ def parse_record(parsed_data: ParsedDataDict, record: Record, line_num: int):
 
 
 # Convert BarcodeInfo to BarcodeUserData
-def make_barcode_user_info(barcode_info: BarcodeInfo) -> BarcodeUserData:
+def make_barcode_user_data(barcode_info: BarcodeInfo) -> BarcodeUserData:
     barcode_user_data = BarcodeUserData()
     if barcode_info.barcode_name:
         barcode_user_data.barcode_name = barcode_info.barcode_name
@@ -352,20 +352,13 @@ def make_barcode_user_info(barcode_info: BarcodeInfo) -> BarcodeUserData:
     return barcode_user_data
 
 
-def make_protocol_run_user_info(parsed_entry: ParsedData) -> ProtocolRunUserInfo:
-    protocol_run_user_info = ProtocolRunUserInfo()
-    if parsed_entry.get("sample_id"):
-        protocol_run_user_info.sample_id.value = parsed_entry["sample_id"]
-    if parsed_entry.get("experiment_id"):
-        protocol_run_user_info.protocol_group_id.value = parsed_entry["experiment_id"]
-    if parsed_entry.get("barcode_info"):
-        protocol_run_user_info.barcode_user_info.extend(
-            [
-                make_barcode_user_info(val)
-                for val in parsed_entry["barcode_info"].values()
-            ]
-        )
-    return protocol_run_user_info
+def convert_barcode_info(
+    barcode_info: BarcodeInfo,
+) -> Optional[Sequence[BarcodeUserData]]:
+    if barcode_info:
+        return [make_barcode_user_data(val) for val in barcode_info.values()]
+    else:
+        return None
 
 
 ParsedSampleSheetEntry = NamedTuple(
@@ -373,7 +366,9 @@ ParsedSampleSheetEntry = NamedTuple(
     [
         ("flow_cell_id", Optional[str]),
         ("position_id", Optional[str]),
-        ("protocol_run_user_info", ProtocolRunUserInfo),
+        ("sample_id", Optional[str]),
+        ("experiment_id", Optional[str]),
+        ("barcode_info", Sequence[BarcodeUserData]),
     ],
 )
 
@@ -383,7 +378,9 @@ def convert_parsed_data(parsed_data_dict: ParsedDataDict):
         ParsedSampleSheetEntry(
             flow_cell_id=val.get("flow_cell_id"),
             position_id=val.get("position_id"),
-            protocol_run_user_info=make_protocol_run_user_info(val),
+            sample_id=val.get("sample_id"),
+            experiment_id=val.get("experiment_id"),
+            barcode_info=convert_barcode_info(val.get("barcode_info")),
         )
         for val in parsed_data_dict.values()
     ]

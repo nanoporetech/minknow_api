@@ -13,6 +13,7 @@ INSTALL_REQUIRES = [
     "numpy~=1.11",  # minknow_api.data
     "protobuf~=3.11",
     "packaging>=15.0",
+    "pyrfc3339~=1.1",
 ]
 
 setup(
@@ -20,6 +21,7 @@ setup(
     version=VERSION,
     author="Oxford Nanopore Technologies Ltd",
     author_email="info@nanoporetech.com",
+    url="https://github.com/nanoporetech/minknow_api",
     description="MinKNOW RPC API bindings",
     packages=find_packages(),
     install_requires=INSTALL_REQUIRES,

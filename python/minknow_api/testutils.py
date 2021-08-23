@@ -15,6 +15,9 @@ Eg:
 >>> server = minknow_api.testutils.MockMinKNOWServer(
 ...     instance_service=InstanceService
 ... )
+>>> # Start mock server for 30 seconds
+>>> with server:
+...     server.wait_for_termination(timeout=30)
 
 There is one required method for the connection class
 InstanceService.get_version_info() which supplies the
@@ -34,6 +37,7 @@ For examples of other service implementations check the
 test cases for this mock server.
 """
 import logging
+from collections import namedtuple
 from concurrent import futures
 from importlib import import_module
 from packaging.version import parse
@@ -48,6 +52,27 @@ VERSION = parse(minknow_api.__version__)
 #   allows us to use older packaging versions
 MAJOR, MINOR, MICRO = map(int, VERSION.base_version.split("."))
 DEFAULT_SERVER_PORT = 0
+
+AuthInfo = namedtuple("AuthInfo", ["ssl_cert", "ssl_key", "auth_token"])
+
+
+class AuthInterceptor(grpc.ServerInterceptor):
+    def __init__(self, token, logger):
+        self.token = token
+        self.logger = logger
+
+    def intercept_service(self, continuation, handler_call_details):
+        authenticated = False
+        for val in handler_call_details.invocation_metadata:
+            if val.key == "test-auth":
+                authenticated = True if val.value == self.token else False
+                break
+
+        if not authenticated:
+            raise RuntimeError("Not authenticated!")
+
+        cont = continuation(handler_call_details)
+        return cont
 
 
 class InstanceService(minknow_api.instance_pb2_grpc.InstanceServiceServicer):
@@ -66,15 +91,18 @@ class MockMinKNOWServer:
     This is a minimal gRPC server that implements all the required methods
     for the minknow_api.Connection class. The server is easily extensible
     using custom service classes and provides an interface for testing code
-    that interacts with the MinKNOW without it being installed.
+    that interacts with MinKNOW without it being installed.
 
     Any documented service in the minknow_api module can be added to the
     server. The custom service should be passed as a keyword argument when
     initialising the server in the format ``{name}_service=MyClass`` where
     ``name`` is a valid minknow service.
+
+    if ``auth_info`` is not None, then it is assumed that the server is
+    hosted on a secure port
     """
 
-    def __init__(self, port=DEFAULT_SERVER_PORT, **kwargs):
+    def __init__(self, port=DEFAULT_SERVER_PORT, auth_info=None, **kwargs):
         # Logging setup
         logging.basicConfig(
             level=logging.DEBUG,
@@ -87,8 +115,16 @@ class MockMinKNOWServer:
         if self.port == 0:
             self.logger.info("Port will be assigned by operating system")
 
+        # Initialise any interceptors
+        interceptors = None
+        if auth_info and auth_info.auth_token:
+            interceptor = AuthInterceptor(auth_info.auth_token, self.logger)
+            interceptors = [interceptor]
+
         # Init the server
-        self.server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
+        self.server = grpc.server(
+            futures.ThreadPoolExecutor(max_workers=10), interceptors=interceptors,
+        )
 
         for service in kwargs:
             # get service name excluding '_service'
@@ -137,7 +173,14 @@ class MockMinKNOWServer:
                     add_servicer_to_server_func = getattr(svc_module, func)
                     add_servicer_to_server_func(getattr(self, svc_name), self.server)
 
-        bound = self.server.add_insecure_port("[::]:{}".format(self.port))
+        if auth_info:
+            creds = grpc.ssl_server_credentials(
+                ((auth_info.ssl_key, auth_info.ssl_cert),)
+            )
+
+            bound = self.server.add_secure_port("[::]:{}".format(self.port), creds)
+        else:
+            bound = self.server.add_insecure_port("[::]:{}".format(self.port))
         if bound == 0:
             raise ConnectionError("Could not connect using port {}".format(self.port))
         self.port = bound

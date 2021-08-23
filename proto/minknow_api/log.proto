@@ -63,7 +63,8 @@ message UserMessage {
     // The severity of the message
     Severity severity = 2;
 
-    // A short textual identifier for the message
+    // A short unique textual identifier for the message
+    // Used to identify the message for translation purposes
     string identifier = 3;
 
     // A long user readable description of the message
@@ -79,8 +80,15 @@ message SendUserMessageRequest {
     // note: TRACE messages cannot be sent using this interface (will throw an error).
     Severity severity = 2 [(rpc_required) = true];
 
+    // A short unique textual identifier for the message
+    // Used to identify the message for translation purposes
+    string identifier = 3;
+
     // The user message to send to any listeners.
     string user_message = 1 [(rpc_required) = true];
+
+    // Any extra data associated with the user message, as a map from key to data.
+    map<string, string> extra_data = 4;
 }
 
 message SendUserMessageResponse {

@@ -113,7 +113,10 @@ class LogService(object):
             severity (minknow_api.log_pb2.Severity): The severity of the message to send
 
                 note: TRACE messages cannot be sent using this interface (will throw an error).
+            identifier (str, optional): A short unique textual identifier for the message
+                Used to identify the message for translation purposes
             user_message (str): The user message to send to any listeners.
+            extra_data (minknow_api.log_pb2.SendUserMessageRequest.ExtraDataEntry, optional): Any extra data associated with the user message, as a map from key to data.
 
         Returns:
             minknow_api.log_pb2.SendUserMessageResponse
@@ -139,11 +142,20 @@ class LogService(object):
         else:
             raise ArgumentError("send_user_message requires a 'severity' argument")
 
+        if "identifier" in kwargs:
+            unused_args.remove("identifier")
+            _message.identifier = kwargs['identifier']
+
         if "user_message" in kwargs:
             unused_args.remove("user_message")
             _message.user_message = kwargs['user_message']
         else:
             raise ArgumentError("send_user_message requires a 'user_message' argument")
+
+        if "extra_data" in kwargs:
+            unused_args.remove("extra_data")
+            _message.extra_data.update(kwargs['extra_data'])
+            
 
         if len(unused_args) > 0:
             raise ArgumentError("Unexpected keyword arguments to send_user_message: '{}'".format(", ".join(unused_args)))

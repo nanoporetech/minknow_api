@@ -150,7 +150,7 @@ class TestBidirectionalRPC(unittest.TestCase):
         self.server = MockMinKNOWServer(data_service=DataServicer,)
         self.port = self.server.port
         self.server.start()
-        self.connection = minknow_api.Connection(self.port)
+        self.connection = minknow_api.Connection(self.port, use_tls=False)
 
     def tearDown(self) -> None:
         self.server.stop(0)

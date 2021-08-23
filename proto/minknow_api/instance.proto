@@ -177,7 +177,7 @@ message GetVersionInfoResponse {
 }
 
 message GetOutputDirectoriesRequest {
-    
+
 }
 
 message OutputDirectories {
@@ -279,6 +279,25 @@ message DeviceInfo {
     device.GetDeviceInfoResponse device_info = 2;
 }
 
+message BasecallSpeed {
+        // Mean basecall speed, in bases per second.
+        //
+        // This value is only streamed for acquisitions where basecalling is enabled.
+        //
+        // The value reported here is the value stored in last completed basecall boxplot bucket
+        // Each boxplot bucket covers a duration of `boxplot_time_coverage_in_minutes`
+        float mean_basecall_speed = 1;
+}
+
+message N50 {
+    // N50 data, in basecalled bases
+    //
+    // This value is only streamed for acquisitions where basecalling is enabled.
+    //
+    // The latest value is sent once per minute
+    float n50 = 1;
+}
+
 message StreamInstanceActivityResponse {
 
     message FlowCellHealth {
@@ -294,7 +313,7 @@ message StreamInstanceActivityResponse {
         DeviceInfo device_info = 1;
 
         // Information about the currently conected flow cell
-        // 
+        //
         // Note: if no flow cell is connected this [flow_cell_info.has_flow_cell] will be false
         device.GetFlowCellInfoResponse flow_cell_info = 2;
 
@@ -317,5 +336,16 @@ message StreamInstanceActivityResponse {
         // what number of those reads have passed or failed basecalling etc. Rate 
         // limited to 1 second per update
         acquisition.AcquisitionYieldSummary yield_summary = 6;
+
+        // Basecall speed information
+        // Note: only available if an acquisition with basecalling enabled is in progress
+        BasecallSpeed basecall_speed = 7;
+
+        // n50 information
+        //
+        // Contains the n50 value, measured in basecalled bases
+        //
+        // Note: only available if an acquisition with basecalling enabled is in progress
+        N50 n50 = 8;
     }
 }

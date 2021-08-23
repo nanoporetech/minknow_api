@@ -24,17 +24,45 @@ __all__ = [
     "Basecaller",
     "FlowCellPosition",
     "Manager",
+    "get_local_authentication_token_file",
 ]
+
+
+def get_local_authentication_token_file(host="localhost", port=None):
+    """Starts an isolated manager instance to retrieve the path
+    of the local authentication token file, which can then
+    be read to extract the local authentication token"""
+    # If asking for local authentication token, then assume
+    # we are using a tls connection
+    if not port:
+        port = 9502
+
+    try:
+        ssl_creds = grpc.ssl_channel_credentials(minknow_api.read_ssl_certificate())
+
+        channel = grpc.secure_channel(host + ":" + str(port), ssl_creds)
+
+        service = minknow_api.manager_service.ManagerService(channel)
+        return service.local_authentication_token_path().path
+    except:
+        logging.debug(
+            "Unable to connect to manager on port '{}' to retrieve local auth token path".format(
+                port
+            )
+        )
+        return None
 
 
 class ServiceBase(object):
     def __init__(self, serviceclass, host, port, use_tls):
         self.host = host
         self.port = port
+        self.grpc_credentials = None
         if use_tls:
+            self.grpc_credentials = minknow_api.load_grpc_credentials(port)
             self.channel = grpc.secure_channel(
                 host + ":" + str(port),
-                minknow_api.grpc_credentials(),
+                self.grpc_credentials,
                 options=minknow_api.GRPC_CHANNEL_OPTIONS,
             )
         else:
@@ -104,9 +132,7 @@ class Manager(ServiceBase):
         )
         self._default_use_tls = use_tls
 
-        version_info = self.stub.get_version_info(
-            minknow_api.manager_service.GetVersionInfoRequest()
-        )
+        version_info = self.rpc.get_version_info()
         self.bream_version = version_info.protocols
         self.config_version = version_info.configuration
         self.core_version = version_info.minknow.full
@@ -150,7 +176,7 @@ class Manager(ServiceBase):
             minknow_api.manager.Basecaller: The wrapper for the Basecaller service, or None if the
                 connection couldn't be made.
         """
-        bc_api = self.stub.basecaller_api(
+        bc_api = self.rpc.basecaller_api(
             minknow_api.manager_service.BasecallerApiRequest(), timeout=timeout
         )
         if use_tls is None:
@@ -184,7 +210,7 @@ class Manager(ServiceBase):
         request = minknow_api.manager_service.CreateDirectoryRequest(
             parent_path=parent_path, name=name
         )
-        return self.stub.create_directory(request, timeout=timeout).path
+        return self.rpc.create_directory(request, _timeout=timeout).path
 
     def guppy_port(self, timeout=DEFAULT_TIMEOUT):
         """Get the port that Guppy is listening on.
@@ -198,9 +224,7 @@ class Manager(ServiceBase):
         Returns:
             int: The port Guppy is listening on
         """
-        return self.stub.get_guppy_info(
-            minknow_api.manager_service.GetGuppyInfoRequest(), timeout=timeout
-        ).port
+        return self.rpc.get_guppy_info(_timeout=timeout).port
 
     def describe_host(self, timeout=DEFAULT_TIMEOUT):
         """Get information about the machine running MinKNOW.
@@ -212,9 +236,7 @@ class Manager(ServiceBase):
         Returns:
             minknow_api.manager_service.DescribeHostResponse: The information about the host.
         """
-        return self.stub.describe_host(
-            minknow_api.manager_service.DescribeHostRequest(), timeout=timeout
-        )
+        return self.rpc.describe_host(_timeout=timeout)
 
     def reset_position(self, position, force=False, timeout=DEFAULT_TIMEOUT):
         """Reset a flow cell position.
@@ -236,10 +258,7 @@ class Manager(ServiceBase):
             timeout (float, optional): The maximum time to wait for the call to complete. Should
                 usually be left at the default.
         """
-        request = minknow_api.manager_service.ResetPositionRequest()
-        request.positions.extend(positions)
-        request.force = force
-        self.stub.reset_position(request, timeout=timeout)
+        self.rpc.reset_position(_timeout=timeout, positions=positions, force=force)
 
     def flow_cell_positions(self, timeout=DEFAULT_TIMEOUT):
         """Get a list of flow cell positions.
@@ -251,15 +270,37 @@ class Manager(ServiceBase):
         Yields:
             FlowCellPosition: A flow cell position. Ordering is not guaranteed.
         """
-        call = self.stub.flow_cell_positions(
-            minknow_api.manager_service.FlowCellPositionsRequest(), timeout=timeout
-        )
+        call = self.rpc.flow_cell_positions(_timeout=timeout)
         # avoid holding open the call for longer than necessary by consuming all the results up
         # front
         messages = [msg for msg in call]
         for msg in messages:
             for position in msg.positions:
                 yield FlowCellPosition(position, self.host, self._default_use_tls)
+
+    def add_simulated_device(self, name, timeout=DEFAULT_TIMEOUT):
+        """ Dynamically create a simulated device
+
+        Args:
+            name (string): name of simulated device to create. Should not exist already.
+                The format depends on the type of device being created,
+                For MinIONs and MinION-mk1Cs, "MS" followed by five digits, eg: "MS12345".
+                For GridIONs, "GS" followed by five digits, eg: "GS12345".
+                PromethIONs position-names have no format restriction
+            timeout (float, optional): The maximum time to wait for the call to complete. Should
+            usually be left at the default.
+        """
+        self.rpc.add_simulated_device(_timeout=timeout, name=name)
+
+    def remove_simulated_device(self, name, timeout=DEFAULT_TIMEOUT):
+        """ Dynamically remove a simulated device
+
+        Args:
+            name (string): name of device to remove. It should exist and be simulated.
+            timeout (float, optional): The maximum time to wait for the call to complete. Should
+            usually be left at the default.
+        """
+        self.rpc.remove_simulated_device(_timeout=timeout, name=name)
 
 
 class FlowCellPosition(object):
@@ -330,7 +371,7 @@ class FlowCellPosition(object):
         """
         return self.description.HasField("rpc_ports")
 
-    def connect(self, use_tls=None):
+    def connect(self, use_tls=None, credentials=None):
         """Connect to the position.
 
         Only valid to do if `running` is True.
@@ -344,7 +385,9 @@ class FlowCellPosition(object):
             port = self.description.rpc_ports.secure
         else:
             port = self.description.rpc_ports.insecure
-        return minknow_api.Connection(host=self.host, port=port, use_tls=use_tls)
+        return minknow_api.Connection(
+            host=self.host, port=port, use_tls=use_tls, credentials=credentials,
+        )
 
 
 class Basecaller(ServiceBase):

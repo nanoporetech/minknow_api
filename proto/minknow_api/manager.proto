@@ -119,6 +119,15 @@ service ManagerService {
         option idempotency_level = NO_SIDE_EFFECTS;
     }
 
+    // As with `instance.get_default_output_directories`, this will return the
+    // paths that are defined in the config used when an instance of minknow
+    // is started.
+    //
+    // Since 4.3
+    rpc get_default_output_directories (instance.GetDefaultOutputDirectoriesRequest) returns (instance.OutputDirectories) {
+        option idempotency_level = NO_SIDE_EFFECTS;
+    }
+
     // Stream information about the amount of disk space available, how quickly
     // it is being used, how much space is needed to stop an experiment cleanly
     // and if MinKNOW thinks that the free disk-space is approaching or past
@@ -174,6 +183,50 @@ service ManagerService {
     rpc get_sequencing_kits(GetSequencingKitsRequest) returns (GetSequencingKitsResponse) {
         option idempotency_level = NO_SIDE_EFFECTS;
         option (experimental) = true;
+    }
+
+    // Creates a simulated device of the type your system is configured for
+    //
+    // Since 4.3
+    rpc add_simulated_device(AddSimulatedDeviceRequest) returns (AddSimulatedDeviceResponse) {}
+
+    // Removes a simulated device
+    //
+    // Since 4.3
+    rpc remove_simulated_device(RemoveSimulatedDeviceRequest) returns (RemoveSimulatedDeviceResponse) {
+        option idempotency_level = IDEMPOTENT;
+    }
+
+    // Get the path for the local authentication token.
+    //
+    // This RPC is only useful when connecting to MinKNOW from the same computer that MinKNOW is
+    // running on (ie: connecting to "localhost"). If this file exists (which it should if MinKNOW's
+    // guest mode is not completely disabled), it contains a description of a token that can be used
+    // to connect to MinKNOW. This is most useful when MinKNOW's guest mode is set to "local_only",
+    // as it certifies that the client is connecting from the local machine. If the guest mode is
+    // set to "enabled", no token is required to connect.
+    //
+    // The contents of the file is a json object with two fields, "token" and "expires". "token" is
+    // the string that can be passed in a "local-auth" gRPC authentication metadata field, while
+    // "expires" gives the time the token will expire (in RFC3339 format). Note that a new token
+    // will be written out shortly before this time (and, in fact, the token will be accepted a
+    // short time after).
+    //
+    //
+    // An example token file is::
+    //
+    //  {
+    //    "token": "30fe5214-a7c5-4cb3-b521-b1ec8a49592a",
+    //    "expires": "2020-12-18T14:26:12.021934+00:00"
+    //  }
+    //
+    // To connect before 14:26:12.021934 on 2020-12-18, a client would set the metadata field
+    // "local-auth" to "30fe5214-a7c5-4cb3-b521-b1ec8a49592a". At around 14:26:12, the client should
+    // re-read the file and update the metadata field with the newly-read value.
+    //
+    // Since 4.2
+    rpc local_authentication_token_path(LocalAuthenticationTokenPathRequest) returns (LocalAuthenticationTokenPathResponse) {
+        option idempotency_level = NO_SIDE_EFFECTS;
     }
 }
 
@@ -776,4 +829,33 @@ message GetSequencingKitsResponse {
     // These are kits that can be used in combination with certain sequencing kits to add (or
     // extend) barcoding functionality.
     repeated BarcodingExpansionKit barcoding_expansion_kits = 2;
+}
+
+message AddSimulatedDeviceRequest {
+    // The name of the position, this must be unique and the correct format:
+    //
+    // For MinIONs and MinION-mk1Cs, "MS" followed by five digits, eg: "MS12345".
+    // For GridIONs, "GS" followed by five digits, eg: "GS12345".
+    //
+    // PromethIONs position-names have no format restriction, but must be unique
+    string name = 1 [(rpc_required) = true];
+}
+
+message AddSimulatedDeviceResponse {
+}
+
+message RemoveSimulatedDeviceRequest {
+    // The name of the simulated device to be removed
+    string name = 1 [(rpc_required) = true];
+}
+
+message RemoveSimulatedDeviceResponse {
+}
+
+message LocalAuthenticationTokenPathRequest {
+}
+
+message LocalAuthenticationTokenPathResponse {
+    // The full path of the local authentication token
+    string path = 1;
 }

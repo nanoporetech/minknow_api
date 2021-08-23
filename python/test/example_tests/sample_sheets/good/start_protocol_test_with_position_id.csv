@@ -1,0 +1,3 @@
+position_id,sample_id,experiment_id,barcode,alias,type
+MN00000,my_sample,my_experiment,barcode01,alias01,test_sample
+MN00000,my_sample,my_experiment,barcode02,alias02,positive_control

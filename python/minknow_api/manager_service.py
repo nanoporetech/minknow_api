@@ -42,6 +42,12 @@ __all__ = [
     "GetFlowCellTypesResponse",
     "GetSequencingKitsRequest",
     "GetSequencingKitsResponse",
+    "AddSimulatedDeviceRequest",
+    "AddSimulatedDeviceResponse",
+    "RemoveSimulatedDeviceRequest",
+    "RemoveSimulatedDeviceResponse",
+    "LocalAuthenticationTokenPathRequest",
+    "LocalAuthenticationTokenPathResponse",
 ]
 
 def run_with_retry(method, message, timeout, unwraps, full_name):
@@ -552,6 +558,48 @@ class ManagerService(object):
                               _message, _timeout,
                               [],
                               "minknow_api.manager.ManagerService")
+    def get_default_output_directories(self, _message=None, _timeout=None, **kwargs):
+        """As with `instance.get_default_output_directories`, this will return the
+        paths that are defined in the config used when an instance of minknow
+        is started.
+
+        Since 4.3
+
+        This RPC has no side effects. Calling it will have no effect on the state of the
+        system. It is safe to call repeatedly, or to retry on failure, although there is no
+        guarantee it will return the same information each time.
+
+        Args:
+            _message (minknow_api.instance_pb2.GetDefaultOutputDirectoriesRequest, optional): The message to send.
+                This can be passed instead of the keyword arguments.
+            _timeout (float, optional): The call will be cancelled after this number of seconds
+                if it has not been completed.
+
+        Returns:
+            minknow_api.instance_pb2.OutputDirectories
+
+        Note that the returned messages are actually wrapped in a type that collapses
+        submessages for fields marked with ``[rpc_unwrap]``.
+        """
+        if _message is not None:
+            if isinstance(_message, MessageWrapper):
+                _message = _message._message
+            return run_with_retry(self._stub.get_default_output_directories,
+                                  _message, _timeout,
+                                  [],
+                                  "minknow_api.manager.ManagerService")
+
+        unused_args = set(kwargs.keys())
+
+        _message = GetDefaultOutputDirectoriesRequest()
+
+        if len(unused_args) > 0:
+            raise ArgumentError("Unexpected keyword arguments to get_default_output_directories: '{}'".format(", ".join(unused_args)))
+
+        return run_with_retry(self._stub.get_default_output_directories,
+                              _message, _timeout,
+                              [],
+                              "minknow_api.manager.ManagerService")
     def stream_disk_space_info(self, _message=None, _timeout=None, **kwargs):
         """Stream information about the amount of disk space available, how quickly
         it is being used, how much space is needed to stop an experiment cleanly
@@ -844,6 +892,168 @@ class ManagerService(object):
             raise ArgumentError("Unexpected keyword arguments to get_sequencing_kits: '{}'".format(", ".join(unused_args)))
 
         return run_with_retry(self._stub.get_sequencing_kits,
+                              _message, _timeout,
+                              [],
+                              "minknow_api.manager.ManagerService")
+    def add_simulated_device(self, _message=None, _timeout=None, **kwargs):
+        """Creates a simulated device of the type your system is configured for
+
+        Since 4.3
+
+        
+
+        Args:
+            _message (minknow_api.manager_pb2.AddSimulatedDeviceRequest, optional): The message to send.
+                This can be passed instead of the keyword arguments.
+            _timeout (float, optional): The call will be cancelled after this number of seconds
+                if it has not been completed.
+            name (str): The name of the position, this must be unique and the correct format:
+
+                For MinIONs and MinION-mk1Cs, "MS" followed by five digits, eg: "MS12345".
+                For GridIONs, "GS" followed by five digits, eg: "GS12345".
+
+                PromethIONs position-names have no format restriction, but must be unique
+
+        Returns:
+            minknow_api.manager_pb2.AddSimulatedDeviceResponse
+
+        Note that the returned messages are actually wrapped in a type that collapses
+        submessages for fields marked with ``[rpc_unwrap]``.
+        """
+        if _message is not None:
+            if isinstance(_message, MessageWrapper):
+                _message = _message._message
+            return run_with_retry(self._stub.add_simulated_device,
+                                  _message, _timeout,
+                                  [],
+                                  "minknow_api.manager.ManagerService")
+
+        unused_args = set(kwargs.keys())
+
+        _message = AddSimulatedDeviceRequest()
+
+        if "name" in kwargs:
+            unused_args.remove("name")
+            _message.name = kwargs['name']
+        else:
+            raise ArgumentError("add_simulated_device requires a 'name' argument")
+
+        if len(unused_args) > 0:
+            raise ArgumentError("Unexpected keyword arguments to add_simulated_device: '{}'".format(", ".join(unused_args)))
+
+        return run_with_retry(self._stub.add_simulated_device,
+                              _message, _timeout,
+                              [],
+                              "minknow_api.manager.ManagerService")
+    def remove_simulated_device(self, _message=None, _timeout=None, **kwargs):
+        """Removes a simulated device
+
+        Since 4.3
+
+        This RPC is idempotent. It may change the state of the system, but if the requested
+        change has already happened, it will not fail because of this, make any additional
+        changes or return a different value.
+
+        Args:
+            _message (minknow_api.manager_pb2.RemoveSimulatedDeviceRequest, optional): The message to send.
+                This can be passed instead of the keyword arguments.
+            _timeout (float, optional): The call will be cancelled after this number of seconds
+                if it has not been completed.
+            name (str): The name of the simulated device to be removed
+
+        Returns:
+            minknow_api.manager_pb2.RemoveSimulatedDeviceResponse
+
+        Note that the returned messages are actually wrapped in a type that collapses
+        submessages for fields marked with ``[rpc_unwrap]``.
+        """
+        if _message is not None:
+            if isinstance(_message, MessageWrapper):
+                _message = _message._message
+            return run_with_retry(self._stub.remove_simulated_device,
+                                  _message, _timeout,
+                                  [],
+                                  "minknow_api.manager.ManagerService")
+
+        unused_args = set(kwargs.keys())
+
+        _message = RemoveSimulatedDeviceRequest()
+
+        if "name" in kwargs:
+            unused_args.remove("name")
+            _message.name = kwargs['name']
+        else:
+            raise ArgumentError("remove_simulated_device requires a 'name' argument")
+
+        if len(unused_args) > 0:
+            raise ArgumentError("Unexpected keyword arguments to remove_simulated_device: '{}'".format(", ".join(unused_args)))
+
+        return run_with_retry(self._stub.remove_simulated_device,
+                              _message, _timeout,
+                              [],
+                              "minknow_api.manager.ManagerService")
+    def local_authentication_token_path(self, _message=None, _timeout=None, **kwargs):
+        """Get the path for the local authentication token.
+
+        This RPC is only useful when connecting to MinKNOW from the same computer that MinKNOW is
+        running on (ie: connecting to "localhost"). If this file exists (which it should if MinKNOW's
+        guest mode is not completely disabled), it contains a description of a token that can be used
+        to connect to MinKNOW. This is most useful when MinKNOW's guest mode is set to "local_only",
+        as it certifies that the client is connecting from the local machine. If the guest mode is
+        set to "enabled", no token is required to connect.
+
+        The contents of the file is a json object with two fields, "token" and "expires". "token" is
+        the string that can be passed in a "local-auth" gRPC authentication metadata field, while
+        "expires" gives the time the token will expire (in RFC3339 format). Note that a new token
+        will be written out shortly before this time (and, in fact, the token will be accepted a
+        short time after).
+
+
+        An example token file is::
+
+         {
+           "token": "30fe5214-a7c5-4cb3-b521-b1ec8a49592a",
+           "expires": "2020-12-18T14:26:12.021934+00:00"
+         }
+
+        To connect before 14:26:12.021934 on 2020-12-18, a client would set the metadata field
+        "local-auth" to "30fe5214-a7c5-4cb3-b521-b1ec8a49592a". At around 14:26:12, the client should
+        re-read the file and update the metadata field with the newly-read value.
+
+        Since 4.2
+
+        This RPC has no side effects. Calling it will have no effect on the state of the
+        system. It is safe to call repeatedly, or to retry on failure, although there is no
+        guarantee it will return the same information each time.
+
+        Args:
+            _message (minknow_api.manager_pb2.LocalAuthenticationTokenPathRequest, optional): The message to send.
+                This can be passed instead of the keyword arguments.
+            _timeout (float, optional): The call will be cancelled after this number of seconds
+                if it has not been completed.
+
+        Returns:
+            minknow_api.manager_pb2.LocalAuthenticationTokenPathResponse
+
+        Note that the returned messages are actually wrapped in a type that collapses
+        submessages for fields marked with ``[rpc_unwrap]``.
+        """
+        if _message is not None:
+            if isinstance(_message, MessageWrapper):
+                _message = _message._message
+            return run_with_retry(self._stub.local_authentication_token_path,
+                                  _message, _timeout,
+                                  [],
+                                  "minknow_api.manager.ManagerService")
+
+        unused_args = set(kwargs.keys())
+
+        _message = LocalAuthenticationTokenPathRequest()
+
+        if len(unused_args) > 0:
+            raise ArgumentError("Unexpected keyword arguments to local_authentication_token_path: '{}'".format(", ".join(unused_args)))
+
+        return run_with_retry(self._stub.local_authentication_token_path,
                               _message, _timeout,
                               [],
                               "minknow_api.manager.ManagerService")

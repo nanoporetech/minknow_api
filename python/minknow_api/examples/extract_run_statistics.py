@@ -4,7 +4,7 @@ Example script to extract protocol yield
 Example usage might be (to dump the statistics for the most recent protocol):
 
 ```
-> python ./python/examples/extract_run_statistics.py --host localhost --position X1
+> python ./python/minknow_api/examples/extract_run_statistics.py --host localhost --position X1
 ```
 
 This script generates a set of files in the current dir summarising acquisition output for the most recent protocol run on X1.

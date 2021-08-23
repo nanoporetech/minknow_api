@@ -7,10 +7,10 @@ from typing import Sequence
 from google.protobuf.wrappers_pb2 import StringValue
 from minknow_api.protocol_pb2 import ProtocolRunUserInfo, BarcodeUserData
 
-example_root = Path(__file__).parent.parent.parent / "examples"
+example_root = Path(__file__).parent.parent.parent / "minknow_api" / "examples"
 sys.path.insert(0, example_root)
 
-from examples.load_sample_sheet import (
+from minknow_api.examples.load_sample_sheet import (
     SampleSheetParseError,
     load_sample_sheet_csv,
     ParsedSampleSheetEntry,
@@ -42,25 +42,17 @@ class TestLoadSampleSheet(unittest.TestCase):
         ):
             self.assertEqual(actual_entry.flow_cell_id, expected_entry.flow_cell_id)
             self.assertEqual(actual_entry.position_id, expected_entry.position_id)
-            self.assertEqual(
-                actual_entry.protocol_run_user_info.sample_id,
-                expected_entry.protocol_run_user_info.sample_id,
-            )
-            self.assertEqual(
-                actual_entry.protocol_run_user_info.protocol_group_id,
-                expected_entry.protocol_run_user_info.protocol_group_id,
-            )
+            self.assertEqual(actual_entry.sample_id, expected_entry.sample_id)
+            self.assertEqual(actual_entry.experiment_id, expected_entry.experiment_id)
 
-            self.assertEqual(
-                sorted(
-                    actual_entry.protocol_run_user_info.barcode_user_info,
-                    key=sort_barcode_info,
-                ),
-                sorted(
-                    expected_entry.protocol_run_user_info.barcode_user_info,
-                    key=sort_barcode_info,
-                ),
-            )
+            if expected_entry.barcode_info is None:
+                self.assertIsNone(actual_entry.barcode_info)
+            else:
+                self.assertIsNotNone(actual_entry.barcode_info)
+                self.assertEqual(
+                    sorted(actual_entry.barcode_info, key=sort_barcode_info,),
+                    sorted(expected_entry.barcode_info, key=sort_barcode_info,),
+                )
 
     def test_no_barcoding(self):
         sample_sheet = load_sample_sheet_csv(
@@ -72,10 +64,9 @@ class TestLoadSampleSheet(unittest.TestCase):
                 ParsedSampleSheetEntry(
                     flow_cell_id="FC001",
                     position_id=None,
-                    protocol_run_user_info=ProtocolRunUserInfo(
-                        sample_id=StringValue(value="my_sample"),
-                        protocol_group_id=StringValue(value="my_experiment"),
-                    ),
+                    sample_id="my_sample",
+                    experiment_id="my_experiment",
+                    barcode_info=None,
                 ),
             ],
         )
@@ -92,30 +83,30 @@ class TestLoadSampleSheet(unittest.TestCase):
                 ParsedSampleSheetEntry(
                     flow_cell_id="FC001",
                     position_id=None,
-                    protocol_run_user_info=ProtocolRunUserInfo(
-                        barcode_user_info=[
-                            BarcodeUserData(
-                                barcode_name="barcode01",
-                                alias="alias01",
-                                type=SampleType.test_sample,
-                            ),
-                            BarcodeUserData(
-                                barcode_name="barcode02",
-                                alias="alias02",
-                                type=SampleType.positive_control,
-                            ),
-                            BarcodeUserData(
-                                barcode_name="barcode03",
-                                alias="alias03",
-                                type=SampleType.negative_control,
-                            ),
-                            BarcodeUserData(
-                                barcode_name="barcode04",
-                                alias="alias04",
-                                type=SampleType.no_template_control,
-                            ),
-                        ]
-                    ),
+                    sample_id=None,
+                    experiment_id=None,
+                    barcode_info=[
+                        BarcodeUserData(
+                            barcode_name="barcode01",
+                            alias="alias01",
+                            type=SampleType.test_sample,
+                        ),
+                        BarcodeUserData(
+                            barcode_name="barcode02",
+                            alias="alias02",
+                            type=SampleType.positive_control,
+                        ),
+                        BarcodeUserData(
+                            barcode_name="barcode03",
+                            alias="alias03",
+                            type=SampleType.negative_control,
+                        ),
+                        BarcodeUserData(
+                            barcode_name="barcode04",
+                            alias="alias04",
+                            type=SampleType.no_template_control,
+                        ),
+                    ],
                 ),
             ],
         )
@@ -131,18 +122,18 @@ class TestLoadSampleSheet(unittest.TestCase):
                 ParsedSampleSheetEntry(
                     flow_cell_id="FC001",
                     position_id=None,
-                    protocol_run_user_info=ProtocolRunUserInfo(
-                        barcode_user_info=[
-                            BarcodeUserData(
-                                barcode_name="barcode_external01_internal01",
-                                alias="alias01",
-                            ),
-                            BarcodeUserData(
-                                barcode_name="barcode_external02_internal01",
-                                alias="alias02",
-                            ),
-                        ]
-                    ),
+                    sample_id=None,
+                    experiment_id=None,
+                    barcode_info=[
+                        BarcodeUserData(
+                            barcode_name="barcode_external01_internal01",
+                            alias="alias01",
+                        ),
+                        BarcodeUserData(
+                            barcode_name="barcode_external02_internal01",
+                            alias="alias02",
+                        ),
+                    ],
                 ),
             ],
         )
@@ -158,20 +149,20 @@ class TestLoadSampleSheet(unittest.TestCase):
                 ParsedSampleSheetEntry(
                     flow_cell_id="FC001",
                     position_id=None,
-                    protocol_run_user_info=ProtocolRunUserInfo(
-                        barcode_user_info=[
-                            BarcodeUserData(
-                                barcode_name="barcode01",
-                                lamp_barcode_id="FIP01",
-                                alias="alias01",
-                            ),
-                            BarcodeUserData(
-                                barcode_name="barcode02",
-                                lamp_barcode_id="FIP01",
-                                alias="alias02",
-                            ),
-                        ]
-                    ),
+                    sample_id=None,
+                    experiment_id=None,
+                    barcode_info=[
+                        BarcodeUserData(
+                            barcode_name="barcode01",
+                            lamp_barcode_id="FIP01",
+                            alias="alias01",
+                        ),
+                        BarcodeUserData(
+                            barcode_name="barcode02",
+                            lamp_barcode_id="FIP01",
+                            alias="alias02",
+                        ),
+                    ],
                 ),
             ],
         )
@@ -187,24 +178,20 @@ class TestLoadSampleSheet(unittest.TestCase):
                 ParsedSampleSheetEntry(
                     flow_cell_id=None,
                     position_id="A1",
-                    protocol_run_user_info=ProtocolRunUserInfo(
-                        sample_id=StringValue(value="my_sample_1"),
-                        protocol_group_id=StringValue(value="my_experiment"),
-                        barcode_user_info=[
-                            BarcodeUserData(barcode_name="barcode01", alias="alias01"),
-                        ],
-                    ),
+                    sample_id="my_sample_1",
+                    experiment_id="my_experiment",
+                    barcode_info=[
+                        BarcodeUserData(barcode_name="barcode01", alias="alias01"),
+                    ],
                 ),
                 ParsedSampleSheetEntry(
                     flow_cell_id=None,
                     position_id="A2",
-                    protocol_run_user_info=ProtocolRunUserInfo(
-                        sample_id=StringValue(value="my_sample_2"),
-                        protocol_group_id=StringValue(value="my_experiment"),
-                        barcode_user_info=[
-                            BarcodeUserData(barcode_name="barcode01", alias="alias01"),
-                        ],
-                    ),
+                    sample_id="my_sample_2",
+                    experiment_id="my_experiment",
+                    barcode_info=[
+                        BarcodeUserData(barcode_name="barcode01", alias="alias01"),
+                    ],
                 ),
             ],
         )

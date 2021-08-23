@@ -29,7 +29,7 @@ Example usage:
 ```
 > python list_sequencing_positions.py
 
-> python ./python/examples/start_protocol.py \
+> python ./python/minknow_api/examples/start_protocol.py \
 >     --host localhost --position 1A \                        # Select which host + position will run a script
 >     --sample-id "my_sample" --experiment-group "my_group" \ # Set sample id + experiment group
 >     --experiment-duration 24 \                              # Set the run time of the experiment (hours)

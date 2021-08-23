@@ -60,7 +60,7 @@ to get it is from PyPI using pip, but it can also be built from source (see [BUI
 > pip install minknow_api
 
 # Verify API is installed correctly (from a checkout of this repository):
-> python ./python/examples/list_sequencing_positions.py --host localhost --port 9501
+> python ./python/minknow_api/examples/list_sequencing_positions.py --host localhost --port 9501
 
 # Possible output if running minknow locally:
 #   Available sequencing positions on localhost:9501:
@@ -71,7 +71,7 @@ to get it is from PyPI using pip, but it can also be built from source (see [BUI
 
 The package contains plenty of documentation in its docstrings, although for an overview of the
 MinKNOW APIs themselves you may prefer to read the [API description files](protos/minknow_api/) -
-see below for further discussion of these files. There are also [examples](python/examples/) (like
+see below for further discussion of these files. There are also [examples](python/minknow_api/examples/) (like
 the `list_sequencing_positions.py` script in the above instructions) that show how to perform some
 common tasks.
 
@@ -148,7 +148,7 @@ This can be accessed via the ports reported by `flow_cell_positions` on the mana
 protocols, as well as providing information about the current and previous protocol runs. Note that
 information about protocol runs from before the last restart is not available via this API.
 
-See the [`start_protocol` example](python/examples/start_protocol.py) for an example of how to use
+See the [`start_protocol` example](python/minknow_api/examples/start_protocol.py) for an example of how to use
 this service to start a protocol.
 
 #### acquisition.proto
@@ -256,6 +256,31 @@ channel = grpc.secure_channel("gxb1234:9502",
                               credentials=grpc_credentials,
                               options=(("grpc.ssl_target_name_override", "localhost"),))
 ```
+
+###### Connecting from Manager or Connection classes
+
+The `Manager` or `Connection` classes will use the following strategy to determine the CA
+(certificate authority) file to use to validate TLS connections to MinKNOW:
+
+1. If `MINKNOW_TRUSTED_CA` environment variable is present and contains the path to a file that exists, that file will be used.
+2. If run from MinKNOW's internal `ont-python` environment (eg: as part of a protocol script) the CA
+   file for this installation of MinKNOW will be used.
+3. If MinKNOW is installed on the system in the standard location (see below), the CA file from that
+   installation of MinKNOW will be used.
+
+The default MinKNOW installation path depends on the operating system:
+- Windows: `C:\Program Files\OxfordNanopore\MinKNOW`
+- OSX: `/Applications/MinKNOW.app/Contents/Resources`
+- Linux: `/opt/ont/minknow`
+
+The CA file is located at `conf/rpc-certs/ca.crt` within the MinKNOW installation.
+
+If `MissingMinknowSSlCertError` is raised, then the most likely causes are:
+
+1. Non-default installation path was used
+2. Initiating from a remote connection, so `ca.crt` file is not available
+
+Both cases will require setting `MINKNOW_TRUSTED_CA` environment variable to the correct path. In the case of a remote connection, then the `ca.crt` file will need to be copied to the remote client first.
 
 We are working on improving this experience in future versions of MinKNOW.
 

@@ -322,6 +322,7 @@ message ReadClassificationParams {
 message ChannelStates {
     message Logic {
         message Behaviour {
+            // TODO: MinKNOW 5: replace int32 with bool for these options
             // these are ints but act like bools
             int32 reset_on_mux_change = 1;
             int32 reset_on_well_change = 2;
@@ -547,6 +548,11 @@ message BarcodingConfiguration
     //
     // Maximum value is 100, defaults to 60.
     google.protobuf.FloatValue min_score_mid = 7;
+
+    // The minimum score required for the barcode mask to be detected.
+    //
+    // Maximum value is 100, defaults to 40. 
+    google.protobuf.FloatValue min_score_mask = 8;
 }
 
 // Since 4.0
@@ -779,10 +785,25 @@ message WriterConfiguration {
             repeated int32 channels = 1;
         }
 
+        message ChannelRanges
+        {
+            message ChannelRange
+            {
+                int32 start = 1;
+                int32 end = 2;
+            }
+            // List of start/end paired channel numbers
+            // which should be enabled for writing.
+            //
+            // All channels in inclusive ranges should be enabled.
+            repeated ChannelRange ranges = 1;
+        }
+
         // Control the way channels are enabled for this data type.
         oneof channels {
             bool all_channels = 1;
             ChannelList specific_channels = 2;
+            ChannelRanges channel_ranges = 3;
         }
     }
 
@@ -991,7 +1012,7 @@ message WriterConfiguration {
         // The pattern used to find the pdf report filename. If left empty but output is
         // enabled a default pattern is used.
         //
-        // default: report_{flow_cell_id}_{start_time}_{short_protocol_run_id}.pdf
+        // default: report_{flow_cell_id}_{daq_start_time}_{short_protocol_run_id}.pdf
         // Where each {xxx} section is replaced with an attribute from the minknow
         // state when the file is written.
         //
@@ -1001,7 +1022,7 @@ message WriterConfiguration {
         // The pattern used to find the markdown report filename. If left empty but output is
         // enabled a default pattern is used.
         //
-        // default: report_{flow_cell_id}_{start_time}_{short_protocol_run_id}.md
+        // default: report_{flow_cell_id}_{daq_start_time}_{short_protocol_run_id}.md
         // Where each {xxx} section is replaced with an attribute from the minknow
         // state when the file is written.
         //
@@ -1053,7 +1074,7 @@ message WriterConfiguration {
         // default: "_{flow_cell_id}_{short_run_id}"
         // Where each {xxx} section is replaced with an attribute from the minknow
         // state when the file is written.
-        // 
+        //
         // Custom reports use this to build filenames:
         //   - "custom_report{suffix}.txt"
         //

@@ -38,6 +38,7 @@ __all__ = [
     "SetTemperatureResponse",
     "GetTemperatureRequest",
     "GetTemperatureResponse",
+    "StreamTemperatureRequest",
     "UnblockRequest",
     "UnblockResponse",
     "CancelUnblocksRequest",
@@ -809,12 +810,60 @@ class DeviceService(object):
                               _message, _timeout,
                               [],
                               "minknow_api.device.DeviceService")
+    def stream_temperature(self, _message=None, _timeout=None, **kwargs):
+        """Stream the current temperature of the device.
+
+        Since 4.3
+
+        This RPC has no side effects. Calling it will have no effect on the state of the
+        system. It is safe to call repeatedly, or to retry on failure, although there is no
+        guarantee it will return the same information each time.
+
+        Args:
+            _message (minknow_api.device_pb2.StreamTemperatureRequest, optional): The message to send.
+                This can be passed instead of the keyword arguments.
+            _timeout (float, optional): The call will be cancelled after this number of seconds
+                if it has not been completed.
+                Note that this is the time until the call ends, not the time between returned
+                messages.
+            period_seconds (int, optional): How often temperature updates should be sent
+                Defaults to a period of 1 second, if not specified, or set to 0
+
+        Returns:
+            iter of minknow_api.device_pb2.GetTemperatureResponse
+
+        Note that the returned messages are actually wrapped in a type that collapses
+        submessages for fields marked with ``[rpc_unwrap]``.
+        """
+        if _message is not None:
+            if isinstance(_message, MessageWrapper):
+                _message = _message._message
+            return run_with_retry(self._stub.stream_temperature,
+                                  _message, _timeout,
+                                  [],
+                                  "minknow_api.device.DeviceService")
+
+        unused_args = set(kwargs.keys())
+
+        _message = StreamTemperatureRequest()
+
+        if "period_seconds" in kwargs:
+            unused_args.remove("period_seconds")
+            _message.period_seconds = kwargs['period_seconds']
+
+        if len(unused_args) > 0:
+            raise ArgumentError("Unexpected keyword arguments to stream_temperature: '{}'".format(", ".join(unused_args)))
+
+        return run_with_retry(self._stub.stream_temperature,
+                              _message, _timeout,
+                              [],
+                              "minknow_api.device.DeviceService")
     def unblock(self, _message=None, _timeout=None, **kwargs):
         """Triggers an unblock for a list of channels for a given duration (Please see UnblockRequest).
         It will start an unblock for every channel received as a parameter, then this RPC returns.
         After the timeout expires (the duration in seconds given in the request), the return from
         unblock is automatically triggered, which resets the channel configuration (mux) to the
-        value preceding the unblock. 
+        value preceding the unblock.
 
         Notes!!
 
@@ -994,12 +1043,12 @@ class DeviceService(object):
                 if it has not been completed.
             channel_configurations (minknow_api.device_pb2.SetChannelConfigurationRequest.ChannelConfigurationsEntry, optional): A map between <channel name, config to set>
 
-                Will return an error if any of the key values (representing channel names) are below 1, or 
+                Will return an error if any of the key values (representing channel names) are below 1, or
                 above the channel count value returned from :meth:`get_flow_cell_info`
 
                 The selected well cannot be set to WELL_OTHER, and will error if it tries to do so
 
-                DEPRECATED: Note that the type to set may change from 4.0 to enforce the fact that 
+                DEPRECATED: Note that the type to set may change from 4.0 to enforce the fact that
                 unblock cannot be set through this call
 
         Returns:

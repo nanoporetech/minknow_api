@@ -480,11 +480,11 @@ message ChangeSettingsResponse {
 
 }
 
-// Request for MinIONDeviceService.get_settings
+// Request for MinionDeviceService.get_settings
 message GetSettingsRequest {
 }
 
-// Response for MinIONDeviceService.get_settings
+// Response for MinionDeviceService.get_settings
 message GetSettingsResponse {
     // MinION device settings
     MinionDeviceSettings settings = 1 [(rpc_unwrap) = true];

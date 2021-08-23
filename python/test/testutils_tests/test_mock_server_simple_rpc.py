@@ -11,7 +11,7 @@ class TestMockServer(unittest.TestCase):
     def setUp(self):
         self.test_server = MockMinKNOWServer()
         self.test_server.start()
-        self.connection = minknow_api.Connection(self.test_server.port)
+        self.connection = minknow_api.Connection(self.test_server.port, use_tls=False)
         LOGGER.info("Connected on {}".format(self.test_server.port))
 
     def tearDown(self):

@@ -24,6 +24,8 @@ __all__ = [
     "GetInfoResponse",
     "WatchRequest",
     "WatchResponse",
+    "MakeAlignmentIndexRequest",
+    "MakeAlignmentIndexResponse",
     "State",
     "STATE_RUNNING",
     "STATE_SUCCESS",
@@ -118,6 +120,7 @@ class Basecaller(object):
                 This can be passed instead of the keyword arguments.
             _timeout (float, optional): The call will be cancelled after this number of seconds
                 if it has not been completed.
+            name (str, optional): User specified name to identify the basecall run.
             input_reads_directories (str, optional): Input directories to search for reads to be basecalled.
 
                 Currently, only one directory can be specified, but this definition allows for multiple in
@@ -161,6 +164,10 @@ class Basecaller(object):
         unused_args = set(kwargs.keys())
 
         _message = StartBasecallingRequest()
+
+        if "name" in kwargs:
+            unused_args.remove("name")
+            _message.name = kwargs['name']
 
         if "input_reads_directories" in kwargs:
             unused_args.remove("input_reads_directories")
@@ -217,6 +224,7 @@ class Basecaller(object):
                 This can be passed instead of the keyword arguments.
             _timeout (float, optional): The call will be cancelled after this number of seconds
                 if it has not been completed.
+            name (str, optional): User specified name to identify the barcoding run.
             input_reads_directories (str, optional): Input directories to search for reads to be basecalled.
 
                 Currently, only one directory can be specified, but this definition allows for multiple in
@@ -248,6 +256,10 @@ class Basecaller(object):
         unused_args = set(kwargs.keys())
 
         _message = StartBarcodingRequest()
+
+        if "name" in kwargs:
+            unused_args.remove("name")
+            _message.name = kwargs['name']
 
         if "input_reads_directories" in kwargs:
             unused_args.remove("input_reads_directories")
@@ -288,6 +300,7 @@ class Basecaller(object):
                 This can be passed instead of the keyword arguments.
             _timeout (float, optional): The call will be cancelled after this number of seconds
                 if it has not been completed.
+            name (str, optional): User specified name to identify the alignment run.
             input_reads_directories (str, optional): Input directories to search for reads to be aligned.
 
                 Currently, only one directory can be specified, but this definition allows for multiple in
@@ -316,6 +329,10 @@ class Basecaller(object):
         unused_args = set(kwargs.keys())
 
         _message = StartAlignmentRequest()
+
+        if "name" in kwargs:
+            unused_args.remove("name")
+            _message.name = kwargs['name']
 
         if "input_reads_directories" in kwargs:
             unused_args.remove("input_reads_directories")
@@ -504,6 +521,58 @@ class Basecaller(object):
             raise ArgumentError("Unexpected keyword arguments to watch: '{}'".format(", ".join(unused_args)))
 
         return run_with_retry(self._stub.watch,
+                              _message, _timeout,
+                              [],
+                              "minknow_api.basecaller.Basecaller")
+    def make_alignment_index(self, _message=None, _timeout=None, **kwargs):
+        """Build an alignment index file from an input fasta reference.
+
+        This call blocks whilst the index is built.
+
+        Since 4.3
+
+        
+
+        Args:
+            _message (minknow_api.basecaller_pb2.MakeAlignmentIndexRequest, optional): The message to send.
+                This can be passed instead of the keyword arguments.
+            _timeout (float, optional): The call will be cancelled after this number of seconds
+                if it has not been completed.
+            input_alignment_reference (str, optional): Input fasta reference to use for building the index.
+            output_alignment_index (str, optional): Output file path to write index (mmi file) to.
+
+                Must have a ".mmi" extension, and the paths parent directory must exist.
+
+        Returns:
+            minknow_api.basecaller_pb2.MakeAlignmentIndexResponse
+
+        Note that the returned messages are actually wrapped in a type that collapses
+        submessages for fields marked with ``[rpc_unwrap]``.
+        """
+        if _message is not None:
+            if isinstance(_message, MessageWrapper):
+                _message = _message._message
+            return run_with_retry(self._stub.make_alignment_index,
+                                  _message, _timeout,
+                                  [],
+                                  "minknow_api.basecaller.Basecaller")
+
+        unused_args = set(kwargs.keys())
+
+        _message = MakeAlignmentIndexRequest()
+
+        if "input_alignment_reference" in kwargs:
+            unused_args.remove("input_alignment_reference")
+            _message.input_alignment_reference = kwargs['input_alignment_reference']
+
+        if "output_alignment_index" in kwargs:
+            unused_args.remove("output_alignment_index")
+            _message.output_alignment_index = kwargs['output_alignment_index']
+
+        if len(unused_args) > 0:
+            raise ArgumentError("Unexpected keyword arguments to make_alignment_index: '{}'".format(", ".join(unused_args)))
+
+        return run_with_retry(self._stub.make_alignment_index,
                               _message, _timeout,
                               [],
                               "minknow_api.basecaller.Basecaller")

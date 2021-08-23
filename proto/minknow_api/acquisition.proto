@@ -11,7 +11,7 @@ import "google/protobuf/timestamp.proto";
 service AcquisitionService {
     // Starts reading data from the device
     //
-    // Some setup calls will need to be made before starting data acquisition: particularly setting the analysis configuration, 
+    // Some setup calls will need to be made before starting data acquisition: particularly setting the analysis configuration,
     // calibration, read writer and bulk writer config and some device calls such as setting the sampling frequency
     //
     // If acqusition is already running (even in the FINISHING state), this call will fail.
@@ -34,14 +34,14 @@ service AcquisitionService {
     // Watches for status changes within MinKNOW. Status states are defined from MinknowStatus enum.
     // This is a bi-directional stream where the incoming response stream will return everytime the status has changed
     // and the request stream is used to stop the watcher. Refer to http://www.grpc.io/docs/tutorials/basic/python.html
-    // to see how bi-directoional streaming works in grpc, but essentially when calling this function the user will have 
+    // to see how bi-directoional streaming works in grpc, but essentially when calling this function the user will have
     // to pass in a generator that will eventually yield a WatchForStatusChangeRequest(stop=True) to the cpp side.
     // A wrapper class for this is provided in the Python code.
     //
-    // The function will first return with the current status that MinKNOW is in. Every response thereafter will be a 
+    // The function will first return with the current status that MinKNOW is in. Every response thereafter will be a
     // change from one status to another.
     //
-    // The ERROR_STATUS state includes errors during transition between states. If that happens, MinKNOW will 
+    // The ERROR_STATUS state includes errors during transition between states. If that happens, MinKNOW will
     // try to revert to the READY state. It is up to the user to determine if they wish to try to wait for MinKNOW to
     // correct itself or to try some other course of action
     rpc watch_for_status_change (stream WatchForStatusChangeRequest) returns (stream WatchForStatusChangeResponse) {
@@ -98,7 +98,7 @@ service AcquisitionService {
     rpc get_current_acquisition_run (GetCurrentAcquisitionRunRequest) returns (AcquisitionRunInfo) {
         option idempotency_level = NO_SIDE_EFFECTS;
     }
-    
+
     // Specify the signal reader to use
     //
     // Since 3.6
@@ -113,7 +113,7 @@ service AcquisitionService {
 
 enum MinknowStatus {
     // ERROR_STATUS occurs when there is an error during a transition from one state to another.
-    // Minknow will try to revert into the READY state to try to stabalise itself, but there is no guarantee of 
+    // Minknow will try to revert into the READY state to try to stabalise itself, but there is no guarantee of
     // that succeeding
     ERROR_STATUS = 0;
 
@@ -388,16 +388,41 @@ enum AcquisitionStopReason {
     // The device or asic was disconnected, causing the run to stop.
     STOPPED_DEVICE_ERROR = 6;
 
-    // The temperature was out of a safe range (either got extremely hot or was too 
+    // The temperature was out of a safe range (either got extremely hot or was too
     // far from the set-point for a certain amount of time)
     STOPPED_BAD_TEMPERATURE = 7;
+
+    // MinKNOW (or the sequencing device) was shut down, turned off or crashed.
+    STOPPED_SHUTDOWN = 8;
+}
+
+enum StartupState {
+    STARTUP_UNKNOWN = 0;
+
+    // Building the analysis pipeline objects.
+    STARTUP_BUILDING_PIPELINE = 2;
+
+    // Waiting for the basecaller to load any required data/references.
+    STARTUP_INITIALISING_BASECALLER = 3;
+
+    // Waiting for the basecaller to load alignment specific data files.
+    STARTUP_INITIALISING_BASECALLER_ALIGNMENT = 4;
+
+    // Setting up data writers for outputting reads/files.
+    STARTUP_INITIALISING_DATA_WRITERS = 5;
+
+    // Initialsing storage for in flight reads.
+    STARTUP_INITIALISING_INTERMEDIATE_DATA_STORAGE = 6;
+
+    // Initialsing storage for run statistics.
+    STARTUP_INITIALISING_STATISTICS = 7;
 }
 
 enum FinishingState {
     // The default state for acquisition
     FINISHING_UNKNOWN = 0;
 
-    // The acquisition is processing raw signal into reads 
+    // The acquisition is processing raw signal into reads
     FINISHING_PROCESSING_DEVICE_SIGNAL = 1;
 
     // Processed reads are being basecalled
@@ -473,6 +498,15 @@ message AcquisitionYieldSummary
     //
     // Since 4.0
     int64 alignment_deletions = 17;
+
+    // Number of bases that match the target reference(s) expressed as a
+    // fraction of the total size of the target reference(s).
+    //
+    // eg: For a specified alignment-targets with 2000 and 3000 bases, if
+    // "alignment_matches" is 2500, then "alignment_coverage" will be 0.5
+    //
+    // Since 4.3
+    float alignment_coverage = 19;
 }
 
 message AcquisitionWriterSummary
@@ -549,14 +583,31 @@ message ChannelStateInfo {
 }
 
 message AcquisitionConfigSummary {
+    // The purpose, as supplied to `acquisition.start()`
+    Purpose purpose = 21;
+
     // Was basecalling enabled for the run.
     bool basecalling_enabled = 1;
+    // Basecalling configuration filename (if basecalling enabled)
+    string basecalling_config_filename = 16;
+
     // Is barcoding enabled for the run
     bool barcoding_enabled = 13;
+    /// Barcoding kit(s) used (if barcoding enabled)
+    repeated string barcoding_kits = 17;
+
     // Is alignment enabled for the run
     bool alignment_enabled = 14;
+    // Alignment reference file(s) used (if alignment enabled)
+    repeated string alignment_reference_files = 18;
+    // bed file used (if alignment enabled, and bed file specified)
+    string alignment_bed_file = 19;
+
+
     // Is lamp enabled for the run
     bool lamp_enabled = 15;
+    // The LAMP kit used (if LAMP enabled)
+    string lamp_kit = 20;
 
     // Root directory reads were written to for the run.
     //
@@ -606,6 +657,9 @@ message AcquisitionRunInfo {
     // most 40 characters. It is globally unique across all
     // acquisitions on all MinKNOW instances.
     string run_id = 1;
+
+    // Current startup task (or STARTUP_UNKNOWN if not starting up).
+    StartupState startup_state = 12;
 
     // Indicates the current state of the acquisition.
     AcquisitionState state = 2;
@@ -672,21 +726,21 @@ message SetSignalReaderRequest {
         HDF5 = 0; // Default value
         DEVICE = 1;
     }
-    
+
     // The type of signal reader to use
     SignalReaderType reader = 1 [(rpc_required) = true];
-    
+
     // The following settings are optional, and only used when setting the reader to hdf5
     string hdf_source = 2;
-    
+
     enum SourceFileMode {
         UNSPECIFIED = 0; // Default value
         SINGLE_RUN = 1;
         LOOP = 2;
     }
-    
+
     SourceFileMode hdf_mode = 3; // Defaults to UNSPECIFIED, since this setting is optional
-    
+
     float sample_rate_scale_factor = 4;
 }
 

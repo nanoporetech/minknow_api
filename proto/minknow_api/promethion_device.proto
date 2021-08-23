@@ -40,6 +40,13 @@ service PromethionDeviceService {
     rpc get_pixel_settings(GetPixelSettingsRequest) returns (GetPixelSettingsResponse) {
         option idempotency_level = NO_SIDE_EFFECTS;
     }
+
+    // Stream the current temperature of the device
+    //
+    // Since 4.3
+    rpc stream_temperature(StreamTemperatureRequest) returns (stream GetTemperatureResponse) {
+        option idempotency_level = NO_SIDE_EFFECTS;
+    }
 }
 
 message WaveformSettings {
@@ -57,11 +64,8 @@ message WaveformSettings {
 message DeviceSettings {
     // The number of measurements to take each second.
     //
-    // Possible values are multiples of 1000, between 1000, and 10000.
-    // If the specified value is not possible in the hardware, the closest
-    // frequency is used.
-    // For example, if 1499 is specified, 1000 is used, if 2500 is
-    // specified, 3000 is used.
+    // Possible values are between 1000, and 10000.
+    // If the value is outside of this range, it will be clamped within it
     // 
     // This value cannot be changed during acquisition.
     google.protobuf.Int32Value sampling_frequency = 1;
@@ -401,3 +405,23 @@ message GetPixelSettingsResponse {
     repeated PixelSettings pixels = 1;
 }
 
+message StreamTemperatureRequest {
+    // How often temperature updates should be sent
+    // Defaults to a period of 1 second, if not specified, or set to 0
+    uint32 period_seconds = 1;
+}
+
+message GetTemperatureResponse {
+    // Temperature as measured by thermistor TH2 on the P-Chip.
+    google.protobuf.FloatValue flowcell_temperature = 1;
+
+    // Flow-cell chamber-temperature, calculated from the pixel-block temperatures
+    google.protobuf.FloatValue chamber_temperature = 2;
+
+    // Temperature measured at each sensor in the ASIC, there are 12 sensors,
+    // one sensor per pixel-block
+    repeated google.protobuf.FloatValue pixel_block_temperature = 3;
+
+    // Return the temperature target the device is aiming to reach.
+    google.protobuf.FloatValue target_temperature = 4;
+}

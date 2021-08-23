@@ -7,6 +7,7 @@ import typing
 import grpc
 
 from minknow_api import protocol_pb2
+from minknow_api.protocol_pb2 import BarcodeUserData
 
 from .. import Connection
 
@@ -351,6 +352,7 @@ def start_protocol(
     identifier: str,
     sample_id: str,
     experiment_group: str,
+    barcode_info: typing.Optional[typing.Sequence[BarcodeUserData]],
     *args,
     **kwargs
 ) -> str:
@@ -361,6 +363,8 @@ def start_protocol(
         identifier(str):                        Protocol identifier to be started.
         sample_id(str):                         Sample id of protocol to start.
         experiment_group(str):                  Experiment group of protocol to start.
+        barcode_info(Sequence[:obj:`BarcodeUserData`]):
+                Barcode user data (sample type and alias)
         *args: Additional arguments forwarded to {make_protocol_arguments}
         **kwargs: Additional arguments forwarded to {make_protocol_arguments}
 
@@ -380,6 +384,8 @@ def start_protocol(
         user_info.sample_id.value = sample_id
     if experiment_group:
         user_info.protocol_group_id.value = experiment_group
+    if barcode_info:
+        user_info.barcode_user_info.extend(barcode_info)
 
     result = device_connection.protocol.start_protocol(
         identifier=identifier, args=protocol_arguments, user_info=user_info

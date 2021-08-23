@@ -152,11 +152,18 @@ service DeviceService {
         option idempotency_level = NO_SIDE_EFFECTS;
     }
 
+    // Stream the current temperature of the device.
+    //
+    // Since 4.3
+    rpc stream_temperature (StreamTemperatureRequest) returns (stream GetTemperatureResponse) {
+        option idempotency_level = NO_SIDE_EFFECTS;
+    }
+
     // Triggers an unblock for a list of channels for a given duration (Please see UnblockRequest).
     // It will start an unblock for every channel received as a parameter, then this RPC returns.
     // After the timeout expires (the duration in seconds given in the request), the return from
     // unblock is automatically triggered, which resets the channel configuration (mux) to the
-    // value preceding the unblock. 
+    // value preceding the unblock.
     //
     // Notes!!
     //
@@ -167,7 +174,7 @@ service DeviceService {
     //
     // The user should NOT change the overload mode during an unblock - this will confuse the return from
     // unblock, which tries to reset the overload mode to the state preceeding the unblock.
-    // 
+    //
     // The unblock can fail if the channel is not in a valid well state (this means a channel needs to be
     // in one of pore1-4, not test current, regen pore or unblock). If a mux is not valid, the unblock grpc
     // will try to continue for the rest of the channels, ignoring the one with the wrong mux.
@@ -669,7 +676,7 @@ message SetTemperatureRequest {
         //
         // Not specifying a value will wait for a maximum of 5 minutes.
         uint32 timeout = 1;
-        
+
         // Minimum duration (in seconds) that the reported temperature must be
         // continually within the target temperature range, before the device is
         // considered to have reached temperature.
@@ -755,6 +762,12 @@ message GetTemperatureResponse
     google.protobuf.FloatValue target_temperature = 3;
 }
 
+message StreamTemperatureRequest {
+    // How often temperature updates should be sent
+    // Defaults to a period of 1 second, if not specified, or set to 0
+    uint32 period_seconds = 1;
+}
+
 message UnblockRequest
 {
     // List of channels indexed from 1.
@@ -773,7 +786,7 @@ message CancelUnblocksRequest
 }
 
 message CancelUnblocksResponse
-{   
+{
     // The number of unblocks which have been cancelled as part of this request.
     //
     // Should return the total number of unblock operations which have been cancelled.
@@ -812,12 +825,12 @@ message SetChannelConfigurationRequest
 {
     // A map between <channel name, config to set>
     //
-    // Will return an error if any of the key values (representing channel names) are below 1, or 
+    // Will return an error if any of the key values (representing channel names) are below 1, or
     // above the channel count value returned from :meth:`get_flow_cell_info`
     //
     // The selected well cannot be set to WELL_OTHER, and will error if it tries to do so
     //
-    // DEPRECATED: Note that the type to set may change from 4.0 to enforce the fact that 
+    // DEPRECATED: Note that the type to set may change from 4.0 to enforce the fact that
     // unblock cannot be set through this call
     map<uint32, ChannelConfiguration> channel_configurations = 1;
 }

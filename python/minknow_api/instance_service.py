@@ -26,6 +26,8 @@ __all__ = [
     "GetMachineIdResponse",
     "StreamInstanceActivityRequest",
     "DeviceInfo",
+    "BasecallSpeed",
+    "N50",
     "StreamInstanceActivityResponse",
 ]
 

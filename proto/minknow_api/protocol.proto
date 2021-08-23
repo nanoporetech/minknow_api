@@ -6,6 +6,7 @@ option java_package = "com.nanoporetech.minknow_api";
 option objc_class_prefix = "MKAPI";
 
 import "minknow_api/acquisition.proto";
+import "minknow_api/analysis_configuration.proto";
 import "minknow_api/device.proto";
 import "minknow_api/rpc_options.proto";
 import "google/protobuf/timestamp.proto";
@@ -121,6 +122,33 @@ service ProtocolService {
     //
     // Since 3.2
     rpc list_protocol_group_ids(ListProtocolGroupIdsRequest) returns (ListProtocolGroupIdsResponse) {
+        option idempotency_level = NO_SIDE_EFFECTS;
+    }
+
+    // Run a hardware check on the connected flow cell.
+    //
+    // Throws an error if there is no flow cell connected.
+    //
+    // Since 4.3
+    rpc begin_hardware_check(BeginHardwareCheckRequest) returns (BeginHardwareCheckResponse) {
+        option (experimental) = true;
+    }
+
+    // Run platform qc on the connected flow cell
+    //
+    // Throws an error if there is no flow cell connected.
+    //
+    // Since 4.3
+    rpc begin_platform_qc(BeginPlatformQcRequest) returns (BeginPlatformQcResponse) {
+        option (experimental) = true;
+    }
+
+    // Given a protocol and some information about the flow-cell and kits will provide a list
+    // of settings required by the protocol, their defaults and dependencies.
+    //
+    // Since 4.3
+    rpc list_settings_for_protocol(ListSettingsForProtocolRequest) returns (ListSettingsForProtocolResponse) {
+        option (experimental) = true;
         option idempotency_level = NO_SIDE_EFFECTS;
     }
 }
@@ -457,4 +485,263 @@ message ListProtocolGroupIdsResponse {
     // protocol started on this instance of minknow.
     //
     repeated string protocol_group_ids = 1;
+}
+
+message BeginHardwareCheckRequest {}
+
+message BeginHardwareCheckResponse {
+    // UUID generated when the protocol is started, to uniquely represent this protocol instance
+    string run_id = 1;
+}
+
+message BeginPlatformQcRequest {
+
+}
+
+message BeginPlatformQcResponse {
+    // UUID generated when the protocol is started, to uniquely represent this protocol instance
+    string run_id = 1;
+}
+
+message ProtocolIdentifierComponents {
+    enum Location {
+        ANY = 0;
+        SYSTEM_SCRIPTS = 1;
+        USER_SCRIPTS = 2;
+    };
+    // If not specified, will default to "ANY"
+    Location location = 1;
+    // one of "custom", "sequencing", "control", "ctc", "platform qc" or "flowcell_plugin"
+    string experiment_type = 2;
+    // Name (or path) of the protocol, without the .toml extension eg: "sequencing/sequencing_MIN106_DNA" this is relative to the
+    // system or user protocol directory
+    string name = 3;
+    // eg: "FLO-MIN106"
+    string flow_cell_product_code = 4;
+    // eg: "SQK-RPB004"
+    string kit = 5;
+}
+
+
+message ListSettingsForProtocolRequest {
+    oneof protocol_identifier {
+        // specify the protocol with a string containing all the protocol's identifying components, eg:
+        // "sequencing/sequencing_MIN106_DNA:FLO-MIN106:SQK-RPB004"
+        string identifier = 1;
+
+        // specify the protocol providing the identifying components individually. All components are optional, if more
+        // than one protocol matches given strings, information about the first will be returned.
+        ProtocolIdentifierComponents components = 2;
+    }
+}
+
+message ProtocolSetting {
+    enum Category {
+        OTHER = 0;
+        RUN_OPTIONS = 1;
+        BASECALLING = 2;
+        OUTPUT = 3;
+    };
+
+    enum Unit {
+        UNITLESS = 0;
+
+        // strings
+        UTF8_STRING = 1;
+        ASCII_STRING = 2;
+        PATH = 3;
+        URL = 4;
+        PRIVATE_STRING = 5; // eg: password, or identifying data, something that should be obscured on the screen
+        CHOICE = 6; // choose one of the strings described in choices
+        MULTI_CHOICE = 7; // choose any number of the strings described in choices.
+
+        // numbers
+        SECOND = 8;
+        HOUR = 9;
+        BASE = 10;
+        KBASE = 11;
+        MBASE = 12;
+        GBASE = 13;
+        MILLIVOLT = 14;
+    };
+
+    message ProtocolSettingValue {
+        oneof protocol_setting_value {
+            string string_value = 1;
+            double float_value = 2;
+            int64 integer_value = 3;
+            bool bool_value = 4;
+            analysis_configuration.WriterConfiguration.ChannelConfiguration channels_value = 5;
+        }
+    }
+
+    message Constraint {
+        enum Condition {
+            EQUAL = 0;
+            NOT_EQUAL = 1;
+            GT_EQ = 2;
+            GT = 3;
+            LT_EQ = 4;
+            LT = 5;
+            IN = 6;     // When setting a path, it should be in or under the constraining path
+            NOT_IN  = 7;// Forbidden directory for a path
+            ENDS_WITH = 8;
+            STARTS_WITH = 9;
+        };
+        Condition condition = 1;
+        ProtocolSettingValue value = 2;
+    }
+
+    message Dependency {
+        string identifier = 1;
+        repeated Constraint constraints = 2;
+    }
+
+    enum Visibility {
+        // User can change this, a default may be provided
+        EDITABLE = 0;
+        // Don't show this to the user, it's not relevant to this protocol
+        HIDDEN = 1;
+        // User shouldn't change this from the default
+        FIXED = 2;
+        // User must set this, no sensible default can be provided
+        REQUIRED = 3;
+    };
+    Category category = 1;
+
+    // Identifier is the unique primary-key for referring to protocol-settings,
+    // dependencies refer to other settings via their identifier.
+    string identifier = 2 [(rpc_required) = true];
+    string display_name = 3 [(rpc_required) = true];
+
+    // Optional additional help text for a setting that may be shown to the user if required.
+    string help = 16;
+
+    Unit unit = 5;
+    ProtocolSettingValue default_value = 6;
+
+    // All constraints must be met if this setting is to be considered valid
+    repeated Constraint constraints = 7;
+
+    // If any of the dependencies matches it's constraints, this setting should
+    // adopt the level of visibility specified in "visibility". If none of the
+    // dependencies match their constraints, then "visibility" should be ignored
+    // and the option should be hidden from the user.
+    //
+    // Some dependencies may be specified multiple times, but with mutually
+    // exclusive constraints, for example if the setting controls data compression
+    // level, where there is a compression_algorithm setting specified by a string
+    // that can have the values "X", "Y" or "None". The setting may be dependent
+    // on compression_algorithm equals "X" or compression_algorithm equals "Y".
+    // If the compression_algorithm is "None" then none of the dependency constraints
+    // will be met and the setting should be hidden. A typical arrangement of fields
+    // in this case would be:
+    // Dependency {
+    //   identifier: "compression_algorithm",
+    //   Constraint {
+    //     condition : EQUAL,
+    //     value: "X"
+    //   }
+    // }
+    // Dependency {
+    //   identifier: "compression_algorithm",
+    //   Constraint {
+    //     condition : EQUAL,
+    //     value: "Y"
+    //   }
+    // }
+    // When a dependency is specified with multiple constraints they must all be
+    // met before the dependency is considered satisfied, for example some other
+    // setting may be dependent on compression_level being in a range (0,10] :
+    //  Dependency {
+    //   identifier: "compression_level",
+    //   Constraint {
+    //     condition : GT,
+    //     value: 0
+    //   },
+    //   Constraint {
+    //     condition : LT_EQ,
+    //     value: 10
+    //   }
+    // }
+    repeated Dependency dependencies = 8;
+
+    // If any of the dependencies match their constraints, this level of visibility
+    // should be adopted. It should also be adopted if no dependencies are specified.
+    Visibility visibility = 9;
+
+    // when unit is CHOICE, this defines the acceptable choices.
+    repeated string choices = 17;
+}
+
+message ListSettingsForProtocolResponse {
+    // Run options
+    message RunOptions {
+        ProtocolSetting run_length = 1;
+        ProtocolSetting bias_voltage = 2;
+        ProtocolSetting read_until_enabled = 3;
+        ProtocolSetting read_until_ref_file = 4;
+        ProtocolSetting read_until_channels = 5;
+        ProtocolSetting read_until_bed_file_enabled = 6;
+        ProtocolSetting read_until_bed_file = 7;
+        ProtocolSetting read_until_enrichment = 8;
+        ProtocolSetting active_channel_selection = 9; // bool
+        ProtocolSetting mux_scan_period = 10; // in hours
+        ProtocolSetting group_change_period = 11;
+    }
+
+    message Basecalling {
+        ProtocolSetting basecalling_enabled = 1;
+        ProtocolSetting barcoding_enabled = 2;
+        ProtocolSetting basecall_model = 3;
+        ProtocolSetting trim_barcodes_enabled = 4;
+        ProtocolSetting require_barcodes_both_ends = 5;
+        ProtocolSetting detect_mid_strand_barcodes = 6;
+        ProtocolSetting override_mid_barcoding_score = 7;
+        ProtocolSetting override_rear_barcoding_score = 8;
+        ProtocolSetting min_barcoding_score = 9;
+        ProtocolSetting min_barcoding_score_rear = 10;
+        ProtocolSetting min_barcoding_score_mid = 11;
+        ProtocolSetting alignment_enabled = 12;
+        ProtocolSetting alignment_ref_file = 13;
+        ProtocolSetting alignment_bed_file_enabled = 14;
+        ProtocolSetting alignment_bed_file = 15;
+    }
+
+    // Output
+    message Output {
+        ProtocolSetting output_location = 1;
+        ProtocolSetting fast_q_enabled = 2;
+        ProtocolSetting fast_q_reads_per_file = 3;
+        ProtocolSetting fast_q_data_compression = 4;
+        ProtocolSetting fast_5_enabled = 5;
+        ProtocolSetting fast_5_reads_per_file = 6;
+        ProtocolSetting fast_5_data_trace_table = 7;
+        ProtocolSetting fast_5_data_move_table = 8;
+        ProtocolSetting fast_5_data_fast_q = 9;
+        ProtocolSetting fast_5_data_raw = 10;
+        ProtocolSetting fast_5_data_compression = 11;
+        ProtocolSetting bam_enabled = 12;
+        ProtocolSetting read_filtering_enabled = 13;
+        ProtocolSetting read_filtering_min_qscore = 14;
+        ProtocolSetting read_filtering_min_read_length = 15;
+        ProtocolSetting read_filtering_max_read_length = 16;
+        ProtocolSetting bulk_file_enabled = 17;
+        ProtocolSetting bulk_file_raw = 18;
+        ProtocolSetting bulk_file_events = 19;
+        ProtocolSetting bulk_file_read_table = 20;
+        ProtocolSetting bulk_file_raw_enabled = 21;
+        ProtocolSetting bulk_file_events_enabled = 22;
+        ProtocolSetting bulk_file_read_table_enabled = 23;
+    }
+
+    ProtocolIdentifierComponents protocol = 1;
+
+    RunOptions run_options = 2;
+    Basecalling basecalling = 3;
+    Output output = 4;
+
+    // Any protocol settings not covered by the above structures, for example
+    // those required for custom-scripts.
+    repeated ProtocolSetting protocol_settings = 5;
 }

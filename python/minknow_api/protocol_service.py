@@ -39,6 +39,14 @@ __all__ = [
     "AddEpi2meWorkflowResponse",
     "ListProtocolGroupIdsRequest",
     "ListProtocolGroupIdsResponse",
+    "BeginHardwareCheckRequest",
+    "BeginHardwareCheckResponse",
+    "BeginPlatformQcRequest",
+    "BeginPlatformQcResponse",
+    "ProtocolIdentifierComponents",
+    "ListSettingsForProtocolRequest",
+    "ProtocolSetting",
+    "ListSettingsForProtocolResponse",
     "ProtocolState",
     "PROTOCOL_RUNNING",
     "PROTOCOL_WAITING_FOR_TEMPERATURE",
@@ -745,6 +753,157 @@ class ProtocolService(object):
             raise ArgumentError("Unexpected keyword arguments to list_protocol_group_ids: '{}'".format(", ".join(unused_args)))
 
         return run_with_retry(self._stub.list_protocol_group_ids,
+                              _message, _timeout,
+                              [],
+                              "minknow_api.protocol.ProtocolService")
+    def begin_hardware_check(self, _message=None, _timeout=None, **kwargs):
+        """Run a hardware check on the connected flow cell.
+
+        Throws an error if there is no flow cell connected.
+
+        Since 4.3
+
+        
+
+        Note this API is experimental - it may be changed, revised or removed in future minor versions.
+
+        Args:
+            _message (minknow_api.protocol_pb2.BeginHardwareCheckRequest, optional): The message to send.
+                This can be passed instead of the keyword arguments.
+            _timeout (float, optional): The call will be cancelled after this number of seconds
+                if it has not been completed.
+
+        Returns:
+            minknow_api.protocol_pb2.BeginHardwareCheckResponse
+
+        Note that the returned messages are actually wrapped in a type that collapses
+        submessages for fields marked with ``[rpc_unwrap]``.
+        """
+        print("Warning: Method ProtocolService.begin_hardware_check is experimental and may be changed, revised or removed in future minor versions.", file=sys.stderr)
+        if _message is not None:
+            if isinstance(_message, MessageWrapper):
+                _message = _message._message
+            return run_with_retry(self._stub.begin_hardware_check,
+                                  _message, _timeout,
+                                  [],
+                                  "minknow_api.protocol.ProtocolService")
+
+        unused_args = set(kwargs.keys())
+
+        _message = BeginHardwareCheckRequest()
+
+        if len(unused_args) > 0:
+            raise ArgumentError("Unexpected keyword arguments to begin_hardware_check: '{}'".format(", ".join(unused_args)))
+
+        return run_with_retry(self._stub.begin_hardware_check,
+                              _message, _timeout,
+                              [],
+                              "minknow_api.protocol.ProtocolService")
+    def begin_platform_qc(self, _message=None, _timeout=None, **kwargs):
+        """Run platform qc on the connected flow cell
+
+        Throws an error if there is no flow cell connected.
+
+        Since 4.3
+
+        
+
+        Note this API is experimental - it may be changed, revised or removed in future minor versions.
+
+        Args:
+            _message (minknow_api.protocol_pb2.BeginPlatformQcRequest, optional): The message to send.
+                This can be passed instead of the keyword arguments.
+            _timeout (float, optional): The call will be cancelled after this number of seconds
+                if it has not been completed.
+
+        Returns:
+            minknow_api.protocol_pb2.BeginPlatformQcResponse
+
+        Note that the returned messages are actually wrapped in a type that collapses
+        submessages for fields marked with ``[rpc_unwrap]``.
+        """
+        print("Warning: Method ProtocolService.begin_platform_qc is experimental and may be changed, revised or removed in future minor versions.", file=sys.stderr)
+        if _message is not None:
+            if isinstance(_message, MessageWrapper):
+                _message = _message._message
+            return run_with_retry(self._stub.begin_platform_qc,
+                                  _message, _timeout,
+                                  [],
+                                  "minknow_api.protocol.ProtocolService")
+
+        unused_args = set(kwargs.keys())
+
+        _message = BeginPlatformQcRequest()
+
+        if len(unused_args) > 0:
+            raise ArgumentError("Unexpected keyword arguments to begin_platform_qc: '{}'".format(", ".join(unused_args)))
+
+        return run_with_retry(self._stub.begin_platform_qc,
+                              _message, _timeout,
+                              [],
+                              "minknow_api.protocol.ProtocolService")
+    def list_settings_for_protocol(self, _message=None, _timeout=None, **kwargs):
+        """Given a protocol and some information about the flow-cell and kits will provide a list
+        of settings required by the protocol, their defaults and dependencies.
+
+        Since 4.3
+
+        This RPC has no side effects. Calling it will have no effect on the state of the
+        system. It is safe to call repeatedly, or to retry on failure, although there is no
+        guarantee it will return the same information each time.
+
+        Note this API is experimental - it may be changed, revised or removed in future minor versions.
+
+        Args:
+            _message (minknow_api.protocol_pb2.ListSettingsForProtocolRequest, optional): The message to send.
+                This can be passed instead of the keyword arguments.
+            _timeout (float, optional): The call will be cancelled after this number of seconds
+                if it has not been completed.
+            identifier (str, optional): specify the protocol with a string containing all the protocol's identifying components, eg:
+                "sequencing/sequencing_MIN106_DNA:FLO-MIN106:SQK-RPB004"
+            components (minknow_api.protocol_pb2.ProtocolIdentifierComponents, optional): specify the protocol providing the identifying components individually. All components are optional, if more
+                than one protocol matches given strings, information about the first will be returned.
+
+        Returns:
+            minknow_api.protocol_pb2.ListSettingsForProtocolResponse
+
+        Note that the returned messages are actually wrapped in a type that collapses
+        submessages for fields marked with ``[rpc_unwrap]``.
+        """
+        print("Warning: Method ProtocolService.list_settings_for_protocol is experimental and may be changed, revised or removed in future minor versions.", file=sys.stderr)
+        if _message is not None:
+            if isinstance(_message, MessageWrapper):
+                _message = _message._message
+            return run_with_retry(self._stub.list_settings_for_protocol,
+                                  _message, _timeout,
+                                  [],
+                                  "minknow_api.protocol.ProtocolService")
+
+        unused_args = set(kwargs.keys())
+
+        # check oneof group 'protocol_identifier'
+        oneof_fields = set([
+            "identifier",
+            "components",
+        ])
+
+        if len(unused_args & oneof_fields) > 1:
+            raise ArgumentError("list_settings_for_protocol given multiple conflicting arguments: '{}'".format(", ".join(unused_args & oneof_fields)))
+
+        _message = ListSettingsForProtocolRequest()
+
+        if "identifier" in kwargs:
+            unused_args.remove("identifier")
+            _message.identifier = kwargs['identifier']
+
+        if "components" in kwargs:
+            unused_args.remove("components")
+            _message.components.CopyFrom(kwargs['components'])
+
+        if len(unused_args) > 0:
+            raise ArgumentError("Unexpected keyword arguments to list_settings_for_protocol: '{}'".format(", ".join(unused_args)))
+
+        return run_with_retry(self._stub.list_settings_for_protocol,
                               _message, _timeout,
                               [],
                               "minknow_api.protocol.ProtocolService")

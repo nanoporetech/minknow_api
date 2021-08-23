@@ -66,6 +66,14 @@ service Basecaller {
     rpc watch (WatchRequest) returns (stream WatchResponse) {
         option idempotency_level = NO_SIDE_EFFECTS;
     }
+
+    // Build an alignment index file from an input fasta reference.
+    //
+    // This call blocks whilst the index is built.
+    //
+    // Since 4.3
+    rpc make_alignment_index(MakeAlignmentIndexRequest) returns (MakeAlignmentIndexResponse) {}
+
 }
 
 message ListConfigsByKitRequest {
@@ -88,6 +96,9 @@ message ListConfigsByKitResponse {
 }
 
 message StartBasecallingRequest {
+    // User specified name to identify the basecall run.
+    string name = 12;
+
     // Input directories to search for reads to be basecalled.
     //
     // Currently, only one directory can be specified, but this definition allows for multiple in
@@ -139,6 +150,9 @@ message StartBasecallingResponse {
 }
 
 message StartBarcodingRequest {
+    // User specified name to identify the barcoding run.
+    string name = 11;
+
     // Input directories to search for reads to be basecalled.
     //
     // Currently, only one directory can be specified, but this definition allows for multiple in
@@ -171,6 +185,9 @@ message StartBarcodingResponse {
 }
 
 message StartAlignmentRequest {
+    // User specified name to identify the alignment run.
+    string name = 7;
+
     // Input directories to search for reads to be aligned.
     //
     // Currently, only one directory can be specified, but this definition allows for multiple in
@@ -326,3 +343,14 @@ message WatchResponse {
     repeated RunInfo runs = 1;
 }
 
+message MakeAlignmentIndexRequest {
+    // Input fasta reference to use for building the index.
+    string input_alignment_reference = 1;
+
+    // Output file path to write index (mmi file) to.
+    //
+    // Must have a ".mmi" extension, and the paths parent directory must exist.
+    string output_alignment_index = 2;
+}
+
+message MakeAlignmentIndexResponse { }

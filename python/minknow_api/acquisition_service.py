@@ -59,6 +59,15 @@ __all__ = [
     "STOPPED_PROTOCOL_ENDED",
     "STOPPED_DEVICE_ERROR",
     "STOPPED_BAD_TEMPERATURE",
+    "STOPPED_SHUTDOWN",
+    "StartupState",
+    "STARTUP_UNKNOWN",
+    "STARTUP_BUILDING_PIPELINE",
+    "STARTUP_INITIALISING_BASECALLER",
+    "STARTUP_INITIALISING_BASECALLER_ALIGNMENT",
+    "STARTUP_INITIALISING_DATA_WRITERS",
+    "STARTUP_INITIALISING_INTERMEDIATE_DATA_STORAGE",
+    "STARTUP_INITIALISING_STATISTICS",
     "FinishingState",
     "FINISHING_UNKNOWN",
     "FINISHING_PROCESSING_DEVICE_SIGNAL",
@@ -93,7 +102,7 @@ class AcquisitionService(object):
     def start(self, _message=None, _timeout=None, **kwargs):
         """Starts reading data from the device
 
-        Some setup calls will need to be made before starting data acquisition: particularly setting the analysis configuration, 
+        Some setup calls will need to be made before starting data acquisition: particularly setting the analysis configuration,
         calibration, read writer and bulk writer config and some device calls such as setting the sampling frequency
 
         If acqusition is already running (even in the FINISHING state), this call will fail.
@@ -324,14 +333,14 @@ class AcquisitionService(object):
         """Watches for status changes within MinKNOW. Status states are defined from MinknowStatus enum.
         This is a bi-directional stream where the incoming response stream will return everytime the status has changed
         and the request stream is used to stop the watcher. Refer to http://www.grpc.io/docs/tutorials/basic/python.html
-        to see how bi-directoional streaming works in grpc, but essentially when calling this function the user will have 
+        to see how bi-directoional streaming works in grpc, but essentially when calling this function the user will have
         to pass in a generator that will eventually yield a WatchForStatusChangeRequest(stop=True) to the cpp side.
         A wrapper class for this is provided in the Python code.
 
-        The function will first return with the current status that MinKNOW is in. Every response thereafter will be a 
+        The function will first return with the current status that MinKNOW is in. Every response thereafter will be a
         change from one status to another.
 
-        The ERROR_STATUS state includes errors during transition between states. If that happens, MinKNOW will 
+        The ERROR_STATUS state includes errors during transition between states. If that happens, MinKNOW will
         try to revert to the READY state. It is up to the user to determine if they wish to try to wait for MinKNOW to
         correct itself or to try some other course of action
 
