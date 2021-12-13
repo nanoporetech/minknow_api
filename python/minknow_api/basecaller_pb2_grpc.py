@@ -36,6 +36,11 @@ class BasecallerStub(object):
                 request_serializer=minknow__api_dot_basecaller__pb2.StartBarcodingRequest.SerializeToString,
                 response_deserializer=minknow__api_dot_basecaller__pb2.StartBarcodingResponse.FromString,
                 )
+        self.start_post_processing_protocol = channel.unary_unary(
+                '/minknow_api.basecaller.Basecaller/start_post_processing_protocol',
+                request_serializer=minknow__api_dot_basecaller__pb2.StartPostProcessingProtocolRequest.SerializeToString,
+                response_deserializer=minknow__api_dot_basecaller__pb2.StartPostProcessingProtocolResponse.FromString,
+                )
         self.start_alignment = channel.unary_unary(
                 '/minknow_api.basecaller.Basecaller/start_alignment',
                 request_serializer=minknow__api_dot_basecaller__pb2.StartAlignmentRequest.SerializeToString,
@@ -60,6 +65,21 @@ class BasecallerStub(object):
                 '/minknow_api.basecaller.Basecaller/make_alignment_index',
                 request_serializer=minknow__api_dot_basecaller__pb2.MakeAlignmentIndexRequest.SerializeToString,
                 response_deserializer=minknow__api_dot_basecaller__pb2.MakeAlignmentIndexResponse.FromString,
+                )
+        self.list_post_processing_protocols = channel.unary_unary(
+                '/minknow_api.basecaller.Basecaller/list_post_processing_protocols',
+                request_serializer=minknow__api_dot_basecaller__pb2.ListPostProcessingProtocolsRequest.SerializeToString,
+                response_deserializer=minknow__api_dot_basecaller__pb2.ListPostProcessingProtocolsResponse.FromString,
+                )
+        self.list_settings_for_post_processing_protocol = channel.unary_unary(
+                '/minknow_api.basecaller.Basecaller/list_settings_for_post_processing_protocol',
+                request_serializer=minknow__api_dot_basecaller__pb2.ListSettingsForPostProcessingProtocolRequest.SerializeToString,
+                response_deserializer=minknow__api_dot_basecaller__pb2.ListSettingsForPostProcessingProtocolResponse.FromString,
+                )
+        self.update_post_processing_protocol_progress = channel.unary_unary(
+                '/minknow_api.basecaller.Basecaller/update_post_processing_protocol_progress',
+                request_serializer=minknow__api_dot_basecaller__pb2.UpdateProgressRequest.SerializeToString,
+                response_deserializer=minknow__api_dot_basecaller__pb2.UpdateProgressResponse.FromString,
                 )
 
 
@@ -95,6 +115,18 @@ class BasecallerServicer(object):
         """Start barcoding fastq files.
 
         Since 3.8
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def start_post_processing_protocol(self, request, context):
+        """Start an post processing analysis protocol.
+
+        Post processing protocols allow processing already generated sequencing files in some way, eg: running an
+        ARTIC workflow on some fastq files, or barcoding a set of fastq input files.
+
+        Since 4.4
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -154,6 +186,32 @@ class BasecallerServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def list_post_processing_protocols(self, request, context):
+        """Gives back a list that contains info about each possible post processing protocol script minknow is aware of.
+        This will most likely be used to retrieve a suitable post processing protocol script that can be passed on to `start_post_processing_protocol`
+
+        Since 4.4
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def list_settings_for_post_processing_protocol(self, request, context):
+        """Find available display settings for an post processing protocol
+
+        Since 4.4
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def update_post_processing_protocol_progress(self, request, context):
+        """Set the progress of the currently executing post processing protocol (this API expects a run_id as more than one can be active).
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_BasecallerServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -171,6 +229,11 @@ def add_BasecallerServicer_to_server(servicer, server):
                     servicer.start_barcoding,
                     request_deserializer=minknow__api_dot_basecaller__pb2.StartBarcodingRequest.FromString,
                     response_serializer=minknow__api_dot_basecaller__pb2.StartBarcodingResponse.SerializeToString,
+            ),
+            'start_post_processing_protocol': grpc.unary_unary_rpc_method_handler(
+                    servicer.start_post_processing_protocol,
+                    request_deserializer=minknow__api_dot_basecaller__pb2.StartPostProcessingProtocolRequest.FromString,
+                    response_serializer=minknow__api_dot_basecaller__pb2.StartPostProcessingProtocolResponse.SerializeToString,
             ),
             'start_alignment': grpc.unary_unary_rpc_method_handler(
                     servicer.start_alignment,
@@ -196,6 +259,21 @@ def add_BasecallerServicer_to_server(servicer, server):
                     servicer.make_alignment_index,
                     request_deserializer=minknow__api_dot_basecaller__pb2.MakeAlignmentIndexRequest.FromString,
                     response_serializer=minknow__api_dot_basecaller__pb2.MakeAlignmentIndexResponse.SerializeToString,
+            ),
+            'list_post_processing_protocols': grpc.unary_unary_rpc_method_handler(
+                    servicer.list_post_processing_protocols,
+                    request_deserializer=minknow__api_dot_basecaller__pb2.ListPostProcessingProtocolsRequest.FromString,
+                    response_serializer=minknow__api_dot_basecaller__pb2.ListPostProcessingProtocolsResponse.SerializeToString,
+            ),
+            'list_settings_for_post_processing_protocol': grpc.unary_unary_rpc_method_handler(
+                    servicer.list_settings_for_post_processing_protocol,
+                    request_deserializer=minknow__api_dot_basecaller__pb2.ListSettingsForPostProcessingProtocolRequest.FromString,
+                    response_serializer=minknow__api_dot_basecaller__pb2.ListSettingsForPostProcessingProtocolResponse.SerializeToString,
+            ),
+            'update_post_processing_protocol_progress': grpc.unary_unary_rpc_method_handler(
+                    servicer.update_post_processing_protocol_progress,
+                    request_deserializer=minknow__api_dot_basecaller__pb2.UpdateProgressRequest.FromString,
+                    response_serializer=minknow__api_dot_basecaller__pb2.UpdateProgressResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -262,6 +340,23 @@ class Basecaller(object):
         return grpc.experimental.unary_unary(request, target, '/minknow_api.basecaller.Basecaller/start_barcoding',
             minknow__api_dot_basecaller__pb2.StartBarcodingRequest.SerializeToString,
             minknow__api_dot_basecaller__pb2.StartBarcodingResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def start_post_processing_protocol(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/minknow_api.basecaller.Basecaller/start_post_processing_protocol',
+            minknow__api_dot_basecaller__pb2.StartPostProcessingProtocolRequest.SerializeToString,
+            minknow__api_dot_basecaller__pb2.StartPostProcessingProtocolResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -347,5 +442,56 @@ class Basecaller(object):
         return grpc.experimental.unary_unary(request, target, '/minknow_api.basecaller.Basecaller/make_alignment_index',
             minknow__api_dot_basecaller__pb2.MakeAlignmentIndexRequest.SerializeToString,
             minknow__api_dot_basecaller__pb2.MakeAlignmentIndexResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def list_post_processing_protocols(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/minknow_api.basecaller.Basecaller/list_post_processing_protocols',
+            minknow__api_dot_basecaller__pb2.ListPostProcessingProtocolsRequest.SerializeToString,
+            minknow__api_dot_basecaller__pb2.ListPostProcessingProtocolsResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def list_settings_for_post_processing_protocol(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/minknow_api.basecaller.Basecaller/list_settings_for_post_processing_protocol',
+            minknow__api_dot_basecaller__pb2.ListSettingsForPostProcessingProtocolRequest.SerializeToString,
+            minknow__api_dot_basecaller__pb2.ListSettingsForPostProcessingProtocolResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def update_post_processing_protocol_progress(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/minknow_api.basecaller.Basecaller/update_post_processing_protocol_progress',
+            minknow__api_dot_basecaller__pb2.UpdateProgressRequest.SerializeToString,
+            minknow__api_dot_basecaller__pb2.UpdateProgressResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

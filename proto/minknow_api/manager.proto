@@ -8,9 +8,12 @@ option objc_class_prefix = "MKAPI";
 import "minknow_api/rpc_options.proto";
 import "minknow_api/device.proto";
 import "minknow_api/instance.proto";
+import "google/protobuf/timestamp.proto";
 
 service ManagerService {
     // Get information about the machine running MinKNOW.
+    //
+    // This RPC can be called without providing any authentication tokens.
     //
     // Since 3.6
     rpc describe_host (DescribeHostRequest) returns (DescribeHostResponse) {
@@ -23,6 +26,8 @@ service ManagerService {
     // in case there are too many positions to fit into a single response, but normally there should
     // only be a single response.
     //
+    // This RPC can be called without providing any authentication tokens.
+    //
     // Since 3.6
     rpc flow_cell_positions (FlowCellPositionsRequest) returns (stream FlowCellPositionsResponse) {
         option idempotency_level = NO_SIDE_EFFECTS;
@@ -32,6 +37,8 @@ service ManagerService {
     //
     // This is like flow_cell_positions, but updates are streamed as positions come and go (eg:
     // MinIONs being plugged or unplugged), or their status otherwise changes.
+    //
+    // This RPC can be called without providing any authentication tokens.
     //
     // Since 3.6
     rpc watch_flow_cell_positions (WatchFlowCellPositionsRequest) returns (stream WatchFlowCellPositionsResponse) {
@@ -51,6 +58,8 @@ service ManagerService {
     // This is the service that implements the minknow_api.basecaller interface for basecalling
     // reads files.
     //
+    // This RPC can be called without providing any authentication tokens.
+    //
     // Since 3.5
     rpc basecaller_api (BasecallerApiRequest) returns (BasecallerApiResponse) {
         option idempotency_level = NO_SIDE_EFFECTS;
@@ -69,6 +78,8 @@ service ManagerService {
     // - Configuration version (i.e. Wanda version)
     // - Distribution version
     // - Guppy version
+    //
+    // This RPC can be called without providing any authentication tokens.
     //
     // See also: instance.get_version_info which provides some similar information on a per instance basis.
     // Since 3.3
@@ -224,11 +235,91 @@ service ManagerService {
     // "local-auth" to "30fe5214-a7c5-4cb3-b521-b1ec8a49592a". At around 14:26:12, the client should
     // re-read the file and update the metadata field with the newly-read value.
     //
+    // This RPC can be called without providing any authentication tokens.
+    //
     // Since 4.2
     rpc local_authentication_token_path(LocalAuthenticationTokenPathRequest) returns (LocalAuthenticationTokenPathResponse) {
         option idempotency_level = NO_SIDE_EFFECTS;
     }
+
+    // Query information about a reference file.
+    //
+    // Reference file types are picked up by extension:
+    // for fasta: .fasta, .fna, .ffn, .faa, .frn
+    // for mmi: .mmi
+    //
+    // Since 4.4
+    rpc get_alignment_reference_information(GetAlignmentReferenceInformationRequest) returns (GetAlignmentReferenceInformationResponse) {
+        option idempotency_level = NO_SIDE_EFFECTS;
+    }
+
+    // Get the device code/key for association.
+    //
+    // This can be used to either get the code that the user must enter into the customer support
+    // portal to associate the device with their account, or the key used for online association.
+    //
+    // Errors:
+    //     INVALID_ARGUMENT: The requested flow cell position does not exist.
+    //
+    // Since 4.4
+    rpc association_device_code(AssociationDeviceCodeRequest) returns (AssociationDeviceCodeResponse) {
+        option idempotency_level = NO_SIDE_EFFECTS;
+    }
+
+    // Apply the unlock code for offline association.
+    //
+    // This is the code that the user receives from the customer support portal after entering the
+    // device code for this device (see `offline_association_device_code`).
+    //
+    // This is only required if either `describe_host` indicates that the device as a whole needs
+    // association, or `flow_cell_positions` indicates that a particular positions needs it.
+    //
+    // Errors:
+    //     INVALID_ARGUMENT: The requested flow cell position does not exist, or no unlock code
+    //         was provided.
+    //
+    // Note that you will need to check the result to see if the association was successful. Calling
+    // this on an already-associated device with a valid unlock code will succeed, but have no
+    // effect.
+    //
+    // Since 4.4
+    rpc apply_offline_association_unlock_code(ApplyOfflineAssociationUnlockCodeRequest) returns (ApplyOfflineAssociationUnlockCodeResponse) {
+        option idempotency_level = IDEMPOTENT;
+    }
+
+    // List all developer API tokens.
+    //
+    // List all developer tokens, and their expiry times. Note this does not return the actual token value - this is only available at creation time.
+    //
+    // Since 4.4
+    rpc list_developer_api_tokens(ListDeveloperApiTokensRequest) returns (ListDeveloperApiTokensResponse) {
+        option idempotency_level = IDEMPOTENT;
+    }
+
+    // Create a new developer API token, with a user facing name, and optional expiry time.
+    //
+    // The response contains the requested token, which will be valid until provided expiry time.
+    //
+    // The token cannot be obtained a second time, once the CreateDeveloperApiTokenResponse is destroyed.
+    //
+    // Since 4.4
+    rpc create_developer_api_token(CreateDeveloperApiTokenRequest) returns (CreateDeveloperApiTokenResponse) {}
+
+    // Remove a developer api token.
+    //
+    // Since 4.4
+    rpc revoke_developer_api_token(RevokeDeveloperApiTokenRequest) returns (RevokeDeveloperApiTokensResponse) {}
+
+    // Find protocols which can be run based on the current device + flowcell.
+    //
+    // Throws an error if there is no flow cell connected.
+    //
+    // Since 4.5
+    rpc find_protocols(FindProtocolsRequest) returns (FindProtocolsResponse) {
+        option (experimental) = true;
+    }
 }
+
 
 message DescribeHostRequest {
 }
@@ -282,6 +373,29 @@ message DescribeHostResponse {
     //
     // For customer computers, this is the only available identfying information for the system.
     string network_name = 4;
+
+    // This device has not been associated with an account.
+    //
+    // Association must be completed before using the device.
+    //
+    // Note that this will only ever be set for hosts that also have a `product_code` and `serial`.
+    //
+    // If this is true, all positions will report as ``STATE_NEEDS_ASSOCIATION`` until the device
+    // is associated. Even if this is false, however, removable sequencing units (eg: the MinION
+    // Mk1B) may require their own association (in which case they will individually report as
+    // ``STATE_NEEDS_ASSOCIATION`` - see the `flow_cell_positions` RPC).
+    //
+    // Since 4.4
+    bool needs_association = 16;
+
+    // Whether the device can sequence while offline.
+    //
+    // Not all sequencing devices can sequence without an internet connection. This indicates
+    // whether it is possible for the integrated sequencing positions. Note that this will only be
+    // set if `needs_association` is true.
+    //
+    // Since 4.4
+    bool can_sequence_offline = 5;
 }
 
 message FlowCellPosition {
@@ -336,8 +450,8 @@ message FlowCellPosition {
         STATE_HARDWARE_REMOVED = 3;
         // Communication with the hardware failed.
         //
-        // For built-in positions, this can include when the hardware was not found at all (eg: if a
-        // PromethION has not had one of its sequencing unit cables attached).
+        // For integrated positions, this can include when the hardware was not found at all (eg: if
+        // a PromethION has not had one of its sequencing unit cables attached).
         //
         // More information may be available in `error_info`.
         STATE_HARDWARE_ERROR = 4;
@@ -346,6 +460,14 @@ message FlowCellPosition {
         //
         // More information may be available in `error_info`.
         STATE_SOFTWARE_ERROR = 5;
+        // The position is not available because it requires association.
+        //
+        // See also `DescribeHostResponse.needs_association`. If the `describe_host` RPC result has
+        // `needs_association` set to false, this position is a pluggable device (likely a MinION
+        // Mk1B) that individually requires assocation.
+        //
+        // Since 4.4
+        STATE_NEEDS_ASSOCIATION = 6;
     };
     // The state of the flow cell position.
     //
@@ -362,7 +484,7 @@ message FlowCellPosition {
         uint32 secure_grpc_web = 3;
         // DEPRECATED: A port providing the gRPC-Web protocol without TLS
         //
-        // From 4.1, this field is now deprecated and will only ever 
+        // From 4.1, this field is now deprecated and will only ever
         // return a value of 0
         uint32 insecure_grpc_web = 4;
     }
@@ -381,14 +503,35 @@ message FlowCellPosition {
     // This can be useful for dealing with (new) unknown states.
     string error_info = 5;
 
+    message SharedHardwareGroup {
+        uint32 group_id = 1;
+    }
+
     // Some positions may share hardware. Positions that share hardware will have the same
     // group-id. If positions do share hardware, to reset the hardware you will need to
     // reset all positions in the group at the same time.
-    message SharedHardwareGroup {
-        uint32 group_id= 1;
-    }
-
     SharedHardwareGroup shared_hardware_group = 6;
+
+    // Indicates that this is an integrated flow cell position.
+    //
+    // This is true for the integrated positions on a PromethION, GridION or MinION Mk1C, and false
+    // for a MinION Mk1B.
+    //
+    // Integrated positions are always listed, even if (due to some hardware error) they can't be
+    // found. They are never in STATE_HARDWARE_REMOVED, and they always report a location.
+    //
+    // Additionally, integrated positions cannot be associated independently - if they are in
+    // STATE_NEEDS_ASSOCIATION, then the host as a whole needs associating. Likewise, either all
+    // integrated positions can run offline, or none of them can.
+    //
+    // Since 4.4
+    bool is_integrated = 7;
+
+    // Indicates that this position can sequence offline.
+    //
+    // For integrated positions, this is the same as the corresponding field returned from the
+    // describe_host RPC.
+    bool can_sequence_offline = 8;
 }
 
 message FlowCellPositionsRequest {
@@ -466,7 +609,7 @@ message BasecallerApiResponse {
     // DEPRECATED: The port to use to access the minknow_api.basecaller API using the gRPC-Web protocol without
     // TLS
     //
-    // From 4.1, this field is now deprecated and will only ever 
+    // From 4.1, this field is now deprecated and will only ever
     // return a value of 0
     uint32 insecure_grpc_web = 4;
 }
@@ -858,4 +1001,165 @@ message LocalAuthenticationTokenPathRequest {
 message LocalAuthenticationTokenPathResponse {
     // The full path of the local authentication token
     string path = 1;
+}
+
+message GetAlignmentReferenceInformationRequest {
+    // The full path of the alignment reference.
+    //
+    // Should be a .fasta, or .mmi file.
+    string path = 1;
+}
+
+message GetAlignmentReferenceInformationResponse {
+    // Estimated load time of the reference in seconds.
+    float estimated_load_time_seconds = 1;
+
+    // Estimated size of the reference file in bases.
+    uint64 estimated_reference_size_bases = 2;
+
+    // Does the reference file fit within the recommended live usage memory size?
+    //
+    // This uses an estimate of how much memory a reference may use when running in guppy
+    // and compares to the amount of memory in the sequencer. It does not account for
+    // whether the reference will run in real time.
+    bool recommended_live_usage = 3;
+}
+
+message AssociationDeviceCodeRequest {
+    // The flow cell position to get the association code/key for.
+    //
+    // If this is omitted, the code/key for the sequencing device as a whole is returned.
+    //
+    // Note that this cannot be omitted if MinKNOW is installed on a PC (as opposed to a sequencing
+    // device). It should be omitted if (and only if) the data returned from `describe_host` has
+    // its ``needs_association`` field set to true.
+    //
+    // Passing a integrated flow cell position will return the code/key for the whole sequencing
+    // device.
+    string position_name = 1;
+
+    // Get a code suitable for offline association rather than online association.
+    //
+    // Set this to true if the user will manually enter the code into the customer portal to get an
+    // unlock code. Set to false if the code will be used directly in the online association API.
+    bool offline = 2;
+}
+
+message AssociationDeviceCodeResponse {
+    // The code required to associate the device with an account.
+    //
+    // If the request had `offline` set, this code is suitable for use in the customer portal
+    // offline association page. Otherwise, it is suitable for the online association APIs.
+    string code = 1;
+}
+
+message ApplyOfflineAssociationUnlockCodeRequest {
+    // The flow cell position to unlock.
+    //
+    // This should be set (or not set) to match the corresponding call to
+    // `offline_association_device_code`.
+    string position_name = 1;
+
+    // The unlock code provided by the user.
+    //
+    // This the code given by the customer support portal when the corresponding device code is
+    // entered into the device association page.
+    string unlock_code = 2;
+}
+
+message ApplyOfflineAssociationUnlockCodeResponse {
+    // True if the association was successful (the unlock_code was accepted), false otherwise.
+    bool associated = 1;
+}
+
+message ListDeveloperApiTokensRequest {}
+
+message ListDeveloperApiTokensResponse {
+    message DeveloperApiToken {
+        // Unique ID assigned to the token.
+        string id = 1;
+
+        // User facing name describing the token (guaranteed unique across tokens).
+        string name = 2;
+
+        // Optional expiry of the token.
+        google.protobuf.Timestamp expiry = 3;
+    }
+
+    repeated DeveloperApiToken tokens = 1;
+}
+
+message CreateDeveloperApiTokenRequest {
+
+    // User facing name describing the token.
+    string name = 2;
+
+    // Optional expiry time for the token.
+    google.protobuf.Timestamp expiry = 3;
+}
+
+message CreateDeveloperApiTokenResponse {
+    // Unique ID assigned to the token for identification purposes. Not valid as an authentication token.
+    string id = 1;
+
+    // Created token, available to be used with minknow API's immediately.
+    string token = 2;
+}
+
+message RevokeDeveloperApiTokenRequest {
+    // The id passed back from [CreateDeveloperApiTokenRequest] or [DeveloperApiToken].
+    string id = 1;
+}
+
+message RevokeDeveloperApiTokensResponse {}
+
+enum ExperimentType {
+    // Must not be hidden, experiment type must be "sequencing".
+    SEQUENCING = 0;
+
+    // Must not be hidden, experiment type must be "control".
+    CONTROL = 1;
+
+    // Must not be hidden, experiment type must not be "sequencing" or "control", and if the protocol is in the installation directory, it must also not be "CTC", "platform QC" or "flowcell_plugin".
+    CUSTOM = 2;
+
+    // "hidden" protocols are not returned, but any other compatible protocols are.
+    ALL_EXCEPT_HIDDEN = 3;
+
+    // All protocols, including "hidden" protocols, are returned.
+    ALL_INCLUDING_HIDDEN = 4;
+}
+
+message FindProtocolsRequest {
+    // Find protocols that are compatible with this flow cell product code.
+    //
+    // Set to empty string to find protocols matching all flow cell product codes.
+    string flow_cell_product_code = 1;
+
+    // Limit to protocols that are compatible with this sequencing kit.
+    //
+    // Set to empty string to find protocols matching all kits.
+    string sequencing_kit = 2;
+
+    // Limit response to certain protocol types.
+    ExperimentType experiment_type = 3;
+}
+
+message FindProtocolsResponse {
+    message Protocol {
+        // An identifying string for protocol, of the form: LOCATION:relative/path/to/protocol
+        //
+        // The identifier uniquely identifies the protocol.
+        //
+        string identifier = 1;
+
+        // Whether the protocol requires a flow cell product code in order to start.
+        bool requires_flow_cell_product_code = 2;
+
+        // Whether the protocol requires a sequencing kit in order to start.
+        bool requires_sequencing_kit = 3;
+    }
+
+    // Protocols available for starting.
+    repeated Protocol protocols = 1;
 }

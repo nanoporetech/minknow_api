@@ -14,6 +14,7 @@ _sym_db = _symbol_database.Default()
 
 from google.protobuf import timestamp_pb2 as google_dot_protobuf_dot_timestamp__pb2
 from minknow_api import analysis_configuration_pb2 as minknow__api_dot_analysis__configuration__pb2
+from minknow_api import protocol_settings_pb2 as minknow__api_dot_protocol__settings__pb2
 
 
 DESCRIPTOR = _descriptor.FileDescriptor(
@@ -22,9 +23,9 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=b'\n\034com.nanoporetech.minknow_api\242\002\005MKAPI',
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\x1cminknow_api/basecaller.proto\x12\x16minknow_api.basecaller\x1a\x1fgoogle/protobuf/timestamp.proto\x1a(minknow_api/analysis_configuration.proto\"\x19\n\x17ListConfigsByKitRequest\"\xf4\x03\n\x18ListConfigsByKitResponse\x12`\n\x11\x66low_cell_configs\x18\x01 \x03(\x0b\x32\x45.minknow_api.basecaller.ListConfigsByKitResponse.FlowCellConfigsEntry\x1a\x1d\n\nConfigList\x12\x0f\n\x07\x63onfigs\x18\x01 \x03(\t\x1a\xe0\x01\n\x0bPerFlowCell\x12\x61\n\x0bkit_configs\x18\x01 \x03(\x0b\x32L.minknow_api.basecaller.ListConfigsByKitResponse.PerFlowCell.KitConfigsEntry\x1an\n\x0fKitConfigsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12J\n\x05value\x18\x02 \x01(\x0b\x32;.minknow_api.basecaller.ListConfigsByKitResponse.ConfigList:\x02\x38\x01\x1at\n\x14\x46lowCellConfigsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12K\n\x05value\x18\x02 \x01(\x0b\x32<.minknow_api.basecaller.ListConfigsByKitResponse.PerFlowCell:\x02\x38\x01\"\x8f\x03\n\x17StartBasecallingRequest\x12\x0c\n\x04name\x18\x0c \x01(\t\x12\x1f\n\x17input_reads_directories\x18\x01 \x03(\t\x12\x1e\n\x16output_reads_directory\x18\x02 \x01(\t\x12\x15\n\rconfiguration\x18\x03 \x01(\t\x12\x11\n\tfast5_out\x18\x04 \x01(\x08\x12\x16\n\x0e\x63ompress_fastq\x18\x05 \x01(\x08\x12\x16\n\x0e\x64isable_events\x18\x06 \x01(\x08\x12\x11\n\trecursive\x18\x07 \x01(\x08\x12[\n\x17\x62\x61rcoding_configuration\x18\n \x01(\x0b\x32:.minknow_api.analysis_configuration.BarcodingConfiguration\x12[\n\x17\x61lignment_configuration\x18\x0b \x01(\x0b\x32:.minknow_api.analysis_configuration.AlignmentConfiguration\"&\n\x18StartBasecallingResponse\x12\n\n\x02id\x18\x01 \x01(\t\"\xee\x01\n\x15StartBarcodingRequest\x12\x0c\n\x04name\x18\x0b \x01(\t\x12\x1f\n\x17input_reads_directories\x18\x01 \x03(\t\x12\x1e\n\x16output_reads_directory\x18\x02 \x01(\t\x12\x16\n\x0e\x63ompress_fastq\x18\x04 \x01(\x08\x12\x11\n\trecursive\x18\x05 \x01(\x08\x12[\n\x17\x62\x61rcoding_configuration\x18\n \x01(\x0b\x32:.minknow_api.analysis_configuration.BarcodingConfiguration\"$\n\x16StartBarcodingResponse\x12\n\n\x02id\x18\x01 \x01(\t\"\xd6\x01\n\x15StartAlignmentRequest\x12\x0c\n\x04name\x18\x07 \x01(\t\x12\x1f\n\x17input_reads_directories\x18\x01 \x03(\t\x12\x1e\n\x16output_reads_directory\x18\x02 \x01(\t\x12\x11\n\trecursive\x18\x04 \x01(\x08\x12[\n\x17\x61lignment_configuration\x18\x06 \x01(\x0b\x32:.minknow_api.analysis_configuration.AlignmentConfiguration\"$\n\x16StartAlignmentResponse\x12\n\n\x02id\x18\x01 \x01(\t\"\x1b\n\rCancelRequest\x12\n\n\x02id\x18\x01 \x01(\t\"\x10\n\x0e\x43\x61ncelResponse\"\xc6\x04\n\x07RunInfo\x12\n\n\x02id\x18\x01 \x01(\t\x12T\n\x19start_basecalling_request\x18\x02 \x01(\x0b\x32/.minknow_api.basecaller.StartBasecallingRequestH\x00\x12P\n\x17start_barcoding_request\x18\x0b \x01(\x0b\x32-.minknow_api.basecaller.StartBarcodingRequestH\x00\x12P\n\x17start_alignment_request\x18\x0c \x01(\x0b\x32-.minknow_api.basecaller.StartAlignmentRequestH\x00\x12,\n\x05state\x18\x03 \x01(\x0e\x32\x1d.minknow_api.basecaller.State\x12\x0e\n\x06\x65rrors\x18\x04 \x03(\t\x12\x18\n\x10\x66iles_discovered\x18\x05 \x01(\x05\x12\x18\n\x10progress_current\x18\x06 \x01(\x05\x12\x16\n\x0eprogress_total\x18\x07 \x01(\x05\x12.\n\nstart_time\x18\x08 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12,\n\x08\x65nd_time\x18\t \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x36\n\x12\x65stimated_end_time\x18\n \x01(\x0b\x32\x1a.google.protobuf.TimestampB\x15\n\x13start_request_oneof\"\xbc\x01\n\x0eGetInfoRequest\x12\x39\n\x06preset\x18\x01 \x01(\x0e\x32\'.minknow_api.basecaller.SelectionPresetH\x00\x12\x0c\n\x02id\x18\x02 \x01(\tH\x00\x12=\n\x04list\x18\x03 \x01(\x0b\x32-.minknow_api.basecaller.GetInfoRequest.IdListH\x00\x1a\x15\n\x06IdList\x12\x0b\n\x03ids\x18\x01 \x03(\tB\x0b\n\tselection\"@\n\x0fGetInfoResponse\x12-\n\x04runs\x18\x01 \x03(\x0b\x32\x1f.minknow_api.basecaller.RunInfo\"*\n\x0cWatchRequest\x12\x1a\n\x12send_finished_runs\x18\x01 \x01(\x08\">\n\rWatchResponse\x12-\n\x04runs\x18\x01 \x03(\x0b\x32\x1f.minknow_api.basecaller.RunInfo\"^\n\x19MakeAlignmentIndexRequest\x12!\n\x19input_alignment_reference\x18\x01 \x01(\t\x12\x1e\n\x16output_alignment_index\x18\x02 \x01(\t\"\x1c\n\x1aMakeAlignmentIndexResponse*S\n\x05State\x12\x11\n\rSTATE_RUNNING\x10\x00\x12\x11\n\rSTATE_SUCCESS\x10\x01\x12\x0f\n\x0bSTATE_ERROR\x10\x02\x12\x13\n\x0fSTATE_CANCELLED\x10\x03*[\n\x0fSelectionPreset\x12\x16\n\x12PRESET_ALL_RUNNING\x10\x00\x12 \n\x1cPRESET_MOST_RECENTLY_STARTED\x10\x01\x12\x0e\n\nPRESET_ALL\x10\x02\x32\x8d\x07\n\nBasecaller\x12}\n\x13list_configs_by_kit\x12/.minknow_api.basecaller.ListConfigsByKitRequest\x1a\x30.minknow_api.basecaller.ListConfigsByKitResponse\"\x03\x90\x02\x01\x12x\n\x11start_basecalling\x12/.minknow_api.basecaller.StartBasecallingRequest\x1a\x30.minknow_api.basecaller.StartBasecallingResponse\"\x00\x12r\n\x0fstart_barcoding\x12-.minknow_api.basecaller.StartBarcodingRequest\x1a..minknow_api.basecaller.StartBarcodingResponse\"\x00\x12r\n\x0fstart_alignment\x12-.minknow_api.basecaller.StartAlignmentRequest\x1a..minknow_api.basecaller.StartAlignmentResponse\"\x00\x12\\\n\x06\x63\x61ncel\x12%.minknow_api.basecaller.CancelRequest\x1a&.minknow_api.basecaller.CancelResponse\"\x03\x90\x02\x02\x12\x62\n\x08get_info\x12&.minknow_api.basecaller.GetInfoRequest\x1a\'.minknow_api.basecaller.GetInfoResponse\"\x03\x90\x02\x01\x30\x01\x12[\n\x05watch\x12$.minknow_api.basecaller.WatchRequest\x1a%.minknow_api.basecaller.WatchResponse\"\x03\x90\x02\x01\x30\x01\x12\x7f\n\x14make_alignment_index\x12\x31.minknow_api.basecaller.MakeAlignmentIndexRequest\x1a\x32.minknow_api.basecaller.MakeAlignmentIndexResponse\"\x00\x42&\n\x1c\x63om.nanoporetech.minknow_api\xa2\x02\x05MKAPIb\x06proto3'
+  serialized_pb=b'\n\x1cminknow_api/basecaller.proto\x12\x16minknow_api.basecaller\x1a\x1fgoogle/protobuf/timestamp.proto\x1a(minknow_api/analysis_configuration.proto\x1a#minknow_api/protocol_settings.proto\"\x19\n\x17ListConfigsByKitRequest\"\xf4\x03\n\x18ListConfigsByKitResponse\x12`\n\x11\x66low_cell_configs\x18\x01 \x03(\x0b\x32\x45.minknow_api.basecaller.ListConfigsByKitResponse.FlowCellConfigsEntry\x1a\x1d\n\nConfigList\x12\x0f\n\x07\x63onfigs\x18\x01 \x03(\t\x1a\xe0\x01\n\x0bPerFlowCell\x12\x61\n\x0bkit_configs\x18\x01 \x03(\x0b\x32L.minknow_api.basecaller.ListConfigsByKitResponse.PerFlowCell.KitConfigsEntry\x1an\n\x0fKitConfigsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12J\n\x05value\x18\x02 \x01(\x0b\x32;.minknow_api.basecaller.ListConfigsByKitResponse.ConfigList:\x02\x38\x01\x1at\n\x14\x46lowCellConfigsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12K\n\x05value\x18\x02 \x01(\x0b\x32<.minknow_api.basecaller.ListConfigsByKitResponse.PerFlowCell:\x02\x38\x01\"\x8f\x03\n\x17StartBasecallingRequest\x12\x0c\n\x04name\x18\x0c \x01(\t\x12\x1f\n\x17input_reads_directories\x18\x01 \x03(\t\x12\x1e\n\x16output_reads_directory\x18\x02 \x01(\t\x12\x15\n\rconfiguration\x18\x03 \x01(\t\x12\x11\n\tfast5_out\x18\x04 \x01(\x08\x12\x16\n\x0e\x63ompress_fastq\x18\x05 \x01(\x08\x12\x16\n\x0e\x64isable_events\x18\x06 \x01(\x08\x12\x11\n\trecursive\x18\x07 \x01(\x08\x12[\n\x17\x62\x61rcoding_configuration\x18\n \x01(\x0b\x32:.minknow_api.analysis_configuration.BarcodingConfiguration\x12[\n\x17\x61lignment_configuration\x18\x0b \x01(\x0b\x32:.minknow_api.analysis_configuration.AlignmentConfiguration\"&\n\x18StartBasecallingResponse\x12\n\n\x02id\x18\x01 \x01(\t\"\xee\x01\n\x15StartBarcodingRequest\x12\x0c\n\x04name\x18\x0b \x01(\t\x12\x1f\n\x17input_reads_directories\x18\x01 \x03(\t\x12\x1e\n\x16output_reads_directory\x18\x02 \x01(\t\x12\x16\n\x0e\x63ompress_fastq\x18\x04 \x01(\x08\x12\x11\n\trecursive\x18\x05 \x01(\x08\x12[\n\x17\x62\x61rcoding_configuration\x18\n \x01(\x0b\x32:.minknow_api.analysis_configuration.BarcodingConfiguration\"$\n\x16StartBarcodingResponse\x12\n\n\x02id\x18\x01 \x01(\t\"\xd6\x01\n\x15StartAlignmentRequest\x12\x0c\n\x04name\x18\x07 \x01(\t\x12\x1f\n\x17input_reads_directories\x18\x01 \x03(\t\x12\x1e\n\x16output_reads_directory\x18\x02 \x01(\t\x12\x11\n\trecursive\x18\x04 \x01(\x08\x12[\n\x17\x61lignment_configuration\x18\x06 \x01(\x0b\x32:.minknow_api.analysis_configuration.AlignmentConfiguration\"$\n\x16StartAlignmentResponse\x12\n\n\x02id\x18\x01 \x01(\t\"\xb3\x03\n\"StartPostProcessingProtocolRequest\x12\x12\n\nidentifier\x18\x01 \x01(\t\x12\"\n\x1asequencing_protocol_run_id\x18\x07 \x01(\t\x12\x1d\n\x15input_fast5_directory\x18\x02 \x01(\t\x12\x1d\n\x15input_fastq_directory\x18\x03 \x01(\t\x12\x1b\n\x13input_bam_directory\x18\x04 \x01(\t\x12\x18\n\x10output_directory\x18\x05 \x01(\t\x12\x65\n\x0esetting_values\x18\x06 \x03(\x0b\x32M.minknow_api.basecaller.StartPostProcessingProtocolRequest.SettingValuesEntry\x1ay\n\x12SettingValuesEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12R\n\x05value\x18\x02 \x01(\x0b\x32\x43.minknow_api.protocol_settings.ProtocolSetting.ProtocolSettingValue:\x02\x38\x01\"\x87\x03\n\x0cStartRequest\x12T\n\x19start_basecalling_request\x18\x02 \x01(\x0b\x32/.minknow_api.basecaller.StartBasecallingRequestH\x00\x12P\n\x17start_barcoding_request\x18\x03 \x01(\x0b\x32-.minknow_api.basecaller.StartBarcodingRequestH\x00\x12P\n\x17start_alignment_request\x18\x04 \x01(\x0b\x32-.minknow_api.basecaller.StartAlignmentRequestH\x00\x12l\n&start_post_processing_protocol_request\x18\x05 \x01(\x0b\x32:.minknow_api.basecaller.StartPostProcessingProtocolRequestH\x00\x42\x0f\n\rstart_request\"1\n#StartPostProcessingProtocolResponse\x12\n\n\x02id\x18\x01 \x01(\t\"\x1b\n\rCancelRequest\x12\n\n\x02id\x18\x01 \x01(\t\"\x10\n\x0e\x43\x61ncelResponse\"\xb4\x05\n\x07RunInfo\x12\n\n\x02id\x18\x01 \x01(\t\x12T\n\x19start_basecalling_request\x18\x02 \x01(\x0b\x32/.minknow_api.basecaller.StartBasecallingRequestH\x00\x12P\n\x17start_barcoding_request\x18\x0b \x01(\x0b\x32-.minknow_api.basecaller.StartBarcodingRequestH\x00\x12P\n\x17start_alignment_request\x18\x0c \x01(\x0b\x32-.minknow_api.basecaller.StartAlignmentRequestH\x00\x12l\n&start_post_processing_protocol_request\x18\r \x01(\x0b\x32:.minknow_api.basecaller.StartPostProcessingProtocolRequestH\x00\x12,\n\x05state\x18\x03 \x01(\x0e\x32\x1d.minknow_api.basecaller.State\x12\x0e\n\x06\x65rrors\x18\x04 \x03(\t\x12\x18\n\x10\x66iles_discovered\x18\x05 \x01(\x05\x12\x18\n\x10progress_current\x18\x06 \x01(\x05\x12\x16\n\x0eprogress_total\x18\x07 \x01(\x05\x12.\n\nstart_time\x18\x08 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12,\n\x08\x65nd_time\x18\t \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x36\n\x12\x65stimated_end_time\x18\n \x01(\x0b\x32\x1a.google.protobuf.TimestampB\x15\n\x13start_request_oneof\"\xbc\x01\n\x0eGetInfoRequest\x12\x39\n\x06preset\x18\x01 \x01(\x0e\x32\'.minknow_api.basecaller.SelectionPresetH\x00\x12\x0c\n\x02id\x18\x02 \x01(\tH\x00\x12=\n\x04list\x18\x03 \x01(\x0b\x32-.minknow_api.basecaller.GetInfoRequest.IdListH\x00\x1a\x15\n\x06IdList\x12\x0b\n\x03ids\x18\x01 \x03(\tB\x0b\n\tselection\"@\n\x0fGetInfoResponse\x12-\n\x04runs\x18\x01 \x03(\x0b\x32\x1f.minknow_api.basecaller.RunInfo\"*\n\x0cWatchRequest\x12\x1a\n\x12send_finished_runs\x18\x01 \x01(\x08\">\n\rWatchResponse\x12-\n\x04runs\x18\x01 \x03(\x0b\x32\x1f.minknow_api.basecaller.RunInfo\"^\n\x19MakeAlignmentIndexRequest\x12!\n\x19input_alignment_reference\x18\x01 \x01(\t\x12\x1e\n\x16output_alignment_index\x18\x02 \x01(\t\"\x1c\n\x1aMakeAlignmentIndexResponse\"$\n\"ListPostProcessingProtocolsRequest\">\n\x1aPostProcessingProtocolInfo\x12\x12\n\nidentifier\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\"l\n#ListPostProcessingProtocolsResponse\x12\x45\n\tprotocols\x18\x01 \x03(\x0b\x32\x32.minknow_api.basecaller.PostProcessingProtocolInfo\"B\n,ListSettingsForPostProcessingProtocolRequest\x12\x12\n\nidentifier\x18\x01 \x01(\t\"\xd2\x01\n-ListSettingsForPostProcessingProtocolResponse\x12\x1c\n\x14requires_fast5_input\x18\x01 \x01(\x08\x12\x1c\n\x14requires_fastq_input\x18\x02 \x01(\x08\x12\x1a\n\x12requires_bam_input\x18\x03 \x01(\x08\x12I\n\x11protocol_settings\x18\x04 \x03(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\"5\n\x15UpdateProgressRequest\x12\n\n\x02id\x18\x01 \x01(\t\x12\x10\n\x08progress\x18\x02 \x01(\x02\"\x18\n\x16UpdateProgressResponse*S\n\x05State\x12\x11\n\rSTATE_RUNNING\x10\x00\x12\x11\n\rSTATE_SUCCESS\x10\x01\x12\x0f\n\x0bSTATE_ERROR\x10\x02\x12\x13\n\x0fSTATE_CANCELLED\x10\x03*[\n\x0fSelectionPreset\x12\x16\n\x12PRESET_ALL_RUNNING\x10\x00\x12 \n\x1cPRESET_MOST_RECENTLY_STARTED\x10\x01\x12\x0e\n\nPRESET_ALL\x10\x02\x32\x9b\x0c\n\nBasecaller\x12}\n\x13list_configs_by_kit\x12/.minknow_api.basecaller.ListConfigsByKitRequest\x1a\x30.minknow_api.basecaller.ListConfigsByKitResponse\"\x03\x90\x02\x01\x12x\n\x11start_basecalling\x12/.minknow_api.basecaller.StartBasecallingRequest\x1a\x30.minknow_api.basecaller.StartBasecallingResponse\"\x00\x12r\n\x0fstart_barcoding\x12-.minknow_api.basecaller.StartBarcodingRequest\x1a..minknow_api.basecaller.StartBarcodingResponse\"\x00\x12\x9b\x01\n\x1estart_post_processing_protocol\x12:.minknow_api.basecaller.StartPostProcessingProtocolRequest\x1a;.minknow_api.basecaller.StartPostProcessingProtocolResponse\"\x00\x12r\n\x0fstart_alignment\x12-.minknow_api.basecaller.StartAlignmentRequest\x1a..minknow_api.basecaller.StartAlignmentResponse\"\x00\x12\\\n\x06\x63\x61ncel\x12%.minknow_api.basecaller.CancelRequest\x1a&.minknow_api.basecaller.CancelResponse\"\x03\x90\x02\x02\x12\x62\n\x08get_info\x12&.minknow_api.basecaller.GetInfoRequest\x1a\'.minknow_api.basecaller.GetInfoResponse\"\x03\x90\x02\x01\x30\x01\x12[\n\x05watch\x12$.minknow_api.basecaller.WatchRequest\x1a%.minknow_api.basecaller.WatchResponse\"\x03\x90\x02\x01\x30\x01\x12\x7f\n\x14make_alignment_index\x12\x31.minknow_api.basecaller.MakeAlignmentIndexRequest\x1a\x32.minknow_api.basecaller.MakeAlignmentIndexResponse\"\x00\x12\x9e\x01\n\x1elist_post_processing_protocols\x12:.minknow_api.basecaller.ListPostProcessingProtocolsRequest\x1a;.minknow_api.basecaller.ListPostProcessingProtocolsResponse\"\x03\x90\x02\x02\x12\xbe\x01\n*list_settings_for_post_processing_protocol\x12\x44.minknow_api.basecaller.ListSettingsForPostProcessingProtocolRequest\x1a\x45.minknow_api.basecaller.ListSettingsForPostProcessingProtocolResponse\"\x03\x90\x02\x01\x12\x8b\x01\n(update_post_processing_protocol_progress\x12-.minknow_api.basecaller.UpdateProgressRequest\x1a..minknow_api.basecaller.UpdateProgressResponse\"\x00\x42&\n\x1c\x63om.nanoporetech.minknow_api\xa2\x02\x05MKAPIb\x06proto3'
   ,
-  dependencies=[google_dot_protobuf_dot_timestamp__pb2.DESCRIPTOR,minknow__api_dot_analysis__configuration__pb2.DESCRIPTOR,])
+  dependencies=[google_dot_protobuf_dot_timestamp__pb2.DESCRIPTOR,minknow__api_dot_analysis__configuration__pb2.DESCRIPTOR,minknow__api_dot_protocol__settings__pb2.DESCRIPTOR,])
 
 _STATE = _descriptor.EnumDescriptor(
   name='State',
@@ -56,8 +57,8 @@ _STATE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=2760,
-  serialized_end=2843,
+  serialized_start=4364,
+  serialized_end=4447,
 )
 _sym_db.RegisterEnumDescriptor(_STATE)
 
@@ -87,8 +88,8 @@ _SELECTIONPRESET = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=2845,
-  serialized_end=2936,
+  serialized_start=4449,
+  serialized_end=4540,
 )
 _sym_db.RegisterEnumDescriptor(_SELECTIONPRESET)
 
@@ -123,8 +124,8 @@ _LISTCONFIGSBYKITREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=131,
-  serialized_end=156,
+  serialized_start=168,
+  serialized_end=193,
 )
 
 
@@ -155,8 +156,8 @@ _LISTCONFIGSBYKITRESPONSE_CONFIGLIST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=285,
-  serialized_end=314,
+  serialized_start=322,
+  serialized_end=351,
 )
 
 _LISTCONFIGSBYKITRESPONSE_PERFLOWCELL_KITCONFIGSENTRY = _descriptor.Descriptor(
@@ -193,8 +194,8 @@ _LISTCONFIGSBYKITRESPONSE_PERFLOWCELL_KITCONFIGSENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=431,
-  serialized_end=541,
+  serialized_start=468,
+  serialized_end=578,
 )
 
 _LISTCONFIGSBYKITRESPONSE_PERFLOWCELL = _descriptor.Descriptor(
@@ -224,8 +225,8 @@ _LISTCONFIGSBYKITRESPONSE_PERFLOWCELL = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=317,
-  serialized_end=541,
+  serialized_start=354,
+  serialized_end=578,
 )
 
 _LISTCONFIGSBYKITRESPONSE_FLOWCELLCONFIGSENTRY = _descriptor.Descriptor(
@@ -262,8 +263,8 @@ _LISTCONFIGSBYKITRESPONSE_FLOWCELLCONFIGSENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=543,
-  serialized_end=659,
+  serialized_start=580,
+  serialized_end=696,
 )
 
 _LISTCONFIGSBYKITRESPONSE = _descriptor.Descriptor(
@@ -293,8 +294,8 @@ _LISTCONFIGSBYKITRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=159,
-  serialized_end=659,
+  serialized_start=196,
+  serialized_end=696,
 )
 
 
@@ -388,8 +389,8 @@ _STARTBASECALLINGREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=662,
-  serialized_end=1061,
+  serialized_start=699,
+  serialized_end=1098,
 )
 
 
@@ -420,8 +421,8 @@ _STARTBASECALLINGRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1063,
-  serialized_end=1101,
+  serialized_start=1100,
+  serialized_end=1138,
 )
 
 
@@ -487,8 +488,8 @@ _STARTBARCODINGREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1104,
-  serialized_end=1342,
+  serialized_start=1141,
+  serialized_end=1379,
 )
 
 
@@ -519,8 +520,8 @@ _STARTBARCODINGRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1344,
-  serialized_end=1380,
+  serialized_start=1381,
+  serialized_end=1417,
 )
 
 
@@ -579,8 +580,8 @@ _STARTALIGNMENTREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1383,
-  serialized_end=1597,
+  serialized_start=1420,
+  serialized_end=1634,
 )
 
 
@@ -611,8 +612,210 @@ _STARTALIGNMENTRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1599,
-  serialized_end=1635,
+  serialized_start=1636,
+  serialized_end=1672,
+)
+
+
+_STARTPOSTPROCESSINGPROTOCOLREQUEST_SETTINGVALUESENTRY = _descriptor.Descriptor(
+  name='SettingValuesEntry',
+  full_name='minknow_api.basecaller.StartPostProcessingProtocolRequest.SettingValuesEntry',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='key', full_name='minknow_api.basecaller.StartPostProcessingProtocolRequest.SettingValuesEntry.key', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='value', full_name='minknow_api.basecaller.StartPostProcessingProtocolRequest.SettingValuesEntry.value', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=b'8\001',
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=1989,
+  serialized_end=2110,
+)
+
+_STARTPOSTPROCESSINGPROTOCOLREQUEST = _descriptor.Descriptor(
+  name='StartPostProcessingProtocolRequest',
+  full_name='minknow_api.basecaller.StartPostProcessingProtocolRequest',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='identifier', full_name='minknow_api.basecaller.StartPostProcessingProtocolRequest.identifier', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='sequencing_protocol_run_id', full_name='minknow_api.basecaller.StartPostProcessingProtocolRequest.sequencing_protocol_run_id', index=1,
+      number=7, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='input_fast5_directory', full_name='minknow_api.basecaller.StartPostProcessingProtocolRequest.input_fast5_directory', index=2,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='input_fastq_directory', full_name='minknow_api.basecaller.StartPostProcessingProtocolRequest.input_fastq_directory', index=3,
+      number=3, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='input_bam_directory', full_name='minknow_api.basecaller.StartPostProcessingProtocolRequest.input_bam_directory', index=4,
+      number=4, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='output_directory', full_name='minknow_api.basecaller.StartPostProcessingProtocolRequest.output_directory', index=5,
+      number=5, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='setting_values', full_name='minknow_api.basecaller.StartPostProcessingProtocolRequest.setting_values', index=6,
+      number=6, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[_STARTPOSTPROCESSINGPROTOCOLREQUEST_SETTINGVALUESENTRY, ],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=1675,
+  serialized_end=2110,
+)
+
+
+_STARTREQUEST = _descriptor.Descriptor(
+  name='StartRequest',
+  full_name='minknow_api.basecaller.StartRequest',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='start_basecalling_request', full_name='minknow_api.basecaller.StartRequest.start_basecalling_request', index=0,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='start_barcoding_request', full_name='minknow_api.basecaller.StartRequest.start_barcoding_request', index=1,
+      number=3, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='start_alignment_request', full_name='minknow_api.basecaller.StartRequest.start_alignment_request', index=2,
+      number=4, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='start_post_processing_protocol_request', full_name='minknow_api.basecaller.StartRequest.start_post_processing_protocol_request', index=3,
+      number=5, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+    _descriptor.OneofDescriptor(
+      name='start_request', full_name='minknow_api.basecaller.StartRequest.start_request',
+      index=0, containing_type=None,
+      create_key=_descriptor._internal_create_key,
+    fields=[]),
+  ],
+  serialized_start=2113,
+  serialized_end=2504,
+)
+
+
+_STARTPOSTPROCESSINGPROTOCOLRESPONSE = _descriptor.Descriptor(
+  name='StartPostProcessingProtocolResponse',
+  full_name='minknow_api.basecaller.StartPostProcessingProtocolResponse',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='id', full_name='minknow_api.basecaller.StartPostProcessingProtocolResponse.id', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=2506,
+  serialized_end=2555,
 )
 
 
@@ -643,8 +846,8 @@ _CANCELREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1637,
-  serialized_end=1664,
+  serialized_start=2557,
+  serialized_end=2584,
 )
 
 
@@ -668,8 +871,8 @@ _CANCELRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1666,
-  serialized_end=1682,
+  serialized_start=2586,
+  serialized_end=2602,
 )
 
 
@@ -710,56 +913,63 @@ _RUNINFO = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='state', full_name='minknow_api.basecaller.RunInfo.state', index=4,
+      name='start_post_processing_protocol_request', full_name='minknow_api.basecaller.RunInfo.start_post_processing_protocol_request', index=4,
+      number=13, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='state', full_name='minknow_api.basecaller.RunInfo.state', index=5,
       number=3, type=14, cpp_type=8, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='errors', full_name='minknow_api.basecaller.RunInfo.errors', index=5,
+      name='errors', full_name='minknow_api.basecaller.RunInfo.errors', index=6,
       number=4, type=9, cpp_type=9, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='files_discovered', full_name='minknow_api.basecaller.RunInfo.files_discovered', index=6,
+      name='files_discovered', full_name='minknow_api.basecaller.RunInfo.files_discovered', index=7,
       number=5, type=5, cpp_type=1, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='progress_current', full_name='minknow_api.basecaller.RunInfo.progress_current', index=7,
+      name='progress_current', full_name='minknow_api.basecaller.RunInfo.progress_current', index=8,
       number=6, type=5, cpp_type=1, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='progress_total', full_name='minknow_api.basecaller.RunInfo.progress_total', index=8,
+      name='progress_total', full_name='minknow_api.basecaller.RunInfo.progress_total', index=9,
       number=7, type=5, cpp_type=1, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='start_time', full_name='minknow_api.basecaller.RunInfo.start_time', index=9,
+      name='start_time', full_name='minknow_api.basecaller.RunInfo.start_time', index=10,
       number=8, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='end_time', full_name='minknow_api.basecaller.RunInfo.end_time', index=10,
+      name='end_time', full_name='minknow_api.basecaller.RunInfo.end_time', index=11,
       number=9, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='estimated_end_time', full_name='minknow_api.basecaller.RunInfo.estimated_end_time', index=11,
+      name='estimated_end_time', full_name='minknow_api.basecaller.RunInfo.estimated_end_time', index=12,
       number=10, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
@@ -782,8 +992,8 @@ _RUNINFO = _descriptor.Descriptor(
       create_key=_descriptor._internal_create_key,
     fields=[]),
   ],
-  serialized_start=1685,
-  serialized_end=2267,
+  serialized_start=2605,
+  serialized_end=3297,
 )
 
 
@@ -814,8 +1024,8 @@ _GETINFOREQUEST_IDLIST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2424,
-  serialized_end=2445,
+  serialized_start=3454,
+  serialized_end=3475,
 )
 
 _GETINFOREQUEST = _descriptor.Descriptor(
@@ -864,8 +1074,8 @@ _GETINFOREQUEST = _descriptor.Descriptor(
       create_key=_descriptor._internal_create_key,
     fields=[]),
   ],
-  serialized_start=2270,
-  serialized_end=2458,
+  serialized_start=3300,
+  serialized_end=3488,
 )
 
 
@@ -896,8 +1106,8 @@ _GETINFORESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2460,
-  serialized_end=2524,
+  serialized_start=3490,
+  serialized_end=3554,
 )
 
 
@@ -928,8 +1138,8 @@ _WATCHREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2526,
-  serialized_end=2568,
+  serialized_start=3556,
+  serialized_end=3598,
 )
 
 
@@ -960,8 +1170,8 @@ _WATCHRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2570,
-  serialized_end=2632,
+  serialized_start=3600,
+  serialized_end=3662,
 )
 
 
@@ -999,8 +1209,8 @@ _MAKEALIGNMENTINDEXREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2634,
-  serialized_end=2728,
+  serialized_start=3664,
+  serialized_end=3758,
 )
 
 
@@ -1024,8 +1234,253 @@ _MAKEALIGNMENTINDEXRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2730,
-  serialized_end=2758,
+  serialized_start=3760,
+  serialized_end=3788,
+)
+
+
+_LISTPOSTPROCESSINGPROTOCOLSREQUEST = _descriptor.Descriptor(
+  name='ListPostProcessingProtocolsRequest',
+  full_name='minknow_api.basecaller.ListPostProcessingProtocolsRequest',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=3790,
+  serialized_end=3826,
+)
+
+
+_POSTPROCESSINGPROTOCOLINFO = _descriptor.Descriptor(
+  name='PostProcessingProtocolInfo',
+  full_name='minknow_api.basecaller.PostProcessingProtocolInfo',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='identifier', full_name='minknow_api.basecaller.PostProcessingProtocolInfo.identifier', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='name', full_name='minknow_api.basecaller.PostProcessingProtocolInfo.name', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=3828,
+  serialized_end=3890,
+)
+
+
+_LISTPOSTPROCESSINGPROTOCOLSRESPONSE = _descriptor.Descriptor(
+  name='ListPostProcessingProtocolsResponse',
+  full_name='minknow_api.basecaller.ListPostProcessingProtocolsResponse',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='protocols', full_name='minknow_api.basecaller.ListPostProcessingProtocolsResponse.protocols', index=0,
+      number=1, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=3892,
+  serialized_end=4000,
+)
+
+
+_LISTSETTINGSFORPOSTPROCESSINGPROTOCOLREQUEST = _descriptor.Descriptor(
+  name='ListSettingsForPostProcessingProtocolRequest',
+  full_name='minknow_api.basecaller.ListSettingsForPostProcessingProtocolRequest',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='identifier', full_name='minknow_api.basecaller.ListSettingsForPostProcessingProtocolRequest.identifier', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=4002,
+  serialized_end=4068,
+)
+
+
+_LISTSETTINGSFORPOSTPROCESSINGPROTOCOLRESPONSE = _descriptor.Descriptor(
+  name='ListSettingsForPostProcessingProtocolResponse',
+  full_name='minknow_api.basecaller.ListSettingsForPostProcessingProtocolResponse',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='requires_fast5_input', full_name='minknow_api.basecaller.ListSettingsForPostProcessingProtocolResponse.requires_fast5_input', index=0,
+      number=1, type=8, cpp_type=7, label=1,
+      has_default_value=False, default_value=False,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='requires_fastq_input', full_name='minknow_api.basecaller.ListSettingsForPostProcessingProtocolResponse.requires_fastq_input', index=1,
+      number=2, type=8, cpp_type=7, label=1,
+      has_default_value=False, default_value=False,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='requires_bam_input', full_name='minknow_api.basecaller.ListSettingsForPostProcessingProtocolResponse.requires_bam_input', index=2,
+      number=3, type=8, cpp_type=7, label=1,
+      has_default_value=False, default_value=False,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='protocol_settings', full_name='minknow_api.basecaller.ListSettingsForPostProcessingProtocolResponse.protocol_settings', index=3,
+      number=4, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=4071,
+  serialized_end=4281,
+)
+
+
+_UPDATEPROGRESSREQUEST = _descriptor.Descriptor(
+  name='UpdateProgressRequest',
+  full_name='minknow_api.basecaller.UpdateProgressRequest',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='id', full_name='minknow_api.basecaller.UpdateProgressRequest.id', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='progress', full_name='minknow_api.basecaller.UpdateProgressRequest.progress', index=1,
+      number=2, type=2, cpp_type=6, label=1,
+      has_default_value=False, default_value=float(0),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=4283,
+  serialized_end=4336,
+)
+
+
+_UPDATEPROGRESSRESPONSE = _descriptor.Descriptor(
+  name='UpdateProgressResponse',
+  full_name='minknow_api.basecaller.UpdateProgressResponse',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=4338,
+  serialized_end=4362,
 )
 
 _LISTCONFIGSBYKITRESPONSE_CONFIGLIST.containing_type = _LISTCONFIGSBYKITRESPONSE
@@ -1040,9 +1495,29 @@ _STARTBASECALLINGREQUEST.fields_by_name['barcoding_configuration'].message_type 
 _STARTBASECALLINGREQUEST.fields_by_name['alignment_configuration'].message_type = minknow__api_dot_analysis__configuration__pb2._ALIGNMENTCONFIGURATION
 _STARTBARCODINGREQUEST.fields_by_name['barcoding_configuration'].message_type = minknow__api_dot_analysis__configuration__pb2._BARCODINGCONFIGURATION
 _STARTALIGNMENTREQUEST.fields_by_name['alignment_configuration'].message_type = minknow__api_dot_analysis__configuration__pb2._ALIGNMENTCONFIGURATION
+_STARTPOSTPROCESSINGPROTOCOLREQUEST_SETTINGVALUESENTRY.fields_by_name['value'].message_type = minknow__api_dot_protocol__settings__pb2._PROTOCOLSETTING_PROTOCOLSETTINGVALUE
+_STARTPOSTPROCESSINGPROTOCOLREQUEST_SETTINGVALUESENTRY.containing_type = _STARTPOSTPROCESSINGPROTOCOLREQUEST
+_STARTPOSTPROCESSINGPROTOCOLREQUEST.fields_by_name['setting_values'].message_type = _STARTPOSTPROCESSINGPROTOCOLREQUEST_SETTINGVALUESENTRY
+_STARTREQUEST.fields_by_name['start_basecalling_request'].message_type = _STARTBASECALLINGREQUEST
+_STARTREQUEST.fields_by_name['start_barcoding_request'].message_type = _STARTBARCODINGREQUEST
+_STARTREQUEST.fields_by_name['start_alignment_request'].message_type = _STARTALIGNMENTREQUEST
+_STARTREQUEST.fields_by_name['start_post_processing_protocol_request'].message_type = _STARTPOSTPROCESSINGPROTOCOLREQUEST
+_STARTREQUEST.oneofs_by_name['start_request'].fields.append(
+  _STARTREQUEST.fields_by_name['start_basecalling_request'])
+_STARTREQUEST.fields_by_name['start_basecalling_request'].containing_oneof = _STARTREQUEST.oneofs_by_name['start_request']
+_STARTREQUEST.oneofs_by_name['start_request'].fields.append(
+  _STARTREQUEST.fields_by_name['start_barcoding_request'])
+_STARTREQUEST.fields_by_name['start_barcoding_request'].containing_oneof = _STARTREQUEST.oneofs_by_name['start_request']
+_STARTREQUEST.oneofs_by_name['start_request'].fields.append(
+  _STARTREQUEST.fields_by_name['start_alignment_request'])
+_STARTREQUEST.fields_by_name['start_alignment_request'].containing_oneof = _STARTREQUEST.oneofs_by_name['start_request']
+_STARTREQUEST.oneofs_by_name['start_request'].fields.append(
+  _STARTREQUEST.fields_by_name['start_post_processing_protocol_request'])
+_STARTREQUEST.fields_by_name['start_post_processing_protocol_request'].containing_oneof = _STARTREQUEST.oneofs_by_name['start_request']
 _RUNINFO.fields_by_name['start_basecalling_request'].message_type = _STARTBASECALLINGREQUEST
 _RUNINFO.fields_by_name['start_barcoding_request'].message_type = _STARTBARCODINGREQUEST
 _RUNINFO.fields_by_name['start_alignment_request'].message_type = _STARTALIGNMENTREQUEST
+_RUNINFO.fields_by_name['start_post_processing_protocol_request'].message_type = _STARTPOSTPROCESSINGPROTOCOLREQUEST
 _RUNINFO.fields_by_name['state'].enum_type = _STATE
 _RUNINFO.fields_by_name['start_time'].message_type = google_dot_protobuf_dot_timestamp__pb2._TIMESTAMP
 _RUNINFO.fields_by_name['end_time'].message_type = google_dot_protobuf_dot_timestamp__pb2._TIMESTAMP
@@ -1056,6 +1531,9 @@ _RUNINFO.fields_by_name['start_barcoding_request'].containing_oneof = _RUNINFO.o
 _RUNINFO.oneofs_by_name['start_request_oneof'].fields.append(
   _RUNINFO.fields_by_name['start_alignment_request'])
 _RUNINFO.fields_by_name['start_alignment_request'].containing_oneof = _RUNINFO.oneofs_by_name['start_request_oneof']
+_RUNINFO.oneofs_by_name['start_request_oneof'].fields.append(
+  _RUNINFO.fields_by_name['start_post_processing_protocol_request'])
+_RUNINFO.fields_by_name['start_post_processing_protocol_request'].containing_oneof = _RUNINFO.oneofs_by_name['start_request_oneof']
 _GETINFOREQUEST_IDLIST.containing_type = _GETINFOREQUEST
 _GETINFOREQUEST.fields_by_name['preset'].enum_type = _SELECTIONPRESET
 _GETINFOREQUEST.fields_by_name['list'].message_type = _GETINFOREQUEST_IDLIST
@@ -1070,6 +1548,8 @@ _GETINFOREQUEST.oneofs_by_name['selection'].fields.append(
 _GETINFOREQUEST.fields_by_name['list'].containing_oneof = _GETINFOREQUEST.oneofs_by_name['selection']
 _GETINFORESPONSE.fields_by_name['runs'].message_type = _RUNINFO
 _WATCHRESPONSE.fields_by_name['runs'].message_type = _RUNINFO
+_LISTPOSTPROCESSINGPROTOCOLSRESPONSE.fields_by_name['protocols'].message_type = _POSTPROCESSINGPROTOCOLINFO
+_LISTSETTINGSFORPOSTPROCESSINGPROTOCOLRESPONSE.fields_by_name['protocol_settings'].message_type = minknow__api_dot_protocol__settings__pb2._PROTOCOLSETTING
 DESCRIPTOR.message_types_by_name['ListConfigsByKitRequest'] = _LISTCONFIGSBYKITREQUEST
 DESCRIPTOR.message_types_by_name['ListConfigsByKitResponse'] = _LISTCONFIGSBYKITRESPONSE
 DESCRIPTOR.message_types_by_name['StartBasecallingRequest'] = _STARTBASECALLINGREQUEST
@@ -1078,6 +1558,9 @@ DESCRIPTOR.message_types_by_name['StartBarcodingRequest'] = _STARTBARCODINGREQUE
 DESCRIPTOR.message_types_by_name['StartBarcodingResponse'] = _STARTBARCODINGRESPONSE
 DESCRIPTOR.message_types_by_name['StartAlignmentRequest'] = _STARTALIGNMENTREQUEST
 DESCRIPTOR.message_types_by_name['StartAlignmentResponse'] = _STARTALIGNMENTRESPONSE
+DESCRIPTOR.message_types_by_name['StartPostProcessingProtocolRequest'] = _STARTPOSTPROCESSINGPROTOCOLREQUEST
+DESCRIPTOR.message_types_by_name['StartRequest'] = _STARTREQUEST
+DESCRIPTOR.message_types_by_name['StartPostProcessingProtocolResponse'] = _STARTPOSTPROCESSINGPROTOCOLRESPONSE
 DESCRIPTOR.message_types_by_name['CancelRequest'] = _CANCELREQUEST
 DESCRIPTOR.message_types_by_name['CancelResponse'] = _CANCELRESPONSE
 DESCRIPTOR.message_types_by_name['RunInfo'] = _RUNINFO
@@ -1087,6 +1570,13 @@ DESCRIPTOR.message_types_by_name['WatchRequest'] = _WATCHREQUEST
 DESCRIPTOR.message_types_by_name['WatchResponse'] = _WATCHRESPONSE
 DESCRIPTOR.message_types_by_name['MakeAlignmentIndexRequest'] = _MAKEALIGNMENTINDEXREQUEST
 DESCRIPTOR.message_types_by_name['MakeAlignmentIndexResponse'] = _MAKEALIGNMENTINDEXRESPONSE
+DESCRIPTOR.message_types_by_name['ListPostProcessingProtocolsRequest'] = _LISTPOSTPROCESSINGPROTOCOLSREQUEST
+DESCRIPTOR.message_types_by_name['PostProcessingProtocolInfo'] = _POSTPROCESSINGPROTOCOLINFO
+DESCRIPTOR.message_types_by_name['ListPostProcessingProtocolsResponse'] = _LISTPOSTPROCESSINGPROTOCOLSRESPONSE
+DESCRIPTOR.message_types_by_name['ListSettingsForPostProcessingProtocolRequest'] = _LISTSETTINGSFORPOSTPROCESSINGPROTOCOLREQUEST
+DESCRIPTOR.message_types_by_name['ListSettingsForPostProcessingProtocolResponse'] = _LISTSETTINGSFORPOSTPROCESSINGPROTOCOLRESPONSE
+DESCRIPTOR.message_types_by_name['UpdateProgressRequest'] = _UPDATEPROGRESSREQUEST
+DESCRIPTOR.message_types_by_name['UpdateProgressResponse'] = _UPDATEPROGRESSRESPONSE
 DESCRIPTOR.enum_types_by_name['State'] = _STATE
 DESCRIPTOR.enum_types_by_name['SelectionPreset'] = _SELECTIONPRESET
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
@@ -1107,7 +1597,7 @@ ListConfigsByKitResponse = _reflection.GeneratedProtocolMessageType('ListConfigs
     '__doc__': """Attributes:
         configs:
             List of configuration names, to be used in
-            ``StartRequest.configuration``
+            ``StartBasecallingRequest.configuration``
     """,
     # @@protoc_insertion_point(class_scope:minknow_api.basecaller.ListConfigsByKitResponse.ConfigList)
     })
@@ -1302,6 +1792,65 @@ StartAlignmentResponse = _reflection.GeneratedProtocolMessageType('StartAlignmen
   })
 _sym_db.RegisterMessage(StartAlignmentResponse)
 
+StartPostProcessingProtocolRequest = _reflection.GeneratedProtocolMessageType('StartPostProcessingProtocolRequest', (_message.Message,), {
+
+  'SettingValuesEntry' : _reflection.GeneratedProtocolMessageType('SettingValuesEntry', (_message.Message,), {
+    'DESCRIPTOR' : _STARTPOSTPROCESSINGPROTOCOLREQUEST_SETTINGVALUESENTRY,
+    '__module__' : 'minknow_api.basecaller_pb2'
+    # @@protoc_insertion_point(class_scope:minknow_api.basecaller.StartPostProcessingProtocolRequest.SettingValuesEntry)
+    })
+  ,
+  'DESCRIPTOR' : _STARTPOSTPROCESSINGPROTOCOLREQUEST,
+  '__module__' : 'minknow_api.basecaller_pb2'
+  ,
+  '__doc__': """Attributes:
+      identifier:
+          identifier value from a protocol returned from
+          list_post_processing_protocols.
+      sequencing_protocol_run_id:
+          Optionally specify a sequencing protocol that is linked with
+          this analysis.
+      input_fast5_directory:
+          Input directories for the protocol (omit those which the
+          protocol doesnt require).
+      output_directory:
+          Output directory where the analysed output should be written.
+      setting_values:
+          Configured values for display settings for the protocol (see
+          basecaller.list_settings_for_protocol) keys missing from the
+          original protocol will cause errors.
+  """,
+  # @@protoc_insertion_point(class_scope:minknow_api.basecaller.StartPostProcessingProtocolRequest)
+  })
+_sym_db.RegisterMessage(StartPostProcessingProtocolRequest)
+_sym_db.RegisterMessage(StartPostProcessingProtocolRequest.SettingValuesEntry)
+
+StartRequest = _reflection.GeneratedProtocolMessageType('StartRequest', (_message.Message,), {
+  'DESCRIPTOR' : _STARTREQUEST,
+  '__module__' : 'minknow_api.basecaller_pb2'
+  ,
+  '__doc__': """Attributes:
+      start_request:
+          Start request that will be used to trigger analysis, used to
+          union over all the different types of analysis possible.
+  """,
+  # @@protoc_insertion_point(class_scope:minknow_api.basecaller.StartRequest)
+  })
+_sym_db.RegisterMessage(StartRequest)
+
+StartPostProcessingProtocolResponse = _reflection.GeneratedProtocolMessageType('StartPostProcessingProtocolResponse', (_message.Message,), {
+  'DESCRIPTOR' : _STARTPOSTPROCESSINGPROTOCOLRESPONSE,
+  '__module__' : 'minknow_api.basecaller_pb2'
+  ,
+  '__doc__': """Attributes:
+      id:
+          An identifier for the protocol run that was started. This can
+          be used to monitor or cancel the run.
+  """,
+  # @@protoc_insertion_point(class_scope:minknow_api.basecaller.StartPostProcessingProtocolResponse)
+  })
+_sym_db.RegisterMessage(StartPostProcessingProtocolResponse)
+
 CancelRequest = _reflection.GeneratedProtocolMessageType('CancelRequest', (_message.Message,), {
   'DESCRIPTOR' : _CANCELREQUEST,
   '__module__' : 'minknow_api.basecaller_pb2'
@@ -1335,6 +1884,8 @@ RunInfo = _reflection.GeneratedProtocolMessageType('RunInfo', (_message.Message,
       start_barcoding_request:
           Set if barcoding reads
       start_alignment_request:
+          Set if aligning reads
+      start_post_processing_protocol_request:
           Set if aligning reads
       state:
           What state the run is in.  While the basecalling is running
@@ -1463,10 +2014,94 @@ MakeAlignmentIndexResponse = _reflection.GeneratedProtocolMessageType('MakeAlign
   })
 _sym_db.RegisterMessage(MakeAlignmentIndexResponse)
 
+ListPostProcessingProtocolsRequest = _reflection.GeneratedProtocolMessageType('ListPostProcessingProtocolsRequest', (_message.Message,), {
+  'DESCRIPTOR' : _LISTPOSTPROCESSINGPROTOCOLSREQUEST,
+  '__module__' : 'minknow_api.basecaller_pb2'
+  # @@protoc_insertion_point(class_scope:minknow_api.basecaller.ListPostProcessingProtocolsRequest)
+  })
+_sym_db.RegisterMessage(ListPostProcessingProtocolsRequest)
+
+PostProcessingProtocolInfo = _reflection.GeneratedProtocolMessageType('PostProcessingProtocolInfo', (_message.Message,), {
+  'DESCRIPTOR' : _POSTPROCESSINGPROTOCOLINFO,
+  '__module__' : 'minknow_api.basecaller_pb2'
+  ,
+  '__doc__': """Attributes:
+      identifier:
+          System identifier for the protocol
+      name:
+          Readable name for the protocol (appropriate for use as a key
+          in translation database).
+  """,
+  # @@protoc_insertion_point(class_scope:minknow_api.basecaller.PostProcessingProtocolInfo)
+  })
+_sym_db.RegisterMessage(PostProcessingProtocolInfo)
+
+ListPostProcessingProtocolsResponse = _reflection.GeneratedProtocolMessageType('ListPostProcessingProtocolsResponse', (_message.Message,), {
+  'DESCRIPTOR' : _LISTPOSTPROCESSINGPROTOCOLSRESPONSE,
+  '__module__' : 'minknow_api.basecaller_pb2'
+  # @@protoc_insertion_point(class_scope:minknow_api.basecaller.ListPostProcessingProtocolsResponse)
+  })
+_sym_db.RegisterMessage(ListPostProcessingProtocolsResponse)
+
+ListSettingsForPostProcessingProtocolRequest = _reflection.GeneratedProtocolMessageType('ListSettingsForPostProcessingProtocolRequest', (_message.Message,), {
+  'DESCRIPTOR' : _LISTSETTINGSFORPOSTPROCESSINGPROTOCOLREQUEST,
+  '__module__' : 'minknow_api.basecaller_pb2'
+  ,
+  '__doc__': """Attributes:
+      identifier:
+          specify the protocol with a string containing all the
+          protocol's identifying components, eg:
+          "SYSTEM:post_processing/artic"
+  """,
+  # @@protoc_insertion_point(class_scope:minknow_api.basecaller.ListSettingsForPostProcessingProtocolRequest)
+  })
+_sym_db.RegisterMessage(ListSettingsForPostProcessingProtocolRequest)
+
+ListSettingsForPostProcessingProtocolResponse = _reflection.GeneratedProtocolMessageType('ListSettingsForPostProcessingProtocolResponse', (_message.Message,), {
+  'DESCRIPTOR' : _LISTSETTINGSFORPOSTPROCESSINGPROTOCOLRESPONSE,
+  '__module__' : 'minknow_api.basecaller_pb2'
+  ,
+  '__doc__': """Attributes:
+      requires_fast5_input:
+          Does the protocol require fast5 files as input
+      requires_fastq_input:
+          Does the protocol require fastq files as input
+      requires_bam_input:
+          Does the protocol require bam files as input
+      protocol_settings:
+          List of protocol settings used by the post processing protocol
+  """,
+  # @@protoc_insertion_point(class_scope:minknow_api.basecaller.ListSettingsForPostProcessingProtocolResponse)
+  })
+_sym_db.RegisterMessage(ListSettingsForPostProcessingProtocolResponse)
+
+UpdateProgressRequest = _reflection.GeneratedProtocolMessageType('UpdateProgressRequest', (_message.Message,), {
+  'DESCRIPTOR' : _UPDATEPROGRESSREQUEST,
+  '__module__' : 'minknow_api.basecaller_pb2'
+  ,
+  '__doc__': """Attributes:
+      id:
+          id of the protocol to update (stored in environment variable
+          for python process)
+      progress:
+          Progress indicator, 0-1.
+  """,
+  # @@protoc_insertion_point(class_scope:minknow_api.basecaller.UpdateProgressRequest)
+  })
+_sym_db.RegisterMessage(UpdateProgressRequest)
+
+UpdateProgressResponse = _reflection.GeneratedProtocolMessageType('UpdateProgressResponse', (_message.Message,), {
+  'DESCRIPTOR' : _UPDATEPROGRESSRESPONSE,
+  '__module__' : 'minknow_api.basecaller_pb2'
+  # @@protoc_insertion_point(class_scope:minknow_api.basecaller.UpdateProgressResponse)
+  })
+_sym_db.RegisterMessage(UpdateProgressResponse)
+
 
 DESCRIPTOR._options = None
 _LISTCONFIGSBYKITRESPONSE_PERFLOWCELL_KITCONFIGSENTRY._options = None
 _LISTCONFIGSBYKITRESPONSE_FLOWCELLCONFIGSENTRY._options = None
+_STARTPOSTPROCESSINGPROTOCOLREQUEST_SETTINGVALUESENTRY._options = None
 
 _BASECALLER = _descriptor.ServiceDescriptor(
   name='Basecaller',
@@ -1475,8 +2110,8 @@ _BASECALLER = _descriptor.ServiceDescriptor(
   index=0,
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_start=2939,
-  serialized_end=3848,
+  serialized_start=4543,
+  serialized_end=6106,
   methods=[
   _descriptor.MethodDescriptor(
     name='list_configs_by_kit',
@@ -1509,9 +2144,19 @@ _BASECALLER = _descriptor.ServiceDescriptor(
     create_key=_descriptor._internal_create_key,
   ),
   _descriptor.MethodDescriptor(
+    name='start_post_processing_protocol',
+    full_name='minknow_api.basecaller.Basecaller.start_post_processing_protocol',
+    index=3,
+    containing_service=None,
+    input_type=_STARTPOSTPROCESSINGPROTOCOLREQUEST,
+    output_type=_STARTPOSTPROCESSINGPROTOCOLRESPONSE,
+    serialized_options=None,
+    create_key=_descriptor._internal_create_key,
+  ),
+  _descriptor.MethodDescriptor(
     name='start_alignment',
     full_name='minknow_api.basecaller.Basecaller.start_alignment',
-    index=3,
+    index=4,
     containing_service=None,
     input_type=_STARTALIGNMENTREQUEST,
     output_type=_STARTALIGNMENTRESPONSE,
@@ -1521,7 +2166,7 @@ _BASECALLER = _descriptor.ServiceDescriptor(
   _descriptor.MethodDescriptor(
     name='cancel',
     full_name='minknow_api.basecaller.Basecaller.cancel',
-    index=4,
+    index=5,
     containing_service=None,
     input_type=_CANCELREQUEST,
     output_type=_CANCELRESPONSE,
@@ -1531,7 +2176,7 @@ _BASECALLER = _descriptor.ServiceDescriptor(
   _descriptor.MethodDescriptor(
     name='get_info',
     full_name='minknow_api.basecaller.Basecaller.get_info',
-    index=5,
+    index=6,
     containing_service=None,
     input_type=_GETINFOREQUEST,
     output_type=_GETINFORESPONSE,
@@ -1541,7 +2186,7 @@ _BASECALLER = _descriptor.ServiceDescriptor(
   _descriptor.MethodDescriptor(
     name='watch',
     full_name='minknow_api.basecaller.Basecaller.watch',
-    index=6,
+    index=7,
     containing_service=None,
     input_type=_WATCHREQUEST,
     output_type=_WATCHRESPONSE,
@@ -1551,10 +2196,40 @@ _BASECALLER = _descriptor.ServiceDescriptor(
   _descriptor.MethodDescriptor(
     name='make_alignment_index',
     full_name='minknow_api.basecaller.Basecaller.make_alignment_index',
-    index=7,
+    index=8,
     containing_service=None,
     input_type=_MAKEALIGNMENTINDEXREQUEST,
     output_type=_MAKEALIGNMENTINDEXRESPONSE,
+    serialized_options=None,
+    create_key=_descriptor._internal_create_key,
+  ),
+  _descriptor.MethodDescriptor(
+    name='list_post_processing_protocols',
+    full_name='minknow_api.basecaller.Basecaller.list_post_processing_protocols',
+    index=9,
+    containing_service=None,
+    input_type=_LISTPOSTPROCESSINGPROTOCOLSREQUEST,
+    output_type=_LISTPOSTPROCESSINGPROTOCOLSRESPONSE,
+    serialized_options=b'\220\002\002',
+    create_key=_descriptor._internal_create_key,
+  ),
+  _descriptor.MethodDescriptor(
+    name='list_settings_for_post_processing_protocol',
+    full_name='minknow_api.basecaller.Basecaller.list_settings_for_post_processing_protocol',
+    index=10,
+    containing_service=None,
+    input_type=_LISTSETTINGSFORPOSTPROCESSINGPROTOCOLREQUEST,
+    output_type=_LISTSETTINGSFORPOSTPROCESSINGPROTOCOLRESPONSE,
+    serialized_options=b'\220\002\001',
+    create_key=_descriptor._internal_create_key,
+  ),
+  _descriptor.MethodDescriptor(
+    name='update_post_processing_protocol_progress',
+    full_name='minknow_api.basecaller.Basecaller.update_post_processing_protocol_progress',
+    index=11,
+    containing_service=None,
+    input_type=_UPDATEPROGRESSREQUEST,
+    output_type=_UPDATEPROGRESSRESPONSE,
     serialized_options=None,
     create_key=_descriptor._internal_create_key,
   ),

@@ -1,0 +1,148 @@
+syntax="proto3";
+
+package minknow_api.protocol_settings;
+
+option java_package = "com.nanoporetech.minknow_api";
+option objc_class_prefix = "MKAPI";
+
+import "minknow_api/analysis_configuration.proto";
+import "minknow_api/rpc_options.proto";
+
+message ProtocolSetting {
+    enum Category {
+        OTHER = 0;
+        RUN_OPTIONS = 1;
+        BASECALLING = 2;
+        OUTPUT = 3;
+    };
+
+    enum Unit {
+        UNITLESS = 0;
+
+        // strings
+        UTF8_STRING = 1;
+        ASCII_STRING = 2;
+        PATH = 3;
+        URL = 4;
+        PRIVATE_STRING = 5; // eg: password, or identifying data, something that should be obscured on the screen
+        CHOICE = 6; // choose one of the strings described in choices
+        MULTI_CHOICE = 7; // choose any number of the strings described in choices.
+
+        // numbers
+        SECOND = 8;
+        HOUR = 9;
+        BASE = 10;
+        KBASE = 11;
+        MBASE = 12;
+        GBASE = 13;
+        MILLIVOLT = 14;
+    };
+
+    message ProtocolSettingValue {
+        oneof protocol_setting_value {
+            string string_value = 1;
+            double float_value = 2;
+            int64 integer_value = 3;
+            bool bool_value = 4;
+            analysis_configuration.WriterConfiguration.ChannelConfiguration channels_value = 5;
+        }
+    }
+
+    message Constraint {
+        enum Condition {
+            EQUAL = 0;
+            NOT_EQUAL = 1;
+            GT_EQ = 2;
+            GT = 3;
+            LT_EQ = 4;
+            LT = 5;
+            IN = 6;     // When setting a path, it should be in or under the constraining path
+            NOT_IN  = 7;// Forbidden directory for a path
+            ENDS_WITH = 8;
+            STARTS_WITH = 9;
+        };
+        Condition condition = 1;
+        ProtocolSettingValue value = 2;
+    }
+
+    message Dependency {
+        string identifier = 1;
+        repeated Constraint constraints = 2;
+    }
+
+    enum Visibility {
+        // User can change this, a default may be provided
+        EDITABLE = 0;
+        // Don't show this to the user, it's not relevant to this protocol
+        HIDDEN = 1;
+        // User shouldn't change this from the default
+        FIXED = 2;
+        // User must set this, no sensible default can be provided
+        REQUIRED = 3;
+    };
+    Category category = 1;
+
+    // Identifier is the unique primary-key for referring to protocol-settings,
+    // dependencies refer to other settings via their identifier.
+    string identifier = 2 [(rpc_required) = true];
+    string display_name = 3 [(rpc_required) = true];
+
+    // Optional additional help text for a setting that may be shown to the user if required.
+    string help = 16;
+
+    Unit unit = 5;
+    ProtocolSettingValue default_value = 6;
+
+    // All constraints must be met if this setting is to be considered valid
+    repeated Constraint constraints = 7;
+
+    // If any of the dependencies matches it's constraints, this setting should
+    // adopt the level of visibility specified in "visibility". If none of the
+    // dependencies match their constraints, then "visibility" should be ignored
+    // and the option should be hidden from the user.
+    //
+    // Some dependencies may be specified multiple times, but with mutually
+    // exclusive constraints, for example if the setting controls data compression
+    // level, where there is a compression_algorithm setting specified by a string
+    // that can have the values "X", "Y" or "None". The setting may be dependent
+    // on compression_algorithm equals "X" or compression_algorithm equals "Y".
+    // If the compression_algorithm is "None" then none of the dependency constraints
+    // will be met and the setting should be hidden. A typical arrangement of fields
+    // in this case would be:
+    // Dependency {
+    //   identifier: "compression_algorithm",
+    //   Constraint {
+    //     condition : EQUAL,
+    //     value: "X"
+    //   }
+    // }
+    // Dependency {
+    //   identifier: "compression_algorithm",
+    //   Constraint {
+    //     condition : EQUAL,
+    //     value: "Y"
+    //   }
+    // }
+    // When a dependency is specified with multiple constraints they must all be
+    // met before the dependency is considered satisfied, for example some other
+    // setting may be dependent on compression_level being in a range (0,10] :
+    //  Dependency {
+    //   identifier: "compression_level",
+    //   Constraint {
+    //     condition : GT,
+    //     value: 0
+    //   },
+    //   Constraint {
+    //     condition : LT_EQ,
+    //     value: 10
+    //   }
+    // }
+    repeated Dependency dependencies = 8;
+
+    // If any of the dependencies match their constraints, this level of visibility
+    // should be adopted. It should also be adopted if no dependencies are specified.
+    Visibility visibility = 9;
+
+    // when unit is CHOICE, this defines the acceptable choices.
+    repeated string choices = 17;
+}

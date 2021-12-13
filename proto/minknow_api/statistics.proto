@@ -462,6 +462,14 @@ message AcquisitionOutputKey {
 
     // The barcode alias corresponding to the `barcode_name` and `lamp_barcode_id`
     string barcode_alias = 6;
+
+    // Only return data for the given ReadEndReason.
+    //
+    // Special values:
+    //   - Specify `ReadEndReason::All` to return data for all read end reasons
+    //
+    // If unspecified all read end reasons are returned.
+    ReadEndReason read_end_reason = 7;
 }
 
 message AcquisitionOutputSplit {
@@ -487,6 +495,9 @@ message AcquisitionOutputSplit {
     //
     // Lamp targets are defined by the active lamp kit.
     bool lamp_target_id = 5;
+
+    // Split returned data by read_end_reason
+    bool read_end_reason = 6;
 }
 
 message StreamAcquisitionOutputRequest {

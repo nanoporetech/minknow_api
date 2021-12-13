@@ -15,13 +15,22 @@ __all__ = [
     "StartProtocolResponse",
     "StopProtocolRequest",
     "StopProtocolResponse",
+    "PauseProtocolRequest",
+    "PauseProtocolResponse",
+    "ResumeProtocolRequest",
+    "ResumeProtocolResponse",
+    "TriggerMuxScanRequest",
+    "TriggerMuxScanResponse",
     "ListProtocolsRequest",
     "ProtocolInfo",
     "ListProtocolsResponse",
     "WaitForFinishedRequest",
     "GetRunInfoRequest",
     "Epi2meWorkflowReference",
+    "AssociatedPostProcessingAnalysis",
+    "PlatformQcResult",
     "ProtocolRunInfo",
+    "FilteringInfo",
     "ListProtocolRunsRequest",
     "ListProtocolRunsResponse",
     "GetCurrentProtocolRunRequest",
@@ -43,10 +52,17 @@ __all__ = [
     "BeginHardwareCheckResponse",
     "BeginPlatformQcRequest",
     "BeginPlatformQcResponse",
+    "SetPlatformQcResultRequest",
+    "SetPlatformQcResultResponse",
     "ProtocolIdentifierComponents",
     "ListSettingsForProtocolRequest",
-    "ProtocolSetting",
     "ListSettingsForProtocolResponse",
+    "AssociatePostProcessingAnalysisRequest",
+    "AssociatePostProcessingAnalysisResponse",
+    "ClearProtocolHistoryDataRequest",
+    "ClearProtocolHistoryDataResponse",
+    "ProtocolPhaseManagementRequest",
+    "ProtocolPhaseManagementResponse",
     "ProtocolState",
     "PROTOCOL_RUNNING",
     "PROTOCOL_WAITING_FOR_TEMPERATURE",
@@ -56,6 +72,20 @@ __all__ = [
     "PROTOCOL_FINISHED_WITH_ERROR",
     "PROTOCOL_FINISHED_WITH_DEVICE_ERROR",
     "PROTOCOL_FINISHED_UNABLE_TO_SEND_TELEMETRY",
+    "ProtocolPhase",
+    "PHASE_UNKNOWN",
+    "PHASE_INITIALISING",
+    "PHASE_SEQUENCING",
+    "PHASE_PREPARING_FOR_MUX_SCAN",
+    "PHASE_MUX_SCAN",
+    "PHASE_PAUSED",
+    "PHASE_PAUSING",
+    "PHASE_RESUMING",
+    "Action",
+    "ACTION_NONE",
+    "ACTION_PAUSE",
+    "ACTION_RESUME",
+    "ACTION_TRIGGER_MUX_SCAN",
 ]
 
 def run_with_retry(method, message, timeout, unwraps, full_name):
@@ -184,6 +214,136 @@ class ProtocolService(object):
             raise ArgumentError("Unexpected keyword arguments to stop_protocol: '{}'".format(", ".join(unused_args)))
 
         return run_with_retry(self._stub.stop_protocol,
+                              _message, _timeout,
+                              [],
+                              "minknow_api.protocol.ProtocolService")
+    def pause_protocol(self, _message=None, _timeout=None, **kwargs):
+        """Request the protocol to pause.
+
+        This will return an error unless the ProtocolRunInfo has the `can_pause` field set to true.
+        It will have no effect if the protocol is already paused or pausing.
+
+        Since 4.4.
+
+        This RPC is idempotent. It may change the state of the system, but if the requested
+        change has already happened, it will not fail because of this, make any additional
+        changes or return a different value.
+
+        Args:
+            _message (minknow_api.protocol_pb2.PauseProtocolRequest, optional): The message to send.
+                This can be passed instead of the keyword arguments.
+            _timeout (float, optional): The call will be cancelled after this number of seconds
+                if it has not been completed.
+
+        Returns:
+            minknow_api.protocol_pb2.PauseProtocolResponse
+
+        Note that the returned messages are actually wrapped in a type that collapses
+        submessages for fields marked with ``[rpc_unwrap]``.
+        """
+        if _message is not None:
+            if isinstance(_message, MessageWrapper):
+                _message = _message._message
+            return run_with_retry(self._stub.pause_protocol,
+                                  _message, _timeout,
+                                  [],
+                                  "minknow_api.protocol.ProtocolService")
+
+        unused_args = set(kwargs.keys())
+
+        _message = PauseProtocolRequest()
+
+        if len(unused_args) > 0:
+            raise ArgumentError("Unexpected keyword arguments to pause_protocol: '{}'".format(", ".join(unused_args)))
+
+        return run_with_retry(self._stub.pause_protocol,
+                              _message, _timeout,
+                              [],
+                              "minknow_api.protocol.ProtocolService")
+    def resume_protocol(self, _message=None, _timeout=None, **kwargs):
+        """Request the protocol to resume.
+
+        This will return an error unless the ProtocolRunInfo has the `can_pause` field set to true.
+        It will have no effect if the protocol is not paused or pausing.
+
+        Since 4.4.
+
+        This RPC is idempotent. It may change the state of the system, but if the requested
+        change has already happened, it will not fail because of this, make any additional
+        changes or return a different value.
+
+        Args:
+            _message (minknow_api.protocol_pb2.ResumeProtocolRequest, optional): The message to send.
+                This can be passed instead of the keyword arguments.
+            _timeout (float, optional): The call will be cancelled after this number of seconds
+                if it has not been completed.
+
+        Returns:
+            minknow_api.protocol_pb2.ResumeProtocolResponse
+
+        Note that the returned messages are actually wrapped in a type that collapses
+        submessages for fields marked with ``[rpc_unwrap]``.
+        """
+        if _message is not None:
+            if isinstance(_message, MessageWrapper):
+                _message = _message._message
+            return run_with_retry(self._stub.resume_protocol,
+                                  _message, _timeout,
+                                  [],
+                                  "minknow_api.protocol.ProtocolService")
+
+        unused_args = set(kwargs.keys())
+
+        _message = ResumeProtocolRequest()
+
+        if len(unused_args) > 0:
+            raise ArgumentError("Unexpected keyword arguments to resume_protocol: '{}'".format(", ".join(unused_args)))
+
+        return run_with_retry(self._stub.resume_protocol,
+                              _message, _timeout,
+                              [],
+                              "minknow_api.protocol.ProtocolService")
+    def trigger_mux_scan(self, _message=None, _timeout=None, **kwargs):
+        """Request the protocol to perform a mux scan.
+
+        This will return an error unless the ProtocolRunInfo has the `can_trigger_mux_scan` field set
+        to true. It will have no effect if the protocol is already running or preparing for a mux
+        scan.
+
+        Since 4.4.
+
+        This RPC is idempotent. It may change the state of the system, but if the requested
+        change has already happened, it will not fail because of this, make any additional
+        changes or return a different value.
+
+        Args:
+            _message (minknow_api.protocol_pb2.TriggerMuxScanRequest, optional): The message to send.
+                This can be passed instead of the keyword arguments.
+            _timeout (float, optional): The call will be cancelled after this number of seconds
+                if it has not been completed.
+
+        Returns:
+            minknow_api.protocol_pb2.TriggerMuxScanResponse
+
+        Note that the returned messages are actually wrapped in a type that collapses
+        submessages for fields marked with ``[rpc_unwrap]``.
+        """
+        if _message is not None:
+            if isinstance(_message, MessageWrapper):
+                _message = _message._message
+            return run_with_retry(self._stub.trigger_mux_scan,
+                                  _message, _timeout,
+                                  [],
+                                  "minknow_api.protocol.ProtocolService")
+
+        unused_args = set(kwargs.keys())
+
+        _message = TriggerMuxScanRequest()
+
+        if len(unused_args) > 0:
+            raise ArgumentError("Unexpected keyword arguments to trigger_mux_scan: '{}'".format(", ".join(unused_args)))
+
+        return run_with_retry(self._stub.trigger_mux_scan,
                               _message, _timeout,
                               [],
                               "minknow_api.protocol.ProtocolService")
@@ -327,6 +487,7 @@ class ProtocolService(object):
                 This can be passed instead of the keyword arguments.
             _timeout (float, optional): The call will be cancelled after this number of seconds
                 if it has not been completed.
+            filter_info (minknow_api.protocol_pb2.FilteringInfo, optional): 
 
         Returns:
             minknow_api.protocol_pb2.ListProtocolRunsResponse
@@ -345,6 +506,10 @@ class ProtocolService(object):
         unused_args = set(kwargs.keys())
 
         _message = ListProtocolRunsRequest()
+
+        if "filter_info" in kwargs:
+            unused_args.remove("filter_info")
+            _message.filter_info.CopyFrom(kwargs['filter_info'])
 
         if len(unused_args) > 0:
             raise ArgumentError("Unexpected keyword arguments to list_protocol_runs: '{}'".format(", ".join(unused_args)))
@@ -842,6 +1007,54 @@ class ProtocolService(object):
                               _message, _timeout,
                               [],
                               "minknow_api.protocol.ProtocolService")
+    def set_platform_qc_result(self, _message=None, _timeout=None, **kwargs):
+        """
+
+        This RPC is idempotent. It may change the state of the system, but if the requested
+        change has already happened, it will not fail because of this, make any additional
+        changes or return a different value.
+
+        Args:
+            _message (minknow_api.protocol_pb2.SetPlatformQcResultRequest, optional): The message to send.
+                This can be passed instead of the keyword arguments.
+            _timeout (float, optional): The call will be cancelled after this number of seconds
+                if it has not been completed.
+            protocol_run_id (str, optional): The protocol_run_id that was given when the pqc run was started
+            pqc_result (minknow_api.protocol_pb2.PlatformQcResult, optional): 
+
+        Returns:
+            minknow_api.protocol_pb2.SetPlatformQcResultResponse
+
+        Note that the returned messages are actually wrapped in a type that collapses
+        submessages for fields marked with ``[rpc_unwrap]``.
+        """
+        if _message is not None:
+            if isinstance(_message, MessageWrapper):
+                _message = _message._message
+            return run_with_retry(self._stub.set_platform_qc_result,
+                                  _message, _timeout,
+                                  [],
+                                  "minknow_api.protocol.ProtocolService")
+
+        unused_args = set(kwargs.keys())
+
+        _message = SetPlatformQcResultRequest()
+
+        if "protocol_run_id" in kwargs:
+            unused_args.remove("protocol_run_id")
+            _message.protocol_run_id = kwargs['protocol_run_id']
+
+        if "pqc_result" in kwargs:
+            unused_args.remove("pqc_result")
+            _message.pqc_result.CopyFrom(kwargs['pqc_result'])
+
+        if len(unused_args) > 0:
+            raise ArgumentError("Unexpected keyword arguments to set_platform_qc_result: '{}'".format(", ".join(unused_args)))
+
+        return run_with_retry(self._stub.set_platform_qc_result,
+                              _message, _timeout,
+                              [],
+                              "minknow_api.protocol.ProtocolService")
     def list_settings_for_protocol(self, _message=None, _timeout=None, **kwargs):
         """Given a protocol and some information about the flow-cell and kits will provide a list
         of settings required by the protocol, their defaults and dependencies.
@@ -907,3 +1120,127 @@ class ProtocolService(object):
                               _message, _timeout,
                               [],
                               "minknow_api.protocol.ProtocolService")
+    def associate_post_processing_analysis_for_protocol(self, _message=None, _timeout=None, **kwargs):
+        """Associated a post processing analysis process, and schedule it to run once the protocol is complete.
+
+        If the protocol is already complete, the post proecssing analysis is executed immediately.
+
+        Since 4.4
+
+        
+
+        Args:
+            _message (minknow_api.protocol_pb2.AssociatePostProcessingAnalysisRequest, optional): The message to send.
+                This can be passed instead of the keyword arguments.
+            _timeout (float, optional): The call will be cancelled after this number of seconds
+                if it has not been completed.
+            run_id (str, optional): Protocol id to associate analysis with:
+            start_request (minknow_api.basecaller_pb2.StartRequest, optional): 
+
+        Returns:
+            minknow_api.protocol_pb2.AssociatePostProcessingAnalysisResponse
+
+        Note that the returned messages are actually wrapped in a type that collapses
+        submessages for fields marked with ``[rpc_unwrap]``.
+        """
+        if _message is not None:
+            if isinstance(_message, MessageWrapper):
+                _message = _message._message
+            return run_with_retry(self._stub.associate_post_processing_analysis_for_protocol,
+                                  _message, _timeout,
+                                  [],
+                                  "minknow_api.protocol.ProtocolService")
+
+        unused_args = set(kwargs.keys())
+
+        _message = AssociatePostProcessingAnalysisRequest()
+
+        if "run_id" in kwargs:
+            unused_args.remove("run_id")
+            _message.run_id = kwargs['run_id']
+
+        if "start_request" in kwargs:
+            unused_args.remove("start_request")
+            _message.start_request.CopyFrom(kwargs['start_request'])
+
+        if len(unused_args) > 0:
+            raise ArgumentError("Unexpected keyword arguments to associate_post_processing_analysis_for_protocol: '{}'".format(", ".join(unused_args)))
+
+        return run_with_retry(self._stub.associate_post_processing_analysis_for_protocol,
+                              _message, _timeout,
+                              [],
+                              "minknow_api.protocol.ProtocolService")
+    def clear_protocol_history_data(self, _message=None, _timeout=None, **kwargs):
+        """Clears history data for specified protocol(s)
+
+        History data includes protocol protocol info, acquisition info and statistics.
+
+        Also clears any persistence data that has been written to disk for those protocols -- this
+        data will not be available after a restart.
+
+        Does NOT clear experiment results (fast5, fastq, sequencing_summary, etc)
+
+        Since 4.4
+
+        
+
+        Args:
+            _message (minknow_api.protocol_pb2.ClearProtocolHistoryDataRequest, optional): The message to send.
+                This can be passed instead of the keyword arguments.
+            _timeout (float, optional): The call will be cancelled after this number of seconds
+                if it has not been completed.
+            protocol_ids (str, optional): 
+
+        Returns:
+            minknow_api.protocol_pb2.ClearProtocolHistoryDataResponse
+
+        Note that the returned messages are actually wrapped in a type that collapses
+        submessages for fields marked with ``[rpc_unwrap]``.
+        """
+        if _message is not None:
+            if isinstance(_message, MessageWrapper):
+                _message = _message._message
+            return run_with_retry(self._stub.clear_protocol_history_data,
+                                  _message, _timeout,
+                                  [],
+                                  "minknow_api.protocol.ProtocolService")
+
+        unused_args = set(kwargs.keys())
+
+        _message = ClearProtocolHistoryDataRequest()
+
+        if "protocol_ids" in kwargs:
+            unused_args.remove("protocol_ids")
+            _message.protocol_ids.extend(kwargs['protocol_ids'])
+
+        if len(unused_args) > 0:
+            raise ArgumentError("Unexpected keyword arguments to clear_protocol_history_data: '{}'".format(", ".join(unused_args)))
+
+        return run_with_retry(self._stub.clear_protocol_history_data,
+                              _message, _timeout,
+                              [],
+                              "minknow_api.protocol.ProtocolService")
+    def protocol_phase_management(self, iterator):
+        """This RPC should only be used by the protocol script.
+
+        The protocol script can call this to opt in to protocol phase management. It can report the
+        phase it is currently in, and handle requests to change phase.
+
+        Only one call to this RPC is possible at once. Ending the call will reset the phase to
+        PHASE_UNKNOWN and clear any set capabilities.
+
+        Since 4.4.
+
+        
+
+        Args:
+            iterator (iter of minknow_api.protocol_pb2.ProtocolPhaseManagementRequest): An interable that
+                yields the messages to send.
+
+        Returns:
+            iter of minknow_api.protocol_pb2.ProtocolPhaseManagementResponse
+
+        Note that the returned messages are actually wrapped in a type that collapses
+        submessages for fields marked with ``[rpc_unwrap]``.
+        """
+        return self._stub.protocol_phase_management(iterator)

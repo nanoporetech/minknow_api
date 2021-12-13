@@ -115,6 +115,41 @@ class ManagerServiceStub(object):
                 request_serializer=minknow__api_dot_manager__pb2.LocalAuthenticationTokenPathRequest.SerializeToString,
                 response_deserializer=minknow__api_dot_manager__pb2.LocalAuthenticationTokenPathResponse.FromString,
                 )
+        self.get_alignment_reference_information = channel.unary_unary(
+                '/minknow_api.manager.ManagerService/get_alignment_reference_information',
+                request_serializer=minknow__api_dot_manager__pb2.GetAlignmentReferenceInformationRequest.SerializeToString,
+                response_deserializer=minknow__api_dot_manager__pb2.GetAlignmentReferenceInformationResponse.FromString,
+                )
+        self.association_device_code = channel.unary_unary(
+                '/minknow_api.manager.ManagerService/association_device_code',
+                request_serializer=minknow__api_dot_manager__pb2.AssociationDeviceCodeRequest.SerializeToString,
+                response_deserializer=minknow__api_dot_manager__pb2.AssociationDeviceCodeResponse.FromString,
+                )
+        self.apply_offline_association_unlock_code = channel.unary_unary(
+                '/minknow_api.manager.ManagerService/apply_offline_association_unlock_code',
+                request_serializer=minknow__api_dot_manager__pb2.ApplyOfflineAssociationUnlockCodeRequest.SerializeToString,
+                response_deserializer=minknow__api_dot_manager__pb2.ApplyOfflineAssociationUnlockCodeResponse.FromString,
+                )
+        self.list_developer_api_tokens = channel.unary_unary(
+                '/minknow_api.manager.ManagerService/list_developer_api_tokens',
+                request_serializer=minknow__api_dot_manager__pb2.ListDeveloperApiTokensRequest.SerializeToString,
+                response_deserializer=minknow__api_dot_manager__pb2.ListDeveloperApiTokensResponse.FromString,
+                )
+        self.create_developer_api_token = channel.unary_unary(
+                '/minknow_api.manager.ManagerService/create_developer_api_token',
+                request_serializer=minknow__api_dot_manager__pb2.CreateDeveloperApiTokenRequest.SerializeToString,
+                response_deserializer=minknow__api_dot_manager__pb2.CreateDeveloperApiTokenResponse.FromString,
+                )
+        self.revoke_developer_api_token = channel.unary_unary(
+                '/minknow_api.manager.ManagerService/revoke_developer_api_token',
+                request_serializer=minknow__api_dot_manager__pb2.RevokeDeveloperApiTokenRequest.SerializeToString,
+                response_deserializer=minknow__api_dot_manager__pb2.RevokeDeveloperApiTokensResponse.FromString,
+                )
+        self.find_protocols = channel.unary_unary(
+                '/minknow_api.manager.ManagerService/find_protocols',
+                request_serializer=minknow__api_dot_manager__pb2.FindProtocolsRequest.SerializeToString,
+                response_deserializer=minknow__api_dot_manager__pb2.FindProtocolsResponse.FromString,
+                )
 
 
 class ManagerServiceServicer(object):
@@ -122,6 +157,8 @@ class ManagerServiceServicer(object):
 
     def describe_host(self, request, context):
         """Get information about the machine running MinKNOW.
+
+        This RPC can be called without providing any authentication tokens.
 
         Since 3.6
         """
@@ -136,6 +173,8 @@ class ManagerServiceServicer(object):
         in case there are too many positions to fit into a single response, but normally there should
         only be a single response.
 
+        This RPC can be called without providing any authentication tokens.
+
         Since 3.6
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
@@ -147,6 +186,8 @@ class ManagerServiceServicer(object):
 
         This is like flow_cell_positions, but updates are streamed as positions come and go (eg:
         MinIONs being plugged or unplugged), or their status otherwise changes.
+
+        This RPC can be called without providing any authentication tokens.
 
         Since 3.6
         """
@@ -172,6 +213,8 @@ class ManagerServiceServicer(object):
         This is the service that implements the minknow_api.basecaller interface for basecalling
         reads files.
 
+        This RPC can be called without providing any authentication tokens.
+
         Since 3.5
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
@@ -194,6 +237,8 @@ class ManagerServiceServicer(object):
         - Configuration version (i.e. Wanda version)
         - Distribution version
         - Guppy version
+
+        This RPC can be called without providing any authentication tokens.
 
         See also: instance.get_version_info which provides some similar information on a per instance basis.
         Since 3.3
@@ -375,7 +420,104 @@ class ManagerServiceServicer(object):
         "local-auth" to "30fe5214-a7c5-4cb3-b521-b1ec8a49592a". At around 14:26:12, the client should
         re-read the file and update the metadata field with the newly-read value.
 
+        This RPC can be called without providing any authentication tokens.
+
         Since 4.2
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def get_alignment_reference_information(self, request, context):
+        """Query information about a reference file.
+
+        Reference file types are picked up by extension:
+        for fasta: .fasta, .fna, .ffn, .faa, .frn
+        for mmi: .mmi
+
+        Since 4.4
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def association_device_code(self, request, context):
+        """Get the device code/key for association.
+
+        This can be used to either get the code that the user must enter into the customer support
+        portal to associate the device with their account, or the key used for online association.
+
+        Errors:
+        INVALID_ARGUMENT: The requested flow cell position does not exist.
+
+        Since 4.4
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def apply_offline_association_unlock_code(self, request, context):
+        """Apply the unlock code for offline association.
+
+        This is the code that the user receives from the customer support portal after entering the
+        device code for this device (see `offline_association_device_code`).
+
+        This is only required if either `describe_host` indicates that the device as a whole needs
+        association, or `flow_cell_positions` indicates that a particular positions needs it.
+
+        Errors:
+        INVALID_ARGUMENT: The requested flow cell position does not exist, or no unlock code
+        was provided.
+
+        Note that you will need to check the result to see if the association was successful. Calling
+        this on an already-associated device with a valid unlock code will succeed, but have no
+        effect.
+
+        Since 4.4
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def list_developer_api_tokens(self, request, context):
+        """List all developer API tokens.
+
+        List all developer tokens, and their expiry times. Note this does not return the actual token value - this is only available at creation time.
+
+        Since 4.4
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def create_developer_api_token(self, request, context):
+        """Create a new developer API token, with a user facing name, and optional expiry time.
+
+        The response contains the requested token, which will be valid until provided expiry time.
+
+        The token cannot be obtained a second time, once the CreateDeveloperApiTokenResponse is destroyed.
+
+        Since 4.4
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def revoke_developer_api_token(self, request, context):
+        """Remove a developer api token.
+
+        Since 4.4
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def find_protocols(self, request, context):
+        """Find protocols which can be run based on the current device + flowcell.
+
+        Throws an error if there is no flow cell connected.
+
+        Since 4.5
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -483,6 +625,41 @@ def add_ManagerServiceServicer_to_server(servicer, server):
                     servicer.local_authentication_token_path,
                     request_deserializer=minknow__api_dot_manager__pb2.LocalAuthenticationTokenPathRequest.FromString,
                     response_serializer=minknow__api_dot_manager__pb2.LocalAuthenticationTokenPathResponse.SerializeToString,
+            ),
+            'get_alignment_reference_information': grpc.unary_unary_rpc_method_handler(
+                    servicer.get_alignment_reference_information,
+                    request_deserializer=minknow__api_dot_manager__pb2.GetAlignmentReferenceInformationRequest.FromString,
+                    response_serializer=minknow__api_dot_manager__pb2.GetAlignmentReferenceInformationResponse.SerializeToString,
+            ),
+            'association_device_code': grpc.unary_unary_rpc_method_handler(
+                    servicer.association_device_code,
+                    request_deserializer=minknow__api_dot_manager__pb2.AssociationDeviceCodeRequest.FromString,
+                    response_serializer=minknow__api_dot_manager__pb2.AssociationDeviceCodeResponse.SerializeToString,
+            ),
+            'apply_offline_association_unlock_code': grpc.unary_unary_rpc_method_handler(
+                    servicer.apply_offline_association_unlock_code,
+                    request_deserializer=minknow__api_dot_manager__pb2.ApplyOfflineAssociationUnlockCodeRequest.FromString,
+                    response_serializer=minknow__api_dot_manager__pb2.ApplyOfflineAssociationUnlockCodeResponse.SerializeToString,
+            ),
+            'list_developer_api_tokens': grpc.unary_unary_rpc_method_handler(
+                    servicer.list_developer_api_tokens,
+                    request_deserializer=minknow__api_dot_manager__pb2.ListDeveloperApiTokensRequest.FromString,
+                    response_serializer=minknow__api_dot_manager__pb2.ListDeveloperApiTokensResponse.SerializeToString,
+            ),
+            'create_developer_api_token': grpc.unary_unary_rpc_method_handler(
+                    servicer.create_developer_api_token,
+                    request_deserializer=minknow__api_dot_manager__pb2.CreateDeveloperApiTokenRequest.FromString,
+                    response_serializer=minknow__api_dot_manager__pb2.CreateDeveloperApiTokenResponse.SerializeToString,
+            ),
+            'revoke_developer_api_token': grpc.unary_unary_rpc_method_handler(
+                    servicer.revoke_developer_api_token,
+                    request_deserializer=minknow__api_dot_manager__pb2.RevokeDeveloperApiTokenRequest.FromString,
+                    response_serializer=minknow__api_dot_manager__pb2.RevokeDeveloperApiTokensResponse.SerializeToString,
+            ),
+            'find_protocols': grpc.unary_unary_rpc_method_handler(
+                    servicer.find_protocols,
+                    request_deserializer=minknow__api_dot_manager__pb2.FindProtocolsRequest.FromString,
+                    response_serializer=minknow__api_dot_manager__pb2.FindProtocolsResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -831,5 +1008,124 @@ class ManagerService(object):
         return grpc.experimental.unary_unary(request, target, '/minknow_api.manager.ManagerService/local_authentication_token_path',
             minknow__api_dot_manager__pb2.LocalAuthenticationTokenPathRequest.SerializeToString,
             minknow__api_dot_manager__pb2.LocalAuthenticationTokenPathResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def get_alignment_reference_information(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/minknow_api.manager.ManagerService/get_alignment_reference_information',
+            minknow__api_dot_manager__pb2.GetAlignmentReferenceInformationRequest.SerializeToString,
+            minknow__api_dot_manager__pb2.GetAlignmentReferenceInformationResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def association_device_code(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/minknow_api.manager.ManagerService/association_device_code',
+            minknow__api_dot_manager__pb2.AssociationDeviceCodeRequest.SerializeToString,
+            minknow__api_dot_manager__pb2.AssociationDeviceCodeResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def apply_offline_association_unlock_code(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/minknow_api.manager.ManagerService/apply_offline_association_unlock_code',
+            minknow__api_dot_manager__pb2.ApplyOfflineAssociationUnlockCodeRequest.SerializeToString,
+            minknow__api_dot_manager__pb2.ApplyOfflineAssociationUnlockCodeResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def list_developer_api_tokens(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/minknow_api.manager.ManagerService/list_developer_api_tokens',
+            minknow__api_dot_manager__pb2.ListDeveloperApiTokensRequest.SerializeToString,
+            minknow__api_dot_manager__pb2.ListDeveloperApiTokensResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def create_developer_api_token(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/minknow_api.manager.ManagerService/create_developer_api_token',
+            minknow__api_dot_manager__pb2.CreateDeveloperApiTokenRequest.SerializeToString,
+            minknow__api_dot_manager__pb2.CreateDeveloperApiTokenResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def revoke_developer_api_token(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/minknow_api.manager.ManagerService/revoke_developer_api_token',
+            minknow__api_dot_manager__pb2.RevokeDeveloperApiTokenRequest.SerializeToString,
+            minknow__api_dot_manager__pb2.RevokeDeveloperApiTokensResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def find_protocols(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/minknow_api.manager.ManagerService/find_protocols',
+            minknow__api_dot_manager__pb2.FindProtocolsRequest.SerializeToString,
+            minknow__api_dot_manager__pb2.FindProtocolsResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

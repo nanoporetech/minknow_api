@@ -60,6 +60,7 @@ __all__ = [
     "STOPPED_DEVICE_ERROR",
     "STOPPED_BAD_TEMPERATURE",
     "STOPPED_SHUTDOWN",
+    "STOPPED_INTERNAL_ERROR",
     "StartupState",
     "STARTUP_UNKNOWN",
     "STARTUP_BUILDING_PIPELINE",
@@ -278,15 +279,25 @@ class AcquisitionService(object):
             wait_until_ready (bool, optional): Defaults to false
                 If false will return as soon as minknow enters the FINISHING state.
                 If true then returns as soon as minknow enters the READY state.
-            keep_power_on (bool, optional): Keep the ASIC power on for GridIONs and MinIONs.
+            keep_power_on (bool, optional): Force the MinION/GridION ASIC power to be kept on after the current acquisition finishes
 
-                Unless this option is set to true, the ASIC power will be disabled as soon as MinKNOW has
-                stopped pulling data from it. This is because removing (or plugging in) a flow cell while the
-                power is on can damage it. Disabling the power will also disable the heating element; this is
-                likely to cause the device to cool down (particularly for MinIONs).
+                Keeping the ASIC power on has two main effects:
 
-                You should normally only use this option if you are expecting to start acquisition again
-                in a short amount of time.
+                     - The flow-cell will remain at the correct operating temperature between acquisitions;
+                       this allows following acquisition to be started more quickly.
+
+                     - MinION/GridION flow cells may be damaged if they are removed or plugged in while the
+                       ASIC power is turned on.
+
+                Therefore, this option should be set to `true` if and only if another acquisition will be
+                performed using the same flow-cell, soon after the acquisition that is being stopped.
+                Otherwise it should be set to `false` (or left unset) to prevent potential damage to
+                MinION/GridION flow-cells.
+
+                If this option is set to `false` (or is left unset), then the application configuration
+                determines whether the power will be left on when the acquisition finishes -- see the
+                `powered_when_idle` and `flongle_powered_when_idle` configuration options for further
+                details.
 
                 This option has no effect on PromethIONs.
 

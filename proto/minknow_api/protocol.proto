@@ -6,8 +6,9 @@ option java_package = "com.nanoporetech.minknow_api";
 option objc_class_prefix = "MKAPI";
 
 import "minknow_api/acquisition.proto";
-import "minknow_api/analysis_configuration.proto";
+import "minknow_api/basecaller.proto";
 import "minknow_api/device.proto";
+import "minknow_api/protocol_settings.proto";
 import "minknow_api/rpc_options.proto";
 import "google/protobuf/timestamp.proto";
 import "google/protobuf/wrappers.proto";
@@ -19,6 +20,37 @@ service ProtocolService {
 
     // Stops the currently running protocol script instance.
     rpc stop_protocol (StopProtocolRequest) returns (StopProtocolResponse) {}
+
+    // Request the protocol to pause.
+    //
+    // This will return an error unless the ProtocolRunInfo has the `can_pause` field set to true.
+    // It will have no effect if the protocol is already paused or pausing.
+    //
+    // Since 4.4.
+    rpc pause_protocol (PauseProtocolRequest) returns (PauseProtocolResponse) {
+        option idempotency_level = IDEMPOTENT;
+    }
+
+    // Request the protocol to resume.
+    //
+    // This will return an error unless the ProtocolRunInfo has the `can_pause` field set to true.
+    // It will have no effect if the protocol is not paused or pausing.
+    //
+    // Since 4.4.
+    rpc resume_protocol (ResumeProtocolRequest) returns (ResumeProtocolResponse) {
+        option idempotency_level = IDEMPOTENT;
+    }
+
+    // Request the protocol to perform a mux scan.
+    //
+    // This will return an error unless the ProtocolRunInfo has the `can_trigger_mux_scan` field set
+    // to true. It will have no effect if the protocol is already running or preparing for a mux
+    // scan.
+    //
+    // Since 4.4.
+    rpc trigger_mux_scan (TriggerMuxScanRequest) returns (TriggerMuxScanResponse) {
+        option idempotency_level = IDEMPOTENT;
+    }
 
     // Wait for a protocol run to finish.
     //
@@ -143,6 +175,10 @@ service ProtocolService {
         option (experimental) = true;
     }
 
+    rpc set_platform_qc_result(SetPlatformQcResultRequest) returns (SetPlatformQcResultResponse) {
+        option idempotency_level = IDEMPOTENT;
+    }
+
     // Given a protocol and some information about the flow-cell and kits will provide a list
     // of settings required by the protocol, their defaults and dependencies.
     //
@@ -151,6 +187,38 @@ service ProtocolService {
         option (experimental) = true;
         option idempotency_level = NO_SIDE_EFFECTS;
     }
+
+    // Associated a post processing analysis process, and schedule it to run once the protocol is complete.
+    //
+    // If the protocol is already complete, the post proecssing analysis is executed immediately.
+    //
+    // Since 4.4
+    rpc associate_post_processing_analysis_for_protocol(AssociatePostProcessingAnalysisRequest) returns (AssociatePostProcessingAnalysisResponse) {}
+
+    // Clears history data for specified protocol(s)
+    //
+    // History data includes protocol protocol info, acquisition info and statistics.
+    //
+    // Also clears any persistence data that has been written to disk for those protocols -- this
+    // data will not be available after a restart.
+    //
+    // Does NOT clear experiment results (fast5, fastq, sequencing_summary, etc)
+    //
+    // Since 4.4
+    //
+    rpc clear_protocol_history_data(ClearProtocolHistoryDataRequest) returns (ClearProtocolHistoryDataResponse) {}
+
+    // This RPC should only be used by the protocol script.
+    //
+    // The protocol script can call this to opt in to protocol phase management. It can report the
+    // phase it is currently in, and handle requests to change phase.
+    //
+    // Only one call to this RPC is possible at once. Ending the call will reset the phase to
+    // PHASE_UNKNOWN and clear any set capabilities.
+    //
+    // Since 4.4.
+    rpc protocol_phase_management (stream ProtocolPhaseManagementRequest)
+                          returns (stream ProtocolPhaseManagementResponse) {}
 }
 
 message BarcodeUserData {
@@ -166,7 +234,7 @@ message BarcodeUserData {
 
         // Indended to show that a result has not occured due to contamination.
         no_template_control = 3;
-        
+
         // Separate positive controls for when kits expect 2.
         positive_control_1 = 4;
 
@@ -232,6 +300,19 @@ message StopProtocolRequest {
 }
 
 message StopProtocolResponse {
+}
+
+message PauseProtocolRequest {
+}
+message PauseProtocolResponse {
+}
+message ResumeProtocolRequest {
+}
+message ResumeProtocolResponse {
+}
+message TriggerMuxScanRequest {
+}
+message TriggerMuxScanResponse {
 }
 
 message ListProtocolsRequest {
@@ -343,12 +424,66 @@ enum ProtocolState {
     PROTOCOL_FINISHED_UNABLE_TO_SEND_TELEMETRY = 7;
 }
 
+enum ProtocolPhase {
+    // The protocol has not reported what phase it is in.
+    PHASE_UNKNOWN = 0;
+
+    // The protocol is calibrating, or performing other initialisation tasks.
+    PHASE_INITIALISING = 1;
+
+    // The protocol is sequencing.
+    PHASE_SEQUENCING = 2;
+
+    // The protocol is setting up to perform a mux scan.
+    PHASE_PREPARING_FOR_MUX_SCAN = 3;
+
+    // The protocol is performing a mux scan. This checks whether to switch channels to different
+    // wells (muxes) in order to improve and maintain sequencing performance.
+    PHASE_MUX_SCAN = 4;
+
+    // The protocol is paused.
+    //
+    // When the protocol is resumed, it is likely to enter the PHASE_RESUMING state before moving to
+    // another state (such as PHASE_SEQUENCING).
+    PHASE_PAUSED = 5;
+
+    // The protocol is in the process of pausing.
+    //
+    // It should move into PHASE_PAUSED within a short time.
+    PHASE_PAUSING = 6;
+
+    // The protocol is in the process of resuming from a paused state.
+    //
+    // It should move into another phase, such as PHASE_SEQUENCING or PHASE_PREPARING_FOR_MUX_SCAN,
+    // in a short time.
+    PHASE_RESUMING = 7;
+}
+
 message Epi2meWorkflowReference {
     // The unique identifier for a workflow ( unique to a specific instance of epi2me )
     int64 id = 1;
 
     // URL that links to the workflow report. Syntax for a local workflow: file:// otherwise: http(s)://
     string url = 2;
+}
+
+message AssociatedPostProcessingAnalysis {
+    // Id of analysis if this has been triggered (otherwise empty).
+    string started_id = 1;
+
+    // Start request for analysis
+    basecaller.StartRequest start_request = 2;
+}
+
+message PlatformQcResult {
+    // The flow cell id that the pqc was performed for
+    string flow_cell_id = 1;
+
+    // Whether the flow cell passed the platform qc check
+    bool passed = 2;
+
+    // Total number of pores that were found on the flow cell, across all muxes.
+    uint32 total_pore_count = 3;
 }
 
 message ProtocolRunInfo {
@@ -371,6 +506,42 @@ message ProtocolRunInfo {
 
     // Indicates the current state of the protocol run.
     ProtocolState state = 4;
+
+    // The phase of the protocol.
+    //
+    // This is the state reported by the protocol. If the protocol has not reported any state, it
+    // will be PHASE_UNKNOWN. Completed protocols also report PHASE_UNKNOWN.
+    //
+    // Note that clients should handle unexpected values of this field gracefully. This can happen
+    // if new phases are added but the client is still using an older version of the API
+    // specification.
+    //
+    // Since 4.4.
+    ProtocolPhase phase = 16;
+
+    // The last time the phase changed.
+    //
+    // This can be used to determine how long the protocol has been in the current phase.
+    //
+    // NB: This will not be set if the phase is PHASE_UNKNOWN.
+    //
+    // Since 4.4.
+    google.protobuf.Timestamp last_phase_change = 17;
+
+    // Whether the protocol can be paused.
+    //
+    // Not all protocols can be paused, and cannot be paused in all phases.
+    //
+    // Note that if this is true and the phase is PHASE_PAUSING or PHASE_PAUSED, pausing will not
+    // actually do anything.
+    //
+    // Since 4.4.
+    bool can_pause = 18;
+
+    // Whether a mux scan can be triggered for the protocol.
+    //
+    // Since 4.4.
+    bool can_trigger_mux_scan = 19;
 
     // When the protocol was started (UTC).
     google.protobuf.Timestamp start_time = 5;
@@ -416,9 +587,33 @@ message ProtocolRunInfo {
     //
     // Since 3.8
     ProtocolInfo meta_info = 14;
+
+    // List of scheduled post processing analysis tasks
+    repeated AssociatedPostProcessingAnalysis associated_post_processing_analysis = 15;
+
+    // Platform QC result. Set by bream by calling `set_platform_qc_result()`. 
+    // Possible to not be set (e.g. not a pqc run)
+    PlatformQcResult pqc_result = 20;
+
+}
+
+message FilteringInfo {
+    // Intialising this message a filter like `pqc_filter` will imply to restrict results to
+    // that type only.
+    // 
+    // Each filter type should also be using wrapper types for each individual value, to
+    // allow for specific filtering within each type
+
+    message PlatformQcFilter {
+        optional string flow_cell_id = 1;
+    }
+
+    PlatformQcFilter pqc_filter = 1;
+    
 }
 
 message ListProtocolRunsRequest {
+    FilteringInfo filter_info = 1;
 }
 
 message ListProtocolRunsResponse {
@@ -503,6 +698,17 @@ message BeginPlatformQcResponse {
     string run_id = 1;
 }
 
+message SetPlatformQcResultRequest {
+    // The protocol_run_id that was given when the pqc run was started
+    string protocol_run_id = 1;
+
+    PlatformQcResult pqc_result = 2;
+}
+
+message SetPlatformQcResultResponse {
+
+}
+
 message ProtocolIdentifierComponents {
     enum Location {
         ANY = 0;
@@ -535,204 +741,65 @@ message ListSettingsForProtocolRequest {
     }
 }
 
-message ProtocolSetting {
-    enum Category {
-        OTHER = 0;
-        RUN_OPTIONS = 1;
-        BASECALLING = 2;
-        OUTPUT = 3;
-    };
-
-    enum Unit {
-        UNITLESS = 0;
-
-        // strings
-        UTF8_STRING = 1;
-        ASCII_STRING = 2;
-        PATH = 3;
-        URL = 4;
-        PRIVATE_STRING = 5; // eg: password, or identifying data, something that should be obscured on the screen
-        CHOICE = 6; // choose one of the strings described in choices
-        MULTI_CHOICE = 7; // choose any number of the strings described in choices.
-
-        // numbers
-        SECOND = 8;
-        HOUR = 9;
-        BASE = 10;
-        KBASE = 11;
-        MBASE = 12;
-        GBASE = 13;
-        MILLIVOLT = 14;
-    };
-
-    message ProtocolSettingValue {
-        oneof protocol_setting_value {
-            string string_value = 1;
-            double float_value = 2;
-            int64 integer_value = 3;
-            bool bool_value = 4;
-            analysis_configuration.WriterConfiguration.ChannelConfiguration channels_value = 5;
-        }
-    }
-
-    message Constraint {
-        enum Condition {
-            EQUAL = 0;
-            NOT_EQUAL = 1;
-            GT_EQ = 2;
-            GT = 3;
-            LT_EQ = 4;
-            LT = 5;
-            IN = 6;     // When setting a path, it should be in or under the constraining path
-            NOT_IN  = 7;// Forbidden directory for a path
-            ENDS_WITH = 8;
-            STARTS_WITH = 9;
-        };
-        Condition condition = 1;
-        ProtocolSettingValue value = 2;
-    }
-
-    message Dependency {
-        string identifier = 1;
-        repeated Constraint constraints = 2;
-    }
-
-    enum Visibility {
-        // User can change this, a default may be provided
-        EDITABLE = 0;
-        // Don't show this to the user, it's not relevant to this protocol
-        HIDDEN = 1;
-        // User shouldn't change this from the default
-        FIXED = 2;
-        // User must set this, no sensible default can be provided
-        REQUIRED = 3;
-    };
-    Category category = 1;
-
-    // Identifier is the unique primary-key for referring to protocol-settings,
-    // dependencies refer to other settings via their identifier.
-    string identifier = 2 [(rpc_required) = true];
-    string display_name = 3 [(rpc_required) = true];
-
-    // Optional additional help text for a setting that may be shown to the user if required.
-    string help = 16;
-
-    Unit unit = 5;
-    ProtocolSettingValue default_value = 6;
-
-    // All constraints must be met if this setting is to be considered valid
-    repeated Constraint constraints = 7;
-
-    // If any of the dependencies matches it's constraints, this setting should
-    // adopt the level of visibility specified in "visibility". If none of the
-    // dependencies match their constraints, then "visibility" should be ignored
-    // and the option should be hidden from the user.
-    //
-    // Some dependencies may be specified multiple times, but with mutually
-    // exclusive constraints, for example if the setting controls data compression
-    // level, where there is a compression_algorithm setting specified by a string
-    // that can have the values "X", "Y" or "None". The setting may be dependent
-    // on compression_algorithm equals "X" or compression_algorithm equals "Y".
-    // If the compression_algorithm is "None" then none of the dependency constraints
-    // will be met and the setting should be hidden. A typical arrangement of fields
-    // in this case would be:
-    // Dependency {
-    //   identifier: "compression_algorithm",
-    //   Constraint {
-    //     condition : EQUAL,
-    //     value: "X"
-    //   }
-    // }
-    // Dependency {
-    //   identifier: "compression_algorithm",
-    //   Constraint {
-    //     condition : EQUAL,
-    //     value: "Y"
-    //   }
-    // }
-    // When a dependency is specified with multiple constraints they must all be
-    // met before the dependency is considered satisfied, for example some other
-    // setting may be dependent on compression_level being in a range (0,10] :
-    //  Dependency {
-    //   identifier: "compression_level",
-    //   Constraint {
-    //     condition : GT,
-    //     value: 0
-    //   },
-    //   Constraint {
-    //     condition : LT_EQ,
-    //     value: 10
-    //   }
-    // }
-    repeated Dependency dependencies = 8;
-
-    // If any of the dependencies match their constraints, this level of visibility
-    // should be adopted. It should also be adopted if no dependencies are specified.
-    Visibility visibility = 9;
-
-    // when unit is CHOICE, this defines the acceptable choices.
-    repeated string choices = 17;
-}
-
 message ListSettingsForProtocolResponse {
     // Run options
     message RunOptions {
-        ProtocolSetting run_length = 1;
-        ProtocolSetting bias_voltage = 2;
-        ProtocolSetting read_until_enabled = 3;
-        ProtocolSetting read_until_ref_file = 4;
-        ProtocolSetting read_until_channels = 5;
-        ProtocolSetting read_until_bed_file_enabled = 6;
-        ProtocolSetting read_until_bed_file = 7;
-        ProtocolSetting read_until_enrichment = 8;
-        ProtocolSetting active_channel_selection = 9; // bool
-        ProtocolSetting mux_scan_period = 10; // in hours
-        ProtocolSetting group_change_period = 11;
+        protocol_settings.ProtocolSetting run_length = 1;
+        protocol_settings.ProtocolSetting bias_voltage = 2;
+        protocol_settings.ProtocolSetting read_until_enabled = 3;
+        protocol_settings.ProtocolSetting read_until_ref_file = 4;
+        protocol_settings.ProtocolSetting read_until_channels = 5;
+        protocol_settings.ProtocolSetting read_until_bed_file_enabled = 6;
+        protocol_settings.ProtocolSetting read_until_bed_file = 7;
+        protocol_settings.ProtocolSetting read_until_enrichment = 8;
+        protocol_settings.ProtocolSetting active_channel_selection = 9; // bool
+        protocol_settings.ProtocolSetting mux_scan_period = 10; // in hours
+        protocol_settings.ProtocolSetting group_change_period = 11;
     }
 
     message Basecalling {
-        ProtocolSetting basecalling_enabled = 1;
-        ProtocolSetting barcoding_enabled = 2;
-        ProtocolSetting basecall_model = 3;
-        ProtocolSetting trim_barcodes_enabled = 4;
-        ProtocolSetting require_barcodes_both_ends = 5;
-        ProtocolSetting detect_mid_strand_barcodes = 6;
-        ProtocolSetting override_mid_barcoding_score = 7;
-        ProtocolSetting override_rear_barcoding_score = 8;
-        ProtocolSetting min_barcoding_score = 9;
-        ProtocolSetting min_barcoding_score_rear = 10;
-        ProtocolSetting min_barcoding_score_mid = 11;
-        ProtocolSetting alignment_enabled = 12;
-        ProtocolSetting alignment_ref_file = 13;
-        ProtocolSetting alignment_bed_file_enabled = 14;
-        ProtocolSetting alignment_bed_file = 15;
+        protocol_settings.ProtocolSetting basecalling_enabled = 1;
+        protocol_settings.ProtocolSetting barcoding_enabled = 2;
+        protocol_settings.ProtocolSetting basecall_model = 3;
+        protocol_settings.ProtocolSetting trim_barcodes_enabled = 4;
+        protocol_settings.ProtocolSetting require_barcodes_both_ends = 5;
+        protocol_settings.ProtocolSetting detect_mid_strand_barcodes = 6;
+        protocol_settings.ProtocolSetting override_mid_barcoding_score = 7;
+        protocol_settings.ProtocolSetting override_rear_barcoding_score = 8;
+        protocol_settings.ProtocolSetting min_barcoding_score = 9;
+        protocol_settings.ProtocolSetting min_barcoding_score_rear = 10;
+        protocol_settings.ProtocolSetting min_barcoding_score_mid = 11;
+        protocol_settings.ProtocolSetting alignment_enabled = 12;
+        protocol_settings.ProtocolSetting alignment_ref_file = 13;
+        protocol_settings.ProtocolSetting alignment_bed_file_enabled = 14;
+        protocol_settings.ProtocolSetting alignment_bed_file = 15;
     }
 
     // Output
     message Output {
-        ProtocolSetting output_location = 1;
-        ProtocolSetting fast_q_enabled = 2;
-        ProtocolSetting fast_q_reads_per_file = 3;
-        ProtocolSetting fast_q_data_compression = 4;
-        ProtocolSetting fast_5_enabled = 5;
-        ProtocolSetting fast_5_reads_per_file = 6;
-        ProtocolSetting fast_5_data_trace_table = 7;
-        ProtocolSetting fast_5_data_move_table = 8;
-        ProtocolSetting fast_5_data_fast_q = 9;
-        ProtocolSetting fast_5_data_raw = 10;
-        ProtocolSetting fast_5_data_compression = 11;
-        ProtocolSetting bam_enabled = 12;
-        ProtocolSetting read_filtering_enabled = 13;
-        ProtocolSetting read_filtering_min_qscore = 14;
-        ProtocolSetting read_filtering_min_read_length = 15;
-        ProtocolSetting read_filtering_max_read_length = 16;
-        ProtocolSetting bulk_file_enabled = 17;
-        ProtocolSetting bulk_file_raw = 18;
-        ProtocolSetting bulk_file_events = 19;
-        ProtocolSetting bulk_file_read_table = 20;
-        ProtocolSetting bulk_file_raw_enabled = 21;
-        ProtocolSetting bulk_file_events_enabled = 22;
-        ProtocolSetting bulk_file_read_table_enabled = 23;
+        protocol_settings.ProtocolSetting output_location = 1;
+        protocol_settings.ProtocolSetting fast_q_enabled = 2;
+        protocol_settings.ProtocolSetting fast_q_reads_per_file = 3;
+        protocol_settings.ProtocolSetting fast_q_data_compression = 4;
+        protocol_settings.ProtocolSetting fast_5_enabled = 5;
+        protocol_settings.ProtocolSetting fast_5_reads_per_file = 6;
+        protocol_settings.ProtocolSetting fast_5_data_trace_table = 7;
+        protocol_settings.ProtocolSetting fast_5_data_move_table = 8;
+        protocol_settings.ProtocolSetting fast_5_data_fast_q = 9;
+        protocol_settings.ProtocolSetting fast_5_data_raw = 10;
+        protocol_settings.ProtocolSetting fast_5_data_compression = 11;
+        protocol_settings.ProtocolSetting bam_enabled = 12;
+        protocol_settings.ProtocolSetting read_filtering_enabled = 13;
+        protocol_settings.ProtocolSetting read_filtering_min_qscore = 14;
+        protocol_settings.ProtocolSetting read_filtering_min_read_length = 15;
+        protocol_settings.ProtocolSetting read_filtering_max_read_length = 16;
+        protocol_settings.ProtocolSetting bulk_file_enabled = 17;
+        protocol_settings.ProtocolSetting bulk_file_raw = 18;
+        protocol_settings.ProtocolSetting bulk_file_events = 19;
+        protocol_settings.ProtocolSetting bulk_file_read_table = 20;
+        protocol_settings.ProtocolSetting bulk_file_raw_enabled = 21;
+        protocol_settings.ProtocolSetting bulk_file_events_enabled = 22;
+        protocol_settings.ProtocolSetting bulk_file_read_table_enabled = 23;
     }
 
     ProtocolIdentifierComponents protocol = 1;
@@ -743,5 +810,83 @@ message ListSettingsForProtocolResponse {
 
     // Any protocol settings not covered by the above structures, for example
     // those required for custom-scripts.
-    repeated ProtocolSetting protocol_settings = 5;
+    repeated protocol_settings.ProtocolSetting protocol_settings = 5;
+}
+
+message AssociatePostProcessingAnalysisRequest {
+    // Protocol id to associate analysis with:
+    string run_id = 1;
+
+    basecaller.StartRequest start_request = 2;
+}
+
+message AssociatePostProcessingAnalysisResponse {
+    // Id of the basecaller.proto post processing task that was triggered, if the post processing analysis was executed immediately (protocol was finished).
+    string id = 1;
+}
+
+message ClearProtocolHistoryDataRequest {
+    repeated string protocol_ids = 1;
+}
+
+message ClearProtocolHistoryDataResponse {}
+
+enum Action {
+    // No action is requested.
+    ACTION_NONE = 0;
+    // The protocol should pause.
+    //
+    // This will only be sent if the can_pause capability has been set to true by a request
+    // in the current call to protocol_phase_management().
+    //
+    // If the protocol is already pausing or paused, this message should be ignored.
+    // Otherwise, the protocol should immediately respond with a ProtocolPhaseManagementRequest
+    // that sets the phase to PHASE_PAUSING or PHASE_PAUSED.
+    ACTION_PAUSE = 1;
+    // The protocol should resume.
+    //
+    // This will only be sent if the can_pause capability has been set to true by a request
+    // in the current call to protocol_phase_management().
+    //
+    // If the protocol is not pausing or paused, this message should be ignored.
+    // Otherwise, the protocol should immediately respond with a ProtocolPhaseManagementRequest
+    // that sets the phase appropriated (eg: to PHASE_RESUMING).
+    ACTION_RESUME = 2;
+    // The protocol should trigger a mux scan.
+    //
+    // This will only be sent if the can_trigger_mux_scan capability has been set to true by a
+    // request in the current call to protocol_phase_management().
+    //
+    // If the protocol is already performing (or preparing for) a mux scan, this message should be
+    // ignored. Otherwise, the protocol should immediately respond with a
+    // ProtocolPhaseManagementRequest that sets the phase to PHASE_PREPARING_FOR_MUX_SCAN or
+    // PHASE_MUX_SCAN.
+    ACTION_TRIGGER_MUX_SCAN = 3;
+}
+
+message ProtocolPhaseManagementRequest {
+    message Capabilities {
+        // Indicate that the protocol will respond to pause and resume requests.
+        bool can_pause = 1;
+        // Indicate that the protocol will respond to mux scan requests.
+        bool can_trigger_mux_scan = 2;
+    }
+    // Update the set of capabilities (messages that will be responded to by the protocol).
+    Capabilities set_capabilities = 1;
+
+    // Update the protocol phase.
+    //
+    // Leave empty (ie: PHASE_UNKNOWN) to keep the previous phase.
+    ProtocolPhase phase = 2;
+}
+
+message ProtocolPhaseManagementResponse {
+    // Requests that the protocol changes phase.
+    //
+    // The client should never receive an action type (other than possibly ACTION_NONE) that it has
+    // not explicitly opted into via the `ProtocolPhaseManagementRequest.set_capabilities` field.
+    //
+    // If this is set to ACTION_NONE, the message should be ignored (this is for future
+    // compatibility).
+    Action action = 1;
 }

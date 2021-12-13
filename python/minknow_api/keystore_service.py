@@ -23,6 +23,7 @@ __all__ = [
     "UNTIL_NEXT_PROTOCOL_START",
     "UNTIL_PROTOCOL_END",
     "UNTIL_INSTANCE_END",
+    "PERSIST_ACROSS_RESTARTS",
 ]
 
 def run_with_retry(method, message, timeout, unwraps, full_name):
@@ -81,8 +82,9 @@ class KeyStoreService(object):
                 is the name of your software product.
             lifetime (minknow_api.keystore_pb2.Lifetime, optional): Specify the lifetime of a value.
 
-                Note that when storing values in the manager keystore lifetime is ignored,
-                and all values are stored until the manager exits.
+                When storing values in the manager, the only valid values are `UNTIL_INSTANCE_END` and
+                `PERSIST_ACROSS_RESTARTS`.  Using any other value will cause the call to fail with
+                `INVALID_ARGUMENT`
 
                 Note that calling remove() will remove the value regardless of this setting.
 

@@ -7,6 +7,7 @@ option objc_class_prefix = "MKAPI";
 
 import "google/protobuf/timestamp.proto";
 import "minknow_api/analysis_configuration.proto";
+import "minknow_api/protocol_settings.proto";
 
 // Basecall reads files from previous sequencing runs.
 //
@@ -33,6 +34,13 @@ service Basecaller {
     // Since 3.8
     rpc start_barcoding (StartBarcodingRequest) returns (StartBarcodingResponse) {}
 
+    // Start an post processing analysis protocol.
+    //
+    // Post processing protocols allow processing already generated sequencing files in some way, eg: running an
+    // ARTIC workflow on some fastq files, or barcoding a set of fastq input files.
+    //
+    // Since 4.4
+    rpc start_post_processing_protocol (StartPostProcessingProtocolRequest) returns (StartPostProcessingProtocolResponse) {}
 
     // Start aligning fastq files.
     //
@@ -74,14 +82,32 @@ service Basecaller {
     // Since 4.3
     rpc make_alignment_index(MakeAlignmentIndexRequest) returns (MakeAlignmentIndexResponse) {}
 
+    // Gives back a list that contains info about each possible post processing protocol script minknow is aware of.
+    // This will most likely be used to retrieve a suitable post processing protocol script that can be passed on to `start_post_processing_protocol`
+    //
+    // Since 4.4
+    rpc list_post_processing_protocols (ListPostProcessingProtocolsRequest) returns (ListPostProcessingProtocolsResponse) {
+        option idempotency_level = IDEMPOTENT;
+    }
+
+    // Find available display settings for an post processing protocol
+    //
+    // Since 4.4
+    rpc list_settings_for_post_processing_protocol(ListSettingsForPostProcessingProtocolRequest) returns (ListSettingsForPostProcessingProtocolResponse) {
+        option idempotency_level = NO_SIDE_EFFECTS;
+    }
+
+    // Set the progress of the currently executing post processing protocol (this API expects a run_id as more than one can be active).
+    rpc update_post_processing_protocol_progress(UpdateProgressRequest) returns (UpdateProgressResponse) {}
 }
+ 
 
 message ListConfigsByKitRequest {
 }
 
 message ListConfigsByKitResponse {
     message ConfigList {
-        // List of configuration names, to be used in ``StartRequest.configuration``
+        // List of configuration names, to be used in ``StartBasecallingRequest.configuration``
         repeated string configs = 1;
     }
     message PerFlowCell {
@@ -213,6 +239,42 @@ message StartAlignmentResponse {
     string id = 1;
 }
 
+message StartPostProcessingProtocolRequest {
+    // identifier value from a protocol returned from list_post_processing_protocols.
+    string identifier = 1;
+
+    // Optionally specify a sequencing protocol that is linked with this analysis.
+    string sequencing_protocol_run_id = 7;
+
+    // Input directories for the protocol (omit those which the protocol doesnt require).
+    string input_fast5_directory = 2;
+    string input_fastq_directory = 3;
+    string input_bam_directory = 4;
+
+    // Output directory where the analysed output should be written.
+    string output_directory = 5;
+
+    // Configured values for display settings for the protocol (see basecaller.list_settings_for_protocol)
+    // keys missing from the original protocol will cause errors.
+    map<string, protocol_settings.ProtocolSetting.ProtocolSettingValue> setting_values = 6;
+}
+
+message StartRequest {
+    // Start request that will be used to trigger analysis, used to union over all the different types of analysis possible.
+    oneof start_request {
+        basecaller.StartBasecallingRequest start_basecalling_request = 2;
+        basecaller.StartBarcodingRequest start_barcoding_request = 3;
+        basecaller.StartAlignmentRequest start_alignment_request = 4;
+        basecaller.StartPostProcessingProtocolRequest start_post_processing_protocol_request = 5;
+    }
+}
+
+message StartPostProcessingProtocolResponse {
+    // An identifier for the protocol run that was started. This can be used to monitor or cancel
+    // the run.
+    string id = 1;
+}
+
 message CancelRequest {
     // An identifier as returned from a call to start() or list().
     string id = 1;
@@ -248,6 +310,9 @@ message RunInfo {
 
         // Set if aligning reads
         StartAlignmentRequest start_alignment_request = 12;
+
+        // Set if aligning reads
+        StartPostProcessingProtocolRequest start_post_processing_protocol_request = 13;
     }
 
     // What state the run is in.
@@ -354,3 +419,47 @@ message MakeAlignmentIndexRequest {
 }
 
 message MakeAlignmentIndexResponse { }
+
+message ListPostProcessingProtocolsRequest { }
+
+message PostProcessingProtocolInfo {
+    // System identifier for the protocol
+    string identifier = 1;
+
+    // Readable name for the protocol (appropriate for use as a key in translation database).
+    string name = 2;
+}
+
+message ListPostProcessingProtocolsResponse {
+    repeated PostProcessingProtocolInfo protocols = 1;
+}
+
+message ListSettingsForPostProcessingProtocolRequest {
+    // specify the protocol with a string containing all the protocol's identifying components, eg:
+    // "SYSTEM:post_processing/artic"
+    string identifier = 1;
+}
+
+message ListSettingsForPostProcessingProtocolResponse {
+    // Does the protocol require fast5 files as input
+    bool requires_fast5_input = 1;
+
+    // Does the protocol require fastq files as input
+    bool requires_fastq_input = 2;
+
+    // Does the protocol require bam files as input
+    bool requires_bam_input = 3;
+
+    // List of protocol settings used by the post processing protocol
+    repeated protocol_settings.ProtocolSetting protocol_settings = 4;
+}
+
+message UpdateProgressRequest {
+    // id of the protocol to update (stored in environment variable for python process)
+    string id = 1;
+ 
+    // Progress indicator, 0-1.
+    float progress = 2;
+}
+
+message UpdateProgressResponse {}

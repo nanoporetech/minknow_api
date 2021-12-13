@@ -13,8 +13,9 @@ _sym_db = _symbol_database.Default()
 
 
 from minknow_api import acquisition_pb2 as minknow__api_dot_acquisition__pb2
-from minknow_api import analysis_configuration_pb2 as minknow__api_dot_analysis__configuration__pb2
+from minknow_api import basecaller_pb2 as minknow__api_dot_basecaller__pb2
 from minknow_api import device_pb2 as minknow__api_dot_device__pb2
+from minknow_api import protocol_settings_pb2 as minknow__api_dot_protocol__settings__pb2
 from minknow_api import rpc_options_pb2 as minknow__api_dot_rpc__options__pb2
 from google.protobuf import timestamp_pb2 as google_dot_protobuf_dot_timestamp__pb2
 from google.protobuf import wrappers_pb2 as google_dot_protobuf_dot_wrappers__pb2
@@ -26,9 +27,9 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=b'\n\034com.nanoporetech.minknow_api\242\002\005MKAPI',
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\x1aminknow_api/protocol.proto\x12\x14minknow_api.protocol\x1a\x1dminknow_api/acquisition.proto\x1a(minknow_api/analysis_configuration.proto\x1a\x18minknow_api/device.proto\x1a\x1dminknow_api/rpc_options.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1egoogle/protobuf/wrappers.proto\"\xa4\x02\n\x0f\x42\x61rcodeUserData\x12\x14\n\x0c\x62\x61rcode_name\x18\x01 \x01(\t\x12\x17\n\x0flamp_barcode_id\x18\x02 \x01(\t\x12\r\n\x05\x61lias\x18\x03 \x01(\t\x12>\n\x04type\x18\x04 \x01(\x0e\x32\x30.minknow_api.protocol.BarcodeUserData.SampleType\"\x92\x01\n\nSampleType\x12\x0f\n\x0btest_sample\x10\x00\x12\x14\n\x10positive_control\x10\x01\x12\x14\n\x10negative_control\x10\x02\x12\x17\n\x13no_template_control\x10\x03\x12\x16\n\x12positive_control_1\x10\x04\x12\x16\n\x12positive_control_2\x10\x05\"\xc1\x01\n\x13ProtocolRunUserInfo\x12\x37\n\x11protocol_group_id\x18\x01 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12/\n\tsample_id\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12@\n\x11\x62\x61rcode_user_info\x18\x03 \x03(\x0b\x32%.minknow_api.protocol.BarcodeUserData\"|\n\x14StartProtocolRequest\x12\x18\n\nidentifier\x18\x01 \x01(\tB\x04\x88\xb5\x18\x01\x12\x0c\n\x04\x61rgs\x18\x02 \x03(\t\x12<\n\tuser_info\x18\x03 \x01(\x0b\x32).minknow_api.protocol.ProtocolRunUserInfo\"\'\n\x15StartProtocolResponse\x12\x0e\n\x06run_id\x18\x01 \x01(\t\"c\n\x13StopProtocolRequest\x12L\n\x13\x64\x61ta_action_on_stop\x18\x01 \x01(\x0e\x32/.minknow_api.acquisition.StopRequest.DataAction\"\x16\n\x14StopProtocolResponse\",\n\x14ListProtocolsRequest\x12\x14\n\x0c\x66orce_reload\x18\x01 \x01(\x08\"\xff\x03\n\x0cProtocolInfo\x12\x12\n\nidentifier\x18\x01 \x01(\t\x12:\n\x04tags\x18\x02 \x03(\x0b\x32,.minknow_api.protocol.ProtocolInfo.TagsEntry\x12\x0c\n\x04name\x18\x03 \x01(\t\x12U\n\x15tag_extraction_result\x18\x04 \x01(\x0b\x32\x36.minknow_api.protocol.ProtocolInfo.TagExtractionResult\x1a\xa1\x01\n\x08TagValue\x12\x16\n\x0cstring_value\x18\x01 \x01(\tH\x00\x12\x14\n\nbool_value\x18\x02 \x01(\x08H\x00\x12\x13\n\tint_value\x18\x03 \x01(\x03H\x00\x12\x16\n\x0c\x64ouble_value\x18\x04 \x01(\x01H\x00\x12\x15\n\x0b\x61rray_value\x18\x05 \x01(\tH\x00\x12\x16\n\x0cobject_value\x18\x06 \x01(\tH\x00\x42\x0b\n\ttag_value\x1a<\n\x13TagExtractionResult\x12\x0f\n\x07success\x18\x01 \x01(\x08\x12\x14\n\x0c\x65rror_report\x18\x02 \x01(\t\x1aX\n\tTagsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12:\n\x05value\x18\x02 \x01(\x0b\x32+.minknow_api.protocol.ProtocolInfo.TagValue:\x02\x38\x01\"N\n\x15ListProtocolsResponse\x12\x35\n\tprotocols\x18\x01 \x03(\x0b\x32\".minknow_api.protocol.ProtocolInfo\"\xff\x01\n\x16WaitForFinishedRequest\x12\x14\n\x06run_id\x18\x01 \x01(\tB\x04\x88\xb5\x18\x01\x12M\n\x05state\x18\x02 \x01(\x0e\x32>.minknow_api.protocol.WaitForFinishedRequest.NotificationState\x12\x0f\n\x07timeout\x18\x03 \x01(\x02\"o\n\x11NotificationState\x12\x19\n\x15NOTIFY_ON_TERMINATION\x10\x00\x12\x1d\n\x19NOTIFY_BEFORE_TERMINATION\x10\x01\x12 \n\x1cNOTIFY_ON_SCRIPT_TERMINATION\x10\x02\"#\n\x11GetRunInfoRequest\x12\x0e\n\x06run_id\x18\x01 \x01(\t\"2\n\x17\x45pi2meWorkflowReference\x12\n\n\x02id\x18\x01 \x01(\x03\x12\x0b\n\x03url\x18\x02 \x01(\t\"\xf6\x04\n\x0fProtocolRunInfo\x12\x0e\n\x06run_id\x18\x01 \x01(\t\x12\x13\n\x0bprotocol_id\x18\x02 \x01(\t\x12\x0c\n\x04\x61rgs\x18\x03 \x03(\t\x12\x13\n\x0boutput_path\x18\x0b \x01(\t\x12\x32\n\x05state\x18\x04 \x01(\x0e\x32#.minknow_api.protocol.ProtocolState\x12.\n\nstart_time\x18\x05 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x33\n\x0fscript_end_time\x18\t \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12,\n\x08\x65nd_time\x18\x06 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x1b\n\x13\x61\x63quisition_run_ids\x18\x07 \x03(\t\x12<\n\tuser_info\x18\x08 \x01(\x0b\x32).minknow_api.protocol.ProtocolRunUserInfo\x12G\n\x10\x65pi2me_workflows\x18\n \x03(\x0b\x32-.minknow_api.protocol.Epi2meWorkflowReference\x12\x39\n\x06\x64\x65vice\x18\x0c \x01(\x0b\x32).minknow_api.device.GetDeviceInfoResponse\x12>\n\tflow_cell\x18\r \x01(\x0b\x32+.minknow_api.device.GetFlowCellInfoResponse\x12\x35\n\tmeta_info\x18\x0e \x01(\x0b\x32\".minknow_api.protocol.ProtocolInfo\"\x19\n\x17ListProtocolRunsRequest\"+\n\x18ListProtocolRunsResponse\x12\x0f\n\x07run_ids\x18\x01 \x03(\t\"\x1e\n\x1cGetCurrentProtocolRunRequest\"X\n\x1dGetCurrentProtocolRunResponse\x12\x37\n\x08run_info\x18\x03 \x01(\x0b\x32%.minknow_api.protocol.ProtocolRunInfo\" \n\x1eWatchCurrentProtocolRunRequest\"\x17\n\x15GetContextInfoRequest\"\xa1\x01\n\x16GetContextInfoResponse\x12S\n\x0c\x63ontext_info\x18\x01 \x03(\x0b\x32=.minknow_api.protocol.GetContextInfoResponse.ContextInfoEntry\x1a\x32\n\x10\x43ontextInfoEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\x9f\x01\n\x15SetContextInfoRequest\x12R\n\x0c\x63ontext_info\x18\x01 \x03(\x0b\x32<.minknow_api.protocol.SetContextInfoRequest.ContextInfoEntry\x1a\x32\n\x10\x43ontextInfoEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\x18\n\x16SetContextInfoResponse\"\x1b\n\x19GetProtocolPurposeRequest\"-\n\x1aGetProtocolPurposeResponse\x12\x0f\n\x07purpose\x18\x01 \x01(\t\",\n\x19SetProtocolPurposeRequest\x12\x0f\n\x07purpose\x18\x01 \x01(\t\"\x1c\n\x1aSetProtocolPurposeResponse\"~\n\x18\x41\x64\x64\x45pi2meWorkflowRequest\x12\x14\n\x06run_id\x18\x01 \x01(\tB\x04\x88\xb5\x18\x01\x12L\n\x0f\x65pi2me_workflow\x18\x02 \x01(\x0b\x32-.minknow_api.protocol.Epi2meWorkflowReferenceB\x04\x88\xb5\x18\x01\"\x1b\n\x19\x41\x64\x64\x45pi2meWorkflowResponse\"\x1d\n\x1bListProtocolGroupIdsRequest\":\n\x1cListProtocolGroupIdsResponse\x12\x1a\n\x12protocol_group_ids\x18\x01 \x03(\t\"\x1b\n\x19\x42\x65ginHardwareCheckRequest\",\n\x1a\x42\x65ginHardwareCheckResponse\x12\x0e\n\x06run_id\x18\x01 \x01(\t\"\x18\n\x16\x42\x65ginPlatformQcRequest\")\n\x17\x42\x65ginPlatformQcResponse\x12\x0e\n\x06run_id\x18\x01 \x01(\t\"\xfc\x01\n\x1cProtocolIdentifierComponents\x12M\n\x08location\x18\x01 \x01(\x0e\x32;.minknow_api.protocol.ProtocolIdentifierComponents.Location\x12\x17\n\x0f\x65xperiment_type\x18\x02 \x01(\t\x12\x0c\n\x04name\x18\x03 \x01(\t\x12\x1e\n\x16\x66low_cell_product_code\x18\x04 \x01(\t\x12\x0b\n\x03kit\x18\x05 \x01(\t\"9\n\x08Location\x12\x07\n\x03\x41NY\x10\x00\x12\x12\n\x0eSYSTEM_SCRIPTS\x10\x01\x12\x10\n\x0cUSER_SCRIPTS\x10\x02\"\x97\x01\n\x1eListSettingsForProtocolRequest\x12\x14\n\nidentifier\x18\x01 \x01(\tH\x00\x12H\n\ncomponents\x18\x02 \x01(\x0b\x32\x32.minknow_api.protocol.ProtocolIdentifierComponentsH\x00\x42\x15\n\x13protocol_identifier\"\xeb\x0b\n\x0fProtocolSetting\x12@\n\x08\x63\x61tegory\x18\x01 \x01(\x0e\x32..minknow_api.protocol.ProtocolSetting.Category\x12\x18\n\nidentifier\x18\x02 \x01(\tB\x04\x88\xb5\x18\x01\x12\x1a\n\x0c\x64isplay_name\x18\x03 \x01(\tB\x04\x88\xb5\x18\x01\x12\x0c\n\x04help\x18\x10 \x01(\t\x12\x38\n\x04unit\x18\x05 \x01(\x0e\x32*.minknow_api.protocol.ProtocolSetting.Unit\x12Q\n\rdefault_value\x18\x06 \x01(\x0b\x32:.minknow_api.protocol.ProtocolSetting.ProtocolSettingValue\x12\x45\n\x0b\x63onstraints\x18\x07 \x03(\x0b\x32\x30.minknow_api.protocol.ProtocolSetting.Constraint\x12\x46\n\x0c\x64\x65pendencies\x18\x08 \x03(\x0b\x32\x30.minknow_api.protocol.ProtocolSetting.Dependency\x12\x44\n\nvisibility\x18\t \x01(\x0e\x32\x30.minknow_api.protocol.ProtocolSetting.Visibility\x12\x0f\n\x07\x63hoices\x18\x11 \x03(\t\x1a\xf6\x01\n\x14ProtocolSettingValue\x12\x16\n\x0cstring_value\x18\x01 \x01(\tH\x00\x12\x15\n\x0b\x66loat_value\x18\x02 \x01(\x01H\x00\x12\x17\n\rinteger_value\x18\x03 \x01(\x03H\x00\x12\x14\n\nbool_value\x18\x04 \x01(\x08H\x00\x12\x66\n\x0e\x63hannels_value\x18\x05 \x01(\x0b\x32L.minknow_api.analysis_configuration.WriterConfiguration.ChannelConfigurationH\x00\x42\x18\n\x16protocol_setting_value\x1a\xa7\x02\n\nConstraint\x12M\n\tcondition\x18\x01 \x01(\x0e\x32:.minknow_api.protocol.ProtocolSetting.Constraint.Condition\x12I\n\x05value\x18\x02 \x01(\x0b\x32:.minknow_api.protocol.ProtocolSetting.ProtocolSettingValue\"\x7f\n\tCondition\x12\t\n\x05\x45QUAL\x10\x00\x12\r\n\tNOT_EQUAL\x10\x01\x12\t\n\x05GT_EQ\x10\x02\x12\x06\n\x02GT\x10\x03\x12\t\n\x05LT_EQ\x10\x04\x12\x06\n\x02LT\x10\x05\x12\x06\n\x02IN\x10\x06\x12\n\n\x06NOT_IN\x10\x07\x12\r\n\tENDS_WITH\x10\x08\x12\x0f\n\x0bSTARTS_WITH\x10\t\x1ag\n\nDependency\x12\x12\n\nidentifier\x18\x01 \x01(\t\x12\x45\n\x0b\x63onstraints\x18\x02 \x03(\x0b\x32\x30.minknow_api.protocol.ProtocolSetting.Constraint\"C\n\x08\x43\x61tegory\x12\t\n\x05OTHER\x10\x00\x12\x0f\n\x0bRUN_OPTIONS\x10\x01\x12\x0f\n\x0b\x42\x41SECALLING\x10\x02\x12\n\n\x06OUTPUT\x10\x03\"\xcc\x01\n\x04Unit\x12\x0c\n\x08UNITLESS\x10\x00\x12\x0f\n\x0bUTF8_STRING\x10\x01\x12\x10\n\x0c\x41SCII_STRING\x10\x02\x12\x08\n\x04PATH\x10\x03\x12\x07\n\x03URL\x10\x04\x12\x12\n\x0ePRIVATE_STRING\x10\x05\x12\n\n\x06\x43HOICE\x10\x06\x12\x10\n\x0cMULTI_CHOICE\x10\x07\x12\n\n\x06SECOND\x10\x08\x12\x08\n\x04HOUR\x10\t\x12\x08\n\x04\x42\x41SE\x10\n\x12\t\n\x05KBASE\x10\x0b\x12\t\n\x05MBASE\x10\x0c\x12\t\n\x05GBASE\x10\r\x12\r\n\tMILLIVOLT\x10\x0e\"?\n\nVisibility\x12\x0c\n\x08\x45\x44ITABLE\x10\x00\x12\n\n\x06HIDDEN\x10\x01\x12\t\n\x05\x46IXED\x10\x02\x12\x0c\n\x08REQUIRED\x10\x03\"\x93\x1e\n\x1fListSettingsForProtocolResponse\x12\x44\n\x08protocol\x18\x01 \x01(\x0b\x32\x32.minknow_api.protocol.ProtocolIdentifierComponents\x12U\n\x0brun_options\x18\x02 \x01(\x0b\x32@.minknow_api.protocol.ListSettingsForProtocolResponse.RunOptions\x12V\n\x0b\x62\x61secalling\x18\x03 \x01(\x0b\x32\x41.minknow_api.protocol.ListSettingsForProtocolResponse.Basecalling\x12L\n\x06output\x18\x04 \x01(\x0b\x32<.minknow_api.protocol.ListSettingsForProtocolResponse.Output\x12@\n\x11protocol_settings\x18\x05 \x03(\x0b\x32%.minknow_api.protocol.ProtocolSetting\x1a\xf2\x05\n\nRunOptions\x12\x39\n\nrun_length\x18\x01 \x01(\x0b\x32%.minknow_api.protocol.ProtocolSetting\x12;\n\x0c\x62ias_voltage\x18\x02 \x01(\x0b\x32%.minknow_api.protocol.ProtocolSetting\x12\x41\n\x12read_until_enabled\x18\x03 \x01(\x0b\x32%.minknow_api.protocol.ProtocolSetting\x12\x42\n\x13read_until_ref_file\x18\x04 \x01(\x0b\x32%.minknow_api.protocol.ProtocolSetting\x12\x42\n\x13read_until_channels\x18\x05 \x01(\x0b\x32%.minknow_api.protocol.ProtocolSetting\x12J\n\x1bread_until_bed_file_enabled\x18\x06 \x01(\x0b\x32%.minknow_api.protocol.ProtocolSetting\x12\x42\n\x13read_until_bed_file\x18\x07 \x01(\x0b\x32%.minknow_api.protocol.ProtocolSetting\x12\x44\n\x15read_until_enrichment\x18\x08 \x01(\x0b\x32%.minknow_api.protocol.ProtocolSetting\x12G\n\x18\x61\x63tive_channel_selection\x18\t \x01(\x0b\x32%.minknow_api.protocol.ProtocolSetting\x12>\n\x0fmux_scan_period\x18\n \x01(\x0b\x32%.minknow_api.protocol.ProtocolSetting\x12\x42\n\x13group_change_period\x18\x0b \x01(\x0b\x32%.minknow_api.protocol.ProtocolSetting\x1a\xb1\x08\n\x0b\x42\x61secalling\x12\x42\n\x13\x62\x61secalling_enabled\x18\x01 \x01(\x0b\x32%.minknow_api.protocol.ProtocolSetting\x12@\n\x11\x62\x61rcoding_enabled\x18\x02 \x01(\x0b\x32%.minknow_api.protocol.ProtocolSetting\x12=\n\x0e\x62\x61secall_model\x18\x03 \x01(\x0b\x32%.minknow_api.protocol.ProtocolSetting\x12\x44\n\x15trim_barcodes_enabled\x18\x04 \x01(\x0b\x32%.minknow_api.protocol.ProtocolSetting\x12I\n\x1arequire_barcodes_both_ends\x18\x05 \x01(\x0b\x32%.minknow_api.protocol.ProtocolSetting\x12I\n\x1a\x64\x65tect_mid_strand_barcodes\x18\x06 \x01(\x0b\x32%.minknow_api.protocol.ProtocolSetting\x12K\n\x1coverride_mid_barcoding_score\x18\x07 \x01(\x0b\x32%.minknow_api.protocol.ProtocolSetting\x12L\n\x1doverride_rear_barcoding_score\x18\x08 \x01(\x0b\x32%.minknow_api.protocol.ProtocolSetting\x12\x42\n\x13min_barcoding_score\x18\t \x01(\x0b\x32%.minknow_api.protocol.ProtocolSetting\x12G\n\x18min_barcoding_score_rear\x18\n \x01(\x0b\x32%.minknow_api.protocol.ProtocolSetting\x12\x46\n\x17min_barcoding_score_mid\x18\x0b \x01(\x0b\x32%.minknow_api.protocol.ProtocolSetting\x12@\n\x11\x61lignment_enabled\x18\x0c \x01(\x0b\x32%.minknow_api.protocol.ProtocolSetting\x12\x41\n\x12\x61lignment_ref_file\x18\r \x01(\x0b\x32%.minknow_api.protocol.ProtocolSetting\x12I\n\x1a\x61lignment_bed_file_enabled\x18\x0e \x01(\x0b\x32%.minknow_api.protocol.ProtocolSetting\x12\x41\n\x12\x61lignment_bed_file\x18\x0f \x01(\x0b\x32%.minknow_api.protocol.ProtocolSetting\x1a\xc1\x0c\n\x06Output\x12>\n\x0foutput_location\x18\x01 \x01(\x0b\x32%.minknow_api.protocol.ProtocolSetting\x12=\n\x0e\x66\x61st_q_enabled\x18\x02 \x01(\x0b\x32%.minknow_api.protocol.ProtocolSetting\x12\x44\n\x15\x66\x61st_q_reads_per_file\x18\x03 \x01(\x0b\x32%.minknow_api.protocol.ProtocolSetting\x12\x46\n\x17\x66\x61st_q_data_compression\x18\x04 \x01(\x0b\x32%.minknow_api.protocol.ProtocolSetting\x12=\n\x0e\x66\x61st_5_enabled\x18\x05 \x01(\x0b\x32%.minknow_api.protocol.ProtocolSetting\x12\x44\n\x15\x66\x61st_5_reads_per_file\x18\x06 \x01(\x0b\x32%.minknow_api.protocol.ProtocolSetting\x12\x46\n\x17\x66\x61st_5_data_trace_table\x18\x07 \x01(\x0b\x32%.minknow_api.protocol.ProtocolSetting\x12\x45\n\x16\x66\x61st_5_data_move_table\x18\x08 \x01(\x0b\x32%.minknow_api.protocol.ProtocolSetting\x12\x41\n\x12\x66\x61st_5_data_fast_q\x18\t \x01(\x0b\x32%.minknow_api.protocol.ProtocolSetting\x12>\n\x0f\x66\x61st_5_data_raw\x18\n \x01(\x0b\x32%.minknow_api.protocol.ProtocolSetting\x12\x46\n\x17\x66\x61st_5_data_compression\x18\x0b \x01(\x0b\x32%.minknow_api.protocol.ProtocolSetting\x12:\n\x0b\x62\x61m_enabled\x18\x0c \x01(\x0b\x32%.minknow_api.protocol.ProtocolSetting\x12\x45\n\x16read_filtering_enabled\x18\r \x01(\x0b\x32%.minknow_api.protocol.ProtocolSetting\x12H\n\x19read_filtering_min_qscore\x18\x0e \x01(\x0b\x32%.minknow_api.protocol.ProtocolSetting\x12M\n\x1eread_filtering_min_read_length\x18\x0f \x01(\x0b\x32%.minknow_api.protocol.ProtocolSetting\x12M\n\x1eread_filtering_max_read_length\x18\x10 \x01(\x0b\x32%.minknow_api.protocol.ProtocolSetting\x12@\n\x11\x62ulk_file_enabled\x18\x11 \x01(\x0b\x32%.minknow_api.protocol.ProtocolSetting\x12<\n\rbulk_file_raw\x18\x12 \x01(\x0b\x32%.minknow_api.protocol.ProtocolSetting\x12?\n\x10\x62ulk_file_events\x18\x13 \x01(\x0b\x32%.minknow_api.protocol.ProtocolSetting\x12\x43\n\x14\x62ulk_file_read_table\x18\x14 \x01(\x0b\x32%.minknow_api.protocol.ProtocolSetting\x12\x44\n\x15\x62ulk_file_raw_enabled\x18\x15 \x01(\x0b\x32%.minknow_api.protocol.ProtocolSetting\x12G\n\x18\x62ulk_file_events_enabled\x18\x16 \x01(\x0b\x32%.minknow_api.protocol.ProtocolSetting\x12K\n\x1c\x62ulk_file_read_table_enabled\x18\x17 \x01(\x0b\x32%.minknow_api.protocol.ProtocolSetting*\xa2\x02\n\rProtocolState\x12\x14\n\x10PROTOCOL_RUNNING\x10\x00\x12$\n PROTOCOL_WAITING_FOR_TEMPERATURE\x10\x04\x12$\n PROTOCOL_WAITING_FOR_ACQUISITION\x10\x05\x12\x16\n\x12PROTOCOL_COMPLETED\x10\x01\x12\x1c\n\x18PROTOCOL_STOPPED_BY_USER\x10\x02\x12 \n\x1cPROTOCOL_FINISHED_WITH_ERROR\x10\x03\x12\'\n#PROTOCOL_FINISHED_WITH_DEVICE_ERROR\x10\x06\x12.\n*PROTOCOL_FINISHED_UNABLE_TO_SEND_TELEMETRY\x10\x07\x32\x9d\x10\n\x0fProtocolService\x12k\n\x0estart_protocol\x12*.minknow_api.protocol.StartProtocolRequest\x1a+.minknow_api.protocol.StartProtocolResponse\"\x00\x12h\n\rstop_protocol\x12).minknow_api.protocol.StopProtocolRequest\x1a*.minknow_api.protocol.StopProtocolResponse\"\x00\x12m\n\x11wait_for_finished\x12,.minknow_api.protocol.WaitForFinishedRequest\x1a%.minknow_api.protocol.ProtocolRunInfo\"\x03\x90\x02\x01\x12\x63\n\x0cget_run_info\x12\'.minknow_api.protocol.GetRunInfoRequest\x1a%.minknow_api.protocol.ProtocolRunInfo\"\x03\x90\x02\x01\x12x\n\x12list_protocol_runs\x12-.minknow_api.protocol.ListProtocolRunsRequest\x1a..minknow_api.protocol.ListProtocolRunsResponse\"\x03\x90\x02\x01\x12z\n\x18get_current_protocol_run\x12\x32.minknow_api.protocol.GetCurrentProtocolRunRequest\x1a%.minknow_api.protocol.ProtocolRunInfo\"\x03\x90\x02\x01\x12\x80\x01\n\x1awatch_current_protocol_run\x12\x34.minknow_api.protocol.WatchCurrentProtocolRunRequest\x1a%.minknow_api.protocol.ProtocolRunInfo\"\x03\x90\x02\x01\x30\x01\x12n\n\x0elist_protocols\x12*.minknow_api.protocol.ListProtocolsRequest\x1a+.minknow_api.protocol.ListProtocolsResponse\"\x03\x90\x02\x02\x12r\n\x10get_context_info\x12+.minknow_api.protocol.GetContextInfoRequest\x1a,.minknow_api.protocol.GetContextInfoResponse\"\x03\x90\x02\x01\x12r\n\x10set_context_info\x12+.minknow_api.protocol.SetContextInfoRequest\x1a,.minknow_api.protocol.SetContextInfoResponse\"\x03\x90\x02\x02\x12~\n\x14get_protocol_purpose\x12/.minknow_api.protocol.GetProtocolPurposeRequest\x1a\x30.minknow_api.protocol.GetProtocolPurposeResponse\"\x03\x90\x02\x01\x12~\n\x14set_protocol_purpose\x12/.minknow_api.protocol.SetProtocolPurposeRequest\x1a\x30.minknow_api.protocol.SetProtocolPurposeResponse\"\x03\x90\x02\x02\x12x\n\x13\x61\x64\x64_epi2me_workflow\x12..minknow_api.protocol.AddEpi2meWorkflowRequest\x1a/.minknow_api.protocol.AddEpi2meWorkflowResponse\"\x00\x12\x85\x01\n\x17list_protocol_group_ids\x12\x31.minknow_api.protocol.ListProtocolGroupIdsRequest\x1a\x32.minknow_api.protocol.ListProtocolGroupIdsResponse\"\x03\x90\x02\x01\x12\x7f\n\x14\x62\x65gin_hardware_check\x12/.minknow_api.protocol.BeginHardwareCheckRequest\x1a\x30.minknow_api.protocol.BeginHardwareCheckResponse\"\x04\x98\xb5\x18\x01\x12v\n\x11\x62\x65gin_platform_qc\x12,.minknow_api.protocol.BeginPlatformQcRequest\x1a-.minknow_api.protocol.BeginPlatformQcResponse\"\x04\x98\xb5\x18\x01\x12\x92\x01\n\x1alist_settings_for_protocol\x12\x34.minknow_api.protocol.ListSettingsForProtocolRequest\x1a\x35.minknow_api.protocol.ListSettingsForProtocolResponse\"\x07\x90\x02\x01\x98\xb5\x18\x01\x42&\n\x1c\x63om.nanoporetech.minknow_api\xa2\x02\x05MKAPIb\x06proto3'
+  serialized_pb=b'\n\x1aminknow_api/protocol.proto\x12\x14minknow_api.protocol\x1a\x1dminknow_api/acquisition.proto\x1a\x1cminknow_api/basecaller.proto\x1a\x18minknow_api/device.proto\x1a#minknow_api/protocol_settings.proto\x1a\x1dminknow_api/rpc_options.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1egoogle/protobuf/wrappers.proto\"\xa4\x02\n\x0f\x42\x61rcodeUserData\x12\x14\n\x0c\x62\x61rcode_name\x18\x01 \x01(\t\x12\x17\n\x0flamp_barcode_id\x18\x02 \x01(\t\x12\r\n\x05\x61lias\x18\x03 \x01(\t\x12>\n\x04type\x18\x04 \x01(\x0e\x32\x30.minknow_api.protocol.BarcodeUserData.SampleType\"\x92\x01\n\nSampleType\x12\x0f\n\x0btest_sample\x10\x00\x12\x14\n\x10positive_control\x10\x01\x12\x14\n\x10negative_control\x10\x02\x12\x17\n\x13no_template_control\x10\x03\x12\x16\n\x12positive_control_1\x10\x04\x12\x16\n\x12positive_control_2\x10\x05\"\xc1\x01\n\x13ProtocolRunUserInfo\x12\x37\n\x11protocol_group_id\x18\x01 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12/\n\tsample_id\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12@\n\x11\x62\x61rcode_user_info\x18\x03 \x03(\x0b\x32%.minknow_api.protocol.BarcodeUserData\"|\n\x14StartProtocolRequest\x12\x18\n\nidentifier\x18\x01 \x01(\tB\x04\x88\xb5\x18\x01\x12\x0c\n\x04\x61rgs\x18\x02 \x03(\t\x12<\n\tuser_info\x18\x03 \x01(\x0b\x32).minknow_api.protocol.ProtocolRunUserInfo\"\'\n\x15StartProtocolResponse\x12\x0e\n\x06run_id\x18\x01 \x01(\t\"c\n\x13StopProtocolRequest\x12L\n\x13\x64\x61ta_action_on_stop\x18\x01 \x01(\x0e\x32/.minknow_api.acquisition.StopRequest.DataAction\"\x16\n\x14StopProtocolResponse\"\x16\n\x14PauseProtocolRequest\"\x17\n\x15PauseProtocolResponse\"\x17\n\x15ResumeProtocolRequest\"\x18\n\x16ResumeProtocolResponse\"\x17\n\x15TriggerMuxScanRequest\"\x18\n\x16TriggerMuxScanResponse\",\n\x14ListProtocolsRequest\x12\x14\n\x0c\x66orce_reload\x18\x01 \x01(\x08\"\xff\x03\n\x0cProtocolInfo\x12\x12\n\nidentifier\x18\x01 \x01(\t\x12:\n\x04tags\x18\x02 \x03(\x0b\x32,.minknow_api.protocol.ProtocolInfo.TagsEntry\x12\x0c\n\x04name\x18\x03 \x01(\t\x12U\n\x15tag_extraction_result\x18\x04 \x01(\x0b\x32\x36.minknow_api.protocol.ProtocolInfo.TagExtractionResult\x1a\xa1\x01\n\x08TagValue\x12\x16\n\x0cstring_value\x18\x01 \x01(\tH\x00\x12\x14\n\nbool_value\x18\x02 \x01(\x08H\x00\x12\x13\n\tint_value\x18\x03 \x01(\x03H\x00\x12\x16\n\x0c\x64ouble_value\x18\x04 \x01(\x01H\x00\x12\x15\n\x0b\x61rray_value\x18\x05 \x01(\tH\x00\x12\x16\n\x0cobject_value\x18\x06 \x01(\tH\x00\x42\x0b\n\ttag_value\x1a<\n\x13TagExtractionResult\x12\x0f\n\x07success\x18\x01 \x01(\x08\x12\x14\n\x0c\x65rror_report\x18\x02 \x01(\t\x1aX\n\tTagsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12:\n\x05value\x18\x02 \x01(\x0b\x32+.minknow_api.protocol.ProtocolInfo.TagValue:\x02\x38\x01\"N\n\x15ListProtocolsResponse\x12\x35\n\tprotocols\x18\x01 \x03(\x0b\x32\".minknow_api.protocol.ProtocolInfo\"\xff\x01\n\x16WaitForFinishedRequest\x12\x14\n\x06run_id\x18\x01 \x01(\tB\x04\x88\xb5\x18\x01\x12M\n\x05state\x18\x02 \x01(\x0e\x32>.minknow_api.protocol.WaitForFinishedRequest.NotificationState\x12\x0f\n\x07timeout\x18\x03 \x01(\x02\"o\n\x11NotificationState\x12\x19\n\x15NOTIFY_ON_TERMINATION\x10\x00\x12\x1d\n\x19NOTIFY_BEFORE_TERMINATION\x10\x01\x12 \n\x1cNOTIFY_ON_SCRIPT_TERMINATION\x10\x02\"#\n\x11GetRunInfoRequest\x12\x0e\n\x06run_id\x18\x01 \x01(\t\"2\n\x17\x45pi2meWorkflowReference\x12\n\n\x02id\x18\x01 \x01(\x03\x12\x0b\n\x03url\x18\x02 \x01(\t\"s\n AssociatedPostProcessingAnalysis\x12\x12\n\nstarted_id\x18\x01 \x01(\t\x12;\n\rstart_request\x18\x02 \x01(\x0b\x32$.minknow_api.basecaller.StartRequest\"R\n\x10PlatformQcResult\x12\x14\n\x0c\x66low_cell_id\x18\x01 \x01(\t\x12\x0e\n\x06passed\x18\x02 \x01(\x08\x12\x18\n\x10total_pore_count\x18\x03 \x01(\r\"\xb3\x07\n\x0fProtocolRunInfo\x12\x0e\n\x06run_id\x18\x01 \x01(\t\x12\x13\n\x0bprotocol_id\x18\x02 \x01(\t\x12\x0c\n\x04\x61rgs\x18\x03 \x03(\t\x12\x13\n\x0boutput_path\x18\x0b \x01(\t\x12\x32\n\x05state\x18\x04 \x01(\x0e\x32#.minknow_api.protocol.ProtocolState\x12\x32\n\x05phase\x18\x10 \x01(\x0e\x32#.minknow_api.protocol.ProtocolPhase\x12\x35\n\x11last_phase_change\x18\x11 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x11\n\tcan_pause\x18\x12 \x01(\x08\x12\x1c\n\x14\x63\x61n_trigger_mux_scan\x18\x13 \x01(\x08\x12.\n\nstart_time\x18\x05 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x33\n\x0fscript_end_time\x18\t \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12,\n\x08\x65nd_time\x18\x06 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x1b\n\x13\x61\x63quisition_run_ids\x18\x07 \x03(\t\x12<\n\tuser_info\x18\x08 \x01(\x0b\x32).minknow_api.protocol.ProtocolRunUserInfo\x12G\n\x10\x65pi2me_workflows\x18\n \x03(\x0b\x32-.minknow_api.protocol.Epi2meWorkflowReference\x12\x39\n\x06\x64\x65vice\x18\x0c \x01(\x0b\x32).minknow_api.device.GetDeviceInfoResponse\x12>\n\tflow_cell\x18\r \x01(\x0b\x32+.minknow_api.device.GetFlowCellInfoResponse\x12\x35\n\tmeta_info\x18\x0e \x01(\x0b\x32\".minknow_api.protocol.ProtocolInfo\x12\x63\n#associated_post_processing_analysis\x18\x0f \x03(\x0b\x32\x36.minknow_api.protocol.AssociatedPostProcessingAnalysis\x12:\n\npqc_result\x18\x14 \x01(\x0b\x32&.minknow_api.protocol.PlatformQcResult\"\x99\x01\n\rFilteringInfo\x12H\n\npqc_filter\x18\x01 \x01(\x0b\x32\x34.minknow_api.protocol.FilteringInfo.PlatformQcFilter\x1a>\n\x10PlatformQcFilter\x12\x19\n\x0c\x66low_cell_id\x18\x01 \x01(\tH\x00\x88\x01\x01\x42\x0f\n\r_flow_cell_id\"S\n\x17ListProtocolRunsRequest\x12\x38\n\x0b\x66ilter_info\x18\x01 \x01(\x0b\x32#.minknow_api.protocol.FilteringInfo\"+\n\x18ListProtocolRunsResponse\x12\x0f\n\x07run_ids\x18\x01 \x03(\t\"\x1e\n\x1cGetCurrentProtocolRunRequest\"X\n\x1dGetCurrentProtocolRunResponse\x12\x37\n\x08run_info\x18\x03 \x01(\x0b\x32%.minknow_api.protocol.ProtocolRunInfo\" \n\x1eWatchCurrentProtocolRunRequest\"\x17\n\x15GetContextInfoRequest\"\xa1\x01\n\x16GetContextInfoResponse\x12S\n\x0c\x63ontext_info\x18\x01 \x03(\x0b\x32=.minknow_api.protocol.GetContextInfoResponse.ContextInfoEntry\x1a\x32\n\x10\x43ontextInfoEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\x9f\x01\n\x15SetContextInfoRequest\x12R\n\x0c\x63ontext_info\x18\x01 \x03(\x0b\x32<.minknow_api.protocol.SetContextInfoRequest.ContextInfoEntry\x1a\x32\n\x10\x43ontextInfoEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\x18\n\x16SetContextInfoResponse\"\x1b\n\x19GetProtocolPurposeRequest\"-\n\x1aGetProtocolPurposeResponse\x12\x0f\n\x07purpose\x18\x01 \x01(\t\",\n\x19SetProtocolPurposeRequest\x12\x0f\n\x07purpose\x18\x01 \x01(\t\"\x1c\n\x1aSetProtocolPurposeResponse\"~\n\x18\x41\x64\x64\x45pi2meWorkflowRequest\x12\x14\n\x06run_id\x18\x01 \x01(\tB\x04\x88\xb5\x18\x01\x12L\n\x0f\x65pi2me_workflow\x18\x02 \x01(\x0b\x32-.minknow_api.protocol.Epi2meWorkflowReferenceB\x04\x88\xb5\x18\x01\"\x1b\n\x19\x41\x64\x64\x45pi2meWorkflowResponse\"\x1d\n\x1bListProtocolGroupIdsRequest\":\n\x1cListProtocolGroupIdsResponse\x12\x1a\n\x12protocol_group_ids\x18\x01 \x03(\t\"\x1b\n\x19\x42\x65ginHardwareCheckRequest\",\n\x1a\x42\x65ginHardwareCheckResponse\x12\x0e\n\x06run_id\x18\x01 \x01(\t\"\x18\n\x16\x42\x65ginPlatformQcRequest\")\n\x17\x42\x65ginPlatformQcResponse\x12\x0e\n\x06run_id\x18\x01 \x01(\t\"q\n\x1aSetPlatformQcResultRequest\x12\x17\n\x0fprotocol_run_id\x18\x01 \x01(\t\x12:\n\npqc_result\x18\x02 \x01(\x0b\x32&.minknow_api.protocol.PlatformQcResult\"\x1d\n\x1bSetPlatformQcResultResponse\"\xfc\x01\n\x1cProtocolIdentifierComponents\x12M\n\x08location\x18\x01 \x01(\x0e\x32;.minknow_api.protocol.ProtocolIdentifierComponents.Location\x12\x17\n\x0f\x65xperiment_type\x18\x02 \x01(\t\x12\x0c\n\x04name\x18\x03 \x01(\t\x12\x1e\n\x16\x66low_cell_product_code\x18\x04 \x01(\t\x12\x0b\n\x03kit\x18\x05 \x01(\t\"9\n\x08Location\x12\x07\n\x03\x41NY\x10\x00\x12\x12\n\x0eSYSTEM_SCRIPTS\x10\x01\x12\x10\n\x0cUSER_SCRIPTS\x10\x02\"\x97\x01\n\x1eListSettingsForProtocolRequest\x12\x14\n\nidentifier\x18\x01 \x01(\tH\x00\x12H\n\ncomponents\x18\x02 \x01(\x0b\x32\x32.minknow_api.protocol.ProtocolIdentifierComponentsH\x00\x42\x15\n\x13protocol_identifier\"\xd5!\n\x1fListSettingsForProtocolResponse\x12\x44\n\x08protocol\x18\x01 \x01(\x0b\x32\x32.minknow_api.protocol.ProtocolIdentifierComponents\x12U\n\x0brun_options\x18\x02 \x01(\x0b\x32@.minknow_api.protocol.ListSettingsForProtocolResponse.RunOptions\x12V\n\x0b\x62\x61secalling\x18\x03 \x01(\x0b\x32\x41.minknow_api.protocol.ListSettingsForProtocolResponse.Basecalling\x12L\n\x06output\x18\x04 \x01(\x0b\x32<.minknow_api.protocol.ListSettingsForProtocolResponse.Output\x12I\n\x11protocol_settings\x18\x05 \x03(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x1a\xd5\x06\n\nRunOptions\x12\x42\n\nrun_length\x18\x01 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12\x44\n\x0c\x62ias_voltage\x18\x02 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12J\n\x12read_until_enabled\x18\x03 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12K\n\x13read_until_ref_file\x18\x04 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12K\n\x13read_until_channels\x18\x05 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12S\n\x1bread_until_bed_file_enabled\x18\x06 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12K\n\x13read_until_bed_file\x18\x07 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12M\n\x15read_until_enrichment\x18\x08 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12P\n\x18\x61\x63tive_channel_selection\x18\t \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12G\n\x0fmux_scan_period\x18\n \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12K\n\x13group_change_period\x18\x0b \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x1a\xb8\t\n\x0b\x42\x61secalling\x12K\n\x13\x62\x61secalling_enabled\x18\x01 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12I\n\x11\x62\x61rcoding_enabled\x18\x02 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12\x46\n\x0e\x62\x61secall_model\x18\x03 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12M\n\x15trim_barcodes_enabled\x18\x04 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12R\n\x1arequire_barcodes_both_ends\x18\x05 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12R\n\x1a\x64\x65tect_mid_strand_barcodes\x18\x06 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12T\n\x1coverride_mid_barcoding_score\x18\x07 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12U\n\x1doverride_rear_barcoding_score\x18\x08 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12K\n\x13min_barcoding_score\x18\t \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12P\n\x18min_barcoding_score_rear\x18\n \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12O\n\x17min_barcoding_score_mid\x18\x0b \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12I\n\x11\x61lignment_enabled\x18\x0c \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12J\n\x12\x61lignment_ref_file\x18\r \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12R\n\x1a\x61lignment_bed_file_enabled\x18\x0e \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12J\n\x12\x61lignment_bed_file\x18\x0f \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x1a\x90\x0e\n\x06Output\x12G\n\x0foutput_location\x18\x01 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12\x46\n\x0e\x66\x61st_q_enabled\x18\x02 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12M\n\x15\x66\x61st_q_reads_per_file\x18\x03 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12O\n\x17\x66\x61st_q_data_compression\x18\x04 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12\x46\n\x0e\x66\x61st_5_enabled\x18\x05 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12M\n\x15\x66\x61st_5_reads_per_file\x18\x06 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12O\n\x17\x66\x61st_5_data_trace_table\x18\x07 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12N\n\x16\x66\x61st_5_data_move_table\x18\x08 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12J\n\x12\x66\x61st_5_data_fast_q\x18\t \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12G\n\x0f\x66\x61st_5_data_raw\x18\n \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12O\n\x17\x66\x61st_5_data_compression\x18\x0b \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12\x43\n\x0b\x62\x61m_enabled\x18\x0c \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12N\n\x16read_filtering_enabled\x18\r \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12Q\n\x19read_filtering_min_qscore\x18\x0e \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12V\n\x1eread_filtering_min_read_length\x18\x0f \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12V\n\x1eread_filtering_max_read_length\x18\x10 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12I\n\x11\x62ulk_file_enabled\x18\x11 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12\x45\n\rbulk_file_raw\x18\x12 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12H\n\x10\x62ulk_file_events\x18\x13 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12L\n\x14\x62ulk_file_read_table\x18\x14 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12M\n\x15\x62ulk_file_raw_enabled\x18\x15 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12P\n\x18\x62ulk_file_events_enabled\x18\x16 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12T\n\x1c\x62ulk_file_read_table_enabled\x18\x17 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\"u\n&AssociatePostProcessingAnalysisRequest\x12\x0e\n\x06run_id\x18\x01 \x01(\t\x12;\n\rstart_request\x18\x02 \x01(\x0b\x32$.minknow_api.basecaller.StartRequest\"5\n\'AssociatePostProcessingAnalysisResponse\x12\n\n\x02id\x18\x01 \x01(\t\"7\n\x1f\x43learProtocolHistoryDataRequest\x12\x14\n\x0cprotocol_ids\x18\x01 \x03(\t\"\"\n ClearProtocolHistoryDataResponse\"\xf2\x01\n\x1eProtocolPhaseManagementRequest\x12[\n\x10set_capabilities\x18\x01 \x01(\x0b\x32\x41.minknow_api.protocol.ProtocolPhaseManagementRequest.Capabilities\x12\x32\n\x05phase\x18\x02 \x01(\x0e\x32#.minknow_api.protocol.ProtocolPhase\x1a?\n\x0c\x43\x61pabilities\x12\x11\n\tcan_pause\x18\x01 \x01(\x08\x12\x1c\n\x14\x63\x61n_trigger_mux_scan\x18\x02 \x01(\x08\"O\n\x1fProtocolPhaseManagementResponse\x12,\n\x06\x61\x63tion\x18\x01 \x01(\x0e\x32\x1c.minknow_api.protocol.Action*\xa2\x02\n\rProtocolState\x12\x14\n\x10PROTOCOL_RUNNING\x10\x00\x12$\n PROTOCOL_WAITING_FOR_TEMPERATURE\x10\x04\x12$\n PROTOCOL_WAITING_FOR_ACQUISITION\x10\x05\x12\x16\n\x12PROTOCOL_COMPLETED\x10\x01\x12\x1c\n\x18PROTOCOL_STOPPED_BY_USER\x10\x02\x12 \n\x1cPROTOCOL_FINISHED_WITH_ERROR\x10\x03\x12\'\n#PROTOCOL_FINISHED_WITH_DEVICE_ERROR\x10\x06\x12.\n*PROTOCOL_FINISHED_UNABLE_TO_SEND_TELEMETRY\x10\x07*\xbf\x01\n\rProtocolPhase\x12\x11\n\rPHASE_UNKNOWN\x10\x00\x12\x16\n\x12PHASE_INITIALISING\x10\x01\x12\x14\n\x10PHASE_SEQUENCING\x10\x02\x12 \n\x1cPHASE_PREPARING_FOR_MUX_SCAN\x10\x03\x12\x12\n\x0ePHASE_MUX_SCAN\x10\x04\x12\x10\n\x0cPHASE_PAUSED\x10\x05\x12\x11\n\rPHASE_PAUSING\x10\x06\x12\x12\n\x0ePHASE_RESUMING\x10\x07*[\n\x06\x41\x63tion\x12\x0f\n\x0b\x41\x43TION_NONE\x10\x00\x12\x10\n\x0c\x41\x43TION_PAUSE\x10\x01\x12\x11\n\rACTION_RESUME\x10\x02\x12\x1b\n\x17\x41\x43TION_TRIGGER_MUX_SCAN\x10\x03\x32\xce\x17\n\x0fProtocolService\x12k\n\x0estart_protocol\x12*.minknow_api.protocol.StartProtocolRequest\x1a+.minknow_api.protocol.StartProtocolResponse\"\x00\x12h\n\rstop_protocol\x12).minknow_api.protocol.StopProtocolRequest\x1a*.minknow_api.protocol.StopProtocolResponse\"\x00\x12n\n\x0epause_protocol\x12*.minknow_api.protocol.PauseProtocolRequest\x1a+.minknow_api.protocol.PauseProtocolResponse\"\x03\x90\x02\x02\x12q\n\x0fresume_protocol\x12+.minknow_api.protocol.ResumeProtocolRequest\x1a,.minknow_api.protocol.ResumeProtocolResponse\"\x03\x90\x02\x02\x12r\n\x10trigger_mux_scan\x12+.minknow_api.protocol.TriggerMuxScanRequest\x1a,.minknow_api.protocol.TriggerMuxScanResponse\"\x03\x90\x02\x02\x12m\n\x11wait_for_finished\x12,.minknow_api.protocol.WaitForFinishedRequest\x1a%.minknow_api.protocol.ProtocolRunInfo\"\x03\x90\x02\x01\x12\x63\n\x0cget_run_info\x12\'.minknow_api.protocol.GetRunInfoRequest\x1a%.minknow_api.protocol.ProtocolRunInfo\"\x03\x90\x02\x01\x12x\n\x12list_protocol_runs\x12-.minknow_api.protocol.ListProtocolRunsRequest\x1a..minknow_api.protocol.ListProtocolRunsResponse\"\x03\x90\x02\x01\x12z\n\x18get_current_protocol_run\x12\x32.minknow_api.protocol.GetCurrentProtocolRunRequest\x1a%.minknow_api.protocol.ProtocolRunInfo\"\x03\x90\x02\x01\x12\x80\x01\n\x1awatch_current_protocol_run\x12\x34.minknow_api.protocol.WatchCurrentProtocolRunRequest\x1a%.minknow_api.protocol.ProtocolRunInfo\"\x03\x90\x02\x01\x30\x01\x12n\n\x0elist_protocols\x12*.minknow_api.protocol.ListProtocolsRequest\x1a+.minknow_api.protocol.ListProtocolsResponse\"\x03\x90\x02\x02\x12r\n\x10get_context_info\x12+.minknow_api.protocol.GetContextInfoRequest\x1a,.minknow_api.protocol.GetContextInfoResponse\"\x03\x90\x02\x01\x12r\n\x10set_context_info\x12+.minknow_api.protocol.SetContextInfoRequest\x1a,.minknow_api.protocol.SetContextInfoResponse\"\x03\x90\x02\x02\x12~\n\x14get_protocol_purpose\x12/.minknow_api.protocol.GetProtocolPurposeRequest\x1a\x30.minknow_api.protocol.GetProtocolPurposeResponse\"\x03\x90\x02\x01\x12~\n\x14set_protocol_purpose\x12/.minknow_api.protocol.SetProtocolPurposeRequest\x1a\x30.minknow_api.protocol.SetProtocolPurposeResponse\"\x03\x90\x02\x02\x12x\n\x13\x61\x64\x64_epi2me_workflow\x12..minknow_api.protocol.AddEpi2meWorkflowRequest\x1a/.minknow_api.protocol.AddEpi2meWorkflowResponse\"\x00\x12\x85\x01\n\x17list_protocol_group_ids\x12\x31.minknow_api.protocol.ListProtocolGroupIdsRequest\x1a\x32.minknow_api.protocol.ListProtocolGroupIdsResponse\"\x03\x90\x02\x01\x12\x7f\n\x14\x62\x65gin_hardware_check\x12/.minknow_api.protocol.BeginHardwareCheckRequest\x1a\x30.minknow_api.protocol.BeginHardwareCheckResponse\"\x04\x98\xb5\x18\x01\x12v\n\x11\x62\x65gin_platform_qc\x12,.minknow_api.protocol.BeginPlatformQcRequest\x1a-.minknow_api.protocol.BeginPlatformQcResponse\"\x04\x98\xb5\x18\x01\x12\x82\x01\n\x16set_platform_qc_result\x12\x30.minknow_api.protocol.SetPlatformQcResultRequest\x1a\x31.minknow_api.protocol.SetPlatformQcResultResponse\"\x03\x90\x02\x02\x12\x92\x01\n\x1alist_settings_for_protocol\x12\x34.minknow_api.protocol.ListSettingsForProtocolRequest\x1a\x35.minknow_api.protocol.ListSettingsForProtocolResponse\"\x07\x90\x02\x01\x98\xb5\x18\x01\x12\xb0\x01\n/associate_post_processing_analysis_for_protocol\x12<.minknow_api.protocol.AssociatePostProcessingAnalysisRequest\x1a=.minknow_api.protocol.AssociatePostProcessingAnalysisResponse\"\x00\x12\x8e\x01\n\x1b\x63lear_protocol_history_data\x12\x35.minknow_api.protocol.ClearProtocolHistoryDataRequest\x1a\x36.minknow_api.protocol.ClearProtocolHistoryDataResponse\"\x00\x12\x8e\x01\n\x19protocol_phase_management\x12\x34.minknow_api.protocol.ProtocolPhaseManagementRequest\x1a\x35.minknow_api.protocol.ProtocolPhaseManagementResponse\"\x00(\x01\x30\x01\x42&\n\x1c\x63om.nanoporetech.minknow_api\xa2\x02\x05MKAPIb\x06proto3'
   ,
-  dependencies=[minknow__api_dot_acquisition__pb2.DESCRIPTOR,minknow__api_dot_analysis__configuration__pb2.DESCRIPTOR,minknow__api_dot_device__pb2.DESCRIPTOR,minknow__api_dot_rpc__options__pb2.DESCRIPTOR,google_dot_protobuf_dot_timestamp__pb2.DESCRIPTOR,google_dot_protobuf_dot_wrappers__pb2.DESCRIPTOR,])
+  dependencies=[minknow__api_dot_acquisition__pb2.DESCRIPTOR,minknow__api_dot_basecaller__pb2.DESCRIPTOR,minknow__api_dot_device__pb2.DESCRIPTOR,minknow__api_dot_protocol__settings__pb2.DESCRIPTOR,minknow__api_dot_rpc__options__pb2.DESCRIPTOR,google_dot_protobuf_dot_timestamp__pb2.DESCRIPTOR,google_dot_protobuf_dot_wrappers__pb2.DESCRIPTOR,])
 
 _PROTOCOLSTATE = _descriptor.EnumDescriptor(
   name='ProtocolState',
@@ -80,12 +81,104 @@ _PROTOCOLSTATE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=9589,
-  serialized_end=9879,
+  serialized_start=10168,
+  serialized_end=10458,
 )
 _sym_db.RegisterEnumDescriptor(_PROTOCOLSTATE)
 
 ProtocolState = enum_type_wrapper.EnumTypeWrapper(_PROTOCOLSTATE)
+_PROTOCOLPHASE = _descriptor.EnumDescriptor(
+  name='ProtocolPhase',
+  full_name='minknow_api.protocol.ProtocolPhase',
+  filename=None,
+  file=DESCRIPTOR,
+  create_key=_descriptor._internal_create_key,
+  values=[
+    _descriptor.EnumValueDescriptor(
+      name='PHASE_UNKNOWN', index=0, number=0,
+      serialized_options=None,
+      type=None,
+      create_key=_descriptor._internal_create_key),
+    _descriptor.EnumValueDescriptor(
+      name='PHASE_INITIALISING', index=1, number=1,
+      serialized_options=None,
+      type=None,
+      create_key=_descriptor._internal_create_key),
+    _descriptor.EnumValueDescriptor(
+      name='PHASE_SEQUENCING', index=2, number=2,
+      serialized_options=None,
+      type=None,
+      create_key=_descriptor._internal_create_key),
+    _descriptor.EnumValueDescriptor(
+      name='PHASE_PREPARING_FOR_MUX_SCAN', index=3, number=3,
+      serialized_options=None,
+      type=None,
+      create_key=_descriptor._internal_create_key),
+    _descriptor.EnumValueDescriptor(
+      name='PHASE_MUX_SCAN', index=4, number=4,
+      serialized_options=None,
+      type=None,
+      create_key=_descriptor._internal_create_key),
+    _descriptor.EnumValueDescriptor(
+      name='PHASE_PAUSED', index=5, number=5,
+      serialized_options=None,
+      type=None,
+      create_key=_descriptor._internal_create_key),
+    _descriptor.EnumValueDescriptor(
+      name='PHASE_PAUSING', index=6, number=6,
+      serialized_options=None,
+      type=None,
+      create_key=_descriptor._internal_create_key),
+    _descriptor.EnumValueDescriptor(
+      name='PHASE_RESUMING', index=7, number=7,
+      serialized_options=None,
+      type=None,
+      create_key=_descriptor._internal_create_key),
+  ],
+  containing_type=None,
+  serialized_options=None,
+  serialized_start=10461,
+  serialized_end=10652,
+)
+_sym_db.RegisterEnumDescriptor(_PROTOCOLPHASE)
+
+ProtocolPhase = enum_type_wrapper.EnumTypeWrapper(_PROTOCOLPHASE)
+_ACTION = _descriptor.EnumDescriptor(
+  name='Action',
+  full_name='minknow_api.protocol.Action',
+  filename=None,
+  file=DESCRIPTOR,
+  create_key=_descriptor._internal_create_key,
+  values=[
+    _descriptor.EnumValueDescriptor(
+      name='ACTION_NONE', index=0, number=0,
+      serialized_options=None,
+      type=None,
+      create_key=_descriptor._internal_create_key),
+    _descriptor.EnumValueDescriptor(
+      name='ACTION_PAUSE', index=1, number=1,
+      serialized_options=None,
+      type=None,
+      create_key=_descriptor._internal_create_key),
+    _descriptor.EnumValueDescriptor(
+      name='ACTION_RESUME', index=2, number=2,
+      serialized_options=None,
+      type=None,
+      create_key=_descriptor._internal_create_key),
+    _descriptor.EnumValueDescriptor(
+      name='ACTION_TRIGGER_MUX_SCAN', index=3, number=3,
+      serialized_options=None,
+      type=None,
+      create_key=_descriptor._internal_create_key),
+  ],
+  containing_type=None,
+  serialized_options=None,
+  serialized_start=10654,
+  serialized_end=10745,
+)
+_sym_db.RegisterEnumDescriptor(_ACTION)
+
+Action = enum_type_wrapper.EnumTypeWrapper(_ACTION)
 PROTOCOL_RUNNING = 0
 PROTOCOL_WAITING_FOR_TEMPERATURE = 4
 PROTOCOL_WAITING_FOR_ACQUISITION = 5
@@ -94,6 +187,18 @@ PROTOCOL_STOPPED_BY_USER = 2
 PROTOCOL_FINISHED_WITH_ERROR = 3
 PROTOCOL_FINISHED_WITH_DEVICE_ERROR = 6
 PROTOCOL_FINISHED_UNABLE_TO_SEND_TELEMETRY = 7
+PHASE_UNKNOWN = 0
+PHASE_INITIALISING = 1
+PHASE_SEQUENCING = 2
+PHASE_PREPARING_FOR_MUX_SCAN = 3
+PHASE_MUX_SCAN = 4
+PHASE_PAUSED = 5
+PHASE_PAUSING = 6
+PHASE_RESUMING = 7
+ACTION_NONE = 0
+ACTION_PAUSE = 1
+ACTION_RESUME = 2
+ACTION_TRIGGER_MUX_SCAN = 3
 
 
 _BARCODEUSERDATA_SAMPLETYPE = _descriptor.EnumDescriptor(
@@ -136,8 +241,8 @@ _BARCODEUSERDATA_SAMPLETYPE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=394,
-  serialized_end=540,
+  serialized_start=419,
+  serialized_end=565,
 )
 _sym_db.RegisterEnumDescriptor(_BARCODEUSERDATA_SAMPLETYPE)
 
@@ -166,8 +271,8 @@ _WAITFORFINISHEDREQUEST_NOTIFICATIONSTATE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=1815,
-  serialized_end=1926,
+  serialized_start=1991,
+  serialized_end=2102,
 )
 _sym_db.RegisterEnumDescriptor(_WAITFORFINISHEDREQUEST_NOTIFICATIONSTATE)
 
@@ -196,235 +301,10 @@ _PROTOCOLIDENTIFIERCOMPONENTS_LOCATION = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=3995,
-  serialized_end=4052,
+  serialized_start=5049,
+  serialized_end=5106,
 )
 _sym_db.RegisterEnumDescriptor(_PROTOCOLIDENTIFIERCOMPONENTS_LOCATION)
-
-_PROTOCOLSETTING_CONSTRAINT_CONDITION = _descriptor.EnumDescriptor(
-  name='Condition',
-  full_name='minknow_api.protocol.ProtocolSetting.Constraint.Condition',
-  filename=None,
-  file=DESCRIPTOR,
-  create_key=_descriptor._internal_create_key,
-  values=[
-    _descriptor.EnumValueDescriptor(
-      name='EQUAL', index=0, number=0,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-    _descriptor.EnumValueDescriptor(
-      name='NOT_EQUAL', index=1, number=1,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-    _descriptor.EnumValueDescriptor(
-      name='GT_EQ', index=2, number=2,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-    _descriptor.EnumValueDescriptor(
-      name='GT', index=3, number=3,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-    _descriptor.EnumValueDescriptor(
-      name='LT_EQ', index=4, number=4,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-    _descriptor.EnumValueDescriptor(
-      name='LT', index=5, number=5,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-    _descriptor.EnumValueDescriptor(
-      name='IN', index=6, number=6,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-    _descriptor.EnumValueDescriptor(
-      name='NOT_IN', index=7, number=7,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-    _descriptor.EnumValueDescriptor(
-      name='ENDS_WITH', index=8, number=8,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-    _descriptor.EnumValueDescriptor(
-      name='STARTS_WITH', index=9, number=9,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-  ],
-  containing_type=None,
-  serialized_options=None,
-  serialized_start=5151,
-  serialized_end=5278,
-)
-_sym_db.RegisterEnumDescriptor(_PROTOCOLSETTING_CONSTRAINT_CONDITION)
-
-_PROTOCOLSETTING_CATEGORY = _descriptor.EnumDescriptor(
-  name='Category',
-  full_name='minknow_api.protocol.ProtocolSetting.Category',
-  filename=None,
-  file=DESCRIPTOR,
-  create_key=_descriptor._internal_create_key,
-  values=[
-    _descriptor.EnumValueDescriptor(
-      name='OTHER', index=0, number=0,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-    _descriptor.EnumValueDescriptor(
-      name='RUN_OPTIONS', index=1, number=1,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-    _descriptor.EnumValueDescriptor(
-      name='BASECALLING', index=2, number=2,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-    _descriptor.EnumValueDescriptor(
-      name='OUTPUT', index=3, number=3,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-  ],
-  containing_type=None,
-  serialized_options=None,
-  serialized_start=5385,
-  serialized_end=5452,
-)
-_sym_db.RegisterEnumDescriptor(_PROTOCOLSETTING_CATEGORY)
-
-_PROTOCOLSETTING_UNIT = _descriptor.EnumDescriptor(
-  name='Unit',
-  full_name='minknow_api.protocol.ProtocolSetting.Unit',
-  filename=None,
-  file=DESCRIPTOR,
-  create_key=_descriptor._internal_create_key,
-  values=[
-    _descriptor.EnumValueDescriptor(
-      name='UNITLESS', index=0, number=0,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-    _descriptor.EnumValueDescriptor(
-      name='UTF8_STRING', index=1, number=1,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-    _descriptor.EnumValueDescriptor(
-      name='ASCII_STRING', index=2, number=2,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-    _descriptor.EnumValueDescriptor(
-      name='PATH', index=3, number=3,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-    _descriptor.EnumValueDescriptor(
-      name='URL', index=4, number=4,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-    _descriptor.EnumValueDescriptor(
-      name='PRIVATE_STRING', index=5, number=5,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-    _descriptor.EnumValueDescriptor(
-      name='CHOICE', index=6, number=6,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-    _descriptor.EnumValueDescriptor(
-      name='MULTI_CHOICE', index=7, number=7,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-    _descriptor.EnumValueDescriptor(
-      name='SECOND', index=8, number=8,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-    _descriptor.EnumValueDescriptor(
-      name='HOUR', index=9, number=9,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-    _descriptor.EnumValueDescriptor(
-      name='BASE', index=10, number=10,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-    _descriptor.EnumValueDescriptor(
-      name='KBASE', index=11, number=11,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-    _descriptor.EnumValueDescriptor(
-      name='MBASE', index=12, number=12,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-    _descriptor.EnumValueDescriptor(
-      name='GBASE', index=13, number=13,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-    _descriptor.EnumValueDescriptor(
-      name='MILLIVOLT', index=14, number=14,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-  ],
-  containing_type=None,
-  serialized_options=None,
-  serialized_start=5455,
-  serialized_end=5659,
-)
-_sym_db.RegisterEnumDescriptor(_PROTOCOLSETTING_UNIT)
-
-_PROTOCOLSETTING_VISIBILITY = _descriptor.EnumDescriptor(
-  name='Visibility',
-  full_name='minknow_api.protocol.ProtocolSetting.Visibility',
-  filename=None,
-  file=DESCRIPTOR,
-  create_key=_descriptor._internal_create_key,
-  values=[
-    _descriptor.EnumValueDescriptor(
-      name='EDITABLE', index=0, number=0,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-    _descriptor.EnumValueDescriptor(
-      name='HIDDEN', index=1, number=1,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-    _descriptor.EnumValueDescriptor(
-      name='FIXED', index=2, number=2,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-    _descriptor.EnumValueDescriptor(
-      name='REQUIRED', index=3, number=3,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-  ],
-  containing_type=None,
-  serialized_options=None,
-  serialized_start=5661,
-  serialized_end=5724,
-)
-_sym_db.RegisterEnumDescriptor(_PROTOCOLSETTING_VISIBILITY)
 
 
 _BARCODEUSERDATA = _descriptor.Descriptor(
@@ -476,8 +356,8 @@ _BARCODEUSERDATA = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=248,
-  serialized_end=540,
+  serialized_start=273,
+  serialized_end=565,
 )
 
 
@@ -522,8 +402,8 @@ _PROTOCOLRUNUSERINFO = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=543,
-  serialized_end=736,
+  serialized_start=568,
+  serialized_end=761,
 )
 
 
@@ -568,8 +448,8 @@ _STARTPROTOCOLREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=738,
-  serialized_end=862,
+  serialized_start=763,
+  serialized_end=887,
 )
 
 
@@ -600,8 +480,8 @@ _STARTPROTOCOLRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=864,
-  serialized_end=903,
+  serialized_start=889,
+  serialized_end=928,
 )
 
 
@@ -632,8 +512,8 @@ _STOPPROTOCOLREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=905,
-  serialized_end=1004,
+  serialized_start=930,
+  serialized_end=1029,
 )
 
 
@@ -657,8 +537,158 @@ _STOPPROTOCOLRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1006,
-  serialized_end=1028,
+  serialized_start=1031,
+  serialized_end=1053,
+)
+
+
+_PAUSEPROTOCOLREQUEST = _descriptor.Descriptor(
+  name='PauseProtocolRequest',
+  full_name='minknow_api.protocol.PauseProtocolRequest',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=1055,
+  serialized_end=1077,
+)
+
+
+_PAUSEPROTOCOLRESPONSE = _descriptor.Descriptor(
+  name='PauseProtocolResponse',
+  full_name='minknow_api.protocol.PauseProtocolResponse',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=1079,
+  serialized_end=1102,
+)
+
+
+_RESUMEPROTOCOLREQUEST = _descriptor.Descriptor(
+  name='ResumeProtocolRequest',
+  full_name='minknow_api.protocol.ResumeProtocolRequest',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=1104,
+  serialized_end=1127,
+)
+
+
+_RESUMEPROTOCOLRESPONSE = _descriptor.Descriptor(
+  name='ResumeProtocolResponse',
+  full_name='minknow_api.protocol.ResumeProtocolResponse',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=1129,
+  serialized_end=1153,
+)
+
+
+_TRIGGERMUXSCANREQUEST = _descriptor.Descriptor(
+  name='TriggerMuxScanRequest',
+  full_name='minknow_api.protocol.TriggerMuxScanRequest',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=1155,
+  serialized_end=1178,
+)
+
+
+_TRIGGERMUXSCANRESPONSE = _descriptor.Descriptor(
+  name='TriggerMuxScanResponse',
+  full_name='minknow_api.protocol.TriggerMuxScanResponse',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=1180,
+  serialized_end=1204,
 )
 
 
@@ -689,8 +719,8 @@ _LISTPROTOCOLSREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1030,
-  serialized_end=1074,
+  serialized_start=1206,
+  serialized_end=1250,
 )
 
 
@@ -761,8 +791,8 @@ _PROTOCOLINFO_TAGVALUE = _descriptor.Descriptor(
       create_key=_descriptor._internal_create_key,
     fields=[]),
   ],
-  serialized_start=1275,
-  serialized_end=1436,
+  serialized_start=1451,
+  serialized_end=1612,
 )
 
 _PROTOCOLINFO_TAGEXTRACTIONRESULT = _descriptor.Descriptor(
@@ -799,8 +829,8 @@ _PROTOCOLINFO_TAGEXTRACTIONRESULT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1438,
-  serialized_end=1498,
+  serialized_start=1614,
+  serialized_end=1674,
 )
 
 _PROTOCOLINFO_TAGSENTRY = _descriptor.Descriptor(
@@ -837,8 +867,8 @@ _PROTOCOLINFO_TAGSENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1500,
-  serialized_end=1588,
+  serialized_start=1676,
+  serialized_end=1764,
 )
 
 _PROTOCOLINFO = _descriptor.Descriptor(
@@ -889,8 +919,8 @@ _PROTOCOLINFO = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1077,
-  serialized_end=1588,
+  serialized_start=1253,
+  serialized_end=1764,
 )
 
 
@@ -921,8 +951,8 @@ _LISTPROTOCOLSRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1590,
-  serialized_end=1668,
+  serialized_start=1766,
+  serialized_end=1844,
 )
 
 
@@ -968,8 +998,8 @@ _WAITFORFINISHEDREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1671,
-  serialized_end=1926,
+  serialized_start=1847,
+  serialized_end=2102,
 )
 
 
@@ -1000,8 +1030,8 @@ _GETRUNINFOREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1928,
-  serialized_end=1963,
+  serialized_start=2104,
+  serialized_end=2139,
 )
 
 
@@ -1039,8 +1069,93 @@ _EPI2MEWORKFLOWREFERENCE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1965,
-  serialized_end=2015,
+  serialized_start=2141,
+  serialized_end=2191,
+)
+
+
+_ASSOCIATEDPOSTPROCESSINGANALYSIS = _descriptor.Descriptor(
+  name='AssociatedPostProcessingAnalysis',
+  full_name='minknow_api.protocol.AssociatedPostProcessingAnalysis',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='started_id', full_name='minknow_api.protocol.AssociatedPostProcessingAnalysis.started_id', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='start_request', full_name='minknow_api.protocol.AssociatedPostProcessingAnalysis.start_request', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=2193,
+  serialized_end=2308,
+)
+
+
+_PLATFORMQCRESULT = _descriptor.Descriptor(
+  name='PlatformQcResult',
+  full_name='minknow_api.protocol.PlatformQcResult',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='flow_cell_id', full_name='minknow_api.protocol.PlatformQcResult.flow_cell_id', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='passed', full_name='minknow_api.protocol.PlatformQcResult.passed', index=1,
+      number=2, type=8, cpp_type=7, label=1,
+      has_default_value=False, default_value=False,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='total_pore_count', full_name='minknow_api.protocol.PlatformQcResult.total_pore_count', index=2,
+      number=3, type=13, cpp_type=3, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=2310,
+  serialized_end=2392,
 )
 
 
@@ -1088,64 +1203,106 @@ _PROTOCOLRUNINFO = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='start_time', full_name='minknow_api.protocol.ProtocolRunInfo.start_time', index=5,
+      name='phase', full_name='minknow_api.protocol.ProtocolRunInfo.phase', index=5,
+      number=16, type=14, cpp_type=8, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='last_phase_change', full_name='minknow_api.protocol.ProtocolRunInfo.last_phase_change', index=6,
+      number=17, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='can_pause', full_name='minknow_api.protocol.ProtocolRunInfo.can_pause', index=7,
+      number=18, type=8, cpp_type=7, label=1,
+      has_default_value=False, default_value=False,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='can_trigger_mux_scan', full_name='minknow_api.protocol.ProtocolRunInfo.can_trigger_mux_scan', index=8,
+      number=19, type=8, cpp_type=7, label=1,
+      has_default_value=False, default_value=False,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='start_time', full_name='minknow_api.protocol.ProtocolRunInfo.start_time', index=9,
       number=5, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='script_end_time', full_name='minknow_api.protocol.ProtocolRunInfo.script_end_time', index=6,
+      name='script_end_time', full_name='minknow_api.protocol.ProtocolRunInfo.script_end_time', index=10,
       number=9, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='end_time', full_name='minknow_api.protocol.ProtocolRunInfo.end_time', index=7,
+      name='end_time', full_name='minknow_api.protocol.ProtocolRunInfo.end_time', index=11,
       number=6, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='acquisition_run_ids', full_name='minknow_api.protocol.ProtocolRunInfo.acquisition_run_ids', index=8,
+      name='acquisition_run_ids', full_name='minknow_api.protocol.ProtocolRunInfo.acquisition_run_ids', index=12,
       number=7, type=9, cpp_type=9, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='user_info', full_name='minknow_api.protocol.ProtocolRunInfo.user_info', index=9,
+      name='user_info', full_name='minknow_api.protocol.ProtocolRunInfo.user_info', index=13,
       number=8, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='epi2me_workflows', full_name='minknow_api.protocol.ProtocolRunInfo.epi2me_workflows', index=10,
+      name='epi2me_workflows', full_name='minknow_api.protocol.ProtocolRunInfo.epi2me_workflows', index=14,
       number=10, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='device', full_name='minknow_api.protocol.ProtocolRunInfo.device', index=11,
+      name='device', full_name='minknow_api.protocol.ProtocolRunInfo.device', index=15,
       number=12, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='flow_cell', full_name='minknow_api.protocol.ProtocolRunInfo.flow_cell', index=12,
+      name='flow_cell', full_name='minknow_api.protocol.ProtocolRunInfo.flow_cell', index=16,
       number=13, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='meta_info', full_name='minknow_api.protocol.ProtocolRunInfo.meta_info', index=13,
+      name='meta_info', full_name='minknow_api.protocol.ProtocolRunInfo.meta_info', index=17,
       number=14, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='associated_post_processing_analysis', full_name='minknow_api.protocol.ProtocolRunInfo.associated_post_processing_analysis', index=18,
+      number=15, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='pqc_result', full_name='minknow_api.protocol.ProtocolRunInfo.pqc_result', index=19,
+      number=20, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -1162,8 +1319,76 @@ _PROTOCOLRUNINFO = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2018,
-  serialized_end=2648,
+  serialized_start=2395,
+  serialized_end=3342,
+)
+
+
+_FILTERINGINFO_PLATFORMQCFILTER = _descriptor.Descriptor(
+  name='PlatformQcFilter',
+  full_name='minknow_api.protocol.FilteringInfo.PlatformQcFilter',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='flow_cell_id', full_name='minknow_api.protocol.FilteringInfo.PlatformQcFilter.flow_cell_id', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+    _descriptor.OneofDescriptor(
+      name='_flow_cell_id', full_name='minknow_api.protocol.FilteringInfo.PlatformQcFilter._flow_cell_id',
+      index=0, containing_type=None,
+      create_key=_descriptor._internal_create_key,
+    fields=[]),
+  ],
+  serialized_start=3436,
+  serialized_end=3498,
+)
+
+_FILTERINGINFO = _descriptor.Descriptor(
+  name='FilteringInfo',
+  full_name='minknow_api.protocol.FilteringInfo',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='pqc_filter', full_name='minknow_api.protocol.FilteringInfo.pqc_filter', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[_FILTERINGINFO_PLATFORMQCFILTER, ],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=3345,
+  serialized_end=3498,
 )
 
 
@@ -1175,6 +1400,13 @@ _LISTPROTOCOLRUNSREQUEST = _descriptor.Descriptor(
   containing_type=None,
   create_key=_descriptor._internal_create_key,
   fields=[
+    _descriptor.FieldDescriptor(
+      name='filter_info', full_name='minknow_api.protocol.ListProtocolRunsRequest.filter_info', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
   ],
   extensions=[
   ],
@@ -1187,8 +1419,8 @@ _LISTPROTOCOLRUNSREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2650,
-  serialized_end=2675,
+  serialized_start=3500,
+  serialized_end=3583,
 )
 
 
@@ -1219,8 +1451,8 @@ _LISTPROTOCOLRUNSRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2677,
-  serialized_end=2720,
+  serialized_start=3585,
+  serialized_end=3628,
 )
 
 
@@ -1244,8 +1476,8 @@ _GETCURRENTPROTOCOLRUNREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2722,
-  serialized_end=2752,
+  serialized_start=3630,
+  serialized_end=3660,
 )
 
 
@@ -1276,8 +1508,8 @@ _GETCURRENTPROTOCOLRUNRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2754,
-  serialized_end=2842,
+  serialized_start=3662,
+  serialized_end=3750,
 )
 
 
@@ -1301,8 +1533,8 @@ _WATCHCURRENTPROTOCOLRUNREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2844,
-  serialized_end=2876,
+  serialized_start=3752,
+  serialized_end=3784,
 )
 
 
@@ -1326,8 +1558,8 @@ _GETCONTEXTINFOREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2878,
-  serialized_end=2901,
+  serialized_start=3786,
+  serialized_end=3809,
 )
 
 
@@ -1365,8 +1597,8 @@ _GETCONTEXTINFORESPONSE_CONTEXTINFOENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3015,
-  serialized_end=3065,
+  serialized_start=3923,
+  serialized_end=3973,
 )
 
 _GETCONTEXTINFORESPONSE = _descriptor.Descriptor(
@@ -1396,8 +1628,8 @@ _GETCONTEXTINFORESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=2904,
-  serialized_end=3065,
+  serialized_start=3812,
+  serialized_end=3973,
 )
 
 
@@ -1435,8 +1667,8 @@ _SETCONTEXTINFOREQUEST_CONTEXTINFOENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3015,
-  serialized_end=3065,
+  serialized_start=3923,
+  serialized_end=3973,
 )
 
 _SETCONTEXTINFOREQUEST = _descriptor.Descriptor(
@@ -1466,8 +1698,8 @@ _SETCONTEXTINFOREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3068,
-  serialized_end=3227,
+  serialized_start=3976,
+  serialized_end=4135,
 )
 
 
@@ -1491,8 +1723,8 @@ _SETCONTEXTINFORESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3229,
-  serialized_end=3253,
+  serialized_start=4137,
+  serialized_end=4161,
 )
 
 
@@ -1516,8 +1748,8 @@ _GETPROTOCOLPURPOSEREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3255,
-  serialized_end=3282,
+  serialized_start=4163,
+  serialized_end=4190,
 )
 
 
@@ -1548,8 +1780,8 @@ _GETPROTOCOLPURPOSERESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3284,
-  serialized_end=3329,
+  serialized_start=4192,
+  serialized_end=4237,
 )
 
 
@@ -1580,8 +1812,8 @@ _SETPROTOCOLPURPOSEREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3331,
-  serialized_end=3375,
+  serialized_start=4239,
+  serialized_end=4283,
 )
 
 
@@ -1605,8 +1837,8 @@ _SETPROTOCOLPURPOSERESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3377,
-  serialized_end=3405,
+  serialized_start=4285,
+  serialized_end=4313,
 )
 
 
@@ -1644,8 +1876,8 @@ _ADDEPI2MEWORKFLOWREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3407,
-  serialized_end=3533,
+  serialized_start=4315,
+  serialized_end=4441,
 )
 
 
@@ -1669,8 +1901,8 @@ _ADDEPI2MEWORKFLOWRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3535,
-  serialized_end=3562,
+  serialized_start=4443,
+  serialized_end=4470,
 )
 
 
@@ -1694,8 +1926,8 @@ _LISTPROTOCOLGROUPIDSREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3564,
-  serialized_end=3593,
+  serialized_start=4472,
+  serialized_end=4501,
 )
 
 
@@ -1726,8 +1958,8 @@ _LISTPROTOCOLGROUPIDSRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3595,
-  serialized_end=3653,
+  serialized_start=4503,
+  serialized_end=4561,
 )
 
 
@@ -1751,8 +1983,8 @@ _BEGINHARDWARECHECKREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3655,
-  serialized_end=3682,
+  serialized_start=4563,
+  serialized_end=4590,
 )
 
 
@@ -1783,8 +2015,8 @@ _BEGINHARDWARECHECKRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3684,
-  serialized_end=3728,
+  serialized_start=4592,
+  serialized_end=4636,
 )
 
 
@@ -1808,8 +2040,8 @@ _BEGINPLATFORMQCREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3730,
-  serialized_end=3754,
+  serialized_start=4638,
+  serialized_end=4662,
 )
 
 
@@ -1840,8 +2072,72 @@ _BEGINPLATFORMQCRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3756,
-  serialized_end=3797,
+  serialized_start=4664,
+  serialized_end=4705,
+)
+
+
+_SETPLATFORMQCRESULTREQUEST = _descriptor.Descriptor(
+  name='SetPlatformQcResultRequest',
+  full_name='minknow_api.protocol.SetPlatformQcResultRequest',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='protocol_run_id', full_name='minknow_api.protocol.SetPlatformQcResultRequest.protocol_run_id', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='pqc_result', full_name='minknow_api.protocol.SetPlatformQcResultRequest.pqc_result', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=4707,
+  serialized_end=4820,
+)
+
+
+_SETPLATFORMQCRESULTRESPONSE = _descriptor.Descriptor(
+  name='SetPlatformQcResultResponse',
+  full_name='minknow_api.protocol.SetPlatformQcResultResponse',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=4822,
+  serialized_end=4851,
 )
 
 
@@ -1901,8 +2197,8 @@ _PROTOCOLIDENTIFIERCOMPONENTS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=3800,
-  serialized_end=4052,
+  serialized_start=4854,
+  serialized_end=5106,
 )
 
 
@@ -1945,247 +2241,8 @@ _LISTSETTINGSFORPROTOCOLREQUEST = _descriptor.Descriptor(
       create_key=_descriptor._internal_create_key,
     fields=[]),
   ],
-  serialized_start=4055,
-  serialized_end=4206,
-)
-
-
-_PROTOCOLSETTING_PROTOCOLSETTINGVALUE = _descriptor.Descriptor(
-  name='ProtocolSettingValue',
-  full_name='minknow_api.protocol.ProtocolSetting.ProtocolSettingValue',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='string_value', full_name='minknow_api.protocol.ProtocolSetting.ProtocolSettingValue.string_value', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='float_value', full_name='minknow_api.protocol.ProtocolSetting.ProtocolSettingValue.float_value', index=1,
-      number=2, type=1, cpp_type=5, label=1,
-      has_default_value=False, default_value=float(0),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='integer_value', full_name='minknow_api.protocol.ProtocolSetting.ProtocolSettingValue.integer_value', index=2,
-      number=3, type=3, cpp_type=2, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='bool_value', full_name='minknow_api.protocol.ProtocolSetting.ProtocolSettingValue.bool_value', index=3,
-      number=4, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='channels_value', full_name='minknow_api.protocol.ProtocolSetting.ProtocolSettingValue.channels_value', index=4,
-      number=5, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-    _descriptor.OneofDescriptor(
-      name='protocol_setting_value', full_name='minknow_api.protocol.ProtocolSetting.ProtocolSettingValue.protocol_setting_value',
-      index=0, containing_type=None,
-      create_key=_descriptor._internal_create_key,
-    fields=[]),
-  ],
-  serialized_start=4734,
-  serialized_end=4980,
-)
-
-_PROTOCOLSETTING_CONSTRAINT = _descriptor.Descriptor(
-  name='Constraint',
-  full_name='minknow_api.protocol.ProtocolSetting.Constraint',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='condition', full_name='minknow_api.protocol.ProtocolSetting.Constraint.condition', index=0,
-      number=1, type=14, cpp_type=8, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='value', full_name='minknow_api.protocol.ProtocolSetting.Constraint.value', index=1,
-      number=2, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-    _PROTOCOLSETTING_CONSTRAINT_CONDITION,
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=4983,
-  serialized_end=5278,
-)
-
-_PROTOCOLSETTING_DEPENDENCY = _descriptor.Descriptor(
-  name='Dependency',
-  full_name='minknow_api.protocol.ProtocolSetting.Dependency',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='identifier', full_name='minknow_api.protocol.ProtocolSetting.Dependency.identifier', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='constraints', full_name='minknow_api.protocol.ProtocolSetting.Dependency.constraints', index=1,
-      number=2, type=11, cpp_type=10, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=5280,
-  serialized_end=5383,
-)
-
-_PROTOCOLSETTING = _descriptor.Descriptor(
-  name='ProtocolSetting',
-  full_name='minknow_api.protocol.ProtocolSetting',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='category', full_name='minknow_api.protocol.ProtocolSetting.category', index=0,
-      number=1, type=14, cpp_type=8, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='identifier', full_name='minknow_api.protocol.ProtocolSetting.identifier', index=1,
-      number=2, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=b'\210\265\030\001', file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='display_name', full_name='minknow_api.protocol.ProtocolSetting.display_name', index=2,
-      number=3, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=b'\210\265\030\001', file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='help', full_name='minknow_api.protocol.ProtocolSetting.help', index=3,
-      number=16, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='unit', full_name='minknow_api.protocol.ProtocolSetting.unit', index=4,
-      number=5, type=14, cpp_type=8, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='default_value', full_name='minknow_api.protocol.ProtocolSetting.default_value', index=5,
-      number=6, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='constraints', full_name='minknow_api.protocol.ProtocolSetting.constraints', index=6,
-      number=7, type=11, cpp_type=10, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='dependencies', full_name='minknow_api.protocol.ProtocolSetting.dependencies', index=7,
-      number=8, type=11, cpp_type=10, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='visibility', full_name='minknow_api.protocol.ProtocolSetting.visibility', index=8,
-      number=9, type=14, cpp_type=8, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='choices', full_name='minknow_api.protocol.ProtocolSetting.choices', index=9,
-      number=17, type=9, cpp_type=9, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[_PROTOCOLSETTING_PROTOCOLSETTINGVALUE, _PROTOCOLSETTING_CONSTRAINT, _PROTOCOLSETTING_DEPENDENCY, ],
-  enum_types=[
-    _PROTOCOLSETTING_CATEGORY,
-    _PROTOCOLSETTING_UNIT,
-    _PROTOCOLSETTING_VISIBILITY,
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=4209,
-  serialized_end=5724,
+  serialized_start=5109,
+  serialized_end=5260,
 )
 
 
@@ -2286,8 +2343,8 @@ _LISTSETTINGSFORPROTOCOLRESPONSE_RUNOPTIONS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=6152,
-  serialized_end=6906,
+  serialized_start=5697,
+  serialized_end=6550,
 )
 
 _LISTSETTINGSFORPROTOCOLRESPONSE_BASECALLING = _descriptor.Descriptor(
@@ -2415,8 +2472,8 @@ _LISTSETTINGSFORPROTOCOLRESPONSE_BASECALLING = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=6909,
-  serialized_end=7982,
+  serialized_start=6553,
+  serialized_end=7761,
 )
 
 _LISTSETTINGSFORPROTOCOLRESPONSE_OUTPUT = _descriptor.Descriptor(
@@ -2600,8 +2657,8 @@ _LISTSETTINGSFORPROTOCOLRESPONSE_OUTPUT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=7985,
-  serialized_end=9586,
+  serialized_start=7764,
+  serialized_end=9572,
 )
 
 _LISTSETTINGSFORPROTOCOLRESPONSE = _descriptor.Descriptor(
@@ -2659,8 +2716,245 @@ _LISTSETTINGSFORPROTOCOLRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=5727,
-  serialized_end=9586,
+  serialized_start=5263,
+  serialized_end=9572,
+)
+
+
+_ASSOCIATEPOSTPROCESSINGANALYSISREQUEST = _descriptor.Descriptor(
+  name='AssociatePostProcessingAnalysisRequest',
+  full_name='minknow_api.protocol.AssociatePostProcessingAnalysisRequest',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='run_id', full_name='minknow_api.protocol.AssociatePostProcessingAnalysisRequest.run_id', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='start_request', full_name='minknow_api.protocol.AssociatePostProcessingAnalysisRequest.start_request', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=9574,
+  serialized_end=9691,
+)
+
+
+_ASSOCIATEPOSTPROCESSINGANALYSISRESPONSE = _descriptor.Descriptor(
+  name='AssociatePostProcessingAnalysisResponse',
+  full_name='minknow_api.protocol.AssociatePostProcessingAnalysisResponse',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='id', full_name='minknow_api.protocol.AssociatePostProcessingAnalysisResponse.id', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=9693,
+  serialized_end=9746,
+)
+
+
+_CLEARPROTOCOLHISTORYDATAREQUEST = _descriptor.Descriptor(
+  name='ClearProtocolHistoryDataRequest',
+  full_name='minknow_api.protocol.ClearProtocolHistoryDataRequest',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='protocol_ids', full_name='minknow_api.protocol.ClearProtocolHistoryDataRequest.protocol_ids', index=0,
+      number=1, type=9, cpp_type=9, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=9748,
+  serialized_end=9803,
+)
+
+
+_CLEARPROTOCOLHISTORYDATARESPONSE = _descriptor.Descriptor(
+  name='ClearProtocolHistoryDataResponse',
+  full_name='minknow_api.protocol.ClearProtocolHistoryDataResponse',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=9805,
+  serialized_end=9839,
+)
+
+
+_PROTOCOLPHASEMANAGEMENTREQUEST_CAPABILITIES = _descriptor.Descriptor(
+  name='Capabilities',
+  full_name='minknow_api.protocol.ProtocolPhaseManagementRequest.Capabilities',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='can_pause', full_name='minknow_api.protocol.ProtocolPhaseManagementRequest.Capabilities.can_pause', index=0,
+      number=1, type=8, cpp_type=7, label=1,
+      has_default_value=False, default_value=False,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='can_trigger_mux_scan', full_name='minknow_api.protocol.ProtocolPhaseManagementRequest.Capabilities.can_trigger_mux_scan', index=1,
+      number=2, type=8, cpp_type=7, label=1,
+      has_default_value=False, default_value=False,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=10021,
+  serialized_end=10084,
+)
+
+_PROTOCOLPHASEMANAGEMENTREQUEST = _descriptor.Descriptor(
+  name='ProtocolPhaseManagementRequest',
+  full_name='minknow_api.protocol.ProtocolPhaseManagementRequest',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='set_capabilities', full_name='minknow_api.protocol.ProtocolPhaseManagementRequest.set_capabilities', index=0,
+      number=1, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='phase', full_name='minknow_api.protocol.ProtocolPhaseManagementRequest.phase', index=1,
+      number=2, type=14, cpp_type=8, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[_PROTOCOLPHASEMANAGEMENTREQUEST_CAPABILITIES, ],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=9842,
+  serialized_end=10084,
+)
+
+
+_PROTOCOLPHASEMANAGEMENTRESPONSE = _descriptor.Descriptor(
+  name='ProtocolPhaseManagementResponse',
+  full_name='minknow_api.protocol.ProtocolPhaseManagementResponse',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='action', full_name='minknow_api.protocol.ProtocolPhaseManagementResponse.action', index=0,
+      number=1, type=14, cpp_type=8, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=10086,
+  serialized_end=10165,
 )
 
 _BARCODEUSERDATA.fields_by_name['type'].enum_type = _BARCODEUSERDATA_SAMPLETYPE
@@ -2697,7 +2991,10 @@ _PROTOCOLINFO.fields_by_name['tag_extraction_result'].message_type = _PROTOCOLIN
 _LISTPROTOCOLSRESPONSE.fields_by_name['protocols'].message_type = _PROTOCOLINFO
 _WAITFORFINISHEDREQUEST.fields_by_name['state'].enum_type = _WAITFORFINISHEDREQUEST_NOTIFICATIONSTATE
 _WAITFORFINISHEDREQUEST_NOTIFICATIONSTATE.containing_type = _WAITFORFINISHEDREQUEST
+_ASSOCIATEDPOSTPROCESSINGANALYSIS.fields_by_name['start_request'].message_type = minknow__api_dot_basecaller__pb2._STARTREQUEST
 _PROTOCOLRUNINFO.fields_by_name['state'].enum_type = _PROTOCOLSTATE
+_PROTOCOLRUNINFO.fields_by_name['phase'].enum_type = _PROTOCOLPHASE
+_PROTOCOLRUNINFO.fields_by_name['last_phase_change'].message_type = google_dot_protobuf_dot_timestamp__pb2._TIMESTAMP
 _PROTOCOLRUNINFO.fields_by_name['start_time'].message_type = google_dot_protobuf_dot_timestamp__pb2._TIMESTAMP
 _PROTOCOLRUNINFO.fields_by_name['script_end_time'].message_type = google_dot_protobuf_dot_timestamp__pb2._TIMESTAMP
 _PROTOCOLRUNINFO.fields_by_name['end_time'].message_type = google_dot_protobuf_dot_timestamp__pb2._TIMESTAMP
@@ -2706,12 +3003,21 @@ _PROTOCOLRUNINFO.fields_by_name['epi2me_workflows'].message_type = _EPI2MEWORKFL
 _PROTOCOLRUNINFO.fields_by_name['device'].message_type = minknow__api_dot_device__pb2._GETDEVICEINFORESPONSE
 _PROTOCOLRUNINFO.fields_by_name['flow_cell'].message_type = minknow__api_dot_device__pb2._GETFLOWCELLINFORESPONSE
 _PROTOCOLRUNINFO.fields_by_name['meta_info'].message_type = _PROTOCOLINFO
+_PROTOCOLRUNINFO.fields_by_name['associated_post_processing_analysis'].message_type = _ASSOCIATEDPOSTPROCESSINGANALYSIS
+_PROTOCOLRUNINFO.fields_by_name['pqc_result'].message_type = _PLATFORMQCRESULT
+_FILTERINGINFO_PLATFORMQCFILTER.containing_type = _FILTERINGINFO
+_FILTERINGINFO_PLATFORMQCFILTER.oneofs_by_name['_flow_cell_id'].fields.append(
+  _FILTERINGINFO_PLATFORMQCFILTER.fields_by_name['flow_cell_id'])
+_FILTERINGINFO_PLATFORMQCFILTER.fields_by_name['flow_cell_id'].containing_oneof = _FILTERINGINFO_PLATFORMQCFILTER.oneofs_by_name['_flow_cell_id']
+_FILTERINGINFO.fields_by_name['pqc_filter'].message_type = _FILTERINGINFO_PLATFORMQCFILTER
+_LISTPROTOCOLRUNSREQUEST.fields_by_name['filter_info'].message_type = _FILTERINGINFO
 _GETCURRENTPROTOCOLRUNRESPONSE.fields_by_name['run_info'].message_type = _PROTOCOLRUNINFO
 _GETCONTEXTINFORESPONSE_CONTEXTINFOENTRY.containing_type = _GETCONTEXTINFORESPONSE
 _GETCONTEXTINFORESPONSE.fields_by_name['context_info'].message_type = _GETCONTEXTINFORESPONSE_CONTEXTINFOENTRY
 _SETCONTEXTINFOREQUEST_CONTEXTINFOENTRY.containing_type = _SETCONTEXTINFOREQUEST
 _SETCONTEXTINFOREQUEST.fields_by_name['context_info'].message_type = _SETCONTEXTINFOREQUEST_CONTEXTINFOENTRY
 _ADDEPI2MEWORKFLOWREQUEST.fields_by_name['epi2me_workflow'].message_type = _EPI2MEWORKFLOWREFERENCE
+_SETPLATFORMQCRESULTREQUEST.fields_by_name['pqc_result'].message_type = _PLATFORMQCRESULT
 _PROTOCOLIDENTIFIERCOMPONENTS.fields_by_name['location'].enum_type = _PROTOCOLIDENTIFIERCOMPONENTS_LOCATION
 _PROTOCOLIDENTIFIERCOMPONENTS_LOCATION.containing_type = _PROTOCOLIDENTIFIERCOMPONENTS
 _LISTSETTINGSFORPROTOCOLREQUEST.fields_by_name['components'].message_type = _PROTOCOLIDENTIFIERCOMPONENTS
@@ -2721,108 +3027,90 @@ _LISTSETTINGSFORPROTOCOLREQUEST.fields_by_name['identifier'].containing_oneof = 
 _LISTSETTINGSFORPROTOCOLREQUEST.oneofs_by_name['protocol_identifier'].fields.append(
   _LISTSETTINGSFORPROTOCOLREQUEST.fields_by_name['components'])
 _LISTSETTINGSFORPROTOCOLREQUEST.fields_by_name['components'].containing_oneof = _LISTSETTINGSFORPROTOCOLREQUEST.oneofs_by_name['protocol_identifier']
-_PROTOCOLSETTING_PROTOCOLSETTINGVALUE.fields_by_name['channels_value'].message_type = minknow__api_dot_analysis__configuration__pb2._WRITERCONFIGURATION_CHANNELCONFIGURATION
-_PROTOCOLSETTING_PROTOCOLSETTINGVALUE.containing_type = _PROTOCOLSETTING
-_PROTOCOLSETTING_PROTOCOLSETTINGVALUE.oneofs_by_name['protocol_setting_value'].fields.append(
-  _PROTOCOLSETTING_PROTOCOLSETTINGVALUE.fields_by_name['string_value'])
-_PROTOCOLSETTING_PROTOCOLSETTINGVALUE.fields_by_name['string_value'].containing_oneof = _PROTOCOLSETTING_PROTOCOLSETTINGVALUE.oneofs_by_name['protocol_setting_value']
-_PROTOCOLSETTING_PROTOCOLSETTINGVALUE.oneofs_by_name['protocol_setting_value'].fields.append(
-  _PROTOCOLSETTING_PROTOCOLSETTINGVALUE.fields_by_name['float_value'])
-_PROTOCOLSETTING_PROTOCOLSETTINGVALUE.fields_by_name['float_value'].containing_oneof = _PROTOCOLSETTING_PROTOCOLSETTINGVALUE.oneofs_by_name['protocol_setting_value']
-_PROTOCOLSETTING_PROTOCOLSETTINGVALUE.oneofs_by_name['protocol_setting_value'].fields.append(
-  _PROTOCOLSETTING_PROTOCOLSETTINGVALUE.fields_by_name['integer_value'])
-_PROTOCOLSETTING_PROTOCOLSETTINGVALUE.fields_by_name['integer_value'].containing_oneof = _PROTOCOLSETTING_PROTOCOLSETTINGVALUE.oneofs_by_name['protocol_setting_value']
-_PROTOCOLSETTING_PROTOCOLSETTINGVALUE.oneofs_by_name['protocol_setting_value'].fields.append(
-  _PROTOCOLSETTING_PROTOCOLSETTINGVALUE.fields_by_name['bool_value'])
-_PROTOCOLSETTING_PROTOCOLSETTINGVALUE.fields_by_name['bool_value'].containing_oneof = _PROTOCOLSETTING_PROTOCOLSETTINGVALUE.oneofs_by_name['protocol_setting_value']
-_PROTOCOLSETTING_PROTOCOLSETTINGVALUE.oneofs_by_name['protocol_setting_value'].fields.append(
-  _PROTOCOLSETTING_PROTOCOLSETTINGVALUE.fields_by_name['channels_value'])
-_PROTOCOLSETTING_PROTOCOLSETTINGVALUE.fields_by_name['channels_value'].containing_oneof = _PROTOCOLSETTING_PROTOCOLSETTINGVALUE.oneofs_by_name['protocol_setting_value']
-_PROTOCOLSETTING_CONSTRAINT.fields_by_name['condition'].enum_type = _PROTOCOLSETTING_CONSTRAINT_CONDITION
-_PROTOCOLSETTING_CONSTRAINT.fields_by_name['value'].message_type = _PROTOCOLSETTING_PROTOCOLSETTINGVALUE
-_PROTOCOLSETTING_CONSTRAINT.containing_type = _PROTOCOLSETTING
-_PROTOCOLSETTING_CONSTRAINT_CONDITION.containing_type = _PROTOCOLSETTING_CONSTRAINT
-_PROTOCOLSETTING_DEPENDENCY.fields_by_name['constraints'].message_type = _PROTOCOLSETTING_CONSTRAINT
-_PROTOCOLSETTING_DEPENDENCY.containing_type = _PROTOCOLSETTING
-_PROTOCOLSETTING.fields_by_name['category'].enum_type = _PROTOCOLSETTING_CATEGORY
-_PROTOCOLSETTING.fields_by_name['unit'].enum_type = _PROTOCOLSETTING_UNIT
-_PROTOCOLSETTING.fields_by_name['default_value'].message_type = _PROTOCOLSETTING_PROTOCOLSETTINGVALUE
-_PROTOCOLSETTING.fields_by_name['constraints'].message_type = _PROTOCOLSETTING_CONSTRAINT
-_PROTOCOLSETTING.fields_by_name['dependencies'].message_type = _PROTOCOLSETTING_DEPENDENCY
-_PROTOCOLSETTING.fields_by_name['visibility'].enum_type = _PROTOCOLSETTING_VISIBILITY
-_PROTOCOLSETTING_CATEGORY.containing_type = _PROTOCOLSETTING
-_PROTOCOLSETTING_UNIT.containing_type = _PROTOCOLSETTING
-_PROTOCOLSETTING_VISIBILITY.containing_type = _PROTOCOLSETTING
-_LISTSETTINGSFORPROTOCOLRESPONSE_RUNOPTIONS.fields_by_name['run_length'].message_type = _PROTOCOLSETTING
-_LISTSETTINGSFORPROTOCOLRESPONSE_RUNOPTIONS.fields_by_name['bias_voltage'].message_type = _PROTOCOLSETTING
-_LISTSETTINGSFORPROTOCOLRESPONSE_RUNOPTIONS.fields_by_name['read_until_enabled'].message_type = _PROTOCOLSETTING
-_LISTSETTINGSFORPROTOCOLRESPONSE_RUNOPTIONS.fields_by_name['read_until_ref_file'].message_type = _PROTOCOLSETTING
-_LISTSETTINGSFORPROTOCOLRESPONSE_RUNOPTIONS.fields_by_name['read_until_channels'].message_type = _PROTOCOLSETTING
-_LISTSETTINGSFORPROTOCOLRESPONSE_RUNOPTIONS.fields_by_name['read_until_bed_file_enabled'].message_type = _PROTOCOLSETTING
-_LISTSETTINGSFORPROTOCOLRESPONSE_RUNOPTIONS.fields_by_name['read_until_bed_file'].message_type = _PROTOCOLSETTING
-_LISTSETTINGSFORPROTOCOLRESPONSE_RUNOPTIONS.fields_by_name['read_until_enrichment'].message_type = _PROTOCOLSETTING
-_LISTSETTINGSFORPROTOCOLRESPONSE_RUNOPTIONS.fields_by_name['active_channel_selection'].message_type = _PROTOCOLSETTING
-_LISTSETTINGSFORPROTOCOLRESPONSE_RUNOPTIONS.fields_by_name['mux_scan_period'].message_type = _PROTOCOLSETTING
-_LISTSETTINGSFORPROTOCOLRESPONSE_RUNOPTIONS.fields_by_name['group_change_period'].message_type = _PROTOCOLSETTING
+_LISTSETTINGSFORPROTOCOLRESPONSE_RUNOPTIONS.fields_by_name['run_length'].message_type = minknow__api_dot_protocol__settings__pb2._PROTOCOLSETTING
+_LISTSETTINGSFORPROTOCOLRESPONSE_RUNOPTIONS.fields_by_name['bias_voltage'].message_type = minknow__api_dot_protocol__settings__pb2._PROTOCOLSETTING
+_LISTSETTINGSFORPROTOCOLRESPONSE_RUNOPTIONS.fields_by_name['read_until_enabled'].message_type = minknow__api_dot_protocol__settings__pb2._PROTOCOLSETTING
+_LISTSETTINGSFORPROTOCOLRESPONSE_RUNOPTIONS.fields_by_name['read_until_ref_file'].message_type = minknow__api_dot_protocol__settings__pb2._PROTOCOLSETTING
+_LISTSETTINGSFORPROTOCOLRESPONSE_RUNOPTIONS.fields_by_name['read_until_channels'].message_type = minknow__api_dot_protocol__settings__pb2._PROTOCOLSETTING
+_LISTSETTINGSFORPROTOCOLRESPONSE_RUNOPTIONS.fields_by_name['read_until_bed_file_enabled'].message_type = minknow__api_dot_protocol__settings__pb2._PROTOCOLSETTING
+_LISTSETTINGSFORPROTOCOLRESPONSE_RUNOPTIONS.fields_by_name['read_until_bed_file'].message_type = minknow__api_dot_protocol__settings__pb2._PROTOCOLSETTING
+_LISTSETTINGSFORPROTOCOLRESPONSE_RUNOPTIONS.fields_by_name['read_until_enrichment'].message_type = minknow__api_dot_protocol__settings__pb2._PROTOCOLSETTING
+_LISTSETTINGSFORPROTOCOLRESPONSE_RUNOPTIONS.fields_by_name['active_channel_selection'].message_type = minknow__api_dot_protocol__settings__pb2._PROTOCOLSETTING
+_LISTSETTINGSFORPROTOCOLRESPONSE_RUNOPTIONS.fields_by_name['mux_scan_period'].message_type = minknow__api_dot_protocol__settings__pb2._PROTOCOLSETTING
+_LISTSETTINGSFORPROTOCOLRESPONSE_RUNOPTIONS.fields_by_name['group_change_period'].message_type = minknow__api_dot_protocol__settings__pb2._PROTOCOLSETTING
 _LISTSETTINGSFORPROTOCOLRESPONSE_RUNOPTIONS.containing_type = _LISTSETTINGSFORPROTOCOLRESPONSE
-_LISTSETTINGSFORPROTOCOLRESPONSE_BASECALLING.fields_by_name['basecalling_enabled'].message_type = _PROTOCOLSETTING
-_LISTSETTINGSFORPROTOCOLRESPONSE_BASECALLING.fields_by_name['barcoding_enabled'].message_type = _PROTOCOLSETTING
-_LISTSETTINGSFORPROTOCOLRESPONSE_BASECALLING.fields_by_name['basecall_model'].message_type = _PROTOCOLSETTING
-_LISTSETTINGSFORPROTOCOLRESPONSE_BASECALLING.fields_by_name['trim_barcodes_enabled'].message_type = _PROTOCOLSETTING
-_LISTSETTINGSFORPROTOCOLRESPONSE_BASECALLING.fields_by_name['require_barcodes_both_ends'].message_type = _PROTOCOLSETTING
-_LISTSETTINGSFORPROTOCOLRESPONSE_BASECALLING.fields_by_name['detect_mid_strand_barcodes'].message_type = _PROTOCOLSETTING
-_LISTSETTINGSFORPROTOCOLRESPONSE_BASECALLING.fields_by_name['override_mid_barcoding_score'].message_type = _PROTOCOLSETTING
-_LISTSETTINGSFORPROTOCOLRESPONSE_BASECALLING.fields_by_name['override_rear_barcoding_score'].message_type = _PROTOCOLSETTING
-_LISTSETTINGSFORPROTOCOLRESPONSE_BASECALLING.fields_by_name['min_barcoding_score'].message_type = _PROTOCOLSETTING
-_LISTSETTINGSFORPROTOCOLRESPONSE_BASECALLING.fields_by_name['min_barcoding_score_rear'].message_type = _PROTOCOLSETTING
-_LISTSETTINGSFORPROTOCOLRESPONSE_BASECALLING.fields_by_name['min_barcoding_score_mid'].message_type = _PROTOCOLSETTING
-_LISTSETTINGSFORPROTOCOLRESPONSE_BASECALLING.fields_by_name['alignment_enabled'].message_type = _PROTOCOLSETTING
-_LISTSETTINGSFORPROTOCOLRESPONSE_BASECALLING.fields_by_name['alignment_ref_file'].message_type = _PROTOCOLSETTING
-_LISTSETTINGSFORPROTOCOLRESPONSE_BASECALLING.fields_by_name['alignment_bed_file_enabled'].message_type = _PROTOCOLSETTING
-_LISTSETTINGSFORPROTOCOLRESPONSE_BASECALLING.fields_by_name['alignment_bed_file'].message_type = _PROTOCOLSETTING
+_LISTSETTINGSFORPROTOCOLRESPONSE_BASECALLING.fields_by_name['basecalling_enabled'].message_type = minknow__api_dot_protocol__settings__pb2._PROTOCOLSETTING
+_LISTSETTINGSFORPROTOCOLRESPONSE_BASECALLING.fields_by_name['barcoding_enabled'].message_type = minknow__api_dot_protocol__settings__pb2._PROTOCOLSETTING
+_LISTSETTINGSFORPROTOCOLRESPONSE_BASECALLING.fields_by_name['basecall_model'].message_type = minknow__api_dot_protocol__settings__pb2._PROTOCOLSETTING
+_LISTSETTINGSFORPROTOCOLRESPONSE_BASECALLING.fields_by_name['trim_barcodes_enabled'].message_type = minknow__api_dot_protocol__settings__pb2._PROTOCOLSETTING
+_LISTSETTINGSFORPROTOCOLRESPONSE_BASECALLING.fields_by_name['require_barcodes_both_ends'].message_type = minknow__api_dot_protocol__settings__pb2._PROTOCOLSETTING
+_LISTSETTINGSFORPROTOCOLRESPONSE_BASECALLING.fields_by_name['detect_mid_strand_barcodes'].message_type = minknow__api_dot_protocol__settings__pb2._PROTOCOLSETTING
+_LISTSETTINGSFORPROTOCOLRESPONSE_BASECALLING.fields_by_name['override_mid_barcoding_score'].message_type = minknow__api_dot_protocol__settings__pb2._PROTOCOLSETTING
+_LISTSETTINGSFORPROTOCOLRESPONSE_BASECALLING.fields_by_name['override_rear_barcoding_score'].message_type = minknow__api_dot_protocol__settings__pb2._PROTOCOLSETTING
+_LISTSETTINGSFORPROTOCOLRESPONSE_BASECALLING.fields_by_name['min_barcoding_score'].message_type = minknow__api_dot_protocol__settings__pb2._PROTOCOLSETTING
+_LISTSETTINGSFORPROTOCOLRESPONSE_BASECALLING.fields_by_name['min_barcoding_score_rear'].message_type = minknow__api_dot_protocol__settings__pb2._PROTOCOLSETTING
+_LISTSETTINGSFORPROTOCOLRESPONSE_BASECALLING.fields_by_name['min_barcoding_score_mid'].message_type = minknow__api_dot_protocol__settings__pb2._PROTOCOLSETTING
+_LISTSETTINGSFORPROTOCOLRESPONSE_BASECALLING.fields_by_name['alignment_enabled'].message_type = minknow__api_dot_protocol__settings__pb2._PROTOCOLSETTING
+_LISTSETTINGSFORPROTOCOLRESPONSE_BASECALLING.fields_by_name['alignment_ref_file'].message_type = minknow__api_dot_protocol__settings__pb2._PROTOCOLSETTING
+_LISTSETTINGSFORPROTOCOLRESPONSE_BASECALLING.fields_by_name['alignment_bed_file_enabled'].message_type = minknow__api_dot_protocol__settings__pb2._PROTOCOLSETTING
+_LISTSETTINGSFORPROTOCOLRESPONSE_BASECALLING.fields_by_name['alignment_bed_file'].message_type = minknow__api_dot_protocol__settings__pb2._PROTOCOLSETTING
 _LISTSETTINGSFORPROTOCOLRESPONSE_BASECALLING.containing_type = _LISTSETTINGSFORPROTOCOLRESPONSE
-_LISTSETTINGSFORPROTOCOLRESPONSE_OUTPUT.fields_by_name['output_location'].message_type = _PROTOCOLSETTING
-_LISTSETTINGSFORPROTOCOLRESPONSE_OUTPUT.fields_by_name['fast_q_enabled'].message_type = _PROTOCOLSETTING
-_LISTSETTINGSFORPROTOCOLRESPONSE_OUTPUT.fields_by_name['fast_q_reads_per_file'].message_type = _PROTOCOLSETTING
-_LISTSETTINGSFORPROTOCOLRESPONSE_OUTPUT.fields_by_name['fast_q_data_compression'].message_type = _PROTOCOLSETTING
-_LISTSETTINGSFORPROTOCOLRESPONSE_OUTPUT.fields_by_name['fast_5_enabled'].message_type = _PROTOCOLSETTING
-_LISTSETTINGSFORPROTOCOLRESPONSE_OUTPUT.fields_by_name['fast_5_reads_per_file'].message_type = _PROTOCOLSETTING
-_LISTSETTINGSFORPROTOCOLRESPONSE_OUTPUT.fields_by_name['fast_5_data_trace_table'].message_type = _PROTOCOLSETTING
-_LISTSETTINGSFORPROTOCOLRESPONSE_OUTPUT.fields_by_name['fast_5_data_move_table'].message_type = _PROTOCOLSETTING
-_LISTSETTINGSFORPROTOCOLRESPONSE_OUTPUT.fields_by_name['fast_5_data_fast_q'].message_type = _PROTOCOLSETTING
-_LISTSETTINGSFORPROTOCOLRESPONSE_OUTPUT.fields_by_name['fast_5_data_raw'].message_type = _PROTOCOLSETTING
-_LISTSETTINGSFORPROTOCOLRESPONSE_OUTPUT.fields_by_name['fast_5_data_compression'].message_type = _PROTOCOLSETTING
-_LISTSETTINGSFORPROTOCOLRESPONSE_OUTPUT.fields_by_name['bam_enabled'].message_type = _PROTOCOLSETTING
-_LISTSETTINGSFORPROTOCOLRESPONSE_OUTPUT.fields_by_name['read_filtering_enabled'].message_type = _PROTOCOLSETTING
-_LISTSETTINGSFORPROTOCOLRESPONSE_OUTPUT.fields_by_name['read_filtering_min_qscore'].message_type = _PROTOCOLSETTING
-_LISTSETTINGSFORPROTOCOLRESPONSE_OUTPUT.fields_by_name['read_filtering_min_read_length'].message_type = _PROTOCOLSETTING
-_LISTSETTINGSFORPROTOCOLRESPONSE_OUTPUT.fields_by_name['read_filtering_max_read_length'].message_type = _PROTOCOLSETTING
-_LISTSETTINGSFORPROTOCOLRESPONSE_OUTPUT.fields_by_name['bulk_file_enabled'].message_type = _PROTOCOLSETTING
-_LISTSETTINGSFORPROTOCOLRESPONSE_OUTPUT.fields_by_name['bulk_file_raw'].message_type = _PROTOCOLSETTING
-_LISTSETTINGSFORPROTOCOLRESPONSE_OUTPUT.fields_by_name['bulk_file_events'].message_type = _PROTOCOLSETTING
-_LISTSETTINGSFORPROTOCOLRESPONSE_OUTPUT.fields_by_name['bulk_file_read_table'].message_type = _PROTOCOLSETTING
-_LISTSETTINGSFORPROTOCOLRESPONSE_OUTPUT.fields_by_name['bulk_file_raw_enabled'].message_type = _PROTOCOLSETTING
-_LISTSETTINGSFORPROTOCOLRESPONSE_OUTPUT.fields_by_name['bulk_file_events_enabled'].message_type = _PROTOCOLSETTING
-_LISTSETTINGSFORPROTOCOLRESPONSE_OUTPUT.fields_by_name['bulk_file_read_table_enabled'].message_type = _PROTOCOLSETTING
+_LISTSETTINGSFORPROTOCOLRESPONSE_OUTPUT.fields_by_name['output_location'].message_type = minknow__api_dot_protocol__settings__pb2._PROTOCOLSETTING
+_LISTSETTINGSFORPROTOCOLRESPONSE_OUTPUT.fields_by_name['fast_q_enabled'].message_type = minknow__api_dot_protocol__settings__pb2._PROTOCOLSETTING
+_LISTSETTINGSFORPROTOCOLRESPONSE_OUTPUT.fields_by_name['fast_q_reads_per_file'].message_type = minknow__api_dot_protocol__settings__pb2._PROTOCOLSETTING
+_LISTSETTINGSFORPROTOCOLRESPONSE_OUTPUT.fields_by_name['fast_q_data_compression'].message_type = minknow__api_dot_protocol__settings__pb2._PROTOCOLSETTING
+_LISTSETTINGSFORPROTOCOLRESPONSE_OUTPUT.fields_by_name['fast_5_enabled'].message_type = minknow__api_dot_protocol__settings__pb2._PROTOCOLSETTING
+_LISTSETTINGSFORPROTOCOLRESPONSE_OUTPUT.fields_by_name['fast_5_reads_per_file'].message_type = minknow__api_dot_protocol__settings__pb2._PROTOCOLSETTING
+_LISTSETTINGSFORPROTOCOLRESPONSE_OUTPUT.fields_by_name['fast_5_data_trace_table'].message_type = minknow__api_dot_protocol__settings__pb2._PROTOCOLSETTING
+_LISTSETTINGSFORPROTOCOLRESPONSE_OUTPUT.fields_by_name['fast_5_data_move_table'].message_type = minknow__api_dot_protocol__settings__pb2._PROTOCOLSETTING
+_LISTSETTINGSFORPROTOCOLRESPONSE_OUTPUT.fields_by_name['fast_5_data_fast_q'].message_type = minknow__api_dot_protocol__settings__pb2._PROTOCOLSETTING
+_LISTSETTINGSFORPROTOCOLRESPONSE_OUTPUT.fields_by_name['fast_5_data_raw'].message_type = minknow__api_dot_protocol__settings__pb2._PROTOCOLSETTING
+_LISTSETTINGSFORPROTOCOLRESPONSE_OUTPUT.fields_by_name['fast_5_data_compression'].message_type = minknow__api_dot_protocol__settings__pb2._PROTOCOLSETTING
+_LISTSETTINGSFORPROTOCOLRESPONSE_OUTPUT.fields_by_name['bam_enabled'].message_type = minknow__api_dot_protocol__settings__pb2._PROTOCOLSETTING
+_LISTSETTINGSFORPROTOCOLRESPONSE_OUTPUT.fields_by_name['read_filtering_enabled'].message_type = minknow__api_dot_protocol__settings__pb2._PROTOCOLSETTING
+_LISTSETTINGSFORPROTOCOLRESPONSE_OUTPUT.fields_by_name['read_filtering_min_qscore'].message_type = minknow__api_dot_protocol__settings__pb2._PROTOCOLSETTING
+_LISTSETTINGSFORPROTOCOLRESPONSE_OUTPUT.fields_by_name['read_filtering_min_read_length'].message_type = minknow__api_dot_protocol__settings__pb2._PROTOCOLSETTING
+_LISTSETTINGSFORPROTOCOLRESPONSE_OUTPUT.fields_by_name['read_filtering_max_read_length'].message_type = minknow__api_dot_protocol__settings__pb2._PROTOCOLSETTING
+_LISTSETTINGSFORPROTOCOLRESPONSE_OUTPUT.fields_by_name['bulk_file_enabled'].message_type = minknow__api_dot_protocol__settings__pb2._PROTOCOLSETTING
+_LISTSETTINGSFORPROTOCOLRESPONSE_OUTPUT.fields_by_name['bulk_file_raw'].message_type = minknow__api_dot_protocol__settings__pb2._PROTOCOLSETTING
+_LISTSETTINGSFORPROTOCOLRESPONSE_OUTPUT.fields_by_name['bulk_file_events'].message_type = minknow__api_dot_protocol__settings__pb2._PROTOCOLSETTING
+_LISTSETTINGSFORPROTOCOLRESPONSE_OUTPUT.fields_by_name['bulk_file_read_table'].message_type = minknow__api_dot_protocol__settings__pb2._PROTOCOLSETTING
+_LISTSETTINGSFORPROTOCOLRESPONSE_OUTPUT.fields_by_name['bulk_file_raw_enabled'].message_type = minknow__api_dot_protocol__settings__pb2._PROTOCOLSETTING
+_LISTSETTINGSFORPROTOCOLRESPONSE_OUTPUT.fields_by_name['bulk_file_events_enabled'].message_type = minknow__api_dot_protocol__settings__pb2._PROTOCOLSETTING
+_LISTSETTINGSFORPROTOCOLRESPONSE_OUTPUT.fields_by_name['bulk_file_read_table_enabled'].message_type = minknow__api_dot_protocol__settings__pb2._PROTOCOLSETTING
 _LISTSETTINGSFORPROTOCOLRESPONSE_OUTPUT.containing_type = _LISTSETTINGSFORPROTOCOLRESPONSE
 _LISTSETTINGSFORPROTOCOLRESPONSE.fields_by_name['protocol'].message_type = _PROTOCOLIDENTIFIERCOMPONENTS
 _LISTSETTINGSFORPROTOCOLRESPONSE.fields_by_name['run_options'].message_type = _LISTSETTINGSFORPROTOCOLRESPONSE_RUNOPTIONS
 _LISTSETTINGSFORPROTOCOLRESPONSE.fields_by_name['basecalling'].message_type = _LISTSETTINGSFORPROTOCOLRESPONSE_BASECALLING
 _LISTSETTINGSFORPROTOCOLRESPONSE.fields_by_name['output'].message_type = _LISTSETTINGSFORPROTOCOLRESPONSE_OUTPUT
-_LISTSETTINGSFORPROTOCOLRESPONSE.fields_by_name['protocol_settings'].message_type = _PROTOCOLSETTING
+_LISTSETTINGSFORPROTOCOLRESPONSE.fields_by_name['protocol_settings'].message_type = minknow__api_dot_protocol__settings__pb2._PROTOCOLSETTING
+_ASSOCIATEPOSTPROCESSINGANALYSISREQUEST.fields_by_name['start_request'].message_type = minknow__api_dot_basecaller__pb2._STARTREQUEST
+_PROTOCOLPHASEMANAGEMENTREQUEST_CAPABILITIES.containing_type = _PROTOCOLPHASEMANAGEMENTREQUEST
+_PROTOCOLPHASEMANAGEMENTREQUEST.fields_by_name['set_capabilities'].message_type = _PROTOCOLPHASEMANAGEMENTREQUEST_CAPABILITIES
+_PROTOCOLPHASEMANAGEMENTREQUEST.fields_by_name['phase'].enum_type = _PROTOCOLPHASE
+_PROTOCOLPHASEMANAGEMENTRESPONSE.fields_by_name['action'].enum_type = _ACTION
 DESCRIPTOR.message_types_by_name['BarcodeUserData'] = _BARCODEUSERDATA
 DESCRIPTOR.message_types_by_name['ProtocolRunUserInfo'] = _PROTOCOLRUNUSERINFO
 DESCRIPTOR.message_types_by_name['StartProtocolRequest'] = _STARTPROTOCOLREQUEST
 DESCRIPTOR.message_types_by_name['StartProtocolResponse'] = _STARTPROTOCOLRESPONSE
 DESCRIPTOR.message_types_by_name['StopProtocolRequest'] = _STOPPROTOCOLREQUEST
 DESCRIPTOR.message_types_by_name['StopProtocolResponse'] = _STOPPROTOCOLRESPONSE
+DESCRIPTOR.message_types_by_name['PauseProtocolRequest'] = _PAUSEPROTOCOLREQUEST
+DESCRIPTOR.message_types_by_name['PauseProtocolResponse'] = _PAUSEPROTOCOLRESPONSE
+DESCRIPTOR.message_types_by_name['ResumeProtocolRequest'] = _RESUMEPROTOCOLREQUEST
+DESCRIPTOR.message_types_by_name['ResumeProtocolResponse'] = _RESUMEPROTOCOLRESPONSE
+DESCRIPTOR.message_types_by_name['TriggerMuxScanRequest'] = _TRIGGERMUXSCANREQUEST
+DESCRIPTOR.message_types_by_name['TriggerMuxScanResponse'] = _TRIGGERMUXSCANRESPONSE
 DESCRIPTOR.message_types_by_name['ListProtocolsRequest'] = _LISTPROTOCOLSREQUEST
 DESCRIPTOR.message_types_by_name['ProtocolInfo'] = _PROTOCOLINFO
 DESCRIPTOR.message_types_by_name['ListProtocolsResponse'] = _LISTPROTOCOLSRESPONSE
 DESCRIPTOR.message_types_by_name['WaitForFinishedRequest'] = _WAITFORFINISHEDREQUEST
 DESCRIPTOR.message_types_by_name['GetRunInfoRequest'] = _GETRUNINFOREQUEST
 DESCRIPTOR.message_types_by_name['Epi2meWorkflowReference'] = _EPI2MEWORKFLOWREFERENCE
+DESCRIPTOR.message_types_by_name['AssociatedPostProcessingAnalysis'] = _ASSOCIATEDPOSTPROCESSINGANALYSIS
+DESCRIPTOR.message_types_by_name['PlatformQcResult'] = _PLATFORMQCRESULT
 DESCRIPTOR.message_types_by_name['ProtocolRunInfo'] = _PROTOCOLRUNINFO
+DESCRIPTOR.message_types_by_name['FilteringInfo'] = _FILTERINGINFO
 DESCRIPTOR.message_types_by_name['ListProtocolRunsRequest'] = _LISTPROTOCOLRUNSREQUEST
 DESCRIPTOR.message_types_by_name['ListProtocolRunsResponse'] = _LISTPROTOCOLRUNSRESPONSE
 DESCRIPTOR.message_types_by_name['GetCurrentProtocolRunRequest'] = _GETCURRENTPROTOCOLRUNREQUEST
@@ -2844,11 +3132,20 @@ DESCRIPTOR.message_types_by_name['BeginHardwareCheckRequest'] = _BEGINHARDWARECH
 DESCRIPTOR.message_types_by_name['BeginHardwareCheckResponse'] = _BEGINHARDWARECHECKRESPONSE
 DESCRIPTOR.message_types_by_name['BeginPlatformQcRequest'] = _BEGINPLATFORMQCREQUEST
 DESCRIPTOR.message_types_by_name['BeginPlatformQcResponse'] = _BEGINPLATFORMQCRESPONSE
+DESCRIPTOR.message_types_by_name['SetPlatformQcResultRequest'] = _SETPLATFORMQCRESULTREQUEST
+DESCRIPTOR.message_types_by_name['SetPlatformQcResultResponse'] = _SETPLATFORMQCRESULTRESPONSE
 DESCRIPTOR.message_types_by_name['ProtocolIdentifierComponents'] = _PROTOCOLIDENTIFIERCOMPONENTS
 DESCRIPTOR.message_types_by_name['ListSettingsForProtocolRequest'] = _LISTSETTINGSFORPROTOCOLREQUEST
-DESCRIPTOR.message_types_by_name['ProtocolSetting'] = _PROTOCOLSETTING
 DESCRIPTOR.message_types_by_name['ListSettingsForProtocolResponse'] = _LISTSETTINGSFORPROTOCOLRESPONSE
+DESCRIPTOR.message_types_by_name['AssociatePostProcessingAnalysisRequest'] = _ASSOCIATEPOSTPROCESSINGANALYSISREQUEST
+DESCRIPTOR.message_types_by_name['AssociatePostProcessingAnalysisResponse'] = _ASSOCIATEPOSTPROCESSINGANALYSISRESPONSE
+DESCRIPTOR.message_types_by_name['ClearProtocolHistoryDataRequest'] = _CLEARPROTOCOLHISTORYDATAREQUEST
+DESCRIPTOR.message_types_by_name['ClearProtocolHistoryDataResponse'] = _CLEARPROTOCOLHISTORYDATARESPONSE
+DESCRIPTOR.message_types_by_name['ProtocolPhaseManagementRequest'] = _PROTOCOLPHASEMANAGEMENTREQUEST
+DESCRIPTOR.message_types_by_name['ProtocolPhaseManagementResponse'] = _PROTOCOLPHASEMANAGEMENTRESPONSE
 DESCRIPTOR.enum_types_by_name['ProtocolState'] = _PROTOCOLSTATE
+DESCRIPTOR.enum_types_by_name['ProtocolPhase'] = _PROTOCOLPHASE
+DESCRIPTOR.enum_types_by_name['Action'] = _ACTION
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
 BarcodeUserData = _reflection.GeneratedProtocolMessageType('BarcodeUserData', (_message.Message,), {
@@ -2941,6 +3238,48 @@ StopProtocolResponse = _reflection.GeneratedProtocolMessageType('StopProtocolRes
   # @@protoc_insertion_point(class_scope:minknow_api.protocol.StopProtocolResponse)
   })
 _sym_db.RegisterMessage(StopProtocolResponse)
+
+PauseProtocolRequest = _reflection.GeneratedProtocolMessageType('PauseProtocolRequest', (_message.Message,), {
+  'DESCRIPTOR' : _PAUSEPROTOCOLREQUEST,
+  '__module__' : 'minknow_api.protocol_pb2'
+  # @@protoc_insertion_point(class_scope:minknow_api.protocol.PauseProtocolRequest)
+  })
+_sym_db.RegisterMessage(PauseProtocolRequest)
+
+PauseProtocolResponse = _reflection.GeneratedProtocolMessageType('PauseProtocolResponse', (_message.Message,), {
+  'DESCRIPTOR' : _PAUSEPROTOCOLRESPONSE,
+  '__module__' : 'minknow_api.protocol_pb2'
+  # @@protoc_insertion_point(class_scope:minknow_api.protocol.PauseProtocolResponse)
+  })
+_sym_db.RegisterMessage(PauseProtocolResponse)
+
+ResumeProtocolRequest = _reflection.GeneratedProtocolMessageType('ResumeProtocolRequest', (_message.Message,), {
+  'DESCRIPTOR' : _RESUMEPROTOCOLREQUEST,
+  '__module__' : 'minknow_api.protocol_pb2'
+  # @@protoc_insertion_point(class_scope:minknow_api.protocol.ResumeProtocolRequest)
+  })
+_sym_db.RegisterMessage(ResumeProtocolRequest)
+
+ResumeProtocolResponse = _reflection.GeneratedProtocolMessageType('ResumeProtocolResponse', (_message.Message,), {
+  'DESCRIPTOR' : _RESUMEPROTOCOLRESPONSE,
+  '__module__' : 'minknow_api.protocol_pb2'
+  # @@protoc_insertion_point(class_scope:minknow_api.protocol.ResumeProtocolResponse)
+  })
+_sym_db.RegisterMessage(ResumeProtocolResponse)
+
+TriggerMuxScanRequest = _reflection.GeneratedProtocolMessageType('TriggerMuxScanRequest', (_message.Message,), {
+  'DESCRIPTOR' : _TRIGGERMUXSCANREQUEST,
+  '__module__' : 'minknow_api.protocol_pb2'
+  # @@protoc_insertion_point(class_scope:minknow_api.protocol.TriggerMuxScanRequest)
+  })
+_sym_db.RegisterMessage(TriggerMuxScanRequest)
+
+TriggerMuxScanResponse = _reflection.GeneratedProtocolMessageType('TriggerMuxScanResponse', (_message.Message,), {
+  'DESCRIPTOR' : _TRIGGERMUXSCANRESPONSE,
+  '__module__' : 'minknow_api.protocol_pb2'
+  # @@protoc_insertion_point(class_scope:minknow_api.protocol.TriggerMuxScanResponse)
+  })
+_sym_db.RegisterMessage(TriggerMuxScanResponse)
 
 ListProtocolsRequest = _reflection.GeneratedProtocolMessageType('ListProtocolsRequest', (_message.Message,), {
   'DESCRIPTOR' : _LISTPROTOCOLSREQUEST,
@@ -3045,6 +3384,37 @@ Epi2meWorkflowReference = _reflection.GeneratedProtocolMessageType('Epi2meWorkfl
   })
 _sym_db.RegisterMessage(Epi2meWorkflowReference)
 
+AssociatedPostProcessingAnalysis = _reflection.GeneratedProtocolMessageType('AssociatedPostProcessingAnalysis', (_message.Message,), {
+  'DESCRIPTOR' : _ASSOCIATEDPOSTPROCESSINGANALYSIS,
+  '__module__' : 'minknow_api.protocol_pb2'
+  ,
+  '__doc__': """Attributes:
+      started_id:
+          Id of analysis if this has been triggered (otherwise empty).
+      start_request:
+          Start request for analysis
+  """,
+  # @@protoc_insertion_point(class_scope:minknow_api.protocol.AssociatedPostProcessingAnalysis)
+  })
+_sym_db.RegisterMessage(AssociatedPostProcessingAnalysis)
+
+PlatformQcResult = _reflection.GeneratedProtocolMessageType('PlatformQcResult', (_message.Message,), {
+  'DESCRIPTOR' : _PLATFORMQCRESULT,
+  '__module__' : 'minknow_api.protocol_pb2'
+  ,
+  '__doc__': """Attributes:
+      flow_cell_id:
+          The flow cell id that the pqc was performed for
+      passed:
+          Whether the flow cell passed the platform qc check
+      total_pore_count:
+          Total number of pores that were found on the flow cell, across
+          all muxes.
+  """,
+  # @@protoc_insertion_point(class_scope:minknow_api.protocol.PlatformQcResult)
+  })
+_sym_db.RegisterMessage(PlatformQcResult)
+
 ProtocolRunInfo = _reflection.GeneratedProtocolMessageType('ProtocolRunInfo', (_message.Message,), {
   'DESCRIPTOR' : _PROTOCOLRUNINFO,
   '__module__' : 'minknow_api.protocol_pb2'
@@ -3063,6 +3433,27 @@ ProtocolRunInfo = _reflection.GeneratedProtocolMessageType('ProtocolRunInfo', (_
           Output location for protocol data (eg. reads).  Since 1.16.
       state:
           Indicates the current state of the protocol run.
+      phase:
+          The phase of the protocol.  This is the state reported by the
+          protocol. If the protocol has not reported any state, it will
+          be PHASE_UNKNOWN. Completed protocols also report
+          PHASE_UNKNOWN.  Note that clients should handle unexpected
+          values of this field gracefully. This can happen if new phases
+          are added but the client is still using an older version of
+          the API specification.  Since 4.4.
+      last_phase_change:
+          The last time the phase changed.  This can be used to
+          determine how long the protocol has been in the current phase.
+          NB: This will not be set if the phase is PHASE_UNKNOWN.  Since
+          4.4.
+      can_pause:
+          Whether the protocol can be paused.  Not all protocols can be
+          paused, and cannot be paused in all phases.  Note that if this
+          is true and the phase is PHASE_PAUSING or PHASE_PAUSED,
+          pausing will not actually do anything.  Since 4.4.
+      can_trigger_mux_scan:
+          Whether a mux scan can be triggered for the protocol.  Since
+          4.4.
       start_time:
           When the protocol was started (UTC).
       script_end_time:
@@ -3090,10 +3481,36 @@ ProtocolRunInfo = _reflection.GeneratedProtocolMessageType('ProtocolRunInfo', (_
           Since 3.4
       meta_info:
           Meta-info about the protocol  Since 3.8
+      associated_post_processing_analysis:
+          List of scheduled post processing analysis tasks
+      pqc_result:
+          Platform QC result. Set by bream by calling
+          `set_platform_qc_result()`.  Possible to not be set (e.g. not
+          a pqc run)
   """,
   # @@protoc_insertion_point(class_scope:minknow_api.protocol.ProtocolRunInfo)
   })
 _sym_db.RegisterMessage(ProtocolRunInfo)
+
+FilteringInfo = _reflection.GeneratedProtocolMessageType('FilteringInfo', (_message.Message,), {
+
+  'PlatformQcFilter' : _reflection.GeneratedProtocolMessageType('PlatformQcFilter', (_message.Message,), {
+    'DESCRIPTOR' : _FILTERINGINFO_PLATFORMQCFILTER,
+    '__module__' : 'minknow_api.protocol_pb2'
+    # @@protoc_insertion_point(class_scope:minknow_api.protocol.FilteringInfo.PlatformQcFilter)
+    })
+  ,
+  'DESCRIPTOR' : _FILTERINGINFO,
+  '__module__' : 'minknow_api.protocol_pb2'
+  ,
+  '__doc__': """ Intialising this message a filter like `pqc_filter` will imply to
+  restrict results to that type only.  Each filter type should also be
+  using wrapper types for each individual value, to allow for specific
+  filtering within each type""",
+  # @@protoc_insertion_point(class_scope:minknow_api.protocol.FilteringInfo)
+  })
+_sym_db.RegisterMessage(FilteringInfo)
+_sym_db.RegisterMessage(FilteringInfo.PlatformQcFilter)
 
 ListProtocolRunsRequest = _reflection.GeneratedProtocolMessageType('ListProtocolRunsRequest', (_message.Message,), {
   'DESCRIPTOR' : _LISTPROTOCOLRUNSREQUEST,
@@ -3276,6 +3693,26 @@ BeginPlatformQcResponse = _reflection.GeneratedProtocolMessageType('BeginPlatfor
   })
 _sym_db.RegisterMessage(BeginPlatformQcResponse)
 
+SetPlatformQcResultRequest = _reflection.GeneratedProtocolMessageType('SetPlatformQcResultRequest', (_message.Message,), {
+  'DESCRIPTOR' : _SETPLATFORMQCRESULTREQUEST,
+  '__module__' : 'minknow_api.protocol_pb2'
+  ,
+  '__doc__': """Attributes:
+      protocol_run_id:
+          The protocol_run_id that was given when the pqc run was
+          started
+  """,
+  # @@protoc_insertion_point(class_scope:minknow_api.protocol.SetPlatformQcResultRequest)
+  })
+_sym_db.RegisterMessage(SetPlatformQcResultRequest)
+
+SetPlatformQcResultResponse = _reflection.GeneratedProtocolMessageType('SetPlatformQcResultResponse', (_message.Message,), {
+  'DESCRIPTOR' : _SETPLATFORMQCRESULTRESPONSE,
+  '__module__' : 'minknow_api.protocol_pb2'
+  # @@protoc_insertion_point(class_scope:minknow_api.protocol.SetPlatformQcResultResponse)
+  })
+_sym_db.RegisterMessage(SetPlatformQcResultResponse)
+
 ProtocolIdentifierComponents = _reflection.GeneratedProtocolMessageType('ProtocolIdentifierComponents', (_message.Message,), {
   'DESCRIPTOR' : _PROTOCOLIDENTIFIERCOMPONENTS,
   '__module__' : 'minknow_api.protocol_pb2'
@@ -3317,82 +3754,6 @@ ListSettingsForProtocolRequest = _reflection.GeneratedProtocolMessageType('ListS
   # @@protoc_insertion_point(class_scope:minknow_api.protocol.ListSettingsForProtocolRequest)
   })
 _sym_db.RegisterMessage(ListSettingsForProtocolRequest)
-
-ProtocolSetting = _reflection.GeneratedProtocolMessageType('ProtocolSetting', (_message.Message,), {
-
-  'ProtocolSettingValue' : _reflection.GeneratedProtocolMessageType('ProtocolSettingValue', (_message.Message,), {
-    'DESCRIPTOR' : _PROTOCOLSETTING_PROTOCOLSETTINGVALUE,
-    '__module__' : 'minknow_api.protocol_pb2'
-    # @@protoc_insertion_point(class_scope:minknow_api.protocol.ProtocolSetting.ProtocolSettingValue)
-    })
-  ,
-
-  'Constraint' : _reflection.GeneratedProtocolMessageType('Constraint', (_message.Message,), {
-    'DESCRIPTOR' : _PROTOCOLSETTING_CONSTRAINT,
-    '__module__' : 'minknow_api.protocol_pb2'
-    # @@protoc_insertion_point(class_scope:minknow_api.protocol.ProtocolSetting.Constraint)
-    })
-  ,
-
-  'Dependency' : _reflection.GeneratedProtocolMessageType('Dependency', (_message.Message,), {
-    'DESCRIPTOR' : _PROTOCOLSETTING_DEPENDENCY,
-    '__module__' : 'minknow_api.protocol_pb2'
-    # @@protoc_insertion_point(class_scope:minknow_api.protocol.ProtocolSetting.Dependency)
-    })
-  ,
-  'DESCRIPTOR' : _PROTOCOLSETTING,
-  '__module__' : 'minknow_api.protocol_pb2'
-  ,
-  '__doc__': """Attributes:
-      identifier:
-          Identifier is the unique primary-key for referring to
-          protocol-settings, dependencies refer to other settings via
-          their identifier.
-      help:
-          Optional additional help text for a setting that may be shown
-          to the user if required.
-      constraints:
-          All constraints must be met if this setting is to be
-          considered valid
-      dependencies:
-          If any of the dependencies matches it's constraints, this
-          setting should adopt the level of visibility specified in
-          "visibility". If none of the dependencies match their
-          constraints, then "visibility" should be ignored and the
-          option should be hidden from the user.  Some dependencies may
-          be specified multiple times, but with mutually exclusive
-          constraints, for example if the setting controls data
-          compression level, where there is a compression_algorithm
-          setting specified by a string that can have the values "X",
-          "Y" or "None". The setting may be dependent on
-          compression_algorithm equals "X" or compression_algorithm
-          equals "Y". If the compression_algorithm is "None" then none
-          of the dependency constraints will be met and the setting
-          should be hidden. A typical arrangement of fields in this case
-          would be: Dependency {   identifier: "compression_algorithm",
-          Constraint {     condition : EQUAL,     value: "X"   } }
-          Dependency {   identifier: "compression_algorithm",
-          Constraint {     condition : EQUAL,     value: "Y"   } } When
-          a dependency is specified with multiple constraints they must
-          all be met before the dependency is considered satisfied, for
-          example some other setting may be dependent on
-          compression_level being in a range (0,10] :  Dependency {
-          identifier: "compression_level",   Constraint {     condition
-          : GT,     value: 0   },   Constraint {     condition : LT_EQ,
-          value: 10   } }
-      visibility:
-          If any of the dependencies match their constraints, this level
-          of visibility should be adopted. It should also be adopted if
-          no dependencies are specified.
-      choices:
-          when unit is CHOICE, this defines the acceptable choices.
-  """,
-  # @@protoc_insertion_point(class_scope:minknow_api.protocol.ProtocolSetting)
-  })
-_sym_db.RegisterMessage(ProtocolSetting)
-_sym_db.RegisterMessage(ProtocolSetting.ProtocolSettingValue)
-_sym_db.RegisterMessage(ProtocolSetting.Constraint)
-_sym_db.RegisterMessage(ProtocolSetting.Dependency)
 
 ListSettingsForProtocolResponse = _reflection.GeneratedProtocolMessageType('ListSettingsForProtocolResponse', (_message.Message,), {
 
@@ -3442,6 +3803,95 @@ _sym_db.RegisterMessage(ListSettingsForProtocolResponse.RunOptions)
 _sym_db.RegisterMessage(ListSettingsForProtocolResponse.Basecalling)
 _sym_db.RegisterMessage(ListSettingsForProtocolResponse.Output)
 
+AssociatePostProcessingAnalysisRequest = _reflection.GeneratedProtocolMessageType('AssociatePostProcessingAnalysisRequest', (_message.Message,), {
+  'DESCRIPTOR' : _ASSOCIATEPOSTPROCESSINGANALYSISREQUEST,
+  '__module__' : 'minknow_api.protocol_pb2'
+  ,
+  '__doc__': """Attributes:
+      run_id:
+          Protocol id to associate analysis with:
+  """,
+  # @@protoc_insertion_point(class_scope:minknow_api.protocol.AssociatePostProcessingAnalysisRequest)
+  })
+_sym_db.RegisterMessage(AssociatePostProcessingAnalysisRequest)
+
+AssociatePostProcessingAnalysisResponse = _reflection.GeneratedProtocolMessageType('AssociatePostProcessingAnalysisResponse', (_message.Message,), {
+  'DESCRIPTOR' : _ASSOCIATEPOSTPROCESSINGANALYSISRESPONSE,
+  '__module__' : 'minknow_api.protocol_pb2'
+  ,
+  '__doc__': """Attributes:
+      id:
+          Id of the basecaller.proto post processing task that was
+          triggered, if the post processing analysis was executed
+          immediately (protocol was finished).
+  """,
+  # @@protoc_insertion_point(class_scope:minknow_api.protocol.AssociatePostProcessingAnalysisResponse)
+  })
+_sym_db.RegisterMessage(AssociatePostProcessingAnalysisResponse)
+
+ClearProtocolHistoryDataRequest = _reflection.GeneratedProtocolMessageType('ClearProtocolHistoryDataRequest', (_message.Message,), {
+  'DESCRIPTOR' : _CLEARPROTOCOLHISTORYDATAREQUEST,
+  '__module__' : 'minknow_api.protocol_pb2'
+  # @@protoc_insertion_point(class_scope:minknow_api.protocol.ClearProtocolHistoryDataRequest)
+  })
+_sym_db.RegisterMessage(ClearProtocolHistoryDataRequest)
+
+ClearProtocolHistoryDataResponse = _reflection.GeneratedProtocolMessageType('ClearProtocolHistoryDataResponse', (_message.Message,), {
+  'DESCRIPTOR' : _CLEARPROTOCOLHISTORYDATARESPONSE,
+  '__module__' : 'minknow_api.protocol_pb2'
+  # @@protoc_insertion_point(class_scope:minknow_api.protocol.ClearProtocolHistoryDataResponse)
+  })
+_sym_db.RegisterMessage(ClearProtocolHistoryDataResponse)
+
+ProtocolPhaseManagementRequest = _reflection.GeneratedProtocolMessageType('ProtocolPhaseManagementRequest', (_message.Message,), {
+
+  'Capabilities' : _reflection.GeneratedProtocolMessageType('Capabilities', (_message.Message,), {
+    'DESCRIPTOR' : _PROTOCOLPHASEMANAGEMENTREQUEST_CAPABILITIES,
+    '__module__' : 'minknow_api.protocol_pb2'
+    ,
+    '__doc__': """Attributes:
+        can_pause:
+            Indicate that the protocol will respond to pause and resume
+            requests.
+        can_trigger_mux_scan:
+            Indicate that the protocol will respond to mux scan requests.
+    """,
+    # @@protoc_insertion_point(class_scope:minknow_api.protocol.ProtocolPhaseManagementRequest.Capabilities)
+    })
+  ,
+  'DESCRIPTOR' : _PROTOCOLPHASEMANAGEMENTREQUEST,
+  '__module__' : 'minknow_api.protocol_pb2'
+  ,
+  '__doc__': """Attributes:
+      set_capabilities:
+          Update the set of capabilities (messages that will be
+          responded to by the protocol).
+      phase:
+          Update the protocol phase.  Leave empty (ie: PHASE_UNKNOWN) to
+          keep the previous phase.
+  """,
+  # @@protoc_insertion_point(class_scope:minknow_api.protocol.ProtocolPhaseManagementRequest)
+  })
+_sym_db.RegisterMessage(ProtocolPhaseManagementRequest)
+_sym_db.RegisterMessage(ProtocolPhaseManagementRequest.Capabilities)
+
+ProtocolPhaseManagementResponse = _reflection.GeneratedProtocolMessageType('ProtocolPhaseManagementResponse', (_message.Message,), {
+  'DESCRIPTOR' : _PROTOCOLPHASEMANAGEMENTRESPONSE,
+  '__module__' : 'minknow_api.protocol_pb2'
+  ,
+  '__doc__': """Attributes:
+      action:
+          Requests that the protocol changes phase.  The client should
+          never receive an action type (other than possibly ACTION_NONE)
+          that it has not explicitly opted into via the
+          `ProtocolPhaseManagementRequest.set_capabilities` field.  If
+          this is set to ACTION_NONE, the message should be ignored
+          (this is for future compatibility).
+  """,
+  # @@protoc_insertion_point(class_scope:minknow_api.protocol.ProtocolPhaseManagementResponse)
+  })
+_sym_db.RegisterMessage(ProtocolPhaseManagementResponse)
+
 
 DESCRIPTOR._options = None
 _STARTPROTOCOLREQUEST.fields_by_name['identifier']._options = None
@@ -3451,8 +3901,6 @@ _GETCONTEXTINFORESPONSE_CONTEXTINFOENTRY._options = None
 _SETCONTEXTINFOREQUEST_CONTEXTINFOENTRY._options = None
 _ADDEPI2MEWORKFLOWREQUEST.fields_by_name['run_id']._options = None
 _ADDEPI2MEWORKFLOWREQUEST.fields_by_name['epi2me_workflow']._options = None
-_PROTOCOLSETTING.fields_by_name['identifier']._options = None
-_PROTOCOLSETTING.fields_by_name['display_name']._options = None
 
 _PROTOCOLSERVICE = _descriptor.ServiceDescriptor(
   name='ProtocolService',
@@ -3461,8 +3909,8 @@ _PROTOCOLSERVICE = _descriptor.ServiceDescriptor(
   index=0,
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_start=9882,
-  serialized_end=11959,
+  serialized_start=10748,
+  serialized_end=13770,
   methods=[
   _descriptor.MethodDescriptor(
     name='start_protocol',
@@ -3485,9 +3933,39 @@ _PROTOCOLSERVICE = _descriptor.ServiceDescriptor(
     create_key=_descriptor._internal_create_key,
   ),
   _descriptor.MethodDescriptor(
+    name='pause_protocol',
+    full_name='minknow_api.protocol.ProtocolService.pause_protocol',
+    index=2,
+    containing_service=None,
+    input_type=_PAUSEPROTOCOLREQUEST,
+    output_type=_PAUSEPROTOCOLRESPONSE,
+    serialized_options=b'\220\002\002',
+    create_key=_descriptor._internal_create_key,
+  ),
+  _descriptor.MethodDescriptor(
+    name='resume_protocol',
+    full_name='minknow_api.protocol.ProtocolService.resume_protocol',
+    index=3,
+    containing_service=None,
+    input_type=_RESUMEPROTOCOLREQUEST,
+    output_type=_RESUMEPROTOCOLRESPONSE,
+    serialized_options=b'\220\002\002',
+    create_key=_descriptor._internal_create_key,
+  ),
+  _descriptor.MethodDescriptor(
+    name='trigger_mux_scan',
+    full_name='minknow_api.protocol.ProtocolService.trigger_mux_scan',
+    index=4,
+    containing_service=None,
+    input_type=_TRIGGERMUXSCANREQUEST,
+    output_type=_TRIGGERMUXSCANRESPONSE,
+    serialized_options=b'\220\002\002',
+    create_key=_descriptor._internal_create_key,
+  ),
+  _descriptor.MethodDescriptor(
     name='wait_for_finished',
     full_name='minknow_api.protocol.ProtocolService.wait_for_finished',
-    index=2,
+    index=5,
     containing_service=None,
     input_type=_WAITFORFINISHEDREQUEST,
     output_type=_PROTOCOLRUNINFO,
@@ -3497,7 +3975,7 @@ _PROTOCOLSERVICE = _descriptor.ServiceDescriptor(
   _descriptor.MethodDescriptor(
     name='get_run_info',
     full_name='minknow_api.protocol.ProtocolService.get_run_info',
-    index=3,
+    index=6,
     containing_service=None,
     input_type=_GETRUNINFOREQUEST,
     output_type=_PROTOCOLRUNINFO,
@@ -3507,7 +3985,7 @@ _PROTOCOLSERVICE = _descriptor.ServiceDescriptor(
   _descriptor.MethodDescriptor(
     name='list_protocol_runs',
     full_name='minknow_api.protocol.ProtocolService.list_protocol_runs',
-    index=4,
+    index=7,
     containing_service=None,
     input_type=_LISTPROTOCOLRUNSREQUEST,
     output_type=_LISTPROTOCOLRUNSRESPONSE,
@@ -3517,7 +3995,7 @@ _PROTOCOLSERVICE = _descriptor.ServiceDescriptor(
   _descriptor.MethodDescriptor(
     name='get_current_protocol_run',
     full_name='minknow_api.protocol.ProtocolService.get_current_protocol_run',
-    index=5,
+    index=8,
     containing_service=None,
     input_type=_GETCURRENTPROTOCOLRUNREQUEST,
     output_type=_PROTOCOLRUNINFO,
@@ -3527,7 +4005,7 @@ _PROTOCOLSERVICE = _descriptor.ServiceDescriptor(
   _descriptor.MethodDescriptor(
     name='watch_current_protocol_run',
     full_name='minknow_api.protocol.ProtocolService.watch_current_protocol_run',
-    index=6,
+    index=9,
     containing_service=None,
     input_type=_WATCHCURRENTPROTOCOLRUNREQUEST,
     output_type=_PROTOCOLRUNINFO,
@@ -3537,7 +4015,7 @@ _PROTOCOLSERVICE = _descriptor.ServiceDescriptor(
   _descriptor.MethodDescriptor(
     name='list_protocols',
     full_name='minknow_api.protocol.ProtocolService.list_protocols',
-    index=7,
+    index=10,
     containing_service=None,
     input_type=_LISTPROTOCOLSREQUEST,
     output_type=_LISTPROTOCOLSRESPONSE,
@@ -3547,7 +4025,7 @@ _PROTOCOLSERVICE = _descriptor.ServiceDescriptor(
   _descriptor.MethodDescriptor(
     name='get_context_info',
     full_name='minknow_api.protocol.ProtocolService.get_context_info',
-    index=8,
+    index=11,
     containing_service=None,
     input_type=_GETCONTEXTINFOREQUEST,
     output_type=_GETCONTEXTINFORESPONSE,
@@ -3557,7 +4035,7 @@ _PROTOCOLSERVICE = _descriptor.ServiceDescriptor(
   _descriptor.MethodDescriptor(
     name='set_context_info',
     full_name='minknow_api.protocol.ProtocolService.set_context_info',
-    index=9,
+    index=12,
     containing_service=None,
     input_type=_SETCONTEXTINFOREQUEST,
     output_type=_SETCONTEXTINFORESPONSE,
@@ -3567,7 +4045,7 @@ _PROTOCOLSERVICE = _descriptor.ServiceDescriptor(
   _descriptor.MethodDescriptor(
     name='get_protocol_purpose',
     full_name='minknow_api.protocol.ProtocolService.get_protocol_purpose',
-    index=10,
+    index=13,
     containing_service=None,
     input_type=_GETPROTOCOLPURPOSEREQUEST,
     output_type=_GETPROTOCOLPURPOSERESPONSE,
@@ -3577,7 +4055,7 @@ _PROTOCOLSERVICE = _descriptor.ServiceDescriptor(
   _descriptor.MethodDescriptor(
     name='set_protocol_purpose',
     full_name='minknow_api.protocol.ProtocolService.set_protocol_purpose',
-    index=11,
+    index=14,
     containing_service=None,
     input_type=_SETPROTOCOLPURPOSEREQUEST,
     output_type=_SETPROTOCOLPURPOSERESPONSE,
@@ -3587,7 +4065,7 @@ _PROTOCOLSERVICE = _descriptor.ServiceDescriptor(
   _descriptor.MethodDescriptor(
     name='add_epi2me_workflow',
     full_name='minknow_api.protocol.ProtocolService.add_epi2me_workflow',
-    index=12,
+    index=15,
     containing_service=None,
     input_type=_ADDEPI2MEWORKFLOWREQUEST,
     output_type=_ADDEPI2MEWORKFLOWRESPONSE,
@@ -3597,7 +4075,7 @@ _PROTOCOLSERVICE = _descriptor.ServiceDescriptor(
   _descriptor.MethodDescriptor(
     name='list_protocol_group_ids',
     full_name='minknow_api.protocol.ProtocolService.list_protocol_group_ids',
-    index=13,
+    index=16,
     containing_service=None,
     input_type=_LISTPROTOCOLGROUPIDSREQUEST,
     output_type=_LISTPROTOCOLGROUPIDSRESPONSE,
@@ -3607,7 +4085,7 @@ _PROTOCOLSERVICE = _descriptor.ServiceDescriptor(
   _descriptor.MethodDescriptor(
     name='begin_hardware_check',
     full_name='minknow_api.protocol.ProtocolService.begin_hardware_check',
-    index=14,
+    index=17,
     containing_service=None,
     input_type=_BEGINHARDWARECHECKREQUEST,
     output_type=_BEGINHARDWARECHECKRESPONSE,
@@ -3617,7 +4095,7 @@ _PROTOCOLSERVICE = _descriptor.ServiceDescriptor(
   _descriptor.MethodDescriptor(
     name='begin_platform_qc',
     full_name='minknow_api.protocol.ProtocolService.begin_platform_qc',
-    index=15,
+    index=18,
     containing_service=None,
     input_type=_BEGINPLATFORMQCREQUEST,
     output_type=_BEGINPLATFORMQCRESPONSE,
@@ -3625,13 +4103,53 @@ _PROTOCOLSERVICE = _descriptor.ServiceDescriptor(
     create_key=_descriptor._internal_create_key,
   ),
   _descriptor.MethodDescriptor(
+    name='set_platform_qc_result',
+    full_name='minknow_api.protocol.ProtocolService.set_platform_qc_result',
+    index=19,
+    containing_service=None,
+    input_type=_SETPLATFORMQCRESULTREQUEST,
+    output_type=_SETPLATFORMQCRESULTRESPONSE,
+    serialized_options=b'\220\002\002',
+    create_key=_descriptor._internal_create_key,
+  ),
+  _descriptor.MethodDescriptor(
     name='list_settings_for_protocol',
     full_name='minknow_api.protocol.ProtocolService.list_settings_for_protocol',
-    index=16,
+    index=20,
     containing_service=None,
     input_type=_LISTSETTINGSFORPROTOCOLREQUEST,
     output_type=_LISTSETTINGSFORPROTOCOLRESPONSE,
     serialized_options=b'\220\002\001\230\265\030\001',
+    create_key=_descriptor._internal_create_key,
+  ),
+  _descriptor.MethodDescriptor(
+    name='associate_post_processing_analysis_for_protocol',
+    full_name='minknow_api.protocol.ProtocolService.associate_post_processing_analysis_for_protocol',
+    index=21,
+    containing_service=None,
+    input_type=_ASSOCIATEPOSTPROCESSINGANALYSISREQUEST,
+    output_type=_ASSOCIATEPOSTPROCESSINGANALYSISRESPONSE,
+    serialized_options=None,
+    create_key=_descriptor._internal_create_key,
+  ),
+  _descriptor.MethodDescriptor(
+    name='clear_protocol_history_data',
+    full_name='minknow_api.protocol.ProtocolService.clear_protocol_history_data',
+    index=22,
+    containing_service=None,
+    input_type=_CLEARPROTOCOLHISTORYDATAREQUEST,
+    output_type=_CLEARPROTOCOLHISTORYDATARESPONSE,
+    serialized_options=None,
+    create_key=_descriptor._internal_create_key,
+  ),
+  _descriptor.MethodDescriptor(
+    name='protocol_phase_management',
+    full_name='minknow_api.protocol.ProtocolService.protocol_phase_management',
+    index=23,
+    containing_service=None,
+    input_type=_PROTOCOLPHASEMANAGEMENTREQUEST,
+    output_type=_PROTOCOLPHASEMANAGEMENTRESPONSE,
+    serialized_options=None,
     create_key=_descriptor._internal_create_key,
   ),
 ])

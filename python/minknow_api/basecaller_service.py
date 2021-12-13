@@ -17,6 +17,9 @@ __all__ = [
     "StartBarcodingResponse",
     "StartAlignmentRequest",
     "StartAlignmentResponse",
+    "StartPostProcessingProtocolRequest",
+    "StartRequest",
+    "StartPostProcessingProtocolResponse",
     "CancelRequest",
     "CancelResponse",
     "RunInfo",
@@ -26,6 +29,13 @@ __all__ = [
     "WatchResponse",
     "MakeAlignmentIndexRequest",
     "MakeAlignmentIndexResponse",
+    "ListPostProcessingProtocolsRequest",
+    "PostProcessingProtocolInfo",
+    "ListPostProcessingProtocolsResponse",
+    "ListSettingsForPostProcessingProtocolRequest",
+    "ListSettingsForPostProcessingProtocolResponse",
+    "UpdateProgressRequest",
+    "UpdateProgressResponse",
     "State",
     "STATE_RUNNING",
     "STATE_SUCCESS",
@@ -285,6 +295,84 @@ class Basecaller(object):
             raise ArgumentError("Unexpected keyword arguments to start_barcoding: '{}'".format(", ".join(unused_args)))
 
         return run_with_retry(self._stub.start_barcoding,
+                              _message, _timeout,
+                              [],
+                              "minknow_api.basecaller.Basecaller")
+    def start_post_processing_protocol(self, _message=None, _timeout=None, **kwargs):
+        """Start an post processing analysis protocol.
+
+        Post processing protocols allow processing already generated sequencing files in some way, eg: running an
+        ARTIC workflow on some fastq files, or barcoding a set of fastq input files.
+
+        Since 4.4
+
+        
+
+        Args:
+            _message (minknow_api.basecaller_pb2.StartPostProcessingProtocolRequest, optional): The message to send.
+                This can be passed instead of the keyword arguments.
+            _timeout (float, optional): The call will be cancelled after this number of seconds
+                if it has not been completed.
+            identifier (str, optional): identifier value from a protocol returned from list_post_processing_protocols.
+            sequencing_protocol_run_id (str, optional): Optionally specify a sequencing protocol that is linked with this analysis.
+            input_fast5_directory (str, optional): Input directories for the protocol (omit those which the protocol doesnt require).
+            input_fastq_directory (str, optional): 
+            input_bam_directory (str, optional): 
+            output_directory (str, optional): Output directory where the analysed output should be written.
+            setting_values (minknow_api.basecaller_pb2.StartPostProcessingProtocolRequest.SettingValuesEntry, optional): Configured values for display settings for the protocol (see basecaller.list_settings_for_protocol)
+                keys missing from the original protocol will cause errors.
+
+        Returns:
+            minknow_api.basecaller_pb2.StartPostProcessingProtocolResponse
+
+        Note that the returned messages are actually wrapped in a type that collapses
+        submessages for fields marked with ``[rpc_unwrap]``.
+        """
+        if _message is not None:
+            if isinstance(_message, MessageWrapper):
+                _message = _message._message
+            return run_with_retry(self._stub.start_post_processing_protocol,
+                                  _message, _timeout,
+                                  [],
+                                  "minknow_api.basecaller.Basecaller")
+
+        unused_args = set(kwargs.keys())
+
+        _message = StartPostProcessingProtocolRequest()
+
+        if "identifier" in kwargs:
+            unused_args.remove("identifier")
+            _message.identifier = kwargs['identifier']
+
+        if "sequencing_protocol_run_id" in kwargs:
+            unused_args.remove("sequencing_protocol_run_id")
+            _message.sequencing_protocol_run_id = kwargs['sequencing_protocol_run_id']
+
+        if "input_fast5_directory" in kwargs:
+            unused_args.remove("input_fast5_directory")
+            _message.input_fast5_directory = kwargs['input_fast5_directory']
+
+        if "input_fastq_directory" in kwargs:
+            unused_args.remove("input_fastq_directory")
+            _message.input_fastq_directory = kwargs['input_fastq_directory']
+
+        if "input_bam_directory" in kwargs:
+            unused_args.remove("input_bam_directory")
+            _message.input_bam_directory = kwargs['input_bam_directory']
+
+        if "output_directory" in kwargs:
+            unused_args.remove("output_directory")
+            _message.output_directory = kwargs['output_directory']
+
+        if "setting_values" in kwargs:
+            unused_args.remove("setting_values")
+            for key, value in kwargs['setting_values'].items():
+                _message.setting_values[key].CopyFrom(value)
+
+        if len(unused_args) > 0:
+            raise ArgumentError("Unexpected keyword arguments to start_post_processing_protocol: '{}'".format(", ".join(unused_args)))
+
+        return run_with_retry(self._stub.start_post_processing_protocol,
                               _message, _timeout,
                               [],
                               "minknow_api.basecaller.Basecaller")
@@ -573,6 +661,139 @@ class Basecaller(object):
             raise ArgumentError("Unexpected keyword arguments to make_alignment_index: '{}'".format(", ".join(unused_args)))
 
         return run_with_retry(self._stub.make_alignment_index,
+                              _message, _timeout,
+                              [],
+                              "minknow_api.basecaller.Basecaller")
+    def list_post_processing_protocols(self, _message=None, _timeout=None, **kwargs):
+        """Gives back a list that contains info about each possible post processing protocol script minknow is aware of.
+        This will most likely be used to retrieve a suitable post processing protocol script that can be passed on to `start_post_processing_protocol`
+
+        Since 4.4
+
+        This RPC is idempotent. It may change the state of the system, but if the requested
+        change has already happened, it will not fail because of this, make any additional
+        changes or return a different value.
+
+        Args:
+            _message (minknow_api.basecaller_pb2.ListPostProcessingProtocolsRequest, optional): The message to send.
+                This can be passed instead of the keyword arguments.
+            _timeout (float, optional): The call will be cancelled after this number of seconds
+                if it has not been completed.
+
+        Returns:
+            minknow_api.basecaller_pb2.ListPostProcessingProtocolsResponse
+
+        Note that the returned messages are actually wrapped in a type that collapses
+        submessages for fields marked with ``[rpc_unwrap]``.
+        """
+        if _message is not None:
+            if isinstance(_message, MessageWrapper):
+                _message = _message._message
+            return run_with_retry(self._stub.list_post_processing_protocols,
+                                  _message, _timeout,
+                                  [],
+                                  "minknow_api.basecaller.Basecaller")
+
+        unused_args = set(kwargs.keys())
+
+        _message = ListPostProcessingProtocolsRequest()
+
+        if len(unused_args) > 0:
+            raise ArgumentError("Unexpected keyword arguments to list_post_processing_protocols: '{}'".format(", ".join(unused_args)))
+
+        return run_with_retry(self._stub.list_post_processing_protocols,
+                              _message, _timeout,
+                              [],
+                              "minknow_api.basecaller.Basecaller")
+    def list_settings_for_post_processing_protocol(self, _message=None, _timeout=None, **kwargs):
+        """Find available display settings for an post processing protocol
+
+        Since 4.4
+
+        This RPC has no side effects. Calling it will have no effect on the state of the
+        system. It is safe to call repeatedly, or to retry on failure, although there is no
+        guarantee it will return the same information each time.
+
+        Args:
+            _message (minknow_api.basecaller_pb2.ListSettingsForPostProcessingProtocolRequest, optional): The message to send.
+                This can be passed instead of the keyword arguments.
+            _timeout (float, optional): The call will be cancelled after this number of seconds
+                if it has not been completed.
+            identifier (str, optional): specify the protocol with a string containing all the protocol's identifying components, eg:
+                "SYSTEM:post_processing/artic"
+
+        Returns:
+            minknow_api.basecaller_pb2.ListSettingsForPostProcessingProtocolResponse
+
+        Note that the returned messages are actually wrapped in a type that collapses
+        submessages for fields marked with ``[rpc_unwrap]``.
+        """
+        if _message is not None:
+            if isinstance(_message, MessageWrapper):
+                _message = _message._message
+            return run_with_retry(self._stub.list_settings_for_post_processing_protocol,
+                                  _message, _timeout,
+                                  [],
+                                  "minknow_api.basecaller.Basecaller")
+
+        unused_args = set(kwargs.keys())
+
+        _message = ListSettingsForPostProcessingProtocolRequest()
+
+        if "identifier" in kwargs:
+            unused_args.remove("identifier")
+            _message.identifier = kwargs['identifier']
+
+        if len(unused_args) > 0:
+            raise ArgumentError("Unexpected keyword arguments to list_settings_for_post_processing_protocol: '{}'".format(", ".join(unused_args)))
+
+        return run_with_retry(self._stub.list_settings_for_post_processing_protocol,
+                              _message, _timeout,
+                              [],
+                              "minknow_api.basecaller.Basecaller")
+    def update_post_processing_protocol_progress(self, _message=None, _timeout=None, **kwargs):
+        """Set the progress of the currently executing post processing protocol (this API expects a run_id as more than one can be active).
+
+        
+
+        Args:
+            _message (minknow_api.basecaller_pb2.UpdateProgressRequest, optional): The message to send.
+                This can be passed instead of the keyword arguments.
+            _timeout (float, optional): The call will be cancelled after this number of seconds
+                if it has not been completed.
+            id (str, optional): id of the protocol to update (stored in environment variable for python process)
+            progress (float, optional): Progress indicator, 0-1.
+
+        Returns:
+            minknow_api.basecaller_pb2.UpdateProgressResponse
+
+        Note that the returned messages are actually wrapped in a type that collapses
+        submessages for fields marked with ``[rpc_unwrap]``.
+        """
+        if _message is not None:
+            if isinstance(_message, MessageWrapper):
+                _message = _message._message
+            return run_with_retry(self._stub.update_post_processing_protocol_progress,
+                                  _message, _timeout,
+                                  [],
+                                  "minknow_api.basecaller.Basecaller")
+
+        unused_args = set(kwargs.keys())
+
+        _message = UpdateProgressRequest()
+
+        if "id" in kwargs:
+            unused_args.remove("id")
+            _message.id = kwargs['id']
+
+        if "progress" in kwargs:
+            unused_args.remove("progress")
+            _message.progress = kwargs['progress']
+
+        if len(unused_args) > 0:
+            raise ArgumentError("Unexpected keyword arguments to update_post_processing_protocol_progress: '{}'".format(", ".join(unused_args)))
+
+        return run_with_retry(self._stub.update_post_processing_protocol_progress,
                               _message, _timeout,
                               [],
                               "minknow_api.basecaller.Basecaller")

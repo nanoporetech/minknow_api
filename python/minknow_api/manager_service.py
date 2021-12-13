@@ -48,6 +48,26 @@ __all__ = [
     "RemoveSimulatedDeviceResponse",
     "LocalAuthenticationTokenPathRequest",
     "LocalAuthenticationTokenPathResponse",
+    "GetAlignmentReferenceInformationRequest",
+    "GetAlignmentReferenceInformationResponse",
+    "AssociationDeviceCodeRequest",
+    "AssociationDeviceCodeResponse",
+    "ApplyOfflineAssociationUnlockCodeRequest",
+    "ApplyOfflineAssociationUnlockCodeResponse",
+    "ListDeveloperApiTokensRequest",
+    "ListDeveloperApiTokensResponse",
+    "CreateDeveloperApiTokenRequest",
+    "CreateDeveloperApiTokenResponse",
+    "RevokeDeveloperApiTokenRequest",
+    "RevokeDeveloperApiTokensResponse",
+    "FindProtocolsRequest",
+    "FindProtocolsResponse",
+    "ExperimentType",
+    "SEQUENCING",
+    "CONTROL",
+    "CUSTOM",
+    "ALL_EXCEPT_HIDDEN",
+    "ALL_INCLUDING_HIDDEN",
 ]
 
 def run_with_retry(method, message, timeout, unwraps, full_name):
@@ -76,6 +96,8 @@ class ManagerService(object):
         self._pb = manager_pb2
     def describe_host(self, _message=None, _timeout=None, **kwargs):
         """Get information about the machine running MinKNOW.
+
+        This RPC can be called without providing any authentication tokens.
 
         Since 3.6
 
@@ -121,6 +143,8 @@ class ManagerService(object):
         in case there are too many positions to fit into a single response, but normally there should
         only be a single response.
 
+        This RPC can be called without providing any authentication tokens.
+
         Since 3.6
 
         This RPC has no side effects. Calling it will have no effect on the state of the
@@ -165,6 +189,8 @@ class ManagerService(object):
 
         This is like flow_cell_positions, but updates are streamed as positions come and go (eg:
         MinIONs being plugged or unplugged), or their status otherwise changes.
+
+        This RPC can be called without providing any authentication tokens.
 
         Since 3.6
 
@@ -263,6 +289,8 @@ class ManagerService(object):
         This is the service that implements the minknow_api.basecaller interface for basecalling
         reads files.
 
+        This RPC can be called without providing any authentication tokens.
+
         Since 3.5
 
         This RPC has no side effects. Calling it will have no effect on the state of the
@@ -347,6 +375,8 @@ class ManagerService(object):
         - Configuration version (i.e. Wanda version)
         - Distribution version
         - Guppy version
+
+        This RPC can be called without providing any authentication tokens.
 
         See also: instance.get_version_info which provides some similar information on a per instance basis.
         Since 3.3
@@ -1020,6 +1050,8 @@ class ManagerService(object):
         "local-auth" to "30fe5214-a7c5-4cb3-b521-b1ec8a49592a". At around 14:26:12, the client should
         re-read the file and update the metadata field with the newly-read value.
 
+        This RPC can be called without providing any authentication tokens.
+
         Since 4.2
 
         This RPC has no side effects. Calling it will have no effect on the state of the
@@ -1054,6 +1086,394 @@ class ManagerService(object):
             raise ArgumentError("Unexpected keyword arguments to local_authentication_token_path: '{}'".format(", ".join(unused_args)))
 
         return run_with_retry(self._stub.local_authentication_token_path,
+                              _message, _timeout,
+                              [],
+                              "minknow_api.manager.ManagerService")
+    def get_alignment_reference_information(self, _message=None, _timeout=None, **kwargs):
+        """Query information about a reference file.
+
+        Reference file types are picked up by extension:
+        for fasta: .fasta, .fna, .ffn, .faa, .frn
+        for mmi: .mmi
+
+        Since 4.4
+
+        This RPC has no side effects. Calling it will have no effect on the state of the
+        system. It is safe to call repeatedly, or to retry on failure, although there is no
+        guarantee it will return the same information each time.
+
+        Args:
+            _message (minknow_api.manager_pb2.GetAlignmentReferenceInformationRequest, optional): The message to send.
+                This can be passed instead of the keyword arguments.
+            _timeout (float, optional): The call will be cancelled after this number of seconds
+                if it has not been completed.
+            path (str, optional): The full path of the alignment reference.
+
+                Should be a .fasta, or .mmi file.
+
+        Returns:
+            minknow_api.manager_pb2.GetAlignmentReferenceInformationResponse
+
+        Note that the returned messages are actually wrapped in a type that collapses
+        submessages for fields marked with ``[rpc_unwrap]``.
+        """
+        if _message is not None:
+            if isinstance(_message, MessageWrapper):
+                _message = _message._message
+            return run_with_retry(self._stub.get_alignment_reference_information,
+                                  _message, _timeout,
+                                  [],
+                                  "minknow_api.manager.ManagerService")
+
+        unused_args = set(kwargs.keys())
+
+        _message = GetAlignmentReferenceInformationRequest()
+
+        if "path" in kwargs:
+            unused_args.remove("path")
+            _message.path = kwargs['path']
+
+        if len(unused_args) > 0:
+            raise ArgumentError("Unexpected keyword arguments to get_alignment_reference_information: '{}'".format(", ".join(unused_args)))
+
+        return run_with_retry(self._stub.get_alignment_reference_information,
+                              _message, _timeout,
+                              [],
+                              "minknow_api.manager.ManagerService")
+    def association_device_code(self, _message=None, _timeout=None, **kwargs):
+        """Get the device code/key for association.
+
+        This can be used to either get the code that the user must enter into the customer support
+        portal to associate the device with their account, or the key used for online association.
+
+        Errors:
+            INVALID_ARGUMENT: The requested flow cell position does not exist.
+
+        Since 4.4
+
+        This RPC has no side effects. Calling it will have no effect on the state of the
+        system. It is safe to call repeatedly, or to retry on failure, although there is no
+        guarantee it will return the same information each time.
+
+        Args:
+            _message (minknow_api.manager_pb2.AssociationDeviceCodeRequest, optional): The message to send.
+                This can be passed instead of the keyword arguments.
+            _timeout (float, optional): The call will be cancelled after this number of seconds
+                if it has not been completed.
+            position_name (str, optional): The flow cell position to get the association code/key for.
+
+                If this is omitted, the code/key for the sequencing device as a whole is returned.
+
+                Note that this cannot be omitted if MinKNOW is installed on a PC (as opposed to a sequencing
+                device). It should be omitted if (and only if) the data returned from `describe_host` has
+                its ``needs_association`` field set to true.
+
+                Passing a integrated flow cell position will return the code/key for the whole sequencing
+                device.
+            offline (bool, optional): Get a code suitable for offline association rather than online association.
+
+                Set this to true if the user will manually enter the code into the customer portal to get an
+                unlock code. Set to false if the code will be used directly in the online association API.
+
+        Returns:
+            minknow_api.manager_pb2.AssociationDeviceCodeResponse
+
+        Note that the returned messages are actually wrapped in a type that collapses
+        submessages for fields marked with ``[rpc_unwrap]``.
+        """
+        if _message is not None:
+            if isinstance(_message, MessageWrapper):
+                _message = _message._message
+            return run_with_retry(self._stub.association_device_code,
+                                  _message, _timeout,
+                                  [],
+                                  "minknow_api.manager.ManagerService")
+
+        unused_args = set(kwargs.keys())
+
+        _message = AssociationDeviceCodeRequest()
+
+        if "position_name" in kwargs:
+            unused_args.remove("position_name")
+            _message.position_name = kwargs['position_name']
+
+        if "offline" in kwargs:
+            unused_args.remove("offline")
+            _message.offline = kwargs['offline']
+
+        if len(unused_args) > 0:
+            raise ArgumentError("Unexpected keyword arguments to association_device_code: '{}'".format(", ".join(unused_args)))
+
+        return run_with_retry(self._stub.association_device_code,
+                              _message, _timeout,
+                              [],
+                              "minknow_api.manager.ManagerService")
+    def apply_offline_association_unlock_code(self, _message=None, _timeout=None, **kwargs):
+        """Apply the unlock code for offline association.
+
+        This is the code that the user receives from the customer support portal after entering the
+        device code for this device (see `offline_association_device_code`).
+
+        This is only required if either `describe_host` indicates that the device as a whole needs
+        association, or `flow_cell_positions` indicates that a particular positions needs it.
+
+        Errors:
+            INVALID_ARGUMENT: The requested flow cell position does not exist, or no unlock code
+                was provided.
+
+        Note that you will need to check the result to see if the association was successful. Calling
+        this on an already-associated device with a valid unlock code will succeed, but have no
+        effect.
+
+        Since 4.4
+
+        This RPC is idempotent. It may change the state of the system, but if the requested
+        change has already happened, it will not fail because of this, make any additional
+        changes or return a different value.
+
+        Args:
+            _message (minknow_api.manager_pb2.ApplyOfflineAssociationUnlockCodeRequest, optional): The message to send.
+                This can be passed instead of the keyword arguments.
+            _timeout (float, optional): The call will be cancelled after this number of seconds
+                if it has not been completed.
+            position_name (str, optional): The flow cell position to unlock.
+
+                This should be set (or not set) to match the corresponding call to
+                `offline_association_device_code`.
+            unlock_code (str, optional): The unlock code provided by the user.
+
+                This the code given by the customer support portal when the corresponding device code is
+                entered into the device association page.
+
+        Returns:
+            minknow_api.manager_pb2.ApplyOfflineAssociationUnlockCodeResponse
+
+        Note that the returned messages are actually wrapped in a type that collapses
+        submessages for fields marked with ``[rpc_unwrap]``.
+        """
+        if _message is not None:
+            if isinstance(_message, MessageWrapper):
+                _message = _message._message
+            return run_with_retry(self._stub.apply_offline_association_unlock_code,
+                                  _message, _timeout,
+                                  [],
+                                  "minknow_api.manager.ManagerService")
+
+        unused_args = set(kwargs.keys())
+
+        _message = ApplyOfflineAssociationUnlockCodeRequest()
+
+        if "position_name" in kwargs:
+            unused_args.remove("position_name")
+            _message.position_name = kwargs['position_name']
+
+        if "unlock_code" in kwargs:
+            unused_args.remove("unlock_code")
+            _message.unlock_code = kwargs['unlock_code']
+
+        if len(unused_args) > 0:
+            raise ArgumentError("Unexpected keyword arguments to apply_offline_association_unlock_code: '{}'".format(", ".join(unused_args)))
+
+        return run_with_retry(self._stub.apply_offline_association_unlock_code,
+                              _message, _timeout,
+                              [],
+                              "minknow_api.manager.ManagerService")
+    def list_developer_api_tokens(self, _message=None, _timeout=None, **kwargs):
+        """List all developer API tokens.
+
+        List all developer tokens, and their expiry times. Note this does not return the actual token value - this is only available at creation time.
+
+        Since 4.4
+
+        This RPC is idempotent. It may change the state of the system, but if the requested
+        change has already happened, it will not fail because of this, make any additional
+        changes or return a different value.
+
+        Args:
+            _message (minknow_api.manager_pb2.ListDeveloperApiTokensRequest, optional): The message to send.
+                This can be passed instead of the keyword arguments.
+            _timeout (float, optional): The call will be cancelled after this number of seconds
+                if it has not been completed.
+
+        Returns:
+            minknow_api.manager_pb2.ListDeveloperApiTokensResponse
+
+        Note that the returned messages are actually wrapped in a type that collapses
+        submessages for fields marked with ``[rpc_unwrap]``.
+        """
+        if _message is not None:
+            if isinstance(_message, MessageWrapper):
+                _message = _message._message
+            return run_with_retry(self._stub.list_developer_api_tokens,
+                                  _message, _timeout,
+                                  [],
+                                  "minknow_api.manager.ManagerService")
+
+        unused_args = set(kwargs.keys())
+
+        _message = ListDeveloperApiTokensRequest()
+
+        if len(unused_args) > 0:
+            raise ArgumentError("Unexpected keyword arguments to list_developer_api_tokens: '{}'".format(", ".join(unused_args)))
+
+        return run_with_retry(self._stub.list_developer_api_tokens,
+                              _message, _timeout,
+                              [],
+                              "minknow_api.manager.ManagerService")
+    def create_developer_api_token(self, _message=None, _timeout=None, **kwargs):
+        """Create a new developer API token, with a user facing name, and optional expiry time.
+
+        The response contains the requested token, which will be valid until provided expiry time.
+
+        The token cannot be obtained a second time, once the CreateDeveloperApiTokenResponse is destroyed.
+
+        Since 4.4
+
+        
+
+        Args:
+            _message (minknow_api.manager_pb2.CreateDeveloperApiTokenRequest, optional): The message to send.
+                This can be passed instead of the keyword arguments.
+            _timeout (float, optional): The call will be cancelled after this number of seconds
+                if it has not been completed.
+            name (str, optional): User facing name describing the token.
+            expiry (google.protobuf.timestamp_pb2.Timestamp, optional): Optional expiry time for the token.
+
+        Returns:
+            minknow_api.manager_pb2.CreateDeveloperApiTokenResponse
+
+        Note that the returned messages are actually wrapped in a type that collapses
+        submessages for fields marked with ``[rpc_unwrap]``.
+        """
+        if _message is not None:
+            if isinstance(_message, MessageWrapper):
+                _message = _message._message
+            return run_with_retry(self._stub.create_developer_api_token,
+                                  _message, _timeout,
+                                  [],
+                                  "minknow_api.manager.ManagerService")
+
+        unused_args = set(kwargs.keys())
+
+        _message = CreateDeveloperApiTokenRequest()
+
+        if "name" in kwargs:
+            unused_args.remove("name")
+            _message.name = kwargs['name']
+
+        if "expiry" in kwargs:
+            unused_args.remove("expiry")
+            _message.expiry.CopyFrom(kwargs['expiry'])
+
+        if len(unused_args) > 0:
+            raise ArgumentError("Unexpected keyword arguments to create_developer_api_token: '{}'".format(", ".join(unused_args)))
+
+        return run_with_retry(self._stub.create_developer_api_token,
+                              _message, _timeout,
+                              [],
+                              "minknow_api.manager.ManagerService")
+    def revoke_developer_api_token(self, _message=None, _timeout=None, **kwargs):
+        """Remove a developer api token.
+
+        Since 4.4
+
+        
+
+        Args:
+            _message (minknow_api.manager_pb2.RevokeDeveloperApiTokenRequest, optional): The message to send.
+                This can be passed instead of the keyword arguments.
+            _timeout (float, optional): The call will be cancelled after this number of seconds
+                if it has not been completed.
+            id (str, optional): The id passed back from [CreateDeveloperApiTokenRequest] or [DeveloperApiToken].
+
+        Returns:
+            minknow_api.manager_pb2.RevokeDeveloperApiTokensResponse
+
+        Note that the returned messages are actually wrapped in a type that collapses
+        submessages for fields marked with ``[rpc_unwrap]``.
+        """
+        if _message is not None:
+            if isinstance(_message, MessageWrapper):
+                _message = _message._message
+            return run_with_retry(self._stub.revoke_developer_api_token,
+                                  _message, _timeout,
+                                  [],
+                                  "minknow_api.manager.ManagerService")
+
+        unused_args = set(kwargs.keys())
+
+        _message = RevokeDeveloperApiTokenRequest()
+
+        if "id" in kwargs:
+            unused_args.remove("id")
+            _message.id = kwargs['id']
+
+        if len(unused_args) > 0:
+            raise ArgumentError("Unexpected keyword arguments to revoke_developer_api_token: '{}'".format(", ".join(unused_args)))
+
+        return run_with_retry(self._stub.revoke_developer_api_token,
+                              _message, _timeout,
+                              [],
+                              "minknow_api.manager.ManagerService")
+    def find_protocols(self, _message=None, _timeout=None, **kwargs):
+        """Find protocols which can be run based on the current device + flowcell.
+
+        Throws an error if there is no flow cell connected.
+
+        Since 4.5
+
+        
+
+        Note this API is experimental - it may be changed, revised or removed in future minor versions.
+
+        Args:
+            _message (minknow_api.manager_pb2.FindProtocolsRequest, optional): The message to send.
+                This can be passed instead of the keyword arguments.
+            _timeout (float, optional): The call will be cancelled after this number of seconds
+                if it has not been completed.
+            flow_cell_product_code (str, optional): Find protocols that are compatible with this flow cell product code.
+
+                Set to empty string to find protocols matching all flow cell product codes.
+            sequencing_kit (str, optional): Limit to protocols that are compatible with this sequencing kit.
+
+                Set to empty string to find protocols matching all kits.
+            experiment_type (minknow_api.manager_pb2.ExperimentType, optional): Limit response to certain protocol types.
+
+        Returns:
+            minknow_api.manager_pb2.FindProtocolsResponse
+
+        Note that the returned messages are actually wrapped in a type that collapses
+        submessages for fields marked with ``[rpc_unwrap]``.
+        """
+        print("Warning: Method ManagerService.find_protocols is experimental and may be changed, revised or removed in future minor versions.", file=sys.stderr)
+        if _message is not None:
+            if isinstance(_message, MessageWrapper):
+                _message = _message._message
+            return run_with_retry(self._stub.find_protocols,
+                                  _message, _timeout,
+                                  [],
+                                  "minknow_api.manager.ManagerService")
+
+        unused_args = set(kwargs.keys())
+
+        _message = FindProtocolsRequest()
+
+        if "flow_cell_product_code" in kwargs:
+            unused_args.remove("flow_cell_product_code")
+            _message.flow_cell_product_code = kwargs['flow_cell_product_code']
+
+        if "sequencing_kit" in kwargs:
+            unused_args.remove("sequencing_kit")
+            _message.sequencing_kit = kwargs['sequencing_kit']
+
+        if "experiment_type" in kwargs:
+            unused_args.remove("experiment_type")
+            _message.experiment_type = kwargs['experiment_type']
+
+        if len(unused_args) > 0:
+            raise ArgumentError("Unexpected keyword arguments to find_protocols: '{}'".format(", ".join(unused_args)))
+
+        return run_with_retry(self._stub.find_protocols,
                               _message, _timeout,
                               [],
                               "minknow_api.manager.ManagerService")

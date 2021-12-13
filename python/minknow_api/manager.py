@@ -13,6 +13,7 @@ usually constructing using methods on ``Manager``.
 """
 
 
+from google.protobuf import timestamp_pb2
 import grpc
 import logging
 import minknow_api
@@ -54,12 +55,11 @@ def get_local_authentication_token_file(host="localhost", port=None):
 
 
 class ServiceBase(object):
-    def __init__(self, serviceclass, host, port, use_tls):
+    def __init__(self, serviceclass, host, port, use_tls, grpc_credentials=None):
         self.host = host
         self.port = port
-        self.grpc_credentials = None
+        self.grpc_credentials = grpc_credentials
         if use_tls:
-            self.grpc_credentials = minknow_api.load_grpc_credentials(port)
             self.channel = grpc.secure_channel(
                 host + ":" + str(port),
                 self.grpc_credentials,
@@ -94,6 +94,7 @@ class Manager(ServiceBase):
             TLS connections)
         port (int, optional): override the port to connect to
         use_tls (bool, optional): set to False to use an insecure channel connection
+        developer_api_token (str, optional): token to use for auth when connecting using a developer token
 
     Attributes:
         bream_version (str): The version of Bream that is installed.
@@ -118,19 +119,32 @@ class Manager(ServiceBase):
     # has gone wrong with the manager.
     DEFAULT_TIMEOUT = 5
 
-    def __init__(self, host="localhost", port=None, use_tls=True):
+    def __init__(
+        self, host="localhost", port=None, use_tls=True, developer_api_token=None
+    ):
         if port is None:
             if use_tls:
                 port = 9502
             else:
+                logging.warning(
+                    "Insecure connections are deprecated, users should upgrade to secure connections"
+                )
                 port = 9501
+
+        self._grpc_credentials = None
+        if use_tls:
+            self._grpc_credentials = minknow_api.load_grpc_credentials(
+                port, developer_api_token
+            )
         super(Manager, self).__init__(
             minknow_api.manager_service.ManagerService,
             host=host,
             port=port,
             use_tls=use_tls,
+            grpc_credentials=self._grpc_credentials,
         )
         self._default_use_tls = use_tls
+        self._developer_api_token = developer_api_token
 
         version_info = self.rpc.get_version_info()
         self.bream_version = version_info.protocols
@@ -193,7 +207,7 @@ class Manager(ServiceBase):
             port = bc_api.insecure
         if port == 0:
             return None
-        return Basecaller(self.host, port, use_tls)
+        return Basecaller(self.host, port, use_tls, None, self._grpc_credentials)
 
     def create_directory(self, name, parent_path="", timeout=DEFAULT_TIMEOUT):
         """Create a directory on the host.
@@ -276,7 +290,13 @@ class Manager(ServiceBase):
         messages = [msg for msg in call]
         for msg in messages:
             for position in msg.positions:
-                yield FlowCellPosition(position, self.host, self._default_use_tls)
+                yield FlowCellPosition(
+                    position,
+                    self.host,
+                    self._default_use_tls,
+                    developer_api_token=self._developer_api_token,
+                    default_grpc_credentials=self._grpc_credentials,
+                )
 
     def add_simulated_device(self, name, timeout=DEFAULT_TIMEOUT):
         """ Dynamically create a simulated device
@@ -302,6 +322,82 @@ class Manager(ServiceBase):
         """
         self.rpc.remove_simulated_device(_timeout=timeout, name=name)
 
+    def get_alignment_reference_information(self, path, timeout=DEFAULT_TIMEOUT):
+        """ Query alignment reference information from a file path.
+
+        Args:
+            path (string): Path of the alignment reference file.
+            timeout (float, optional): The maximum time to wait for the call to complete. Should
+            usually be left at the default.
+        """
+        return self.rpc.get_alignment_reference_information(_timeout=timeout, path=path)
+
+    def create_developer_api_token(self, name, expiry=None, timeout=DEFAULT_TIMEOUT):
+        """ Create a new developer api token, which expires at [expiry].
+
+        Can not be invoked when using a developer token as authorisation method.
+
+        Args:
+            name (string): Readable name of the token.
+            expiry (datetime, optional): Expiry time of the token.
+            timeout (float, optional): The maximum time to wait for the call to complete. Should
+            usually be left at the default.
+        """
+
+        kwargs = {}
+        if expiry:
+            ts = timestamp_pb2.Timestamp()
+            ts.FromDatetime(dt=expiry)
+            kwargs["expiry"] = ts
+        return self.rpc.create_developer_api_token(
+            _timeout=timeout, name=name, **kwargs
+        )
+
+    def revoke_developer_api_token(self, id, timeout=DEFAULT_TIMEOUT):
+        """ Revoke an existing developer api tokens.
+
+        Args:
+            id (string): The identification of the token (available from list_developer_api_tokens).
+            timeout (float, optional): The maximum time to wait for the call to complete. Should
+            usually be left at the default.
+        """
+        return self.rpc.revoke_developer_api_token(id=id, _timeout=timeout)
+
+    def list_developer_api_tokens(self, timeout=DEFAULT_TIMEOUT):
+        """ List existing developer api tokens.
+
+        Args:
+            timeout (float, optional): The maximum time to wait for the call to complete. Should
+            usually be left at the default.
+        """
+        return self.rpc.list_developer_api_tokens(_timeout=timeout)
+
+    def find_protocols(
+        self,
+        experiment_type,
+        flow_cell_product_code=None,
+        sequencing_kit=None,
+        timeout=DEFAULT_TIMEOUT,
+    ):
+        """ List existing developer api tokens.
+
+        Args:
+            experiment_type (manager.ExperimentType): Type of experiment to search for.
+            flow_cell_product_code (str, optional): Find only protocols compatible with the given flow cell code.
+                Default 'None' will return protocols matching any (including protocols without a flow_cell_product_code).
+            sequencing_kit (str, optional): Find only protocols compatible with the given sequencing kit.
+                Default 'None' will return protocols matching any (including protocols without a sequencing_kit).
+            timeout (float, optional): The maximum time to wait for the call to complete. Should
+                usually be left at the default.
+        """
+        kwargs = {}
+        if flow_cell_product_code is not None:
+            kwargs["flow_cell_product_code"] = flow_cell_product_code
+        if sequencing_kit is not None:
+            kwargs["sequencing_kit"] = sequencing_kit
+
+        return self.rpc.find_protocols(experiment_type=experiment_type, **kwargs)
+
 
 class FlowCellPosition(object):
     """A flow cell position.
@@ -315,10 +411,19 @@ class FlowCellPosition(object):
         use_tls (bool, optional): Set the default for the ``use_tls`` argument for `connect`.
     """
 
-    def __init__(self, description, host="localhost", use_tls=True):
+    def __init__(
+        self,
+        description,
+        host="localhost",
+        use_tls=True,
+        developer_api_token=None,
+        default_grpc_credentials=None,
+    ):
         self.host = host
         self.description = description
         self._default_use_tls = use_tls
+        self._default_grpc_credentials = default_grpc_credentials
+        self._developer_api_token = developer_api_token
         self._device = None
 
     def __repr__(self):
@@ -334,8 +439,10 @@ class FlowCellPosition(object):
 
     @property
     def location(self):
-        """minknow_api.manager_service.FlowCellPosition.Location: The location of the position (if
-        built-in, otherwise None).
+        """minknow_api.manager_service.FlowCellPosition.Location: The location of the position.
+
+        Returns None if no location information is available. Location information should always be
+        available for integrated positions.
         """
         if self.description.HasField("location"):
             return self.description.location
@@ -356,8 +463,8 @@ class FlowCellPosition(object):
     def state(self):
         """str: The state of the position.
 
-        One of "initialising", "running", "resetting", "hardware_removed", "hardware_error" or
-        "software_error".
+        One of "initialising", "running", "resetting", "hardware_removed", "hardware_error",
+        "software_error" or "needs_association".
         """
         State = minknow_api.manager_service.FlowCellPosition.State
         return State.Name(self.description.state)[6:].lower()
@@ -371,7 +478,16 @@ class FlowCellPosition(object):
         """
         return self.description.HasField("rpc_ports")
 
-    def connect(self, use_tls=None, credentials=None):
+    @property
+    def is_integrated(self):
+        """bool: Whether the position is integrated.
+
+        For example, the X1 through X5 positions on a GridION are integrated positions: they are
+        part of the GridION itself. A MinION Mk1B is not integrated.
+        """
+        return self.description.is_integrated
+
+    def connect(self, use_tls=None, credentials=None, developer_api_token=None):
         """Connect to the position.
 
         Only valid to do if `running` is True.
@@ -385,8 +501,16 @@ class FlowCellPosition(object):
             port = self.description.rpc_ports.secure
         else:
             port = self.description.rpc_ports.insecure
+        if not developer_api_token:
+            developer_api_token = self._developer_api_token
+        if not credentials:
+            credentials = self._default_grpc_credentials
         return minknow_api.Connection(
-            host=self.host, port=port, use_tls=use_tls, credentials=credentials,
+            host=self.host,
+            port=port,
+            use_tls=use_tls,
+            credentials=credentials,
+            developer_api_token=developer_api_token,
         )
 
 
@@ -407,12 +531,25 @@ class Basecaller(ServiceBase):
         stub (minknow_api.manager_grpc_pb2.ManagerServiceStub): the gRPC-generated stub
     """
 
-    def __init__(self, host, port, use_tls=True):
+    def __init__(
+        self,
+        host="127.0.0.1",
+        port=None,
+        use_tls=True,
+        developer_api_token=None,
+        grpc_credentials=None,
+    ):
+        if use_tls and not grpc_credentials and developer_api_token:
+            grpc_credentials = minknow_api.load_grpc_credentials(
+                developer_api_token=developer_api_token
+            )
+
         super(Basecaller, self).__init__(
             minknow_api.basecaller_service.Basecaller,
             host=host,
             port=port,
             use_tls=use_tls,
+            grpc_credentials=grpc_credentials,
         )
 
     def __repr__(self):

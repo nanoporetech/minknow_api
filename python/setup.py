@@ -9,9 +9,9 @@ from _version import __version__ as VERSION
 del sys.path[0]
 
 INSTALL_REQUIRES = [
-    "grpcio~=1.25",
+    "grpcio~=1.37",
     "numpy~=1.11",  # minknow_api.data
-    "protobuf~=3.11",
+    "protobuf~=3.15",  # 3.15 includes use of 'optional' for scalar fields
     "packaging>=15.0",
     "pyrfc3339~=1.1",
 ]
