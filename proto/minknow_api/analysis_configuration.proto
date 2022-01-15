@@ -668,6 +668,17 @@ message BasecallerConfiguration
     //
     // Since 4.1
     LampConfiguration lamp_configuration = 7;
+
+    // Enable read splitting in guppy.
+    //
+    // Since 4.5
+    bool enable_read_splitting = 8;
+
+    // Override score to use for guppy read splitting. If not specified a default value
+    // is used from guppy.
+    //
+    // Since 4.5
+    google.protobuf.FloatValue min_score_read_splitting = 9;
 }
 
 message SetBasecallerConfigurationRequest

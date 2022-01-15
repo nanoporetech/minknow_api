@@ -410,6 +410,13 @@ class AnalysisConfigurationService(object):
                 If no configuration is specified lamp is disabled.
 
                 Since 4.1
+            enable_read_splitting (bool, optional): Enable read splitting in guppy.
+
+                Since 4.5
+            min_score_read_splitting (google.protobuf.wrappers_pb2.FloatValue, optional): Override score to use for guppy read splitting. If not specified a default value
+                is used from guppy.
+
+                Since 4.5
 
         Returns:
             minknow_api.analysis_configuration_pb2.SetBasecallerConfigurationResponse
@@ -456,6 +463,14 @@ class AnalysisConfigurationService(object):
         if "lamp_configuration" in kwargs:
             unused_args.remove("lamp_configuration")
             _message.configs.lamp_configuration.CopyFrom(kwargs['lamp_configuration'])
+
+        if "enable_read_splitting" in kwargs:
+            unused_args.remove("enable_read_splitting")
+            _message.configs.enable_read_splitting = kwargs['enable_read_splitting']
+
+        if "min_score_read_splitting" in kwargs:
+            unused_args.remove("min_score_read_splitting")
+            _message.configs.min_score_read_splitting.value = kwargs['min_score_read_splitting']
 
         if len(unused_args) > 0:
             raise ArgumentError("Unexpected keyword arguments to set_basecaller_configuration: '{}'".format(", ".join(unused_args)))
@@ -513,6 +528,13 @@ class AnalysisConfigurationService(object):
                 If no configuration is specified lamp is disabled.
 
                 Since 4.1
+            enable_read_splitting (bool, optional): Enable read splitting in guppy.
+
+                Since 4.5
+            min_score_read_splitting (google.protobuf.wrappers_pb2.FloatValue, optional): Override score to use for guppy read splitting. If not specified a default value
+                is used from guppy.
+
+                Since 4.5
 
         Returns:
             minknow_api.analysis_configuration_pb2.SetBasecallerConfigurationResponse
@@ -559,6 +581,14 @@ class AnalysisConfigurationService(object):
         if "lamp_configuration" in kwargs:
             unused_args.remove("lamp_configuration")
             _message.configs.lamp_configuration.CopyFrom(kwargs['lamp_configuration'])
+
+        if "enable_read_splitting" in kwargs:
+            unused_args.remove("enable_read_splitting")
+            _message.configs.enable_read_splitting = kwargs['enable_read_splitting']
+
+        if "min_score_read_splitting" in kwargs:
+            unused_args.remove("min_score_read_splitting")
+            _message.configs.min_score_read_splitting.value = kwargs['min_score_read_splitting']
 
         if len(unused_args) > 0:
             raise ArgumentError("Unexpected keyword arguments to preload_basecaller_configuration: '{}'".format(", ".join(unused_args)))

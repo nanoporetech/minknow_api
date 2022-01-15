@@ -617,8 +617,14 @@ message BasecallerApiResponse {
 message GetGuppyInfoRequest {}
 
 message GetGuppyInfoResponse {
-    // The port Guppy is listening on.
-    uint32 port = 1;
+    oneof connection_type {
+        // The port Guppy is listening on.
+        uint32 port = 1;
+
+        // The path to an ipc file Guppy is using.
+        // Use "ipc://<ipc_path>" for a guppy connection string.
+        string ipc_path = 3;
+    }
 
     // The Guppy server version.
     string version = 2;

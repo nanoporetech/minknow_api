@@ -16,6 +16,7 @@ usually constructing using methods on ``Manager``.
 from google.protobuf import timestamp_pb2
 import grpc
 import logging
+import typing
 import minknow_api
 import minknow_api.basecaller_service
 import minknow_api.manager_service
@@ -84,6 +85,12 @@ class ServiceBase(object):
         self.rpc = None
         self.stub = None
         self.channel = None
+
+
+GuppyConnectionInfo = typing.NamedTuple(
+    "GuppyConnectionInfo",
+    [("port", typing.Optional[int]), ("ipc_path", typing.Optional[str]),],
+)
 
 
 class Manager(ServiceBase):
@@ -239,6 +246,30 @@ class Manager(ServiceBase):
             int: The port Guppy is listening on
         """
         return self.rpc.get_guppy_info(_timeout=timeout).port
+
+    def get_guppy_connection_info(self, timeout=DEFAULT_TIMEOUT):
+        """Get the port and ipc_path that Guppy is listening to.
+
+        This can be used to directly connect to the Guppy server using the pyguppy client.
+
+        Guppy only listens on either a port or the ipc path. The default changes based on OS.
+        Calling code should change its behaviour based on which tuple field is not None.
+
+        Args:
+            timeout (float, optional): The maximum time to wait for the call to complete. Should
+                usually be left at the default.
+
+        Returns:
+            GuppyConnectionInfo: Either the port or path guppy is listening on.
+        """
+        guppy_info = self.rpc.get_guppy_info(_timeout=timeout)
+        port = None
+        ipc_path = None
+        if guppy_info.port != 0:
+            port = guppy_info.port
+        else:
+            ipc_path = guppy_info.ipc_path
+        return GuppyConnectionInfo(port, ipc_path)
 
     def describe_host(self, timeout=DEFAULT_TIMEOUT):
         """Get information about the machine running MinKNOW.
