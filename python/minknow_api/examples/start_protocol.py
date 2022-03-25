@@ -56,9 +56,6 @@ def parse_args():
         "--port",
         help="Port to connect to on host (defaults to standard MinKNOW port based on tls setting)",
     )
-    parser.add_argument(
-        "--no-tls", help="Disable tls connection", default=False, action="store_true"
-    )
     parser.add_argument("--verbose", action="store_true", help="Enable debug logging")
 
     parser.add_argument("--sample-id", help="sample ID to set")
@@ -527,7 +524,7 @@ def main():
         logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
 
     # Construct a manager using the host + port provided:
-    manager = Manager(host=args.host, port=args.port, use_tls=not args.no_tls)
+    manager = Manager(host=args.host, port=args.port)
 
     experiment_specs = []
     add_sample_sheet_entries(experiment_specs, args)

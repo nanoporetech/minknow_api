@@ -672,7 +672,7 @@ message GetLiveReadsResponse {
     // Sparsely populated as not all channels have new/incomplete reads.
     map<uint32, ReadData> channels = 4;
 
-    // List of repsonses to requested actions, informing the caller of results to requested
+    // List of responses to requested actions, informing the caller of results to requested
     // unblocks or discards of data.
     repeated ActionResponse action_responses = 5;
 }

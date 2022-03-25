@@ -45,22 +45,22 @@ def test_list_sequencing_positions_gridion_positions():
         manager_pb2.FlowCellPosition(
             name="X1",
             state=manager_pb2.FlowCellPosition.State.STATE_RUNNING,
-            rpc_ports=manager_pb2.FlowCellPosition.RpcPorts(secure=8000, insecure=8001),
+            rpc_ports=manager_pb2.FlowCellPosition.RpcPorts(secure=8000),
         ),
         manager_pb2.FlowCellPosition(
             name="X2",
             state=manager_pb2.FlowCellPosition.State.STATE_RUNNING,
-            rpc_ports=manager_pb2.FlowCellPosition.RpcPorts(secure=8002, insecure=8003),
+            rpc_ports=manager_pb2.FlowCellPosition.RpcPorts(secure=8001),
         ),
         manager_pb2.FlowCellPosition(
             name="X3",
             state=manager_pb2.FlowCellPosition.State.STATE_RUNNING,
-            rpc_ports=manager_pb2.FlowCellPosition.RpcPorts(secure=8004, insecure=8005),
+            rpc_ports=manager_pb2.FlowCellPosition.RpcPorts(secure=8002),
         ),
         manager_pb2.FlowCellPosition(
             name="X4",
             state=manager_pb2.FlowCellPosition.State.STATE_RUNNING,
-            rpc_ports=manager_pb2.FlowCellPosition.RpcPorts(secure=8006, insecure=8007),
+            rpc_ports=manager_pb2.FlowCellPosition.RpcPorts(secure=8003),
         ),
         manager_pb2.FlowCellPosition(
             name="X5", state=manager_pb2.FlowCellPosition.State.STATE_INITIALISING
@@ -70,7 +70,7 @@ def test_list_sequencing_positions_gridion_positions():
     with ManagerTestServer(positions=test_positions) as server:
         p = subprocess.run(
             [sys.executable, str(list_positions_source), "--port", str(server.port)],
-            check=True,
+            check=False,
             stdout=subprocess.PIPE,
         )
 
@@ -78,16 +78,12 @@ def test_list_sequencing_positions_gridion_positions():
             """Available sequencing positions on localhost:%s:
 X1: running
   secure: 8000
-  insecure: 8001
 X2: running
-  secure: 8002
-  insecure: 8003
+  secure: 8001
 X3: running
-  secure: 8004
-  insecure: 8005
+  secure: 8002
 X4: running
-  secure: 8006
-  insecure: 8007
+  secure: 8003
 X5: initialising
 """
             % server.port

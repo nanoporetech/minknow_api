@@ -110,7 +110,7 @@ message DeviceSettings {
 
 message TimingEnginePeriods {
     // Timing-engine periods are specified in 5ns units. Some of the timing
-    // mechanism can only acheive 10ns accuracy, so even numbers are preferred.
+    // mechanism can only achieve 10ns accuracy, so even numbers are preferred.
     //
     // Note: There is a timing feature in the ASIC that requires the sum of
     // the RST1 and DATA periods to be a multiple of 16

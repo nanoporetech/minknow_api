@@ -128,7 +128,7 @@ class AnalysisConfigurationServiceServicer(object):
         will not be sent on the wire, so the value wouldn't appear when converting to json. In practice, most values are wrapper types and this
         field won't have an affect in wrapper types, but it does affect enum types as the default initailised value is the 0th enum.
 
-        NOTE: if the analysis configuration was set using the new parameters (with the filename for albacore config files), the old parameters
+        NOTE: if the analysis configuration was set using the new parameters (with the filename for basecalling config files), the old parameters
         from jsn will be ignored. So set_analysis_configuration must be used with either the old protobuf message for the basecaller parameters,
         or with the new one, but it cannot be used interleaved!
         """

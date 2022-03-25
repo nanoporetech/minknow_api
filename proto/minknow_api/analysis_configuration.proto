@@ -45,7 +45,7 @@ service AnalysisConfigurationService {
     // will not be sent on the wire, so the value wouldn't appear when converting to json. In practice, most values are wrapper types and this
     // field won't have an affect in wrapper types, but it does affect enum types as the default initailised value is the 0th enum.
     //
-    // NOTE: if the analysis configuration was set using the new parameters (with the filename for albacore config files), the old parameters
+    // NOTE: if the analysis configuration was set using the new parameters (with the filename for basecalling config files), the old parameters
     // from jsn will be ignored. So set_analysis_configuration must be used with either the old protobuf message for the basecaller parameters,
     // or with the new one, but it cannot be used interleaved!
     rpc set_analysis_configuration (AnalysisConfiguration) returns (SetAnalysisConfigurationResponse) {
@@ -253,6 +253,37 @@ message ReadDetectionParams {
     // Minimum number of seconds events must lie within the range of open pore in order to allow
     // a read to break.
     google.protobuf.DoubleValue open_pore_seconds_required = 10;
+}
+
+// Parameters for filtering out reads from being written.
+//
+// The tests are combined using a logical AND: if any given test fails, the read will not be
+// written. Only reads that pass all (non-zero) tests will be written out.
+//
+// Currently, it is only possible to filter on read length. This can be given in samples or MinKNOW
+// events.
+message ReadFilters {
+    // Only write reads that contain at least this many samples.
+    //
+    // The default zero value will not exclude any reads.
+    uint32 read_length_min = 1;
+
+    // Only write reads that contain at most this many samples.
+    //
+    // If set to zero (the default), this test is not applied (as though it had been set to a value
+    // longer than any possible read).
+    uint32 read_length_max = 2;
+
+    // Only write reads that contain at least this many MinKNOW events.
+    //
+    // The default zero value will not exclude any reads.
+    uint32 event_count_min = 3;
+
+    // Only write reads that contain at most this many MinKNOW events.
+    //
+    // If set to zero (the default), this test is not applied (as though it had been set to a value
+    // longer than any possible read).
+    uint32 event_count_max = 4;
 }
 
 message ReadClassificationParams {
@@ -1030,6 +1061,26 @@ message WriterConfiguration {
         // See file pattern attributes above.
         string pdf_report_file_pattern = 1;
 
+        // The pattern used to find the json report filename. If left empty but output is
+        // enabled a default pattern is used.
+        //
+        // default: report_{flow_cell_id}_{daq_start_time}_{short_protocol_run_id}.json
+        // Where each {xxx} section is replaced with an attribute from the minknow
+        // state when the file is written.
+        //
+        // See file pattern attributes above.
+        string json_report_file_pattern = 2;
+
+        // The pattern used to find the html report filename. If left empty but output is
+        // enabled a default pattern is used.
+        //
+        // default: report_{flow_cell_id}_{daq_start_time}_{short_protocol_run_id}.html
+        // Where each {xxx} section is replaced with an attribute from the minknow
+        // state when the file is written.
+        //
+        // See file pattern attributes above.
+        string html_report_file_pattern = 9;
+
         // The pattern used to find the markdown report filename. If left empty but output is
         // enabled a default pattern is used.
         //
@@ -1038,7 +1089,7 @@ message WriterConfiguration {
         // state when the file is written.
         //
         // See file pattern attributes above.
-        string markdown_report_file_pattern = 2;
+        string markdown_report_file_pattern = 8;
 
         // The pattern used to find the duty time csv report. If left empty but output is
         // enabled a default pattern is used.
@@ -1129,6 +1180,10 @@ message WriterConfiguration {
     // acquisition period, and empty paths (or no report config) are supplied
     // for reports default paths are used.
     ReportConfiguration report = 7;
+
+    // Parameters for filtering reads for writing.  If not present, then
+    // no filtering will be applied, so no reads will be excluded.
+    ReadFilters read_filters = 9;
 }
 
 message SetWriterConfigurationResponse {

@@ -14,12 +14,12 @@ service AcquisitionService {
     // Some setup calls will need to be made before starting data acquisition: particularly setting the analysis configuration,
     // calibration, read writer and bulk writer config and some device calls such as setting the sampling frequency
     //
-    // If acqusition is already running (even in the FINISHING state), this call will fail.
+    // If acquisition is already running (even in the FINISHING state), this call will fail.
     //
     // On MinIONs and GridIONs, this will enable the ASIC power supply if it is not already enabled.
     // See StopRequest.keep_power_on for more details about the implications of this.
     //
-    // The rpc will return once `current_status` is "PROCESSING" or an error occurs and acqusition fails to start.
+    // The rpc will return once `current_status` is "PROCESSING" or an error occurs and acquisition fails to start.
     rpc start (StartRequest) returns (StartResponse) {}
 
     // Stops data acquisition.
@@ -28,13 +28,13 @@ service AcquisitionService {
     // description for documentation on what each mode does.
     //
     // Be aware that this command will return as soon as Minknow enters the FINISHING state and not the READY state.
-    // So if starting a new experiment then you will have to wait for the READY state seperately
+    // So if starting a new experiment then you will have to wait for the READY state separately
     rpc stop (StopRequest) returns (StopResponse) {}
 
     // Watches for status changes within MinKNOW. Status states are defined from MinknowStatus enum.
-    // This is a bi-directional stream where the incoming response stream will return everytime the status has changed
+    // This is a bi-directional stream where the incoming response stream will return every time the status has changed
     // and the request stream is used to stop the watcher. Refer to http://www.grpc.io/docs/tutorials/basic/python.html
-    // to see how bi-directoional streaming works in grpc, but essentially when calling this function the user will have
+    // to see how bi-directional streaming works in grpc, but essentially when calling this function the user will have
     // to pass in a generator that will eventually yield a WatchForStatusChangeRequest(stop=True) to the cpp side.
     // A wrapper class for this is provided in the Python code.
     //
@@ -105,6 +105,32 @@ service AcquisitionService {
     rpc set_signal_reader (SetSignalReaderRequest) returns (SetSignalReaderResponse) {
         option idempotency_level = IDEMPOTENT;
     }
+
+    // Set the bream information for the current acquisition.
+    //
+    // This should only be called by the protocol. It will only affect the last acquisition that was
+    // started in the current protocol.
+    //
+    // If no protocol is running, or no acquisition has been started during the current protocol, a
+    // FAILED_PRECONDITION error will be returned.
+    //
+    // Since 5.0
+    rpc set_bream_info (SetBreamInfoRequest) returns (SetBreamInfoResponse) {
+        option idempotency_level = IDEMPOTENT;
+    }
+
+    // Add a mux scan result to the bream information for the current acquisition.
+    //
+    // This should only be called by the protocol. It will only affect the last acquisition that was
+    // started in the current protocol.
+    //
+    // If no protocol is running, or no acquisition has been started during the current protocol, a
+    // FAILED_PRECONDITION error will be returned.
+    //
+    // Since 5.0
+    rpc append_mux_scan_result (MuxScanResult) returns (AppendMuxScanResultResponse) {
+        option idempotency_level = IDEMPOTENT;
+    }
 }
 
 //
@@ -128,7 +154,7 @@ enum MinknowStatus {
     PROCESSING = 3;
 
     // FINISHING occurs when data acquisition has stopped (either from a explicit rpc request or the experiment naturally ended)
-    // and data is still being processed (albacore is still in catchup and processing reads).
+    // and data is still being processed (basecalling is still in catchup and processing reads).
     FINISHING = 4;
 }
 
@@ -273,11 +299,12 @@ message StopRequest {
         // The current default is set to FINISH_PROCESSING, but is subject to change
         STOP_DEFAULT = 0;
 
-        // STOP_KEEP_ALL_DATA tells minknow to stop albacore catchup, but keep all of the read files
-        // Any reads that have not been successfully/unsucessfully basecalled will be classed as 'skipped'
+
+        // STOP_KEEP_ALL_DATA tells minknow to stop basecalling catchup, but keep all of the read files
+        // Any reads that have not been successfully/unsuccessfully basecalled will be classed as 'skipped'
         STOP_KEEP_ALL_DATA = 1;
 
-        // FINISH_PROCESSING will allow albacore to continue catchup until all of the reads have been basecalled
+        // FINISH_PROCESSING will allow basecalling to continue catchup until all of the reads have been basecalled
         STOP_FINISH_PROCESSING = 2;
 
         // STOP_DISCARD_ALL_DATA = 3;
@@ -452,6 +479,23 @@ message AcquisitionYieldSummary
     // The reads in this counter are completed, but not necessarily on disk yet.
     int64 read_count = 1;
 
+    // This is the fraction of whole reads that the base-caller has finished
+    // with. The value should be in the range [0.0, 1.0]
+    //
+    // When base-calling is enabled, it can be added to fraction_skipped and
+    // multiplied by 100 to give the percentage of reads processed and by
+    // implication, the percentage of reads the user is waiting for the
+    // base-caller to process.
+    //
+    // Since 5.0
+    float fraction_basecalled = 20;
+
+    // This is the fraction of whole reads that have been skipped. The value
+    // should be in the range [0.0, 1.0]
+    //
+    // Since 5.0
+    float fraction_skipped = 21;
+
     // Number of reads successfully basecalled.
     int64 basecalled_pass_read_count = 3;
 
@@ -524,10 +568,8 @@ message AcquisitionYieldSummary
 
 message AcquisitionWriterSummary
 {
-    // Number of reads finished processing and written to disk.
-    //
-    // The reads which have been finalised and written to disk.
-    int64 written_read_count = 1;
+    reserved 1;
+    reserved "written_read_count";
 
     // Number of bytes which minknow needs to write in order to
     // finish the experiment.
@@ -663,6 +705,120 @@ message AcquisitionConfigSummary {
     uint32 channel_count = 12;
 }
 
+// Provides information about how mux scans are configured.
+//
+// This primarily information to help present mux scan results to the user (see `MuxScanResult`).
+message MuxScanMetadata {
+    // Presentation information for a category or group.
+    message Style {
+        // The human-readable name to display when rendering this category or group.
+        string label = 1;
+
+        // A sentence describing the meaning of the category or group.
+        //
+        // This can be used as a tooltip, for example.
+        string description = 2;
+
+        // The colour to use when rendering this category or group.
+        //
+        // This is a six-digit hex string describing an RGB colour (eg: "ff0000" for red).
+        string colour = 3;
+    }
+    // A category that a channel mux can be assigned.
+    message Category {
+        // Name of the category.
+        //
+        // This is the value that will be in the `MuxScanResult.counts` field.
+        //
+        // The user should not be shown this. Instead, `style.label` should be displayed.
+        string name = 1;
+
+        // How to render the category in a graphical user interface.
+        Style style = 2;
+
+        // An order ranking for the category when displaying them without using groups.
+        uint32 global_order = 3;
+    }
+    message CategoryGroup {
+        // The name of the group.
+        string name = 1;
+
+        // How to render the group in a graphical user interface.
+        Style style = 2;
+
+        // The categories contained in the group.
+        //
+        // Within this group, categories should be presented in the order of this list.
+        repeated Category category = 3;
+    }
+
+    // How frequently automatic scans are scheduled to occur.
+    float auto_mux_scan_period_hours = 1;
+
+    // Presentation information for categories.
+    //
+    // Describes the preferred way to present mux scan categories to users. Groups should be
+    // presented in the order of this list.
+    repeated CategoryGroup category_groups = 2;
+}
+
+// A report of the states of channel muxes (wells) across the flow cell.
+//
+// Every channel mux (well) is assigned to a specific category describing its state (for example, is
+// it expected to produce good results, and if not why not?). This is a report of how many channel
+// muxes are in each category.
+message MuxScanResult {
+    // How many channel muxes are in each category.
+    //
+    // The sum of all the values in this map should be the number of channels multiplied by the
+    // number of muxes on each channel (eg: 512x4=2048 on a MinION Mk1B without a flongle adapter).
+    //
+    // eg. 'sequencing': 1500
+    map<string, uint32> counts = 1;
+
+    // When this mux scan result was added (Seconds since the start of the acquisition).
+    uint64 mux_scan_timestamp = 2;
+}
+
+// Information provided by Bream.
+//
+// Note that this is provided by the protocol, and some protocols may choose not to provide this.
+message BreamInfo {
+    // Represents a range of values.
+    message Range {
+        double minimum = 1;
+        double maximum = 2;
+    }
+
+    // Presentation information for mux scan results.
+    MuxScanMetadata mux_scan_metadata = 1;
+
+    // Mux scan results.
+    repeated MuxScanResult mux_scan_results = 2;
+
+    // The ideal translocation speed range.
+    //
+    // This can be used to provide context for speed graphs (see the statistics RPCs), showing what
+    // range is considered "good".
+    Range target_translocation_speed = 3;
+
+    // The ideal quality (Q) score range.
+    //
+    // This can be used to provide context for q-score graphs (see the statistics RPCs), showing
+    // what range is considered "good".
+    Range target_q_score = 4;
+
+    // The ideal temperature range.
+    //
+    // This can be used to provide context for temperature (see the statistics RPCs), showing
+    // what range is considered "good".
+    //
+    // Note that a protocol may request a different temperature range than this (eg: it might
+    // request a tighter range, or it may adjust the temperature it is requesting throughout the
+    // run). This intended only to provide context when presenting data to users.
+    Range target_temperature = 5;
+}
+
 message AcquisitionRunInfo {
     // The unique identifier assigned to this acquisition run.
     //
@@ -726,6 +882,9 @@ message AcquisitionRunInfo {
     //
     // Since 4.0
     AcquisitionWriterSummary writer_summary = 11;
+
+    // Set information provided by the Bream toolkit.
+    BreamInfo bream_info = 15;
 }
 
 message ListAcquisitionRunsRequest {
@@ -768,3 +927,24 @@ message SetSignalReaderRequest {
 }
 
 message SetSignalReaderResponse {}
+
+message SetBreamInfoRequest {
+    // The information to set.
+    //
+    // Note that, other than treating the top-level fields independently (see the other flags on
+    // this request), MinKNOW Core will not do anything special to the data. In particular, the
+    // caller must fill in the `mux_scan_timestamp` field in `MuxScanResult` messages.
+    BreamInfo info = 1;
+
+    // If any `BreamInfo` fields were set in a previous call, but are unset in the `info` field of
+    // this call, then use the old value for them.
+    //
+    // For example, to just update the mux_scan_metadata field, use a BreamInfo object with only the
+    // `mux_scan_metadata` field set, and leave this as False. To clear the entire BreamInfo
+    // structure, leave `info` empty and set this to True.
+    bool overwrite_unset_fields = 2;
+}
+
+message SetBreamInfoResponse {}
+
+message AppendMuxScanResultResponse{}

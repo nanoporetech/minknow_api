@@ -62,14 +62,7 @@ TEST_BARCODING_PROTOCOL = protocol_pb2.ProtocolInfo(
 
 def run_start_protocol_example(port, args):
     p = subprocess.run(
-        [
-            sys.executable,
-            str(start_protocol_source),
-            "--port",
-            str(port),
-            "--no-tls",
-            "--verbose",
-        ]
+        [sys.executable, str(start_protocol_source), "--port", str(port), "--verbose",]
         + args,
         stdout=subprocess.PIPE,
         stderr=subprocess.STDOUT,
@@ -90,7 +83,7 @@ def test_basic_start_protocol():
                 name=position_info.position_name,
                 state=manager_pb2.FlowCellPosition.State.STATE_RUNNING,
                 rpc_ports=manager_pb2.FlowCellPosition.RpcPorts(
-                    secure=0, insecure=sequencing_position.port
+                    secure=sequencing_position.port
                 ),
             ),
         ]
@@ -252,7 +245,7 @@ def test_naming_start_protocol():
                 name=position_info.position_name,
                 state=manager_pb2.FlowCellPosition.State.STATE_RUNNING,
                 rpc_ports=manager_pb2.FlowCellPosition.RpcPorts(
-                    secure=0, insecure=sequencing_position.port
+                    secure=sequencing_position.port
                 ),
             ),
         ]
@@ -308,7 +301,7 @@ def test_basecalling_start_protocol():
                 name=position_info.position_name,
                 state=manager_pb2.FlowCellPosition.State.STATE_RUNNING,
                 rpc_ports=manager_pb2.FlowCellPosition.RpcPorts(
-                    secure=0, insecure=sequencing_position.port
+                    secure=sequencing_position.port
                 ),
             ),
         ]
@@ -390,7 +383,7 @@ def test_barcoding_start_protocol():
                 name=position_info.position_name,
                 state=manager_pb2.FlowCellPosition.State.STATE_RUNNING,
                 rpc_ports=manager_pb2.FlowCellPosition.RpcPorts(
-                    secure=0, insecure=sequencing_position.port
+                    secure=sequencing_position.port
                 ),
             ),
         ]
@@ -510,7 +503,7 @@ def test_alignment_start_protocol():
                 name=position_info.position_name,
                 state=manager_pb2.FlowCellPosition.State.STATE_RUNNING,
                 rpc_ports=manager_pb2.FlowCellPosition.RpcPorts(
-                    secure=0, insecure=sequencing_position.port
+                    secure=sequencing_position.port
                 ),
             ),
         ]
@@ -638,7 +631,7 @@ def test_output_start_protocol():
                 name=position_info.position_name,
                 state=manager_pb2.FlowCellPosition.State.STATE_RUNNING,
                 rpc_ports=manager_pb2.FlowCellPosition.RpcPorts(
-                    secure=0, insecure=sequencing_position.port
+                    secure=sequencing_position.port
                 ),
             ),
         ]
@@ -767,7 +760,7 @@ def test_sample_sheet_start_protocol():
                 name=position_info.position_name,
                 state=manager_pb2.FlowCellPosition.State.STATE_RUNNING,
                 rpc_ports=manager_pb2.FlowCellPosition.RpcPorts(
-                    secure=0, insecure=sequencing_position.port
+                    secure=sequencing_position.port
                 ),
             ),
         ]
@@ -1057,7 +1050,7 @@ def test_read_until_start_protocol():
                 name=position_info.position_name,
                 state=manager_pb2.FlowCellPosition.State.STATE_RUNNING,
                 rpc_ports=manager_pb2.FlowCellPosition.RpcPorts(
-                    secure=0, insecure=sequencing_position.port
+                    secure=sequencing_position.port
                 ),
             ),
         ]

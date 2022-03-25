@@ -12,10 +12,12 @@ from uuid import uuid4
 from queue import Queue, Empty
 import random
 import logging
+from pathlib import Path
 from threading import Thread
 import time
 import unittest
 
+import grpc
 import numpy as np
 
 import minknow_api
@@ -147,10 +149,12 @@ def request_generator(logger, action_queue, return_queue):
 class TestBidirectionalRPC(unittest.TestCase):
     def setUp(self) -> None:
         # Here we initialise the server
-        self.server = MockMinKNOWServer(data_service=DataServicer,)
+        self.server = MockMinKNOWServer(data_service=DataServicer)
         self.port = self.server.port
         self.server.start()
-        self.connection = minknow_api.Connection(self.port, use_tls=False)
+
+        ssl_creds = self.server.make_channel_credentials()
+        self.connection = minknow_api.Connection(self.port, credentials=ssl_creds)
 
     def tearDown(self) -> None:
         self.server.stop(0)

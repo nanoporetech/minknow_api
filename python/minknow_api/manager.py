@@ -30,46 +30,47 @@ __all__ = [
 ]
 
 
-def get_local_authentication_token_file(host="localhost", port=None):
+def get_local_authentication_token_file(host="127.0.0.1", port=None):
     """Starts an isolated manager instance to retrieve the path
     of the local authentication token file, which can then
     be read to extract the local authentication token"""
-    # If asking for local authentication token, then assume
-    # we are using a tls connection
     if not port:
         port = 9502
 
     try:
         ssl_creds = grpc.ssl_channel_credentials(minknow_api.read_ssl_certificate())
 
-        channel = grpc.secure_channel(host + ":" + str(port), ssl_creds)
+        channel = grpc.secure_channel(
+            host + ":" + str(port),
+            ssl_creds,
+            # we need the ssl target name override
+            options=minknow_api.GRPC_CHANNEL_OPTIONS,
+        )
 
         service = minknow_api.manager_service.ManagerService(channel)
         return service.local_authentication_token_path().path
-    except:
+    except grpc.RpcError:
         logging.debug(
             "Unable to connect to manager on port '{}' to retrieve local auth token path".format(
                 port
-            )
+            ),
+            exc_info=True,
         )
         return None
 
 
 class ServiceBase(object):
-    def __init__(self, serviceclass, host, port, use_tls, grpc_credentials=None):
+    """Implementation detail for Manager and Basecaller - do not use directly."""
+
+    def __init__(self, serviceclass, host, port, credentials=None):
         self.host = host
         self.port = port
-        self.grpc_credentials = grpc_credentials
-        if use_tls:
-            self.channel = grpc.secure_channel(
-                host + ":" + str(port),
-                self.grpc_credentials,
-                options=minknow_api.GRPC_CHANNEL_OPTIONS,
-            )
-        else:
-            self.channel = grpc.insecure_channel(
-                host + ":" + str(port), options=minknow_api.GRPC_CHANNEL_OPTIONS
-            )
+        self.credentials = credentials
+        self.channel = grpc.secure_channel(
+            host + ":" + str(port),
+            self.credentials,
+            options=minknow_api.GRPC_CHANNEL_OPTIONS,
+        )
         self.rpc = serviceclass(self.channel)
         self.stub = self.rpc._stub
 
@@ -97,11 +98,13 @@ class Manager(ServiceBase):
     """A connection to the manager gRPC interface.
 
     Args:
-        host (str, optional): the hostname to connect to (note that IP addresses will not work for
-            TLS connections)
-        port (int, optional): override the port to connect to
-        use_tls (bool, optional): set to False to use an insecure channel connection
-        developer_api_token (str, optional): token to use for auth when connecting using a developer token
+        host (str, optional): The hostname to connect to (IP address will not work due to TLS).
+        port (int, optional): Override the port to connect to.
+        developer_api_token (str, optional): A token to use for auth when connecting
+            using a developer token (ignored if `credentials` is provided).
+        credentials (grpc.ChannelCredentials, optional): Provide the credentials to use
+            for the connection. If it is not provided, one will be constructed using
+            minknow.credentials().
 
     Attributes:
         bream_version (str): The version of Bream that is installed.
@@ -110,6 +113,10 @@ class Manager(ServiceBase):
         core_version (str): The running version of MinKNOW Core.
         core_version_components (tuple): A tuple of three integers describing the major, minor and
             patch parts of the core version. Useful for version comparisions.
+        credentials (grpc.ChannelCredentials): The credentials used for the gRPC
+            connection. Can used to connect to other MinKNOW interfaces. Changing this
+            will not affect the connection to the manager, but will affect connections
+            made to other MinKNOW services (like the basecaller).
         guppy_version (str): The version of Guppy that is running.
         host (str): The hostname used to connect.
         port (int): The port used to connect.
@@ -127,35 +134,27 @@ class Manager(ServiceBase):
     DEFAULT_TIMEOUT = 5
 
     def __init__(
-        self, host="localhost", port=None, use_tls=True, developer_api_token=None
+        self, host="127.0.0.1", port=None, developer_api_token=None, credentials=None,
     ):
         if port is None:
-            if use_tls:
-                port = 9502
-            else:
-                logging.warning(
-                    "Insecure connections are deprecated, users should upgrade to secure connections"
-                )
-                port = 9501
+            port = 9502
 
-        self._grpc_credentials = None
-        if use_tls:
-            self._grpc_credentials = minknow_api.load_grpc_credentials(
-                port, developer_api_token
+        credentials = None
+        if credentials is None:
+            credentials = minknow_api.grpc_credentials(
+                manager_port=port, developer_api_token=developer_api_token, host=host
             )
         super(Manager, self).__init__(
             minknow_api.manager_service.ManagerService,
             host=host,
             port=port,
-            use_tls=use_tls,
-            grpc_credentials=self._grpc_credentials,
+            credentials=credentials,  # saved as self.credentials
         )
-        self._default_use_tls = use_tls
         self._developer_api_token = developer_api_token
 
         version_info = self.rpc.get_version_info()
-        self.bream_version = version_info.protocols
-        self.config_version = version_info.configuration
+        self.bream_version = version_info.bream
+        self.config_version = version_info.protocol_configuration
         self.core_version = version_info.minknow.full
         self.core_version_components = (
             version_info.minknow.major,
@@ -183,13 +182,10 @@ class Manager(ServiceBase):
         """
         return minknow_api.keystore_service.KeyStoreService(self.channel)
 
-    def basecaller(self, use_tls=None, timeout=DEFAULT_TIMEOUT):
+    def basecaller(self, timeout=DEFAULT_TIMEOUT):
         """Connect to the basecalling interface.
 
         Args:
-            use_tls (bool, optional): Force use of TLS (True) or insecure (False) connection.
-                By default, it will use the same type of channel as the manager connection, or
-                whatever is available to connect on.
             timeout (float, optional): The maximum time to wait for the call to complete. Should
                 usually be left at the default.
 
@@ -200,21 +196,9 @@ class Manager(ServiceBase):
         bc_api = self.rpc.basecaller_api(
             minknow_api.manager_service.BasecallerApiRequest(), timeout=timeout
         )
-        if use_tls is None:
-            if bc_api.secure == 0 and bc_api.insecure != 0:
-                use_tls = False
-            elif bc_api.insecure == 0 and bc_api.secure != 0:
-                use_tls = True
-            else:
-                use_tls = self._default_use_tls
-
-        if use_tls:
-            port = bc_api.secure
-        else:
-            port = bc_api.insecure
-        if port == 0:
+        if bc_api.secure == 0:
             return None
-        return Basecaller(self.host, port, use_tls, None, self._grpc_credentials)
+        return Basecaller(self.host, bc_api.secure, credentials=self.credentials)
 
     def create_directory(self, name, parent_path="", timeout=DEFAULT_TIMEOUT):
         """Create a directory on the host.
@@ -324,9 +308,8 @@ class Manager(ServiceBase):
                 yield FlowCellPosition(
                     position,
                     self.host,
-                    self._default_use_tls,
                     developer_api_token=self._developer_api_token,
-                    default_grpc_credentials=self._grpc_credentials,
+                    credentials=self.credentials,
                 )
 
     def add_simulated_device(self, name, timeout=DEFAULT_TIMEOUT):
@@ -433,29 +416,40 @@ class Manager(ServiceBase):
 class FlowCellPosition(object):
     """A flow cell position.
 
+    You should not normally construct this directly, but instead call
+    `Manager.flow_cell_positions`. The constructor arguments may change between minor
+    releases.
+
     Args:
         description (minknow_api.manager_service.FlowCellPosition): A description of a flow cell
             position returned from a call to ``flow_cell_positions`` or
             ``watch_flow_cell_positions`` on the manager.
         host (string, optional): The hostname of the manager API (see Manager.host). This will be
-            used by the `connect` method. Defauls to "localhost".
-        use_tls (bool, optional): Set the default for the ``use_tls`` argument for `connect`.
+            used by the `connect` method. Defauls to localhost.
+        developer_api_token (str, optional): A token to use for auth when connecting
+            using a developer token (ignored if `credentials` is provided).
+        credentials (grpc.ChannelCredentials, optional): Provide the credentials to use
+            for the connection. If it is not provided, one will be constructed using
+            minknow.credentials().
+
+    Attributes:
+        description (minknow_api.manager_service.FlowCellPosition): The description of
+            the flow cell position as returned from a call to ``flow_cell_positions``
+            on the manger.
+        credentials (grpc.ChannelCredentials): The credentials used for the gRPC
+            connection. Can used to connect to other MinKNOW interfaces. Changing this
+            will affect future calls to connect().
+        host (string): The hostname of the machine the position is running on.
     """
 
     def __init__(
-        self,
-        description,
-        host="localhost",
-        use_tls=True,
-        developer_api_token=None,
-        default_grpc_credentials=None,
+        self, description, host="127.0.0.1", developer_api_token=None, credentials=None,
     ):
         self.host = host
         self.description = description
-        self._default_use_tls = use_tls
-        self._default_grpc_credentials = default_grpc_credentials
         self._developer_api_token = developer_api_token
         self._device = None
+        self.credentials = credentials
 
     def __repr__(self):
         return "FlowCellPosition({!r}, {{{!r}}})".format(self.host, self.description)
@@ -518,7 +512,7 @@ class FlowCellPosition(object):
         """
         return self.description.is_integrated
 
-    def connect(self, use_tls=None, credentials=None, developer_api_token=None):
+    def connect(self, credentials=None, developer_api_token=None):
         """Connect to the position.
 
         Only valid to do if `running` is True.
@@ -526,20 +520,14 @@ class FlowCellPosition(object):
         Returns:
             minknow_api.Connection: A connection to the RPC interface.
         """
-        if not use_tls:
-            use_tls = self._default_use_tls
-        if use_tls:
-            port = self.description.rpc_ports.secure
-        else:
-            port = self.description.rpc_ports.insecure
+        port = self.description.rpc_ports.secure
+        if credentials is None:
+            credentials = self.credentials
         if not developer_api_token:
             developer_api_token = self._developer_api_token
-        if not credentials:
-            credentials = self._default_grpc_credentials
         return minknow_api.Connection(
             host=self.host,
             port=port,
-            use_tls=use_tls,
             credentials=credentials,
             developer_api_token=developer_api_token,
         )
@@ -548,39 +536,37 @@ class FlowCellPosition(object):
 class Basecaller(ServiceBase):
     """A connection to the basecalling gRPC interface.
 
+    You should not normally construct this directly - use `Manager.basecaller` instead.
+    The constructor arguments may change between minor releases.
+
+    Note that 
+
     Args:
-        host (str, optional): the hostname to connect to (note that IP addresses will not work for
-            TLS connections)
-        port (int, optional): override the port to connect to
-        use_tls (bool, optional): set to False to use an insecure channel connection
+        host (str, optional): The hostname to connect to (IP address will not work due to TLS).
+        port (int, optional): Override the port to connect to.
+        credentials (grpc.ChannelCredentials): Provide the credentials to use
+            for the connection.
 
     Attributes:
         channel (grpc.Channel): the gRPC channel used for communication
+        credentials (grpc.ChannelCredentials): The credentials used for the gRPC
+            connection. Can used to connect to other MinKNOW interfaces. Note that
+            changing this will not affect the connection to the basecaller service.
         host (str): the hostname used to connect
         port (int): the port used to connect
         rpc (minknow_api.manager_service.ManagerService): the auto-generated API wrapper
         stub (minknow_api.manager_grpc_pb2.ManagerServiceStub): the gRPC-generated stub
     """
 
-    def __init__(
-        self,
-        host="127.0.0.1",
-        port=None,
-        use_tls=True,
-        developer_api_token=None,
-        grpc_credentials=None,
-    ):
-        if use_tls and not grpc_credentials and developer_api_token:
-            grpc_credentials = minknow_api.load_grpc_credentials(
-                developer_api_token=developer_api_token
-            )
+    def __init__(self, host="127.0.0.1", port=None, credentials=None):
+        if not credentials:
+            raise TypeError("Expected credentials to be specified")
 
         super(Basecaller, self).__init__(
             minknow_api.basecaller_service.Basecaller,
             host=host,
             port=port,
-            use_tls=use_tls,
-            grpc_credentials=grpc_credentials,
+            credentials=credentials,
         )
 
     def __repr__(self):

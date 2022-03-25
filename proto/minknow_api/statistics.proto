@@ -109,7 +109,7 @@ service StatisticsService {
     //
     // Since 4.0
     rpc stream_basecall_boxplots (StreamBoxplotRequest) returns (stream BoxplotResponse) {
-    option idempotency_level = NO_SIDE_EFFECTS;
+        option idempotency_level = NO_SIDE_EFFECTS;
     }
 }
 
@@ -518,29 +518,27 @@ message StreamAcquisitionOutputRequest {
 }
 
 // A snapshot of acquisition output data, for a given set of filtering criteria.
-message AcquisitionOutputBucket {
+message AcquisitionOutputSnapshot {
     // The time the snapshot was collected, in seconds.
     //
-    // This type + field have misleading names - this message really reflects a snapshot of data
-    // at a given time point (`bucket` indicates the time point).
-    //
-    // TODO (major version change): resolve naming inconsistencies.
-    uint32 bucket = 1;
+    // Represents the number of seconds since the start of the experiment
+    // Will usually stream in minute chunks, so will first see 60, then 120 etc
+    uint32 seconds = 1;
 
     // The yield summary data.
     acquisition.AcquisitionYieldSummary yield_summary = 2;
 }
 
 message StreamAcquisitionOutputResponse {
-    message FilteredBuckets {
+    message FilteredSnapshots {
         // The filtering parameters which contributed to this bucket.
         repeated AcquisitionOutputKey filtering = 1;
 
-        repeated AcquisitionOutputBucket buckets = 2;
+        repeated AcquisitionOutputSnapshot snapshots = 2;
     }
 
-    // Buckets split by requested filtering parameters.
-    repeated FilteredBuckets buckets = 1;
+    // Snapshots split by requested filtering parameters.
+    repeated FilteredSnapshots snapshots = 1;
 }
 
 message StreamWriterOutputRequest {
@@ -555,21 +553,19 @@ message StreamWriterOutputRequest {
 }
 
 // A snapshot of writer data.
-message WriterOutputBucket {
+message WriterOutputSnapshot {
     // The time the snapshot was collected, in seconds.
     //
-    // This type + field have misleading names - this message really reflects a snapshot of data
-    // at a given time point (`bucket` indicates the time point).
-    //
-    // TODO (major version change): resolve naming inconsistencies.
-    uint32 bucket = 1;
+    // Represents the number of seconds since the start of the experiment
+    // Will usually stream in minute chunks, so will first see 60, then 120 etc
+    uint32 seconds = 1;
 
     // The writer data for this bucket.
     acquisition.AcquisitionWriterSummary writer_output = 2;
 }
 
 message StreamWriterOutputResponse {
-    repeated WriterOutputBucket buckets = 1;
+    repeated WriterOutputSnapshot snapshots = 1;
 }
 
 message StreamEncounteredAcquisitionOutputKeysRequest {

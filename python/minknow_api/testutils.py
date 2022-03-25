@@ -40,7 +40,9 @@ import logging
 from collections import namedtuple
 from concurrent import futures
 from importlib import import_module
+import inspect
 from packaging.version import parse
+from pathlib import Path
 
 import grpc
 import minknow_api
@@ -53,7 +55,42 @@ VERSION = parse(minknow_api.__version__)
 MAJOR, MINOR, MICRO = map(int, VERSION.base_version.split("."))
 DEFAULT_SERVER_PORT = 0
 
-AuthInfo = namedtuple("AuthInfo", ["ssl_cert", "ssl_key", "auth_token"])
+found_test_certs_dir = None
+
+
+def find_test_certs_dir(extra_stack_frames_up=0):
+    global found_test_certs_dir
+    if not found_test_certs_dir:
+        frame = inspect.stack()[1 + extra_stack_frames_up]
+        module = inspect.getmodule(frame[0])
+        cert_root = Path(module.__file__).parent
+
+        certs_dir = None
+        while True:
+            certs_dir = cert_root / "test_certs"
+            if certs_dir.exists():
+                break
+            new_cert_root = cert_root.parent
+            logging.info("%s %s", new_cert_root, cert_root)
+            if new_cert_root == cert_root:
+                raise Exception("Failed to find test certficates directory")
+            cert_root = new_cert_root
+
+        found_test_certs_dir = certs_dir
+    return found_test_certs_dir
+
+
+def make_secure_grpc_credentials(certs_dir):
+    server_credentials = grpc.ssl_server_credentials(
+        (
+            (
+                (certs_dir / "localhost.key").read_bytes(),
+                (certs_dir / "localhost.crt").read_bytes(),
+            ),
+        ),
+        (certs_dir / "ca.crt").read_bytes(),
+    )
+    return server_credentials
 
 
 class AuthInterceptor(grpc.ServerInterceptor):
@@ -102,13 +139,18 @@ class MockMinKNOWServer:
     hosted on a secure port
     """
 
-    def __init__(self, port=DEFAULT_SERVER_PORT, auth_info=None, **kwargs):
+    def __init__(
+        self, port=DEFAULT_SERVER_PORT, certs_path=None, auth_token=None, **kwargs
+    ):
         # Logging setup
         logging.basicConfig(
             level=logging.DEBUG,
             format="%(asctime)s %(name)s %(levelname)s %(message)s",
         )
         self.logger = logging.getLogger(__name__)
+        self.certs_path = certs_path
+        if not self.certs_path:
+            self.certs_path = find_test_certs_dir(extra_stack_frames_up=1)
 
         # Set the server port or get an available port
         self.port = port
@@ -117,8 +159,8 @@ class MockMinKNOWServer:
 
         # Initialise any interceptors
         interceptors = None
-        if auth_info and auth_info.auth_token:
-            interceptor = AuthInterceptor(auth_info.auth_token, self.logger)
+        if auth_token:
+            interceptor = AuthInterceptor(auth_token, self.logger)
             interceptors = [interceptor]
 
         # Init the server
@@ -173,19 +215,21 @@ class MockMinKNOWServer:
                     add_servicer_to_server_func = getattr(svc_module, func)
                     add_servicer_to_server_func(getattr(self, svc_name), self.server)
 
-        if auth_info:
-            creds = grpc.ssl_server_credentials(
-                ((auth_info.ssl_key, auth_info.ssl_cert),)
-            )
-
-            bound = self.server.add_secure_port("[::]:{}".format(self.port), creds)
-        else:
-            bound = self.server.add_insecure_port("[::]:{}".format(self.port))
+            grpc_creds = None
+            if self.certs_path:
+                grpc_creds = make_secure_grpc_credentials(self.certs_path)
+            bound = self.server.add_secure_port("[::]:{}".format(self.port), grpc_creds)
         if bound == 0:
             raise ConnectionError("Could not connect using port {}".format(self.port))
         self.port = bound
 
         self.logger.info("Using port {}".format(self.port))
+
+    def make_channel_credentials(self):
+        certs_path = self.__dict__["certs_path"]
+        if not certs_path:
+            raise Exception("certs_path is not defined")
+        return grpc.ssl_channel_credentials((certs_path / "localhost.crt").read_bytes())
 
     def __enter__(self):
         self.start()

@@ -63,7 +63,7 @@ def dump_statistics_for_acquisition(connection, acquisition_run_id, output_dir):
 
     # Now iterate the stream and summarise each bucket as markdown
     for filter_groups in stream:
-        for filter_group in filter_groups.buckets:
+        for filter_group in filter_groups.snapshots:
             # Find a title for this filter group:
             report += do_title(
                 "Output snapshots for "
@@ -87,12 +87,12 @@ def dump_statistics_for_acquisition(connection, acquisition_run_id, output_dir):
             # Generate per snapshot summaries (one per line):
             #
             # See `acquisition.AcquisitionYieldSummary` in acquisition.proto for other fields that could be queried here.
-            for bucket in filter_group.buckets:
+            for snapshot in filter_group.snapshots:
                 cells = [
-                    bucket.bucket,  # timestamp(s)
-                    bucket.yield_summary.basecalled_pass_read_count,  # Passed Called reads
-                    bucket.yield_summary.basecalled_fail_read_count,  # Failed reads
-                    bucket.yield_summary.basecalled_samples,  # Total samples passed through the basecaller
+                    snapshot.seconds,  # timestamp(s)
+                    snapshot.yield_summary.basecalled_pass_read_count,  # Passed Called reads
+                    snapshot.yield_summary.basecalled_fail_read_count,  # Failed reads
+                    snapshot.yield_summary.basecalled_samples,  # Total samples passed through the basecaller
                 ]
 
                 report += "\t".join(str(c) for c in cells) + "\n"
@@ -138,9 +138,6 @@ def main():
         help="Directory to write extracted info to. Defaults to current directory.",
     )
     parser.add_argument("--verbose", action="store_true", help="Enable debug logging")
-    parser.add_argument(
-        "--use-tls", action="store_true", default=False, help="Enable debug logging"
-    )
 
     args = parser.parse_args()
 
@@ -149,7 +146,7 @@ def main():
         logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
 
     # Construct a manager using the host + port provided:
-    manager = Manager(host=args.host, port=args.port, use_tls=args.use_tls)
+    manager = Manager(host=args.host, port=args.port)
 
     # Find which positions we are going to start protocol on:
     positions = list(manager.flow_cell_positions())

@@ -4,6 +4,8 @@ from collections import namedtuple
 from concurrent import futures
 from contextlib import closing
 import logging
+import os
+from pathlib import Path
 import socket
 import typing
 
@@ -14,6 +16,9 @@ from minknow_api import instance_pb2, instance_pb2_grpc
 from minknow_api import manager_pb2, manager_pb2_grpc
 from minknow_api import protocol_pb2, protocol_pb2_grpc
 from minknow_api import statistics_pb2, statistics_pb2_grpc
+
+import minknow_api.testutils
+
 
 LOGGER = logging.getLogger(__name__)
 
@@ -91,9 +96,9 @@ class ManagerService(manager_pb2_grpc.ManagerServiceServicer):
 
     def get_version_info(
         self, _request: manager_pb2.GetVersionInfoRequest, _context
-    ) -> manager_pb2.GetVersionInfoResponse:
+    ) -> instance_pb2.GetVersionInfoResponse:
         """Find the version information for the manager"""
-        return manager_pb2.GetVersionInfoResponse(
+        return instance_pb2.GetVersionInfoResponse(
             minknow=instance_pb2.GetVersionInfoResponse.MinknowVersion(
                 major=4, minor=0, patch=0, full="4.0.0"
             )
@@ -176,7 +181,11 @@ class ManagerTestServer:
         )
 
         LOGGER.info("Starting server. Listening on port %s.", self.port)
-        self.server.add_insecure_port("[::]:%s" % self.port)
+        self.certs_dir = minknow_api.testutils.find_test_certs_dir()
+        self.server.add_secure_port(
+            "[::]:%s" % self.port,
+            minknow_api.testutils.make_secure_grpc_credentials(self.certs_dir),
+        )
         self.server.start()
 
     def stop(self):
@@ -184,6 +193,7 @@ class ManagerTestServer:
         self.server.stop(0)
 
     def __enter__(self):
+        os.environ["MINKNOW_TRUSTED_CA"] = str(self.certs_dir / "ca.crt")
         return self
 
     def __exit__(self, *args):
@@ -226,7 +236,13 @@ class SequencingPositionTestServer:
         )
 
         LOGGER.info("Starting server. Listening on port %s.", self.port)
-        self.server.add_insecure_port("[::]:%s" % self.port)
+
+        self.server.add_secure_port(
+            "[::]:%s" % self.port,
+            minknow_api.testutils.make_secure_grpc_credentials(
+                minknow_api.testutils.find_test_certs_dir()
+            ),
+        )
         self.server.start()
 
     def set_flow_cell_info(self, flow_cell_info):

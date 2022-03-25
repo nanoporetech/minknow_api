@@ -1,4 +1,5 @@
 import logging
+from pathlib import Path
 import unittest
 
 import minknow_api
@@ -11,7 +12,11 @@ class TestMockServer(unittest.TestCase):
     def setUp(self):
         self.test_server = MockMinKNOWServer()
         self.test_server.start()
-        self.connection = minknow_api.Connection(self.test_server.port, use_tls=False)
+
+        ssl_creds = self.test_server.make_channel_credentials()
+        self.connection = minknow_api.Connection(
+            self.test_server.port, credentials=ssl_creds
+        )
         LOGGER.info("Connected on {}".format(self.test_server.port))
 
     def tearDown(self):

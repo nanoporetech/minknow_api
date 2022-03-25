@@ -1,0 +1,80 @@
+syntax="proto3";
+
+package minknow_api.report_data;
+
+import "minknow_api/acquisition.proto";
+import "minknow_api/instance.proto";
+import "minknow_api/log.proto";
+import "minknow_api/protocol.proto";
+import "minknow_api/statistics.proto";
+
+enum AcquisitionOutputTypes {
+    AllData = 0;
+
+    SplitByBarcodeAndAlignment = 1;
+
+    SplitByBarcode = 2;
+    SplitByAlignment = 3;
+
+    SplitByEndReason = 4;
+}
+
+message AcquisitionOutput {
+    AcquisitionOutputTypes type = 1;
+    repeated statistics.StreamAcquisitionOutputResponse plot = 2;
+}
+
+message ReadLengthHistogram {
+    statistics.ReadLengthType read_length_type = 1;
+    statistics.BucketValueType bucket_value_type = 2;
+    statistics.StreamReadLengthHistogramResponse plot = 3;
+    statistics.StreamReadLengthHistogramResponse outliers = 4;
+}
+
+message BasecallBoxplot {
+    statistics.StreamBoxplotRequest.BoxplotType type = 1;
+    statistics.BoxplotResponse plot = 2;
+}
+
+message AcquistionReportData {
+    // Information about the executed acquisition
+    acquisition.AcquisitionRunInfo acquisition_run_info = 1;
+
+    // Size of buckets for all statistics data, in minutes.
+    int32 bucket_size = 2;
+
+    // Statistics snapshots for the acquisition period.
+    // Formatted into the same bucket size for all datatypes,
+    // computed from the length of the experiment.
+    repeated statistics.StreamDutyTimeResponse duty_time = 3;
+    repeated statistics.StreamWriterOutputResponse writer_output = 4;
+    repeated statistics.StreamTemperatureResponse temperature = 5;
+    repeated statistics.StreamBiasVoltagesResponse bias_voltage = 6;
+
+    repeated AcquisitionOutput acquisition_output = 7;
+
+    repeated ReadLengthHistogram read_length_histogram = 8;
+
+    repeated BasecallBoxplot basecall_boxplot = 9;
+}
+
+// This is a subset of the information available from the describe_host() call
+message Host {
+    string serial = 1;
+    string product_name = 2;
+}
+
+message ReportData {
+    instance.GetVersionInfoResponse software_versions = 1;
+
+    Host host = 2;
+
+    // Information about the executed protocol.
+    protocol.ProtocolRunInfo protocol_run_info = 3;
+
+    // Information about the acquisitions that are a part of the protocol.
+    repeated AcquistionReportData acquisitions = 4;
+
+    // All the user messages from protocol start to protocol end.
+    repeated log.UserMessage user_messages = 5;
+}

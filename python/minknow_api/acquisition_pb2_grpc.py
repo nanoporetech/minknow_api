@@ -64,6 +64,16 @@ class AcquisitionServiceStub(object):
                 request_serializer=minknow__api_dot_acquisition__pb2.SetSignalReaderRequest.SerializeToString,
                 response_deserializer=minknow__api_dot_acquisition__pb2.SetSignalReaderResponse.FromString,
                 )
+        self.set_bream_info = channel.unary_unary(
+                '/minknow_api.acquisition.AcquisitionService/set_bream_info',
+                request_serializer=minknow__api_dot_acquisition__pb2.SetBreamInfoRequest.SerializeToString,
+                response_deserializer=minknow__api_dot_acquisition__pb2.SetBreamInfoResponse.FromString,
+                )
+        self.append_mux_scan_result = channel.unary_unary(
+                '/minknow_api.acquisition.AcquisitionService/append_mux_scan_result',
+                request_serializer=minknow__api_dot_acquisition__pb2.MuxScanResult.SerializeToString,
+                response_deserializer=minknow__api_dot_acquisition__pb2.AppendMuxScanResultResponse.FromString,
+                )
 
 
 class AcquisitionServiceServicer(object):
@@ -75,12 +85,12 @@ class AcquisitionServiceServicer(object):
         Some setup calls will need to be made before starting data acquisition: particularly setting the analysis configuration,
         calibration, read writer and bulk writer config and some device calls such as setting the sampling frequency
 
-        If acqusition is already running (even in the FINISHING state), this call will fail.
+        If acquisition is already running (even in the FINISHING state), this call will fail.
 
         On MinIONs and GridIONs, this will enable the ASIC power supply if it is not already enabled.
         See StopRequest.keep_power_on for more details about the implications of this.
 
-        The rpc will return once `current_status` is "PROCESSING" or an error occurs and acqusition fails to start.
+        The rpc will return once `current_status` is "PROCESSING" or an error occurs and acquisition fails to start.
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -93,7 +103,7 @@ class AcquisitionServiceServicer(object):
         description for documentation on what each mode does.
 
         Be aware that this command will return as soon as Minknow enters the FINISHING state and not the READY state.
-        So if starting a new experiment then you will have to wait for the READY state seperately
+        So if starting a new experiment then you will have to wait for the READY state separately
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -101,9 +111,9 @@ class AcquisitionServiceServicer(object):
 
     def watch_for_status_change(self, request_iterator, context):
         """Watches for status changes within MinKNOW. Status states are defined from MinknowStatus enum.
-        This is a bi-directional stream where the incoming response stream will return everytime the status has changed
+        This is a bi-directional stream where the incoming response stream will return every time the status has changed
         and the request stream is used to stop the watcher. Refer to http://www.grpc.io/docs/tutorials/basic/python.html
-        to see how bi-directoional streaming works in grpc, but essentially when calling this function the user will have
+        to see how bi-directional streaming works in grpc, but essentially when calling this function the user will have
         to pass in a generator that will eventually yield a WatchForStatusChangeRequest(stop=True) to the cpp side.
         A wrapper class for this is provided in the Python code.
 
@@ -190,6 +200,36 @@ class AcquisitionServiceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def set_bream_info(self, request, context):
+        """Set the bream information for the current acquisition.
+
+        This should only be called by the protocol. It will only affect the last acquisition that was
+        started in the current protocol.
+
+        If no protocol is running, or no acquisition has been started during the current protocol, a
+        FAILED_PRECONDITION error will be returned.
+
+        Since 5.0
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def append_mux_scan_result(self, request, context):
+        """Add a mux scan result to the bream information for the current acquisition.
+
+        This should only be called by the protocol. It will only affect the last acquisition that was
+        started in the current protocol.
+
+        If no protocol is running, or no acquisition has been started during the current protocol, a
+        FAILED_PRECONDITION error will be returned.
+
+        Since 5.0
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_AcquisitionServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -242,6 +282,16 @@ def add_AcquisitionServiceServicer_to_server(servicer, server):
                     servicer.set_signal_reader,
                     request_deserializer=minknow__api_dot_acquisition__pb2.SetSignalReaderRequest.FromString,
                     response_serializer=minknow__api_dot_acquisition__pb2.SetSignalReaderResponse.SerializeToString,
+            ),
+            'set_bream_info': grpc.unary_unary_rpc_method_handler(
+                    servicer.set_bream_info,
+                    request_deserializer=minknow__api_dot_acquisition__pb2.SetBreamInfoRequest.FromString,
+                    response_serializer=minknow__api_dot_acquisition__pb2.SetBreamInfoResponse.SerializeToString,
+            ),
+            'append_mux_scan_result': grpc.unary_unary_rpc_method_handler(
+                    servicer.append_mux_scan_result,
+                    request_deserializer=minknow__api_dot_acquisition__pb2.MuxScanResult.FromString,
+                    response_serializer=minknow__api_dot_acquisition__pb2.AppendMuxScanResultResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -420,5 +470,39 @@ class AcquisitionService(object):
         return grpc.experimental.unary_unary(request, target, '/minknow_api.acquisition.AcquisitionService/set_signal_reader',
             minknow__api_dot_acquisition__pb2.SetSignalReaderRequest.SerializeToString,
             minknow__api_dot_acquisition__pb2.SetSignalReaderResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def set_bream_info(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/minknow_api.acquisition.AcquisitionService/set_bream_info',
+            minknow__api_dot_acquisition__pb2.SetBreamInfoRequest.SerializeToString,
+            minknow__api_dot_acquisition__pb2.SetBreamInfoResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def append_mux_scan_result(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/minknow_api.acquisition.AcquisitionService/append_mux_scan_result',
+            minknow__api_dot_acquisition__pb2.MuxScanResult.SerializeToString,
+            minknow__api_dot_acquisition__pb2.AppendMuxScanResultResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

@@ -105,7 +105,6 @@ message GetVersionInfoRequest {
 }
 
 message GetVersionInfoResponse {
-    
     message MinknowVersion {
         int32 major = 1;
         int32 minor = 2;
@@ -120,11 +119,16 @@ message GetVersionInfoResponse {
     // includes the hash of the commit it is based on, and whether the working copy is different from that has (-dirty)
     MinknowVersion minknow = 1;
 
-    // The protocols version specifies what version of bream is installed.
-    // By default is set to '0.0.0.0', but will otherwise be set to a Bream release version.
-    string protocols = 2;
+    // The version of Bream that is installed.
+    //
+    // An invalid installation will cause this to return "0.0.0".
+    //
+    // Prior to 5.0, this field was called "protocols".
+    //
+    // Since 5.0
+    string bream = 2;
 
-    // Describes the distribution that this MinKNOW installation is part of, ususally
+    // Describes the distribution that this MinKNOW installation is part of, usually
     // this will be the Metapackage version number/identity, this will be "unknown"
     // if the distribution-version hasn't been set. This information is also communicated
     // in the Manager's DaemonMessage in daemon.proto
@@ -143,13 +147,15 @@ message GetVersionInfoResponse {
     // are stable, unstable or have been modified.
     DistributionStatus distribution_status = 4;
 
-    // The configuration version specifies what version of ont-configuration (wanda) is installed.
-    // By default is set to '0.0.0.0', but will otherwise be set to a Wanda release version.
-    // 
-    // Since 3.6
-    string configuration = 5;
+    // The version of the protocol configuration files that is installed.
+    //
+    // An invalid installation will cause this to return "0.0.0".
+    //
+    // Prior to 5.0, this field was called "configuration".
+    //
+    // Since 5.0
+    string protocol_configuration = 5;
 
-    // Note that InstallationType is duplicated in manager.proto, the two definitions should be kept in sync.
     enum InstallationType {
         // For internal release. production.proto will be enabled for this type
         ONT = 0;
@@ -167,13 +173,22 @@ message GetVersionInfoResponse {
         OND_RELEASE = 4;
     }
 
-    // Indicates what installation type minknow was installed as. Certain installation
-    // types may turn features on or off depending on the type. For example,
-    // for ont and prod installs, the production.proto service will be enabled
-    // to make calls such as writing to the eeprom
+    // The installation type of MinKNOW.
+    //
+    // The installation type may affect the available features, or the update process.
     //
     // Since 4.1
     InstallationType installation_type = 6;
+
+    // Version of guppy MinKNOW was packaged against.
+    //
+    // Since 5.0
+    string guppy_build_version = 7;
+
+    // Version of guppy MinKNOW running with.
+    //
+    // Since 5.0
+    string guppy_connected_version = 8;
 }
 
 message GetOutputDirectoriesRequest {
@@ -312,7 +327,7 @@ message StreamInstanceActivityResponse {
         // information about the connected device
         DeviceInfo device_info = 1;
 
-        // Information about the currently conected flow cell
+        // Information about the currently connected flow cell
         //
         // Note: if no flow cell is connected this [flow_cell_info.has_flow_cell] will be false
         device.GetFlowCellInfoResponse flow_cell_info = 2;

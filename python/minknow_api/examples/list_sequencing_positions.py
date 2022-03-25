@@ -20,7 +20,7 @@ def main():
     args = parser.parse_args()
 
     # Construct a manager using the host + port provided.
-    manager = Manager(host=args.host, port=args.port, use_tls=False)
+    manager = Manager(host=args.host, port=args.port)
 
     # Find a list of currently available sequencing positions.
     positions = manager.flow_cell_positions()
@@ -32,7 +32,6 @@ def main():
 
         if pos.running:
             print("  secure: %s" % pos.description.rpc_ports.secure)
-            print("  insecure: %s" % pos.description.rpc_ports.insecure)
 
             # User could call {pos.connect()} here to connect to the running MinKNOW instance.
 

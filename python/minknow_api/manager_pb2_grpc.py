@@ -48,7 +48,7 @@ class ManagerServiceStub(object):
         self.get_version_info = channel.unary_unary(
                 '/minknow_api.manager.ManagerService/get_version_info',
                 request_serializer=minknow__api_dot_manager__pb2.GetVersionInfoRequest.SerializeToString,
-                response_deserializer=minknow__api_dot_manager__pb2.GetVersionInfoResponse.FromString,
+                response_deserializer=minknow__api_dot_instance__pb2.GetVersionInfoResponse.FromString,
                 )
         self.list_protocol_output_dir_files = channel.unary_stream(
                 '/minknow_api.manager.ManagerService/list_protocol_output_dir_files',
@@ -149,6 +149,11 @@ class ManagerServiceStub(object):
                 '/minknow_api.manager.ManagerService/find_protocols',
                 request_serializer=minknow__api_dot_manager__pb2.FindProtocolsRequest.SerializeToString,
                 response_deserializer=minknow__api_dot_manager__pb2.FindProtocolsResponse.FromString,
+                )
+        self.list_settings_for_protocol = channel.unary_unary(
+                '/minknow_api.manager.ManagerService/list_settings_for_protocol',
+                request_serializer=minknow__api_dot_manager__pb2.ListSettingsForProtocolRequest.SerializeToString,
+                response_deserializer=minknow__api_dot_manager__pb2.ListSettingsForProtocolResponse.FromString,
                 )
 
 
@@ -523,6 +528,16 @@ class ManagerServiceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def list_settings_for_protocol(self, request, context):
+        """Given a protocol and some information about the flow-cell and kits will provide a list
+        of settings required by the protocol, their defaults and dependencies.
+
+        Since 4.5 (moved from ProtocolService)
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_ManagerServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -559,7 +574,7 @@ def add_ManagerServiceServicer_to_server(servicer, server):
             'get_version_info': grpc.unary_unary_rpc_method_handler(
                     servicer.get_version_info,
                     request_deserializer=minknow__api_dot_manager__pb2.GetVersionInfoRequest.FromString,
-                    response_serializer=minknow__api_dot_manager__pb2.GetVersionInfoResponse.SerializeToString,
+                    response_serializer=minknow__api_dot_instance__pb2.GetVersionInfoResponse.SerializeToString,
             ),
             'list_protocol_output_dir_files': grpc.unary_stream_rpc_method_handler(
                     servicer.list_protocol_output_dir_files,
@@ -660,6 +675,11 @@ def add_ManagerServiceServicer_to_server(servicer, server):
                     servicer.find_protocols,
                     request_deserializer=minknow__api_dot_manager__pb2.FindProtocolsRequest.FromString,
                     response_serializer=minknow__api_dot_manager__pb2.FindProtocolsResponse.SerializeToString,
+            ),
+            'list_settings_for_protocol': grpc.unary_unary_rpc_method_handler(
+                    servicer.list_settings_for_protocol,
+                    request_deserializer=minknow__api_dot_manager__pb2.ListSettingsForProtocolRequest.FromString,
+                    response_serializer=minknow__api_dot_manager__pb2.ListSettingsForProtocolResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -786,7 +806,7 @@ class ManagerService(object):
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/minknow_api.manager.ManagerService/get_version_info',
             minknow__api_dot_manager__pb2.GetVersionInfoRequest.SerializeToString,
-            minknow__api_dot_manager__pb2.GetVersionInfoResponse.FromString,
+            minknow__api_dot_instance__pb2.GetVersionInfoResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -1127,5 +1147,22 @@ class ManagerService(object):
         return grpc.experimental.unary_unary(request, target, '/minknow_api.manager.ManagerService/find_protocols',
             minknow__api_dot_manager__pb2.FindProtocolsRequest.SerializeToString,
             minknow__api_dot_manager__pb2.FindProtocolsResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def list_settings_for_protocol(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/minknow_api.manager.ManagerService/list_settings_for_protocol',
+            minknow__api_dot_manager__pb2.ListSettingsForProtocolRequest.SerializeToString,
+            minknow__api_dot_manager__pb2.ListSettingsForProtocolResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

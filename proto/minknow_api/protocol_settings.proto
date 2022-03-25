@@ -8,6 +8,25 @@ option objc_class_prefix = "MKAPI";
 import "minknow_api/analysis_configuration.proto";
 import "minknow_api/rpc_options.proto";
 
+message ProtocolIdentifierComponents {
+    enum Location {
+        ANY = 0;
+        SYSTEM_SCRIPTS = 1;
+        USER_SCRIPTS = 2;
+    };
+    // If not specified, will default to "ANY"
+    Location location = 1;
+    // one of "custom", "sequencing", "control", "ctc", "platform qc" or "flowcell_plugin"
+    string experiment_type = 2;
+    // Name (or path) of the protocol, without the .toml extension eg: "sequencing/sequencing_MIN106_DNA" this is relative to the
+    // system or user protocol directory
+    string name = 3;
+    // eg: "FLO-MIN106"
+    string flow_cell_product_code = 4;
+    // eg: "SQK-RPB004"
+    string kit = 5;
+}
+
 message ProtocolSetting {
     enum Category {
         OTHER = 0;
@@ -39,12 +58,17 @@ message ProtocolSetting {
     };
 
     message ProtocolSettingValue {
+        message MultiString{
+            repeated string values = 1;
+        }
+
         oneof protocol_setting_value {
             string string_value = 1;
             double float_value = 2;
             int64 integer_value = 3;
             bool bool_value = 4;
             analysis_configuration.WriterConfiguration.ChannelConfiguration channels_value = 5;
+            MultiString multi_string_value = 6;
         }
     }
 

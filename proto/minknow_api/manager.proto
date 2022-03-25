@@ -8,6 +8,7 @@ option objc_class_prefix = "MKAPI";
 import "minknow_api/rpc_options.proto";
 import "minknow_api/device.proto";
 import "minknow_api/instance.proto";
+import "minknow_api/protocol_settings.proto";
 import "google/protobuf/timestamp.proto";
 
 service ManagerService {
@@ -83,7 +84,7 @@ service ManagerService {
     //
     // See also: instance.get_version_info which provides some similar information on a per instance basis.
     // Since 3.3
-    rpc get_version_info (GetVersionInfoRequest) returns (GetVersionInfoResponse) {
+    rpc get_version_info (GetVersionInfoRequest) returns (instance.GetVersionInfoResponse) {
         option idempotency_level = NO_SIDE_EFFECTS;
     }
 
@@ -318,6 +319,15 @@ service ManagerService {
     rpc find_protocols(FindProtocolsRequest) returns (FindProtocolsResponse) {
         option (experimental) = true;
     }
+
+    // Given a protocol and some information about the flow-cell and kits will provide a list
+    // of settings required by the protocol, their defaults and dependencies.
+    //
+    // Since 4.5 (moved from ProtocolService)
+    rpc list_settings_for_protocol(ListSettingsForProtocolRequest) returns (ListSettingsForProtocolResponse) {
+        option (experimental) = true;
+        option idempotency_level = NO_SIDE_EFFECTS;
+    }
 }
 
 
@@ -396,6 +406,23 @@ message DescribeHostResponse {
     //
     // Since 4.4
     bool can_sequence_offline = 5;
+}
+
+enum SimpleProtocolState {
+    // No protocol has been started on this position (since MinKNOW was started, or the position
+    // was reset). It may also indicate that the protocol state has been manually cleared by the
+    // user (although there is currently no API for doing this).
+    NO_PROTOCOL_STATE = 0;
+
+    // A protocol is currently running on this flow cell position.
+    PROTOCOL_RUNNING = 1;
+
+    // No protocol is currently running, and the last protocol finished successfully (it either ran
+    // to completion or the user manually stopped it).
+    PROTOCOL_FINISHED_SUCCESSFULLY = 2;
+
+    // No protocol is currently running, and the last protocol finished with an error.
+    PROTOCOL_FINISHED_WITH_ERROR = 3;
 }
 
 message FlowCellPosition {
@@ -478,15 +505,8 @@ message FlowCellPosition {
     message RpcPorts {
         // A port providing the standard gRPC protocol over TLS
         uint32 secure = 1;
-        // A port providing the standard gRPC protocol without TLS
-        uint32 insecure = 2;
         // A port providing the gRPC-Web protocol over TLS
         uint32 secure_grpc_web = 3;
-        // DEPRECATED: A port providing the gRPC-Web protocol without TLS
-        //
-        // From 4.1, this field is now deprecated and will only ever
-        // return a value of 0
-        uint32 insecure_grpc_web = 4;
     }
     // The ports the APIs for this flow cell position are provided on.
     //
@@ -532,6 +552,11 @@ message FlowCellPosition {
     // For integrated positions, this is the same as the corresponding field returned from the
     // describe_host RPC.
     bool can_sequence_offline = 8;
+
+    // Indicates the state of the last or current protocol on the flow cell position.
+    //
+    // Since 5.0.
+    SimpleProtocolState protocol_state = 9;
 }
 
 message FlowCellPositionsRequest {
@@ -601,17 +626,8 @@ message BasecallerApiResponse {
     // The port to use to access the minknow_api.basecaller API using the standard gRPC protocol
     // over TLS
     uint32 secure = 1;
-    // The port to use to access the minknow_api.basecaller API using the standard gRPC protocol
-    // without TLS
-    uint32 insecure = 2;
     // The port to use to access the minknow_api.basecaller API using the gRPC-Web protocol over TLS
     uint32 secure_grpc_web = 3;
-    // DEPRECATED: The port to use to access the minknow_api.basecaller API using the gRPC-Web protocol without
-    // TLS
-    //
-    // From 4.1, this field is now deprecated and will only ever
-    // return a value of 0
-    uint32 insecure_grpc_web = 4;
 }
 
 message GetGuppyInfoRequest {}
@@ -631,67 +647,6 @@ message GetGuppyInfoResponse {
 }
 
 message GetVersionInfoRequest {}
-
-message GetVersionInfoResponse {
-
-    // Note that InstallationType is duplicated in instance.proto, the two definitions should be kept in sync.
-    enum InstallationType {
-        // For internal release. production.proto will be enabled for this type
-        ONT = 0;
-
-        // For customer releases
-        NC = 1;
-
-        // For production release. production.proto will be enabled for this type
-        PROD = 2;
-
-        // For Q releases (nanopore long term support release)
-        Q_RELEASE = 3;
-
-        // Oxford Nanopore Diagnostic
-        OND_RELEASE = 4;
-    }
-
-
-    // What minknow version is installed. Split into major, minor and patch versions
-    // Also includes the full version as a string, which contain the major, minor and patch numbers
-    // as well as if the version is pre-release version (-pre), whether it is a release candidate (-rc#)
-    // or whether it is a variant version (i.e. for conferences) (-variant). For non-release builds it also
-    // includes the hash of the commit it is based on, and whether the working copy is different from that has (-dirty)
-    instance.GetVersionInfoResponse.MinknowVersion minknow = 1;
-
-    // The protocols version specifies what version of bream is installed.
-    // By default is set to '0.0.0.0', but will otherwise be set to a Bream release version.
-    string protocols = 2;
-
-    // Describes the distribution that this MinKNOW installation is part of, ususally
-    // this will be the Metapackage version number/identity, this will be "unknown"
-    // if the distribution-version hasn't been set. This information is also communicated
-    // in the Manager's DaemonMessage in daemon.proto
-    string distribution_version = 3;
-
-    // Indicates if the MinKNOW distribution including components such as Bream
-    // are stable, unstable or have been modified.
-    instance.GetVersionInfoResponse.DistributionStatus distribution_status = 4;
-
-    // Version of guppy MinKNOW was packaged against.
-    string guppy_build_version = 5;
-
-    // Version of guppy MinKNOW running with.
-    string guppy_connected_version = 6;
-
-    // The configuration version specifies what version of ont-configuration (wanda) is installed.
-    // By default is set to '0.0.0.0', but will otherwise be set to a Wanda release version.
-    //
-    // Since 3.6
-    string configuration = 7;
-
-    // Indicates what installation type minknow was installed as. Certain installation
-    // types may turn features on or off depending on the type. For example,
-    // for ont and prod installs, the production.proto service will be enabled
-    // to make calls such as writing to the eeprom
-    InstallationType installation_type = 8;
-}
 
 message ListProtocolOutputDirFilesRequest {
     // Specify the root path to list files from. If the path is left empty, then the base protocol output directory
@@ -718,7 +673,7 @@ message ListProtocolOutputDirFilesResponse {
     // List of files in the directory specified
     repeated string files = 2;
 
-    // The absolute directory that is being listed within this repsonse
+    // The absolute directory that is being listed within this response
     string current_listed_path = 3;
 }
 
@@ -1168,4 +1123,96 @@ message FindProtocolsResponse {
 
     // Protocols available for starting.
     repeated Protocol protocols = 1;
+}
+
+message ListSettingsForProtocolRequest {
+    oneof protocol_identifier {
+        // specify the protocol with a string containing all the protocol's identifying components, eg:
+        // "sequencing/sequencing_MIN106_DNA:FLO-MIN106:SQK-RPB004"
+        string identifier = 1;
+
+        // specify the protocol providing the identifying components individually. All components are optional, if more
+        // than one protocol matches given strings, information about the first will be returned.
+        protocol_settings.ProtocolIdentifierComponents components = 2;
+    }
+    // The flow-cell connector type identifies the type of hardware and is used
+    // to identify the correct protocol.
+    // The flow-cell connector types applicable to the device are listed by
+    // the get_flow_cell_types rpc in this service and the get_device_state rpc
+    // in the device service.
+    device.FlowCellConnectorType flow_cell_connector = 3 [(rpc_required) = true];
+}
+
+
+message ListSettingsForProtocolResponse {
+    // Run options
+    message RunOptions {
+        protocol_settings.ProtocolSetting run_length = 1;
+        protocol_settings.ProtocolSetting bias_voltage = 2;
+        protocol_settings.ProtocolSetting read_until_enabled = 3;
+        protocol_settings.ProtocolSetting read_until_ref_file = 4;
+        protocol_settings.ProtocolSetting read_until_channels = 5;
+        protocol_settings.ProtocolSetting read_until_bed_file_enabled = 6;
+        protocol_settings.ProtocolSetting read_until_bed_file = 7;
+        protocol_settings.ProtocolSetting read_until_enrichment = 8;
+        protocol_settings.ProtocolSetting active_channel_selection = 9; // bool
+        protocol_settings.ProtocolSetting mux_scan_period = 10; // in hours
+        protocol_settings.ProtocolSetting group_change_period = 11;
+    }
+
+    message Basecalling {
+        protocol_settings.ProtocolSetting basecalling_enabled = 1;
+        protocol_settings.ProtocolSetting barcoding_enabled = 2;
+        protocol_settings.ProtocolSetting barcoding_kits = 3;
+        protocol_settings.ProtocolSetting basecall_model = 4;
+        protocol_settings.ProtocolSetting trim_barcodes_enabled = 5;
+        protocol_settings.ProtocolSetting require_barcodes_both_ends = 6;
+        protocol_settings.ProtocolSetting detect_mid_strand_barcodes = 7;
+        protocol_settings.ProtocolSetting override_mid_barcoding_score = 8;
+        protocol_settings.ProtocolSetting override_rear_barcoding_score = 9;
+        protocol_settings.ProtocolSetting min_barcoding_score = 10;
+        protocol_settings.ProtocolSetting min_barcoding_score_rear = 11;
+        protocol_settings.ProtocolSetting min_barcoding_score_mid = 12;
+        protocol_settings.ProtocolSetting alignment_enabled = 13;
+        protocol_settings.ProtocolSetting alignment_ref_file = 14;
+        protocol_settings.ProtocolSetting alignment_bed_file_enabled = 15;
+        protocol_settings.ProtocolSetting alignment_bed_file = 16;
+    }
+
+    // Output
+    message Output {
+        protocol_settings.ProtocolSetting output_location = 1;
+        protocol_settings.ProtocolSetting fast_q_enabled = 2;
+        protocol_settings.ProtocolSetting fast_q_reads_per_file = 3;
+        protocol_settings.ProtocolSetting fast_q_data_compression = 4;
+        protocol_settings.ProtocolSetting fast_5_enabled = 5;
+        protocol_settings.ProtocolSetting fast_5_reads_per_file = 6;
+        protocol_settings.ProtocolSetting fast_5_data_trace_table = 7;
+        protocol_settings.ProtocolSetting fast_5_data_move_table = 8;
+        protocol_settings.ProtocolSetting fast_5_data_fast_q = 9;
+        protocol_settings.ProtocolSetting fast_5_data_raw = 10;
+        protocol_settings.ProtocolSetting fast_5_data_compression = 11;
+        protocol_settings.ProtocolSetting bam_enabled = 12;
+        protocol_settings.ProtocolSetting read_filtering_enabled = 13;
+        protocol_settings.ProtocolSetting read_filtering_min_qscore = 14;
+        protocol_settings.ProtocolSetting read_filtering_min_read_length = 15;
+        protocol_settings.ProtocolSetting read_filtering_max_read_length = 16;
+        protocol_settings.ProtocolSetting bulk_file_enabled = 17;
+        protocol_settings.ProtocolSetting bulk_file_raw = 18;
+        protocol_settings.ProtocolSetting bulk_file_events = 19;
+        protocol_settings.ProtocolSetting bulk_file_read_table = 20;
+        protocol_settings.ProtocolSetting bulk_file_raw_enabled = 21;
+        protocol_settings.ProtocolSetting bulk_file_events_enabled = 22;
+        protocol_settings.ProtocolSetting bulk_file_read_table_enabled = 23;
+    }
+
+    protocol_settings.ProtocolIdentifierComponents protocol = 1;
+
+    RunOptions run_options = 2;
+    Basecalling basecalling = 3;
+    Output output = 4;
+
+    // Any protocol settings not covered by the above structures, for example
+    // those required for custom-scripts.
+    repeated protocol_settings.ProtocolSetting protocol_settings = 5;
 }

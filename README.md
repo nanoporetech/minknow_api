@@ -66,7 +66,6 @@ to get it is from PyPI using pip, but it can also be built from source (see [BUI
 #   Available sequencing positions on localhost:9501:
 #   MN12345: running
 #     secure: 8000
-#     insecure: 8001
 ```
 
 The package contains plenty of documentation in its docstrings, although for an overview of the
@@ -85,9 +84,9 @@ descriptions](protos/minknow_api/) in this repository, and how to use those libr
 files themselves contain documentation about what the various RPCs do, and a more general overview
 is given below.
 
-The Manager interface is available on port `9501` (for insecure connections) and `9502` (for
-secure connections) - see the FAQs for more details. From there, APIs are available to get the ports
-that other services operate on (including the services for each flow cell position).
+The Manager interface is available on port  `9502` - see the FAQs for more details.
+From there, APIs are available to get the ports that other services operate on (including the services
+for each flow cell position).
 
 
 #### JavaScript
@@ -97,9 +96,8 @@ much like any other language - see above) or from a web browser environment. For
 (including Electron), you need to use the [Web][grpc-web] variant, which may also involve
 connecting to a different port.
 
-Secure connections still start at `9502` for the Manager service, but insecure connections start at
-`9503` (see the FAQs). When using the Manager APIs to get ports for other services, you should use
-fields with `grpc_web` in the name, like `secure_grpc_web`.
+Secure connections still start at `9502` for the Manager service. When using the Manager APIs to
+get ports for other services, you should use fields with `grpc_web` in the name, like `secure_grpc_web`.
 
 [grpc-web]: https://github.com/improbable-eng/grpc-web
 
@@ -113,14 +111,13 @@ There are two global services, the [manager service](protos/minknow_api/manager.
 [basecaller service](protos/minknow_api/basecaller.proto). There is only one instance of each of
 these services: see below for how to connect to them. All other services are provided by each flow
 cell position independently. For example, if you are using a GridION X5, which has 5 flow cell
-positions, there will be 5 ports (or sets of ports - secure, insecure, gRPC Web, etc), each of which
+positions, there will be 5 ports (or sets of ports - secure, gRPC Web, etc), each of which
 will provide *all* the other services.
 
 #### manager.proto
 
 [manager.proto](protos/minknow_api/manager.proto) is the entry point of MinKNOW's APIs. It is always
-available on specific ports: `9501` for insecure connections and `9502` for secure connections (see
-the FAQs for more details).
+available on a specific port `9502`.
 
 The most important method is `flow_cell_positions`, which provides information about how to connect
 to the services for each flow cell position. From there you can access all the flow cell
@@ -181,7 +178,7 @@ Help
 
 ### Licence and Copyright
 
-© 2020 Oxford Nanopore Technologies Ltd.
+© 2021 Oxford Nanopore Technologies PLC.
 
 API Specifications for MinKNOW is distributed under the Terms and Conditions of the Nanopore
 Community.
@@ -207,25 +204,18 @@ with MinKNOW Core 3.6 or 5.0. There is also no guarantee it will work with MinKN
 
 #### What port should I connect to?
 
-There are three standard ports that MinKNOW exposes, all of which provide the [manager
+There is one standard port that MinKNOW exposes, which provides the [manager
 service](protos/minknow_api/manager.proto):
 
-* `9501` can be used with a gRPC "insecure channel"
 * `9502` can be used with a gRPC or gRPC-Web "secure channel"
-* `9503` can be used with a gRPC-Web "insecure channel"
 
 gRPC-Web is only used for browser-based clients; all other client should use the normal gRPC ports.
-For connections on the local machine, insecure channels are fine. For remote connections, we
-strongly recommend using secure channels (and MinKNOW may not expose insecure ports over the
-network), but see the next FAQ for details.
 
-Ports reported by manager RPCs follow a similar pattern: there are four fields. For example, the
-`basecaller_api` RPC returns a response with four fields:
+Ports reported by manager RPCs follow a similar pattern: there are two fields. For example, the
+`basecaller_api` RPC returns a response with two fields:
 
 * `secure` is a port that can be connected to with a gRPC secure channel
-* `insecure` is a port that can be connected to with a gRPC insecure channel
 * `secure_grpc_web` is a port that can be connected to with a gRPC-Web secure channel
-* `insecure_grpc_web` is a port that can be connected to with a gRPC-Web insecure channel
 
 It may be that the `secure` and `secure_grpc_web` fields contain the same port number, but this is
 not guaranteed and should not be relied on.
@@ -235,54 +225,20 @@ not guaranteed and should not be relied on.
 MinKNOW installations use a self-signed certificate for their secure ports. This means that the
 client library you use has to trust this certificate.
 
-Within the MinKNOW installation, you can find the CA certificate at `conf/rpc-certs/ca.crt`. This
-can be passed to most gRPC client libraries as part of creating a secure/SSL channel. For example,
-in Python, you can do:
+If you are using the `minknow_api` Python package, this is all handled for you. If you are using
+`minknow_api.manager.Manager`, secure connections are used by default. This can be overridden with
+the `use_tls` argument when creating this class. `minknow_api.Connection` can also be passed a
+`use_tls` argument.
 
-```python
-import grpc
-with open("/opt/ont/minknow/conf/rpc-certs/ca.crt", "rb") as ca_file:
-    grpc_credentials = grpc.ssl_channel_credentials(ca_file.read())
-channel = grpc.secure_channel("localhost:9502", credentials=grpc_credentials)
-```
+If you are using the gRPC client libraries directly (for example, if you are connecting from a
+language other than Python), you will need to tell the library about MinKNOW's TLS certificates.
+
+Within the MinKNOW installation, you can find the CA certificate at `conf/rpc-certs/ca.crt`. This
+can be passed to most gRPC client libraries as part of creating a secure/SSL channel.
 
 Note that this certificate is only valid for the "localhost" name - connecting to `127.0.0.1`
 directly will not work, nor will connecting across the network. You can work around this by
-overriding the name that gRPC will check the certificate against using
-`grpc.ssl_target_name_override`:
-
-```python
-channel = grpc.secure_channel("gxb1234:9502",
-                              credentials=grpc_credentials,
-                              options=(("grpc.ssl_target_name_override", "localhost"),))
-```
-
-###### Connecting from Manager or Connection classes
-
-The `Manager` or `Connection` classes will use the following strategy to determine the CA
-(certificate authority) file to use to validate TLS connections to MinKNOW:
-
-1. If `MINKNOW_TRUSTED_CA` environment variable is present and contains the path to a file that exists, that file will be used.
-2. If run from MinKNOW's internal `ont-python` environment (eg: as part of a protocol script) the CA
-   file for this installation of MinKNOW will be used.
-3. If MinKNOW is installed on the system in the standard location (see below), the CA file from that
-   installation of MinKNOW will be used.
-
-The default MinKNOW installation path depends on the operating system:
-- Windows: `C:\Program Files\OxfordNanopore\MinKNOW`
-- OSX: `/Applications/MinKNOW.app/Contents/Resources`
-- Linux: `/opt/ont/minknow`
-
-The CA file is located at `conf/rpc-certs/ca.crt` within the MinKNOW installation.
-
-If `MissingMinknowSSlCertError` is raised, then the most likely causes are:
-
-1. Non-default installation path was used
-2. Initiating from a remote connection, so `ca.crt` file is not available
-
-Both cases will require setting `MINKNOW_TRUSTED_CA` environment variable to the correct path. In the case of a remote connection, then the `ca.crt` file will need to be copied to the remote client first.
-
-We are working on improving this experience in future versions of MinKNOW.
+setting the `grpc.ssl_target_name_override` channel option to `localhost`.
 
 ### Glossary
 
@@ -319,3 +275,39 @@ configuration and a Python script. A *protocol run* is a specific execution of t
 
 A *protocol group* is a set of protocol runs given the same name (referred to as a "protocol group
 ID" in the API, and an "experiment name" in the user interface).
+
+
+### Troubleshooting
+
+#### Bad metadata key
+
+If you see the following error when connecting to the **local** machine:
+
+```
+grpc._channel._InactiveRpcError: <_InactiveRpcError of RPC that terminated with:
+        status = StatusCode.UNAUTHENTICATED
+        details = "Bad metadata key"
+```
+
+you can try setting the `MINKNOW_API_USE_LOCAL_TOKEN` environment variable to `1`. Note that you
+will need to have MinKNOW's local guest mode enabled for this to work (it is enabled by default, but
+the setting can be changed via Mooneye).
+
+#### Invalid local auth token
+
+If you see the following error when connecting to a **remote** machine:
+
+```
+grpc._channel._InactiveRpcError: <_InactiveRpcError of RPC that terminated with:
+        status = StatusCode.UNAUTHENTICATED
+        details = "Invalid local auth token"
+```
+
+you can try setting the `MINKNOW_API_USE_LOCAL_TOKEN` environment variable to `0`.
+
+#### MissingMinknowSSlCertError
+
+If you get a `MissingMinknowSSlCertError` exception, try setting the `MINKNOW_TRUSTED_CA`
+environment variable. This should be the path to the `conf/rpc-certs/ca.crt` file found in a MinKNOW
+installation. You should use a copy of the file from the same version of MinKNOW as the one you are
+attempting to connect to.

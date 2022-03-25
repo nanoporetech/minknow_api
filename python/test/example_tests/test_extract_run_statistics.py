@@ -25,8 +25,8 @@ TEST_PROTOCOL_WITH_ACQUISTIIONS = protocol_pb2.ProtocolRunInfo(
 
 TEST_ACQUISITION_OUTPUT_STATS = [
     statistics_pb2.StreamAcquisitionOutputResponse(
-        buckets=[
-            statistics_pb2.StreamAcquisitionOutputResponse.FilteredBuckets(
+        snapshots=[
+            statistics_pb2.StreamAcquisitionOutputResponse.FilteredSnapshots(
                 filtering=[
                     statistics_pb2.AcquisitionOutputKey(
                         barcode_name="barcode1234",
@@ -35,9 +35,9 @@ TEST_ACQUISITION_OUTPUT_STATS = [
                         alignment_reference="unaligned",
                     )
                 ],
-                buckets=[
-                    statistics_pb2.AcquisitionOutputBucket(
-                        bucket=60,
+                snapshots=[
+                    statistics_pb2.AcquisitionOutputSnapshot(
+                        seconds=60,
                         yield_summary=acquisition_pb2.AcquisitionYieldSummary(
                             basecalled_pass_read_count=600
                         ),
@@ -72,7 +72,7 @@ def test_basic_start_protocol():
                 name=position_info.position_name,
                 state=manager_pb2.FlowCellPosition.State.STATE_RUNNING,
                 rpc_ports=manager_pb2.FlowCellPosition.RpcPorts(
-                    secure=0, insecure=sequencing_position.port
+                    secure=sequencing_position.port
                 ),
             ),
         ]

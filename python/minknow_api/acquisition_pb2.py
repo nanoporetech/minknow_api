@@ -4,6 +4,7 @@
 """Generated protocol buffer code."""
 from google.protobuf.internal import enum_type_wrapper
 from google.protobuf import descriptor as _descriptor
+from google.protobuf import descriptor_pool as _descriptor_pool
 from google.protobuf import message as _message
 from google.protobuf import reflection as _reflection
 from google.protobuf import symbol_database as _symbol_database
@@ -16,307 +17,21 @@ from minknow_api import rpc_options_pb2 as minknow__api_dot_rpc__options__pb2
 from google.protobuf import timestamp_pb2 as google_dot_protobuf_dot_timestamp__pb2
 
 
-DESCRIPTOR = _descriptor.FileDescriptor(
-  name='minknow_api/acquisition.proto',
-  package='minknow_api.acquisition',
-  syntax='proto3',
-  serialized_options=b'\n\034com.nanoporetech.minknow_api\242\002\005MKAPI',
-  create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\x1dminknow_api/acquisition.proto\x12\x17minknow_api.acquisition\x1a\x1dminknow_api/rpc_options.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\xd3\x03\n\x0cStartRequest\x12\"\n\x1a\x64ont_wait_for_device_ready\x18\x02 \x01(\x08\x12\x38\n\x0fgenerate_report\x18\x03 \x01(\x0e\x32\x1f.minknow_api.acquisition.Option\x12\x45\n\x1csend_sequencing_read_metrics\x18\x04 \x01(\x0e\x32\x1f.minknow_api.acquisition.Option\x12\x41\n\x18send_basecalling_metrics\x18\x05 \x01(\x0e\x32\x1f.minknow_api.acquisition.Option\x12\x31\n\x07purpose\x18\x06 \x01(\x0e\x32 .minknow_api.acquisition.Purpose\x12\x31\n\x08\x61nalysis\x18\x07 \x01(\x0e\x32\x1f.minknow_api.acquisition.Option\x12\x34\n\x0b\x66ile_output\x18\x08 \x01(\x0e\x32\x1f.minknow_api.acquisition.Option\x12?\n\x16generate_final_summary\x18\t \x01(\x0e\x32\x1f.minknow_api.acquisition.Option\"\x1f\n\rStartResponse\x12\x0e\n\x06run_id\x18\x01 \x01(\t\"\xe0\x01\n\x0bStopRequest\x12L\n\x13\x64\x61ta_action_on_stop\x18\x01 \x01(\x0e\x32/.minknow_api.acquisition.StopRequest.DataAction\x12\x18\n\x10wait_until_ready\x18\x02 \x01(\x08\x12\x15\n\rkeep_power_on\x18\x03 \x01(\x08\"R\n\nDataAction\x12\x10\n\x0cSTOP_DEFAULT\x10\x00\x12\x16\n\x12STOP_KEEP_ALL_DATA\x10\x01\x12\x1a\n\x16STOP_FINISH_PROCESSING\x10\x02\"\x0e\n\x0cStopResponse\"+\n\x1bWatchForStatusChangeRequest\x12\x0c\n\x04stop\x18\x01 \x01(\x08\"V\n\x1cWatchForStatusChangeResponse\x12\x36\n\x06status\x18\x01 \x01(\x0e\x32&.minknow_api.acquisition.MinknowStatus\"\x16\n\x14\x43urrentStatusRequest\"O\n\x15\x43urrentStatusResponse\x12\x36\n\x06status\x18\x01 \x01(\x0e\x32&.minknow_api.acquisition.MinknowStatus\"\x14\n\x12GetProgressRequest\"\xa0\x01\n\x13GetProgressResponse\x12S\n\x0fraw_per_channel\x18\x01 \x01(\x0b\x32:.minknow_api.acquisition.GetProgressResponse.RawPerChannel\x1a\x34\n\rRawPerChannel\x12\x10\n\x08\x61\x63quired\x18\x01 \x01(\x04\x12\x11\n\tprocessed\x18\x02 \x01(\x04\".\n\x1cGetAcquisitionRunInfoRequest\x12\x0e\n\x06run_id\x18\x01 \x01(\t\"\xdf\x03\n\x17\x41\x63quisitionYieldSummary\x12\x12\n\nread_count\x18\x01 \x01(\x03\x12\"\n\x1a\x62\x61secalled_pass_read_count\x18\x03 \x01(\x03\x12\"\n\x1a\x62\x61secalled_fail_read_count\x18\x04 \x01(\x03\x12%\n\x1d\x62\x61secalled_skipped_read_count\x18\n \x01(\x03\x12\x1d\n\x15\x62\x61secalled_pass_bases\x18\x05 \x01(\x03\x12\x1d\n\x15\x62\x61secalled_fail_bases\x18\x12 \x01(\x03\x12\x1a\n\x12\x62\x61secalled_samples\x18\x06 \x01(\x03\x12\x1c\n\x14selected_raw_samples\x18\x07 \x01(\x03\x12\x17\n\x0fselected_events\x18\x08 \x01(\x03\x12 \n\x18\x65stimated_selected_bases\x18\t \x01(\x03\x12\x19\n\x11\x61lignment_matches\x18\x0e \x01(\x03\x12\x1c\n\x14\x61lignment_mismatches\x18\x0f \x01(\x03\x12\x1c\n\x14\x61lignment_insertions\x18\x10 \x01(\x03\x12\x1b\n\x13\x61lignment_deletions\x18\x11 \x01(\x03\x12\x1a\n\x12\x61lignment_coverage\x18\x13 \x01(\x02\"\x98\x01\n\x18\x41\x63quisitionWriterSummary\x12\x1a\n\x12written_read_count\x18\x01 \x01(\x03\x12\x1f\n\x17\x62ytes_to_write_produced\x18\x02 \x01(\x03\x12\x1d\n\x15\x62ytes_to_write_failed\x18\x03 \x01(\x03\x12 \n\x18\x62ytes_to_write_completed\x18\x04 \x01(\x03\"\xb0\x03\n\x10\x43hannelStateInfo\x12?\n\x06groups\x18\x01 \x03(\x0b\x32/.minknow_api.acquisition.ChannelStateInfo.Group\x1a;\n\x05Style\x12\r\n\x05label\x18\x01 \x01(\t\x12\x13\n\x0b\x64\x65scription\x18\x02 \x01(\t\x12\x0e\n\x06\x63olour\x18\x03 \x01(\t\x1a~\n\x0c\x43hannelState\x12\n\n\x02id\x18\x01 \x01(\r\x12\x0c\n\x04name\x18\x02 \x01(\t\x12>\n\x05style\x18\x03 \x01(\x0b\x32/.minknow_api.acquisition.ChannelStateInfo.Style\x12\x14\n\x0cglobal_order\x18\x04 \x01(\r\x1a\x9d\x01\n\x05Group\x12\x0c\n\x04name\x18\x01 \x01(\t\x12>\n\x05style\x18\x02 \x01(\x0b\x32/.minknow_api.acquisition.ChannelStateInfo.Style\x12\x46\n\x06states\x18\x03 \x03(\x0b\x32\x36.minknow_api.acquisition.ChannelStateInfo.ChannelState\"\x9f\x05\n\x18\x41\x63quisitionConfigSummary\x12\x31\n\x07purpose\x18\x15 \x01(\x0e\x32 .minknow_api.acquisition.Purpose\x12\x1b\n\x13\x62\x61secalling_enabled\x18\x01 \x01(\x08\x12#\n\x1b\x62\x61secalling_config_filename\x18\x10 \x01(\t\x12\x19\n\x11\x62\x61rcoding_enabled\x18\r \x01(\x08\x12\x16\n\x0e\x62\x61rcoding_kits\x18\x11 \x03(\t\x12\x19\n\x11\x61lignment_enabled\x18\x0e \x01(\x08\x12!\n\x19\x61lignment_reference_files\x18\x12 \x03(\t\x12\x1a\n\x12\x61lignment_bed_file\x18\x13 \x01(\t\x12\x14\n\x0clamp_enabled\x18\x0f \x01(\x08\x12\x10\n\x08lamp_kit\x18\x14 \x01(\t\x12\x17\n\x0freads_directory\x18\x02 \x01(\t\x12\"\n\x1areads_fallback_directories\x18\x03 \x03(\t\x12\x1b\n\x13\x66\x61st5_reads_enabled\x18\x04 \x01(\x08\x12\x1b\n\x13\x66\x61stq_reads_enabled\x18\x05 \x01(\x08\x12\x1e\n\x16protobuf_reads_enabled\x18\x06 \x01(\x08\x12\x16\n\x0e\x62ulk_file_path\x18\x07 \x01(\t\x12\x19\n\x11\x62ulk_file_enabled\x18\x08 \x01(\x08\x12\x45\n\x12\x63hannel_state_info\x18\t \x01(\x0b\x32).minknow_api.acquisition.ChannelStateInfo\x12\x1c\n\x14\x65vents_to_base_ratio\x18\n \x01(\x02\x12\x13\n\x0bsample_rate\x18\x0b \x01(\r\x12\x15\n\rchannel_count\x18\x0c \x01(\r\"\xc5\x06\n\x12\x41\x63quisitionRunInfo\x12\x0e\n\x06run_id\x18\x01 \x01(\t\x12<\n\rstartup_state\x18\x0c \x01(\x0e\x32%.minknow_api.acquisition.StartupState\x12?\n\x1bstartup_state_estimated_end\x18\r \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x30\n(startup_state_estimated_percent_complete\x18\x0e \x01(\x02\x12\x38\n\x05state\x18\x02 \x01(\x0e\x32).minknow_api.acquisition.AcquisitionState\x12@\n\x0f\x66inishing_state\x18\n \x01(\x0e\x32\'.minknow_api.acquisition.FinishingState\x12\x43\n\x0bstop_reason\x18\x03 \x01(\x0e\x32..minknow_api.acquisition.AcquisitionStopReason\x12.\n\nstart_time\x18\x04 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x38\n\x14\x64\x61ta_read_start_time\x18\x05 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x36\n\x12\x64\x61ta_read_end_time\x18\x06 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12,\n\x08\x65nd_time\x18\x07 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12G\n\ryield_summary\x18\x08 \x01(\x0b\x32\x30.minknow_api.acquisition.AcquisitionYieldSummary\x12I\n\x0e\x63onfig_summary\x18\t \x01(\x0b\x32\x31.minknow_api.acquisition.AcquisitionConfigSummary\x12I\n\x0ewriter_summary\x18\x0b \x01(\x0b\x32\x31.minknow_api.acquisition.AcquisitionWriterSummary\"\x1c\n\x1aListAcquisitionRunsRequest\".\n\x1bListAcquisitionRunsResponse\x12\x0f\n\x07run_ids\x18\x01 \x03(\t\"!\n\x1fGetCurrentAcquisitionRunRequest\"#\n!WatchCurrentAcquisitionRunRequest\"\xdf\x02\n\x16SetSignalReaderRequest\x12V\n\x06reader\x18\x01 \x01(\x0e\x32@.minknow_api.acquisition.SetSignalReaderRequest.SignalReaderTypeB\x04\x88\xb5\x18\x01\x12\x12\n\nhdf_source\x18\x02 \x01(\t\x12P\n\x08hdf_mode\x18\x03 \x01(\x0e\x32>.minknow_api.acquisition.SetSignalReaderRequest.SourceFileMode\x12 \n\x18sample_rate_scale_factor\x18\x04 \x01(\x02\"(\n\x10SignalReaderType\x12\x08\n\x04HDF5\x10\x00\x12\n\n\x06\x44\x45VICE\x10\x01\";\n\x0eSourceFileMode\x12\x0f\n\x0bUNSPECIFIED\x10\x00\x12\x0e\n\nSINGLE_RUN\x10\x01\x12\x08\n\x04LOOP\x10\x02\"\x19\n\x17SetSignalReaderResponse*Y\n\rMinknowStatus\x12\x10\n\x0c\x45RROR_STATUS\x10\x00\x12\t\n\x05READY\x10\x01\x12\x0c\n\x08STARTING\x10\x02\x12\x0e\n\nPROCESSING\x10\x03\x12\r\n\tFINISHING\x10\x04**\n\x06Option\x12\x08\n\x04\x41UTO\x10\x00\x12\x0b\n\x07\x44ISABLE\x10\x01\x12\t\n\x05\x46ORCE\x10\x02*=\n\x07Purpose\x12\x11\n\rOTHER_PURPOSE\x10\x00\x12\x0e\n\nSEQUENCING\x10\x02\x12\x0f\n\x0b\x43\x41LIBRATION\x10\x03*{\n\x10\x41\x63quisitionState\x12\x18\n\x14\x41\x43QUISITION_STARTING\x10\x00\x12\x17\n\x13\x41\x43QUISITION_RUNNING\x10\x01\x12\x19\n\x15\x41\x43QUISITION_FINISHING\x10\x02\x12\x19\n\x15\x41\x43QUISITION_COMPLETED\x10\x03*\xb2\x02\n\x15\x41\x63quisitionStopReason\x12\x13\n\x0fSTOPPED_NOT_SET\x10\x00\x12\x1a\n\x16STOPPED_USER_REQUESTED\x10\x01\x12\x19\n\x15STOPPED_NO_DISK_SPACE\x10\x02\x12&\n\"STOPPED_DEVICE_STOPPED_ACQUISITION\x10\x03\x12 \n\x1cSTOPPED_STARTING_ANOTHER_RUN\x10\x04\x12\x1a\n\x16STOPPED_PROTOCOL_ENDED\x10\x05\x12\x18\n\x14STOPPED_DEVICE_ERROR\x10\x06\x12\x1b\n\x17STOPPED_BAD_TEMPERATURE\x10\x07\x12\x14\n\x10STOPPED_SHUTDOWN\x10\x08\x12\x1a\n\x16STOPPED_INTERNAL_ERROR\x10\t*\x96\x02\n\x0cStartupState\x12\x13\n\x0fSTARTUP_UNKNOWN\x10\x00\x12\x1d\n\x19STARTUP_BUILDING_PIPELINE\x10\x02\x12#\n\x1fSTARTUP_INITIALISING_BASECALLER\x10\x03\x12-\n)STARTUP_INITIALISING_BASECALLER_ALIGNMENT\x10\x04\x12%\n!STARTUP_INITIALISING_DATA_WRITERS\x10\x05\x12\x32\n.STARTUP_INITIALISING_INTERMEDIATE_DATA_STORAGE\x10\x06\x12#\n\x1fSTARTUP_INITIALISING_STATISTICS\x10\x07*\x8b\x01\n\x0e\x46inishingState\x12\x15\n\x11\x46INISHING_UNKNOWN\x10\x00\x12&\n\"FINISHING_PROCESSING_DEVICE_SIGNAL\x10\x01\x12\x1f\n\x1b\x46INISHING_BASECALLING_READS\x10\x02\x12\x19\n\x15\x46INISHING_SAVING_DATA\x10\x03\x32\xe3\t\n\x12\x41\x63quisitionService\x12X\n\x05start\x12%.minknow_api.acquisition.StartRequest\x1a&.minknow_api.acquisition.StartResponse\"\x00\x12U\n\x04stop\x12$.minknow_api.acquisition.StopRequest\x1a%.minknow_api.acquisition.StopResponse\"\x00\x12\x8f\x01\n\x17watch_for_status_change\x12\x34.minknow_api.acquisition.WatchForStatusChangeRequest\x1a\x35.minknow_api.acquisition.WatchForStatusChangeResponse\"\x03\x90\x02\x01(\x01\x30\x01\x12\x8f\x01\n\x1dwatch_current_acquisition_run\x12:.minknow_api.acquisition.WatchCurrentAcquisitionRunRequest\x1a+.minknow_api.acquisition.AcquisitionRunInfo\"\x03\x90\x02\x01\x30\x01\x12t\n\x0e\x63urrent_status\x12-.minknow_api.acquisition.CurrentStatusRequest\x1a..minknow_api.acquisition.CurrentStatusResponse\"\x03\x90\x02\x01\x12n\n\x0cget_progress\x12+.minknow_api.acquisition.GetProgressRequest\x1a,.minknow_api.acquisition.GetProgressResponse\"\x03\x90\x02\x01\x12\x7f\n\x14get_acquisition_info\x12\x35.minknow_api.acquisition.GetAcquisitionRunInfoRequest\x1a+.minknow_api.acquisition.AcquisitionRunInfo\"\x03\x90\x02\x01\x12\x87\x01\n\x15list_acquisition_runs\x12\x33.minknow_api.acquisition.ListAcquisitionRunsRequest\x1a\x34.minknow_api.acquisition.ListAcquisitionRunsResponse\"\x03\x90\x02\x01\x12\x89\x01\n\x1bget_current_acquisition_run\x12\x38.minknow_api.acquisition.GetCurrentAcquisitionRunRequest\x1a+.minknow_api.acquisition.AcquisitionRunInfo\"\x03\x90\x02\x01\x12{\n\x11set_signal_reader\x12/.minknow_api.acquisition.SetSignalReaderRequest\x1a\x30.minknow_api.acquisition.SetSignalReaderResponse\"\x03\x90\x02\x02\x42&\n\x1c\x63om.nanoporetech.minknow_api\xa2\x02\x05MKAPIb\x06proto3'
-  ,
-  dependencies=[minknow__api_dot_rpc__options__pb2.DESCRIPTOR,google_dot_protobuf_dot_timestamp__pb2.DESCRIPTOR,])
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x1dminknow_api/acquisition.proto\x12\x17minknow_api.acquisition\x1a\x1dminknow_api/rpc_options.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\xd3\x03\n\x0cStartRequest\x12\"\n\x1a\x64ont_wait_for_device_ready\x18\x02 \x01(\x08\x12\x38\n\x0fgenerate_report\x18\x03 \x01(\x0e\x32\x1f.minknow_api.acquisition.Option\x12\x45\n\x1csend_sequencing_read_metrics\x18\x04 \x01(\x0e\x32\x1f.minknow_api.acquisition.Option\x12\x41\n\x18send_basecalling_metrics\x18\x05 \x01(\x0e\x32\x1f.minknow_api.acquisition.Option\x12\x31\n\x07purpose\x18\x06 \x01(\x0e\x32 .minknow_api.acquisition.Purpose\x12\x31\n\x08\x61nalysis\x18\x07 \x01(\x0e\x32\x1f.minknow_api.acquisition.Option\x12\x34\n\x0b\x66ile_output\x18\x08 \x01(\x0e\x32\x1f.minknow_api.acquisition.Option\x12?\n\x16generate_final_summary\x18\t \x01(\x0e\x32\x1f.minknow_api.acquisition.Option\"\x1f\n\rStartResponse\x12\x0e\n\x06run_id\x18\x01 \x01(\t\"\xe0\x01\n\x0bStopRequest\x12L\n\x13\x64\x61ta_action_on_stop\x18\x01 \x01(\x0e\x32/.minknow_api.acquisition.StopRequest.DataAction\x12\x18\n\x10wait_until_ready\x18\x02 \x01(\x08\x12\x15\n\rkeep_power_on\x18\x03 \x01(\x08\"R\n\nDataAction\x12\x10\n\x0cSTOP_DEFAULT\x10\x00\x12\x16\n\x12STOP_KEEP_ALL_DATA\x10\x01\x12\x1a\n\x16STOP_FINISH_PROCESSING\x10\x02\"\x0e\n\x0cStopResponse\"+\n\x1bWatchForStatusChangeRequest\x12\x0c\n\x04stop\x18\x01 \x01(\x08\"V\n\x1cWatchForStatusChangeResponse\x12\x36\n\x06status\x18\x01 \x01(\x0e\x32&.minknow_api.acquisition.MinknowStatus\"\x16\n\x14\x43urrentStatusRequest\"O\n\x15\x43urrentStatusResponse\x12\x36\n\x06status\x18\x01 \x01(\x0e\x32&.minknow_api.acquisition.MinknowStatus\"\x14\n\x12GetProgressRequest\"\xa0\x01\n\x13GetProgressResponse\x12S\n\x0fraw_per_channel\x18\x01 \x01(\x0b\x32:.minknow_api.acquisition.GetProgressResponse.RawPerChannel\x1a\x34\n\rRawPerChannel\x12\x10\n\x08\x61\x63quired\x18\x01 \x01(\x04\x12\x11\n\tprocessed\x18\x02 \x01(\x04\".\n\x1cGetAcquisitionRunInfoRequest\x12\x0e\n\x06run_id\x18\x01 \x01(\t\"\x96\x04\n\x17\x41\x63quisitionYieldSummary\x12\x12\n\nread_count\x18\x01 \x01(\x03\x12\x1b\n\x13\x66raction_basecalled\x18\x14 \x01(\x02\x12\x18\n\x10\x66raction_skipped\x18\x15 \x01(\x02\x12\"\n\x1a\x62\x61secalled_pass_read_count\x18\x03 \x01(\x03\x12\"\n\x1a\x62\x61secalled_fail_read_count\x18\x04 \x01(\x03\x12%\n\x1d\x62\x61secalled_skipped_read_count\x18\n \x01(\x03\x12\x1d\n\x15\x62\x61secalled_pass_bases\x18\x05 \x01(\x03\x12\x1d\n\x15\x62\x61secalled_fail_bases\x18\x12 \x01(\x03\x12\x1a\n\x12\x62\x61secalled_samples\x18\x06 \x01(\x03\x12\x1c\n\x14selected_raw_samples\x18\x07 \x01(\x03\x12\x17\n\x0fselected_events\x18\x08 \x01(\x03\x12 \n\x18\x65stimated_selected_bases\x18\t \x01(\x03\x12\x19\n\x11\x61lignment_matches\x18\x0e \x01(\x03\x12\x1c\n\x14\x61lignment_mismatches\x18\x0f \x01(\x03\x12\x1c\n\x14\x61lignment_insertions\x18\x10 \x01(\x03\x12\x1b\n\x13\x61lignment_deletions\x18\x11 \x01(\x03\x12\x1a\n\x12\x61lignment_coverage\x18\x13 \x01(\x02\"\x96\x01\n\x18\x41\x63quisitionWriterSummary\x12\x1f\n\x17\x62ytes_to_write_produced\x18\x02 \x01(\x03\x12\x1d\n\x15\x62ytes_to_write_failed\x18\x03 \x01(\x03\x12 \n\x18\x62ytes_to_write_completed\x18\x04 \x01(\x03J\x04\x08\x01\x10\x02R\x12written_read_count\"\xb0\x03\n\x10\x43hannelStateInfo\x12?\n\x06groups\x18\x01 \x03(\x0b\x32/.minknow_api.acquisition.ChannelStateInfo.Group\x1a;\n\x05Style\x12\r\n\x05label\x18\x01 \x01(\t\x12\x13\n\x0b\x64\x65scription\x18\x02 \x01(\t\x12\x0e\n\x06\x63olour\x18\x03 \x01(\t\x1a~\n\x0c\x43hannelState\x12\n\n\x02id\x18\x01 \x01(\r\x12\x0c\n\x04name\x18\x02 \x01(\t\x12>\n\x05style\x18\x03 \x01(\x0b\x32/.minknow_api.acquisition.ChannelStateInfo.Style\x12\x14\n\x0cglobal_order\x18\x04 \x01(\r\x1a\x9d\x01\n\x05Group\x12\x0c\n\x04name\x18\x01 \x01(\t\x12>\n\x05style\x18\x02 \x01(\x0b\x32/.minknow_api.acquisition.ChannelStateInfo.Style\x12\x46\n\x06states\x18\x03 \x03(\x0b\x32\x36.minknow_api.acquisition.ChannelStateInfo.ChannelState\"\x9f\x05\n\x18\x41\x63quisitionConfigSummary\x12\x31\n\x07purpose\x18\x15 \x01(\x0e\x32 .minknow_api.acquisition.Purpose\x12\x1b\n\x13\x62\x61secalling_enabled\x18\x01 \x01(\x08\x12#\n\x1b\x62\x61secalling_config_filename\x18\x10 \x01(\t\x12\x19\n\x11\x62\x61rcoding_enabled\x18\r \x01(\x08\x12\x16\n\x0e\x62\x61rcoding_kits\x18\x11 \x03(\t\x12\x19\n\x11\x61lignment_enabled\x18\x0e \x01(\x08\x12!\n\x19\x61lignment_reference_files\x18\x12 \x03(\t\x12\x1a\n\x12\x61lignment_bed_file\x18\x13 \x01(\t\x12\x14\n\x0clamp_enabled\x18\x0f \x01(\x08\x12\x10\n\x08lamp_kit\x18\x14 \x01(\t\x12\x17\n\x0freads_directory\x18\x02 \x01(\t\x12\"\n\x1areads_fallback_directories\x18\x03 \x03(\t\x12\x1b\n\x13\x66\x61st5_reads_enabled\x18\x04 \x01(\x08\x12\x1b\n\x13\x66\x61stq_reads_enabled\x18\x05 \x01(\x08\x12\x1e\n\x16protobuf_reads_enabled\x18\x06 \x01(\x08\x12\x16\n\x0e\x62ulk_file_path\x18\x07 \x01(\t\x12\x19\n\x11\x62ulk_file_enabled\x18\x08 \x01(\x08\x12\x45\n\x12\x63hannel_state_info\x18\t \x01(\x0b\x32).minknow_api.acquisition.ChannelStateInfo\x12\x1c\n\x14\x65vents_to_base_ratio\x18\n \x01(\x02\x12\x13\n\x0bsample_rate\x18\x0b \x01(\r\x12\x15\n\rchannel_count\x18\x0c \x01(\r\"\xd6\x03\n\x0fMuxScanMetadata\x12\"\n\x1a\x61uto_mux_scan_period_hours\x18\x01 \x01(\x02\x12O\n\x0f\x63\x61tegory_groups\x18\x02 \x03(\x0b\x32\x36.minknow_api.acquisition.MuxScanMetadata.CategoryGroup\x1a;\n\x05Style\x12\r\n\x05label\x18\x01 \x01(\t\x12\x13\n\x0b\x64\x65scription\x18\x02 \x01(\t\x12\x0e\n\x06\x63olour\x18\x03 \x01(\t\x1am\n\x08\x43\x61tegory\x12\x0c\n\x04name\x18\x01 \x01(\t\x12=\n\x05style\x18\x02 \x01(\x0b\x32..minknow_api.acquisition.MuxScanMetadata.Style\x12\x14\n\x0cglobal_order\x18\x03 \x01(\r\x1a\xa1\x01\n\rCategoryGroup\x12\x0c\n\x04name\x18\x01 \x01(\t\x12=\n\x05style\x18\x02 \x01(\x0b\x32..minknow_api.acquisition.MuxScanMetadata.Style\x12\x43\n\x08\x63\x61tegory\x18\x03 \x03(\x0b\x32\x31.minknow_api.acquisition.MuxScanMetadata.Category\"\x9e\x01\n\rMuxScanResult\x12\x42\n\x06\x63ounts\x18\x01 \x03(\x0b\x32\x32.minknow_api.acquisition.MuxScanResult.CountsEntry\x12\x1a\n\x12mux_scan_timestamp\x18\x02 \x01(\x04\x1a-\n\x0b\x43ountsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\r:\x02\x38\x01\"\x93\x03\n\tBreamInfo\x12\x43\n\x11mux_scan_metadata\x18\x01 \x01(\x0b\x32(.minknow_api.acquisition.MuxScanMetadata\x12@\n\x10mux_scan_results\x18\x02 \x03(\x0b\x32&.minknow_api.acquisition.MuxScanResult\x12L\n\x1atarget_translocation_speed\x18\x03 \x01(\x0b\x32(.minknow_api.acquisition.BreamInfo.Range\x12@\n\x0etarget_q_score\x18\x04 \x01(\x0b\x32(.minknow_api.acquisition.BreamInfo.Range\x12\x44\n\x12target_temperature\x18\x05 \x01(\x0b\x32(.minknow_api.acquisition.BreamInfo.Range\x1a)\n\x05Range\x12\x0f\n\x07minimum\x18\x01 \x01(\x01\x12\x0f\n\x07maximum\x18\x02 \x01(\x01\"\xfd\x06\n\x12\x41\x63quisitionRunInfo\x12\x0e\n\x06run_id\x18\x01 \x01(\t\x12<\n\rstartup_state\x18\x0c \x01(\x0e\x32%.minknow_api.acquisition.StartupState\x12?\n\x1bstartup_state_estimated_end\x18\r \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x30\n(startup_state_estimated_percent_complete\x18\x0e \x01(\x02\x12\x38\n\x05state\x18\x02 \x01(\x0e\x32).minknow_api.acquisition.AcquisitionState\x12@\n\x0f\x66inishing_state\x18\n \x01(\x0e\x32\'.minknow_api.acquisition.FinishingState\x12\x43\n\x0bstop_reason\x18\x03 \x01(\x0e\x32..minknow_api.acquisition.AcquisitionStopReason\x12.\n\nstart_time\x18\x04 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x38\n\x14\x64\x61ta_read_start_time\x18\x05 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x36\n\x12\x64\x61ta_read_end_time\x18\x06 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12,\n\x08\x65nd_time\x18\x07 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12G\n\ryield_summary\x18\x08 \x01(\x0b\x32\x30.minknow_api.acquisition.AcquisitionYieldSummary\x12I\n\x0e\x63onfig_summary\x18\t \x01(\x0b\x32\x31.minknow_api.acquisition.AcquisitionConfigSummary\x12I\n\x0ewriter_summary\x18\x0b \x01(\x0b\x32\x31.minknow_api.acquisition.AcquisitionWriterSummary\x12\x36\n\nbream_info\x18\x0f \x01(\x0b\x32\".minknow_api.acquisition.BreamInfo\"\x1c\n\x1aListAcquisitionRunsRequest\".\n\x1bListAcquisitionRunsResponse\x12\x0f\n\x07run_ids\x18\x01 \x03(\t\"!\n\x1fGetCurrentAcquisitionRunRequest\"#\n!WatchCurrentAcquisitionRunRequest\"\xdf\x02\n\x16SetSignalReaderRequest\x12V\n\x06reader\x18\x01 \x01(\x0e\x32@.minknow_api.acquisition.SetSignalReaderRequest.SignalReaderTypeB\x04\x88\xb5\x18\x01\x12\x12\n\nhdf_source\x18\x02 \x01(\t\x12P\n\x08hdf_mode\x18\x03 \x01(\x0e\x32>.minknow_api.acquisition.SetSignalReaderRequest.SourceFileMode\x12 \n\x18sample_rate_scale_factor\x18\x04 \x01(\x02\"(\n\x10SignalReaderType\x12\x08\n\x04HDF5\x10\x00\x12\n\n\x06\x44\x45VICE\x10\x01\";\n\x0eSourceFileMode\x12\x0f\n\x0bUNSPECIFIED\x10\x00\x12\x0e\n\nSINGLE_RUN\x10\x01\x12\x08\n\x04LOOP\x10\x02\"\x19\n\x17SetSignalReaderResponse\"g\n\x13SetBreamInfoRequest\x12\x30\n\x04info\x18\x01 \x01(\x0b\x32\".minknow_api.acquisition.BreamInfo\x12\x1e\n\x16overwrite_unset_fields\x18\x02 \x01(\x08\"\x16\n\x14SetBreamInfoResponse\"\x1d\n\x1b\x41ppendMuxScanResultResponse*Y\n\rMinknowStatus\x12\x10\n\x0c\x45RROR_STATUS\x10\x00\x12\t\n\x05READY\x10\x01\x12\x0c\n\x08STARTING\x10\x02\x12\x0e\n\nPROCESSING\x10\x03\x12\r\n\tFINISHING\x10\x04**\n\x06Option\x12\x08\n\x04\x41UTO\x10\x00\x12\x0b\n\x07\x44ISABLE\x10\x01\x12\t\n\x05\x46ORCE\x10\x02*=\n\x07Purpose\x12\x11\n\rOTHER_PURPOSE\x10\x00\x12\x0e\n\nSEQUENCING\x10\x02\x12\x0f\n\x0b\x43\x41LIBRATION\x10\x03*{\n\x10\x41\x63quisitionState\x12\x18\n\x14\x41\x43QUISITION_STARTING\x10\x00\x12\x17\n\x13\x41\x43QUISITION_RUNNING\x10\x01\x12\x19\n\x15\x41\x43QUISITION_FINISHING\x10\x02\x12\x19\n\x15\x41\x43QUISITION_COMPLETED\x10\x03*\xb2\x02\n\x15\x41\x63quisitionStopReason\x12\x13\n\x0fSTOPPED_NOT_SET\x10\x00\x12\x1a\n\x16STOPPED_USER_REQUESTED\x10\x01\x12\x19\n\x15STOPPED_NO_DISK_SPACE\x10\x02\x12&\n\"STOPPED_DEVICE_STOPPED_ACQUISITION\x10\x03\x12 \n\x1cSTOPPED_STARTING_ANOTHER_RUN\x10\x04\x12\x1a\n\x16STOPPED_PROTOCOL_ENDED\x10\x05\x12\x18\n\x14STOPPED_DEVICE_ERROR\x10\x06\x12\x1b\n\x17STOPPED_BAD_TEMPERATURE\x10\x07\x12\x14\n\x10STOPPED_SHUTDOWN\x10\x08\x12\x1a\n\x16STOPPED_INTERNAL_ERROR\x10\t*\x96\x02\n\x0cStartupState\x12\x13\n\x0fSTARTUP_UNKNOWN\x10\x00\x12\x1d\n\x19STARTUP_BUILDING_PIPELINE\x10\x02\x12#\n\x1fSTARTUP_INITIALISING_BASECALLER\x10\x03\x12-\n)STARTUP_INITIALISING_BASECALLER_ALIGNMENT\x10\x04\x12%\n!STARTUP_INITIALISING_DATA_WRITERS\x10\x05\x12\x32\n.STARTUP_INITIALISING_INTERMEDIATE_DATA_STORAGE\x10\x06\x12#\n\x1fSTARTUP_INITIALISING_STATISTICS\x10\x07*\x8b\x01\n\x0e\x46inishingState\x12\x15\n\x11\x46INISHING_UNKNOWN\x10\x00\x12&\n\"FINISHING_PROCESSING_DEVICE_SIGNAL\x10\x01\x12\x1f\n\x1b\x46INISHING_BASECALLING_READS\x10\x02\x12\x19\n\x15\x46INISHING_SAVING_DATA\x10\x03\x32\xd4\x0b\n\x12\x41\x63quisitionService\x12X\n\x05start\x12%.minknow_api.acquisition.StartRequest\x1a&.minknow_api.acquisition.StartResponse\"\x00\x12U\n\x04stop\x12$.minknow_api.acquisition.StopRequest\x1a%.minknow_api.acquisition.StopResponse\"\x00\x12\x8f\x01\n\x17watch_for_status_change\x12\x34.minknow_api.acquisition.WatchForStatusChangeRequest\x1a\x35.minknow_api.acquisition.WatchForStatusChangeResponse\"\x03\x90\x02\x01(\x01\x30\x01\x12\x8f\x01\n\x1dwatch_current_acquisition_run\x12:.minknow_api.acquisition.WatchCurrentAcquisitionRunRequest\x1a+.minknow_api.acquisition.AcquisitionRunInfo\"\x03\x90\x02\x01\x30\x01\x12t\n\x0e\x63urrent_status\x12-.minknow_api.acquisition.CurrentStatusRequest\x1a..minknow_api.acquisition.CurrentStatusResponse\"\x03\x90\x02\x01\x12n\n\x0cget_progress\x12+.minknow_api.acquisition.GetProgressRequest\x1a,.minknow_api.acquisition.GetProgressResponse\"\x03\x90\x02\x01\x12\x7f\n\x14get_acquisition_info\x12\x35.minknow_api.acquisition.GetAcquisitionRunInfoRequest\x1a+.minknow_api.acquisition.AcquisitionRunInfo\"\x03\x90\x02\x01\x12\x87\x01\n\x15list_acquisition_runs\x12\x33.minknow_api.acquisition.ListAcquisitionRunsRequest\x1a\x34.minknow_api.acquisition.ListAcquisitionRunsResponse\"\x03\x90\x02\x01\x12\x89\x01\n\x1bget_current_acquisition_run\x12\x38.minknow_api.acquisition.GetCurrentAcquisitionRunRequest\x1a+.minknow_api.acquisition.AcquisitionRunInfo\"\x03\x90\x02\x01\x12{\n\x11set_signal_reader\x12/.minknow_api.acquisition.SetSignalReaderRequest\x1a\x30.minknow_api.acquisition.SetSignalReaderResponse\"\x03\x90\x02\x02\x12r\n\x0eset_bream_info\x12,.minknow_api.acquisition.SetBreamInfoRequest\x1a-.minknow_api.acquisition.SetBreamInfoResponse\"\x03\x90\x02\x02\x12{\n\x16\x61ppend_mux_scan_result\x12&.minknow_api.acquisition.MuxScanResult\x1a\x34.minknow_api.acquisition.AppendMuxScanResultResponse\"\x03\x90\x02\x02\x42&\n\x1c\x63om.nanoporetech.minknow_api\xa2\x02\x05MKAPIb\x06proto3')
 
-_MINKNOWSTATUS = _descriptor.EnumDescriptor(
-  name='MinknowStatus',
-  full_name='minknow_api.acquisition.MinknowStatus',
-  filename=None,
-  file=DESCRIPTOR,
-  create_key=_descriptor._internal_create_key,
-  values=[
-    _descriptor.EnumValueDescriptor(
-      name='ERROR_STATUS', index=0, number=0,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-    _descriptor.EnumValueDescriptor(
-      name='READY', index=1, number=1,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-    _descriptor.EnumValueDescriptor(
-      name='STARTING', index=2, number=2,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-    _descriptor.EnumValueDescriptor(
-      name='PROCESSING', index=3, number=3,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-    _descriptor.EnumValueDescriptor(
-      name='FINISHING', index=4, number=4,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-  ],
-  containing_type=None,
-  serialized_options=None,
-  serialized_start=4456,
-  serialized_end=4545,
-)
-_sym_db.RegisterEnumDescriptor(_MINKNOWSTATUS)
-
+_MINKNOWSTATUS = DESCRIPTOR.enum_types_by_name['MinknowStatus']
 MinknowStatus = enum_type_wrapper.EnumTypeWrapper(_MINKNOWSTATUS)
-_OPTION = _descriptor.EnumDescriptor(
-  name='Option',
-  full_name='minknow_api.acquisition.Option',
-  filename=None,
-  file=DESCRIPTOR,
-  create_key=_descriptor._internal_create_key,
-  values=[
-    _descriptor.EnumValueDescriptor(
-      name='AUTO', index=0, number=0,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-    _descriptor.EnumValueDescriptor(
-      name='DISABLE', index=1, number=1,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-    _descriptor.EnumValueDescriptor(
-      name='FORCE', index=2, number=2,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-  ],
-  containing_type=None,
-  serialized_options=None,
-  serialized_start=4547,
-  serialized_end=4589,
-)
-_sym_db.RegisterEnumDescriptor(_OPTION)
-
+_OPTION = DESCRIPTOR.enum_types_by_name['Option']
 Option = enum_type_wrapper.EnumTypeWrapper(_OPTION)
-_PURPOSE = _descriptor.EnumDescriptor(
-  name='Purpose',
-  full_name='minknow_api.acquisition.Purpose',
-  filename=None,
-  file=DESCRIPTOR,
-  create_key=_descriptor._internal_create_key,
-  values=[
-    _descriptor.EnumValueDescriptor(
-      name='OTHER_PURPOSE', index=0, number=0,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-    _descriptor.EnumValueDescriptor(
-      name='SEQUENCING', index=1, number=2,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-    _descriptor.EnumValueDescriptor(
-      name='CALIBRATION', index=2, number=3,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-  ],
-  containing_type=None,
-  serialized_options=None,
-  serialized_start=4591,
-  serialized_end=4652,
-)
-_sym_db.RegisterEnumDescriptor(_PURPOSE)
-
+_PURPOSE = DESCRIPTOR.enum_types_by_name['Purpose']
 Purpose = enum_type_wrapper.EnumTypeWrapper(_PURPOSE)
-_ACQUISITIONSTATE = _descriptor.EnumDescriptor(
-  name='AcquisitionState',
-  full_name='minknow_api.acquisition.AcquisitionState',
-  filename=None,
-  file=DESCRIPTOR,
-  create_key=_descriptor._internal_create_key,
-  values=[
-    _descriptor.EnumValueDescriptor(
-      name='ACQUISITION_STARTING', index=0, number=0,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-    _descriptor.EnumValueDescriptor(
-      name='ACQUISITION_RUNNING', index=1, number=1,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-    _descriptor.EnumValueDescriptor(
-      name='ACQUISITION_FINISHING', index=2, number=2,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-    _descriptor.EnumValueDescriptor(
-      name='ACQUISITION_COMPLETED', index=3, number=3,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-  ],
-  containing_type=None,
-  serialized_options=None,
-  serialized_start=4654,
-  serialized_end=4777,
-)
-_sym_db.RegisterEnumDescriptor(_ACQUISITIONSTATE)
-
+_ACQUISITIONSTATE = DESCRIPTOR.enum_types_by_name['AcquisitionState']
 AcquisitionState = enum_type_wrapper.EnumTypeWrapper(_ACQUISITIONSTATE)
-_ACQUISITIONSTOPREASON = _descriptor.EnumDescriptor(
-  name='AcquisitionStopReason',
-  full_name='minknow_api.acquisition.AcquisitionStopReason',
-  filename=None,
-  file=DESCRIPTOR,
-  create_key=_descriptor._internal_create_key,
-  values=[
-    _descriptor.EnumValueDescriptor(
-      name='STOPPED_NOT_SET', index=0, number=0,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-    _descriptor.EnumValueDescriptor(
-      name='STOPPED_USER_REQUESTED', index=1, number=1,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-    _descriptor.EnumValueDescriptor(
-      name='STOPPED_NO_DISK_SPACE', index=2, number=2,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-    _descriptor.EnumValueDescriptor(
-      name='STOPPED_DEVICE_STOPPED_ACQUISITION', index=3, number=3,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-    _descriptor.EnumValueDescriptor(
-      name='STOPPED_STARTING_ANOTHER_RUN', index=4, number=4,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-    _descriptor.EnumValueDescriptor(
-      name='STOPPED_PROTOCOL_ENDED', index=5, number=5,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-    _descriptor.EnumValueDescriptor(
-      name='STOPPED_DEVICE_ERROR', index=6, number=6,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-    _descriptor.EnumValueDescriptor(
-      name='STOPPED_BAD_TEMPERATURE', index=7, number=7,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-    _descriptor.EnumValueDescriptor(
-      name='STOPPED_SHUTDOWN', index=8, number=8,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-    _descriptor.EnumValueDescriptor(
-      name='STOPPED_INTERNAL_ERROR', index=9, number=9,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-  ],
-  containing_type=None,
-  serialized_options=None,
-  serialized_start=4780,
-  serialized_end=5086,
-)
-_sym_db.RegisterEnumDescriptor(_ACQUISITIONSTOPREASON)
-
+_ACQUISITIONSTOPREASON = DESCRIPTOR.enum_types_by_name['AcquisitionStopReason']
 AcquisitionStopReason = enum_type_wrapper.EnumTypeWrapper(_ACQUISITIONSTOPREASON)
-_STARTUPSTATE = _descriptor.EnumDescriptor(
-  name='StartupState',
-  full_name='minknow_api.acquisition.StartupState',
-  filename=None,
-  file=DESCRIPTOR,
-  create_key=_descriptor._internal_create_key,
-  values=[
-    _descriptor.EnumValueDescriptor(
-      name='STARTUP_UNKNOWN', index=0, number=0,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-    _descriptor.EnumValueDescriptor(
-      name='STARTUP_BUILDING_PIPELINE', index=1, number=2,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-    _descriptor.EnumValueDescriptor(
-      name='STARTUP_INITIALISING_BASECALLER', index=2, number=3,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-    _descriptor.EnumValueDescriptor(
-      name='STARTUP_INITIALISING_BASECALLER_ALIGNMENT', index=3, number=4,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-    _descriptor.EnumValueDescriptor(
-      name='STARTUP_INITIALISING_DATA_WRITERS', index=4, number=5,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-    _descriptor.EnumValueDescriptor(
-      name='STARTUP_INITIALISING_INTERMEDIATE_DATA_STORAGE', index=5, number=6,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-    _descriptor.EnumValueDescriptor(
-      name='STARTUP_INITIALISING_STATISTICS', index=6, number=7,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-  ],
-  containing_type=None,
-  serialized_options=None,
-  serialized_start=5089,
-  serialized_end=5367,
-)
-_sym_db.RegisterEnumDescriptor(_STARTUPSTATE)
-
+_STARTUPSTATE = DESCRIPTOR.enum_types_by_name['StartupState']
 StartupState = enum_type_wrapper.EnumTypeWrapper(_STARTUPSTATE)
-_FINISHINGSTATE = _descriptor.EnumDescriptor(
-  name='FinishingState',
-  full_name='minknow_api.acquisition.FinishingState',
-  filename=None,
-  file=DESCRIPTOR,
-  create_key=_descriptor._internal_create_key,
-  values=[
-    _descriptor.EnumValueDescriptor(
-      name='FINISHING_UNKNOWN', index=0, number=0,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-    _descriptor.EnumValueDescriptor(
-      name='FINISHING_PROCESSING_DEVICE_SIGNAL', index=1, number=1,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-    _descriptor.EnumValueDescriptor(
-      name='FINISHING_BASECALLING_READS', index=2, number=2,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-    _descriptor.EnumValueDescriptor(
-      name='FINISHING_SAVING_DATA', index=3, number=3,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-  ],
-  containing_type=None,
-  serialized_options=None,
-  serialized_start=5370,
-  serialized_end=5509,
-)
-_sym_db.RegisterEnumDescriptor(_FINISHINGSTATE)
-
+_FINISHINGSTATE = DESCRIPTOR.enum_types_by_name['FinishingState']
 FinishingState = enum_type_wrapper.EnumTypeWrapper(_FINISHINGSTATE)
 ERROR_STATUS = 0
 READY = 1
@@ -356,1432 +71,46 @@ FINISHING_BASECALLING_READS = 2
 FINISHING_SAVING_DATA = 3
 
 
-_STOPREQUEST_DATAACTION = _descriptor.EnumDescriptor(
-  name='DataAction',
-  full_name='minknow_api.acquisition.StopRequest.DataAction',
-  filename=None,
-  file=DESCRIPTOR,
-  create_key=_descriptor._internal_create_key,
-  values=[
-    _descriptor.EnumValueDescriptor(
-      name='STOP_DEFAULT', index=0, number=0,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-    _descriptor.EnumValueDescriptor(
-      name='STOP_KEEP_ALL_DATA', index=1, number=1,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-    _descriptor.EnumValueDescriptor(
-      name='STOP_FINISH_PROCESSING', index=2, number=2,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-  ],
-  containing_type=None,
-  serialized_options=None,
-  serialized_start=768,
-  serialized_end=850,
-)
-_sym_db.RegisterEnumDescriptor(_STOPREQUEST_DATAACTION)
-
-_SETSIGNALREADERREQUEST_SIGNALREADERTYPE = _descriptor.EnumDescriptor(
-  name='SignalReaderType',
-  full_name='minknow_api.acquisition.SetSignalReaderRequest.SignalReaderType',
-  filename=None,
-  file=DESCRIPTOR,
-  create_key=_descriptor._internal_create_key,
-  values=[
-    _descriptor.EnumValueDescriptor(
-      name='HDF5', index=0, number=0,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-    _descriptor.EnumValueDescriptor(
-      name='DEVICE', index=1, number=1,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-  ],
-  containing_type=None,
-  serialized_options=None,
-  serialized_start=4326,
-  serialized_end=4366,
-)
-_sym_db.RegisterEnumDescriptor(_SETSIGNALREADERREQUEST_SIGNALREADERTYPE)
-
-_SETSIGNALREADERREQUEST_SOURCEFILEMODE = _descriptor.EnumDescriptor(
-  name='SourceFileMode',
-  full_name='minknow_api.acquisition.SetSignalReaderRequest.SourceFileMode',
-  filename=None,
-  file=DESCRIPTOR,
-  create_key=_descriptor._internal_create_key,
-  values=[
-    _descriptor.EnumValueDescriptor(
-      name='UNSPECIFIED', index=0, number=0,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-    _descriptor.EnumValueDescriptor(
-      name='SINGLE_RUN', index=1, number=1,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-    _descriptor.EnumValueDescriptor(
-      name='LOOP', index=2, number=2,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-  ],
-  containing_type=None,
-  serialized_options=None,
-  serialized_start=4368,
-  serialized_end=4427,
-)
-_sym_db.RegisterEnumDescriptor(_SETSIGNALREADERREQUEST_SOURCEFILEMODE)
-
-
-_STARTREQUEST = _descriptor.Descriptor(
-  name='StartRequest',
-  full_name='minknow_api.acquisition.StartRequest',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='dont_wait_for_device_ready', full_name='minknow_api.acquisition.StartRequest.dont_wait_for_device_ready', index=0,
-      number=2, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='generate_report', full_name='minknow_api.acquisition.StartRequest.generate_report', index=1,
-      number=3, type=14, cpp_type=8, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='send_sequencing_read_metrics', full_name='minknow_api.acquisition.StartRequest.send_sequencing_read_metrics', index=2,
-      number=4, type=14, cpp_type=8, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='send_basecalling_metrics', full_name='minknow_api.acquisition.StartRequest.send_basecalling_metrics', index=3,
-      number=5, type=14, cpp_type=8, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='purpose', full_name='minknow_api.acquisition.StartRequest.purpose', index=4,
-      number=6, type=14, cpp_type=8, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='analysis', full_name='minknow_api.acquisition.StartRequest.analysis', index=5,
-      number=7, type=14, cpp_type=8, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='file_output', full_name='minknow_api.acquisition.StartRequest.file_output', index=6,
-      number=8, type=14, cpp_type=8, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='generate_final_summary', full_name='minknow_api.acquisition.StartRequest.generate_final_summary', index=7,
-      number=9, type=14, cpp_type=8, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=123,
-  serialized_end=590,
-)
-
-
-_STARTRESPONSE = _descriptor.Descriptor(
-  name='StartResponse',
-  full_name='minknow_api.acquisition.StartResponse',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='run_id', full_name='minknow_api.acquisition.StartResponse.run_id', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=592,
-  serialized_end=623,
-)
-
-
-_STOPREQUEST = _descriptor.Descriptor(
-  name='StopRequest',
-  full_name='minknow_api.acquisition.StopRequest',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='data_action_on_stop', full_name='minknow_api.acquisition.StopRequest.data_action_on_stop', index=0,
-      number=1, type=14, cpp_type=8, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='wait_until_ready', full_name='minknow_api.acquisition.StopRequest.wait_until_ready', index=1,
-      number=2, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='keep_power_on', full_name='minknow_api.acquisition.StopRequest.keep_power_on', index=2,
-      number=3, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-    _STOPREQUEST_DATAACTION,
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=626,
-  serialized_end=850,
-)
-
-
-_STOPRESPONSE = _descriptor.Descriptor(
-  name='StopResponse',
-  full_name='minknow_api.acquisition.StopResponse',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=852,
-  serialized_end=866,
-)
-
-
-_WATCHFORSTATUSCHANGEREQUEST = _descriptor.Descriptor(
-  name='WatchForStatusChangeRequest',
-  full_name='minknow_api.acquisition.WatchForStatusChangeRequest',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='stop', full_name='minknow_api.acquisition.WatchForStatusChangeRequest.stop', index=0,
-      number=1, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=868,
-  serialized_end=911,
-)
-
-
-_WATCHFORSTATUSCHANGERESPONSE = _descriptor.Descriptor(
-  name='WatchForStatusChangeResponse',
-  full_name='minknow_api.acquisition.WatchForStatusChangeResponse',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='status', full_name='minknow_api.acquisition.WatchForStatusChangeResponse.status', index=0,
-      number=1, type=14, cpp_type=8, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=913,
-  serialized_end=999,
-)
-
-
-_CURRENTSTATUSREQUEST = _descriptor.Descriptor(
-  name='CurrentStatusRequest',
-  full_name='minknow_api.acquisition.CurrentStatusRequest',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=1001,
-  serialized_end=1023,
-)
-
-
-_CURRENTSTATUSRESPONSE = _descriptor.Descriptor(
-  name='CurrentStatusResponse',
-  full_name='minknow_api.acquisition.CurrentStatusResponse',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='status', full_name='minknow_api.acquisition.CurrentStatusResponse.status', index=0,
-      number=1, type=14, cpp_type=8, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=1025,
-  serialized_end=1104,
-)
-
-
-_GETPROGRESSREQUEST = _descriptor.Descriptor(
-  name='GetProgressRequest',
-  full_name='minknow_api.acquisition.GetProgressRequest',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=1106,
-  serialized_end=1126,
-)
-
-
-_GETPROGRESSRESPONSE_RAWPERCHANNEL = _descriptor.Descriptor(
-  name='RawPerChannel',
-  full_name='minknow_api.acquisition.GetProgressResponse.RawPerChannel',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='acquired', full_name='minknow_api.acquisition.GetProgressResponse.RawPerChannel.acquired', index=0,
-      number=1, type=4, cpp_type=4, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='processed', full_name='minknow_api.acquisition.GetProgressResponse.RawPerChannel.processed', index=1,
-      number=2, type=4, cpp_type=4, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=1237,
-  serialized_end=1289,
-)
-
-_GETPROGRESSRESPONSE = _descriptor.Descriptor(
-  name='GetProgressResponse',
-  full_name='minknow_api.acquisition.GetProgressResponse',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='raw_per_channel', full_name='minknow_api.acquisition.GetProgressResponse.raw_per_channel', index=0,
-      number=1, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[_GETPROGRESSRESPONSE_RAWPERCHANNEL, ],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=1129,
-  serialized_end=1289,
-)
-
-
-_GETACQUISITIONRUNINFOREQUEST = _descriptor.Descriptor(
-  name='GetAcquisitionRunInfoRequest',
-  full_name='minknow_api.acquisition.GetAcquisitionRunInfoRequest',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='run_id', full_name='minknow_api.acquisition.GetAcquisitionRunInfoRequest.run_id', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=1291,
-  serialized_end=1337,
-)
-
-
-_ACQUISITIONYIELDSUMMARY = _descriptor.Descriptor(
-  name='AcquisitionYieldSummary',
-  full_name='minknow_api.acquisition.AcquisitionYieldSummary',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='read_count', full_name='minknow_api.acquisition.AcquisitionYieldSummary.read_count', index=0,
-      number=1, type=3, cpp_type=2, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='basecalled_pass_read_count', full_name='minknow_api.acquisition.AcquisitionYieldSummary.basecalled_pass_read_count', index=1,
-      number=3, type=3, cpp_type=2, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='basecalled_fail_read_count', full_name='minknow_api.acquisition.AcquisitionYieldSummary.basecalled_fail_read_count', index=2,
-      number=4, type=3, cpp_type=2, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='basecalled_skipped_read_count', full_name='minknow_api.acquisition.AcquisitionYieldSummary.basecalled_skipped_read_count', index=3,
-      number=10, type=3, cpp_type=2, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='basecalled_pass_bases', full_name='minknow_api.acquisition.AcquisitionYieldSummary.basecalled_pass_bases', index=4,
-      number=5, type=3, cpp_type=2, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='basecalled_fail_bases', full_name='minknow_api.acquisition.AcquisitionYieldSummary.basecalled_fail_bases', index=5,
-      number=18, type=3, cpp_type=2, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='basecalled_samples', full_name='minknow_api.acquisition.AcquisitionYieldSummary.basecalled_samples', index=6,
-      number=6, type=3, cpp_type=2, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='selected_raw_samples', full_name='minknow_api.acquisition.AcquisitionYieldSummary.selected_raw_samples', index=7,
-      number=7, type=3, cpp_type=2, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='selected_events', full_name='minknow_api.acquisition.AcquisitionYieldSummary.selected_events', index=8,
-      number=8, type=3, cpp_type=2, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='estimated_selected_bases', full_name='minknow_api.acquisition.AcquisitionYieldSummary.estimated_selected_bases', index=9,
-      number=9, type=3, cpp_type=2, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='alignment_matches', full_name='minknow_api.acquisition.AcquisitionYieldSummary.alignment_matches', index=10,
-      number=14, type=3, cpp_type=2, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='alignment_mismatches', full_name='minknow_api.acquisition.AcquisitionYieldSummary.alignment_mismatches', index=11,
-      number=15, type=3, cpp_type=2, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='alignment_insertions', full_name='minknow_api.acquisition.AcquisitionYieldSummary.alignment_insertions', index=12,
-      number=16, type=3, cpp_type=2, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='alignment_deletions', full_name='minknow_api.acquisition.AcquisitionYieldSummary.alignment_deletions', index=13,
-      number=17, type=3, cpp_type=2, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='alignment_coverage', full_name='minknow_api.acquisition.AcquisitionYieldSummary.alignment_coverage', index=14,
-      number=19, type=2, cpp_type=6, label=1,
-      has_default_value=False, default_value=float(0),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=1340,
-  serialized_end=1819,
-)
-
-
-_ACQUISITIONWRITERSUMMARY = _descriptor.Descriptor(
-  name='AcquisitionWriterSummary',
-  full_name='minknow_api.acquisition.AcquisitionWriterSummary',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='written_read_count', full_name='minknow_api.acquisition.AcquisitionWriterSummary.written_read_count', index=0,
-      number=1, type=3, cpp_type=2, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='bytes_to_write_produced', full_name='minknow_api.acquisition.AcquisitionWriterSummary.bytes_to_write_produced', index=1,
-      number=2, type=3, cpp_type=2, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='bytes_to_write_failed', full_name='minknow_api.acquisition.AcquisitionWriterSummary.bytes_to_write_failed', index=2,
-      number=3, type=3, cpp_type=2, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='bytes_to_write_completed', full_name='minknow_api.acquisition.AcquisitionWriterSummary.bytes_to_write_completed', index=3,
-      number=4, type=3, cpp_type=2, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=1822,
-  serialized_end=1974,
-)
-
-
-_CHANNELSTATEINFO_STYLE = _descriptor.Descriptor(
-  name='Style',
-  full_name='minknow_api.acquisition.ChannelStateInfo.Style',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='label', full_name='minknow_api.acquisition.ChannelStateInfo.Style.label', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='description', full_name='minknow_api.acquisition.ChannelStateInfo.Style.description', index=1,
-      number=2, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='colour', full_name='minknow_api.acquisition.ChannelStateInfo.Style.colour', index=2,
-      number=3, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=2062,
-  serialized_end=2121,
-)
-
-_CHANNELSTATEINFO_CHANNELSTATE = _descriptor.Descriptor(
-  name='ChannelState',
-  full_name='minknow_api.acquisition.ChannelStateInfo.ChannelState',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='id', full_name='minknow_api.acquisition.ChannelStateInfo.ChannelState.id', index=0,
-      number=1, type=13, cpp_type=3, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='name', full_name='minknow_api.acquisition.ChannelStateInfo.ChannelState.name', index=1,
-      number=2, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='style', full_name='minknow_api.acquisition.ChannelStateInfo.ChannelState.style', index=2,
-      number=3, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='global_order', full_name='minknow_api.acquisition.ChannelStateInfo.ChannelState.global_order', index=3,
-      number=4, type=13, cpp_type=3, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=2123,
-  serialized_end=2249,
-)
-
-_CHANNELSTATEINFO_GROUP = _descriptor.Descriptor(
-  name='Group',
-  full_name='minknow_api.acquisition.ChannelStateInfo.Group',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='name', full_name='minknow_api.acquisition.ChannelStateInfo.Group.name', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='style', full_name='minknow_api.acquisition.ChannelStateInfo.Group.style', index=1,
-      number=2, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='states', full_name='minknow_api.acquisition.ChannelStateInfo.Group.states', index=2,
-      number=3, type=11, cpp_type=10, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=2252,
-  serialized_end=2409,
-)
-
-_CHANNELSTATEINFO = _descriptor.Descriptor(
-  name='ChannelStateInfo',
-  full_name='minknow_api.acquisition.ChannelStateInfo',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='groups', full_name='minknow_api.acquisition.ChannelStateInfo.groups', index=0,
-      number=1, type=11, cpp_type=10, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[_CHANNELSTATEINFO_STYLE, _CHANNELSTATEINFO_CHANNELSTATE, _CHANNELSTATEINFO_GROUP, ],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=1977,
-  serialized_end=2409,
-)
-
-
-_ACQUISITIONCONFIGSUMMARY = _descriptor.Descriptor(
-  name='AcquisitionConfigSummary',
-  full_name='minknow_api.acquisition.AcquisitionConfigSummary',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='purpose', full_name='minknow_api.acquisition.AcquisitionConfigSummary.purpose', index=0,
-      number=21, type=14, cpp_type=8, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='basecalling_enabled', full_name='minknow_api.acquisition.AcquisitionConfigSummary.basecalling_enabled', index=1,
-      number=1, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='basecalling_config_filename', full_name='minknow_api.acquisition.AcquisitionConfigSummary.basecalling_config_filename', index=2,
-      number=16, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='barcoding_enabled', full_name='minknow_api.acquisition.AcquisitionConfigSummary.barcoding_enabled', index=3,
-      number=13, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='barcoding_kits', full_name='minknow_api.acquisition.AcquisitionConfigSummary.barcoding_kits', index=4,
-      number=17, type=9, cpp_type=9, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='alignment_enabled', full_name='minknow_api.acquisition.AcquisitionConfigSummary.alignment_enabled', index=5,
-      number=14, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='alignment_reference_files', full_name='minknow_api.acquisition.AcquisitionConfigSummary.alignment_reference_files', index=6,
-      number=18, type=9, cpp_type=9, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='alignment_bed_file', full_name='minknow_api.acquisition.AcquisitionConfigSummary.alignment_bed_file', index=7,
-      number=19, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='lamp_enabled', full_name='minknow_api.acquisition.AcquisitionConfigSummary.lamp_enabled', index=8,
-      number=15, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='lamp_kit', full_name='minknow_api.acquisition.AcquisitionConfigSummary.lamp_kit', index=9,
-      number=20, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='reads_directory', full_name='minknow_api.acquisition.AcquisitionConfigSummary.reads_directory', index=10,
-      number=2, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='reads_fallback_directories', full_name='minknow_api.acquisition.AcquisitionConfigSummary.reads_fallback_directories', index=11,
-      number=3, type=9, cpp_type=9, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='fast5_reads_enabled', full_name='minknow_api.acquisition.AcquisitionConfigSummary.fast5_reads_enabled', index=12,
-      number=4, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='fastq_reads_enabled', full_name='minknow_api.acquisition.AcquisitionConfigSummary.fastq_reads_enabled', index=13,
-      number=5, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='protobuf_reads_enabled', full_name='minknow_api.acquisition.AcquisitionConfigSummary.protobuf_reads_enabled', index=14,
-      number=6, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='bulk_file_path', full_name='minknow_api.acquisition.AcquisitionConfigSummary.bulk_file_path', index=15,
-      number=7, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='bulk_file_enabled', full_name='minknow_api.acquisition.AcquisitionConfigSummary.bulk_file_enabled', index=16,
-      number=8, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='channel_state_info', full_name='minknow_api.acquisition.AcquisitionConfigSummary.channel_state_info', index=17,
-      number=9, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='events_to_base_ratio', full_name='minknow_api.acquisition.AcquisitionConfigSummary.events_to_base_ratio', index=18,
-      number=10, type=2, cpp_type=6, label=1,
-      has_default_value=False, default_value=float(0),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='sample_rate', full_name='minknow_api.acquisition.AcquisitionConfigSummary.sample_rate', index=19,
-      number=11, type=13, cpp_type=3, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='channel_count', full_name='minknow_api.acquisition.AcquisitionConfigSummary.channel_count', index=20,
-      number=12, type=13, cpp_type=3, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=2412,
-  serialized_end=3083,
-)
-
-
-_ACQUISITIONRUNINFO = _descriptor.Descriptor(
-  name='AcquisitionRunInfo',
-  full_name='minknow_api.acquisition.AcquisitionRunInfo',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='run_id', full_name='minknow_api.acquisition.AcquisitionRunInfo.run_id', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='startup_state', full_name='minknow_api.acquisition.AcquisitionRunInfo.startup_state', index=1,
-      number=12, type=14, cpp_type=8, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='startup_state_estimated_end', full_name='minknow_api.acquisition.AcquisitionRunInfo.startup_state_estimated_end', index=2,
-      number=13, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='startup_state_estimated_percent_complete', full_name='minknow_api.acquisition.AcquisitionRunInfo.startup_state_estimated_percent_complete', index=3,
-      number=14, type=2, cpp_type=6, label=1,
-      has_default_value=False, default_value=float(0),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='state', full_name='minknow_api.acquisition.AcquisitionRunInfo.state', index=4,
-      number=2, type=14, cpp_type=8, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='finishing_state', full_name='minknow_api.acquisition.AcquisitionRunInfo.finishing_state', index=5,
-      number=10, type=14, cpp_type=8, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='stop_reason', full_name='minknow_api.acquisition.AcquisitionRunInfo.stop_reason', index=6,
-      number=3, type=14, cpp_type=8, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='start_time', full_name='minknow_api.acquisition.AcquisitionRunInfo.start_time', index=7,
-      number=4, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='data_read_start_time', full_name='minknow_api.acquisition.AcquisitionRunInfo.data_read_start_time', index=8,
-      number=5, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='data_read_end_time', full_name='minknow_api.acquisition.AcquisitionRunInfo.data_read_end_time', index=9,
-      number=6, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='end_time', full_name='minknow_api.acquisition.AcquisitionRunInfo.end_time', index=10,
-      number=7, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='yield_summary', full_name='minknow_api.acquisition.AcquisitionRunInfo.yield_summary', index=11,
-      number=8, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='config_summary', full_name='minknow_api.acquisition.AcquisitionRunInfo.config_summary', index=12,
-      number=9, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='writer_summary', full_name='minknow_api.acquisition.AcquisitionRunInfo.writer_summary', index=13,
-      number=11, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=3086,
-  serialized_end=3923,
-)
-
-
-_LISTACQUISITIONRUNSREQUEST = _descriptor.Descriptor(
-  name='ListAcquisitionRunsRequest',
-  full_name='minknow_api.acquisition.ListAcquisitionRunsRequest',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=3925,
-  serialized_end=3953,
-)
-
-
-_LISTACQUISITIONRUNSRESPONSE = _descriptor.Descriptor(
-  name='ListAcquisitionRunsResponse',
-  full_name='minknow_api.acquisition.ListAcquisitionRunsResponse',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='run_ids', full_name='minknow_api.acquisition.ListAcquisitionRunsResponse.run_ids', index=0,
-      number=1, type=9, cpp_type=9, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=3955,
-  serialized_end=4001,
-)
-
-
-_GETCURRENTACQUISITIONRUNREQUEST = _descriptor.Descriptor(
-  name='GetCurrentAcquisitionRunRequest',
-  full_name='minknow_api.acquisition.GetCurrentAcquisitionRunRequest',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=4003,
-  serialized_end=4036,
-)
-
-
-_WATCHCURRENTACQUISITIONRUNREQUEST = _descriptor.Descriptor(
-  name='WatchCurrentAcquisitionRunRequest',
-  full_name='minknow_api.acquisition.WatchCurrentAcquisitionRunRequest',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=4038,
-  serialized_end=4073,
-)
-
-
-_SETSIGNALREADERREQUEST = _descriptor.Descriptor(
-  name='SetSignalReaderRequest',
-  full_name='minknow_api.acquisition.SetSignalReaderRequest',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='reader', full_name='minknow_api.acquisition.SetSignalReaderRequest.reader', index=0,
-      number=1, type=14, cpp_type=8, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=b'\210\265\030\001', file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='hdf_source', full_name='minknow_api.acquisition.SetSignalReaderRequest.hdf_source', index=1,
-      number=2, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='hdf_mode', full_name='minknow_api.acquisition.SetSignalReaderRequest.hdf_mode', index=2,
-      number=3, type=14, cpp_type=8, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='sample_rate_scale_factor', full_name='minknow_api.acquisition.SetSignalReaderRequest.sample_rate_scale_factor', index=3,
-      number=4, type=2, cpp_type=6, label=1,
-      has_default_value=False, default_value=float(0),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-    _SETSIGNALREADERREQUEST_SIGNALREADERTYPE,
-    _SETSIGNALREADERREQUEST_SOURCEFILEMODE,
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=4076,
-  serialized_end=4427,
-)
-
-
-_SETSIGNALREADERRESPONSE = _descriptor.Descriptor(
-  name='SetSignalReaderResponse',
-  full_name='minknow_api.acquisition.SetSignalReaderResponse',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=4429,
-  serialized_end=4454,
-)
-
-_STARTREQUEST.fields_by_name['generate_report'].enum_type = _OPTION
-_STARTREQUEST.fields_by_name['send_sequencing_read_metrics'].enum_type = _OPTION
-_STARTREQUEST.fields_by_name['send_basecalling_metrics'].enum_type = _OPTION
-_STARTREQUEST.fields_by_name['purpose'].enum_type = _PURPOSE
-_STARTREQUEST.fields_by_name['analysis'].enum_type = _OPTION
-_STARTREQUEST.fields_by_name['file_output'].enum_type = _OPTION
-_STARTREQUEST.fields_by_name['generate_final_summary'].enum_type = _OPTION
-_STOPREQUEST.fields_by_name['data_action_on_stop'].enum_type = _STOPREQUEST_DATAACTION
-_STOPREQUEST_DATAACTION.containing_type = _STOPREQUEST
-_WATCHFORSTATUSCHANGERESPONSE.fields_by_name['status'].enum_type = _MINKNOWSTATUS
-_CURRENTSTATUSRESPONSE.fields_by_name['status'].enum_type = _MINKNOWSTATUS
-_GETPROGRESSRESPONSE_RAWPERCHANNEL.containing_type = _GETPROGRESSRESPONSE
-_GETPROGRESSRESPONSE.fields_by_name['raw_per_channel'].message_type = _GETPROGRESSRESPONSE_RAWPERCHANNEL
-_CHANNELSTATEINFO_STYLE.containing_type = _CHANNELSTATEINFO
-_CHANNELSTATEINFO_CHANNELSTATE.fields_by_name['style'].message_type = _CHANNELSTATEINFO_STYLE
-_CHANNELSTATEINFO_CHANNELSTATE.containing_type = _CHANNELSTATEINFO
-_CHANNELSTATEINFO_GROUP.fields_by_name['style'].message_type = _CHANNELSTATEINFO_STYLE
-_CHANNELSTATEINFO_GROUP.fields_by_name['states'].message_type = _CHANNELSTATEINFO_CHANNELSTATE
-_CHANNELSTATEINFO_GROUP.containing_type = _CHANNELSTATEINFO
-_CHANNELSTATEINFO.fields_by_name['groups'].message_type = _CHANNELSTATEINFO_GROUP
-_ACQUISITIONCONFIGSUMMARY.fields_by_name['purpose'].enum_type = _PURPOSE
-_ACQUISITIONCONFIGSUMMARY.fields_by_name['channel_state_info'].message_type = _CHANNELSTATEINFO
-_ACQUISITIONRUNINFO.fields_by_name['startup_state'].enum_type = _STARTUPSTATE
-_ACQUISITIONRUNINFO.fields_by_name['startup_state_estimated_end'].message_type = google_dot_protobuf_dot_timestamp__pb2._TIMESTAMP
-_ACQUISITIONRUNINFO.fields_by_name['state'].enum_type = _ACQUISITIONSTATE
-_ACQUISITIONRUNINFO.fields_by_name['finishing_state'].enum_type = _FINISHINGSTATE
-_ACQUISITIONRUNINFO.fields_by_name['stop_reason'].enum_type = _ACQUISITIONSTOPREASON
-_ACQUISITIONRUNINFO.fields_by_name['start_time'].message_type = google_dot_protobuf_dot_timestamp__pb2._TIMESTAMP
-_ACQUISITIONRUNINFO.fields_by_name['data_read_start_time'].message_type = google_dot_protobuf_dot_timestamp__pb2._TIMESTAMP
-_ACQUISITIONRUNINFO.fields_by_name['data_read_end_time'].message_type = google_dot_protobuf_dot_timestamp__pb2._TIMESTAMP
-_ACQUISITIONRUNINFO.fields_by_name['end_time'].message_type = google_dot_protobuf_dot_timestamp__pb2._TIMESTAMP
-_ACQUISITIONRUNINFO.fields_by_name['yield_summary'].message_type = _ACQUISITIONYIELDSUMMARY
-_ACQUISITIONRUNINFO.fields_by_name['config_summary'].message_type = _ACQUISITIONCONFIGSUMMARY
-_ACQUISITIONRUNINFO.fields_by_name['writer_summary'].message_type = _ACQUISITIONWRITERSUMMARY
-_SETSIGNALREADERREQUEST.fields_by_name['reader'].enum_type = _SETSIGNALREADERREQUEST_SIGNALREADERTYPE
-_SETSIGNALREADERREQUEST.fields_by_name['hdf_mode'].enum_type = _SETSIGNALREADERREQUEST_SOURCEFILEMODE
-_SETSIGNALREADERREQUEST_SIGNALREADERTYPE.containing_type = _SETSIGNALREADERREQUEST
-_SETSIGNALREADERREQUEST_SOURCEFILEMODE.containing_type = _SETSIGNALREADERREQUEST
-DESCRIPTOR.message_types_by_name['StartRequest'] = _STARTREQUEST
-DESCRIPTOR.message_types_by_name['StartResponse'] = _STARTRESPONSE
-DESCRIPTOR.message_types_by_name['StopRequest'] = _STOPREQUEST
-DESCRIPTOR.message_types_by_name['StopResponse'] = _STOPRESPONSE
-DESCRIPTOR.message_types_by_name['WatchForStatusChangeRequest'] = _WATCHFORSTATUSCHANGEREQUEST
-DESCRIPTOR.message_types_by_name['WatchForStatusChangeResponse'] = _WATCHFORSTATUSCHANGERESPONSE
-DESCRIPTOR.message_types_by_name['CurrentStatusRequest'] = _CURRENTSTATUSREQUEST
-DESCRIPTOR.message_types_by_name['CurrentStatusResponse'] = _CURRENTSTATUSRESPONSE
-DESCRIPTOR.message_types_by_name['GetProgressRequest'] = _GETPROGRESSREQUEST
-DESCRIPTOR.message_types_by_name['GetProgressResponse'] = _GETPROGRESSRESPONSE
-DESCRIPTOR.message_types_by_name['GetAcquisitionRunInfoRequest'] = _GETACQUISITIONRUNINFOREQUEST
-DESCRIPTOR.message_types_by_name['AcquisitionYieldSummary'] = _ACQUISITIONYIELDSUMMARY
-DESCRIPTOR.message_types_by_name['AcquisitionWriterSummary'] = _ACQUISITIONWRITERSUMMARY
-DESCRIPTOR.message_types_by_name['ChannelStateInfo'] = _CHANNELSTATEINFO
-DESCRIPTOR.message_types_by_name['AcquisitionConfigSummary'] = _ACQUISITIONCONFIGSUMMARY
-DESCRIPTOR.message_types_by_name['AcquisitionRunInfo'] = _ACQUISITIONRUNINFO
-DESCRIPTOR.message_types_by_name['ListAcquisitionRunsRequest'] = _LISTACQUISITIONRUNSREQUEST
-DESCRIPTOR.message_types_by_name['ListAcquisitionRunsResponse'] = _LISTACQUISITIONRUNSRESPONSE
-DESCRIPTOR.message_types_by_name['GetCurrentAcquisitionRunRequest'] = _GETCURRENTACQUISITIONRUNREQUEST
-DESCRIPTOR.message_types_by_name['WatchCurrentAcquisitionRunRequest'] = _WATCHCURRENTACQUISITIONRUNREQUEST
-DESCRIPTOR.message_types_by_name['SetSignalReaderRequest'] = _SETSIGNALREADERREQUEST
-DESCRIPTOR.message_types_by_name['SetSignalReaderResponse'] = _SETSIGNALREADERRESPONSE
-DESCRIPTOR.enum_types_by_name['MinknowStatus'] = _MINKNOWSTATUS
-DESCRIPTOR.enum_types_by_name['Option'] = _OPTION
-DESCRIPTOR.enum_types_by_name['Purpose'] = _PURPOSE
-DESCRIPTOR.enum_types_by_name['AcquisitionState'] = _ACQUISITIONSTATE
-DESCRIPTOR.enum_types_by_name['AcquisitionStopReason'] = _ACQUISITIONSTOPREASON
-DESCRIPTOR.enum_types_by_name['StartupState'] = _STARTUPSTATE
-DESCRIPTOR.enum_types_by_name['FinishingState'] = _FINISHINGSTATE
-_sym_db.RegisterFileDescriptor(DESCRIPTOR)
-
+_STARTREQUEST = DESCRIPTOR.message_types_by_name['StartRequest']
+_STARTRESPONSE = DESCRIPTOR.message_types_by_name['StartResponse']
+_STOPREQUEST = DESCRIPTOR.message_types_by_name['StopRequest']
+_STOPRESPONSE = DESCRIPTOR.message_types_by_name['StopResponse']
+_WATCHFORSTATUSCHANGEREQUEST = DESCRIPTOR.message_types_by_name['WatchForStatusChangeRequest']
+_WATCHFORSTATUSCHANGERESPONSE = DESCRIPTOR.message_types_by_name['WatchForStatusChangeResponse']
+_CURRENTSTATUSREQUEST = DESCRIPTOR.message_types_by_name['CurrentStatusRequest']
+_CURRENTSTATUSRESPONSE = DESCRIPTOR.message_types_by_name['CurrentStatusResponse']
+_GETPROGRESSREQUEST = DESCRIPTOR.message_types_by_name['GetProgressRequest']
+_GETPROGRESSRESPONSE = DESCRIPTOR.message_types_by_name['GetProgressResponse']
+_GETPROGRESSRESPONSE_RAWPERCHANNEL = _GETPROGRESSRESPONSE.nested_types_by_name['RawPerChannel']
+_GETACQUISITIONRUNINFOREQUEST = DESCRIPTOR.message_types_by_name['GetAcquisitionRunInfoRequest']
+_ACQUISITIONYIELDSUMMARY = DESCRIPTOR.message_types_by_name['AcquisitionYieldSummary']
+_ACQUISITIONWRITERSUMMARY = DESCRIPTOR.message_types_by_name['AcquisitionWriterSummary']
+_CHANNELSTATEINFO = DESCRIPTOR.message_types_by_name['ChannelStateInfo']
+_CHANNELSTATEINFO_STYLE = _CHANNELSTATEINFO.nested_types_by_name['Style']
+_CHANNELSTATEINFO_CHANNELSTATE = _CHANNELSTATEINFO.nested_types_by_name['ChannelState']
+_CHANNELSTATEINFO_GROUP = _CHANNELSTATEINFO.nested_types_by_name['Group']
+_ACQUISITIONCONFIGSUMMARY = DESCRIPTOR.message_types_by_name['AcquisitionConfigSummary']
+_MUXSCANMETADATA = DESCRIPTOR.message_types_by_name['MuxScanMetadata']
+_MUXSCANMETADATA_STYLE = _MUXSCANMETADATA.nested_types_by_name['Style']
+_MUXSCANMETADATA_CATEGORY = _MUXSCANMETADATA.nested_types_by_name['Category']
+_MUXSCANMETADATA_CATEGORYGROUP = _MUXSCANMETADATA.nested_types_by_name['CategoryGroup']
+_MUXSCANRESULT = DESCRIPTOR.message_types_by_name['MuxScanResult']
+_MUXSCANRESULT_COUNTSENTRY = _MUXSCANRESULT.nested_types_by_name['CountsEntry']
+_BREAMINFO = DESCRIPTOR.message_types_by_name['BreamInfo']
+_BREAMINFO_RANGE = _BREAMINFO.nested_types_by_name['Range']
+_ACQUISITIONRUNINFO = DESCRIPTOR.message_types_by_name['AcquisitionRunInfo']
+_LISTACQUISITIONRUNSREQUEST = DESCRIPTOR.message_types_by_name['ListAcquisitionRunsRequest']
+_LISTACQUISITIONRUNSRESPONSE = DESCRIPTOR.message_types_by_name['ListAcquisitionRunsResponse']
+_GETCURRENTACQUISITIONRUNREQUEST = DESCRIPTOR.message_types_by_name['GetCurrentAcquisitionRunRequest']
+_WATCHCURRENTACQUISITIONRUNREQUEST = DESCRIPTOR.message_types_by_name['WatchCurrentAcquisitionRunRequest']
+_SETSIGNALREADERREQUEST = DESCRIPTOR.message_types_by_name['SetSignalReaderRequest']
+_SETSIGNALREADERRESPONSE = DESCRIPTOR.message_types_by_name['SetSignalReaderResponse']
+_SETBREAMINFOREQUEST = DESCRIPTOR.message_types_by_name['SetBreamInfoRequest']
+_SETBREAMINFORESPONSE = DESCRIPTOR.message_types_by_name['SetBreamInfoResponse']
+_APPENDMUXSCANRESULTRESPONSE = DESCRIPTOR.message_types_by_name['AppendMuxScanResultResponse']
+_STOPREQUEST_DATAACTION = _STOPREQUEST.enum_types_by_name['DataAction']
+_SETSIGNALREADERREQUEST_SIGNALREADERTYPE = _SETSIGNALREADERREQUEST.enum_types_by_name['SignalReaderType']
+_SETSIGNALREADERREQUEST_SOURCEFILEMODE = _SETSIGNALREADERREQUEST.enum_types_by_name['SourceFileMode']
 StartRequest = _reflection.GeneratedProtocolMessageType('StartRequest', (_message.Message,), {
   'DESCRIPTOR' : _STARTREQUEST,
   '__module__' : 'minknow_api.acquisition_pb2'
@@ -1998,6 +327,16 @@ AcquisitionYieldSummary = _reflection.GeneratedProtocolMessageType('AcquisitionY
           Number of reads selected by analysis as good reads.  The reads
           in this counter are completed, but not necessarily on disk
           yet.
+      fraction_basecalled:
+          This is the fraction of whole reads that the base-caller has
+          finished with. The value should be in the range [0.0, 1.0]
+          When base-calling is enabled, it can be added to
+          fraction_skipped and multiplied by 100 to give the percentage
+          of reads processed and by implication, the percentage of reads
+          the user is waiting for the base-caller to process.  Since 5.0
+      fraction_skipped:
+          This is the fraction of whole reads that have been skipped.
+          The value should be in the range [0.0, 1.0]  Since 5.0
       basecalled_pass_read_count:
           Number of reads successfully basecalled.
       basecalled_fail_read_count:
@@ -2050,9 +389,6 @@ AcquisitionWriterSummary = _reflection.GeneratedProtocolMessageType('Acquisition
   '__module__' : 'minknow_api.acquisition_pb2'
   ,
   '__doc__': """Attributes:
-      written_read_count:
-          Number of reads finished processing and written to disk.  The
-          reads which have been finalised and written to disk.
       bytes_to_write_produced:
           Number of bytes which minknow needs to write in order to
           finish the experiment.
@@ -2204,6 +540,165 @@ AcquisitionConfigSummary = _reflection.GeneratedProtocolMessageType('Acquisition
   })
 _sym_db.RegisterMessage(AcquisitionConfigSummary)
 
+MuxScanMetadata = _reflection.GeneratedProtocolMessageType('MuxScanMetadata', (_message.Message,), {
+
+  'Style' : _reflection.GeneratedProtocolMessageType('Style', (_message.Message,), {
+    'DESCRIPTOR' : _MUXSCANMETADATA_STYLE,
+    '__module__' : 'minknow_api.acquisition_pb2'
+    ,
+    '__doc__': """Presentation information for a category or group.
+    
+    Attributes:
+        label:
+            The human-readable name to display when rendering this
+            category or group.
+        description:
+            A sentence describing the meaning of the category or group.
+            This can be used as a tooltip, for example.
+        colour:
+            The colour to use when rendering this category or group.  This
+            is a six-digit hex string describing an RGB colour (eg:
+            "ff0000" for red).
+    """,
+    # @@protoc_insertion_point(class_scope:minknow_api.acquisition.MuxScanMetadata.Style)
+    })
+  ,
+
+  'Category' : _reflection.GeneratedProtocolMessageType('Category', (_message.Message,), {
+    'DESCRIPTOR' : _MUXSCANMETADATA_CATEGORY,
+    '__module__' : 'minknow_api.acquisition_pb2'
+    ,
+    '__doc__': """A category that a channel mux can be assigned.
+    
+    Attributes:
+        name:
+            Name of the category.  This is the value that will be in the
+            `MuxScanResult.counts` field.  The user should not be shown
+            this. Instead, `style.label` should be displayed.
+        style:
+            How to render the category in a graphical user interface.
+        global_order:
+            An order ranking for the category when displaying them without
+            using groups.
+    """,
+    # @@protoc_insertion_point(class_scope:minknow_api.acquisition.MuxScanMetadata.Category)
+    })
+  ,
+
+  'CategoryGroup' : _reflection.GeneratedProtocolMessageType('CategoryGroup', (_message.Message,), {
+    'DESCRIPTOR' : _MUXSCANMETADATA_CATEGORYGROUP,
+    '__module__' : 'minknow_api.acquisition_pb2'
+    ,
+    '__doc__': """Attributes:
+        name:
+            The name of the group.
+        style:
+            How to render the group in a graphical user interface.
+        category:
+            The categories contained in the group.  Within this group,
+            categories should be presented in the order of this list.
+    """,
+    # @@protoc_insertion_point(class_scope:minknow_api.acquisition.MuxScanMetadata.CategoryGroup)
+    })
+  ,
+  'DESCRIPTOR' : _MUXSCANMETADATA,
+  '__module__' : 'minknow_api.acquisition_pb2'
+  ,
+  '__doc__': """Provides information about how mux scans are configured.  This
+  primarily information to help present mux scan results to the user
+  (see `MuxScanResult`).
+  
+  Attributes:
+      auto_mux_scan_period_hours:
+          How frequently automatic scans are scheduled to occur.
+      category_groups:
+          Presentation information for categories.  Describes the
+          preferred way to present mux scan categories to users. Groups
+          should be presented in the order of this list.
+  """,
+  # @@protoc_insertion_point(class_scope:minknow_api.acquisition.MuxScanMetadata)
+  })
+_sym_db.RegisterMessage(MuxScanMetadata)
+_sym_db.RegisterMessage(MuxScanMetadata.Style)
+_sym_db.RegisterMessage(MuxScanMetadata.Category)
+_sym_db.RegisterMessage(MuxScanMetadata.CategoryGroup)
+
+MuxScanResult = _reflection.GeneratedProtocolMessageType('MuxScanResult', (_message.Message,), {
+
+  'CountsEntry' : _reflection.GeneratedProtocolMessageType('CountsEntry', (_message.Message,), {
+    'DESCRIPTOR' : _MUXSCANRESULT_COUNTSENTRY,
+    '__module__' : 'minknow_api.acquisition_pb2'
+    # @@protoc_insertion_point(class_scope:minknow_api.acquisition.MuxScanResult.CountsEntry)
+    })
+  ,
+  'DESCRIPTOR' : _MUXSCANRESULT,
+  '__module__' : 'minknow_api.acquisition_pb2'
+  ,
+  '__doc__': """A report of the states of channel muxes (wells) across the flow cell.
+  Every channel mux (well) is assigned to a specific category describing
+  its state (for example, is it expected to produce good results, and if
+  not why not?). This is a report of how many channel muxes are in each
+  category.
+  
+  Attributes:
+      counts:
+          How many channel muxes are in each category.  The sum of all
+          the values in this map should be the number of channels
+          multiplied by the number of muxes on each channel (eg:
+          512x4=2048 on a MinION Mk1B without a flongle adapter).  eg.
+          'sequencing': 1500
+      mux_scan_timestamp:
+          When this mux scan result was added (Seconds since the start
+          of the acquisition).
+  """,
+  # @@protoc_insertion_point(class_scope:minknow_api.acquisition.MuxScanResult)
+  })
+_sym_db.RegisterMessage(MuxScanResult)
+_sym_db.RegisterMessage(MuxScanResult.CountsEntry)
+
+BreamInfo = _reflection.GeneratedProtocolMessageType('BreamInfo', (_message.Message,), {
+
+  'Range' : _reflection.GeneratedProtocolMessageType('Range', (_message.Message,), {
+    'DESCRIPTOR' : _BREAMINFO_RANGE,
+    '__module__' : 'minknow_api.acquisition_pb2'
+    ,
+    '__doc__': """Represents a range of values.""",
+    # @@protoc_insertion_point(class_scope:minknow_api.acquisition.BreamInfo.Range)
+    })
+  ,
+  'DESCRIPTOR' : _BREAMINFO,
+  '__module__' : 'minknow_api.acquisition_pb2'
+  ,
+  '__doc__': """Information provided by Bream.  Note that this is provided by the
+  protocol, and some protocols may choose not to provide this.
+  
+  Attributes:
+      mux_scan_metadata:
+          Presentation information for mux scan results.
+      mux_scan_results:
+          Mux scan results.
+      target_translocation_speed:
+          The ideal translocation speed range.  This can be used to
+          provide context for speed graphs (see the statistics RPCs),
+          showing what range is considered "good".
+      target_q_score:
+          The ideal quality (Q) score range.  This can be used to
+          provide context for q-score graphs (see the statistics RPCs),
+          showing what range is considered "good".
+      target_temperature:
+          The ideal temperature range.  This can be used to provide
+          context for temperature (see the statistics RPCs), showing
+          what range is considered "good".  Note that a protocol may
+          request a different temperature range than this (eg: it might
+          request a tighter range, or it may adjust the temperature it
+          is requesting throughout the run). This intended only to
+          provide context when presenting data to users.
+  """,
+  # @@protoc_insertion_point(class_scope:minknow_api.acquisition.BreamInfo)
+  })
+_sym_db.RegisterMessage(BreamInfo)
+_sym_db.RegisterMessage(BreamInfo.Range)
+
 AcquisitionRunInfo = _reflection.GeneratedProtocolMessageType('AcquisitionRunInfo', (_message.Message,), {
   'DESCRIPTOR' : _ACQUISITIONRUNINFO,
   '__module__' : 'minknow_api.acquisition_pb2'
@@ -2246,6 +741,8 @@ AcquisitionRunInfo = _reflection.GeneratedProtocolMessageType('AcquisitionRunInf
           Summary of the configuration settings for a run.  Since 1.14
       writer_summary:
           Summary of writer yields.  Since 4.0
+      bream_info:
+          Set information provided by the Bream toolkit.
   """,
   # @@protoc_insertion_point(class_scope:minknow_api.acquisition.AcquisitionRunInfo)
   })
@@ -2303,123 +800,167 @@ SetSignalReaderResponse = _reflection.GeneratedProtocolMessageType('SetSignalRea
   })
 _sym_db.RegisterMessage(SetSignalReaderResponse)
 
+SetBreamInfoRequest = _reflection.GeneratedProtocolMessageType('SetBreamInfoRequest', (_message.Message,), {
+  'DESCRIPTOR' : _SETBREAMINFOREQUEST,
+  '__module__' : 'minknow_api.acquisition_pb2'
+  ,
+  '__doc__': """Attributes:
+      info:
+          The information to set.  Note that, other than treating the
+          top-level fields independently (see the other flags on this
+          request), MinKNOW Core will not do anything special to the
+          data. In particular, the caller must fill in the
+          `mux_scan_timestamp` field in `MuxScanResult` messages.
+      overwrite_unset_fields:
+          If any `BreamInfo` fields were set in a previous call, but are
+          unset in the `info` field of this call, then use the old value
+          for them.  For example, to just update the mux_scan_metadata
+          field, use a BreamInfo object with only the
+          `mux_scan_metadata` field set, and leave this as False. To
+          clear the entire BreamInfo structure, leave `info` empty and
+          set this to True.
+  """,
+  # @@protoc_insertion_point(class_scope:minknow_api.acquisition.SetBreamInfoRequest)
+  })
+_sym_db.RegisterMessage(SetBreamInfoRequest)
 
-DESCRIPTOR._options = None
-_SETSIGNALREADERREQUEST.fields_by_name['reader']._options = None
+SetBreamInfoResponse = _reflection.GeneratedProtocolMessageType('SetBreamInfoResponse', (_message.Message,), {
+  'DESCRIPTOR' : _SETBREAMINFORESPONSE,
+  '__module__' : 'minknow_api.acquisition_pb2'
+  # @@protoc_insertion_point(class_scope:minknow_api.acquisition.SetBreamInfoResponse)
+  })
+_sym_db.RegisterMessage(SetBreamInfoResponse)
 
-_ACQUISITIONSERVICE = _descriptor.ServiceDescriptor(
-  name='AcquisitionService',
-  full_name='minknow_api.acquisition.AcquisitionService',
-  file=DESCRIPTOR,
-  index=0,
-  serialized_options=None,
-  create_key=_descriptor._internal_create_key,
-  serialized_start=5512,
-  serialized_end=6763,
-  methods=[
-  _descriptor.MethodDescriptor(
-    name='start',
-    full_name='minknow_api.acquisition.AcquisitionService.start',
-    index=0,
-    containing_service=None,
-    input_type=_STARTREQUEST,
-    output_type=_STARTRESPONSE,
-    serialized_options=None,
-    create_key=_descriptor._internal_create_key,
-  ),
-  _descriptor.MethodDescriptor(
-    name='stop',
-    full_name='minknow_api.acquisition.AcquisitionService.stop',
-    index=1,
-    containing_service=None,
-    input_type=_STOPREQUEST,
-    output_type=_STOPRESPONSE,
-    serialized_options=None,
-    create_key=_descriptor._internal_create_key,
-  ),
-  _descriptor.MethodDescriptor(
-    name='watch_for_status_change',
-    full_name='minknow_api.acquisition.AcquisitionService.watch_for_status_change',
-    index=2,
-    containing_service=None,
-    input_type=_WATCHFORSTATUSCHANGEREQUEST,
-    output_type=_WATCHFORSTATUSCHANGERESPONSE,
-    serialized_options=b'\220\002\001',
-    create_key=_descriptor._internal_create_key,
-  ),
-  _descriptor.MethodDescriptor(
-    name='watch_current_acquisition_run',
-    full_name='minknow_api.acquisition.AcquisitionService.watch_current_acquisition_run',
-    index=3,
-    containing_service=None,
-    input_type=_WATCHCURRENTACQUISITIONRUNREQUEST,
-    output_type=_ACQUISITIONRUNINFO,
-    serialized_options=b'\220\002\001',
-    create_key=_descriptor._internal_create_key,
-  ),
-  _descriptor.MethodDescriptor(
-    name='current_status',
-    full_name='minknow_api.acquisition.AcquisitionService.current_status',
-    index=4,
-    containing_service=None,
-    input_type=_CURRENTSTATUSREQUEST,
-    output_type=_CURRENTSTATUSRESPONSE,
-    serialized_options=b'\220\002\001',
-    create_key=_descriptor._internal_create_key,
-  ),
-  _descriptor.MethodDescriptor(
-    name='get_progress',
-    full_name='minknow_api.acquisition.AcquisitionService.get_progress',
-    index=5,
-    containing_service=None,
-    input_type=_GETPROGRESSREQUEST,
-    output_type=_GETPROGRESSRESPONSE,
-    serialized_options=b'\220\002\001',
-    create_key=_descriptor._internal_create_key,
-  ),
-  _descriptor.MethodDescriptor(
-    name='get_acquisition_info',
-    full_name='minknow_api.acquisition.AcquisitionService.get_acquisition_info',
-    index=6,
-    containing_service=None,
-    input_type=_GETACQUISITIONRUNINFOREQUEST,
-    output_type=_ACQUISITIONRUNINFO,
-    serialized_options=b'\220\002\001',
-    create_key=_descriptor._internal_create_key,
-  ),
-  _descriptor.MethodDescriptor(
-    name='list_acquisition_runs',
-    full_name='minknow_api.acquisition.AcquisitionService.list_acquisition_runs',
-    index=7,
-    containing_service=None,
-    input_type=_LISTACQUISITIONRUNSREQUEST,
-    output_type=_LISTACQUISITIONRUNSRESPONSE,
-    serialized_options=b'\220\002\001',
-    create_key=_descriptor._internal_create_key,
-  ),
-  _descriptor.MethodDescriptor(
-    name='get_current_acquisition_run',
-    full_name='minknow_api.acquisition.AcquisitionService.get_current_acquisition_run',
-    index=8,
-    containing_service=None,
-    input_type=_GETCURRENTACQUISITIONRUNREQUEST,
-    output_type=_ACQUISITIONRUNINFO,
-    serialized_options=b'\220\002\001',
-    create_key=_descriptor._internal_create_key,
-  ),
-  _descriptor.MethodDescriptor(
-    name='set_signal_reader',
-    full_name='minknow_api.acquisition.AcquisitionService.set_signal_reader',
-    index=9,
-    containing_service=None,
-    input_type=_SETSIGNALREADERREQUEST,
-    output_type=_SETSIGNALREADERRESPONSE,
-    serialized_options=b'\220\002\002',
-    create_key=_descriptor._internal_create_key,
-  ),
-])
-_sym_db.RegisterServiceDescriptor(_ACQUISITIONSERVICE)
+AppendMuxScanResultResponse = _reflection.GeneratedProtocolMessageType('AppendMuxScanResultResponse', (_message.Message,), {
+  'DESCRIPTOR' : _APPENDMUXSCANRESULTRESPONSE,
+  '__module__' : 'minknow_api.acquisition_pb2'
+  # @@protoc_insertion_point(class_scope:minknow_api.acquisition.AppendMuxScanResultResponse)
+  })
+_sym_db.RegisterMessage(AppendMuxScanResultResponse)
 
-DESCRIPTOR.services_by_name['AcquisitionService'] = _ACQUISITIONSERVICE
+_ACQUISITIONSERVICE = DESCRIPTOR.services_by_name['AcquisitionService']
+if _descriptor._USE_C_DESCRIPTORS == False:
 
+  DESCRIPTOR._options = None
+  DESCRIPTOR._serialized_options = b'\n\034com.nanoporetech.minknow_api\242\002\005MKAPI'
+  _MUXSCANRESULT_COUNTSENTRY._options = None
+  _MUXSCANRESULT_COUNTSENTRY._serialized_options = b'8\001'
+  _SETSIGNALREADERREQUEST.fields_by_name['reader']._options = None
+  _SETSIGNALREADERREQUEST.fields_by_name['reader']._serialized_options = b'\210\265\030\001'
+  _ACQUISITIONSERVICE.methods_by_name['watch_for_status_change']._options = None
+  _ACQUISITIONSERVICE.methods_by_name['watch_for_status_change']._serialized_options = b'\220\002\001'
+  _ACQUISITIONSERVICE.methods_by_name['watch_current_acquisition_run']._options = None
+  _ACQUISITIONSERVICE.methods_by_name['watch_current_acquisition_run']._serialized_options = b'\220\002\001'
+  _ACQUISITIONSERVICE.methods_by_name['current_status']._options = None
+  _ACQUISITIONSERVICE.methods_by_name['current_status']._serialized_options = b'\220\002\001'
+  _ACQUISITIONSERVICE.methods_by_name['get_progress']._options = None
+  _ACQUISITIONSERVICE.methods_by_name['get_progress']._serialized_options = b'\220\002\001'
+  _ACQUISITIONSERVICE.methods_by_name['get_acquisition_info']._options = None
+  _ACQUISITIONSERVICE.methods_by_name['get_acquisition_info']._serialized_options = b'\220\002\001'
+  _ACQUISITIONSERVICE.methods_by_name['list_acquisition_runs']._options = None
+  _ACQUISITIONSERVICE.methods_by_name['list_acquisition_runs']._serialized_options = b'\220\002\001'
+  _ACQUISITIONSERVICE.methods_by_name['get_current_acquisition_run']._options = None
+  _ACQUISITIONSERVICE.methods_by_name['get_current_acquisition_run']._serialized_options = b'\220\002\001'
+  _ACQUISITIONSERVICE.methods_by_name['set_signal_reader']._options = None
+  _ACQUISITIONSERVICE.methods_by_name['set_signal_reader']._serialized_options = b'\220\002\002'
+  _ACQUISITIONSERVICE.methods_by_name['set_bream_info']._options = None
+  _ACQUISITIONSERVICE.methods_by_name['set_bream_info']._serialized_options = b'\220\002\002'
+  _ACQUISITIONSERVICE.methods_by_name['append_mux_scan_result']._options = None
+  _ACQUISITIONSERVICE.methods_by_name['append_mux_scan_result']._serialized_options = b'\220\002\002'
+  _MINKNOWSTATUS._serialized_start=5765
+  _MINKNOWSTATUS._serialized_end=5854
+  _OPTION._serialized_start=5856
+  _OPTION._serialized_end=5898
+  _PURPOSE._serialized_start=5900
+  _PURPOSE._serialized_end=5961
+  _ACQUISITIONSTATE._serialized_start=5963
+  _ACQUISITIONSTATE._serialized_end=6086
+  _ACQUISITIONSTOPREASON._serialized_start=6089
+  _ACQUISITIONSTOPREASON._serialized_end=6395
+  _STARTUPSTATE._serialized_start=6398
+  _STARTUPSTATE._serialized_end=6676
+  _FINISHINGSTATE._serialized_start=6679
+  _FINISHINGSTATE._serialized_end=6818
+  _STARTREQUEST._serialized_start=123
+  _STARTREQUEST._serialized_end=590
+  _STARTRESPONSE._serialized_start=592
+  _STARTRESPONSE._serialized_end=623
+  _STOPREQUEST._serialized_start=626
+  _STOPREQUEST._serialized_end=850
+  _STOPREQUEST_DATAACTION._serialized_start=768
+  _STOPREQUEST_DATAACTION._serialized_end=850
+  _STOPRESPONSE._serialized_start=852
+  _STOPRESPONSE._serialized_end=866
+  _WATCHFORSTATUSCHANGEREQUEST._serialized_start=868
+  _WATCHFORSTATUSCHANGEREQUEST._serialized_end=911
+  _WATCHFORSTATUSCHANGERESPONSE._serialized_start=913
+  _WATCHFORSTATUSCHANGERESPONSE._serialized_end=999
+  _CURRENTSTATUSREQUEST._serialized_start=1001
+  _CURRENTSTATUSREQUEST._serialized_end=1023
+  _CURRENTSTATUSRESPONSE._serialized_start=1025
+  _CURRENTSTATUSRESPONSE._serialized_end=1104
+  _GETPROGRESSREQUEST._serialized_start=1106
+  _GETPROGRESSREQUEST._serialized_end=1126
+  _GETPROGRESSRESPONSE._serialized_start=1129
+  _GETPROGRESSRESPONSE._serialized_end=1289
+  _GETPROGRESSRESPONSE_RAWPERCHANNEL._serialized_start=1237
+  _GETPROGRESSRESPONSE_RAWPERCHANNEL._serialized_end=1289
+  _GETACQUISITIONRUNINFOREQUEST._serialized_start=1291
+  _GETACQUISITIONRUNINFOREQUEST._serialized_end=1337
+  _ACQUISITIONYIELDSUMMARY._serialized_start=1340
+  _ACQUISITIONYIELDSUMMARY._serialized_end=1874
+  _ACQUISITIONWRITERSUMMARY._serialized_start=1877
+  _ACQUISITIONWRITERSUMMARY._serialized_end=2027
+  _CHANNELSTATEINFO._serialized_start=2030
+  _CHANNELSTATEINFO._serialized_end=2462
+  _CHANNELSTATEINFO_STYLE._serialized_start=2115
+  _CHANNELSTATEINFO_STYLE._serialized_end=2174
+  _CHANNELSTATEINFO_CHANNELSTATE._serialized_start=2176
+  _CHANNELSTATEINFO_CHANNELSTATE._serialized_end=2302
+  _CHANNELSTATEINFO_GROUP._serialized_start=2305
+  _CHANNELSTATEINFO_GROUP._serialized_end=2462
+  _ACQUISITIONCONFIGSUMMARY._serialized_start=2465
+  _ACQUISITIONCONFIGSUMMARY._serialized_end=3136
+  _MUXSCANMETADATA._serialized_start=3139
+  _MUXSCANMETADATA._serialized_end=3609
+  _MUXSCANMETADATA_STYLE._serialized_start=2115
+  _MUXSCANMETADATA_STYLE._serialized_end=2174
+  _MUXSCANMETADATA_CATEGORY._serialized_start=3336
+  _MUXSCANMETADATA_CATEGORY._serialized_end=3445
+  _MUXSCANMETADATA_CATEGORYGROUP._serialized_start=3448
+  _MUXSCANMETADATA_CATEGORYGROUP._serialized_end=3609
+  _MUXSCANRESULT._serialized_start=3612
+  _MUXSCANRESULT._serialized_end=3770
+  _MUXSCANRESULT_COUNTSENTRY._serialized_start=3725
+  _MUXSCANRESULT_COUNTSENTRY._serialized_end=3770
+  _BREAMINFO._serialized_start=3773
+  _BREAMINFO._serialized_end=4176
+  _BREAMINFO_RANGE._serialized_start=4135
+  _BREAMINFO_RANGE._serialized_end=4176
+  _ACQUISITIONRUNINFO._serialized_start=4179
+  _ACQUISITIONRUNINFO._serialized_end=5072
+  _LISTACQUISITIONRUNSREQUEST._serialized_start=5074
+  _LISTACQUISITIONRUNSREQUEST._serialized_end=5102
+  _LISTACQUISITIONRUNSRESPONSE._serialized_start=5104
+  _LISTACQUISITIONRUNSRESPONSE._serialized_end=5150
+  _GETCURRENTACQUISITIONRUNREQUEST._serialized_start=5152
+  _GETCURRENTACQUISITIONRUNREQUEST._serialized_end=5185
+  _WATCHCURRENTACQUISITIONRUNREQUEST._serialized_start=5187
+  _WATCHCURRENTACQUISITIONRUNREQUEST._serialized_end=5222
+  _SETSIGNALREADERREQUEST._serialized_start=5225
+  _SETSIGNALREADERREQUEST._serialized_end=5576
+  _SETSIGNALREADERREQUEST_SIGNALREADERTYPE._serialized_start=5475
+  _SETSIGNALREADERREQUEST_SIGNALREADERTYPE._serialized_end=5515
+  _SETSIGNALREADERREQUEST_SOURCEFILEMODE._serialized_start=5517
+  _SETSIGNALREADERREQUEST_SOURCEFILEMODE._serialized_end=5576
+  _SETSIGNALREADERRESPONSE._serialized_start=5578
+  _SETSIGNALREADERRESPONSE._serialized_end=5603
+  _SETBREAMINFOREQUEST._serialized_start=5605
+  _SETBREAMINFOREQUEST._serialized_end=5708
+  _SETBREAMINFORESPONSE._serialized_start=5710
+  _SETBREAMINFORESPONSE._serialized_end=5732
+  _APPENDMUXSCANRESULTRESPONSE._serialized_start=5734
+  _APPENDMUXSCANRESULTRESPONSE._serialized_end=5763
+  _ACQUISITIONSERVICE._serialized_start=6821
+  _ACQUISITIONSERVICE._serialized_end=8313
 # @@protoc_insertion_point(module_scope)

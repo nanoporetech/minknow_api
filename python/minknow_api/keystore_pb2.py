@@ -4,6 +4,7 @@
 """Generated protocol buffer code."""
 from google.protobuf.internal import enum_type_wrapper
 from google.protobuf import descriptor as _descriptor
+from google.protobuf import descriptor_pool as _descriptor_pool
 from google.protobuf import message as _message
 from google.protobuf import reflection as _reflection
 from google.protobuf import symbol_database as _symbol_database
@@ -16,51 +17,9 @@ from google.protobuf import any_pb2 as google_dot_protobuf_dot_any__pb2
 from minknow_api import rpc_options_pb2 as minknow__api_dot_rpc__options__pb2
 
 
-DESCRIPTOR = _descriptor.FileDescriptor(
-  name='minknow_api/keystore.proto',
-  package='minknow_api.keystore',
-  syntax='proto3',
-  serialized_options=b'\n\034com.nanoporetech.minknow_api\242\002\005MKAPI',
-  create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\x1aminknow_api/keystore.proto\x12\x14minknow_api.keystore\x1a\x19google/protobuf/any.proto\x1a\x1dminknow_api/rpc_options.proto\"\xcb\x01\n\x0cStoreRequest\x12\x44\n\x06values\x18\x01 \x03(\x0b\x32..minknow_api.keystore.StoreRequest.ValuesEntryB\x04\x88\xb5\x18\x01\x12\x30\n\x08lifetime\x18\x02 \x01(\x0e\x32\x1e.minknow_api.keystore.Lifetime\x1a\x43\n\x0bValuesEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12#\n\x05value\x18\x02 \x01(\x0b\x32\x14.google.protobuf.Any:\x02\x38\x01\"\x0f\n\rStoreResponse\";\n\rRemoveRequest\x12\x13\n\x05names\x18\x01 \x03(\tB\x04\x88\xb5\x18\x01\x12\x15\n\rallow_missing\x18\x02 \x01(\x08\"\x10\n\x0eRemoveResponse\"#\n\rGetOneRequest\x12\x12\n\x04name\x18\x01 \x01(\tB\x04\x88\xb5\x18\x01\"5\n\x0eGetOneResponse\x12#\n\x05value\x18\x02 \x01(\x0b\x32\x14.google.protobuf.Any\"2\n\nGetRequest\x12\r\n\x05names\x18\x01 \x03(\t\x12\x15\n\rallow_missing\x18\x02 \x01(\x08\"\x91\x01\n\x0bGetResponse\x12=\n\x06values\x18\x01 \x03(\x0b\x32-.minknow_api.keystore.GetResponse.ValuesEntry\x1a\x43\n\x0bValuesEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12#\n\x05value\x18\x02 \x01(\x0b\x32\x14.google.protobuf.Any:\x02\x38\x01\":\n\x0cWatchRequest\x12\x13\n\x05names\x18\x01 \x03(\tB\x04\x88\xb5\x18\x01\x12\x15\n\rallow_missing\x18\x02 \x01(\x08\"\xad\x01\n\rWatchResponse\x12?\n\x06values\x18\x01 \x03(\x0b\x32/.minknow_api.keystore.WatchResponse.ValuesEntry\x12\x16\n\x0eremoved_values\x18\x02 \x03(\t\x1a\x43\n\x0bValuesEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12#\n\x05value\x18\x02 \x01(\x0b\x32\x14.google.protobuf.Any:\x02\x38\x01*v\n\x08Lifetime\x12\x1d\n\x19UNTIL_NEXT_PROTOCOL_START\x10\x00\x12\x16\n\x12UNTIL_PROTOCOL_END\x10\x01\x12\x16\n\x12UNTIL_INSTANCE_END\x10\x02\x12\x1b\n\x17PERSIST_ACROSS_RESTARTS\x10\x03\x32\xc1\x03\n\x0fKeyStoreService\x12R\n\x05store\x12\".minknow_api.keystore.StoreRequest\x1a#.minknow_api.keystore.StoreResponse\"\x00\x12U\n\x06remove\x12#.minknow_api.keystore.RemoveRequest\x1a$.minknow_api.keystore.RemoveResponse\"\x00\x12Y\n\x07get_one\x12#.minknow_api.keystore.GetOneRequest\x1a$.minknow_api.keystore.GetOneResponse\"\x03\x90\x02\x01\x12O\n\x03get\x12 .minknow_api.keystore.GetRequest\x1a!.minknow_api.keystore.GetResponse\"\x03\x90\x02\x01\x12W\n\x05watch\x12\".minknow_api.keystore.WatchRequest\x1a#.minknow_api.keystore.WatchResponse\"\x03\x90\x02\x01\x30\x01\x42&\n\x1c\x63om.nanoporetech.minknow_api\xa2\x02\x05MKAPIb\x06proto3'
-  ,
-  dependencies=[google_dot_protobuf_dot_any__pb2.DESCRIPTOR,minknow__api_dot_rpc__options__pb2.DESCRIPTOR,])
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x1aminknow_api/keystore.proto\x12\x14minknow_api.keystore\x1a\x19google/protobuf/any.proto\x1a\x1dminknow_api/rpc_options.proto\"\xcb\x01\n\x0cStoreRequest\x12\x44\n\x06values\x18\x01 \x03(\x0b\x32..minknow_api.keystore.StoreRequest.ValuesEntryB\x04\x88\xb5\x18\x01\x12\x30\n\x08lifetime\x18\x02 \x01(\x0e\x32\x1e.minknow_api.keystore.Lifetime\x1a\x43\n\x0bValuesEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12#\n\x05value\x18\x02 \x01(\x0b\x32\x14.google.protobuf.Any:\x02\x38\x01\"\x0f\n\rStoreResponse\";\n\rRemoveRequest\x12\x13\n\x05names\x18\x01 \x03(\tB\x04\x88\xb5\x18\x01\x12\x15\n\rallow_missing\x18\x02 \x01(\x08\"\x10\n\x0eRemoveResponse\"#\n\rGetOneRequest\x12\x12\n\x04name\x18\x01 \x01(\tB\x04\x88\xb5\x18\x01\"5\n\x0eGetOneResponse\x12#\n\x05value\x18\x02 \x01(\x0b\x32\x14.google.protobuf.Any\"2\n\nGetRequest\x12\r\n\x05names\x18\x01 \x03(\t\x12\x15\n\rallow_missing\x18\x02 \x01(\x08\"\x91\x01\n\x0bGetResponse\x12=\n\x06values\x18\x01 \x03(\x0b\x32-.minknow_api.keystore.GetResponse.ValuesEntry\x1a\x43\n\x0bValuesEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12#\n\x05value\x18\x02 \x01(\x0b\x32\x14.google.protobuf.Any:\x02\x38\x01\":\n\x0cWatchRequest\x12\x13\n\x05names\x18\x01 \x03(\tB\x04\x88\xb5\x18\x01\x12\x15\n\rallow_missing\x18\x02 \x01(\x08\"\xad\x01\n\rWatchResponse\x12?\n\x06values\x18\x01 \x03(\x0b\x32/.minknow_api.keystore.WatchResponse.ValuesEntry\x12\x16\n\x0eremoved_values\x18\x02 \x03(\t\x1a\x43\n\x0bValuesEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12#\n\x05value\x18\x02 \x01(\x0b\x32\x14.google.protobuf.Any:\x02\x38\x01*v\n\x08Lifetime\x12\x1d\n\x19UNTIL_NEXT_PROTOCOL_START\x10\x00\x12\x16\n\x12UNTIL_PROTOCOL_END\x10\x01\x12\x16\n\x12UNTIL_INSTANCE_END\x10\x02\x12\x1b\n\x17PERSIST_ACROSS_RESTARTS\x10\x03\x32\xc1\x03\n\x0fKeyStoreService\x12R\n\x05store\x12\".minknow_api.keystore.StoreRequest\x1a#.minknow_api.keystore.StoreResponse\"\x00\x12U\n\x06remove\x12#.minknow_api.keystore.RemoveRequest\x1a$.minknow_api.keystore.RemoveResponse\"\x00\x12Y\n\x07get_one\x12#.minknow_api.keystore.GetOneRequest\x1a$.minknow_api.keystore.GetOneResponse\"\x03\x90\x02\x01\x12O\n\x03get\x12 .minknow_api.keystore.GetRequest\x1a!.minknow_api.keystore.GetResponse\"\x03\x90\x02\x01\x12W\n\x05watch\x12\".minknow_api.keystore.WatchRequest\x1a#.minknow_api.keystore.WatchResponse\"\x03\x90\x02\x01\x30\x01\x42&\n\x1c\x63om.nanoporetech.minknow_api\xa2\x02\x05MKAPIb\x06proto3')
 
-_LIFETIME = _descriptor.EnumDescriptor(
-  name='Lifetime',
-  full_name='minknow_api.keystore.Lifetime',
-  filename=None,
-  file=DESCRIPTOR,
-  create_key=_descriptor._internal_create_key,
-  values=[
-    _descriptor.EnumValueDescriptor(
-      name='UNTIL_NEXT_PROTOCOL_START', index=0, number=0,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-    _descriptor.EnumValueDescriptor(
-      name='UNTIL_PROTOCOL_END', index=1, number=1,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-    _descriptor.EnumValueDescriptor(
-      name='UNTIL_INSTANCE_END', index=2, number=2,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-    _descriptor.EnumValueDescriptor(
-      name='PERSIST_ACROSS_RESTARTS', index=3, number=3,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-  ],
-  containing_type=None,
-  serialized_options=None,
-  serialized_start=940,
-  serialized_end=1058,
-)
-_sym_db.RegisterEnumDescriptor(_LIFETIME)
-
+_LIFETIME = DESCRIPTOR.enum_types_by_name['Lifetime']
 Lifetime = enum_type_wrapper.EnumTypeWrapper(_LIFETIME)
 UNTIL_NEXT_PROTOCOL_START = 0
 UNTIL_PROTOCOL_END = 1
@@ -68,485 +27,19 @@ UNTIL_INSTANCE_END = 2
 PERSIST_ACROSS_RESTARTS = 3
 
 
-
-_STOREREQUEST_VALUESENTRY = _descriptor.Descriptor(
-  name='ValuesEntry',
-  full_name='minknow_api.keystore.StoreRequest.ValuesEntry',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='key', full_name='minknow_api.keystore.StoreRequest.ValuesEntry.key', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='value', full_name='minknow_api.keystore.StoreRequest.ValuesEntry.value', index=1,
-      number=2, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=b'8\001',
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=247,
-  serialized_end=314,
-)
-
-_STOREREQUEST = _descriptor.Descriptor(
-  name='StoreRequest',
-  full_name='minknow_api.keystore.StoreRequest',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='values', full_name='minknow_api.keystore.StoreRequest.values', index=0,
-      number=1, type=11, cpp_type=10, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=b'\210\265\030\001', file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='lifetime', full_name='minknow_api.keystore.StoreRequest.lifetime', index=1,
-      number=2, type=14, cpp_type=8, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[_STOREREQUEST_VALUESENTRY, ],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=111,
-  serialized_end=314,
-)
-
-
-_STORERESPONSE = _descriptor.Descriptor(
-  name='StoreResponse',
-  full_name='minknow_api.keystore.StoreResponse',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=316,
-  serialized_end=331,
-)
-
-
-_REMOVEREQUEST = _descriptor.Descriptor(
-  name='RemoveRequest',
-  full_name='minknow_api.keystore.RemoveRequest',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='names', full_name='minknow_api.keystore.RemoveRequest.names', index=0,
-      number=1, type=9, cpp_type=9, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=b'\210\265\030\001', file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='allow_missing', full_name='minknow_api.keystore.RemoveRequest.allow_missing', index=1,
-      number=2, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=333,
-  serialized_end=392,
-)
-
-
-_REMOVERESPONSE = _descriptor.Descriptor(
-  name='RemoveResponse',
-  full_name='minknow_api.keystore.RemoveResponse',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=394,
-  serialized_end=410,
-)
-
-
-_GETONEREQUEST = _descriptor.Descriptor(
-  name='GetOneRequest',
-  full_name='minknow_api.keystore.GetOneRequest',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='name', full_name='minknow_api.keystore.GetOneRequest.name', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=b'\210\265\030\001', file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=412,
-  serialized_end=447,
-)
-
-
-_GETONERESPONSE = _descriptor.Descriptor(
-  name='GetOneResponse',
-  full_name='minknow_api.keystore.GetOneResponse',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='value', full_name='minknow_api.keystore.GetOneResponse.value', index=0,
-      number=2, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=449,
-  serialized_end=502,
-)
-
-
-_GETREQUEST = _descriptor.Descriptor(
-  name='GetRequest',
-  full_name='minknow_api.keystore.GetRequest',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='names', full_name='minknow_api.keystore.GetRequest.names', index=0,
-      number=1, type=9, cpp_type=9, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='allow_missing', full_name='minknow_api.keystore.GetRequest.allow_missing', index=1,
-      number=2, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=504,
-  serialized_end=554,
-)
-
-
-_GETRESPONSE_VALUESENTRY = _descriptor.Descriptor(
-  name='ValuesEntry',
-  full_name='minknow_api.keystore.GetResponse.ValuesEntry',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='key', full_name='minknow_api.keystore.GetResponse.ValuesEntry.key', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='value', full_name='minknow_api.keystore.GetResponse.ValuesEntry.value', index=1,
-      number=2, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=b'8\001',
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=247,
-  serialized_end=314,
-)
-
-_GETRESPONSE = _descriptor.Descriptor(
-  name='GetResponse',
-  full_name='minknow_api.keystore.GetResponse',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='values', full_name='minknow_api.keystore.GetResponse.values', index=0,
-      number=1, type=11, cpp_type=10, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[_GETRESPONSE_VALUESENTRY, ],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=557,
-  serialized_end=702,
-)
-
-
-_WATCHREQUEST = _descriptor.Descriptor(
-  name='WatchRequest',
-  full_name='minknow_api.keystore.WatchRequest',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='names', full_name='minknow_api.keystore.WatchRequest.names', index=0,
-      number=1, type=9, cpp_type=9, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=b'\210\265\030\001', file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='allow_missing', full_name='minknow_api.keystore.WatchRequest.allow_missing', index=1,
-      number=2, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=704,
-  serialized_end=762,
-)
-
-
-_WATCHRESPONSE_VALUESENTRY = _descriptor.Descriptor(
-  name='ValuesEntry',
-  full_name='minknow_api.keystore.WatchResponse.ValuesEntry',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='key', full_name='minknow_api.keystore.WatchResponse.ValuesEntry.key', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='value', full_name='minknow_api.keystore.WatchResponse.ValuesEntry.value', index=1,
-      number=2, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=b'8\001',
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=247,
-  serialized_end=314,
-)
-
-_WATCHRESPONSE = _descriptor.Descriptor(
-  name='WatchResponse',
-  full_name='minknow_api.keystore.WatchResponse',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='values', full_name='minknow_api.keystore.WatchResponse.values', index=0,
-      number=1, type=11, cpp_type=10, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='removed_values', full_name='minknow_api.keystore.WatchResponse.removed_values', index=1,
-      number=2, type=9, cpp_type=9, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[_WATCHRESPONSE_VALUESENTRY, ],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=765,
-  serialized_end=938,
-)
-
-_STOREREQUEST_VALUESENTRY.fields_by_name['value'].message_type = google_dot_protobuf_dot_any__pb2._ANY
-_STOREREQUEST_VALUESENTRY.containing_type = _STOREREQUEST
-_STOREREQUEST.fields_by_name['values'].message_type = _STOREREQUEST_VALUESENTRY
-_STOREREQUEST.fields_by_name['lifetime'].enum_type = _LIFETIME
-_GETONERESPONSE.fields_by_name['value'].message_type = google_dot_protobuf_dot_any__pb2._ANY
-_GETRESPONSE_VALUESENTRY.fields_by_name['value'].message_type = google_dot_protobuf_dot_any__pb2._ANY
-_GETRESPONSE_VALUESENTRY.containing_type = _GETRESPONSE
-_GETRESPONSE.fields_by_name['values'].message_type = _GETRESPONSE_VALUESENTRY
-_WATCHRESPONSE_VALUESENTRY.fields_by_name['value'].message_type = google_dot_protobuf_dot_any__pb2._ANY
-_WATCHRESPONSE_VALUESENTRY.containing_type = _WATCHRESPONSE
-_WATCHRESPONSE.fields_by_name['values'].message_type = _WATCHRESPONSE_VALUESENTRY
-DESCRIPTOR.message_types_by_name['StoreRequest'] = _STOREREQUEST
-DESCRIPTOR.message_types_by_name['StoreResponse'] = _STORERESPONSE
-DESCRIPTOR.message_types_by_name['RemoveRequest'] = _REMOVEREQUEST
-DESCRIPTOR.message_types_by_name['RemoveResponse'] = _REMOVERESPONSE
-DESCRIPTOR.message_types_by_name['GetOneRequest'] = _GETONEREQUEST
-DESCRIPTOR.message_types_by_name['GetOneResponse'] = _GETONERESPONSE
-DESCRIPTOR.message_types_by_name['GetRequest'] = _GETREQUEST
-DESCRIPTOR.message_types_by_name['GetResponse'] = _GETRESPONSE
-DESCRIPTOR.message_types_by_name['WatchRequest'] = _WATCHREQUEST
-DESCRIPTOR.message_types_by_name['WatchResponse'] = _WATCHRESPONSE
-DESCRIPTOR.enum_types_by_name['Lifetime'] = _LIFETIME
-_sym_db.RegisterFileDescriptor(DESCRIPTOR)
-
+_STOREREQUEST = DESCRIPTOR.message_types_by_name['StoreRequest']
+_STOREREQUEST_VALUESENTRY = _STOREREQUEST.nested_types_by_name['ValuesEntry']
+_STORERESPONSE = DESCRIPTOR.message_types_by_name['StoreResponse']
+_REMOVEREQUEST = DESCRIPTOR.message_types_by_name['RemoveRequest']
+_REMOVERESPONSE = DESCRIPTOR.message_types_by_name['RemoveResponse']
+_GETONEREQUEST = DESCRIPTOR.message_types_by_name['GetOneRequest']
+_GETONERESPONSE = DESCRIPTOR.message_types_by_name['GetOneResponse']
+_GETREQUEST = DESCRIPTOR.message_types_by_name['GetRequest']
+_GETRESPONSE = DESCRIPTOR.message_types_by_name['GetResponse']
+_GETRESPONSE_VALUESENTRY = _GETRESPONSE.nested_types_by_name['ValuesEntry']
+_WATCHREQUEST = DESCRIPTOR.message_types_by_name['WatchRequest']
+_WATCHRESPONSE = DESCRIPTOR.message_types_by_name['WatchResponse']
+_WATCHRESPONSE_VALUESENTRY = _WATCHRESPONSE.nested_types_by_name['ValuesEntry']
 StoreRequest = _reflection.GeneratedProtocolMessageType('StoreRequest', (_message.Message,), {
 
   'ValuesEntry' : _reflection.GeneratedProtocolMessageType('ValuesEntry', (_message.Message,), {
@@ -712,79 +205,59 @@ WatchResponse = _reflection.GeneratedProtocolMessageType('WatchResponse', (_mess
 _sym_db.RegisterMessage(WatchResponse)
 _sym_db.RegisterMessage(WatchResponse.ValuesEntry)
 
+_KEYSTORESERVICE = DESCRIPTOR.services_by_name['KeyStoreService']
+if _descriptor._USE_C_DESCRIPTORS == False:
 
-DESCRIPTOR._options = None
-_STOREREQUEST_VALUESENTRY._options = None
-_STOREREQUEST.fields_by_name['values']._options = None
-_REMOVEREQUEST.fields_by_name['names']._options = None
-_GETONEREQUEST.fields_by_name['name']._options = None
-_GETRESPONSE_VALUESENTRY._options = None
-_WATCHREQUEST.fields_by_name['names']._options = None
-_WATCHRESPONSE_VALUESENTRY._options = None
-
-_KEYSTORESERVICE = _descriptor.ServiceDescriptor(
-  name='KeyStoreService',
-  full_name='minknow_api.keystore.KeyStoreService',
-  file=DESCRIPTOR,
-  index=0,
-  serialized_options=None,
-  create_key=_descriptor._internal_create_key,
-  serialized_start=1061,
-  serialized_end=1510,
-  methods=[
-  _descriptor.MethodDescriptor(
-    name='store',
-    full_name='minknow_api.keystore.KeyStoreService.store',
-    index=0,
-    containing_service=None,
-    input_type=_STOREREQUEST,
-    output_type=_STORERESPONSE,
-    serialized_options=None,
-    create_key=_descriptor._internal_create_key,
-  ),
-  _descriptor.MethodDescriptor(
-    name='remove',
-    full_name='minknow_api.keystore.KeyStoreService.remove',
-    index=1,
-    containing_service=None,
-    input_type=_REMOVEREQUEST,
-    output_type=_REMOVERESPONSE,
-    serialized_options=None,
-    create_key=_descriptor._internal_create_key,
-  ),
-  _descriptor.MethodDescriptor(
-    name='get_one',
-    full_name='minknow_api.keystore.KeyStoreService.get_one',
-    index=2,
-    containing_service=None,
-    input_type=_GETONEREQUEST,
-    output_type=_GETONERESPONSE,
-    serialized_options=b'\220\002\001',
-    create_key=_descriptor._internal_create_key,
-  ),
-  _descriptor.MethodDescriptor(
-    name='get',
-    full_name='minknow_api.keystore.KeyStoreService.get',
-    index=3,
-    containing_service=None,
-    input_type=_GETREQUEST,
-    output_type=_GETRESPONSE,
-    serialized_options=b'\220\002\001',
-    create_key=_descriptor._internal_create_key,
-  ),
-  _descriptor.MethodDescriptor(
-    name='watch',
-    full_name='minknow_api.keystore.KeyStoreService.watch',
-    index=4,
-    containing_service=None,
-    input_type=_WATCHREQUEST,
-    output_type=_WATCHRESPONSE,
-    serialized_options=b'\220\002\001',
-    create_key=_descriptor._internal_create_key,
-  ),
-])
-_sym_db.RegisterServiceDescriptor(_KEYSTORESERVICE)
-
-DESCRIPTOR.services_by_name['KeyStoreService'] = _KEYSTORESERVICE
-
+  DESCRIPTOR._options = None
+  DESCRIPTOR._serialized_options = b'\n\034com.nanoporetech.minknow_api\242\002\005MKAPI'
+  _STOREREQUEST_VALUESENTRY._options = None
+  _STOREREQUEST_VALUESENTRY._serialized_options = b'8\001'
+  _STOREREQUEST.fields_by_name['values']._options = None
+  _STOREREQUEST.fields_by_name['values']._serialized_options = b'\210\265\030\001'
+  _REMOVEREQUEST.fields_by_name['names']._options = None
+  _REMOVEREQUEST.fields_by_name['names']._serialized_options = b'\210\265\030\001'
+  _GETONEREQUEST.fields_by_name['name']._options = None
+  _GETONEREQUEST.fields_by_name['name']._serialized_options = b'\210\265\030\001'
+  _GETRESPONSE_VALUESENTRY._options = None
+  _GETRESPONSE_VALUESENTRY._serialized_options = b'8\001'
+  _WATCHREQUEST.fields_by_name['names']._options = None
+  _WATCHREQUEST.fields_by_name['names']._serialized_options = b'\210\265\030\001'
+  _WATCHRESPONSE_VALUESENTRY._options = None
+  _WATCHRESPONSE_VALUESENTRY._serialized_options = b'8\001'
+  _KEYSTORESERVICE.methods_by_name['get_one']._options = None
+  _KEYSTORESERVICE.methods_by_name['get_one']._serialized_options = b'\220\002\001'
+  _KEYSTORESERVICE.methods_by_name['get']._options = None
+  _KEYSTORESERVICE.methods_by_name['get']._serialized_options = b'\220\002\001'
+  _KEYSTORESERVICE.methods_by_name['watch']._options = None
+  _KEYSTORESERVICE.methods_by_name['watch']._serialized_options = b'\220\002\001'
+  _LIFETIME._serialized_start=940
+  _LIFETIME._serialized_end=1058
+  _STOREREQUEST._serialized_start=111
+  _STOREREQUEST._serialized_end=314
+  _STOREREQUEST_VALUESENTRY._serialized_start=247
+  _STOREREQUEST_VALUESENTRY._serialized_end=314
+  _STORERESPONSE._serialized_start=316
+  _STORERESPONSE._serialized_end=331
+  _REMOVEREQUEST._serialized_start=333
+  _REMOVEREQUEST._serialized_end=392
+  _REMOVERESPONSE._serialized_start=394
+  _REMOVERESPONSE._serialized_end=410
+  _GETONEREQUEST._serialized_start=412
+  _GETONEREQUEST._serialized_end=447
+  _GETONERESPONSE._serialized_start=449
+  _GETONERESPONSE._serialized_end=502
+  _GETREQUEST._serialized_start=504
+  _GETREQUEST._serialized_end=554
+  _GETRESPONSE._serialized_start=557
+  _GETRESPONSE._serialized_end=702
+  _GETRESPONSE_VALUESENTRY._serialized_start=247
+  _GETRESPONSE_VALUESENTRY._serialized_end=314
+  _WATCHREQUEST._serialized_start=704
+  _WATCHREQUEST._serialized_end=762
+  _WATCHRESPONSE._serialized_start=765
+  _WATCHRESPONSE._serialized_end=938
+  _WATCHRESPONSE_VALUESENTRY._serialized_start=247
+  _WATCHRESPONSE_VALUESENTRY._serialized_end=314
+  _KEYSTORESERVICE._serialized_start=1061
+  _KEYSTORESERVICE._serialized_end=1510
 # @@protoc_insertion_point(module_scope)

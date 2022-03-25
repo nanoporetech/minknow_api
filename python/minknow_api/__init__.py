@@ -94,16 +94,17 @@ _services = {
     "analysis_configuration": ["AnalysisConfigurationService"],
     "data": ["DataService"],
     "device": ["DeviceService"],
-    "keystore": ["KeyStoreService"],
     "instance": ["InstanceService"],
+    "keystore": ["KeyStoreService"],
     "log": ["LogService"],
     "minion_device": ["MinionDeviceService"],
-    "protocol": ["ProtocolService"],
     "production": ["ProductionService"],
     "promethion_device": ["PromethionDeviceService"],
+    "protocol": ["ProtocolService"],
     "statistics": ["StatisticsService"],
+    "traxion_device": ["TraxionDeviceService"],
 }
-_optional_services = ["production"]
+_optional_services = ["production", "traxion_device"]
 
 
 #
@@ -159,10 +160,6 @@ GRPC_CHANNEL_OPTIONS = [
     ("grpc.http2.min_time_between_pings_ms", 1000),
     ("grpc.ssl_target_name_override", "localhost",),  # that's what our cert's CN is
 ]
-
-
-class MissingMinknowSSlCertError(Exception):
-    pass
 
 
 class LocalAuthTokenCredentials(grpc.AuthMetadataPlugin):
@@ -242,9 +239,16 @@ def get_protocol_token_credentials():
 def get_local_auth_token_credentials(manager_port):
     local_auth_path = get_local_authentication_token_file(port=manager_port)
     if local_auth_path:
-        return grpc.metadata_call_credentials(
-            LocalAuthTokenCredentials(local_auth_path)
-        )
+        if os.path.exists(local_auth_path):
+            return grpc.metadata_call_credentials(
+                LocalAuthTokenCredentials(local_auth_path)
+            )
+        else:
+            logger.warn(
+                'Local authentication token should be at "%s", '
+                + "but that file does not exist",
+                local_auth_path,
+            )
 
     return None
 
@@ -260,57 +264,80 @@ def get_developer_api_token_credentials(developer_api_token):
     )
 
 
-def ca_path_from_minknow():
-    try:
-        # minknow.paths should be present when running under ont-python
-        from minknow.paths import minknow_base_dir
-
-        base = minknow_base_dir()
-    except ImportError:
-        # Determine base from typical installation directory for each OS
-        if sys.platform == "win32":
-            base = "C:\Program Files\OxfordNanopore\MinKNOW"
-        elif sys.platform == "linux":
-            base = "/opt/ont/minknow"
-        elif sys.platform == "darwin":
-            base = "/Applications/MinKNOW.app/Contents/Resources"
-        else:
-            raise RuntimeError(
-                "Unable to determine operating system to retrieve default MinKNOW installation path"
-            )
-
-    ca_path = os.path.join(base, "conf", "rpc-certs", "ca.crt")
-    if os.path.isfile(ca_path):
-        return ca_path
-    else:
-        return None
-
-
-def get_ca_path():
-    try:
-        cert_path = os.environ["MINKNOW_TRUSTED_CA"]
-
-        if not os.path.isfile(cert_path):
-            cert_path = ca_path_from_minknow()
-    except KeyError:
-        cert_path = ca_path_from_minknow()
-
-    return cert_path
-
-
 def read_ssl_certificate():
-    cert_path = get_ca_path()
+    """Get the CA certificate that should be used to verify a TLS connection to MinKNOW.
 
-    if not cert_path:
-        raise MissingMinknowSSlCertError(
-            "Couldn't find a valid path to MinKNOW's CA SSL certificate to initiate a secure connection. Please consult the README on possible solutions to connecting securely to MinKNOW."
+    If the ``$MINKNOW_TRUSTED_CA`` environment variable is set to the path to an
+    existing file, its contents will be used. Otherwise, an internal copy of MinKNOW
+    Core's default CA will be used.
+    """
+    try:
+        with open(os.environ["MINKNOW_TRUSTED_CA"], "rb") as f:
+            return f.read()
+    except KeyError:
+        pass
+    except OSError:
+        logger.warning(
+            "$MINKNOW_TRUSTED_CA set but failed to read '%s'",
+            os.environ.get("MINKNOW_TRUSTED_CA"),
         )
 
-    with open(cert_path, "rb") as file_obj:
-        return file_obj.read()
+    try:
+        # python 3.7+
+        import importlib.resources as importlib_resources
+    except ImportError:
+        # python 3.5/3.6
+        import importlib_resources
+    # using the syntax that works with python 3.7
+    return importlib_resources.read_binary("minknow_api", "ca.crt")
 
 
-def load_grpc_credentials(manager_port=None, developer_api_token=None):
+def _is_localhost(host):
+    # common cases:
+    if host == "localhost" or host == "localhost.localdomain":
+        return True
+    if host == "127.0.0.1" or host == "::1":
+        return True
+
+    # It is an IP address?
+    # IPv6 addresses in particular have multiple equivalent representations.
+    try:
+        import ipaddress
+
+        address = ipaddress.ip_address(host)
+    except ValueError:
+        # it wasn't an ip address
+        pass
+    else:
+        # it was an ip address: is it it the loopback address?
+        return address == ipaddress.IPv6Address(
+            "::1"
+        ) or address == ipaddress.IPv4Address("127.0.0.1")
+
+    # Is it just our own hostname?
+    try:
+        lowercase_host = host.lower()
+        import socket
+
+        if (
+            lowercase_host == socket.gethostname().lower()
+            or lowercase_host == socket.getfqdn().lower()
+        ):
+            return True
+    except OSError:
+        logger.exception(
+            'Failed to get hostname (cannot check whether "%s" is localhost)', host
+        )
+
+    return False
+
+
+def load_grpc_credentials(manager_port=None, developer_api_token=None, host=None):
+    """Load gRPC credentials.
+
+    This is the same as `grpc_credentials`, but does not cache the result. You should
+    probably be using that function instead.
+    """
     logger.debug("Reading ssl certificate")
     ssl_creds = grpc.ssl_channel_credentials(read_ssl_certificate())
 
@@ -322,11 +349,24 @@ def load_grpc_credentials(manager_port=None, developer_api_token=None):
 
     # Next try and get a token from the local filesystem if available:
     if not call_creds:
-        logger.debug("Getting local token")
-        call_creds = get_local_auth_token_credentials(manager_port)
+        local_token_override = os.environ.get("MINKNOW_API_USE_LOCAL_TOKEN")
+        if local_token_override is None:
+            # (allow host==None for backwards compatiblity)
+            try_local_token = host is None or _is_localhost(host)
+        elif local_token_override.lower() in ("", "0", "no"):
+            try_local_token = False
+        else:
+            try_local_token = True
+        if try_local_token:
+            logger.debug("Getting local token")
+            call_creds = get_local_auth_token_credentials(manager_port)
 
     if not call_creds:
-        # No local token, so check if there is a token provided from starting as a protocol
+        # No local token, so check if there is a token provided from starting as a
+        # protocol.
+        # NB: We try this *after* the local token because Bream currently needs to talk
+        # to the manager (where the protocol token doesn't work) - see CORE-3605 - but
+        # this may change in the future.
         logger.debug("Getting protocol token")
         call_creds = get_protocol_token_credentials()
 
@@ -338,9 +378,12 @@ def load_grpc_credentials(manager_port=None, developer_api_token=None):
     return grpc_creds
 
 
-def grpc_credentials(manager_port=None, developer_api_token=None):
+def grpc_credentials(manager_port=None, developer_api_token=None, host=None):
     """Get a grpc.ChannelCredentials object for connecting to secure versions of MinKNOW"s gRPC
     services.
+
+    Args:
+        manager_port (int, optional): The port the Manager is running on
 
     Use like:
 
@@ -352,13 +395,22 @@ def grpc_credentials(manager_port=None, developer_api_token=None):
     certificate used by MinKNOW (which can be found at ``conf/rpc-certs/ca.crt`` in the MinKNOW
     installation).
     """
+    cache_key = (manager_port, developer_api_token, host)
+
     try:
-        return grpc_credentials.cached_credentials
+        cache = grpc_credentials.cached_credentials
     except AttributeError:
-        grpc_credentials.cached_credentials = load_grpc_credentials(
-            manager_port, developer_api_token
-        )
-        return grpc_credentials.cached_credentials
+        cache = dict()
+        grpc_credentials.cached_credentials = cache
+
+    try:
+        return cache[cache_key]
+    except KeyError:
+        pass
+
+    creds = load_grpc_credentials(manager_port, developer_api_token, host)
+    cache[cache_key] = creds
+    return creds
 
 
 #
@@ -403,12 +455,7 @@ class Connection(object):
     """
 
     def __init__(
-        self,
-        port=None,
-        host="127.0.0.1",
-        use_tls=False,
-        credentials=None,
-        developer_api_token=None,
+        self, port=None, host="127.0.0.1", credentials=None, developer_api_token=None,
     ):
         """Connect to MinKNOW.
 
@@ -422,8 +469,7 @@ class Connection(object):
 
         :param port: the port to connect on (defaults to ``MINKNOW_RPC_PORT`` environment variable)
         :param host: the host MinKNOW is running on (defaults to localhost)
-        :param use_tls: boolean to decide whether to use an encrypted connection or not
-        :param credentials: separate grpc credentials to use if using tls. If None, then
+        :param credentials: separate grpc credentials to use. If None, then
                             default credentials are used
         :param developer_api_token: A str token generated by minknow. Will be used to authorise against API if provided.
                                     note, if `credentials` is provided `developer_api_token` is unused.
@@ -431,34 +477,26 @@ class Connection(object):
         import grpc, os, time
 
         self.host = host
-        self.using_tls = use_tls
         if port is None:
-            if use_tls:
-                port = int(os.environ["MINKNOW_RPC_PORT_SECURE"])
-            else:
-                logger.warning(
-                    "Insecure connections are deprecated, users should upgrade to secure connections"
-                )
-                port = int(os.environ["MINKNOW_RPC_PORT"])
+            port = int(os.environ["MINKNOW_RPC_PORT_SECURE"])
         self.port = port
 
         error = None
         retry_count = 5
         for i in range(retry_count):
-            if use_tls:
-                if not credentials:
-                    manager_port = os.environ.get("MINKNOW_MANAGER_TEST_PORT")
-                    credentials = grpc_credentials(manager_port, developer_api_token)
+            if not credentials:
+                manager_port = os.environ.get("MINKNOW_MANAGER_TEST_PORT")
+                credentials = grpc_credentials(
+                    manager_port=manager_port,
+                    developer_api_token=developer_api_token,
+                    host=host,
+                )
 
-                self.channel = grpc.secure_channel(
-                    "{}:{}".format(host, port),
-                    credentials=credentials,
-                    options=GRPC_CHANNEL_OPTIONS,
-                )
-            else:
-                self.channel = grpc.insecure_channel(
-                    "{}:{}".format(host, port), options=GRPC_CHANNEL_OPTIONS
-                )
+            self.channel = grpc.secure_channel(
+                "{}:{}".format(host, port),
+                credentials=credentials,
+                options=GRPC_CHANNEL_OPTIONS,
+            )
 
             # One entry for each service
             for name, svc_list in _services.items():

@@ -4,6 +4,7 @@
 """Generated protocol buffer code."""
 from google.protobuf.internal import enum_type_wrapper
 from google.protobuf import descriptor as _descriptor
+from google.protobuf import descriptor_pool as _descriptor_pool
 from google.protobuf import message as _message
 from google.protobuf import reflection as _reflection
 from google.protobuf import symbol_database as _symbol_database
@@ -16,102 +17,21 @@ from minknow_api import rpc_options_pb2 as minknow__api_dot_rpc__options__pb2
 from google.protobuf import wrappers_pb2 as google_dot_protobuf_dot_wrappers__pb2
 
 
-DESCRIPTOR = _descriptor.FileDescriptor(
-  name='minknow_api/device.proto',
-  package='minknow_api.device',
-  syntax='proto3',
-  serialized_options=b'\n\034com.nanoporetech.minknow_api\242\002\005MKAPI',
-  create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\x18minknow_api/device.proto\x12\x12minknow_api.device\x1a\x1dminknow_api/rpc_options.proto\x1a\x1egoogle/protobuf/wrappers.proto\":\n\x14\x43hannelConfiguration\x12\x0c\n\x04well\x18\x01 \x01(\r\x12\x14\n\x0ctest_current\x18\x02 \x01(\x08\"S\n\x1cReturnedChannelConfiguration\x12\x0c\n\x04well\x18\x01 \x01(\r\x12\x14\n\x0ctest_current\x18\x02 \x01(\x08\x12\x0f\n\x07unblock\x18\x04 \x01(\x08\"\x16\n\x14GetDeviceInfoRequest\"\xf2\x03\n\x15GetDeviceInfoResponse\x12\x11\n\tdevice_id\x18\x01 \x01(\t\x12I\n\x0b\x64\x65vice_type\x18\x02 \x01(\x0e\x32\x34.minknow_api.device.GetDeviceInfoResponse.DeviceType\x12\x14\n\x0cis_simulated\x18\x03 \x01(\x08\x12\x19\n\x11max_channel_count\x18\x04 \x01(\r\x12\x1d\n\x15max_wells_per_channel\x18\x05 \x01(\r\x12\x1b\n\x13\x63\x61n_set_temperature\x18\x06 \x01(\x08\x12\x14\n\x0c\x64igitisation\x18\x07 \x01(\r\x12T\n\x10\x66irmware_version\x18\n \x03(\x0b\x32:.minknow_api.device.GetDeviceInfoResponse.ComponentVersion\x1aM\n\x10\x43omponentVersion\x12\x11\n\tcomponent\x18\x01 \x01(\t\x12\x0f\n\x07version\x18\x02 \x01(\t\x12\x15\n\rserial_number\x18\x03 \x01(\t\"S\n\nDeviceType\x12\n\n\x06MINION\x10\x00\x12\x0b\n\x07GRIDION\x10\x02\x12\x0e\n\nPROMETHION\x10\x03\x12\x0f\n\x0bMINION_MK1C\x10\x04\x12\x0b\n\x07TRAXION\x10\x05\"\x17\n\x15GetDeviceStateRequest\"\xe8\x01\n\x16GetDeviceStateResponse\x12L\n\x0c\x64\x65vice_state\x18\x01 \x01(\x0e\x32\x36.minknow_api.device.GetDeviceStateResponse.DeviceState\x12\x46\n\x13\x66low_cell_connector\x18\x02 \x01(\x0e\x32).minknow_api.device.FlowCellConnectorType\"8\n\x0b\x44\x65viceState\x12\x17\n\x13\x44\x45VICE_DISCONNECTED\x10\x00\x12\x10\n\x0c\x44\x45VICE_READY\x10\x01\"\x1a\n\x18StreamDeviceStateRequest\"\x18\n\x16GetFlowCellInfoRequest\"\xe9\x02\n\x17GetFlowCellInfoResponse\x12\x15\n\rhas_flow_cell\x18\x01 \x01(\x08\x12\x15\n\rchannel_count\x18\x02 \x01(\r\x12\x19\n\x11wells_per_channel\x18\x03 \x01(\r\x12\x14\n\x0c\x66low_cell_id\x18\x04 \x01(\t\x12\x13\n\x0b\x61sic_id_str\x18\r \x01(\t\x12\x14\n\x0cproduct_code\x18\x06 \x01(\t\x12#\n\x1buser_specified_flow_cell_id\x18\x07 \x01(\t\x12#\n\x1buser_specified_product_code\x18\x08 \x01(\t\x12\x13\n\x0bhas_adapter\x18\t \x01(\x08\x12\x12\n\nadapter_id\x18\n \x01(\t\x12\x1c\n\x12temperature_offset\x18\x0b \x01(\x02H\x00\x12\x14\n\x0c\x61sic_version\x18\x0c \x01(\tB\x1d\n\x1btemperature_offset_nullable\"\x1b\n\x19StreamFlowCellInfoRequest\"5\n!SetUserSpecifiedFlowCellIdRequest\x12\x10\n\x02id\x18\x01 \x01(\tB\x04\x88\xb5\x18\x01\"$\n\"SetUserSpecifiedFlowCellIdResponse\"8\n\"SetUserSpecifiedProductCodeRequest\x12\x12\n\x04\x63ode\x18\x01 \x01(\tB\x04\x88\xb5\x18\x01\"%\n#SetUserSpecifiedProductCodeResponse\"\x1a\n\x18GetChannelsLayoutRequest\"W\n\x19GetChannelsLayoutResponse\x12:\n\x0f\x63hannel_records\x18\x01 \x03(\x0b\x32!.minknow_api.device.ChannelRecord\"\xa4\x01\n\rChannelRecord\x12\n\n\x02id\x18\x01 \x01(\r\x12\x0c\n\x04name\x18\x02 \x01(\t\x12@\n\x0bmux_records\x18\x03 \x03(\x0b\x32+.minknow_api.device.ChannelRecord.MuxRecord\x1a\x37\n\tMuxRecord\x12\n\n\x02id\x18\x01 \x01(\r\x12\x0e\n\x06phys_x\x18\x02 \x01(\r\x12\x0e\n\x06phys_y\x18\x03 \x01(\r\"\x1c\n\x1aResetDeviceSettingsRequest\"\x1d\n\x1bResetDeviceSettingsResponse\"\x80\x01\n\x15SetCalibrationRequest\x12\x1b\n\rfirst_channel\x18\x01 \x01(\rB\x04\x88\xb5\x18\x01\x12\x1a\n\x0clast_channel\x18\x02 \x01(\rB\x04\x88\xb5\x18\x01\x12\x15\n\x07offsets\x18\x03 \x03(\x02\x42\x04\x88\xb5\x18\x01\x12\x17\n\tpa_ranges\x18\x04 \x03(\x02\x42\x04\x88\xb5\x18\x01\"\x18\n\x16SetCalibrationResponse\"\x19\n\x17\x43learCalibrationRequest\"\x1a\n\x18\x43learCalibrationResponse\"P\n\x15GetCalibrationRequest\x12\x1b\n\rfirst_channel\x18\x01 \x01(\rB\x04\x88\xb5\x18\x01\x12\x1a\n\x0clast_channel\x18\x02 \x01(\rB\x04\x88\xb5\x18\x01\"k\n\x16GetCalibrationResponse\x12\x14\n\x0c\x64igitisation\x18\x01 \x01(\r\x12\x0f\n\x07offsets\x18\x02 \x03(\x02\x12\x11\n\tpa_ranges\x18\x03 \x03(\x02\x12\x17\n\x0fhas_calibration\x18\x04 \x01(\x08\"\xef\x01\n\x15SetTemperatureRequest\x12\x13\n\x0btemperature\x18\x01 \x01(\x02\x12\x62\n\x14wait_for_temperature\x18\x02 \x01(\x0b\x32\x44.minknow_api.device.SetTemperatureRequest.WaitForTemperatureSettings\x1a]\n\x1aWaitForTemperatureSettings\x12\x0f\n\x07timeout\x18\x01 \x01(\r\x12\x1b\n\x13min_stable_duration\x18\x03 \x01(\r\x12\x11\n\ttolerance\x18\x02 \x01(\x02\"C\n\x16SetTemperatureResponse\x12)\n!timed_out_waiting_for_temperature\x18\x01 \x01(\x08\"\x17\n\x15GetTemperatureRequest\"\x9f\x04\n\x16GetTemperatureResponse\x12N\n\x06minion\x18\x01 \x01(\x0b\x32<.minknow_api.device.GetTemperatureResponse.MinIONTemperatureH\x00\x12V\n\npromethion\x18\x02 \x01(\x0b\x32@.minknow_api.device.GetTemperatureResponse.PromethIONTemperatureH\x00\x12\x37\n\x12target_temperature\x18\x03 \x01(\x0b\x32\x1b.google.protobuf.FloatValue\x1a\x85\x01\n\x11MinIONTemperature\x12\x35\n\x10\x61sic_temperature\x18\x01 \x01(\x0b\x32\x1b.google.protobuf.FloatValue\x12\x39\n\x14heatsink_temperature\x18\x02 \x01(\x0b\x32\x1b.google.protobuf.FloatValue\x1a\x8c\x01\n\x15PromethIONTemperature\x12\x39\n\x14\x66lowcell_temperature\x18\x01 \x01(\x0b\x32\x1b.google.protobuf.FloatValue\x12\x38\n\x13\x63hamber_temperature\x18\x02 \x01(\x0b\x32\x1b.google.protobuf.FloatValueB\r\n\x0btemperature\"2\n\x18StreamTemperatureRequest\x12\x16\n\x0eperiod_seconds\x18\x01 \x01(\r\"q\n\x0eUnblockRequest\x12\x10\n\x08\x63hannels\x18\x01 \x03(\r\x12\x1d\n\x13\x64uration_in_seconds\x18\x02 \x01(\rH\x00\x12\"\n\x18\x64uration_in_milliseconds\x18\x03 \x01(\rH\x00\x42\n\n\x08\x64uration\"\x11\n\x0fUnblockResponse\"\x17\n\x15\x43\x61ncelUnblocksRequest\"4\n\x16\x43\x61ncelUnblocksResponse\x12\x1a\n\x12\x63\x61ncelled_unblocks\x18\x01 \x01(\r\"2\n\x1eGetChannelConfigurationRequest\x12\x10\n\x08\x63hannels\x18\x01 \x03(\r\"s\n\x1fGetChannelConfigurationResponse\x12P\n\x16\x63hannel_configurations\x18\x01 \x03(\x0b\x32\x30.minknow_api.device.ReturnedChannelConfiguration\"\xf7\x01\n\x1eSetChannelConfigurationRequest\x12m\n\x16\x63hannel_configurations\x18\x01 \x03(\x0b\x32M.minknow_api.device.SetChannelConfigurationRequest.ChannelConfigurationsEntry\x1a\x66\n\x1a\x43hannelConfigurationsEntry\x12\x0b\n\x03key\x18\x01 \x01(\r\x12\x37\n\x05value\x18\x02 \x01(\x0b\x32(.minknow_api.device.ChannelConfiguration:\x02\x38\x01\"!\n\x1fSetChannelConfigurationResponse\"r\n!SetChannelConfigurationAllRequest\x12M\n\x15\x63hannel_configuration\x18\x01 \x01(\x0b\x32(.minknow_api.device.ChannelConfigurationB\x04\x90\xb5\x18\x01\"$\n\"SetChannelConfigurationAllResponse\"\xc6\x06\n\x10SaturationConfig\x12\x43\n\nthresholds\x18\x01 \x01(\x0b\x32/.minknow_api.device.SaturationConfig.Thresholds\x12T\n\x13software_saturation\x18\x02 \x01(\x0b\x32\x37.minknow_api.device.SaturationConfig.SoftwareSaturation\x12_\n\x19user_threshold_saturation\x18\x03 \x01(\x0b\x32<.minknow_api.device.SaturationConfig.UserThresholdSaturation\x1a\xfa\x01\n\nThresholds\x12\x37\n\x11general_threshold\x18\x01 \x01(\x0b\x32\x1c.google.protobuf.UInt32Value\x12\x37\n\x11unblock_threshold\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.UInt32Value\x12<\n\x16user_general_threshold\x18\x03 \x01(\x0b\x32\x1c.google.protobuf.UInt32Value\x12<\n\x16user_unblock_threshold\x18\x04 \x01(\x0b\x32\x1c.google.protobuf.UInt32Value\x1a\x93\x01\n\x12SoftwareSaturation\x12\x0f\n\x07\x65nabled\x18\x01 \x01(\x08\x12\x35\n\x10software_min_adc\x18\x02 \x01(\x0b\x32\x1b.google.protobuf.Int32Value\x12\x35\n\x10software_max_adc\x18\x03 \x01(\x0b\x32\x1b.google.protobuf.Int32Value\x1a\xa2\x01\n\x17UserThresholdSaturation\x12\x0f\n\x07\x65nabled\x18\x01 \x01(\x08\x12:\n\x15user_threshold_min_pa\x18\x02 \x01(\x0b\x32\x1b.google.protobuf.FloatValue\x12:\n\x15user_threshold_max_pa\x18\x03 \x01(\x0b\x32\x1b.google.protobuf.FloatValue\"Z\n\x1aSetSaturationConfigRequest\x12<\n\x08settings\x18\x01 \x01(\x0b\x32$.minknow_api.device.SaturationConfigB\x04\x90\xb5\x18\x01\"\x1d\n\x1bSetSaturationConfigResponse\"\x1c\n\x1aGetSaturationConfigRequest\"[\n\x1bGetSaturationConfigResponse\x12<\n\x08settings\x18\x01 \x01(\x0b\x32$.minknow_api.device.SaturationConfigB\x04\x90\xb5\x18\x01\"\x16\n\x14GetSampleRateRequest\",\n\x15GetSampleRateResponse\x12\x13\n\x0bsample_rate\x18\x01 \x01(\r\"1\n\x14SetSampleRateRequest\x12\x19\n\x0bsample_rate\x18\x01 \x01(\rB\x04\x88\xb5\x18\x01\"1\n\x15SetSampleRateResponse\x12\x18\n\x10real_sample_rate\x18\x01 \x01(\r\"\x17\n\x15GetBiasVoltageRequest\".\n\x16GetBiasVoltageResponse\x12\x14\n\x0c\x62ias_voltage\x18\x01 \x01(\x01\"3\n\x15SetBiasVoltageRequest\x12\x1a\n\x0c\x62ias_voltage\x18\x01 \x01(\x01\x42\x04\x88\xb5\x18\x01\"\x18\n\x16SetBiasVoltageResponse*i\n\x15\x46lowCellConnectorType\x12\x11\n\rFCCON_NOT_SET\x10\x00\x12\x14\n\x10\x46\x43\x43ON_PROMETHION\x10\x01\x12\x14\n\x10\x46\x43\x43ON_MINION_MK1\x10\x02\x12\x11\n\rFCCON_FLONGLE\x10\x03*]\n\x0cSelectedWell\x12\r\n\tWELL_NONE\x10\x00\x12\n\n\x06WELL_1\x10\x01\x12\n\n\x06WELL_2\x10\x02\x12\n\n\x06WELL_3\x10\x03\x12\n\n\x06WELL_4\x10\x04\x12\x0e\n\nWELL_OTHER\x10\x05\x32\xcb\x18\n\rDeviceService\x12k\n\x0fget_device_info\x12(.minknow_api.device.GetDeviceInfoRequest\x1a).minknow_api.device.GetDeviceInfoResponse\"\x03\x90\x02\x01\x12n\n\x10get_device_state\x12).minknow_api.device.GetDeviceStateRequest\x1a*.minknow_api.device.GetDeviceStateResponse\"\x03\x90\x02\x01\x12v\n\x13stream_device_state\x12,.minknow_api.device.StreamDeviceStateRequest\x1a*.minknow_api.device.GetDeviceStateResponse\"\x03\x90\x02\x01\x30\x01\x12r\n\x12get_flow_cell_info\x12*.minknow_api.device.GetFlowCellInfoRequest\x1a+.minknow_api.device.GetFlowCellInfoResponse\"\x03\x90\x02\x01\x12z\n\x15stream_flow_cell_info\x12-.minknow_api.device.StreamFlowCellInfoRequest\x1a+.minknow_api.device.GetFlowCellInfoResponse\"\x03\x90\x02\x01\x30\x01\x12\x95\x01\n\x1fset_user_specified_flow_cell_id\x12\x35.minknow_api.device.SetUserSpecifiedFlowCellIdRequest\x1a\x36.minknow_api.device.SetUserSpecifiedFlowCellIdResponse\"\x03\x90\x02\x02\x12\x97\x01\n\x1fset_user_specified_product_code\x12\x36.minknow_api.device.SetUserSpecifiedProductCodeRequest\x1a\x37.minknow_api.device.SetUserSpecifiedProductCodeResponse\"\x03\x90\x02\x02\x12w\n\x13get_channels_layout\x12,.minknow_api.device.GetChannelsLayoutRequest\x1a-.minknow_api.device.GetChannelsLayoutResponse\"\x03\x90\x02\x01\x12}\n\x15reset_device_settings\x12..minknow_api.device.ResetDeviceSettingsRequest\x1a/.minknow_api.device.ResetDeviceSettingsResponse\"\x03\x90\x02\x02\x12m\n\x0fset_calibration\x12).minknow_api.device.SetCalibrationRequest\x1a*.minknow_api.device.SetCalibrationResponse\"\x03\x90\x02\x02\x12s\n\x11\x63lear_calibration\x12+.minknow_api.device.ClearCalibrationRequest\x1a,.minknow_api.device.ClearCalibrationResponse\"\x03\x90\x02\x02\x12m\n\x0fget_calibration\x12).minknow_api.device.GetCalibrationRequest\x1a*.minknow_api.device.GetCalibrationResponse\"\x03\x90\x02\x01\x12m\n\x0fset_temperature\x12).minknow_api.device.SetTemperatureRequest\x1a*.minknow_api.device.SetTemperatureResponse\"\x03\x90\x02\x02\x12m\n\x0fget_temperature\x12).minknow_api.device.GetTemperatureRequest\x1a*.minknow_api.device.GetTemperatureResponse\"\x03\x90\x02\x01\x12u\n\x12stream_temperature\x12,.minknow_api.device.StreamTemperatureRequest\x1a*.minknow_api.device.GetTemperatureResponse\"\x03\x90\x02\x01\x30\x01\x12T\n\x07unblock\x12\".minknow_api.device.UnblockRequest\x1a#.minknow_api.device.UnblockResponse\"\x00\x12j\n\x0f\x63\x61ncel_unblocks\x12).minknow_api.device.CancelUnblocksRequest\x1a*.minknow_api.device.CancelUnblocksResponse\"\x00\x12\x89\x01\n\x19get_channel_configuration\x12\x32.minknow_api.device.GetChannelConfigurationRequest\x1a\x33.minknow_api.device.GetChannelConfigurationResponse\"\x03\x90\x02\x01\x12\x89\x01\n\x19set_channel_configuration\x12\x32.minknow_api.device.SetChannelConfigurationRequest\x1a\x33.minknow_api.device.SetChannelConfigurationResponse\"\x03\x90\x02\x02\x12\x93\x01\n\x1dset_channel_configuration_all\x12\x35.minknow_api.device.SetChannelConfigurationAllRequest\x1a\x36.minknow_api.device.SetChannelConfigurationAllResponse\"\x03\x90\x02\x02\x12z\n\x15set_saturation_config\x12..minknow_api.device.SetSaturationConfigRequest\x1a/.minknow_api.device.SetSaturationConfigResponse\"\x00\x12}\n\x15get_saturation_config\x12..minknow_api.device.GetSaturationConfigRequest\x1a/.minknow_api.device.GetSaturationConfigResponse\"\x03\x90\x02\x01\x12k\n\x0fget_sample_rate\x12(.minknow_api.device.GetSampleRateRequest\x1a).minknow_api.device.GetSampleRateResponse\"\x03\x90\x02\x01\x12k\n\x0fset_sample_rate\x12(.minknow_api.device.SetSampleRateRequest\x1a).minknow_api.device.SetSampleRateResponse\"\x03\x90\x02\x02\x12n\n\x10get_bias_voltage\x12).minknow_api.device.GetBiasVoltageRequest\x1a*.minknow_api.device.GetBiasVoltageResponse\"\x03\x90\x02\x01\x12n\n\x10set_bias_voltage\x12).minknow_api.device.SetBiasVoltageRequest\x1a*.minknow_api.device.SetBiasVoltageResponse\"\x03\x90\x02\x02\x42&\n\x1c\x63om.nanoporetech.minknow_api\xa2\x02\x05MKAPIb\x06proto3'
-  ,
-  dependencies=[minknow__api_dot_rpc__options__pb2.DESCRIPTOR,google_dot_protobuf_dot_wrappers__pb2.DESCRIPTOR,])
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x18minknow_api/device.proto\x12\x12minknow_api.device\x1a\x1dminknow_api/rpc_options.proto\x1a\x1egoogle/protobuf/wrappers.proto\":\n\x14\x43hannelConfiguration\x12\x0c\n\x04well\x18\x01 \x01(\r\x12\x14\n\x0ctest_current\x18\x02 \x01(\x08\"S\n\x1cReturnedChannelConfiguration\x12\x0c\n\x04well\x18\x01 \x01(\r\x12\x14\n\x0ctest_current\x18\x02 \x01(\x08\x12\x0f\n\x07unblock\x18\x04 \x01(\x08\"\x16\n\x14GetDeviceInfoRequest\"\xf2\x03\n\x15GetDeviceInfoResponse\x12\x11\n\tdevice_id\x18\x01 \x01(\t\x12I\n\x0b\x64\x65vice_type\x18\x02 \x01(\x0e\x32\x34.minknow_api.device.GetDeviceInfoResponse.DeviceType\x12\x14\n\x0cis_simulated\x18\x03 \x01(\x08\x12\x19\n\x11max_channel_count\x18\x04 \x01(\r\x12\x1d\n\x15max_wells_per_channel\x18\x05 \x01(\r\x12\x1b\n\x13\x63\x61n_set_temperature\x18\x06 \x01(\x08\x12\x14\n\x0c\x64igitisation\x18\x07 \x01(\r\x12T\n\x10\x66irmware_version\x18\n \x03(\x0b\x32:.minknow_api.device.GetDeviceInfoResponse.ComponentVersion\x1aM\n\x10\x43omponentVersion\x12\x11\n\tcomponent\x18\x01 \x01(\t\x12\x0f\n\x07version\x18\x02 \x01(\t\x12\x15\n\rserial_number\x18\x03 \x01(\t\"S\n\nDeviceType\x12\n\n\x06MINION\x10\x00\x12\x0b\n\x07GRIDION\x10\x02\x12\x0e\n\nPROMETHION\x10\x03\x12\x0f\n\x0bMINION_MK1C\x10\x04\x12\x0b\n\x07TRAXION\x10\x05\"\x17\n\x15GetDeviceStateRequest\"\xe8\x01\n\x16GetDeviceStateResponse\x12L\n\x0c\x64\x65vice_state\x18\x01 \x01(\x0e\x32\x36.minknow_api.device.GetDeviceStateResponse.DeviceState\x12\x46\n\x13\x66low_cell_connector\x18\x02 \x01(\x0e\x32).minknow_api.device.FlowCellConnectorType\"8\n\x0b\x44\x65viceState\x12\x17\n\x13\x44\x45VICE_DISCONNECTED\x10\x00\x12\x10\n\x0c\x44\x45VICE_READY\x10\x01\"\x1a\n\x18StreamDeviceStateRequest\"\x18\n\x16GetFlowCellInfoRequest\"\xb5\x03\n\x17GetFlowCellInfoResponse\x12\x15\n\rhas_flow_cell\x18\x01 \x01(\x08\x12\x15\n\rchannel_count\x18\x02 \x01(\r\x12\x19\n\x11wells_per_channel\x18\x03 \x01(\r\x12\x14\n\x0c\x66low_cell_id\x18\x04 \x01(\t\x12\x13\n\x0b\x61sic_id_str\x18\r \x01(\t\x12\x14\n\x0cproduct_code\x18\x06 \x01(\t\x12#\n\x1buser_specified_flow_cell_id\x18\x07 \x01(\t\x12#\n\x1buser_specified_product_code\x18\x08 \x01(\t\x12\x13\n\x0bhas_adapter\x18\t \x01(\x08\x12\x12\n\nadapter_id\x18\n \x01(\t\x12\x1c\n\x12temperature_offset\x18\x0b \x01(\x02H\x00\x12\x14\n\x0c\x61sic_version\x18\x0c \x01(\t\x12J\n\x17insertion_script_status\x18\x0e \x01(\x0e\x32).minknow_api.device.InsertionScriptStatusB\x1d\n\x1btemperature_offset_nullable\"\x1b\n\x19StreamFlowCellInfoRequest\"5\n!SetUserSpecifiedFlowCellIdRequest\x12\x10\n\x02id\x18\x01 \x01(\tB\x04\x88\xb5\x18\x01\"$\n\"SetUserSpecifiedFlowCellIdResponse\"8\n\"SetUserSpecifiedProductCodeRequest\x12\x12\n\x04\x63ode\x18\x01 \x01(\tB\x04\x88\xb5\x18\x01\"%\n#SetUserSpecifiedProductCodeResponse\"\x1a\n\x18GetChannelsLayoutRequest\"W\n\x19GetChannelsLayoutResponse\x12:\n\x0f\x63hannel_records\x18\x01 \x03(\x0b\x32!.minknow_api.device.ChannelRecord\"\xa4\x01\n\rChannelRecord\x12\n\n\x02id\x18\x01 \x01(\r\x12\x0c\n\x04name\x18\x02 \x01(\t\x12@\n\x0bmux_records\x18\x03 \x03(\x0b\x32+.minknow_api.device.ChannelRecord.MuxRecord\x1a\x37\n\tMuxRecord\x12\n\n\x02id\x18\x01 \x01(\r\x12\x0e\n\x06phys_x\x18\x02 \x01(\r\x12\x0e\n\x06phys_y\x18\x03 \x01(\r\"\x1c\n\x1aResetDeviceSettingsRequest\"\x1d\n\x1bResetDeviceSettingsResponse\"\x80\x01\n\x15SetCalibrationRequest\x12\x1b\n\rfirst_channel\x18\x01 \x01(\rB\x04\x88\xb5\x18\x01\x12\x1a\n\x0clast_channel\x18\x02 \x01(\rB\x04\x88\xb5\x18\x01\x12\x15\n\x07offsets\x18\x03 \x03(\x02\x42\x04\x88\xb5\x18\x01\x12\x17\n\tpa_ranges\x18\x04 \x03(\x02\x42\x04\x88\xb5\x18\x01\"\x18\n\x16SetCalibrationResponse\"\x19\n\x17\x43learCalibrationRequest\"\x1a\n\x18\x43learCalibrationResponse\"P\n\x15GetCalibrationRequest\x12\x1b\n\rfirst_channel\x18\x01 \x01(\rB\x04\x88\xb5\x18\x01\x12\x1a\n\x0clast_channel\x18\x02 \x01(\rB\x04\x88\xb5\x18\x01\"k\n\x16GetCalibrationResponse\x12\x14\n\x0c\x64igitisation\x18\x01 \x01(\r\x12\x0f\n\x07offsets\x18\x02 \x03(\x02\x12\x11\n\tpa_ranges\x18\x03 \x03(\x02\x12\x17\n\x0fhas_calibration\x18\x04 \x01(\x08\"\xef\x01\n\x15SetTemperatureRequest\x12\x13\n\x0btemperature\x18\x01 \x01(\x02\x12\x62\n\x14wait_for_temperature\x18\x02 \x01(\x0b\x32\x44.minknow_api.device.SetTemperatureRequest.WaitForTemperatureSettings\x1a]\n\x1aWaitForTemperatureSettings\x12\x0f\n\x07timeout\x18\x01 \x01(\r\x12\x1b\n\x13min_stable_duration\x18\x03 \x01(\r\x12\x11\n\ttolerance\x18\x02 \x01(\x02\"C\n\x16SetTemperatureResponse\x12)\n!timed_out_waiting_for_temperature\x18\x01 \x01(\x08\"\x17\n\x15GetTemperatureRequest\"\x9f\x04\n\x16GetTemperatureResponse\x12N\n\x06minion\x18\x01 \x01(\x0b\x32<.minknow_api.device.GetTemperatureResponse.MinIONTemperatureH\x00\x12V\n\npromethion\x18\x02 \x01(\x0b\x32@.minknow_api.device.GetTemperatureResponse.PromethIONTemperatureH\x00\x12\x37\n\x12target_temperature\x18\x03 \x01(\x0b\x32\x1b.google.protobuf.FloatValue\x1a\x85\x01\n\x11MinIONTemperature\x12\x35\n\x10\x61sic_temperature\x18\x01 \x01(\x0b\x32\x1b.google.protobuf.FloatValue\x12\x39\n\x14heatsink_temperature\x18\x02 \x01(\x0b\x32\x1b.google.protobuf.FloatValue\x1a\x8c\x01\n\x15PromethIONTemperature\x12\x39\n\x14\x66lowcell_temperature\x18\x01 \x01(\x0b\x32\x1b.google.protobuf.FloatValue\x12\x38\n\x13\x63hamber_temperature\x18\x02 \x01(\x0b\x32\x1b.google.protobuf.FloatValueB\r\n\x0btemperature\"2\n\x18StreamTemperatureRequest\x12\x16\n\x0eperiod_seconds\x18\x01 \x01(\r\"q\n\x0eUnblockRequest\x12\x10\n\x08\x63hannels\x18\x01 \x03(\r\x12\x1d\n\x13\x64uration_in_seconds\x18\x02 \x01(\rH\x00\x12\"\n\x18\x64uration_in_milliseconds\x18\x03 \x01(\rH\x00\x42\n\n\x08\x64uration\"\x11\n\x0fUnblockResponse\"\x17\n\x15\x43\x61ncelUnblocksRequest\"4\n\x16\x43\x61ncelUnblocksResponse\x12\x1a\n\x12\x63\x61ncelled_unblocks\x18\x01 \x01(\r\"2\n\x1eGetChannelConfigurationRequest\x12\x10\n\x08\x63hannels\x18\x01 \x03(\r\"s\n\x1fGetChannelConfigurationResponse\x12P\n\x16\x63hannel_configurations\x18\x01 \x03(\x0b\x32\x30.minknow_api.device.ReturnedChannelConfiguration\"\xf7\x01\n\x1eSetChannelConfigurationRequest\x12m\n\x16\x63hannel_configurations\x18\x01 \x03(\x0b\x32M.minknow_api.device.SetChannelConfigurationRequest.ChannelConfigurationsEntry\x1a\x66\n\x1a\x43hannelConfigurationsEntry\x12\x0b\n\x03key\x18\x01 \x01(\r\x12\x37\n\x05value\x18\x02 \x01(\x0b\x32(.minknow_api.device.ChannelConfiguration:\x02\x38\x01\"!\n\x1fSetChannelConfigurationResponse\"r\n!SetChannelConfigurationAllRequest\x12M\n\x15\x63hannel_configuration\x18\x01 \x01(\x0b\x32(.minknow_api.device.ChannelConfigurationB\x04\x90\xb5\x18\x01\"$\n\"SetChannelConfigurationAllResponse\"\xc6\x06\n\x10SaturationConfig\x12\x43\n\nthresholds\x18\x01 \x01(\x0b\x32/.minknow_api.device.SaturationConfig.Thresholds\x12T\n\x13software_saturation\x18\x02 \x01(\x0b\x32\x37.minknow_api.device.SaturationConfig.SoftwareSaturation\x12_\n\x19user_threshold_saturation\x18\x03 \x01(\x0b\x32<.minknow_api.device.SaturationConfig.UserThresholdSaturation\x1a\xfa\x01\n\nThresholds\x12\x37\n\x11general_threshold\x18\x01 \x01(\x0b\x32\x1c.google.protobuf.UInt32Value\x12\x37\n\x11unblock_threshold\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.UInt32Value\x12<\n\x16user_general_threshold\x18\x03 \x01(\x0b\x32\x1c.google.protobuf.UInt32Value\x12<\n\x16user_unblock_threshold\x18\x04 \x01(\x0b\x32\x1c.google.protobuf.UInt32Value\x1a\x93\x01\n\x12SoftwareSaturation\x12\x0f\n\x07\x65nabled\x18\x01 \x01(\x08\x12\x35\n\x10software_min_adc\x18\x02 \x01(\x0b\x32\x1b.google.protobuf.Int32Value\x12\x35\n\x10software_max_adc\x18\x03 \x01(\x0b\x32\x1b.google.protobuf.Int32Value\x1a\xa2\x01\n\x17UserThresholdSaturation\x12\x0f\n\x07\x65nabled\x18\x01 \x01(\x08\x12:\n\x15user_threshold_min_pa\x18\x02 \x01(\x0b\x32\x1b.google.protobuf.FloatValue\x12:\n\x15user_threshold_max_pa\x18\x03 \x01(\x0b\x32\x1b.google.protobuf.FloatValue\"Z\n\x1aSetSaturationConfigRequest\x12<\n\x08settings\x18\x01 \x01(\x0b\x32$.minknow_api.device.SaturationConfigB\x04\x90\xb5\x18\x01\"\x1d\n\x1bSetSaturationConfigResponse\"\x1c\n\x1aGetSaturationConfigRequest\"[\n\x1bGetSaturationConfigResponse\x12<\n\x08settings\x18\x01 \x01(\x0b\x32$.minknow_api.device.SaturationConfigB\x04\x90\xb5\x18\x01\"\x16\n\x14GetSampleRateRequest\",\n\x15GetSampleRateResponse\x12\x13\n\x0bsample_rate\x18\x01 \x01(\r\"1\n\x14SetSampleRateRequest\x12\x19\n\x0bsample_rate\x18\x01 \x01(\rB\x04\x88\xb5\x18\x01\"1\n\x15SetSampleRateResponse\x12\x18\n\x10real_sample_rate\x18\x01 \x01(\r\"\x17\n\x15GetBiasVoltageRequest\".\n\x16GetBiasVoltageResponse\x12\x14\n\x0c\x62ias_voltage\x18\x01 \x01(\x01\"3\n\x15SetBiasVoltageRequest\x12\x1a\n\x0c\x62ias_voltage\x18\x01 \x01(\x01\x42\x04\x88\xb5\x18\x01\"\x18\n\x16SetBiasVoltageResponse\"\x12\n\x10\x44umpStateRequest\"\x13\n\x11\x44umpStateResponse*i\n\x15\x46lowCellConnectorType\x12\x11\n\rFCCON_NOT_SET\x10\x00\x12\x14\n\x10\x46\x43\x43ON_PROMETHION\x10\x01\x12\x14\n\x10\x46\x43\x43ON_MINION_MK1\x10\x02\x12\x11\n\rFCCON_FLONGLE\x10\x03*?\n\x15InsertionScriptStatus\x12\x0b\n\x07NOT_RUN\x10\x00\x12\n\n\x06\x46\x41ILED\x10\x01\x12\r\n\tSUCCEEDED\x10\x02*]\n\x0cSelectedWell\x12\r\n\tWELL_NONE\x10\x00\x12\n\n\x06WELL_1\x10\x01\x12\n\n\x06WELL_2\x10\x02\x12\n\n\x06WELL_3\x10\x03\x12\n\n\x06WELL_4\x10\x04\x12\x0e\n\nWELL_OTHER\x10\x05\x32\xa8\x19\n\rDeviceService\x12k\n\x0fget_device_info\x12(.minknow_api.device.GetDeviceInfoRequest\x1a).minknow_api.device.GetDeviceInfoResponse\"\x03\x90\x02\x01\x12n\n\x10get_device_state\x12).minknow_api.device.GetDeviceStateRequest\x1a*.minknow_api.device.GetDeviceStateResponse\"\x03\x90\x02\x01\x12v\n\x13stream_device_state\x12,.minknow_api.device.StreamDeviceStateRequest\x1a*.minknow_api.device.GetDeviceStateResponse\"\x03\x90\x02\x01\x30\x01\x12r\n\x12get_flow_cell_info\x12*.minknow_api.device.GetFlowCellInfoRequest\x1a+.minknow_api.device.GetFlowCellInfoResponse\"\x03\x90\x02\x01\x12z\n\x15stream_flow_cell_info\x12-.minknow_api.device.StreamFlowCellInfoRequest\x1a+.minknow_api.device.GetFlowCellInfoResponse\"\x03\x90\x02\x01\x30\x01\x12\x95\x01\n\x1fset_user_specified_flow_cell_id\x12\x35.minknow_api.device.SetUserSpecifiedFlowCellIdRequest\x1a\x36.minknow_api.device.SetUserSpecifiedFlowCellIdResponse\"\x03\x90\x02\x02\x12\x97\x01\n\x1fset_user_specified_product_code\x12\x36.minknow_api.device.SetUserSpecifiedProductCodeRequest\x1a\x37.minknow_api.device.SetUserSpecifiedProductCodeResponse\"\x03\x90\x02\x02\x12w\n\x13get_channels_layout\x12,.minknow_api.device.GetChannelsLayoutRequest\x1a-.minknow_api.device.GetChannelsLayoutResponse\"\x03\x90\x02\x01\x12}\n\x15reset_device_settings\x12..minknow_api.device.ResetDeviceSettingsRequest\x1a/.minknow_api.device.ResetDeviceSettingsResponse\"\x03\x90\x02\x02\x12m\n\x0fset_calibration\x12).minknow_api.device.SetCalibrationRequest\x1a*.minknow_api.device.SetCalibrationResponse\"\x03\x90\x02\x02\x12s\n\x11\x63lear_calibration\x12+.minknow_api.device.ClearCalibrationRequest\x1a,.minknow_api.device.ClearCalibrationResponse\"\x03\x90\x02\x02\x12m\n\x0fget_calibration\x12).minknow_api.device.GetCalibrationRequest\x1a*.minknow_api.device.GetCalibrationResponse\"\x03\x90\x02\x01\x12m\n\x0fset_temperature\x12).minknow_api.device.SetTemperatureRequest\x1a*.minknow_api.device.SetTemperatureResponse\"\x03\x90\x02\x02\x12m\n\x0fget_temperature\x12).minknow_api.device.GetTemperatureRequest\x1a*.minknow_api.device.GetTemperatureResponse\"\x03\x90\x02\x01\x12u\n\x12stream_temperature\x12,.minknow_api.device.StreamTemperatureRequest\x1a*.minknow_api.device.GetTemperatureResponse\"\x03\x90\x02\x01\x30\x01\x12T\n\x07unblock\x12\".minknow_api.device.UnblockRequest\x1a#.minknow_api.device.UnblockResponse\"\x00\x12j\n\x0f\x63\x61ncel_unblocks\x12).minknow_api.device.CancelUnblocksRequest\x1a*.minknow_api.device.CancelUnblocksResponse\"\x00\x12\x89\x01\n\x19get_channel_configuration\x12\x32.minknow_api.device.GetChannelConfigurationRequest\x1a\x33.minknow_api.device.GetChannelConfigurationResponse\"\x03\x90\x02\x01\x12\x89\x01\n\x19set_channel_configuration\x12\x32.minknow_api.device.SetChannelConfigurationRequest\x1a\x33.minknow_api.device.SetChannelConfigurationResponse\"\x03\x90\x02\x02\x12\x93\x01\n\x1dset_channel_configuration_all\x12\x35.minknow_api.device.SetChannelConfigurationAllRequest\x1a\x36.minknow_api.device.SetChannelConfigurationAllResponse\"\x03\x90\x02\x02\x12z\n\x15set_saturation_config\x12..minknow_api.device.SetSaturationConfigRequest\x1a/.minknow_api.device.SetSaturationConfigResponse\"\x00\x12}\n\x15get_saturation_config\x12..minknow_api.device.GetSaturationConfigRequest\x1a/.minknow_api.device.GetSaturationConfigResponse\"\x03\x90\x02\x01\x12k\n\x0fget_sample_rate\x12(.minknow_api.device.GetSampleRateRequest\x1a).minknow_api.device.GetSampleRateResponse\"\x03\x90\x02\x01\x12k\n\x0fset_sample_rate\x12(.minknow_api.device.SetSampleRateRequest\x1a).minknow_api.device.SetSampleRateResponse\"\x03\x90\x02\x02\x12n\n\x10get_bias_voltage\x12).minknow_api.device.GetBiasVoltageRequest\x1a*.minknow_api.device.GetBiasVoltageResponse\"\x03\x90\x02\x01\x12n\n\x10set_bias_voltage\x12).minknow_api.device.SetBiasVoltageRequest\x1a*.minknow_api.device.SetBiasVoltageResponse\"\x03\x90\x02\x02\x12[\n\ndump_state\x12$.minknow_api.device.DumpStateRequest\x1a%.minknow_api.device.DumpStateResponse\"\x00\x42&\n\x1c\x63om.nanoporetech.minknow_api\xa2\x02\x05MKAPIb\x06proto3')
 
-_FLOWCELLCONNECTORTYPE = _descriptor.EnumDescriptor(
-  name='FlowCellConnectorType',
-  full_name='minknow_api.device.FlowCellConnectorType',
-  filename=None,
-  file=DESCRIPTOR,
-  create_key=_descriptor._internal_create_key,
-  values=[
-    _descriptor.EnumValueDescriptor(
-      name='FCCON_NOT_SET', index=0, number=0,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-    _descriptor.EnumValueDescriptor(
-      name='FCCON_PROMETHION', index=1, number=1,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-    _descriptor.EnumValueDescriptor(
-      name='FCCON_MINION_MK1', index=2, number=2,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-    _descriptor.EnumValueDescriptor(
-      name='FCCON_FLONGLE', index=3, number=3,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-  ],
-  containing_type=None,
-  serialized_options=None,
-  serialized_start=5592,
-  serialized_end=5697,
-)
-_sym_db.RegisterEnumDescriptor(_FLOWCELLCONNECTORTYPE)
-
+_FLOWCELLCONNECTORTYPE = DESCRIPTOR.enum_types_by_name['FlowCellConnectorType']
 FlowCellConnectorType = enum_type_wrapper.EnumTypeWrapper(_FLOWCELLCONNECTORTYPE)
-_SELECTEDWELL = _descriptor.EnumDescriptor(
-  name='SelectedWell',
-  full_name='minknow_api.device.SelectedWell',
-  filename=None,
-  file=DESCRIPTOR,
-  create_key=_descriptor._internal_create_key,
-  values=[
-    _descriptor.EnumValueDescriptor(
-      name='WELL_NONE', index=0, number=0,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-    _descriptor.EnumValueDescriptor(
-      name='WELL_1', index=1, number=1,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-    _descriptor.EnumValueDescriptor(
-      name='WELL_2', index=2, number=2,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-    _descriptor.EnumValueDescriptor(
-      name='WELL_3', index=3, number=3,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-    _descriptor.EnumValueDescriptor(
-      name='WELL_4', index=4, number=4,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-    _descriptor.EnumValueDescriptor(
-      name='WELL_OTHER', index=5, number=5,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-  ],
-  containing_type=None,
-  serialized_options=None,
-  serialized_start=5699,
-  serialized_end=5792,
-)
-_sym_db.RegisterEnumDescriptor(_SELECTEDWELL)
-
+_INSERTIONSCRIPTSTATUS = DESCRIPTOR.enum_types_by_name['InsertionScriptStatus']
+InsertionScriptStatus = enum_type_wrapper.EnumTypeWrapper(_INSERTIONSCRIPTSTATUS)
+_SELECTEDWELL = DESCRIPTOR.enum_types_by_name['SelectedWell']
 SelectedWell = enum_type_wrapper.EnumTypeWrapper(_SELECTEDWELL)
 FCCON_NOT_SET = 0
 FCCON_PROMETHION = 1
 FCCON_MINION_MK1 = 2
 FCCON_FLONGLE = 3
+NOT_RUN = 0
+FAILED = 1
+SUCCEEDED = 2
 WELL_NONE = 0
 WELL_1 = 1
 WELL_2 = 2
@@ -120,2394 +40,72 @@ WELL_4 = 4
 WELL_OTHER = 5
 
 
-_GETDEVICEINFORESPONSE_DEVICETYPE = _descriptor.EnumDescriptor(
-  name='DeviceType',
-  full_name='minknow_api.device.GetDeviceInfoResponse.DeviceType',
-  filename=None,
-  file=DESCRIPTOR,
-  create_key=_descriptor._internal_create_key,
-  values=[
-    _descriptor.EnumValueDescriptor(
-      name='MINION', index=0, number=0,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-    _descriptor.EnumValueDescriptor(
-      name='GRIDION', index=1, number=2,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-    _descriptor.EnumValueDescriptor(
-      name='PROMETHION', index=2, number=3,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-    _descriptor.EnumValueDescriptor(
-      name='MINION_MK1C', index=3, number=4,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-    _descriptor.EnumValueDescriptor(
-      name='TRAXION', index=4, number=5,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-  ],
-  containing_type=None,
-  serialized_options=None,
-  serialized_start=696,
-  serialized_end=779,
-)
-_sym_db.RegisterEnumDescriptor(_GETDEVICEINFORESPONSE_DEVICETYPE)
-
-_GETDEVICESTATERESPONSE_DEVICESTATE = _descriptor.EnumDescriptor(
-  name='DeviceState',
-  full_name='minknow_api.device.GetDeviceStateResponse.DeviceState',
-  filename=None,
-  file=DESCRIPTOR,
-  create_key=_descriptor._internal_create_key,
-  values=[
-    _descriptor.EnumValueDescriptor(
-      name='DEVICE_DISCONNECTED', index=0, number=0,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-    _descriptor.EnumValueDescriptor(
-      name='DEVICE_READY', index=1, number=1,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-  ],
-  containing_type=None,
-  serialized_options=None,
-  serialized_start=983,
-  serialized_end=1039,
-)
-_sym_db.RegisterEnumDescriptor(_GETDEVICESTATERESPONSE_DEVICESTATE)
-
-
-_CHANNELCONFIGURATION = _descriptor.Descriptor(
-  name='ChannelConfiguration',
-  full_name='minknow_api.device.ChannelConfiguration',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='well', full_name='minknow_api.device.ChannelConfiguration.well', index=0,
-      number=1, type=13, cpp_type=3, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='test_current', full_name='minknow_api.device.ChannelConfiguration.test_current', index=1,
-      number=2, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=111,
-  serialized_end=169,
-)
-
-
-_RETURNEDCHANNELCONFIGURATION = _descriptor.Descriptor(
-  name='ReturnedChannelConfiguration',
-  full_name='minknow_api.device.ReturnedChannelConfiguration',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='well', full_name='minknow_api.device.ReturnedChannelConfiguration.well', index=0,
-      number=1, type=13, cpp_type=3, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='test_current', full_name='minknow_api.device.ReturnedChannelConfiguration.test_current', index=1,
-      number=2, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='unblock', full_name='minknow_api.device.ReturnedChannelConfiguration.unblock', index=2,
-      number=4, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=171,
-  serialized_end=254,
-)
-
-
-_GETDEVICEINFOREQUEST = _descriptor.Descriptor(
-  name='GetDeviceInfoRequest',
-  full_name='minknow_api.device.GetDeviceInfoRequest',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=256,
-  serialized_end=278,
-)
-
-
-_GETDEVICEINFORESPONSE_COMPONENTVERSION = _descriptor.Descriptor(
-  name='ComponentVersion',
-  full_name='minknow_api.device.GetDeviceInfoResponse.ComponentVersion',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='component', full_name='minknow_api.device.GetDeviceInfoResponse.ComponentVersion.component', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='version', full_name='minknow_api.device.GetDeviceInfoResponse.ComponentVersion.version', index=1,
-      number=2, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='serial_number', full_name='minknow_api.device.GetDeviceInfoResponse.ComponentVersion.serial_number', index=2,
-      number=3, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=617,
-  serialized_end=694,
-)
-
-_GETDEVICEINFORESPONSE = _descriptor.Descriptor(
-  name='GetDeviceInfoResponse',
-  full_name='minknow_api.device.GetDeviceInfoResponse',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='device_id', full_name='minknow_api.device.GetDeviceInfoResponse.device_id', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='device_type', full_name='minknow_api.device.GetDeviceInfoResponse.device_type', index=1,
-      number=2, type=14, cpp_type=8, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='is_simulated', full_name='minknow_api.device.GetDeviceInfoResponse.is_simulated', index=2,
-      number=3, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='max_channel_count', full_name='minknow_api.device.GetDeviceInfoResponse.max_channel_count', index=3,
-      number=4, type=13, cpp_type=3, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='max_wells_per_channel', full_name='minknow_api.device.GetDeviceInfoResponse.max_wells_per_channel', index=4,
-      number=5, type=13, cpp_type=3, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='can_set_temperature', full_name='minknow_api.device.GetDeviceInfoResponse.can_set_temperature', index=5,
-      number=6, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='digitisation', full_name='minknow_api.device.GetDeviceInfoResponse.digitisation', index=6,
-      number=7, type=13, cpp_type=3, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='firmware_version', full_name='minknow_api.device.GetDeviceInfoResponse.firmware_version', index=7,
-      number=10, type=11, cpp_type=10, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[_GETDEVICEINFORESPONSE_COMPONENTVERSION, ],
-  enum_types=[
-    _GETDEVICEINFORESPONSE_DEVICETYPE,
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=281,
-  serialized_end=779,
-)
-
-
-_GETDEVICESTATEREQUEST = _descriptor.Descriptor(
-  name='GetDeviceStateRequest',
-  full_name='minknow_api.device.GetDeviceStateRequest',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=781,
-  serialized_end=804,
-)
-
-
-_GETDEVICESTATERESPONSE = _descriptor.Descriptor(
-  name='GetDeviceStateResponse',
-  full_name='minknow_api.device.GetDeviceStateResponse',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='device_state', full_name='minknow_api.device.GetDeviceStateResponse.device_state', index=0,
-      number=1, type=14, cpp_type=8, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='flow_cell_connector', full_name='minknow_api.device.GetDeviceStateResponse.flow_cell_connector', index=1,
-      number=2, type=14, cpp_type=8, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-    _GETDEVICESTATERESPONSE_DEVICESTATE,
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=807,
-  serialized_end=1039,
-)
-
-
-_STREAMDEVICESTATEREQUEST = _descriptor.Descriptor(
-  name='StreamDeviceStateRequest',
-  full_name='minknow_api.device.StreamDeviceStateRequest',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=1041,
-  serialized_end=1067,
-)
-
-
-_GETFLOWCELLINFOREQUEST = _descriptor.Descriptor(
-  name='GetFlowCellInfoRequest',
-  full_name='minknow_api.device.GetFlowCellInfoRequest',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=1069,
-  serialized_end=1093,
-)
-
-
-_GETFLOWCELLINFORESPONSE = _descriptor.Descriptor(
-  name='GetFlowCellInfoResponse',
-  full_name='minknow_api.device.GetFlowCellInfoResponse',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='has_flow_cell', full_name='minknow_api.device.GetFlowCellInfoResponse.has_flow_cell', index=0,
-      number=1, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='channel_count', full_name='minknow_api.device.GetFlowCellInfoResponse.channel_count', index=1,
-      number=2, type=13, cpp_type=3, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='wells_per_channel', full_name='minknow_api.device.GetFlowCellInfoResponse.wells_per_channel', index=2,
-      number=3, type=13, cpp_type=3, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='flow_cell_id', full_name='minknow_api.device.GetFlowCellInfoResponse.flow_cell_id', index=3,
-      number=4, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='asic_id_str', full_name='minknow_api.device.GetFlowCellInfoResponse.asic_id_str', index=4,
-      number=13, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='product_code', full_name='minknow_api.device.GetFlowCellInfoResponse.product_code', index=5,
-      number=6, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='user_specified_flow_cell_id', full_name='minknow_api.device.GetFlowCellInfoResponse.user_specified_flow_cell_id', index=6,
-      number=7, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='user_specified_product_code', full_name='minknow_api.device.GetFlowCellInfoResponse.user_specified_product_code', index=7,
-      number=8, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='has_adapter', full_name='minknow_api.device.GetFlowCellInfoResponse.has_adapter', index=8,
-      number=9, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='adapter_id', full_name='minknow_api.device.GetFlowCellInfoResponse.adapter_id', index=9,
-      number=10, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='temperature_offset', full_name='minknow_api.device.GetFlowCellInfoResponse.temperature_offset', index=10,
-      number=11, type=2, cpp_type=6, label=1,
-      has_default_value=False, default_value=float(0),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='asic_version', full_name='minknow_api.device.GetFlowCellInfoResponse.asic_version', index=11,
-      number=12, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-    _descriptor.OneofDescriptor(
-      name='temperature_offset_nullable', full_name='minknow_api.device.GetFlowCellInfoResponse.temperature_offset_nullable',
-      index=0, containing_type=None,
-      create_key=_descriptor._internal_create_key,
-    fields=[]),
-  ],
-  serialized_start=1096,
-  serialized_end=1457,
-)
-
-
-_STREAMFLOWCELLINFOREQUEST = _descriptor.Descriptor(
-  name='StreamFlowCellInfoRequest',
-  full_name='minknow_api.device.StreamFlowCellInfoRequest',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=1459,
-  serialized_end=1486,
-)
-
-
-_SETUSERSPECIFIEDFLOWCELLIDREQUEST = _descriptor.Descriptor(
-  name='SetUserSpecifiedFlowCellIdRequest',
-  full_name='minknow_api.device.SetUserSpecifiedFlowCellIdRequest',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='id', full_name='minknow_api.device.SetUserSpecifiedFlowCellIdRequest.id', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=b'\210\265\030\001', file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=1488,
-  serialized_end=1541,
-)
-
-
-_SETUSERSPECIFIEDFLOWCELLIDRESPONSE = _descriptor.Descriptor(
-  name='SetUserSpecifiedFlowCellIdResponse',
-  full_name='minknow_api.device.SetUserSpecifiedFlowCellIdResponse',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=1543,
-  serialized_end=1579,
-)
-
-
-_SETUSERSPECIFIEDPRODUCTCODEREQUEST = _descriptor.Descriptor(
-  name='SetUserSpecifiedProductCodeRequest',
-  full_name='minknow_api.device.SetUserSpecifiedProductCodeRequest',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='code', full_name='minknow_api.device.SetUserSpecifiedProductCodeRequest.code', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=b'\210\265\030\001', file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=1581,
-  serialized_end=1637,
-)
-
-
-_SETUSERSPECIFIEDPRODUCTCODERESPONSE = _descriptor.Descriptor(
-  name='SetUserSpecifiedProductCodeResponse',
-  full_name='minknow_api.device.SetUserSpecifiedProductCodeResponse',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=1639,
-  serialized_end=1676,
-)
-
-
-_GETCHANNELSLAYOUTREQUEST = _descriptor.Descriptor(
-  name='GetChannelsLayoutRequest',
-  full_name='minknow_api.device.GetChannelsLayoutRequest',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=1678,
-  serialized_end=1704,
-)
-
-
-_GETCHANNELSLAYOUTRESPONSE = _descriptor.Descriptor(
-  name='GetChannelsLayoutResponse',
-  full_name='minknow_api.device.GetChannelsLayoutResponse',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='channel_records', full_name='minknow_api.device.GetChannelsLayoutResponse.channel_records', index=0,
-      number=1, type=11, cpp_type=10, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=1706,
-  serialized_end=1793,
-)
-
-
-_CHANNELRECORD_MUXRECORD = _descriptor.Descriptor(
-  name='MuxRecord',
-  full_name='minknow_api.device.ChannelRecord.MuxRecord',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='id', full_name='minknow_api.device.ChannelRecord.MuxRecord.id', index=0,
-      number=1, type=13, cpp_type=3, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='phys_x', full_name='minknow_api.device.ChannelRecord.MuxRecord.phys_x', index=1,
-      number=2, type=13, cpp_type=3, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='phys_y', full_name='minknow_api.device.ChannelRecord.MuxRecord.phys_y', index=2,
-      number=3, type=13, cpp_type=3, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=1905,
-  serialized_end=1960,
-)
-
-_CHANNELRECORD = _descriptor.Descriptor(
-  name='ChannelRecord',
-  full_name='minknow_api.device.ChannelRecord',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='id', full_name='minknow_api.device.ChannelRecord.id', index=0,
-      number=1, type=13, cpp_type=3, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='name', full_name='minknow_api.device.ChannelRecord.name', index=1,
-      number=2, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='mux_records', full_name='minknow_api.device.ChannelRecord.mux_records', index=2,
-      number=3, type=11, cpp_type=10, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[_CHANNELRECORD_MUXRECORD, ],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=1796,
-  serialized_end=1960,
-)
-
-
-_RESETDEVICESETTINGSREQUEST = _descriptor.Descriptor(
-  name='ResetDeviceSettingsRequest',
-  full_name='minknow_api.device.ResetDeviceSettingsRequest',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=1962,
-  serialized_end=1990,
-)
-
-
-_RESETDEVICESETTINGSRESPONSE = _descriptor.Descriptor(
-  name='ResetDeviceSettingsResponse',
-  full_name='minknow_api.device.ResetDeviceSettingsResponse',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=1992,
-  serialized_end=2021,
-)
-
-
-_SETCALIBRATIONREQUEST = _descriptor.Descriptor(
-  name='SetCalibrationRequest',
-  full_name='minknow_api.device.SetCalibrationRequest',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='first_channel', full_name='minknow_api.device.SetCalibrationRequest.first_channel', index=0,
-      number=1, type=13, cpp_type=3, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=b'\210\265\030\001', file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='last_channel', full_name='minknow_api.device.SetCalibrationRequest.last_channel', index=1,
-      number=2, type=13, cpp_type=3, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=b'\210\265\030\001', file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='offsets', full_name='minknow_api.device.SetCalibrationRequest.offsets', index=2,
-      number=3, type=2, cpp_type=6, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=b'\210\265\030\001', file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='pa_ranges', full_name='minknow_api.device.SetCalibrationRequest.pa_ranges', index=3,
-      number=4, type=2, cpp_type=6, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=b'\210\265\030\001', file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=2024,
-  serialized_end=2152,
-)
-
-
-_SETCALIBRATIONRESPONSE = _descriptor.Descriptor(
-  name='SetCalibrationResponse',
-  full_name='minknow_api.device.SetCalibrationResponse',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=2154,
-  serialized_end=2178,
-)
-
-
-_CLEARCALIBRATIONREQUEST = _descriptor.Descriptor(
-  name='ClearCalibrationRequest',
-  full_name='minknow_api.device.ClearCalibrationRequest',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=2180,
-  serialized_end=2205,
-)
-
-
-_CLEARCALIBRATIONRESPONSE = _descriptor.Descriptor(
-  name='ClearCalibrationResponse',
-  full_name='minknow_api.device.ClearCalibrationResponse',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=2207,
-  serialized_end=2233,
-)
-
-
-_GETCALIBRATIONREQUEST = _descriptor.Descriptor(
-  name='GetCalibrationRequest',
-  full_name='minknow_api.device.GetCalibrationRequest',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='first_channel', full_name='minknow_api.device.GetCalibrationRequest.first_channel', index=0,
-      number=1, type=13, cpp_type=3, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=b'\210\265\030\001', file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='last_channel', full_name='minknow_api.device.GetCalibrationRequest.last_channel', index=1,
-      number=2, type=13, cpp_type=3, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=b'\210\265\030\001', file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=2235,
-  serialized_end=2315,
-)
-
-
-_GETCALIBRATIONRESPONSE = _descriptor.Descriptor(
-  name='GetCalibrationResponse',
-  full_name='minknow_api.device.GetCalibrationResponse',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='digitisation', full_name='minknow_api.device.GetCalibrationResponse.digitisation', index=0,
-      number=1, type=13, cpp_type=3, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='offsets', full_name='minknow_api.device.GetCalibrationResponse.offsets', index=1,
-      number=2, type=2, cpp_type=6, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='pa_ranges', full_name='minknow_api.device.GetCalibrationResponse.pa_ranges', index=2,
-      number=3, type=2, cpp_type=6, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='has_calibration', full_name='minknow_api.device.GetCalibrationResponse.has_calibration', index=3,
-      number=4, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=2317,
-  serialized_end=2424,
-)
-
-
-_SETTEMPERATUREREQUEST_WAITFORTEMPERATURESETTINGS = _descriptor.Descriptor(
-  name='WaitForTemperatureSettings',
-  full_name='minknow_api.device.SetTemperatureRequest.WaitForTemperatureSettings',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='timeout', full_name='minknow_api.device.SetTemperatureRequest.WaitForTemperatureSettings.timeout', index=0,
-      number=1, type=13, cpp_type=3, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='min_stable_duration', full_name='minknow_api.device.SetTemperatureRequest.WaitForTemperatureSettings.min_stable_duration', index=1,
-      number=3, type=13, cpp_type=3, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='tolerance', full_name='minknow_api.device.SetTemperatureRequest.WaitForTemperatureSettings.tolerance', index=2,
-      number=2, type=2, cpp_type=6, label=1,
-      has_default_value=False, default_value=float(0),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=2573,
-  serialized_end=2666,
-)
-
-_SETTEMPERATUREREQUEST = _descriptor.Descriptor(
-  name='SetTemperatureRequest',
-  full_name='minknow_api.device.SetTemperatureRequest',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='temperature', full_name='minknow_api.device.SetTemperatureRequest.temperature', index=0,
-      number=1, type=2, cpp_type=6, label=1,
-      has_default_value=False, default_value=float(0),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='wait_for_temperature', full_name='minknow_api.device.SetTemperatureRequest.wait_for_temperature', index=1,
-      number=2, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[_SETTEMPERATUREREQUEST_WAITFORTEMPERATURESETTINGS, ],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=2427,
-  serialized_end=2666,
-)
-
-
-_SETTEMPERATURERESPONSE = _descriptor.Descriptor(
-  name='SetTemperatureResponse',
-  full_name='minknow_api.device.SetTemperatureResponse',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='timed_out_waiting_for_temperature', full_name='minknow_api.device.SetTemperatureResponse.timed_out_waiting_for_temperature', index=0,
-      number=1, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=2668,
-  serialized_end=2735,
-)
-
-
-_GETTEMPERATUREREQUEST = _descriptor.Descriptor(
-  name='GetTemperatureRequest',
-  full_name='minknow_api.device.GetTemperatureRequest',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=2737,
-  serialized_end=2760,
-)
-
-
-_GETTEMPERATURERESPONSE_MINIONTEMPERATURE = _descriptor.Descriptor(
-  name='MinIONTemperature',
-  full_name='minknow_api.device.GetTemperatureResponse.MinIONTemperature',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='asic_temperature', full_name='minknow_api.device.GetTemperatureResponse.MinIONTemperature.asic_temperature', index=0,
-      number=1, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='heatsink_temperature', full_name='minknow_api.device.GetTemperatureResponse.MinIONTemperature.heatsink_temperature', index=1,
-      number=2, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=3015,
-  serialized_end=3148,
-)
-
-_GETTEMPERATURERESPONSE_PROMETHIONTEMPERATURE = _descriptor.Descriptor(
-  name='PromethIONTemperature',
-  full_name='minknow_api.device.GetTemperatureResponse.PromethIONTemperature',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='flowcell_temperature', full_name='minknow_api.device.GetTemperatureResponse.PromethIONTemperature.flowcell_temperature', index=0,
-      number=1, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='chamber_temperature', full_name='minknow_api.device.GetTemperatureResponse.PromethIONTemperature.chamber_temperature', index=1,
-      number=2, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=3151,
-  serialized_end=3291,
-)
-
-_GETTEMPERATURERESPONSE = _descriptor.Descriptor(
-  name='GetTemperatureResponse',
-  full_name='minknow_api.device.GetTemperatureResponse',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='minion', full_name='minknow_api.device.GetTemperatureResponse.minion', index=0,
-      number=1, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='promethion', full_name='minknow_api.device.GetTemperatureResponse.promethion', index=1,
-      number=2, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='target_temperature', full_name='minknow_api.device.GetTemperatureResponse.target_temperature', index=2,
-      number=3, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[_GETTEMPERATURERESPONSE_MINIONTEMPERATURE, _GETTEMPERATURERESPONSE_PROMETHIONTEMPERATURE, ],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-    _descriptor.OneofDescriptor(
-      name='temperature', full_name='minknow_api.device.GetTemperatureResponse.temperature',
-      index=0, containing_type=None,
-      create_key=_descriptor._internal_create_key,
-    fields=[]),
-  ],
-  serialized_start=2763,
-  serialized_end=3306,
-)
-
-
-_STREAMTEMPERATUREREQUEST = _descriptor.Descriptor(
-  name='StreamTemperatureRequest',
-  full_name='minknow_api.device.StreamTemperatureRequest',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='period_seconds', full_name='minknow_api.device.StreamTemperatureRequest.period_seconds', index=0,
-      number=1, type=13, cpp_type=3, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=3308,
-  serialized_end=3358,
-)
-
-
-_UNBLOCKREQUEST = _descriptor.Descriptor(
-  name='UnblockRequest',
-  full_name='minknow_api.device.UnblockRequest',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='channels', full_name='minknow_api.device.UnblockRequest.channels', index=0,
-      number=1, type=13, cpp_type=3, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='duration_in_seconds', full_name='minknow_api.device.UnblockRequest.duration_in_seconds', index=1,
-      number=2, type=13, cpp_type=3, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='duration_in_milliseconds', full_name='minknow_api.device.UnblockRequest.duration_in_milliseconds', index=2,
-      number=3, type=13, cpp_type=3, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-    _descriptor.OneofDescriptor(
-      name='duration', full_name='minknow_api.device.UnblockRequest.duration',
-      index=0, containing_type=None,
-      create_key=_descriptor._internal_create_key,
-    fields=[]),
-  ],
-  serialized_start=3360,
-  serialized_end=3473,
-)
-
-
-_UNBLOCKRESPONSE = _descriptor.Descriptor(
-  name='UnblockResponse',
-  full_name='minknow_api.device.UnblockResponse',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=3475,
-  serialized_end=3492,
-)
-
-
-_CANCELUNBLOCKSREQUEST = _descriptor.Descriptor(
-  name='CancelUnblocksRequest',
-  full_name='minknow_api.device.CancelUnblocksRequest',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=3494,
-  serialized_end=3517,
-)
-
-
-_CANCELUNBLOCKSRESPONSE = _descriptor.Descriptor(
-  name='CancelUnblocksResponse',
-  full_name='minknow_api.device.CancelUnblocksResponse',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='cancelled_unblocks', full_name='minknow_api.device.CancelUnblocksResponse.cancelled_unblocks', index=0,
-      number=1, type=13, cpp_type=3, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=3519,
-  serialized_end=3571,
-)
-
-
-_GETCHANNELCONFIGURATIONREQUEST = _descriptor.Descriptor(
-  name='GetChannelConfigurationRequest',
-  full_name='minknow_api.device.GetChannelConfigurationRequest',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='channels', full_name='minknow_api.device.GetChannelConfigurationRequest.channels', index=0,
-      number=1, type=13, cpp_type=3, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=3573,
-  serialized_end=3623,
-)
-
-
-_GETCHANNELCONFIGURATIONRESPONSE = _descriptor.Descriptor(
-  name='GetChannelConfigurationResponse',
-  full_name='minknow_api.device.GetChannelConfigurationResponse',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='channel_configurations', full_name='minknow_api.device.GetChannelConfigurationResponse.channel_configurations', index=0,
-      number=1, type=11, cpp_type=10, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=3625,
-  serialized_end=3740,
-)
-
-
-_SETCHANNELCONFIGURATIONREQUEST_CHANNELCONFIGURATIONSENTRY = _descriptor.Descriptor(
-  name='ChannelConfigurationsEntry',
-  full_name='minknow_api.device.SetChannelConfigurationRequest.ChannelConfigurationsEntry',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='key', full_name='minknow_api.device.SetChannelConfigurationRequest.ChannelConfigurationsEntry.key', index=0,
-      number=1, type=13, cpp_type=3, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='value', full_name='minknow_api.device.SetChannelConfigurationRequest.ChannelConfigurationsEntry.value', index=1,
-      number=2, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=b'8\001',
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=3888,
-  serialized_end=3990,
-)
-
-_SETCHANNELCONFIGURATIONREQUEST = _descriptor.Descriptor(
-  name='SetChannelConfigurationRequest',
-  full_name='minknow_api.device.SetChannelConfigurationRequest',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='channel_configurations', full_name='minknow_api.device.SetChannelConfigurationRequest.channel_configurations', index=0,
-      number=1, type=11, cpp_type=10, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[_SETCHANNELCONFIGURATIONREQUEST_CHANNELCONFIGURATIONSENTRY, ],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=3743,
-  serialized_end=3990,
-)
-
-
-_SETCHANNELCONFIGURATIONRESPONSE = _descriptor.Descriptor(
-  name='SetChannelConfigurationResponse',
-  full_name='minknow_api.device.SetChannelConfigurationResponse',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=3992,
-  serialized_end=4025,
-)
-
-
-_SETCHANNELCONFIGURATIONALLREQUEST = _descriptor.Descriptor(
-  name='SetChannelConfigurationAllRequest',
-  full_name='minknow_api.device.SetChannelConfigurationAllRequest',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='channel_configuration', full_name='minknow_api.device.SetChannelConfigurationAllRequest.channel_configuration', index=0,
-      number=1, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=b'\220\265\030\001', file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=4027,
-  serialized_end=4141,
-)
-
-
-_SETCHANNELCONFIGURATIONALLRESPONSE = _descriptor.Descriptor(
-  name='SetChannelConfigurationAllResponse',
-  full_name='minknow_api.device.SetChannelConfigurationAllResponse',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=4143,
-  serialized_end=4179,
-)
-
-
-_SATURATIONCONFIG_THRESHOLDS = _descriptor.Descriptor(
-  name='Thresholds',
-  full_name='minknow_api.device.SaturationConfig.Thresholds',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='general_threshold', full_name='minknow_api.device.SaturationConfig.Thresholds.general_threshold', index=0,
-      number=1, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='unblock_threshold', full_name='minknow_api.device.SaturationConfig.Thresholds.unblock_threshold', index=1,
-      number=2, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='user_general_threshold', full_name='minknow_api.device.SaturationConfig.Thresholds.user_general_threshold', index=2,
-      number=3, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='user_unblock_threshold', full_name='minknow_api.device.SaturationConfig.Thresholds.user_unblock_threshold', index=3,
-      number=4, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=4455,
-  serialized_end=4705,
-)
-
-_SATURATIONCONFIG_SOFTWARESATURATION = _descriptor.Descriptor(
-  name='SoftwareSaturation',
-  full_name='minknow_api.device.SaturationConfig.SoftwareSaturation',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='enabled', full_name='minknow_api.device.SaturationConfig.SoftwareSaturation.enabled', index=0,
-      number=1, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='software_min_adc', full_name='minknow_api.device.SaturationConfig.SoftwareSaturation.software_min_adc', index=1,
-      number=2, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='software_max_adc', full_name='minknow_api.device.SaturationConfig.SoftwareSaturation.software_max_adc', index=2,
-      number=3, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=4708,
-  serialized_end=4855,
-)
-
-_SATURATIONCONFIG_USERTHRESHOLDSATURATION = _descriptor.Descriptor(
-  name='UserThresholdSaturation',
-  full_name='minknow_api.device.SaturationConfig.UserThresholdSaturation',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='enabled', full_name='minknow_api.device.SaturationConfig.UserThresholdSaturation.enabled', index=0,
-      number=1, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='user_threshold_min_pa', full_name='minknow_api.device.SaturationConfig.UserThresholdSaturation.user_threshold_min_pa', index=1,
-      number=2, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='user_threshold_max_pa', full_name='minknow_api.device.SaturationConfig.UserThresholdSaturation.user_threshold_max_pa', index=2,
-      number=3, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=4858,
-  serialized_end=5020,
-)
-
-_SATURATIONCONFIG = _descriptor.Descriptor(
-  name='SaturationConfig',
-  full_name='minknow_api.device.SaturationConfig',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='thresholds', full_name='minknow_api.device.SaturationConfig.thresholds', index=0,
-      number=1, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='software_saturation', full_name='minknow_api.device.SaturationConfig.software_saturation', index=1,
-      number=2, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='user_threshold_saturation', full_name='minknow_api.device.SaturationConfig.user_threshold_saturation', index=2,
-      number=3, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[_SATURATIONCONFIG_THRESHOLDS, _SATURATIONCONFIG_SOFTWARESATURATION, _SATURATIONCONFIG_USERTHRESHOLDSATURATION, ],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=4182,
-  serialized_end=5020,
-)
-
-
-_SETSATURATIONCONFIGREQUEST = _descriptor.Descriptor(
-  name='SetSaturationConfigRequest',
-  full_name='minknow_api.device.SetSaturationConfigRequest',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='settings', full_name='minknow_api.device.SetSaturationConfigRequest.settings', index=0,
-      number=1, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=b'\220\265\030\001', file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=5022,
-  serialized_end=5112,
-)
-
-
-_SETSATURATIONCONFIGRESPONSE = _descriptor.Descriptor(
-  name='SetSaturationConfigResponse',
-  full_name='minknow_api.device.SetSaturationConfigResponse',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=5114,
-  serialized_end=5143,
-)
-
-
-_GETSATURATIONCONFIGREQUEST = _descriptor.Descriptor(
-  name='GetSaturationConfigRequest',
-  full_name='minknow_api.device.GetSaturationConfigRequest',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=5145,
-  serialized_end=5173,
-)
-
-
-_GETSATURATIONCONFIGRESPONSE = _descriptor.Descriptor(
-  name='GetSaturationConfigResponse',
-  full_name='minknow_api.device.GetSaturationConfigResponse',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='settings', full_name='minknow_api.device.GetSaturationConfigResponse.settings', index=0,
-      number=1, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=b'\220\265\030\001', file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=5175,
-  serialized_end=5266,
-)
-
-
-_GETSAMPLERATEREQUEST = _descriptor.Descriptor(
-  name='GetSampleRateRequest',
-  full_name='minknow_api.device.GetSampleRateRequest',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=5268,
-  serialized_end=5290,
-)
-
-
-_GETSAMPLERATERESPONSE = _descriptor.Descriptor(
-  name='GetSampleRateResponse',
-  full_name='minknow_api.device.GetSampleRateResponse',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='sample_rate', full_name='minknow_api.device.GetSampleRateResponse.sample_rate', index=0,
-      number=1, type=13, cpp_type=3, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=5292,
-  serialized_end=5336,
-)
-
-
-_SETSAMPLERATEREQUEST = _descriptor.Descriptor(
-  name='SetSampleRateRequest',
-  full_name='minknow_api.device.SetSampleRateRequest',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='sample_rate', full_name='minknow_api.device.SetSampleRateRequest.sample_rate', index=0,
-      number=1, type=13, cpp_type=3, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=b'\210\265\030\001', file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=5338,
-  serialized_end=5387,
-)
-
-
-_SETSAMPLERATERESPONSE = _descriptor.Descriptor(
-  name='SetSampleRateResponse',
-  full_name='minknow_api.device.SetSampleRateResponse',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='real_sample_rate', full_name='minknow_api.device.SetSampleRateResponse.real_sample_rate', index=0,
-      number=1, type=13, cpp_type=3, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=5389,
-  serialized_end=5438,
-)
-
-
-_GETBIASVOLTAGEREQUEST = _descriptor.Descriptor(
-  name='GetBiasVoltageRequest',
-  full_name='minknow_api.device.GetBiasVoltageRequest',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=5440,
-  serialized_end=5463,
-)
-
-
-_GETBIASVOLTAGERESPONSE = _descriptor.Descriptor(
-  name='GetBiasVoltageResponse',
-  full_name='minknow_api.device.GetBiasVoltageResponse',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='bias_voltage', full_name='minknow_api.device.GetBiasVoltageResponse.bias_voltage', index=0,
-      number=1, type=1, cpp_type=5, label=1,
-      has_default_value=False, default_value=float(0),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=5465,
-  serialized_end=5511,
-)
-
-
-_SETBIASVOLTAGEREQUEST = _descriptor.Descriptor(
-  name='SetBiasVoltageRequest',
-  full_name='minknow_api.device.SetBiasVoltageRequest',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='bias_voltage', full_name='minknow_api.device.SetBiasVoltageRequest.bias_voltage', index=0,
-      number=1, type=1, cpp_type=5, label=1,
-      has_default_value=False, default_value=float(0),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=b'\210\265\030\001', file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=5513,
-  serialized_end=5564,
-)
-
-
-_SETBIASVOLTAGERESPONSE = _descriptor.Descriptor(
-  name='SetBiasVoltageResponse',
-  full_name='minknow_api.device.SetBiasVoltageResponse',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=5566,
-  serialized_end=5590,
-)
-
-_GETDEVICEINFORESPONSE_COMPONENTVERSION.containing_type = _GETDEVICEINFORESPONSE
-_GETDEVICEINFORESPONSE.fields_by_name['device_type'].enum_type = _GETDEVICEINFORESPONSE_DEVICETYPE
-_GETDEVICEINFORESPONSE.fields_by_name['firmware_version'].message_type = _GETDEVICEINFORESPONSE_COMPONENTVERSION
-_GETDEVICEINFORESPONSE_DEVICETYPE.containing_type = _GETDEVICEINFORESPONSE
-_GETDEVICESTATERESPONSE.fields_by_name['device_state'].enum_type = _GETDEVICESTATERESPONSE_DEVICESTATE
-_GETDEVICESTATERESPONSE.fields_by_name['flow_cell_connector'].enum_type = _FLOWCELLCONNECTORTYPE
-_GETDEVICESTATERESPONSE_DEVICESTATE.containing_type = _GETDEVICESTATERESPONSE
-_GETFLOWCELLINFORESPONSE.oneofs_by_name['temperature_offset_nullable'].fields.append(
-  _GETFLOWCELLINFORESPONSE.fields_by_name['temperature_offset'])
-_GETFLOWCELLINFORESPONSE.fields_by_name['temperature_offset'].containing_oneof = _GETFLOWCELLINFORESPONSE.oneofs_by_name['temperature_offset_nullable']
-_GETCHANNELSLAYOUTRESPONSE.fields_by_name['channel_records'].message_type = _CHANNELRECORD
-_CHANNELRECORD_MUXRECORD.containing_type = _CHANNELRECORD
-_CHANNELRECORD.fields_by_name['mux_records'].message_type = _CHANNELRECORD_MUXRECORD
-_SETTEMPERATUREREQUEST_WAITFORTEMPERATURESETTINGS.containing_type = _SETTEMPERATUREREQUEST
-_SETTEMPERATUREREQUEST.fields_by_name['wait_for_temperature'].message_type = _SETTEMPERATUREREQUEST_WAITFORTEMPERATURESETTINGS
-_GETTEMPERATURERESPONSE_MINIONTEMPERATURE.fields_by_name['asic_temperature'].message_type = google_dot_protobuf_dot_wrappers__pb2._FLOATVALUE
-_GETTEMPERATURERESPONSE_MINIONTEMPERATURE.fields_by_name['heatsink_temperature'].message_type = google_dot_protobuf_dot_wrappers__pb2._FLOATVALUE
-_GETTEMPERATURERESPONSE_MINIONTEMPERATURE.containing_type = _GETTEMPERATURERESPONSE
-_GETTEMPERATURERESPONSE_PROMETHIONTEMPERATURE.fields_by_name['flowcell_temperature'].message_type = google_dot_protobuf_dot_wrappers__pb2._FLOATVALUE
-_GETTEMPERATURERESPONSE_PROMETHIONTEMPERATURE.fields_by_name['chamber_temperature'].message_type = google_dot_protobuf_dot_wrappers__pb2._FLOATVALUE
-_GETTEMPERATURERESPONSE_PROMETHIONTEMPERATURE.containing_type = _GETTEMPERATURERESPONSE
-_GETTEMPERATURERESPONSE.fields_by_name['minion'].message_type = _GETTEMPERATURERESPONSE_MINIONTEMPERATURE
-_GETTEMPERATURERESPONSE.fields_by_name['promethion'].message_type = _GETTEMPERATURERESPONSE_PROMETHIONTEMPERATURE
-_GETTEMPERATURERESPONSE.fields_by_name['target_temperature'].message_type = google_dot_protobuf_dot_wrappers__pb2._FLOATVALUE
-_GETTEMPERATURERESPONSE.oneofs_by_name['temperature'].fields.append(
-  _GETTEMPERATURERESPONSE.fields_by_name['minion'])
-_GETTEMPERATURERESPONSE.fields_by_name['minion'].containing_oneof = _GETTEMPERATURERESPONSE.oneofs_by_name['temperature']
-_GETTEMPERATURERESPONSE.oneofs_by_name['temperature'].fields.append(
-  _GETTEMPERATURERESPONSE.fields_by_name['promethion'])
-_GETTEMPERATURERESPONSE.fields_by_name['promethion'].containing_oneof = _GETTEMPERATURERESPONSE.oneofs_by_name['temperature']
-_UNBLOCKREQUEST.oneofs_by_name['duration'].fields.append(
-  _UNBLOCKREQUEST.fields_by_name['duration_in_seconds'])
-_UNBLOCKREQUEST.fields_by_name['duration_in_seconds'].containing_oneof = _UNBLOCKREQUEST.oneofs_by_name['duration']
-_UNBLOCKREQUEST.oneofs_by_name['duration'].fields.append(
-  _UNBLOCKREQUEST.fields_by_name['duration_in_milliseconds'])
-_UNBLOCKREQUEST.fields_by_name['duration_in_milliseconds'].containing_oneof = _UNBLOCKREQUEST.oneofs_by_name['duration']
-_GETCHANNELCONFIGURATIONRESPONSE.fields_by_name['channel_configurations'].message_type = _RETURNEDCHANNELCONFIGURATION
-_SETCHANNELCONFIGURATIONREQUEST_CHANNELCONFIGURATIONSENTRY.fields_by_name['value'].message_type = _CHANNELCONFIGURATION
-_SETCHANNELCONFIGURATIONREQUEST_CHANNELCONFIGURATIONSENTRY.containing_type = _SETCHANNELCONFIGURATIONREQUEST
-_SETCHANNELCONFIGURATIONREQUEST.fields_by_name['channel_configurations'].message_type = _SETCHANNELCONFIGURATIONREQUEST_CHANNELCONFIGURATIONSENTRY
-_SETCHANNELCONFIGURATIONALLREQUEST.fields_by_name['channel_configuration'].message_type = _CHANNELCONFIGURATION
-_SATURATIONCONFIG_THRESHOLDS.fields_by_name['general_threshold'].message_type = google_dot_protobuf_dot_wrappers__pb2._UINT32VALUE
-_SATURATIONCONFIG_THRESHOLDS.fields_by_name['unblock_threshold'].message_type = google_dot_protobuf_dot_wrappers__pb2._UINT32VALUE
-_SATURATIONCONFIG_THRESHOLDS.fields_by_name['user_general_threshold'].message_type = google_dot_protobuf_dot_wrappers__pb2._UINT32VALUE
-_SATURATIONCONFIG_THRESHOLDS.fields_by_name['user_unblock_threshold'].message_type = google_dot_protobuf_dot_wrappers__pb2._UINT32VALUE
-_SATURATIONCONFIG_THRESHOLDS.containing_type = _SATURATIONCONFIG
-_SATURATIONCONFIG_SOFTWARESATURATION.fields_by_name['software_min_adc'].message_type = google_dot_protobuf_dot_wrappers__pb2._INT32VALUE
-_SATURATIONCONFIG_SOFTWARESATURATION.fields_by_name['software_max_adc'].message_type = google_dot_protobuf_dot_wrappers__pb2._INT32VALUE
-_SATURATIONCONFIG_SOFTWARESATURATION.containing_type = _SATURATIONCONFIG
-_SATURATIONCONFIG_USERTHRESHOLDSATURATION.fields_by_name['user_threshold_min_pa'].message_type = google_dot_protobuf_dot_wrappers__pb2._FLOATVALUE
-_SATURATIONCONFIG_USERTHRESHOLDSATURATION.fields_by_name['user_threshold_max_pa'].message_type = google_dot_protobuf_dot_wrappers__pb2._FLOATVALUE
-_SATURATIONCONFIG_USERTHRESHOLDSATURATION.containing_type = _SATURATIONCONFIG
-_SATURATIONCONFIG.fields_by_name['thresholds'].message_type = _SATURATIONCONFIG_THRESHOLDS
-_SATURATIONCONFIG.fields_by_name['software_saturation'].message_type = _SATURATIONCONFIG_SOFTWARESATURATION
-_SATURATIONCONFIG.fields_by_name['user_threshold_saturation'].message_type = _SATURATIONCONFIG_USERTHRESHOLDSATURATION
-_SETSATURATIONCONFIGREQUEST.fields_by_name['settings'].message_type = _SATURATIONCONFIG
-_GETSATURATIONCONFIGRESPONSE.fields_by_name['settings'].message_type = _SATURATIONCONFIG
-DESCRIPTOR.message_types_by_name['ChannelConfiguration'] = _CHANNELCONFIGURATION
-DESCRIPTOR.message_types_by_name['ReturnedChannelConfiguration'] = _RETURNEDCHANNELCONFIGURATION
-DESCRIPTOR.message_types_by_name['GetDeviceInfoRequest'] = _GETDEVICEINFOREQUEST
-DESCRIPTOR.message_types_by_name['GetDeviceInfoResponse'] = _GETDEVICEINFORESPONSE
-DESCRIPTOR.message_types_by_name['GetDeviceStateRequest'] = _GETDEVICESTATEREQUEST
-DESCRIPTOR.message_types_by_name['GetDeviceStateResponse'] = _GETDEVICESTATERESPONSE
-DESCRIPTOR.message_types_by_name['StreamDeviceStateRequest'] = _STREAMDEVICESTATEREQUEST
-DESCRIPTOR.message_types_by_name['GetFlowCellInfoRequest'] = _GETFLOWCELLINFOREQUEST
-DESCRIPTOR.message_types_by_name['GetFlowCellInfoResponse'] = _GETFLOWCELLINFORESPONSE
-DESCRIPTOR.message_types_by_name['StreamFlowCellInfoRequest'] = _STREAMFLOWCELLINFOREQUEST
-DESCRIPTOR.message_types_by_name['SetUserSpecifiedFlowCellIdRequest'] = _SETUSERSPECIFIEDFLOWCELLIDREQUEST
-DESCRIPTOR.message_types_by_name['SetUserSpecifiedFlowCellIdResponse'] = _SETUSERSPECIFIEDFLOWCELLIDRESPONSE
-DESCRIPTOR.message_types_by_name['SetUserSpecifiedProductCodeRequest'] = _SETUSERSPECIFIEDPRODUCTCODEREQUEST
-DESCRIPTOR.message_types_by_name['SetUserSpecifiedProductCodeResponse'] = _SETUSERSPECIFIEDPRODUCTCODERESPONSE
-DESCRIPTOR.message_types_by_name['GetChannelsLayoutRequest'] = _GETCHANNELSLAYOUTREQUEST
-DESCRIPTOR.message_types_by_name['GetChannelsLayoutResponse'] = _GETCHANNELSLAYOUTRESPONSE
-DESCRIPTOR.message_types_by_name['ChannelRecord'] = _CHANNELRECORD
-DESCRIPTOR.message_types_by_name['ResetDeviceSettingsRequest'] = _RESETDEVICESETTINGSREQUEST
-DESCRIPTOR.message_types_by_name['ResetDeviceSettingsResponse'] = _RESETDEVICESETTINGSRESPONSE
-DESCRIPTOR.message_types_by_name['SetCalibrationRequest'] = _SETCALIBRATIONREQUEST
-DESCRIPTOR.message_types_by_name['SetCalibrationResponse'] = _SETCALIBRATIONRESPONSE
-DESCRIPTOR.message_types_by_name['ClearCalibrationRequest'] = _CLEARCALIBRATIONREQUEST
-DESCRIPTOR.message_types_by_name['ClearCalibrationResponse'] = _CLEARCALIBRATIONRESPONSE
-DESCRIPTOR.message_types_by_name['GetCalibrationRequest'] = _GETCALIBRATIONREQUEST
-DESCRIPTOR.message_types_by_name['GetCalibrationResponse'] = _GETCALIBRATIONRESPONSE
-DESCRIPTOR.message_types_by_name['SetTemperatureRequest'] = _SETTEMPERATUREREQUEST
-DESCRIPTOR.message_types_by_name['SetTemperatureResponse'] = _SETTEMPERATURERESPONSE
-DESCRIPTOR.message_types_by_name['GetTemperatureRequest'] = _GETTEMPERATUREREQUEST
-DESCRIPTOR.message_types_by_name['GetTemperatureResponse'] = _GETTEMPERATURERESPONSE
-DESCRIPTOR.message_types_by_name['StreamTemperatureRequest'] = _STREAMTEMPERATUREREQUEST
-DESCRIPTOR.message_types_by_name['UnblockRequest'] = _UNBLOCKREQUEST
-DESCRIPTOR.message_types_by_name['UnblockResponse'] = _UNBLOCKRESPONSE
-DESCRIPTOR.message_types_by_name['CancelUnblocksRequest'] = _CANCELUNBLOCKSREQUEST
-DESCRIPTOR.message_types_by_name['CancelUnblocksResponse'] = _CANCELUNBLOCKSRESPONSE
-DESCRIPTOR.message_types_by_name['GetChannelConfigurationRequest'] = _GETCHANNELCONFIGURATIONREQUEST
-DESCRIPTOR.message_types_by_name['GetChannelConfigurationResponse'] = _GETCHANNELCONFIGURATIONRESPONSE
-DESCRIPTOR.message_types_by_name['SetChannelConfigurationRequest'] = _SETCHANNELCONFIGURATIONREQUEST
-DESCRIPTOR.message_types_by_name['SetChannelConfigurationResponse'] = _SETCHANNELCONFIGURATIONRESPONSE
-DESCRIPTOR.message_types_by_name['SetChannelConfigurationAllRequest'] = _SETCHANNELCONFIGURATIONALLREQUEST
-DESCRIPTOR.message_types_by_name['SetChannelConfigurationAllResponse'] = _SETCHANNELCONFIGURATIONALLRESPONSE
-DESCRIPTOR.message_types_by_name['SaturationConfig'] = _SATURATIONCONFIG
-DESCRIPTOR.message_types_by_name['SetSaturationConfigRequest'] = _SETSATURATIONCONFIGREQUEST
-DESCRIPTOR.message_types_by_name['SetSaturationConfigResponse'] = _SETSATURATIONCONFIGRESPONSE
-DESCRIPTOR.message_types_by_name['GetSaturationConfigRequest'] = _GETSATURATIONCONFIGREQUEST
-DESCRIPTOR.message_types_by_name['GetSaturationConfigResponse'] = _GETSATURATIONCONFIGRESPONSE
-DESCRIPTOR.message_types_by_name['GetSampleRateRequest'] = _GETSAMPLERATEREQUEST
-DESCRIPTOR.message_types_by_name['GetSampleRateResponse'] = _GETSAMPLERATERESPONSE
-DESCRIPTOR.message_types_by_name['SetSampleRateRequest'] = _SETSAMPLERATEREQUEST
-DESCRIPTOR.message_types_by_name['SetSampleRateResponse'] = _SETSAMPLERATERESPONSE
-DESCRIPTOR.message_types_by_name['GetBiasVoltageRequest'] = _GETBIASVOLTAGEREQUEST
-DESCRIPTOR.message_types_by_name['GetBiasVoltageResponse'] = _GETBIASVOLTAGERESPONSE
-DESCRIPTOR.message_types_by_name['SetBiasVoltageRequest'] = _SETBIASVOLTAGEREQUEST
-DESCRIPTOR.message_types_by_name['SetBiasVoltageResponse'] = _SETBIASVOLTAGERESPONSE
-DESCRIPTOR.enum_types_by_name['FlowCellConnectorType'] = _FLOWCELLCONNECTORTYPE
-DESCRIPTOR.enum_types_by_name['SelectedWell'] = _SELECTEDWELL
-_sym_db.RegisterFileDescriptor(DESCRIPTOR)
-
+_CHANNELCONFIGURATION = DESCRIPTOR.message_types_by_name['ChannelConfiguration']
+_RETURNEDCHANNELCONFIGURATION = DESCRIPTOR.message_types_by_name['ReturnedChannelConfiguration']
+_GETDEVICEINFOREQUEST = DESCRIPTOR.message_types_by_name['GetDeviceInfoRequest']
+_GETDEVICEINFORESPONSE = DESCRIPTOR.message_types_by_name['GetDeviceInfoResponse']
+_GETDEVICEINFORESPONSE_COMPONENTVERSION = _GETDEVICEINFORESPONSE.nested_types_by_name['ComponentVersion']
+_GETDEVICESTATEREQUEST = DESCRIPTOR.message_types_by_name['GetDeviceStateRequest']
+_GETDEVICESTATERESPONSE = DESCRIPTOR.message_types_by_name['GetDeviceStateResponse']
+_STREAMDEVICESTATEREQUEST = DESCRIPTOR.message_types_by_name['StreamDeviceStateRequest']
+_GETFLOWCELLINFOREQUEST = DESCRIPTOR.message_types_by_name['GetFlowCellInfoRequest']
+_GETFLOWCELLINFORESPONSE = DESCRIPTOR.message_types_by_name['GetFlowCellInfoResponse']
+_STREAMFLOWCELLINFOREQUEST = DESCRIPTOR.message_types_by_name['StreamFlowCellInfoRequest']
+_SETUSERSPECIFIEDFLOWCELLIDREQUEST = DESCRIPTOR.message_types_by_name['SetUserSpecifiedFlowCellIdRequest']
+_SETUSERSPECIFIEDFLOWCELLIDRESPONSE = DESCRIPTOR.message_types_by_name['SetUserSpecifiedFlowCellIdResponse']
+_SETUSERSPECIFIEDPRODUCTCODEREQUEST = DESCRIPTOR.message_types_by_name['SetUserSpecifiedProductCodeRequest']
+_SETUSERSPECIFIEDPRODUCTCODERESPONSE = DESCRIPTOR.message_types_by_name['SetUserSpecifiedProductCodeResponse']
+_GETCHANNELSLAYOUTREQUEST = DESCRIPTOR.message_types_by_name['GetChannelsLayoutRequest']
+_GETCHANNELSLAYOUTRESPONSE = DESCRIPTOR.message_types_by_name['GetChannelsLayoutResponse']
+_CHANNELRECORD = DESCRIPTOR.message_types_by_name['ChannelRecord']
+_CHANNELRECORD_MUXRECORD = _CHANNELRECORD.nested_types_by_name['MuxRecord']
+_RESETDEVICESETTINGSREQUEST = DESCRIPTOR.message_types_by_name['ResetDeviceSettingsRequest']
+_RESETDEVICESETTINGSRESPONSE = DESCRIPTOR.message_types_by_name['ResetDeviceSettingsResponse']
+_SETCALIBRATIONREQUEST = DESCRIPTOR.message_types_by_name['SetCalibrationRequest']
+_SETCALIBRATIONRESPONSE = DESCRIPTOR.message_types_by_name['SetCalibrationResponse']
+_CLEARCALIBRATIONREQUEST = DESCRIPTOR.message_types_by_name['ClearCalibrationRequest']
+_CLEARCALIBRATIONRESPONSE = DESCRIPTOR.message_types_by_name['ClearCalibrationResponse']
+_GETCALIBRATIONREQUEST = DESCRIPTOR.message_types_by_name['GetCalibrationRequest']
+_GETCALIBRATIONRESPONSE = DESCRIPTOR.message_types_by_name['GetCalibrationResponse']
+_SETTEMPERATUREREQUEST = DESCRIPTOR.message_types_by_name['SetTemperatureRequest']
+_SETTEMPERATUREREQUEST_WAITFORTEMPERATURESETTINGS = _SETTEMPERATUREREQUEST.nested_types_by_name['WaitForTemperatureSettings']
+_SETTEMPERATURERESPONSE = DESCRIPTOR.message_types_by_name['SetTemperatureResponse']
+_GETTEMPERATUREREQUEST = DESCRIPTOR.message_types_by_name['GetTemperatureRequest']
+_GETTEMPERATURERESPONSE = DESCRIPTOR.message_types_by_name['GetTemperatureResponse']
+_GETTEMPERATURERESPONSE_MINIONTEMPERATURE = _GETTEMPERATURERESPONSE.nested_types_by_name['MinIONTemperature']
+_GETTEMPERATURERESPONSE_PROMETHIONTEMPERATURE = _GETTEMPERATURERESPONSE.nested_types_by_name['PromethIONTemperature']
+_STREAMTEMPERATUREREQUEST = DESCRIPTOR.message_types_by_name['StreamTemperatureRequest']
+_UNBLOCKREQUEST = DESCRIPTOR.message_types_by_name['UnblockRequest']
+_UNBLOCKRESPONSE = DESCRIPTOR.message_types_by_name['UnblockResponse']
+_CANCELUNBLOCKSREQUEST = DESCRIPTOR.message_types_by_name['CancelUnblocksRequest']
+_CANCELUNBLOCKSRESPONSE = DESCRIPTOR.message_types_by_name['CancelUnblocksResponse']
+_GETCHANNELCONFIGURATIONREQUEST = DESCRIPTOR.message_types_by_name['GetChannelConfigurationRequest']
+_GETCHANNELCONFIGURATIONRESPONSE = DESCRIPTOR.message_types_by_name['GetChannelConfigurationResponse']
+_SETCHANNELCONFIGURATIONREQUEST = DESCRIPTOR.message_types_by_name['SetChannelConfigurationRequest']
+_SETCHANNELCONFIGURATIONREQUEST_CHANNELCONFIGURATIONSENTRY = _SETCHANNELCONFIGURATIONREQUEST.nested_types_by_name['ChannelConfigurationsEntry']
+_SETCHANNELCONFIGURATIONRESPONSE = DESCRIPTOR.message_types_by_name['SetChannelConfigurationResponse']
+_SETCHANNELCONFIGURATIONALLREQUEST = DESCRIPTOR.message_types_by_name['SetChannelConfigurationAllRequest']
+_SETCHANNELCONFIGURATIONALLRESPONSE = DESCRIPTOR.message_types_by_name['SetChannelConfigurationAllResponse']
+_SATURATIONCONFIG = DESCRIPTOR.message_types_by_name['SaturationConfig']
+_SATURATIONCONFIG_THRESHOLDS = _SATURATIONCONFIG.nested_types_by_name['Thresholds']
+_SATURATIONCONFIG_SOFTWARESATURATION = _SATURATIONCONFIG.nested_types_by_name['SoftwareSaturation']
+_SATURATIONCONFIG_USERTHRESHOLDSATURATION = _SATURATIONCONFIG.nested_types_by_name['UserThresholdSaturation']
+_SETSATURATIONCONFIGREQUEST = DESCRIPTOR.message_types_by_name['SetSaturationConfigRequest']
+_SETSATURATIONCONFIGRESPONSE = DESCRIPTOR.message_types_by_name['SetSaturationConfigResponse']
+_GETSATURATIONCONFIGREQUEST = DESCRIPTOR.message_types_by_name['GetSaturationConfigRequest']
+_GETSATURATIONCONFIGRESPONSE = DESCRIPTOR.message_types_by_name['GetSaturationConfigResponse']
+_GETSAMPLERATEREQUEST = DESCRIPTOR.message_types_by_name['GetSampleRateRequest']
+_GETSAMPLERATERESPONSE = DESCRIPTOR.message_types_by_name['GetSampleRateResponse']
+_SETSAMPLERATEREQUEST = DESCRIPTOR.message_types_by_name['SetSampleRateRequest']
+_SETSAMPLERATERESPONSE = DESCRIPTOR.message_types_by_name['SetSampleRateResponse']
+_GETBIASVOLTAGEREQUEST = DESCRIPTOR.message_types_by_name['GetBiasVoltageRequest']
+_GETBIASVOLTAGERESPONSE = DESCRIPTOR.message_types_by_name['GetBiasVoltageResponse']
+_SETBIASVOLTAGEREQUEST = DESCRIPTOR.message_types_by_name['SetBiasVoltageRequest']
+_SETBIASVOLTAGERESPONSE = DESCRIPTOR.message_types_by_name['SetBiasVoltageResponse']
+_DUMPSTATEREQUEST = DESCRIPTOR.message_types_by_name['DumpStateRequest']
+_DUMPSTATERESPONSE = DESCRIPTOR.message_types_by_name['DumpStateResponse']
+_GETDEVICEINFORESPONSE_DEVICETYPE = _GETDEVICEINFORESPONSE.enum_types_by_name['DeviceType']
+_GETDEVICESTATERESPONSE_DEVICESTATE = _GETDEVICESTATERESPONSE.enum_types_by_name['DeviceState']
 ChannelConfiguration = _reflection.GeneratedProtocolMessageType('ChannelConfiguration', (_message.Message,), {
   'DESCRIPTOR' : _CHANNELCONFIGURATION,
   '__module__' : 'minknow_api.device_pb2'
@@ -2623,7 +221,7 @@ GetDeviceInfoResponse = _reflection.GeneratedProtocolMessageType('GetDeviceInfoR
           The type of the device.
       is_simulated:
           Whether the device is simulated.  If this is true, there is no
-          physical device - MinKNOW is simluating it. If it is false,
+          physical device - MinKNOW is simulating it. If it is false,
           MinKNOW will be acquiring data from a real device.
       max_channel_count:
           The maximum number of channels supported by the device.  Each
@@ -2763,7 +361,7 @@ GetFlowCellInfoResponse = _reflection.GeneratedProtocolMessageType('GetFlowCellI
           all provide useful information, even if has_flow_cell is
           false.
       adapter_id:
-          The unique identifier of an attached flongle adatper.  This
+          The unique identifier of an attached flongle adapter.  This
           should be same as the value printed onto the adapter casing.
       temperature_offset_nullable:
           Used to make the field nullable, since the null value is not
@@ -2775,12 +373,16 @@ GetFlowCellInfoResponse = _reflection.GeneratedProtocolMessageType('GetFlowCellI
           temperatures are available from the device, applies to the
           mean temperature.  Since 1.14
       asic_version:
-          The version of the ASIC contained in the flowcell (if
+          The version of the ASIC contained in the flow cell (if
           specified by the hardware).  This can be used to determine if
           the hardware should support certain features added to only
           newer ASICs.  Possible values include: "IA02C", "IA02D", or if
           the value is not readable on the current hardware an empty
           string is returned.  Since 1.14
+      insertion_script_status:
+          If the configuration specifies a script to run when a flow-
+          cell is inserted, this shows if it completed successfully.
+          Since 5.0
   """,
   # @@protoc_insertion_point(class_scope:minknow_api.device.GetFlowCellInfoResponse)
   })
@@ -3234,7 +836,7 @@ SaturationConfig = _reflection.GeneratedProtocolMessageType('SaturationConfig', 
     trigger saturation on the device.  Each packet of frames minknow
     receive is delivered to the saturation check (in approx 64 frame
     chunks), only the first frame of each packet is inspected. The
-    thresolds control how many _packets_ must be outside the valid range.
+    thresholds control how many _packets_ must be outside the valid range.
     ie. if general_threshold is set to 10, at least 640 frames are
     required to trigger saturation.  It is also possible to not define the
     value to never trigger saturation in this config.  Note: Setting a
@@ -3418,296 +1020,237 @@ SetBiasVoltageResponse = _reflection.GeneratedProtocolMessageType('SetBiasVoltag
   })
 _sym_db.RegisterMessage(SetBiasVoltageResponse)
 
+DumpStateRequest = _reflection.GeneratedProtocolMessageType('DumpStateRequest', (_message.Message,), {
+  'DESCRIPTOR' : _DUMPSTATEREQUEST,
+  '__module__' : 'minknow_api.device_pb2'
+  # @@protoc_insertion_point(class_scope:minknow_api.device.DumpStateRequest)
+  })
+_sym_db.RegisterMessage(DumpStateRequest)
 
-DESCRIPTOR._options = None
-_SETUSERSPECIFIEDFLOWCELLIDREQUEST.fields_by_name['id']._options = None
-_SETUSERSPECIFIEDPRODUCTCODEREQUEST.fields_by_name['code']._options = None
-_SETCALIBRATIONREQUEST.fields_by_name['first_channel']._options = None
-_SETCALIBRATIONREQUEST.fields_by_name['last_channel']._options = None
-_SETCALIBRATIONREQUEST.fields_by_name['offsets']._options = None
-_SETCALIBRATIONREQUEST.fields_by_name['pa_ranges']._options = None
-_GETCALIBRATIONREQUEST.fields_by_name['first_channel']._options = None
-_GETCALIBRATIONREQUEST.fields_by_name['last_channel']._options = None
-_SETCHANNELCONFIGURATIONREQUEST_CHANNELCONFIGURATIONSENTRY._options = None
-_SETCHANNELCONFIGURATIONALLREQUEST.fields_by_name['channel_configuration']._options = None
-_SETSATURATIONCONFIGREQUEST.fields_by_name['settings']._options = None
-_GETSATURATIONCONFIGRESPONSE.fields_by_name['settings']._options = None
-_SETSAMPLERATEREQUEST.fields_by_name['sample_rate']._options = None
-_SETBIASVOLTAGEREQUEST.fields_by_name['bias_voltage']._options = None
+DumpStateResponse = _reflection.GeneratedProtocolMessageType('DumpStateResponse', (_message.Message,), {
+  'DESCRIPTOR' : _DUMPSTATERESPONSE,
+  '__module__' : 'minknow_api.device_pb2'
+  # @@protoc_insertion_point(class_scope:minknow_api.device.DumpStateResponse)
+  })
+_sym_db.RegisterMessage(DumpStateResponse)
 
-_DEVICESERVICE = _descriptor.ServiceDescriptor(
-  name='DeviceService',
-  full_name='minknow_api.device.DeviceService',
-  file=DESCRIPTOR,
-  index=0,
-  serialized_options=None,
-  create_key=_descriptor._internal_create_key,
-  serialized_start=5795,
-  serialized_end=8942,
-  methods=[
-  _descriptor.MethodDescriptor(
-    name='get_device_info',
-    full_name='minknow_api.device.DeviceService.get_device_info',
-    index=0,
-    containing_service=None,
-    input_type=_GETDEVICEINFOREQUEST,
-    output_type=_GETDEVICEINFORESPONSE,
-    serialized_options=b'\220\002\001',
-    create_key=_descriptor._internal_create_key,
-  ),
-  _descriptor.MethodDescriptor(
-    name='get_device_state',
-    full_name='minknow_api.device.DeviceService.get_device_state',
-    index=1,
-    containing_service=None,
-    input_type=_GETDEVICESTATEREQUEST,
-    output_type=_GETDEVICESTATERESPONSE,
-    serialized_options=b'\220\002\001',
-    create_key=_descriptor._internal_create_key,
-  ),
-  _descriptor.MethodDescriptor(
-    name='stream_device_state',
-    full_name='minknow_api.device.DeviceService.stream_device_state',
-    index=2,
-    containing_service=None,
-    input_type=_STREAMDEVICESTATEREQUEST,
-    output_type=_GETDEVICESTATERESPONSE,
-    serialized_options=b'\220\002\001',
-    create_key=_descriptor._internal_create_key,
-  ),
-  _descriptor.MethodDescriptor(
-    name='get_flow_cell_info',
-    full_name='minknow_api.device.DeviceService.get_flow_cell_info',
-    index=3,
-    containing_service=None,
-    input_type=_GETFLOWCELLINFOREQUEST,
-    output_type=_GETFLOWCELLINFORESPONSE,
-    serialized_options=b'\220\002\001',
-    create_key=_descriptor._internal_create_key,
-  ),
-  _descriptor.MethodDescriptor(
-    name='stream_flow_cell_info',
-    full_name='minknow_api.device.DeviceService.stream_flow_cell_info',
-    index=4,
-    containing_service=None,
-    input_type=_STREAMFLOWCELLINFOREQUEST,
-    output_type=_GETFLOWCELLINFORESPONSE,
-    serialized_options=b'\220\002\001',
-    create_key=_descriptor._internal_create_key,
-  ),
-  _descriptor.MethodDescriptor(
-    name='set_user_specified_flow_cell_id',
-    full_name='minknow_api.device.DeviceService.set_user_specified_flow_cell_id',
-    index=5,
-    containing_service=None,
-    input_type=_SETUSERSPECIFIEDFLOWCELLIDREQUEST,
-    output_type=_SETUSERSPECIFIEDFLOWCELLIDRESPONSE,
-    serialized_options=b'\220\002\002',
-    create_key=_descriptor._internal_create_key,
-  ),
-  _descriptor.MethodDescriptor(
-    name='set_user_specified_product_code',
-    full_name='minknow_api.device.DeviceService.set_user_specified_product_code',
-    index=6,
-    containing_service=None,
-    input_type=_SETUSERSPECIFIEDPRODUCTCODEREQUEST,
-    output_type=_SETUSERSPECIFIEDPRODUCTCODERESPONSE,
-    serialized_options=b'\220\002\002',
-    create_key=_descriptor._internal_create_key,
-  ),
-  _descriptor.MethodDescriptor(
-    name='get_channels_layout',
-    full_name='minknow_api.device.DeviceService.get_channels_layout',
-    index=7,
-    containing_service=None,
-    input_type=_GETCHANNELSLAYOUTREQUEST,
-    output_type=_GETCHANNELSLAYOUTRESPONSE,
-    serialized_options=b'\220\002\001',
-    create_key=_descriptor._internal_create_key,
-  ),
-  _descriptor.MethodDescriptor(
-    name='reset_device_settings',
-    full_name='minknow_api.device.DeviceService.reset_device_settings',
-    index=8,
-    containing_service=None,
-    input_type=_RESETDEVICESETTINGSREQUEST,
-    output_type=_RESETDEVICESETTINGSRESPONSE,
-    serialized_options=b'\220\002\002',
-    create_key=_descriptor._internal_create_key,
-  ),
-  _descriptor.MethodDescriptor(
-    name='set_calibration',
-    full_name='minknow_api.device.DeviceService.set_calibration',
-    index=9,
-    containing_service=None,
-    input_type=_SETCALIBRATIONREQUEST,
-    output_type=_SETCALIBRATIONRESPONSE,
-    serialized_options=b'\220\002\002',
-    create_key=_descriptor._internal_create_key,
-  ),
-  _descriptor.MethodDescriptor(
-    name='clear_calibration',
-    full_name='minknow_api.device.DeviceService.clear_calibration',
-    index=10,
-    containing_service=None,
-    input_type=_CLEARCALIBRATIONREQUEST,
-    output_type=_CLEARCALIBRATIONRESPONSE,
-    serialized_options=b'\220\002\002',
-    create_key=_descriptor._internal_create_key,
-  ),
-  _descriptor.MethodDescriptor(
-    name='get_calibration',
-    full_name='minknow_api.device.DeviceService.get_calibration',
-    index=11,
-    containing_service=None,
-    input_type=_GETCALIBRATIONREQUEST,
-    output_type=_GETCALIBRATIONRESPONSE,
-    serialized_options=b'\220\002\001',
-    create_key=_descriptor._internal_create_key,
-  ),
-  _descriptor.MethodDescriptor(
-    name='set_temperature',
-    full_name='minknow_api.device.DeviceService.set_temperature',
-    index=12,
-    containing_service=None,
-    input_type=_SETTEMPERATUREREQUEST,
-    output_type=_SETTEMPERATURERESPONSE,
-    serialized_options=b'\220\002\002',
-    create_key=_descriptor._internal_create_key,
-  ),
-  _descriptor.MethodDescriptor(
-    name='get_temperature',
-    full_name='minknow_api.device.DeviceService.get_temperature',
-    index=13,
-    containing_service=None,
-    input_type=_GETTEMPERATUREREQUEST,
-    output_type=_GETTEMPERATURERESPONSE,
-    serialized_options=b'\220\002\001',
-    create_key=_descriptor._internal_create_key,
-  ),
-  _descriptor.MethodDescriptor(
-    name='stream_temperature',
-    full_name='minknow_api.device.DeviceService.stream_temperature',
-    index=14,
-    containing_service=None,
-    input_type=_STREAMTEMPERATUREREQUEST,
-    output_type=_GETTEMPERATURERESPONSE,
-    serialized_options=b'\220\002\001',
-    create_key=_descriptor._internal_create_key,
-  ),
-  _descriptor.MethodDescriptor(
-    name='unblock',
-    full_name='minknow_api.device.DeviceService.unblock',
-    index=15,
-    containing_service=None,
-    input_type=_UNBLOCKREQUEST,
-    output_type=_UNBLOCKRESPONSE,
-    serialized_options=None,
-    create_key=_descriptor._internal_create_key,
-  ),
-  _descriptor.MethodDescriptor(
-    name='cancel_unblocks',
-    full_name='minknow_api.device.DeviceService.cancel_unblocks',
-    index=16,
-    containing_service=None,
-    input_type=_CANCELUNBLOCKSREQUEST,
-    output_type=_CANCELUNBLOCKSRESPONSE,
-    serialized_options=None,
-    create_key=_descriptor._internal_create_key,
-  ),
-  _descriptor.MethodDescriptor(
-    name='get_channel_configuration',
-    full_name='minknow_api.device.DeviceService.get_channel_configuration',
-    index=17,
-    containing_service=None,
-    input_type=_GETCHANNELCONFIGURATIONREQUEST,
-    output_type=_GETCHANNELCONFIGURATIONRESPONSE,
-    serialized_options=b'\220\002\001',
-    create_key=_descriptor._internal_create_key,
-  ),
-  _descriptor.MethodDescriptor(
-    name='set_channel_configuration',
-    full_name='minknow_api.device.DeviceService.set_channel_configuration',
-    index=18,
-    containing_service=None,
-    input_type=_SETCHANNELCONFIGURATIONREQUEST,
-    output_type=_SETCHANNELCONFIGURATIONRESPONSE,
-    serialized_options=b'\220\002\002',
-    create_key=_descriptor._internal_create_key,
-  ),
-  _descriptor.MethodDescriptor(
-    name='set_channel_configuration_all',
-    full_name='minknow_api.device.DeviceService.set_channel_configuration_all',
-    index=19,
-    containing_service=None,
-    input_type=_SETCHANNELCONFIGURATIONALLREQUEST,
-    output_type=_SETCHANNELCONFIGURATIONALLRESPONSE,
-    serialized_options=b'\220\002\002',
-    create_key=_descriptor._internal_create_key,
-  ),
-  _descriptor.MethodDescriptor(
-    name='set_saturation_config',
-    full_name='minknow_api.device.DeviceService.set_saturation_config',
-    index=20,
-    containing_service=None,
-    input_type=_SETSATURATIONCONFIGREQUEST,
-    output_type=_SETSATURATIONCONFIGRESPONSE,
-    serialized_options=None,
-    create_key=_descriptor._internal_create_key,
-  ),
-  _descriptor.MethodDescriptor(
-    name='get_saturation_config',
-    full_name='minknow_api.device.DeviceService.get_saturation_config',
-    index=21,
-    containing_service=None,
-    input_type=_GETSATURATIONCONFIGREQUEST,
-    output_type=_GETSATURATIONCONFIGRESPONSE,
-    serialized_options=b'\220\002\001',
-    create_key=_descriptor._internal_create_key,
-  ),
-  _descriptor.MethodDescriptor(
-    name='get_sample_rate',
-    full_name='minknow_api.device.DeviceService.get_sample_rate',
-    index=22,
-    containing_service=None,
-    input_type=_GETSAMPLERATEREQUEST,
-    output_type=_GETSAMPLERATERESPONSE,
-    serialized_options=b'\220\002\001',
-    create_key=_descriptor._internal_create_key,
-  ),
-  _descriptor.MethodDescriptor(
-    name='set_sample_rate',
-    full_name='minknow_api.device.DeviceService.set_sample_rate',
-    index=23,
-    containing_service=None,
-    input_type=_SETSAMPLERATEREQUEST,
-    output_type=_SETSAMPLERATERESPONSE,
-    serialized_options=b'\220\002\002',
-    create_key=_descriptor._internal_create_key,
-  ),
-  _descriptor.MethodDescriptor(
-    name='get_bias_voltage',
-    full_name='minknow_api.device.DeviceService.get_bias_voltage',
-    index=24,
-    containing_service=None,
-    input_type=_GETBIASVOLTAGEREQUEST,
-    output_type=_GETBIASVOLTAGERESPONSE,
-    serialized_options=b'\220\002\001',
-    create_key=_descriptor._internal_create_key,
-  ),
-  _descriptor.MethodDescriptor(
-    name='set_bias_voltage',
-    full_name='minknow_api.device.DeviceService.set_bias_voltage',
-    index=25,
-    containing_service=None,
-    input_type=_SETBIASVOLTAGEREQUEST,
-    output_type=_SETBIASVOLTAGERESPONSE,
-    serialized_options=b'\220\002\002',
-    create_key=_descriptor._internal_create_key,
-  ),
-])
-_sym_db.RegisterServiceDescriptor(_DEVICESERVICE)
+_DEVICESERVICE = DESCRIPTOR.services_by_name['DeviceService']
+if _descriptor._USE_C_DESCRIPTORS == False:
 
-DESCRIPTOR.services_by_name['DeviceService'] = _DEVICESERVICE
-
+  DESCRIPTOR._options = None
+  DESCRIPTOR._serialized_options = b'\n\034com.nanoporetech.minknow_api\242\002\005MKAPI'
+  _SETUSERSPECIFIEDFLOWCELLIDREQUEST.fields_by_name['id']._options = None
+  _SETUSERSPECIFIEDFLOWCELLIDREQUEST.fields_by_name['id']._serialized_options = b'\210\265\030\001'
+  _SETUSERSPECIFIEDPRODUCTCODEREQUEST.fields_by_name['code']._options = None
+  _SETUSERSPECIFIEDPRODUCTCODEREQUEST.fields_by_name['code']._serialized_options = b'\210\265\030\001'
+  _SETCALIBRATIONREQUEST.fields_by_name['first_channel']._options = None
+  _SETCALIBRATIONREQUEST.fields_by_name['first_channel']._serialized_options = b'\210\265\030\001'
+  _SETCALIBRATIONREQUEST.fields_by_name['last_channel']._options = None
+  _SETCALIBRATIONREQUEST.fields_by_name['last_channel']._serialized_options = b'\210\265\030\001'
+  _SETCALIBRATIONREQUEST.fields_by_name['offsets']._options = None
+  _SETCALIBRATIONREQUEST.fields_by_name['offsets']._serialized_options = b'\210\265\030\001'
+  _SETCALIBRATIONREQUEST.fields_by_name['pa_ranges']._options = None
+  _SETCALIBRATIONREQUEST.fields_by_name['pa_ranges']._serialized_options = b'\210\265\030\001'
+  _GETCALIBRATIONREQUEST.fields_by_name['first_channel']._options = None
+  _GETCALIBRATIONREQUEST.fields_by_name['first_channel']._serialized_options = b'\210\265\030\001'
+  _GETCALIBRATIONREQUEST.fields_by_name['last_channel']._options = None
+  _GETCALIBRATIONREQUEST.fields_by_name['last_channel']._serialized_options = b'\210\265\030\001'
+  _SETCHANNELCONFIGURATIONREQUEST_CHANNELCONFIGURATIONSENTRY._options = None
+  _SETCHANNELCONFIGURATIONREQUEST_CHANNELCONFIGURATIONSENTRY._serialized_options = b'8\001'
+  _SETCHANNELCONFIGURATIONALLREQUEST.fields_by_name['channel_configuration']._options = None
+  _SETCHANNELCONFIGURATIONALLREQUEST.fields_by_name['channel_configuration']._serialized_options = b'\220\265\030\001'
+  _SETSATURATIONCONFIGREQUEST.fields_by_name['settings']._options = None
+  _SETSATURATIONCONFIGREQUEST.fields_by_name['settings']._serialized_options = b'\220\265\030\001'
+  _GETSATURATIONCONFIGRESPONSE.fields_by_name['settings']._options = None
+  _GETSATURATIONCONFIGRESPONSE.fields_by_name['settings']._serialized_options = b'\220\265\030\001'
+  _SETSAMPLERATEREQUEST.fields_by_name['sample_rate']._options = None
+  _SETSAMPLERATEREQUEST.fields_by_name['sample_rate']._serialized_options = b'\210\265\030\001'
+  _SETBIASVOLTAGEREQUEST.fields_by_name['bias_voltage']._options = None
+  _SETBIASVOLTAGEREQUEST.fields_by_name['bias_voltage']._serialized_options = b'\210\265\030\001'
+  _DEVICESERVICE.methods_by_name['get_device_info']._options = None
+  _DEVICESERVICE.methods_by_name['get_device_info']._serialized_options = b'\220\002\001'
+  _DEVICESERVICE.methods_by_name['get_device_state']._options = None
+  _DEVICESERVICE.methods_by_name['get_device_state']._serialized_options = b'\220\002\001'
+  _DEVICESERVICE.methods_by_name['stream_device_state']._options = None
+  _DEVICESERVICE.methods_by_name['stream_device_state']._serialized_options = b'\220\002\001'
+  _DEVICESERVICE.methods_by_name['get_flow_cell_info']._options = None
+  _DEVICESERVICE.methods_by_name['get_flow_cell_info']._serialized_options = b'\220\002\001'
+  _DEVICESERVICE.methods_by_name['stream_flow_cell_info']._options = None
+  _DEVICESERVICE.methods_by_name['stream_flow_cell_info']._serialized_options = b'\220\002\001'
+  _DEVICESERVICE.methods_by_name['set_user_specified_flow_cell_id']._options = None
+  _DEVICESERVICE.methods_by_name['set_user_specified_flow_cell_id']._serialized_options = b'\220\002\002'
+  _DEVICESERVICE.methods_by_name['set_user_specified_product_code']._options = None
+  _DEVICESERVICE.methods_by_name['set_user_specified_product_code']._serialized_options = b'\220\002\002'
+  _DEVICESERVICE.methods_by_name['get_channels_layout']._options = None
+  _DEVICESERVICE.methods_by_name['get_channels_layout']._serialized_options = b'\220\002\001'
+  _DEVICESERVICE.methods_by_name['reset_device_settings']._options = None
+  _DEVICESERVICE.methods_by_name['reset_device_settings']._serialized_options = b'\220\002\002'
+  _DEVICESERVICE.methods_by_name['set_calibration']._options = None
+  _DEVICESERVICE.methods_by_name['set_calibration']._serialized_options = b'\220\002\002'
+  _DEVICESERVICE.methods_by_name['clear_calibration']._options = None
+  _DEVICESERVICE.methods_by_name['clear_calibration']._serialized_options = b'\220\002\002'
+  _DEVICESERVICE.methods_by_name['get_calibration']._options = None
+  _DEVICESERVICE.methods_by_name['get_calibration']._serialized_options = b'\220\002\001'
+  _DEVICESERVICE.methods_by_name['set_temperature']._options = None
+  _DEVICESERVICE.methods_by_name['set_temperature']._serialized_options = b'\220\002\002'
+  _DEVICESERVICE.methods_by_name['get_temperature']._options = None
+  _DEVICESERVICE.methods_by_name['get_temperature']._serialized_options = b'\220\002\001'
+  _DEVICESERVICE.methods_by_name['stream_temperature']._options = None
+  _DEVICESERVICE.methods_by_name['stream_temperature']._serialized_options = b'\220\002\001'
+  _DEVICESERVICE.methods_by_name['get_channel_configuration']._options = None
+  _DEVICESERVICE.methods_by_name['get_channel_configuration']._serialized_options = b'\220\002\001'
+  _DEVICESERVICE.methods_by_name['set_channel_configuration']._options = None
+  _DEVICESERVICE.methods_by_name['set_channel_configuration']._serialized_options = b'\220\002\002'
+  _DEVICESERVICE.methods_by_name['set_channel_configuration_all']._options = None
+  _DEVICESERVICE.methods_by_name['set_channel_configuration_all']._serialized_options = b'\220\002\002'
+  _DEVICESERVICE.methods_by_name['get_saturation_config']._options = None
+  _DEVICESERVICE.methods_by_name['get_saturation_config']._serialized_options = b'\220\002\001'
+  _DEVICESERVICE.methods_by_name['get_sample_rate']._options = None
+  _DEVICESERVICE.methods_by_name['get_sample_rate']._serialized_options = b'\220\002\001'
+  _DEVICESERVICE.methods_by_name['set_sample_rate']._options = None
+  _DEVICESERVICE.methods_by_name['set_sample_rate']._serialized_options = b'\220\002\002'
+  _DEVICESERVICE.methods_by_name['get_bias_voltage']._options = None
+  _DEVICESERVICE.methods_by_name['get_bias_voltage']._serialized_options = b'\220\002\001'
+  _DEVICESERVICE.methods_by_name['set_bias_voltage']._options = None
+  _DEVICESERVICE.methods_by_name['set_bias_voltage']._serialized_options = b'\220\002\002'
+  _FLOWCELLCONNECTORTYPE._serialized_start=5709
+  _FLOWCELLCONNECTORTYPE._serialized_end=5814
+  _INSERTIONSCRIPTSTATUS._serialized_start=5816
+  _INSERTIONSCRIPTSTATUS._serialized_end=5879
+  _SELECTEDWELL._serialized_start=5881
+  _SELECTEDWELL._serialized_end=5974
+  _CHANNELCONFIGURATION._serialized_start=111
+  _CHANNELCONFIGURATION._serialized_end=169
+  _RETURNEDCHANNELCONFIGURATION._serialized_start=171
+  _RETURNEDCHANNELCONFIGURATION._serialized_end=254
+  _GETDEVICEINFOREQUEST._serialized_start=256
+  _GETDEVICEINFOREQUEST._serialized_end=278
+  _GETDEVICEINFORESPONSE._serialized_start=281
+  _GETDEVICEINFORESPONSE._serialized_end=779
+  _GETDEVICEINFORESPONSE_COMPONENTVERSION._serialized_start=617
+  _GETDEVICEINFORESPONSE_COMPONENTVERSION._serialized_end=694
+  _GETDEVICEINFORESPONSE_DEVICETYPE._serialized_start=696
+  _GETDEVICEINFORESPONSE_DEVICETYPE._serialized_end=779
+  _GETDEVICESTATEREQUEST._serialized_start=781
+  _GETDEVICESTATEREQUEST._serialized_end=804
+  _GETDEVICESTATERESPONSE._serialized_start=807
+  _GETDEVICESTATERESPONSE._serialized_end=1039
+  _GETDEVICESTATERESPONSE_DEVICESTATE._serialized_start=983
+  _GETDEVICESTATERESPONSE_DEVICESTATE._serialized_end=1039
+  _STREAMDEVICESTATEREQUEST._serialized_start=1041
+  _STREAMDEVICESTATEREQUEST._serialized_end=1067
+  _GETFLOWCELLINFOREQUEST._serialized_start=1069
+  _GETFLOWCELLINFOREQUEST._serialized_end=1093
+  _GETFLOWCELLINFORESPONSE._serialized_start=1096
+  _GETFLOWCELLINFORESPONSE._serialized_end=1533
+  _STREAMFLOWCELLINFOREQUEST._serialized_start=1535
+  _STREAMFLOWCELLINFOREQUEST._serialized_end=1562
+  _SETUSERSPECIFIEDFLOWCELLIDREQUEST._serialized_start=1564
+  _SETUSERSPECIFIEDFLOWCELLIDREQUEST._serialized_end=1617
+  _SETUSERSPECIFIEDFLOWCELLIDRESPONSE._serialized_start=1619
+  _SETUSERSPECIFIEDFLOWCELLIDRESPONSE._serialized_end=1655
+  _SETUSERSPECIFIEDPRODUCTCODEREQUEST._serialized_start=1657
+  _SETUSERSPECIFIEDPRODUCTCODEREQUEST._serialized_end=1713
+  _SETUSERSPECIFIEDPRODUCTCODERESPONSE._serialized_start=1715
+  _SETUSERSPECIFIEDPRODUCTCODERESPONSE._serialized_end=1752
+  _GETCHANNELSLAYOUTREQUEST._serialized_start=1754
+  _GETCHANNELSLAYOUTREQUEST._serialized_end=1780
+  _GETCHANNELSLAYOUTRESPONSE._serialized_start=1782
+  _GETCHANNELSLAYOUTRESPONSE._serialized_end=1869
+  _CHANNELRECORD._serialized_start=1872
+  _CHANNELRECORD._serialized_end=2036
+  _CHANNELRECORD_MUXRECORD._serialized_start=1981
+  _CHANNELRECORD_MUXRECORD._serialized_end=2036
+  _RESETDEVICESETTINGSREQUEST._serialized_start=2038
+  _RESETDEVICESETTINGSREQUEST._serialized_end=2066
+  _RESETDEVICESETTINGSRESPONSE._serialized_start=2068
+  _RESETDEVICESETTINGSRESPONSE._serialized_end=2097
+  _SETCALIBRATIONREQUEST._serialized_start=2100
+  _SETCALIBRATIONREQUEST._serialized_end=2228
+  _SETCALIBRATIONRESPONSE._serialized_start=2230
+  _SETCALIBRATIONRESPONSE._serialized_end=2254
+  _CLEARCALIBRATIONREQUEST._serialized_start=2256
+  _CLEARCALIBRATIONREQUEST._serialized_end=2281
+  _CLEARCALIBRATIONRESPONSE._serialized_start=2283
+  _CLEARCALIBRATIONRESPONSE._serialized_end=2309
+  _GETCALIBRATIONREQUEST._serialized_start=2311
+  _GETCALIBRATIONREQUEST._serialized_end=2391
+  _GETCALIBRATIONRESPONSE._serialized_start=2393
+  _GETCALIBRATIONRESPONSE._serialized_end=2500
+  _SETTEMPERATUREREQUEST._serialized_start=2503
+  _SETTEMPERATUREREQUEST._serialized_end=2742
+  _SETTEMPERATUREREQUEST_WAITFORTEMPERATURESETTINGS._serialized_start=2649
+  _SETTEMPERATUREREQUEST_WAITFORTEMPERATURESETTINGS._serialized_end=2742
+  _SETTEMPERATURERESPONSE._serialized_start=2744
+  _SETTEMPERATURERESPONSE._serialized_end=2811
+  _GETTEMPERATUREREQUEST._serialized_start=2813
+  _GETTEMPERATUREREQUEST._serialized_end=2836
+  _GETTEMPERATURERESPONSE._serialized_start=2839
+  _GETTEMPERATURERESPONSE._serialized_end=3382
+  _GETTEMPERATURERESPONSE_MINIONTEMPERATURE._serialized_start=3091
+  _GETTEMPERATURERESPONSE_MINIONTEMPERATURE._serialized_end=3224
+  _GETTEMPERATURERESPONSE_PROMETHIONTEMPERATURE._serialized_start=3227
+  _GETTEMPERATURERESPONSE_PROMETHIONTEMPERATURE._serialized_end=3367
+  _STREAMTEMPERATUREREQUEST._serialized_start=3384
+  _STREAMTEMPERATUREREQUEST._serialized_end=3434
+  _UNBLOCKREQUEST._serialized_start=3436
+  _UNBLOCKREQUEST._serialized_end=3549
+  _UNBLOCKRESPONSE._serialized_start=3551
+  _UNBLOCKRESPONSE._serialized_end=3568
+  _CANCELUNBLOCKSREQUEST._serialized_start=3570
+  _CANCELUNBLOCKSREQUEST._serialized_end=3593
+  _CANCELUNBLOCKSRESPONSE._serialized_start=3595
+  _CANCELUNBLOCKSRESPONSE._serialized_end=3647
+  _GETCHANNELCONFIGURATIONREQUEST._serialized_start=3649
+  _GETCHANNELCONFIGURATIONREQUEST._serialized_end=3699
+  _GETCHANNELCONFIGURATIONRESPONSE._serialized_start=3701
+  _GETCHANNELCONFIGURATIONRESPONSE._serialized_end=3816
+  _SETCHANNELCONFIGURATIONREQUEST._serialized_start=3819
+  _SETCHANNELCONFIGURATIONREQUEST._serialized_end=4066
+  _SETCHANNELCONFIGURATIONREQUEST_CHANNELCONFIGURATIONSENTRY._serialized_start=3964
+  _SETCHANNELCONFIGURATIONREQUEST_CHANNELCONFIGURATIONSENTRY._serialized_end=4066
+  _SETCHANNELCONFIGURATIONRESPONSE._serialized_start=4068
+  _SETCHANNELCONFIGURATIONRESPONSE._serialized_end=4101
+  _SETCHANNELCONFIGURATIONALLREQUEST._serialized_start=4103
+  _SETCHANNELCONFIGURATIONALLREQUEST._serialized_end=4217
+  _SETCHANNELCONFIGURATIONALLRESPONSE._serialized_start=4219
+  _SETCHANNELCONFIGURATIONALLRESPONSE._serialized_end=4255
+  _SATURATIONCONFIG._serialized_start=4258
+  _SATURATIONCONFIG._serialized_end=5096
+  _SATURATIONCONFIG_THRESHOLDS._serialized_start=4531
+  _SATURATIONCONFIG_THRESHOLDS._serialized_end=4781
+  _SATURATIONCONFIG_SOFTWARESATURATION._serialized_start=4784
+  _SATURATIONCONFIG_SOFTWARESATURATION._serialized_end=4931
+  _SATURATIONCONFIG_USERTHRESHOLDSATURATION._serialized_start=4934
+  _SATURATIONCONFIG_USERTHRESHOLDSATURATION._serialized_end=5096
+  _SETSATURATIONCONFIGREQUEST._serialized_start=5098
+  _SETSATURATIONCONFIGREQUEST._serialized_end=5188
+  _SETSATURATIONCONFIGRESPONSE._serialized_start=5190
+  _SETSATURATIONCONFIGRESPONSE._serialized_end=5219
+  _GETSATURATIONCONFIGREQUEST._serialized_start=5221
+  _GETSATURATIONCONFIGREQUEST._serialized_end=5249
+  _GETSATURATIONCONFIGRESPONSE._serialized_start=5251
+  _GETSATURATIONCONFIGRESPONSE._serialized_end=5342
+  _GETSAMPLERATEREQUEST._serialized_start=5344
+  _GETSAMPLERATEREQUEST._serialized_end=5366
+  _GETSAMPLERATERESPONSE._serialized_start=5368
+  _GETSAMPLERATERESPONSE._serialized_end=5412
+  _SETSAMPLERATEREQUEST._serialized_start=5414
+  _SETSAMPLERATEREQUEST._serialized_end=5463
+  _SETSAMPLERATERESPONSE._serialized_start=5465
+  _SETSAMPLERATERESPONSE._serialized_end=5514
+  _GETBIASVOLTAGEREQUEST._serialized_start=5516
+  _GETBIASVOLTAGEREQUEST._serialized_end=5539
+  _GETBIASVOLTAGERESPONSE._serialized_start=5541
+  _GETBIASVOLTAGERESPONSE._serialized_end=5587
+  _SETBIASVOLTAGEREQUEST._serialized_start=5589
+  _SETBIASVOLTAGEREQUEST._serialized_end=5640
+  _SETBIASVOLTAGERESPONSE._serialized_start=5642
+  _SETBIASVOLTAGERESPONSE._serialized_end=5666
+  _DUMPSTATEREQUEST._serialized_start=5668
+  _DUMPSTATEREQUEST._serialized_end=5686
+  _DUMPSTATERESPONSE._serialized_start=5688
+  _DUMPSTATERESPONSE._serialized_end=5707
+  _DEVICESERVICE._serialized_start=5977
+  _DEVICESERVICE._serialized_end=9217
 # @@protoc_insertion_point(module_scope)

@@ -8,6 +8,7 @@ option objc_class_prefix = "MKAPI";
 import "google/protobuf/timestamp.proto";
 import "minknow_api/analysis_configuration.proto";
 import "minknow_api/protocol_settings.proto";
+import "minknow_api/rpc_options.proto";
 
 // Basecall reads files from previous sequencing runs.
 //
@@ -99,6 +100,16 @@ service Basecaller {
 
     // Set the progress of the currently executing post processing protocol (this API expects a run_id as more than one can be active).
     rpc update_post_processing_protocol_progress(UpdateProgressRequest) returns (UpdateProgressResponse) {}
+
+    // Send a ping to the configured ping server (see system config for ping server url)
+    //
+    // The tracking_id and context_data section of the ping are filled in automatically by the basecall manager.
+    //
+    // The ping is queued internally for sending immediately, if the basecall manager fails to send the message it
+    // stores the message to send when possible.
+    //
+    // Since 5.0
+    rpc send_ping(SendPingRequest) returns (SendPingResponse) {}
 }
  
 
@@ -246,7 +257,7 @@ message StartPostProcessingProtocolRequest {
     // Optionally specify a sequencing protocol that is linked with this analysis.
     string sequencing_protocol_run_id = 7;
 
-    // Input directories for the protocol (omit those which the protocol doesnt require).
+    // Input directories for the protocol (omit those which the protocol doesn't require).
     string input_fast5_directory = 2;
     string input_fastq_directory = 3;
     string input_bam_directory = 4;
@@ -422,12 +433,33 @@ message MakeAlignmentIndexResponse { }
 
 message ListPostProcessingProtocolsRequest { }
 
+enum PostProcessingProvider {
+    // A local script.
+    SCRIPT = 0;
+    // An EPI2ME workflow.
+    EPI2ME = 1;
+}
+
 message PostProcessingProtocolInfo {
     // System identifier for the protocol
     string identifier = 1;
 
     // Readable name for the protocol (appropriate for use as a key in translation database).
+    //
+    // Note that this may not be unique: in particular, the EPI2ME provider lists every version of
+    // a workflow as a separate post-processing protocol.
     string name = 2;
+
+    // Protocol version.
+    //
+    // This might not be set for all protocols or all providers.
+    string version = 3;
+
+    // A description of the protocol.
+    string description = 4;
+
+    // The source of the post-processing protocol.
+    PostProcessingProvider provider = 5;
 }
 
 message ListPostProcessingProtocolsResponse {
@@ -463,3 +495,15 @@ message UpdateProgressRequest {
 }
 
 message UpdateProgressResponse {}
+
+// Since 5.0
+message SendPingRequest {
+    // The json data to send as a ping.
+    //
+    // note: if this string is not a valid json object, an error will be raised.
+    string ping_data = 1 [(rpc_required) = true];
+}
+
+// Since 5.0
+message SendPingResponse {
+}

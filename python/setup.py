@@ -9,6 +9,9 @@ from _version import __version__ as VERSION
 del sys.path[0]
 
 INSTALL_REQUIRES = [
+    # Python 3.7 has importlib.resources built in
+    # Version 3.3 drops support for Python 3.5
+    "importlib-resources<3.3; python_version < '3.7.0'",
     "grpcio~=1.37",
     "numpy~=1.11",  # minknow_api.data
     "protobuf~=3.15",  # 3.15 includes use of 'optional' for scalar fields
@@ -19,11 +22,12 @@ INSTALL_REQUIRES = [
 setup(
     name="minknow_api",
     version=VERSION,
-    author="Oxford Nanopore Technologies Ltd",
+    author="Oxford Nanopore Technologies PLC",
     author_email="info@nanoporetech.com",
     url="https://github.com/nanoporetech/minknow_api",
     description="MinKNOW RPC API bindings",
     packages=find_packages(),
     install_requires=INSTALL_REQUIRES,
+    package_data={"": ["*.crt"]},
     entry_points={"console_scripts": []},
 )

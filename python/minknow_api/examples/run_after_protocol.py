@@ -112,7 +112,7 @@ def main():
         logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
 
     # Construct a manager using the host + port provided:
-    manager = Manager(host=args.host, port=args.port, use_tls=False)
+    manager = Manager(host=args.host, port=args.port)
 
     # Find on which position we are going to wait for the protocol to finish:
     positions = manager.flow_cell_positions()

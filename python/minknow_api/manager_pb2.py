@@ -4,6 +4,7 @@
 """Generated protocol buffer code."""
 from google.protobuf.internal import enum_type_wrapper
 from google.protobuf import descriptor as _descriptor
+from google.protobuf import descriptor_pool as _descriptor_pool
 from google.protobuf import message as _message
 from google.protobuf import reflection as _reflection
 from google.protobuf import symbol_database as _symbol_database
@@ -15,60 +16,20 @@ _sym_db = _symbol_database.Default()
 from minknow_api import rpc_options_pb2 as minknow__api_dot_rpc__options__pb2
 from minknow_api import device_pb2 as minknow__api_dot_device__pb2
 from minknow_api import instance_pb2 as minknow__api_dot_instance__pb2
+from minknow_api import protocol_settings_pb2 as minknow__api_dot_protocol__settings__pb2
 from google.protobuf import timestamp_pb2 as google_dot_protobuf_dot_timestamp__pb2
 
 
-DESCRIPTOR = _descriptor.FileDescriptor(
-  name='minknow_api/manager.proto',
-  package='minknow_api.manager',
-  syntax='proto3',
-  serialized_options=b'\n\034com.nanoporetech.minknow_api\242\002\005MKAPI',
-  create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\x19minknow_api/manager.proto\x12\x13minknow_api.manager\x1a\x1dminknow_api/rpc_options.proto\x1a\x18minknow_api/device.proto\x1a\x1aminknow_api/instance.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\x15\n\x13\x44\x65scribeHostRequest\"\xa0\x01\n\x14\x44\x65scribeHostResponse\x12\x14\n\x0cproduct_code\x18\x01 \x01(\t\x12\x13\n\x0b\x64\x65scription\x18\x02 \x01(\t\x12\x0e\n\x06serial\x18\x03 \x01(\t\x12\x14\n\x0cnetwork_name\x18\x04 \x01(\t\x12\x19\n\x11needs_association\x18\x10 \x01(\x08\x12\x1c\n\x14\x63\x61n_sequence_offline\x18\x05 \x01(\x08\"\xe8\x05\n\x10\x46lowCellPosition\x12\x0c\n\x04name\x18\x01 \x01(\t\x12@\n\x08location\x18\x02 \x01(\x0b\x32..minknow_api.manager.FlowCellPosition.Location\x12:\n\x05state\x18\x03 \x01(\x0e\x32+.minknow_api.manager.FlowCellPosition.State\x12\x41\n\trpc_ports\x18\x04 \x01(\x0b\x32..minknow_api.manager.FlowCellPosition.RpcPorts\x12\x12\n\nerror_info\x18\x05 \x01(\t\x12X\n\x15shared_hardware_group\x18\x06 \x01(\x0b\x32\x39.minknow_api.manager.FlowCellPosition.SharedHardwareGroup\x12\x15\n\ris_integrated\x18\x07 \x01(\x08\x12\x1c\n\x14\x63\x61n_sequence_offline\x18\x08 \x01(\x08\x1a \n\x08Location\x12\t\n\x01x\x18\x01 \x01(\x05\x12\t\n\x01y\x18\x02 \x01(\x05\x1a`\n\x08RpcPorts\x12\x0e\n\x06secure\x18\x01 \x01(\r\x12\x10\n\x08insecure\x18\x02 \x01(\r\x12\x17\n\x0fsecure_grpc_web\x18\x03 \x01(\r\x12\x19\n\x11insecure_grpc_web\x18\x04 \x01(\r\x1a\'\n\x13SharedHardwareGroup\x12\x10\n\x08group_id\x18\x01 \x01(\r\"\xb4\x01\n\x05State\x12\x16\n\x12STATE_INITIALISING\x10\x00\x12\x11\n\rSTATE_RUNNING\x10\x01\x12\x13\n\x0fSTATE_RESETTING\x10\x02\x12\x1a\n\x16STATE_HARDWARE_REMOVED\x10\x03\x12\x18\n\x14STATE_HARDWARE_ERROR\x10\x04\x12\x18\n\x14STATE_SOFTWARE_ERROR\x10\x05\x12\x1b\n\x17STATE_NEEDS_ASSOCIATION\x10\x06\"\x1a\n\x18\x46lowCellPositionsRequest\"j\n\x19\x46lowCellPositionsResponse\x12\x13\n\x0btotal_count\x18\x01 \x01(\x05\x12\x38\n\tpositions\x18\x02 \x03(\x0b\x32%.minknow_api.manager.FlowCellPosition\"\x1f\n\x1dWatchFlowCellPositionsRequest\"\xa4\x01\n\x1eWatchFlowCellPositionsResponse\x12\x38\n\tadditions\x18\x01 \x03(\x0b\x32%.minknow_api.manager.FlowCellPosition\x12\x36\n\x07\x63hanges\x18\x02 \x03(\x0b\x32%.minknow_api.manager.FlowCellPosition\x12\x10\n\x08removals\x18\x03 \x03(\t\"8\n\x14ResetPositionRequest\x12\x11\n\tpositions\x18\x03 \x03(\t\x12\r\n\x05\x66orce\x18\x02 \x01(\x08\"\x17\n\x15ResetPositionResponse\"\x16\n\x14\x42\x61secallerApiRequest\"m\n\x15\x42\x61secallerApiResponse\x12\x0e\n\x06secure\x18\x01 \x01(\r\x12\x10\n\x08insecure\x18\x02 \x01(\r\x12\x17\n\x0fsecure_grpc_web\x18\x03 \x01(\r\x12\x19\n\x11insecure_grpc_web\x18\x04 \x01(\r\"\x15\n\x13GetGuppyInfoRequest\"^\n\x14GetGuppyInfoResponse\x12\x0e\n\x04port\x18\x01 \x01(\rH\x00\x12\x12\n\x08ipc_path\x18\x03 \x01(\tH\x00\x12\x0f\n\x07version\x18\x02 \x01(\tB\x11\n\x0f\x63onnection_type\"\x17\n\x15GetVersionInfoRequest\"\xf2\x03\n\x16GetVersionInfoResponse\x12L\n\x07minknow\x18\x01 \x01(\x0b\x32;.minknow_api.instance.GetVersionInfoResponse.MinknowVersion\x12\x11\n\tprotocols\x18\x02 \x01(\t\x12\x1c\n\x14\x64istribution_version\x18\x03 \x01(\t\x12\\\n\x13\x64istribution_status\x18\x04 \x01(\x0e\x32?.minknow_api.instance.GetVersionInfoResponse.DistributionStatus\x12\x1b\n\x13guppy_build_version\x18\x05 \x01(\t\x12\x1f\n\x17guppy_connected_version\x18\x06 \x01(\t\x12\x15\n\rconfiguration\x18\x07 \x01(\t\x12W\n\x11installation_type\x18\x08 \x01(\x0e\x32<.minknow_api.manager.GetVersionInfoResponse.InstallationType\"M\n\x10InstallationType\x12\x07\n\x03ONT\x10\x00\x12\x06\n\x02NC\x10\x01\x12\x08\n\x04PROD\x10\x02\x12\r\n\tQ_RELEASE\x10\x03\x12\x0f\n\x0bOND_RELEASE\x10\x04\"1\n!ListProtocolOutputDirFilesRequest\x12\x0c\n\x04path\x18\x01 \x01(\t\"\xf8\x01\n\"ListProtocolOutputDirFilesResponse\x12Z\n\x0b\x64irectories\x18\x01 \x03(\x0b\x32\x45.minknow_api.manager.ListProtocolOutputDirFilesResponse.DirectoryInfo\x12\r\n\x05\x66iles\x18\x02 \x03(\t\x12\x1b\n\x13\x63urrent_listed_path\x18\x03 \x01(\t\x1aJ\n\rDirectoryInfo\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x17\n\x0f\x64irectory_count\x18\x02 \x01(\x05\x12\x12\n\nfile_count\x18\x03 \x01(\x05\";\n\x16\x43reateDirectoryRequest\x12\x13\n\x0bparent_path\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\"\'\n\x17\x43reateDirectoryResponse\x12\x0c\n\x04path\x18\x01 \x01(\t\"\x87\x02\n\x17\x46ilesystemDiskSpaceInfo\x12\x15\n\rfilesystem_id\x18\x01 \x01(\t\x12\x17\n\x0f\x62ytes_available\x18\x02 \x01(\x04\x12\x16\n\x0e\x62ytes_capacity\x18\x03 \x01(\x04\x12\x19\n\x11\x66ile_types_stored\x18\x04 \x03(\t\x12\x1d\n\x15\x62ytes_to_stop_cleanly\x18\x05 \x01(\x04\x12\x1f\n\x17\x62ytes_when_alert_issued\x18\x06 \x01(\x04\x12\x17\n\x0frecommend_alert\x18\x07 \x01(\x08\x12\x16\n\x0erecommend_stop\x18\x08 \x01(\x08\x12\x18\n\x10\x62ytes_per_second\x18\t \x01(\x03\"\x19\n\x17GetDiskSpaceInfoRequest\",\n\x1aStreamDiskSpaceInfoRequest\x12\x0e\n\x06period\x18\x01 \x01(\r\"l\n\x18GetDiskSpaceInfoResponse\x12P\n\x1a\x66ilesystem_disk_space_info\x18\x01 \x03(\x0b\x32,.minknow_api.manager.FilesystemDiskSpaceInfo\"\x1a\n\x18GetBarcodeKitInfoRequest\"\xa8\x02\n\x19GetBarcodeKitInfoResponse\x12\\\n\x10\x62\x61rcode_kit_info\x18\x01 \x03(\x0b\x32\x42.minknow_api.manager.GetBarcodeKitInfoResponse.BarcodeKitInfoEntry\x1a\x37\n\x0e\x42\x61rcodeKitInfo\x12\x0f\n\x07is_dual\x18\x02 \x01(\x08\x12\x14\n\x0cis_both_ends\x18\x03 \x01(\x08\x1at\n\x13\x42\x61rcodeKitInfoEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12L\n\x05value\x18\x02 \x01(\x0b\x32=.minknow_api.manager.GetBarcodeKitInfoResponse.BarcodeKitInfo:\x02\x38\x01\"\x17\n\x15GetLampKitInfoRequest\"+\n\x16GetLampKitInfoResponse\x12\x11\n\tlamp_kits\x18\x02 \x03(\t\"I\n\x15GetBarcodeKeysRequest\x12\x19\n\x11\x62\x61rcode_kit_names\x18\x01 \x03(\t\x12\x15\n\rlamp_kit_name\x18\x02 \x01(\t\"X\n\x16GetBarcodeKeysResponse\x12\x14\n\x0c\x62\x61rcode_keys\x18\x01 \x03(\t\x12\x11\n\tlamp_keys\x18\x02 \x03(\t\x12\x15\n\rcombined_keys\x18\x03 \x03(\t\"\x19\n\x17GetFlowCellTypesRequest\"\xdc\x01\n\x18GetFlowCellTypesResponse\x12\x41\n\x05types\x18\x01 \x03(\x0b\x32\x32.minknow_api.manager.GetFlowCellTypesResponse.Info\x1a}\n\x04Info\x12\x14\n\x0cproduct_code\x18\x01 \x01(\t\x12\x41\n\x0e\x63onnector_type\x18\x02 \x01(\x0e\x32).minknow_api.device.FlowCellConnectorType\x12\x1c\n\x14\x63\x61nnot_live_basecall\x18\x03 \x01(\x08\":\n\x18GetSequencingKitsRequest\x12\x1e\n\x16\x66low_cell_product_code\x18\x01 \x01(\t\"\xf2\x03\n\x19GetSequencingKitsResponse\x12@\n\x04kits\x18\x01 \x03(\x0b\x32\x32.minknow_api.manager.GetSequencingKitsResponse.Kit\x12\x66\n\x18\x62\x61rcoding_expansion_kits\x18\x02 \x03(\x0b\x32\x44.minknow_api.manager.GetSequencingKitsResponse.BarcodingExpansionKit\x1a\xfb\x01\n\x03Kit\x12\x14\n\x0cproduct_code\x18\x01 \x01(\t\x12 \n\x18\x62\x61rcoding_expansion_kits\x18\x02 \x03(\x05\x12\x1a\n\x12includes_barcoding\x18\x03 \x01(\x08\x12\x10\n\x08lamp_kit\x18\x10 \x01(\x08\x12\x1c\n\x14has_control_protocol\x18\x04 \x01(\x08\x12\x1e\n\x16no_sequencing_protocol\x18\x11 \x01(\x08\x12\x17\n\x0f\x66requently_used\x18\x12 \x01(\x08\x12\x0b\n\x03\x64na\x18\x05 \x01(\x08\x12\x0b\n\x03rna\x18\x06 \x01(\x08\x12\x0b\n\x03pcr\x18\x07 \x01(\x08\x12\x10\n\x08pcr_free\x18\x08 \x01(\x08\x1a-\n\x15\x42\x61rcodingExpansionKit\x12\x14\n\x0cproduct_code\x18\x01 \x01(\t\"/\n\x19\x41\x64\x64SimulatedDeviceRequest\x12\x12\n\x04name\x18\x01 \x01(\tB\x04\x88\xb5\x18\x01\"\x1c\n\x1a\x41\x64\x64SimulatedDeviceResponse\"2\n\x1cRemoveSimulatedDeviceRequest\x12\x12\n\x04name\x18\x01 \x01(\tB\x04\x88\xb5\x18\x01\"\x1f\n\x1dRemoveSimulatedDeviceResponse\"%\n#LocalAuthenticationTokenPathRequest\"4\n$LocalAuthenticationTokenPathResponse\x12\x0c\n\x04path\x18\x01 \x01(\t\"7\n\'GetAlignmentReferenceInformationRequest\x12\x0c\n\x04path\x18\x01 \x01(\t\"\x97\x01\n(GetAlignmentReferenceInformationResponse\x12#\n\x1b\x65stimated_load_time_seconds\x18\x01 \x01(\x02\x12&\n\x1e\x65stimated_reference_size_bases\x18\x02 \x01(\x04\x12\x1e\n\x16recommended_live_usage\x18\x03 \x01(\x08\"F\n\x1c\x41ssociationDeviceCodeRequest\x12\x15\n\rposition_name\x18\x01 \x01(\t\x12\x0f\n\x07offline\x18\x02 \x01(\x08\"-\n\x1d\x41ssociationDeviceCodeResponse\x12\x0c\n\x04\x63ode\x18\x01 \x01(\t\"V\n(ApplyOfflineAssociationUnlockCodeRequest\x12\x15\n\rposition_name\x18\x01 \x01(\t\x12\x13\n\x0bunlock_code\x18\x02 \x01(\t\"?\n)ApplyOfflineAssociationUnlockCodeResponse\x12\x12\n\nassociated\x18\x01 \x01(\x08\"\x1f\n\x1dListDeveloperApiTokensRequest\"\xd2\x01\n\x1eListDeveloperApiTokensResponse\x12U\n\x06tokens\x18\x01 \x03(\x0b\x32\x45.minknow_api.manager.ListDeveloperApiTokensResponse.DeveloperApiToken\x1aY\n\x11\x44\x65veloperApiToken\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12*\n\x06\x65xpiry\x18\x03 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\"Z\n\x1e\x43reateDeveloperApiTokenRequest\x12\x0c\n\x04name\x18\x02 \x01(\t\x12*\n\x06\x65xpiry\x18\x03 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\"<\n\x1f\x43reateDeveloperApiTokenResponse\x12\n\n\x02id\x18\x01 \x01(\t\x12\r\n\x05token\x18\x02 \x01(\t\",\n\x1eRevokeDeveloperApiTokenRequest\x12\n\n\x02id\x18\x01 \x01(\t\"\"\n RevokeDeveloperApiTokensResponse\"\x8c\x01\n\x14\x46indProtocolsRequest\x12\x1e\n\x16\x66low_cell_product_code\x18\x01 \x01(\t\x12\x16\n\x0esequencing_kit\x18\x02 \x01(\t\x12<\n\x0f\x65xperiment_type\x18\x03 \x01(\x0e\x32#.minknow_api.manager.ExperimentType\"\xc9\x01\n\x15\x46indProtocolsResponse\x12\x46\n\tprotocols\x18\x01 \x03(\x0b\x32\x33.minknow_api.manager.FindProtocolsResponse.Protocol\x1ah\n\x08Protocol\x12\x12\n\nidentifier\x18\x01 \x01(\t\x12\'\n\x1frequires_flow_cell_product_code\x18\x02 \x01(\x08\x12\x1f\n\x17requires_sequencing_kit\x18\x03 \x01(\x08*j\n\x0e\x45xperimentType\x12\x0e\n\nSEQUENCING\x10\x00\x12\x0b\n\x07\x43ONTROL\x10\x01\x12\n\n\x06\x43USTOM\x10\x02\x12\x15\n\x11\x41LL_EXCEPT_HIDDEN\x10\x03\x12\x18\n\x14\x41LL_INCLUDING_HIDDEN\x10\x04\x32\xc3\x1b\n\x0eManagerService\x12i\n\rdescribe_host\x12(.minknow_api.manager.DescribeHostRequest\x1a).minknow_api.manager.DescribeHostResponse\"\x03\x90\x02\x01\x12{\n\x13\x66low_cell_positions\x12-.minknow_api.manager.FlowCellPositionsRequest\x1a..minknow_api.manager.FlowCellPositionsResponse\"\x03\x90\x02\x01\x30\x01\x12\x8b\x01\n\x19watch_flow_cell_positions\x12\x32.minknow_api.manager.WatchFlowCellPositionsRequest\x1a\x33.minknow_api.manager.WatchFlowCellPositionsResponse\"\x03\x90\x02\x01\x30\x01\x12i\n\x0ereset_position\x12).minknow_api.manager.ResetPositionRequest\x1a*.minknow_api.manager.ResetPositionResponse\"\x00\x12l\n\x0e\x62\x61secaller_api\x12).minknow_api.manager.BasecallerApiRequest\x1a*.minknow_api.manager.BasecallerApiResponse\"\x03\x90\x02\x01\x12j\n\x0eget_guppy_info\x12(.minknow_api.manager.GetGuppyInfoRequest\x1a).minknow_api.manager.GetGuppyInfoResponse\"\x03\x90\x02\x01\x12p\n\x10get_version_info\x12*.minknow_api.manager.GetVersionInfoRequest\x1a+.minknow_api.manager.GetVersionInfoResponse\"\x03\x90\x02\x01\x12\x98\x01\n\x1elist_protocol_output_dir_files\x12\x36.minknow_api.manager.ListProtocolOutputDirFilesRequest\x1a\x37.minknow_api.manager.ListProtocolOutputDirFilesResponse\"\x03\x90\x02\x01\x30\x01\x12r\n\x10\x63reate_directory\x12+.minknow_api.manager.CreateDirectoryRequest\x1a,.minknow_api.manager.CreateDirectoryResponse\"\x03\x90\x02\x02\x12w\n\x13get_disk_space_info\x12,.minknow_api.manager.GetDiskSpaceInfoRequest\x1a-.minknow_api.manager.GetDiskSpaceInfoResponse\"\x03\x90\x02\x01\x12\x88\x01\n\x1eget_default_output_directories\x12\x38.minknow_api.instance.GetDefaultOutputDirectoriesRequest\x1a\'.minknow_api.instance.OutputDirectories\"\x03\x90\x02\x01\x12\x7f\n\x16stream_disk_space_info\x12/.minknow_api.manager.StreamDiskSpaceInfoRequest\x1a-.minknow_api.manager.GetDiskSpaceInfoResponse\"\x03\x90\x02\x01\x30\x01\x12z\n\x14get_barcode_kit_info\x12-.minknow_api.manager.GetBarcodeKitInfoRequest\x1a..minknow_api.manager.GetBarcodeKitInfoResponse\"\x03\x90\x02\x01\x12q\n\x11get_lamp_kit_info\x12*.minknow_api.manager.GetLampKitInfoRequest\x1a+.minknow_api.manager.GetLampKitInfoResponse\"\x03\x90\x02\x01\x12p\n\x10get_barcode_keys\x12*.minknow_api.manager.GetBarcodeKeysRequest\x1a+.minknow_api.manager.GetBarcodeKeysResponse\"\x03\x90\x02\x01\x12{\n\x13get_flow_cell_types\x12,.minknow_api.manager.GetFlowCellTypesRequest\x1a-.minknow_api.manager.GetFlowCellTypesResponse\"\x07\x90\x02\x01\x98\xb5\x18\x01\x12}\n\x13get_sequencing_kits\x12-.minknow_api.manager.GetSequencingKitsRequest\x1a..minknow_api.manager.GetSequencingKitsResponse\"\x07\x90\x02\x01\x98\xb5\x18\x01\x12y\n\x14\x61\x64\x64_simulated_device\x12..minknow_api.manager.AddSimulatedDeviceRequest\x1a/.minknow_api.manager.AddSimulatedDeviceResponse\"\x00\x12\x85\x01\n\x17remove_simulated_device\x12\x31.minknow_api.manager.RemoveSimulatedDeviceRequest\x1a\x32.minknow_api.manager.RemoveSimulatedDeviceResponse\"\x03\x90\x02\x02\x12\x9b\x01\n\x1flocal_authentication_token_path\x12\x38.minknow_api.manager.LocalAuthenticationTokenPathRequest\x1a\x39.minknow_api.manager.LocalAuthenticationTokenPathResponse\"\x03\x90\x02\x01\x12\xa7\x01\n#get_alignment_reference_information\x12<.minknow_api.manager.GetAlignmentReferenceInformationRequest\x1a=.minknow_api.manager.GetAlignmentReferenceInformationResponse\"\x03\x90\x02\x01\x12\x85\x01\n\x17\x61ssociation_device_code\x12\x31.minknow_api.manager.AssociationDeviceCodeRequest\x1a\x32.minknow_api.manager.AssociationDeviceCodeResponse\"\x03\x90\x02\x01\x12\xab\x01\n%apply_offline_association_unlock_code\x12=.minknow_api.manager.ApplyOfflineAssociationUnlockCodeRequest\x1a>.minknow_api.manager.ApplyOfflineAssociationUnlockCodeResponse\"\x03\x90\x02\x02\x12\x89\x01\n\x19list_developer_api_tokens\x12\x32.minknow_api.manager.ListDeveloperApiTokensRequest\x1a\x33.minknow_api.manager.ListDeveloperApiTokensResponse\"\x03\x90\x02\x02\x12\x89\x01\n\x1a\x63reate_developer_api_token\x12\x33.minknow_api.manager.CreateDeveloperApiTokenRequest\x1a\x34.minknow_api.manager.CreateDeveloperApiTokenResponse\"\x00\x12\x8a\x01\n\x1arevoke_developer_api_token\x12\x33.minknow_api.manager.RevokeDeveloperApiTokenRequest\x1a\x35.minknow_api.manager.RevokeDeveloperApiTokensResponse\"\x00\x12m\n\x0e\x66ind_protocols\x12).minknow_api.manager.FindProtocolsRequest\x1a*.minknow_api.manager.FindProtocolsResponse\"\x04\x98\xb5\x18\x01\x42&\n\x1c\x63om.nanoporetech.minknow_api\xa2\x02\x05MKAPIb\x06proto3'
-  ,
-  dependencies=[minknow__api_dot_rpc__options__pb2.DESCRIPTOR,minknow__api_dot_device__pb2.DESCRIPTOR,minknow__api_dot_instance__pb2.DESCRIPTOR,google_dot_protobuf_dot_timestamp__pb2.DESCRIPTOR,])
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x19minknow_api/manager.proto\x12\x13minknow_api.manager\x1a\x1dminknow_api/rpc_options.proto\x1a\x18minknow_api/device.proto\x1a\x1aminknow_api/instance.proto\x1a#minknow_api/protocol_settings.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\x15\n\x13\x44\x65scribeHostRequest\"\xa0\x01\n\x14\x44\x65scribeHostResponse\x12\x14\n\x0cproduct_code\x18\x01 \x01(\t\x12\x13\n\x0b\x64\x65scription\x18\x02 \x01(\t\x12\x0e\n\x06serial\x18\x03 \x01(\t\x12\x14\n\x0cnetwork_name\x18\x04 \x01(\t\x12\x19\n\x11needs_association\x18\x10 \x01(\x08\x12\x1c\n\x14\x63\x61n_sequence_offline\x18\x05 \x01(\x08\"\xfd\x05\n\x10\x46lowCellPosition\x12\x0c\n\x04name\x18\x01 \x01(\t\x12@\n\x08location\x18\x02 \x01(\x0b\x32..minknow_api.manager.FlowCellPosition.Location\x12:\n\x05state\x18\x03 \x01(\x0e\x32+.minknow_api.manager.FlowCellPosition.State\x12\x41\n\trpc_ports\x18\x04 \x01(\x0b\x32..minknow_api.manager.FlowCellPosition.RpcPorts\x12\x12\n\nerror_info\x18\x05 \x01(\t\x12X\n\x15shared_hardware_group\x18\x06 \x01(\x0b\x32\x39.minknow_api.manager.FlowCellPosition.SharedHardwareGroup\x12\x15\n\ris_integrated\x18\x07 \x01(\x08\x12\x1c\n\x14\x63\x61n_sequence_offline\x18\x08 \x01(\x08\x12@\n\x0eprotocol_state\x18\t \x01(\x0e\x32(.minknow_api.manager.SimpleProtocolState\x1a \n\x08Location\x12\t\n\x01x\x18\x01 \x01(\x05\x12\t\n\x01y\x18\x02 \x01(\x05\x1a\x33\n\x08RpcPorts\x12\x0e\n\x06secure\x18\x01 \x01(\r\x12\x17\n\x0fsecure_grpc_web\x18\x03 \x01(\r\x1a\'\n\x13SharedHardwareGroup\x12\x10\n\x08group_id\x18\x01 \x01(\r\"\xb4\x01\n\x05State\x12\x16\n\x12STATE_INITIALISING\x10\x00\x12\x11\n\rSTATE_RUNNING\x10\x01\x12\x13\n\x0fSTATE_RESETTING\x10\x02\x12\x1a\n\x16STATE_HARDWARE_REMOVED\x10\x03\x12\x18\n\x14STATE_HARDWARE_ERROR\x10\x04\x12\x18\n\x14STATE_SOFTWARE_ERROR\x10\x05\x12\x1b\n\x17STATE_NEEDS_ASSOCIATION\x10\x06\"\x1a\n\x18\x46lowCellPositionsRequest\"j\n\x19\x46lowCellPositionsResponse\x12\x13\n\x0btotal_count\x18\x01 \x01(\x05\x12\x38\n\tpositions\x18\x02 \x03(\x0b\x32%.minknow_api.manager.FlowCellPosition\"\x1f\n\x1dWatchFlowCellPositionsRequest\"\xa4\x01\n\x1eWatchFlowCellPositionsResponse\x12\x38\n\tadditions\x18\x01 \x03(\x0b\x32%.minknow_api.manager.FlowCellPosition\x12\x36\n\x07\x63hanges\x18\x02 \x03(\x0b\x32%.minknow_api.manager.FlowCellPosition\x12\x10\n\x08removals\x18\x03 \x03(\t\"8\n\x14ResetPositionRequest\x12\x11\n\tpositions\x18\x03 \x03(\t\x12\r\n\x05\x66orce\x18\x02 \x01(\x08\"\x17\n\x15ResetPositionResponse\"\x16\n\x14\x42\x61secallerApiRequest\"@\n\x15\x42\x61secallerApiResponse\x12\x0e\n\x06secure\x18\x01 \x01(\r\x12\x17\n\x0fsecure_grpc_web\x18\x03 \x01(\r\"\x15\n\x13GetGuppyInfoRequest\"^\n\x14GetGuppyInfoResponse\x12\x0e\n\x04port\x18\x01 \x01(\rH\x00\x12\x12\n\x08ipc_path\x18\x03 \x01(\tH\x00\x12\x0f\n\x07version\x18\x02 \x01(\tB\x11\n\x0f\x63onnection_type\"\x17\n\x15GetVersionInfoRequest\"1\n!ListProtocolOutputDirFilesRequest\x12\x0c\n\x04path\x18\x01 \x01(\t\"\xf8\x01\n\"ListProtocolOutputDirFilesResponse\x12Z\n\x0b\x64irectories\x18\x01 \x03(\x0b\x32\x45.minknow_api.manager.ListProtocolOutputDirFilesResponse.DirectoryInfo\x12\r\n\x05\x66iles\x18\x02 \x03(\t\x12\x1b\n\x13\x63urrent_listed_path\x18\x03 \x01(\t\x1aJ\n\rDirectoryInfo\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x17\n\x0f\x64irectory_count\x18\x02 \x01(\x05\x12\x12\n\nfile_count\x18\x03 \x01(\x05\";\n\x16\x43reateDirectoryRequest\x12\x13\n\x0bparent_path\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\"\'\n\x17\x43reateDirectoryResponse\x12\x0c\n\x04path\x18\x01 \x01(\t\"\x87\x02\n\x17\x46ilesystemDiskSpaceInfo\x12\x15\n\rfilesystem_id\x18\x01 \x01(\t\x12\x17\n\x0f\x62ytes_available\x18\x02 \x01(\x04\x12\x16\n\x0e\x62ytes_capacity\x18\x03 \x01(\x04\x12\x19\n\x11\x66ile_types_stored\x18\x04 \x03(\t\x12\x1d\n\x15\x62ytes_to_stop_cleanly\x18\x05 \x01(\x04\x12\x1f\n\x17\x62ytes_when_alert_issued\x18\x06 \x01(\x04\x12\x17\n\x0frecommend_alert\x18\x07 \x01(\x08\x12\x16\n\x0erecommend_stop\x18\x08 \x01(\x08\x12\x18\n\x10\x62ytes_per_second\x18\t \x01(\x03\"\x19\n\x17GetDiskSpaceInfoRequest\",\n\x1aStreamDiskSpaceInfoRequest\x12\x0e\n\x06period\x18\x01 \x01(\r\"l\n\x18GetDiskSpaceInfoResponse\x12P\n\x1a\x66ilesystem_disk_space_info\x18\x01 \x03(\x0b\x32,.minknow_api.manager.FilesystemDiskSpaceInfo\"\x1a\n\x18GetBarcodeKitInfoRequest\"\xa8\x02\n\x19GetBarcodeKitInfoResponse\x12\\\n\x10\x62\x61rcode_kit_info\x18\x01 \x03(\x0b\x32\x42.minknow_api.manager.GetBarcodeKitInfoResponse.BarcodeKitInfoEntry\x1a\x37\n\x0e\x42\x61rcodeKitInfo\x12\x0f\n\x07is_dual\x18\x02 \x01(\x08\x12\x14\n\x0cis_both_ends\x18\x03 \x01(\x08\x1at\n\x13\x42\x61rcodeKitInfoEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12L\n\x05value\x18\x02 \x01(\x0b\x32=.minknow_api.manager.GetBarcodeKitInfoResponse.BarcodeKitInfo:\x02\x38\x01\"\x17\n\x15GetLampKitInfoRequest\"+\n\x16GetLampKitInfoResponse\x12\x11\n\tlamp_kits\x18\x02 \x03(\t\"I\n\x15GetBarcodeKeysRequest\x12\x19\n\x11\x62\x61rcode_kit_names\x18\x01 \x03(\t\x12\x15\n\rlamp_kit_name\x18\x02 \x01(\t\"X\n\x16GetBarcodeKeysResponse\x12\x14\n\x0c\x62\x61rcode_keys\x18\x01 \x03(\t\x12\x11\n\tlamp_keys\x18\x02 \x03(\t\x12\x15\n\rcombined_keys\x18\x03 \x03(\t\"\x19\n\x17GetFlowCellTypesRequest\"\xdc\x01\n\x18GetFlowCellTypesResponse\x12\x41\n\x05types\x18\x01 \x03(\x0b\x32\x32.minknow_api.manager.GetFlowCellTypesResponse.Info\x1a}\n\x04Info\x12\x14\n\x0cproduct_code\x18\x01 \x01(\t\x12\x41\n\x0e\x63onnector_type\x18\x02 \x01(\x0e\x32).minknow_api.device.FlowCellConnectorType\x12\x1c\n\x14\x63\x61nnot_live_basecall\x18\x03 \x01(\x08\":\n\x18GetSequencingKitsRequest\x12\x1e\n\x16\x66low_cell_product_code\x18\x01 \x01(\t\"\xf2\x03\n\x19GetSequencingKitsResponse\x12@\n\x04kits\x18\x01 \x03(\x0b\x32\x32.minknow_api.manager.GetSequencingKitsResponse.Kit\x12\x66\n\x18\x62\x61rcoding_expansion_kits\x18\x02 \x03(\x0b\x32\x44.minknow_api.manager.GetSequencingKitsResponse.BarcodingExpansionKit\x1a\xfb\x01\n\x03Kit\x12\x14\n\x0cproduct_code\x18\x01 \x01(\t\x12 \n\x18\x62\x61rcoding_expansion_kits\x18\x02 \x03(\x05\x12\x1a\n\x12includes_barcoding\x18\x03 \x01(\x08\x12\x10\n\x08lamp_kit\x18\x10 \x01(\x08\x12\x1c\n\x14has_control_protocol\x18\x04 \x01(\x08\x12\x1e\n\x16no_sequencing_protocol\x18\x11 \x01(\x08\x12\x17\n\x0f\x66requently_used\x18\x12 \x01(\x08\x12\x0b\n\x03\x64na\x18\x05 \x01(\x08\x12\x0b\n\x03rna\x18\x06 \x01(\x08\x12\x0b\n\x03pcr\x18\x07 \x01(\x08\x12\x10\n\x08pcr_free\x18\x08 \x01(\x08\x1a-\n\x15\x42\x61rcodingExpansionKit\x12\x14\n\x0cproduct_code\x18\x01 \x01(\t\"/\n\x19\x41\x64\x64SimulatedDeviceRequest\x12\x12\n\x04name\x18\x01 \x01(\tB\x04\x88\xb5\x18\x01\"\x1c\n\x1a\x41\x64\x64SimulatedDeviceResponse\"2\n\x1cRemoveSimulatedDeviceRequest\x12\x12\n\x04name\x18\x01 \x01(\tB\x04\x88\xb5\x18\x01\"\x1f\n\x1dRemoveSimulatedDeviceResponse\"%\n#LocalAuthenticationTokenPathRequest\"4\n$LocalAuthenticationTokenPathResponse\x12\x0c\n\x04path\x18\x01 \x01(\t\"7\n\'GetAlignmentReferenceInformationRequest\x12\x0c\n\x04path\x18\x01 \x01(\t\"\x97\x01\n(GetAlignmentReferenceInformationResponse\x12#\n\x1b\x65stimated_load_time_seconds\x18\x01 \x01(\x02\x12&\n\x1e\x65stimated_reference_size_bases\x18\x02 \x01(\x04\x12\x1e\n\x16recommended_live_usage\x18\x03 \x01(\x08\"F\n\x1c\x41ssociationDeviceCodeRequest\x12\x15\n\rposition_name\x18\x01 \x01(\t\x12\x0f\n\x07offline\x18\x02 \x01(\x08\"-\n\x1d\x41ssociationDeviceCodeResponse\x12\x0c\n\x04\x63ode\x18\x01 \x01(\t\"V\n(ApplyOfflineAssociationUnlockCodeRequest\x12\x15\n\rposition_name\x18\x01 \x01(\t\x12\x13\n\x0bunlock_code\x18\x02 \x01(\t\"?\n)ApplyOfflineAssociationUnlockCodeResponse\x12\x12\n\nassociated\x18\x01 \x01(\x08\"\x1f\n\x1dListDeveloperApiTokensRequest\"\xd2\x01\n\x1eListDeveloperApiTokensResponse\x12U\n\x06tokens\x18\x01 \x03(\x0b\x32\x45.minknow_api.manager.ListDeveloperApiTokensResponse.DeveloperApiToken\x1aY\n\x11\x44\x65veloperApiToken\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12*\n\x06\x65xpiry\x18\x03 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\"Z\n\x1e\x43reateDeveloperApiTokenRequest\x12\x0c\n\x04name\x18\x02 \x01(\t\x12*\n\x06\x65xpiry\x18\x03 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\"<\n\x1f\x43reateDeveloperApiTokenResponse\x12\n\n\x02id\x18\x01 \x01(\t\x12\r\n\x05token\x18\x02 \x01(\t\",\n\x1eRevokeDeveloperApiTokenRequest\x12\n\n\x02id\x18\x01 \x01(\t\"\"\n RevokeDeveloperApiTokensResponse\"\x8c\x01\n\x14\x46indProtocolsRequest\x12\x1e\n\x16\x66low_cell_product_code\x18\x01 \x01(\t\x12\x16\n\x0esequencing_kit\x18\x02 \x01(\t\x12<\n\x0f\x65xperiment_type\x18\x03 \x01(\x0e\x32#.minknow_api.manager.ExperimentType\"\xc9\x01\n\x15\x46indProtocolsResponse\x12\x46\n\tprotocols\x18\x01 \x03(\x0b\x32\x33.minknow_api.manager.FindProtocolsResponse.Protocol\x1ah\n\x08Protocol\x12\x12\n\nidentifier\x18\x01 \x01(\t\x12\'\n\x1frequires_flow_cell_product_code\x18\x02 \x01(\x08\x12\x1f\n\x17requires_sequencing_kit\x18\x03 \x01(\x08\"\xee\x01\n\x1eListSettingsForProtocolRequest\x12\x14\n\nidentifier\x18\x01 \x01(\tH\x00\x12Q\n\ncomponents\x18\x02 \x01(\x0b\x32;.minknow_api.protocol_settings.ProtocolIdentifierComponentsH\x00\x12L\n\x13\x66low_cell_connector\x18\x03 \x01(\x0e\x32).minknow_api.device.FlowCellConnectorTypeB\x04\x88\xb5\x18\x01\x42\x15\n\x13protocol_identifier\"\xa3\"\n\x1fListSettingsForProtocolResponse\x12M\n\x08protocol\x18\x01 \x01(\x0b\x32;.minknow_api.protocol_settings.ProtocolIdentifierComponents\x12T\n\x0brun_options\x18\x02 \x01(\x0b\x32?.minknow_api.manager.ListSettingsForProtocolResponse.RunOptions\x12U\n\x0b\x62\x61secalling\x18\x03 \x01(\x0b\x32@.minknow_api.manager.ListSettingsForProtocolResponse.Basecalling\x12K\n\x06output\x18\x04 \x01(\x0b\x32;.minknow_api.manager.ListSettingsForProtocolResponse.Output\x12I\n\x11protocol_settings\x18\x05 \x03(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x1a\xd5\x06\n\nRunOptions\x12\x42\n\nrun_length\x18\x01 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12\x44\n\x0c\x62ias_voltage\x18\x02 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12J\n\x12read_until_enabled\x18\x03 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12K\n\x13read_until_ref_file\x18\x04 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12K\n\x13read_until_channels\x18\x05 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12S\n\x1bread_until_bed_file_enabled\x18\x06 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12K\n\x13read_until_bed_file\x18\x07 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12M\n\x15read_until_enrichment\x18\x08 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12P\n\x18\x61\x63tive_channel_selection\x18\t \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12G\n\x0fmux_scan_period\x18\n \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12K\n\x13group_change_period\x18\x0b \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x1a\x80\n\n\x0b\x42\x61secalling\x12K\n\x13\x62\x61secalling_enabled\x18\x01 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12I\n\x11\x62\x61rcoding_enabled\x18\x02 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12\x46\n\x0e\x62\x61rcoding_kits\x18\x03 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12\x46\n\x0e\x62\x61secall_model\x18\x04 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12M\n\x15trim_barcodes_enabled\x18\x05 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12R\n\x1arequire_barcodes_both_ends\x18\x06 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12R\n\x1a\x64\x65tect_mid_strand_barcodes\x18\x07 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12T\n\x1coverride_mid_barcoding_score\x18\x08 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12U\n\x1doverride_rear_barcoding_score\x18\t \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12K\n\x13min_barcoding_score\x18\n \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12P\n\x18min_barcoding_score_rear\x18\x0b \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12O\n\x17min_barcoding_score_mid\x18\x0c \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12I\n\x11\x61lignment_enabled\x18\r \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12J\n\x12\x61lignment_ref_file\x18\x0e \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12R\n\x1a\x61lignment_bed_file_enabled\x18\x0f \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12J\n\x12\x61lignment_bed_file\x18\x10 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x1a\x90\x0e\n\x06Output\x12G\n\x0foutput_location\x18\x01 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12\x46\n\x0e\x66\x61st_q_enabled\x18\x02 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12M\n\x15\x66\x61st_q_reads_per_file\x18\x03 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12O\n\x17\x66\x61st_q_data_compression\x18\x04 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12\x46\n\x0e\x66\x61st_5_enabled\x18\x05 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12M\n\x15\x66\x61st_5_reads_per_file\x18\x06 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12O\n\x17\x66\x61st_5_data_trace_table\x18\x07 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12N\n\x16\x66\x61st_5_data_move_table\x18\x08 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12J\n\x12\x66\x61st_5_data_fast_q\x18\t \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12G\n\x0f\x66\x61st_5_data_raw\x18\n \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12O\n\x17\x66\x61st_5_data_compression\x18\x0b \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12\x43\n\x0b\x62\x61m_enabled\x18\x0c \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12N\n\x16read_filtering_enabled\x18\r \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12Q\n\x19read_filtering_min_qscore\x18\x0e \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12V\n\x1eread_filtering_min_read_length\x18\x0f \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12V\n\x1eread_filtering_max_read_length\x18\x10 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12I\n\x11\x62ulk_file_enabled\x18\x11 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12\x45\n\rbulk_file_raw\x18\x12 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12H\n\x10\x62ulk_file_events\x18\x13 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12L\n\x14\x62ulk_file_read_table\x18\x14 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12M\n\x15\x62ulk_file_raw_enabled\x18\x15 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12P\n\x18\x62ulk_file_events_enabled\x18\x16 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12T\n\x1c\x62ulk_file_read_table_enabled\x18\x17 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting*\x88\x01\n\x13SimpleProtocolState\x12\x15\n\x11NO_PROTOCOL_STATE\x10\x00\x12\x14\n\x10PROTOCOL_RUNNING\x10\x01\x12\"\n\x1ePROTOCOL_FINISHED_SUCCESSFULLY\x10\x02\x12 \n\x1cPROTOCOL_FINISHED_WITH_ERROR\x10\x03*j\n\x0e\x45xperimentType\x12\x0e\n\nSEQUENCING\x10\x00\x12\x0b\n\x07\x43ONTROL\x10\x01\x12\n\n\x06\x43USTOM\x10\x02\x12\x15\n\x11\x41LL_EXCEPT_HIDDEN\x10\x03\x12\x18\n\x14\x41LL_INCLUDING_HIDDEN\x10\x04\x32\xd7\x1c\n\x0eManagerService\x12i\n\rdescribe_host\x12(.minknow_api.manager.DescribeHostRequest\x1a).minknow_api.manager.DescribeHostResponse\"\x03\x90\x02\x01\x12{\n\x13\x66low_cell_positions\x12-.minknow_api.manager.FlowCellPositionsRequest\x1a..minknow_api.manager.FlowCellPositionsResponse\"\x03\x90\x02\x01\x30\x01\x12\x8b\x01\n\x19watch_flow_cell_positions\x12\x32.minknow_api.manager.WatchFlowCellPositionsRequest\x1a\x33.minknow_api.manager.WatchFlowCellPositionsResponse\"\x03\x90\x02\x01\x30\x01\x12i\n\x0ereset_position\x12).minknow_api.manager.ResetPositionRequest\x1a*.minknow_api.manager.ResetPositionResponse\"\x00\x12l\n\x0e\x62\x61secaller_api\x12).minknow_api.manager.BasecallerApiRequest\x1a*.minknow_api.manager.BasecallerApiResponse\"\x03\x90\x02\x01\x12j\n\x0eget_guppy_info\x12(.minknow_api.manager.GetGuppyInfoRequest\x1a).minknow_api.manager.GetGuppyInfoResponse\"\x03\x90\x02\x01\x12q\n\x10get_version_info\x12*.minknow_api.manager.GetVersionInfoRequest\x1a,.minknow_api.instance.GetVersionInfoResponse\"\x03\x90\x02\x01\x12\x98\x01\n\x1elist_protocol_output_dir_files\x12\x36.minknow_api.manager.ListProtocolOutputDirFilesRequest\x1a\x37.minknow_api.manager.ListProtocolOutputDirFilesResponse\"\x03\x90\x02\x01\x30\x01\x12r\n\x10\x63reate_directory\x12+.minknow_api.manager.CreateDirectoryRequest\x1a,.minknow_api.manager.CreateDirectoryResponse\"\x03\x90\x02\x02\x12w\n\x13get_disk_space_info\x12,.minknow_api.manager.GetDiskSpaceInfoRequest\x1a-.minknow_api.manager.GetDiskSpaceInfoResponse\"\x03\x90\x02\x01\x12\x88\x01\n\x1eget_default_output_directories\x12\x38.minknow_api.instance.GetDefaultOutputDirectoriesRequest\x1a\'.minknow_api.instance.OutputDirectories\"\x03\x90\x02\x01\x12\x7f\n\x16stream_disk_space_info\x12/.minknow_api.manager.StreamDiskSpaceInfoRequest\x1a-.minknow_api.manager.GetDiskSpaceInfoResponse\"\x03\x90\x02\x01\x30\x01\x12z\n\x14get_barcode_kit_info\x12-.minknow_api.manager.GetBarcodeKitInfoRequest\x1a..minknow_api.manager.GetBarcodeKitInfoResponse\"\x03\x90\x02\x01\x12q\n\x11get_lamp_kit_info\x12*.minknow_api.manager.GetLampKitInfoRequest\x1a+.minknow_api.manager.GetLampKitInfoResponse\"\x03\x90\x02\x01\x12p\n\x10get_barcode_keys\x12*.minknow_api.manager.GetBarcodeKeysRequest\x1a+.minknow_api.manager.GetBarcodeKeysResponse\"\x03\x90\x02\x01\x12{\n\x13get_flow_cell_types\x12,.minknow_api.manager.GetFlowCellTypesRequest\x1a-.minknow_api.manager.GetFlowCellTypesResponse\"\x07\x90\x02\x01\x98\xb5\x18\x01\x12}\n\x13get_sequencing_kits\x12-.minknow_api.manager.GetSequencingKitsRequest\x1a..minknow_api.manager.GetSequencingKitsResponse\"\x07\x90\x02\x01\x98\xb5\x18\x01\x12y\n\x14\x61\x64\x64_simulated_device\x12..minknow_api.manager.AddSimulatedDeviceRequest\x1a/.minknow_api.manager.AddSimulatedDeviceResponse\"\x00\x12\x85\x01\n\x17remove_simulated_device\x12\x31.minknow_api.manager.RemoveSimulatedDeviceRequest\x1a\x32.minknow_api.manager.RemoveSimulatedDeviceResponse\"\x03\x90\x02\x02\x12\x9b\x01\n\x1flocal_authentication_token_path\x12\x38.minknow_api.manager.LocalAuthenticationTokenPathRequest\x1a\x39.minknow_api.manager.LocalAuthenticationTokenPathResponse\"\x03\x90\x02\x01\x12\xa7\x01\n#get_alignment_reference_information\x12<.minknow_api.manager.GetAlignmentReferenceInformationRequest\x1a=.minknow_api.manager.GetAlignmentReferenceInformationResponse\"\x03\x90\x02\x01\x12\x85\x01\n\x17\x61ssociation_device_code\x12\x31.minknow_api.manager.AssociationDeviceCodeRequest\x1a\x32.minknow_api.manager.AssociationDeviceCodeResponse\"\x03\x90\x02\x01\x12\xab\x01\n%apply_offline_association_unlock_code\x12=.minknow_api.manager.ApplyOfflineAssociationUnlockCodeRequest\x1a>.minknow_api.manager.ApplyOfflineAssociationUnlockCodeResponse\"\x03\x90\x02\x02\x12\x89\x01\n\x19list_developer_api_tokens\x12\x32.minknow_api.manager.ListDeveloperApiTokensRequest\x1a\x33.minknow_api.manager.ListDeveloperApiTokensResponse\"\x03\x90\x02\x02\x12\x89\x01\n\x1a\x63reate_developer_api_token\x12\x33.minknow_api.manager.CreateDeveloperApiTokenRequest\x1a\x34.minknow_api.manager.CreateDeveloperApiTokenResponse\"\x00\x12\x8a\x01\n\x1arevoke_developer_api_token\x12\x33.minknow_api.manager.RevokeDeveloperApiTokenRequest\x1a\x35.minknow_api.manager.RevokeDeveloperApiTokensResponse\"\x00\x12m\n\x0e\x66ind_protocols\x12).minknow_api.manager.FindProtocolsRequest\x1a*.minknow_api.manager.FindProtocolsResponse\"\x04\x98\xb5\x18\x01\x12\x90\x01\n\x1alist_settings_for_protocol\x12\x33.minknow_api.manager.ListSettingsForProtocolRequest\x1a\x34.minknow_api.manager.ListSettingsForProtocolResponse\"\x07\x90\x02\x01\x98\xb5\x18\x01\x42&\n\x1c\x63om.nanoporetech.minknow_api\xa2\x02\x05MKAPIb\x06proto3')
 
-_EXPERIMENTTYPE = _descriptor.EnumDescriptor(
-  name='ExperimentType',
-  full_name='minknow_api.manager.ExperimentType',
-  filename=None,
-  file=DESCRIPTOR,
-  create_key=_descriptor._internal_create_key,
-  values=[
-    _descriptor.EnumValueDescriptor(
-      name='SEQUENCING', index=0, number=0,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-    _descriptor.EnumValueDescriptor(
-      name='CONTROL', index=1, number=1,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-    _descriptor.EnumValueDescriptor(
-      name='CUSTOM', index=2, number=2,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-    _descriptor.EnumValueDescriptor(
-      name='ALL_EXCEPT_HIDDEN', index=3, number=3,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-    _descriptor.EnumValueDescriptor(
-      name='ALL_INCLUDING_HIDDEN', index=4, number=4,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-  ],
-  containing_type=None,
-  serialized_options=None,
-  serialized_start=6095,
-  serialized_end=6201,
-)
-_sym_db.RegisterEnumDescriptor(_EXPERIMENTTYPE)
-
+_SIMPLEPROTOCOLSTATE = DESCRIPTOR.enum_types_by_name['SimpleProtocolState']
+SimpleProtocolState = enum_type_wrapper.EnumTypeWrapper(_SIMPLEPROTOCOLSTATE)
+_EXPERIMENTTYPE = DESCRIPTOR.enum_types_by_name['ExperimentType']
 ExperimentType = enum_type_wrapper.EnumTypeWrapper(_EXPERIMENTTYPE)
+NO_PROTOCOL_STATE = 0
+PROTOCOL_RUNNING = 1
+PROTOCOL_FINISHED_SUCCESSFULLY = 2
+PROTOCOL_FINISHED_WITH_ERROR = 3
 SEQUENCING = 0
 CONTROL = 1
 CUSTOM = 2
@@ -76,2651 +37,75 @@ ALL_EXCEPT_HIDDEN = 3
 ALL_INCLUDING_HIDDEN = 4
 
 
-_FLOWCELLPOSITION_STATE = _descriptor.EnumDescriptor(
-  name='State',
-  full_name='minknow_api.manager.FlowCellPosition.State',
-  filename=None,
-  file=DESCRIPTOR,
-  create_key=_descriptor._internal_create_key,
-  values=[
-    _descriptor.EnumValueDescriptor(
-      name='STATE_INITIALISING', index=0, number=0,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-    _descriptor.EnumValueDescriptor(
-      name='STATE_RUNNING', index=1, number=1,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-    _descriptor.EnumValueDescriptor(
-      name='STATE_RESETTING', index=2, number=2,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-    _descriptor.EnumValueDescriptor(
-      name='STATE_HARDWARE_REMOVED', index=3, number=3,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-    _descriptor.EnumValueDescriptor(
-      name='STATE_HARDWARE_ERROR', index=4, number=4,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-    _descriptor.EnumValueDescriptor(
-      name='STATE_SOFTWARE_ERROR', index=5, number=5,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-    _descriptor.EnumValueDescriptor(
-      name='STATE_NEEDS_ASSOCIATION', index=6, number=6,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-  ],
-  containing_type=None,
-  serialized_options=None,
-  serialized_start=919,
-  serialized_end=1099,
-)
-_sym_db.RegisterEnumDescriptor(_FLOWCELLPOSITION_STATE)
-
-_GETVERSIONINFORESPONSE_INSTALLATIONTYPE = _descriptor.EnumDescriptor(
-  name='InstallationType',
-  full_name='minknow_api.manager.GetVersionInfoResponse.InstallationType',
-  filename=None,
-  file=DESCRIPTOR,
-  create_key=_descriptor._internal_create_key,
-  values=[
-    _descriptor.EnumValueDescriptor(
-      name='ONT', index=0, number=0,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-    _descriptor.EnumValueDescriptor(
-      name='NC', index=1, number=1,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-    _descriptor.EnumValueDescriptor(
-      name='PROD', index=2, number=2,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-    _descriptor.EnumValueDescriptor(
-      name='Q_RELEASE', index=3, number=3,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-    _descriptor.EnumValueDescriptor(
-      name='OND_RELEASE', index=4, number=4,
-      serialized_options=None,
-      type=None,
-      create_key=_descriptor._internal_create_key),
-  ],
-  containing_type=None,
-  serialized_options=None,
-  serialized_start=2221,
-  serialized_end=2298,
-)
-_sym_db.RegisterEnumDescriptor(_GETVERSIONINFORESPONSE_INSTALLATIONTYPE)
-
-
-_DESCRIBEHOSTREQUEST = _descriptor.Descriptor(
-  name='DescribeHostRequest',
-  full_name='minknow_api.manager.DescribeHostRequest',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=168,
-  serialized_end=189,
-)
-
-
-_DESCRIBEHOSTRESPONSE = _descriptor.Descriptor(
-  name='DescribeHostResponse',
-  full_name='minknow_api.manager.DescribeHostResponse',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='product_code', full_name='minknow_api.manager.DescribeHostResponse.product_code', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='description', full_name='minknow_api.manager.DescribeHostResponse.description', index=1,
-      number=2, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='serial', full_name='minknow_api.manager.DescribeHostResponse.serial', index=2,
-      number=3, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='network_name', full_name='minknow_api.manager.DescribeHostResponse.network_name', index=3,
-      number=4, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='needs_association', full_name='minknow_api.manager.DescribeHostResponse.needs_association', index=4,
-      number=16, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='can_sequence_offline', full_name='minknow_api.manager.DescribeHostResponse.can_sequence_offline', index=5,
-      number=5, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=192,
-  serialized_end=352,
-)
-
-
-_FLOWCELLPOSITION_LOCATION = _descriptor.Descriptor(
-  name='Location',
-  full_name='minknow_api.manager.FlowCellPosition.Location',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='x', full_name='minknow_api.manager.FlowCellPosition.Location.x', index=0,
-      number=1, type=5, cpp_type=1, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='y', full_name='minknow_api.manager.FlowCellPosition.Location.y', index=1,
-      number=2, type=5, cpp_type=1, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=745,
-  serialized_end=777,
-)
-
-_FLOWCELLPOSITION_RPCPORTS = _descriptor.Descriptor(
-  name='RpcPorts',
-  full_name='minknow_api.manager.FlowCellPosition.RpcPorts',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='secure', full_name='minknow_api.manager.FlowCellPosition.RpcPorts.secure', index=0,
-      number=1, type=13, cpp_type=3, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='insecure', full_name='minknow_api.manager.FlowCellPosition.RpcPorts.insecure', index=1,
-      number=2, type=13, cpp_type=3, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='secure_grpc_web', full_name='minknow_api.manager.FlowCellPosition.RpcPorts.secure_grpc_web', index=2,
-      number=3, type=13, cpp_type=3, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='insecure_grpc_web', full_name='minknow_api.manager.FlowCellPosition.RpcPorts.insecure_grpc_web', index=3,
-      number=4, type=13, cpp_type=3, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=779,
-  serialized_end=875,
-)
-
-_FLOWCELLPOSITION_SHAREDHARDWAREGROUP = _descriptor.Descriptor(
-  name='SharedHardwareGroup',
-  full_name='minknow_api.manager.FlowCellPosition.SharedHardwareGroup',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='group_id', full_name='minknow_api.manager.FlowCellPosition.SharedHardwareGroup.group_id', index=0,
-      number=1, type=13, cpp_type=3, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=877,
-  serialized_end=916,
-)
-
-_FLOWCELLPOSITION = _descriptor.Descriptor(
-  name='FlowCellPosition',
-  full_name='minknow_api.manager.FlowCellPosition',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='name', full_name='minknow_api.manager.FlowCellPosition.name', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='location', full_name='minknow_api.manager.FlowCellPosition.location', index=1,
-      number=2, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='state', full_name='minknow_api.manager.FlowCellPosition.state', index=2,
-      number=3, type=14, cpp_type=8, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='rpc_ports', full_name='minknow_api.manager.FlowCellPosition.rpc_ports', index=3,
-      number=4, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='error_info', full_name='minknow_api.manager.FlowCellPosition.error_info', index=4,
-      number=5, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='shared_hardware_group', full_name='minknow_api.manager.FlowCellPosition.shared_hardware_group', index=5,
-      number=6, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='is_integrated', full_name='minknow_api.manager.FlowCellPosition.is_integrated', index=6,
-      number=7, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='can_sequence_offline', full_name='minknow_api.manager.FlowCellPosition.can_sequence_offline', index=7,
-      number=8, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[_FLOWCELLPOSITION_LOCATION, _FLOWCELLPOSITION_RPCPORTS, _FLOWCELLPOSITION_SHAREDHARDWAREGROUP, ],
-  enum_types=[
-    _FLOWCELLPOSITION_STATE,
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=355,
-  serialized_end=1099,
-)
-
-
-_FLOWCELLPOSITIONSREQUEST = _descriptor.Descriptor(
-  name='FlowCellPositionsRequest',
-  full_name='minknow_api.manager.FlowCellPositionsRequest',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=1101,
-  serialized_end=1127,
-)
-
-
-_FLOWCELLPOSITIONSRESPONSE = _descriptor.Descriptor(
-  name='FlowCellPositionsResponse',
-  full_name='minknow_api.manager.FlowCellPositionsResponse',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='total_count', full_name='minknow_api.manager.FlowCellPositionsResponse.total_count', index=0,
-      number=1, type=5, cpp_type=1, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='positions', full_name='minknow_api.manager.FlowCellPositionsResponse.positions', index=1,
-      number=2, type=11, cpp_type=10, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=1129,
-  serialized_end=1235,
-)
-
-
-_WATCHFLOWCELLPOSITIONSREQUEST = _descriptor.Descriptor(
-  name='WatchFlowCellPositionsRequest',
-  full_name='minknow_api.manager.WatchFlowCellPositionsRequest',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=1237,
-  serialized_end=1268,
-)
-
-
-_WATCHFLOWCELLPOSITIONSRESPONSE = _descriptor.Descriptor(
-  name='WatchFlowCellPositionsResponse',
-  full_name='minknow_api.manager.WatchFlowCellPositionsResponse',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='additions', full_name='minknow_api.manager.WatchFlowCellPositionsResponse.additions', index=0,
-      number=1, type=11, cpp_type=10, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='changes', full_name='minknow_api.manager.WatchFlowCellPositionsResponse.changes', index=1,
-      number=2, type=11, cpp_type=10, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='removals', full_name='minknow_api.manager.WatchFlowCellPositionsResponse.removals', index=2,
-      number=3, type=9, cpp_type=9, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=1271,
-  serialized_end=1435,
-)
-
-
-_RESETPOSITIONREQUEST = _descriptor.Descriptor(
-  name='ResetPositionRequest',
-  full_name='minknow_api.manager.ResetPositionRequest',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='positions', full_name='minknow_api.manager.ResetPositionRequest.positions', index=0,
-      number=3, type=9, cpp_type=9, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='force', full_name='minknow_api.manager.ResetPositionRequest.force', index=1,
-      number=2, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=1437,
-  serialized_end=1493,
-)
-
-
-_RESETPOSITIONRESPONSE = _descriptor.Descriptor(
-  name='ResetPositionResponse',
-  full_name='minknow_api.manager.ResetPositionResponse',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=1495,
-  serialized_end=1518,
-)
-
-
-_BASECALLERAPIREQUEST = _descriptor.Descriptor(
-  name='BasecallerApiRequest',
-  full_name='minknow_api.manager.BasecallerApiRequest',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=1520,
-  serialized_end=1542,
-)
-
-
-_BASECALLERAPIRESPONSE = _descriptor.Descriptor(
-  name='BasecallerApiResponse',
-  full_name='minknow_api.manager.BasecallerApiResponse',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='secure', full_name='minknow_api.manager.BasecallerApiResponse.secure', index=0,
-      number=1, type=13, cpp_type=3, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='insecure', full_name='minknow_api.manager.BasecallerApiResponse.insecure', index=1,
-      number=2, type=13, cpp_type=3, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='secure_grpc_web', full_name='minknow_api.manager.BasecallerApiResponse.secure_grpc_web', index=2,
-      number=3, type=13, cpp_type=3, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='insecure_grpc_web', full_name='minknow_api.manager.BasecallerApiResponse.insecure_grpc_web', index=3,
-      number=4, type=13, cpp_type=3, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=1544,
-  serialized_end=1653,
-)
-
-
-_GETGUPPYINFOREQUEST = _descriptor.Descriptor(
-  name='GetGuppyInfoRequest',
-  full_name='minknow_api.manager.GetGuppyInfoRequest',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=1655,
-  serialized_end=1676,
-)
-
-
-_GETGUPPYINFORESPONSE = _descriptor.Descriptor(
-  name='GetGuppyInfoResponse',
-  full_name='minknow_api.manager.GetGuppyInfoResponse',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='port', full_name='minknow_api.manager.GetGuppyInfoResponse.port', index=0,
-      number=1, type=13, cpp_type=3, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='ipc_path', full_name='minknow_api.manager.GetGuppyInfoResponse.ipc_path', index=1,
-      number=3, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='version', full_name='minknow_api.manager.GetGuppyInfoResponse.version', index=2,
-      number=2, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-    _descriptor.OneofDescriptor(
-      name='connection_type', full_name='minknow_api.manager.GetGuppyInfoResponse.connection_type',
-      index=0, containing_type=None,
-      create_key=_descriptor._internal_create_key,
-    fields=[]),
-  ],
-  serialized_start=1678,
-  serialized_end=1772,
-)
-
-
-_GETVERSIONINFOREQUEST = _descriptor.Descriptor(
-  name='GetVersionInfoRequest',
-  full_name='minknow_api.manager.GetVersionInfoRequest',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=1774,
-  serialized_end=1797,
-)
-
-
-_GETVERSIONINFORESPONSE = _descriptor.Descriptor(
-  name='GetVersionInfoResponse',
-  full_name='minknow_api.manager.GetVersionInfoResponse',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='minknow', full_name='minknow_api.manager.GetVersionInfoResponse.minknow', index=0,
-      number=1, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='protocols', full_name='minknow_api.manager.GetVersionInfoResponse.protocols', index=1,
-      number=2, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='distribution_version', full_name='minknow_api.manager.GetVersionInfoResponse.distribution_version', index=2,
-      number=3, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='distribution_status', full_name='minknow_api.manager.GetVersionInfoResponse.distribution_status', index=3,
-      number=4, type=14, cpp_type=8, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='guppy_build_version', full_name='minknow_api.manager.GetVersionInfoResponse.guppy_build_version', index=4,
-      number=5, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='guppy_connected_version', full_name='minknow_api.manager.GetVersionInfoResponse.guppy_connected_version', index=5,
-      number=6, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='configuration', full_name='minknow_api.manager.GetVersionInfoResponse.configuration', index=6,
-      number=7, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='installation_type', full_name='minknow_api.manager.GetVersionInfoResponse.installation_type', index=7,
-      number=8, type=14, cpp_type=8, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-    _GETVERSIONINFORESPONSE_INSTALLATIONTYPE,
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=1800,
-  serialized_end=2298,
-)
-
-
-_LISTPROTOCOLOUTPUTDIRFILESREQUEST = _descriptor.Descriptor(
-  name='ListProtocolOutputDirFilesRequest',
-  full_name='minknow_api.manager.ListProtocolOutputDirFilesRequest',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='path', full_name='minknow_api.manager.ListProtocolOutputDirFilesRequest.path', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=2300,
-  serialized_end=2349,
-)
-
-
-_LISTPROTOCOLOUTPUTDIRFILESRESPONSE_DIRECTORYINFO = _descriptor.Descriptor(
-  name='DirectoryInfo',
-  full_name='minknow_api.manager.ListProtocolOutputDirFilesResponse.DirectoryInfo',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='name', full_name='minknow_api.manager.ListProtocolOutputDirFilesResponse.DirectoryInfo.name', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='directory_count', full_name='minknow_api.manager.ListProtocolOutputDirFilesResponse.DirectoryInfo.directory_count', index=1,
-      number=2, type=5, cpp_type=1, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='file_count', full_name='minknow_api.manager.ListProtocolOutputDirFilesResponse.DirectoryInfo.file_count', index=2,
-      number=3, type=5, cpp_type=1, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=2526,
-  serialized_end=2600,
-)
-
-_LISTPROTOCOLOUTPUTDIRFILESRESPONSE = _descriptor.Descriptor(
-  name='ListProtocolOutputDirFilesResponse',
-  full_name='minknow_api.manager.ListProtocolOutputDirFilesResponse',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='directories', full_name='minknow_api.manager.ListProtocolOutputDirFilesResponse.directories', index=0,
-      number=1, type=11, cpp_type=10, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='files', full_name='minknow_api.manager.ListProtocolOutputDirFilesResponse.files', index=1,
-      number=2, type=9, cpp_type=9, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='current_listed_path', full_name='minknow_api.manager.ListProtocolOutputDirFilesResponse.current_listed_path', index=2,
-      number=3, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[_LISTPROTOCOLOUTPUTDIRFILESRESPONSE_DIRECTORYINFO, ],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=2352,
-  serialized_end=2600,
-)
-
-
-_CREATEDIRECTORYREQUEST = _descriptor.Descriptor(
-  name='CreateDirectoryRequest',
-  full_name='minknow_api.manager.CreateDirectoryRequest',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='parent_path', full_name='minknow_api.manager.CreateDirectoryRequest.parent_path', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='name', full_name='minknow_api.manager.CreateDirectoryRequest.name', index=1,
-      number=2, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=2602,
-  serialized_end=2661,
-)
-
-
-_CREATEDIRECTORYRESPONSE = _descriptor.Descriptor(
-  name='CreateDirectoryResponse',
-  full_name='minknow_api.manager.CreateDirectoryResponse',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='path', full_name='minknow_api.manager.CreateDirectoryResponse.path', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=2663,
-  serialized_end=2702,
-)
-
-
-_FILESYSTEMDISKSPACEINFO = _descriptor.Descriptor(
-  name='FilesystemDiskSpaceInfo',
-  full_name='minknow_api.manager.FilesystemDiskSpaceInfo',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='filesystem_id', full_name='minknow_api.manager.FilesystemDiskSpaceInfo.filesystem_id', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='bytes_available', full_name='minknow_api.manager.FilesystemDiskSpaceInfo.bytes_available', index=1,
-      number=2, type=4, cpp_type=4, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='bytes_capacity', full_name='minknow_api.manager.FilesystemDiskSpaceInfo.bytes_capacity', index=2,
-      number=3, type=4, cpp_type=4, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='file_types_stored', full_name='minknow_api.manager.FilesystemDiskSpaceInfo.file_types_stored', index=3,
-      number=4, type=9, cpp_type=9, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='bytes_to_stop_cleanly', full_name='minknow_api.manager.FilesystemDiskSpaceInfo.bytes_to_stop_cleanly', index=4,
-      number=5, type=4, cpp_type=4, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='bytes_when_alert_issued', full_name='minknow_api.manager.FilesystemDiskSpaceInfo.bytes_when_alert_issued', index=5,
-      number=6, type=4, cpp_type=4, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='recommend_alert', full_name='minknow_api.manager.FilesystemDiskSpaceInfo.recommend_alert', index=6,
-      number=7, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='recommend_stop', full_name='minknow_api.manager.FilesystemDiskSpaceInfo.recommend_stop', index=7,
-      number=8, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='bytes_per_second', full_name='minknow_api.manager.FilesystemDiskSpaceInfo.bytes_per_second', index=8,
-      number=9, type=3, cpp_type=2, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=2705,
-  serialized_end=2968,
-)
-
-
-_GETDISKSPACEINFOREQUEST = _descriptor.Descriptor(
-  name='GetDiskSpaceInfoRequest',
-  full_name='minknow_api.manager.GetDiskSpaceInfoRequest',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=2970,
-  serialized_end=2995,
-)
-
-
-_STREAMDISKSPACEINFOREQUEST = _descriptor.Descriptor(
-  name='StreamDiskSpaceInfoRequest',
-  full_name='minknow_api.manager.StreamDiskSpaceInfoRequest',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='period', full_name='minknow_api.manager.StreamDiskSpaceInfoRequest.period', index=0,
-      number=1, type=13, cpp_type=3, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=2997,
-  serialized_end=3041,
-)
-
-
-_GETDISKSPACEINFORESPONSE = _descriptor.Descriptor(
-  name='GetDiskSpaceInfoResponse',
-  full_name='minknow_api.manager.GetDiskSpaceInfoResponse',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='filesystem_disk_space_info', full_name='minknow_api.manager.GetDiskSpaceInfoResponse.filesystem_disk_space_info', index=0,
-      number=1, type=11, cpp_type=10, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=3043,
-  serialized_end=3151,
-)
-
-
-_GETBARCODEKITINFOREQUEST = _descriptor.Descriptor(
-  name='GetBarcodeKitInfoRequest',
-  full_name='minknow_api.manager.GetBarcodeKitInfoRequest',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=3153,
-  serialized_end=3179,
-)
-
-
-_GETBARCODEKITINFORESPONSE_BARCODEKITINFO = _descriptor.Descriptor(
-  name='BarcodeKitInfo',
-  full_name='minknow_api.manager.GetBarcodeKitInfoResponse.BarcodeKitInfo',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='is_dual', full_name='minknow_api.manager.GetBarcodeKitInfoResponse.BarcodeKitInfo.is_dual', index=0,
-      number=2, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='is_both_ends', full_name='minknow_api.manager.GetBarcodeKitInfoResponse.BarcodeKitInfo.is_both_ends', index=1,
-      number=3, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=3305,
-  serialized_end=3360,
-)
-
-_GETBARCODEKITINFORESPONSE_BARCODEKITINFOENTRY = _descriptor.Descriptor(
-  name='BarcodeKitInfoEntry',
-  full_name='minknow_api.manager.GetBarcodeKitInfoResponse.BarcodeKitInfoEntry',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='key', full_name='minknow_api.manager.GetBarcodeKitInfoResponse.BarcodeKitInfoEntry.key', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='value', full_name='minknow_api.manager.GetBarcodeKitInfoResponse.BarcodeKitInfoEntry.value', index=1,
-      number=2, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=b'8\001',
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=3362,
-  serialized_end=3478,
-)
-
-_GETBARCODEKITINFORESPONSE = _descriptor.Descriptor(
-  name='GetBarcodeKitInfoResponse',
-  full_name='minknow_api.manager.GetBarcodeKitInfoResponse',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='barcode_kit_info', full_name='minknow_api.manager.GetBarcodeKitInfoResponse.barcode_kit_info', index=0,
-      number=1, type=11, cpp_type=10, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[_GETBARCODEKITINFORESPONSE_BARCODEKITINFO, _GETBARCODEKITINFORESPONSE_BARCODEKITINFOENTRY, ],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=3182,
-  serialized_end=3478,
-)
-
-
-_GETLAMPKITINFOREQUEST = _descriptor.Descriptor(
-  name='GetLampKitInfoRequest',
-  full_name='minknow_api.manager.GetLampKitInfoRequest',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=3480,
-  serialized_end=3503,
-)
-
-
-_GETLAMPKITINFORESPONSE = _descriptor.Descriptor(
-  name='GetLampKitInfoResponse',
-  full_name='minknow_api.manager.GetLampKitInfoResponse',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='lamp_kits', full_name='minknow_api.manager.GetLampKitInfoResponse.lamp_kits', index=0,
-      number=2, type=9, cpp_type=9, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=3505,
-  serialized_end=3548,
-)
-
-
-_GETBARCODEKEYSREQUEST = _descriptor.Descriptor(
-  name='GetBarcodeKeysRequest',
-  full_name='minknow_api.manager.GetBarcodeKeysRequest',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='barcode_kit_names', full_name='minknow_api.manager.GetBarcodeKeysRequest.barcode_kit_names', index=0,
-      number=1, type=9, cpp_type=9, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='lamp_kit_name', full_name='minknow_api.manager.GetBarcodeKeysRequest.lamp_kit_name', index=1,
-      number=2, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=3550,
-  serialized_end=3623,
-)
-
-
-_GETBARCODEKEYSRESPONSE = _descriptor.Descriptor(
-  name='GetBarcodeKeysResponse',
-  full_name='minknow_api.manager.GetBarcodeKeysResponse',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='barcode_keys', full_name='minknow_api.manager.GetBarcodeKeysResponse.barcode_keys', index=0,
-      number=1, type=9, cpp_type=9, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='lamp_keys', full_name='minknow_api.manager.GetBarcodeKeysResponse.lamp_keys', index=1,
-      number=2, type=9, cpp_type=9, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='combined_keys', full_name='minknow_api.manager.GetBarcodeKeysResponse.combined_keys', index=2,
-      number=3, type=9, cpp_type=9, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=3625,
-  serialized_end=3713,
-)
-
-
-_GETFLOWCELLTYPESREQUEST = _descriptor.Descriptor(
-  name='GetFlowCellTypesRequest',
-  full_name='minknow_api.manager.GetFlowCellTypesRequest',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=3715,
-  serialized_end=3740,
-)
-
-
-_GETFLOWCELLTYPESRESPONSE_INFO = _descriptor.Descriptor(
-  name='Info',
-  full_name='minknow_api.manager.GetFlowCellTypesResponse.Info',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='product_code', full_name='minknow_api.manager.GetFlowCellTypesResponse.Info.product_code', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='connector_type', full_name='minknow_api.manager.GetFlowCellTypesResponse.Info.connector_type', index=1,
-      number=2, type=14, cpp_type=8, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='cannot_live_basecall', full_name='minknow_api.manager.GetFlowCellTypesResponse.Info.cannot_live_basecall', index=2,
-      number=3, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=3838,
-  serialized_end=3963,
-)
-
-_GETFLOWCELLTYPESRESPONSE = _descriptor.Descriptor(
-  name='GetFlowCellTypesResponse',
-  full_name='minknow_api.manager.GetFlowCellTypesResponse',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='types', full_name='minknow_api.manager.GetFlowCellTypesResponse.types', index=0,
-      number=1, type=11, cpp_type=10, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[_GETFLOWCELLTYPESRESPONSE_INFO, ],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=3743,
-  serialized_end=3963,
-)
-
-
-_GETSEQUENCINGKITSREQUEST = _descriptor.Descriptor(
-  name='GetSequencingKitsRequest',
-  full_name='minknow_api.manager.GetSequencingKitsRequest',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='flow_cell_product_code', full_name='minknow_api.manager.GetSequencingKitsRequest.flow_cell_product_code', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=3965,
-  serialized_end=4023,
-)
-
-
-_GETSEQUENCINGKITSRESPONSE_KIT = _descriptor.Descriptor(
-  name='Kit',
-  full_name='minknow_api.manager.GetSequencingKitsResponse.Kit',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='product_code', full_name='minknow_api.manager.GetSequencingKitsResponse.Kit.product_code', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='barcoding_expansion_kits', full_name='minknow_api.manager.GetSequencingKitsResponse.Kit.barcoding_expansion_kits', index=1,
-      number=2, type=5, cpp_type=1, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='includes_barcoding', full_name='minknow_api.manager.GetSequencingKitsResponse.Kit.includes_barcoding', index=2,
-      number=3, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='lamp_kit', full_name='minknow_api.manager.GetSequencingKitsResponse.Kit.lamp_kit', index=3,
-      number=16, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='has_control_protocol', full_name='minknow_api.manager.GetSequencingKitsResponse.Kit.has_control_protocol', index=4,
-      number=4, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='no_sequencing_protocol', full_name='minknow_api.manager.GetSequencingKitsResponse.Kit.no_sequencing_protocol', index=5,
-      number=17, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='frequently_used', full_name='minknow_api.manager.GetSequencingKitsResponse.Kit.frequently_used', index=6,
-      number=18, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='dna', full_name='minknow_api.manager.GetSequencingKitsResponse.Kit.dna', index=7,
-      number=5, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='rna', full_name='minknow_api.manager.GetSequencingKitsResponse.Kit.rna', index=8,
-      number=6, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='pcr', full_name='minknow_api.manager.GetSequencingKitsResponse.Kit.pcr', index=9,
-      number=7, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='pcr_free', full_name='minknow_api.manager.GetSequencingKitsResponse.Kit.pcr_free', index=10,
-      number=8, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=4226,
-  serialized_end=4477,
-)
-
-_GETSEQUENCINGKITSRESPONSE_BARCODINGEXPANSIONKIT = _descriptor.Descriptor(
-  name='BarcodingExpansionKit',
-  full_name='minknow_api.manager.GetSequencingKitsResponse.BarcodingExpansionKit',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='product_code', full_name='minknow_api.manager.GetSequencingKitsResponse.BarcodingExpansionKit.product_code', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=4479,
-  serialized_end=4524,
-)
-
-_GETSEQUENCINGKITSRESPONSE = _descriptor.Descriptor(
-  name='GetSequencingKitsResponse',
-  full_name='minknow_api.manager.GetSequencingKitsResponse',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='kits', full_name='minknow_api.manager.GetSequencingKitsResponse.kits', index=0,
-      number=1, type=11, cpp_type=10, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='barcoding_expansion_kits', full_name='minknow_api.manager.GetSequencingKitsResponse.barcoding_expansion_kits', index=1,
-      number=2, type=11, cpp_type=10, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[_GETSEQUENCINGKITSRESPONSE_KIT, _GETSEQUENCINGKITSRESPONSE_BARCODINGEXPANSIONKIT, ],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=4026,
-  serialized_end=4524,
-)
-
-
-_ADDSIMULATEDDEVICEREQUEST = _descriptor.Descriptor(
-  name='AddSimulatedDeviceRequest',
-  full_name='minknow_api.manager.AddSimulatedDeviceRequest',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='name', full_name='minknow_api.manager.AddSimulatedDeviceRequest.name', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=b'\210\265\030\001', file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=4526,
-  serialized_end=4573,
-)
-
-
-_ADDSIMULATEDDEVICERESPONSE = _descriptor.Descriptor(
-  name='AddSimulatedDeviceResponse',
-  full_name='minknow_api.manager.AddSimulatedDeviceResponse',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=4575,
-  serialized_end=4603,
-)
-
-
-_REMOVESIMULATEDDEVICEREQUEST = _descriptor.Descriptor(
-  name='RemoveSimulatedDeviceRequest',
-  full_name='minknow_api.manager.RemoveSimulatedDeviceRequest',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='name', full_name='minknow_api.manager.RemoveSimulatedDeviceRequest.name', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=b'\210\265\030\001', file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=4605,
-  serialized_end=4655,
-)
-
-
-_REMOVESIMULATEDDEVICERESPONSE = _descriptor.Descriptor(
-  name='RemoveSimulatedDeviceResponse',
-  full_name='minknow_api.manager.RemoveSimulatedDeviceResponse',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=4657,
-  serialized_end=4688,
-)
-
-
-_LOCALAUTHENTICATIONTOKENPATHREQUEST = _descriptor.Descriptor(
-  name='LocalAuthenticationTokenPathRequest',
-  full_name='minknow_api.manager.LocalAuthenticationTokenPathRequest',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=4690,
-  serialized_end=4727,
-)
-
-
-_LOCALAUTHENTICATIONTOKENPATHRESPONSE = _descriptor.Descriptor(
-  name='LocalAuthenticationTokenPathResponse',
-  full_name='minknow_api.manager.LocalAuthenticationTokenPathResponse',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='path', full_name='minknow_api.manager.LocalAuthenticationTokenPathResponse.path', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=4729,
-  serialized_end=4781,
-)
-
-
-_GETALIGNMENTREFERENCEINFORMATIONREQUEST = _descriptor.Descriptor(
-  name='GetAlignmentReferenceInformationRequest',
-  full_name='minknow_api.manager.GetAlignmentReferenceInformationRequest',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='path', full_name='minknow_api.manager.GetAlignmentReferenceInformationRequest.path', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=4783,
-  serialized_end=4838,
-)
-
-
-_GETALIGNMENTREFERENCEINFORMATIONRESPONSE = _descriptor.Descriptor(
-  name='GetAlignmentReferenceInformationResponse',
-  full_name='minknow_api.manager.GetAlignmentReferenceInformationResponse',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='estimated_load_time_seconds', full_name='minknow_api.manager.GetAlignmentReferenceInformationResponse.estimated_load_time_seconds', index=0,
-      number=1, type=2, cpp_type=6, label=1,
-      has_default_value=False, default_value=float(0),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='estimated_reference_size_bases', full_name='minknow_api.manager.GetAlignmentReferenceInformationResponse.estimated_reference_size_bases', index=1,
-      number=2, type=4, cpp_type=4, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='recommended_live_usage', full_name='minknow_api.manager.GetAlignmentReferenceInformationResponse.recommended_live_usage', index=2,
-      number=3, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=4841,
-  serialized_end=4992,
-)
-
-
-_ASSOCIATIONDEVICECODEREQUEST = _descriptor.Descriptor(
-  name='AssociationDeviceCodeRequest',
-  full_name='minknow_api.manager.AssociationDeviceCodeRequest',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='position_name', full_name='minknow_api.manager.AssociationDeviceCodeRequest.position_name', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='offline', full_name='minknow_api.manager.AssociationDeviceCodeRequest.offline', index=1,
-      number=2, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=4994,
-  serialized_end=5064,
-)
-
-
-_ASSOCIATIONDEVICECODERESPONSE = _descriptor.Descriptor(
-  name='AssociationDeviceCodeResponse',
-  full_name='minknow_api.manager.AssociationDeviceCodeResponse',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='code', full_name='minknow_api.manager.AssociationDeviceCodeResponse.code', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=5066,
-  serialized_end=5111,
-)
-
-
-_APPLYOFFLINEASSOCIATIONUNLOCKCODEREQUEST = _descriptor.Descriptor(
-  name='ApplyOfflineAssociationUnlockCodeRequest',
-  full_name='minknow_api.manager.ApplyOfflineAssociationUnlockCodeRequest',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='position_name', full_name='minknow_api.manager.ApplyOfflineAssociationUnlockCodeRequest.position_name', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='unlock_code', full_name='minknow_api.manager.ApplyOfflineAssociationUnlockCodeRequest.unlock_code', index=1,
-      number=2, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=5113,
-  serialized_end=5199,
-)
-
-
-_APPLYOFFLINEASSOCIATIONUNLOCKCODERESPONSE = _descriptor.Descriptor(
-  name='ApplyOfflineAssociationUnlockCodeResponse',
-  full_name='minknow_api.manager.ApplyOfflineAssociationUnlockCodeResponse',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='associated', full_name='minknow_api.manager.ApplyOfflineAssociationUnlockCodeResponse.associated', index=0,
-      number=1, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=5201,
-  serialized_end=5264,
-)
-
-
-_LISTDEVELOPERAPITOKENSREQUEST = _descriptor.Descriptor(
-  name='ListDeveloperApiTokensRequest',
-  full_name='minknow_api.manager.ListDeveloperApiTokensRequest',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=5266,
-  serialized_end=5297,
-)
-
-
-_LISTDEVELOPERAPITOKENSRESPONSE_DEVELOPERAPITOKEN = _descriptor.Descriptor(
-  name='DeveloperApiToken',
-  full_name='minknow_api.manager.ListDeveloperApiTokensResponse.DeveloperApiToken',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='id', full_name='minknow_api.manager.ListDeveloperApiTokensResponse.DeveloperApiToken.id', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='name', full_name='minknow_api.manager.ListDeveloperApiTokensResponse.DeveloperApiToken.name', index=1,
-      number=2, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='expiry', full_name='minknow_api.manager.ListDeveloperApiTokensResponse.DeveloperApiToken.expiry', index=2,
-      number=3, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=5421,
-  serialized_end=5510,
-)
-
-_LISTDEVELOPERAPITOKENSRESPONSE = _descriptor.Descriptor(
-  name='ListDeveloperApiTokensResponse',
-  full_name='minknow_api.manager.ListDeveloperApiTokensResponse',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='tokens', full_name='minknow_api.manager.ListDeveloperApiTokensResponse.tokens', index=0,
-      number=1, type=11, cpp_type=10, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[_LISTDEVELOPERAPITOKENSRESPONSE_DEVELOPERAPITOKEN, ],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=5300,
-  serialized_end=5510,
-)
-
-
-_CREATEDEVELOPERAPITOKENREQUEST = _descriptor.Descriptor(
-  name='CreateDeveloperApiTokenRequest',
-  full_name='minknow_api.manager.CreateDeveloperApiTokenRequest',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='name', full_name='minknow_api.manager.CreateDeveloperApiTokenRequest.name', index=0,
-      number=2, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='expiry', full_name='minknow_api.manager.CreateDeveloperApiTokenRequest.expiry', index=1,
-      number=3, type=11, cpp_type=10, label=1,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=5512,
-  serialized_end=5602,
-)
-
-
-_CREATEDEVELOPERAPITOKENRESPONSE = _descriptor.Descriptor(
-  name='CreateDeveloperApiTokenResponse',
-  full_name='minknow_api.manager.CreateDeveloperApiTokenResponse',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='id', full_name='minknow_api.manager.CreateDeveloperApiTokenResponse.id', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='token', full_name='minknow_api.manager.CreateDeveloperApiTokenResponse.token', index=1,
-      number=2, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=5604,
-  serialized_end=5664,
-)
-
-
-_REVOKEDEVELOPERAPITOKENREQUEST = _descriptor.Descriptor(
-  name='RevokeDeveloperApiTokenRequest',
-  full_name='minknow_api.manager.RevokeDeveloperApiTokenRequest',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='id', full_name='minknow_api.manager.RevokeDeveloperApiTokenRequest.id', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=5666,
-  serialized_end=5710,
-)
-
-
-_REVOKEDEVELOPERAPITOKENSRESPONSE = _descriptor.Descriptor(
-  name='RevokeDeveloperApiTokensResponse',
-  full_name='minknow_api.manager.RevokeDeveloperApiTokensResponse',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=5712,
-  serialized_end=5746,
-)
-
-
-_FINDPROTOCOLSREQUEST = _descriptor.Descriptor(
-  name='FindProtocolsRequest',
-  full_name='minknow_api.manager.FindProtocolsRequest',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='flow_cell_product_code', full_name='minknow_api.manager.FindProtocolsRequest.flow_cell_product_code', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='sequencing_kit', full_name='minknow_api.manager.FindProtocolsRequest.sequencing_kit', index=1,
-      number=2, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='experiment_type', full_name='minknow_api.manager.FindProtocolsRequest.experiment_type', index=2,
-      number=3, type=14, cpp_type=8, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=5749,
-  serialized_end=5889,
-)
-
-
-_FINDPROTOCOLSRESPONSE_PROTOCOL = _descriptor.Descriptor(
-  name='Protocol',
-  full_name='minknow_api.manager.FindProtocolsResponse.Protocol',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='identifier', full_name='minknow_api.manager.FindProtocolsResponse.Protocol.identifier', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='requires_flow_cell_product_code', full_name='minknow_api.manager.FindProtocolsResponse.Protocol.requires_flow_cell_product_code', index=1,
-      number=2, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-    _descriptor.FieldDescriptor(
-      name='requires_sequencing_kit', full_name='minknow_api.manager.FindProtocolsResponse.Protocol.requires_sequencing_kit', index=2,
-      number=3, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=5989,
-  serialized_end=6093,
-)
-
-_FINDPROTOCOLSRESPONSE = _descriptor.Descriptor(
-  name='FindProtocolsResponse',
-  full_name='minknow_api.manager.FindProtocolsResponse',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  create_key=_descriptor._internal_create_key,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='protocols', full_name='minknow_api.manager.FindProtocolsResponse.protocols', index=0,
-      number=1, type=11, cpp_type=10, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
-  ],
-  extensions=[
-  ],
-  nested_types=[_FINDPROTOCOLSRESPONSE_PROTOCOL, ],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=5892,
-  serialized_end=6093,
-)
-
-_FLOWCELLPOSITION_LOCATION.containing_type = _FLOWCELLPOSITION
-_FLOWCELLPOSITION_RPCPORTS.containing_type = _FLOWCELLPOSITION
-_FLOWCELLPOSITION_SHAREDHARDWAREGROUP.containing_type = _FLOWCELLPOSITION
-_FLOWCELLPOSITION.fields_by_name['location'].message_type = _FLOWCELLPOSITION_LOCATION
-_FLOWCELLPOSITION.fields_by_name['state'].enum_type = _FLOWCELLPOSITION_STATE
-_FLOWCELLPOSITION.fields_by_name['rpc_ports'].message_type = _FLOWCELLPOSITION_RPCPORTS
-_FLOWCELLPOSITION.fields_by_name['shared_hardware_group'].message_type = _FLOWCELLPOSITION_SHAREDHARDWAREGROUP
-_FLOWCELLPOSITION_STATE.containing_type = _FLOWCELLPOSITION
-_FLOWCELLPOSITIONSRESPONSE.fields_by_name['positions'].message_type = _FLOWCELLPOSITION
-_WATCHFLOWCELLPOSITIONSRESPONSE.fields_by_name['additions'].message_type = _FLOWCELLPOSITION
-_WATCHFLOWCELLPOSITIONSRESPONSE.fields_by_name['changes'].message_type = _FLOWCELLPOSITION
-_GETGUPPYINFORESPONSE.oneofs_by_name['connection_type'].fields.append(
-  _GETGUPPYINFORESPONSE.fields_by_name['port'])
-_GETGUPPYINFORESPONSE.fields_by_name['port'].containing_oneof = _GETGUPPYINFORESPONSE.oneofs_by_name['connection_type']
-_GETGUPPYINFORESPONSE.oneofs_by_name['connection_type'].fields.append(
-  _GETGUPPYINFORESPONSE.fields_by_name['ipc_path'])
-_GETGUPPYINFORESPONSE.fields_by_name['ipc_path'].containing_oneof = _GETGUPPYINFORESPONSE.oneofs_by_name['connection_type']
-_GETVERSIONINFORESPONSE.fields_by_name['minknow'].message_type = minknow__api_dot_instance__pb2._GETVERSIONINFORESPONSE_MINKNOWVERSION
-_GETVERSIONINFORESPONSE.fields_by_name['distribution_status'].enum_type = minknow__api_dot_instance__pb2._GETVERSIONINFORESPONSE_DISTRIBUTIONSTATUS
-_GETVERSIONINFORESPONSE.fields_by_name['installation_type'].enum_type = _GETVERSIONINFORESPONSE_INSTALLATIONTYPE
-_GETVERSIONINFORESPONSE_INSTALLATIONTYPE.containing_type = _GETVERSIONINFORESPONSE
-_LISTPROTOCOLOUTPUTDIRFILESRESPONSE_DIRECTORYINFO.containing_type = _LISTPROTOCOLOUTPUTDIRFILESRESPONSE
-_LISTPROTOCOLOUTPUTDIRFILESRESPONSE.fields_by_name['directories'].message_type = _LISTPROTOCOLOUTPUTDIRFILESRESPONSE_DIRECTORYINFO
-_GETDISKSPACEINFORESPONSE.fields_by_name['filesystem_disk_space_info'].message_type = _FILESYSTEMDISKSPACEINFO
-_GETBARCODEKITINFORESPONSE_BARCODEKITINFO.containing_type = _GETBARCODEKITINFORESPONSE
-_GETBARCODEKITINFORESPONSE_BARCODEKITINFOENTRY.fields_by_name['value'].message_type = _GETBARCODEKITINFORESPONSE_BARCODEKITINFO
-_GETBARCODEKITINFORESPONSE_BARCODEKITINFOENTRY.containing_type = _GETBARCODEKITINFORESPONSE
-_GETBARCODEKITINFORESPONSE.fields_by_name['barcode_kit_info'].message_type = _GETBARCODEKITINFORESPONSE_BARCODEKITINFOENTRY
-_GETFLOWCELLTYPESRESPONSE_INFO.fields_by_name['connector_type'].enum_type = minknow__api_dot_device__pb2._FLOWCELLCONNECTORTYPE
-_GETFLOWCELLTYPESRESPONSE_INFO.containing_type = _GETFLOWCELLTYPESRESPONSE
-_GETFLOWCELLTYPESRESPONSE.fields_by_name['types'].message_type = _GETFLOWCELLTYPESRESPONSE_INFO
-_GETSEQUENCINGKITSRESPONSE_KIT.containing_type = _GETSEQUENCINGKITSRESPONSE
-_GETSEQUENCINGKITSRESPONSE_BARCODINGEXPANSIONKIT.containing_type = _GETSEQUENCINGKITSRESPONSE
-_GETSEQUENCINGKITSRESPONSE.fields_by_name['kits'].message_type = _GETSEQUENCINGKITSRESPONSE_KIT
-_GETSEQUENCINGKITSRESPONSE.fields_by_name['barcoding_expansion_kits'].message_type = _GETSEQUENCINGKITSRESPONSE_BARCODINGEXPANSIONKIT
-_LISTDEVELOPERAPITOKENSRESPONSE_DEVELOPERAPITOKEN.fields_by_name['expiry'].message_type = google_dot_protobuf_dot_timestamp__pb2._TIMESTAMP
-_LISTDEVELOPERAPITOKENSRESPONSE_DEVELOPERAPITOKEN.containing_type = _LISTDEVELOPERAPITOKENSRESPONSE
-_LISTDEVELOPERAPITOKENSRESPONSE.fields_by_name['tokens'].message_type = _LISTDEVELOPERAPITOKENSRESPONSE_DEVELOPERAPITOKEN
-_CREATEDEVELOPERAPITOKENREQUEST.fields_by_name['expiry'].message_type = google_dot_protobuf_dot_timestamp__pb2._TIMESTAMP
-_FINDPROTOCOLSREQUEST.fields_by_name['experiment_type'].enum_type = _EXPERIMENTTYPE
-_FINDPROTOCOLSRESPONSE_PROTOCOL.containing_type = _FINDPROTOCOLSRESPONSE
-_FINDPROTOCOLSRESPONSE.fields_by_name['protocols'].message_type = _FINDPROTOCOLSRESPONSE_PROTOCOL
-DESCRIPTOR.message_types_by_name['DescribeHostRequest'] = _DESCRIBEHOSTREQUEST
-DESCRIPTOR.message_types_by_name['DescribeHostResponse'] = _DESCRIBEHOSTRESPONSE
-DESCRIPTOR.message_types_by_name['FlowCellPosition'] = _FLOWCELLPOSITION
-DESCRIPTOR.message_types_by_name['FlowCellPositionsRequest'] = _FLOWCELLPOSITIONSREQUEST
-DESCRIPTOR.message_types_by_name['FlowCellPositionsResponse'] = _FLOWCELLPOSITIONSRESPONSE
-DESCRIPTOR.message_types_by_name['WatchFlowCellPositionsRequest'] = _WATCHFLOWCELLPOSITIONSREQUEST
-DESCRIPTOR.message_types_by_name['WatchFlowCellPositionsResponse'] = _WATCHFLOWCELLPOSITIONSRESPONSE
-DESCRIPTOR.message_types_by_name['ResetPositionRequest'] = _RESETPOSITIONREQUEST
-DESCRIPTOR.message_types_by_name['ResetPositionResponse'] = _RESETPOSITIONRESPONSE
-DESCRIPTOR.message_types_by_name['BasecallerApiRequest'] = _BASECALLERAPIREQUEST
-DESCRIPTOR.message_types_by_name['BasecallerApiResponse'] = _BASECALLERAPIRESPONSE
-DESCRIPTOR.message_types_by_name['GetGuppyInfoRequest'] = _GETGUPPYINFOREQUEST
-DESCRIPTOR.message_types_by_name['GetGuppyInfoResponse'] = _GETGUPPYINFORESPONSE
-DESCRIPTOR.message_types_by_name['GetVersionInfoRequest'] = _GETVERSIONINFOREQUEST
-DESCRIPTOR.message_types_by_name['GetVersionInfoResponse'] = _GETVERSIONINFORESPONSE
-DESCRIPTOR.message_types_by_name['ListProtocolOutputDirFilesRequest'] = _LISTPROTOCOLOUTPUTDIRFILESREQUEST
-DESCRIPTOR.message_types_by_name['ListProtocolOutputDirFilesResponse'] = _LISTPROTOCOLOUTPUTDIRFILESRESPONSE
-DESCRIPTOR.message_types_by_name['CreateDirectoryRequest'] = _CREATEDIRECTORYREQUEST
-DESCRIPTOR.message_types_by_name['CreateDirectoryResponse'] = _CREATEDIRECTORYRESPONSE
-DESCRIPTOR.message_types_by_name['FilesystemDiskSpaceInfo'] = _FILESYSTEMDISKSPACEINFO
-DESCRIPTOR.message_types_by_name['GetDiskSpaceInfoRequest'] = _GETDISKSPACEINFOREQUEST
-DESCRIPTOR.message_types_by_name['StreamDiskSpaceInfoRequest'] = _STREAMDISKSPACEINFOREQUEST
-DESCRIPTOR.message_types_by_name['GetDiskSpaceInfoResponse'] = _GETDISKSPACEINFORESPONSE
-DESCRIPTOR.message_types_by_name['GetBarcodeKitInfoRequest'] = _GETBARCODEKITINFOREQUEST
-DESCRIPTOR.message_types_by_name['GetBarcodeKitInfoResponse'] = _GETBARCODEKITINFORESPONSE
-DESCRIPTOR.message_types_by_name['GetLampKitInfoRequest'] = _GETLAMPKITINFOREQUEST
-DESCRIPTOR.message_types_by_name['GetLampKitInfoResponse'] = _GETLAMPKITINFORESPONSE
-DESCRIPTOR.message_types_by_name['GetBarcodeKeysRequest'] = _GETBARCODEKEYSREQUEST
-DESCRIPTOR.message_types_by_name['GetBarcodeKeysResponse'] = _GETBARCODEKEYSRESPONSE
-DESCRIPTOR.message_types_by_name['GetFlowCellTypesRequest'] = _GETFLOWCELLTYPESREQUEST
-DESCRIPTOR.message_types_by_name['GetFlowCellTypesResponse'] = _GETFLOWCELLTYPESRESPONSE
-DESCRIPTOR.message_types_by_name['GetSequencingKitsRequest'] = _GETSEQUENCINGKITSREQUEST
-DESCRIPTOR.message_types_by_name['GetSequencingKitsResponse'] = _GETSEQUENCINGKITSRESPONSE
-DESCRIPTOR.message_types_by_name['AddSimulatedDeviceRequest'] = _ADDSIMULATEDDEVICEREQUEST
-DESCRIPTOR.message_types_by_name['AddSimulatedDeviceResponse'] = _ADDSIMULATEDDEVICERESPONSE
-DESCRIPTOR.message_types_by_name['RemoveSimulatedDeviceRequest'] = _REMOVESIMULATEDDEVICEREQUEST
-DESCRIPTOR.message_types_by_name['RemoveSimulatedDeviceResponse'] = _REMOVESIMULATEDDEVICERESPONSE
-DESCRIPTOR.message_types_by_name['LocalAuthenticationTokenPathRequest'] = _LOCALAUTHENTICATIONTOKENPATHREQUEST
-DESCRIPTOR.message_types_by_name['LocalAuthenticationTokenPathResponse'] = _LOCALAUTHENTICATIONTOKENPATHRESPONSE
-DESCRIPTOR.message_types_by_name['GetAlignmentReferenceInformationRequest'] = _GETALIGNMENTREFERENCEINFORMATIONREQUEST
-DESCRIPTOR.message_types_by_name['GetAlignmentReferenceInformationResponse'] = _GETALIGNMENTREFERENCEINFORMATIONRESPONSE
-DESCRIPTOR.message_types_by_name['AssociationDeviceCodeRequest'] = _ASSOCIATIONDEVICECODEREQUEST
-DESCRIPTOR.message_types_by_name['AssociationDeviceCodeResponse'] = _ASSOCIATIONDEVICECODERESPONSE
-DESCRIPTOR.message_types_by_name['ApplyOfflineAssociationUnlockCodeRequest'] = _APPLYOFFLINEASSOCIATIONUNLOCKCODEREQUEST
-DESCRIPTOR.message_types_by_name['ApplyOfflineAssociationUnlockCodeResponse'] = _APPLYOFFLINEASSOCIATIONUNLOCKCODERESPONSE
-DESCRIPTOR.message_types_by_name['ListDeveloperApiTokensRequest'] = _LISTDEVELOPERAPITOKENSREQUEST
-DESCRIPTOR.message_types_by_name['ListDeveloperApiTokensResponse'] = _LISTDEVELOPERAPITOKENSRESPONSE
-DESCRIPTOR.message_types_by_name['CreateDeveloperApiTokenRequest'] = _CREATEDEVELOPERAPITOKENREQUEST
-DESCRIPTOR.message_types_by_name['CreateDeveloperApiTokenResponse'] = _CREATEDEVELOPERAPITOKENRESPONSE
-DESCRIPTOR.message_types_by_name['RevokeDeveloperApiTokenRequest'] = _REVOKEDEVELOPERAPITOKENREQUEST
-DESCRIPTOR.message_types_by_name['RevokeDeveloperApiTokensResponse'] = _REVOKEDEVELOPERAPITOKENSRESPONSE
-DESCRIPTOR.message_types_by_name['FindProtocolsRequest'] = _FINDPROTOCOLSREQUEST
-DESCRIPTOR.message_types_by_name['FindProtocolsResponse'] = _FINDPROTOCOLSRESPONSE
-DESCRIPTOR.enum_types_by_name['ExperimentType'] = _EXPERIMENTTYPE
-_sym_db.RegisterFileDescriptor(DESCRIPTOR)
-
+_DESCRIBEHOSTREQUEST = DESCRIPTOR.message_types_by_name['DescribeHostRequest']
+_DESCRIBEHOSTRESPONSE = DESCRIPTOR.message_types_by_name['DescribeHostResponse']
+_FLOWCELLPOSITION = DESCRIPTOR.message_types_by_name['FlowCellPosition']
+_FLOWCELLPOSITION_LOCATION = _FLOWCELLPOSITION.nested_types_by_name['Location']
+_FLOWCELLPOSITION_RPCPORTS = _FLOWCELLPOSITION.nested_types_by_name['RpcPorts']
+_FLOWCELLPOSITION_SHAREDHARDWAREGROUP = _FLOWCELLPOSITION.nested_types_by_name['SharedHardwareGroup']
+_FLOWCELLPOSITIONSREQUEST = DESCRIPTOR.message_types_by_name['FlowCellPositionsRequest']
+_FLOWCELLPOSITIONSRESPONSE = DESCRIPTOR.message_types_by_name['FlowCellPositionsResponse']
+_WATCHFLOWCELLPOSITIONSREQUEST = DESCRIPTOR.message_types_by_name['WatchFlowCellPositionsRequest']
+_WATCHFLOWCELLPOSITIONSRESPONSE = DESCRIPTOR.message_types_by_name['WatchFlowCellPositionsResponse']
+_RESETPOSITIONREQUEST = DESCRIPTOR.message_types_by_name['ResetPositionRequest']
+_RESETPOSITIONRESPONSE = DESCRIPTOR.message_types_by_name['ResetPositionResponse']
+_BASECALLERAPIREQUEST = DESCRIPTOR.message_types_by_name['BasecallerApiRequest']
+_BASECALLERAPIRESPONSE = DESCRIPTOR.message_types_by_name['BasecallerApiResponse']
+_GETGUPPYINFOREQUEST = DESCRIPTOR.message_types_by_name['GetGuppyInfoRequest']
+_GETGUPPYINFORESPONSE = DESCRIPTOR.message_types_by_name['GetGuppyInfoResponse']
+_GETVERSIONINFOREQUEST = DESCRIPTOR.message_types_by_name['GetVersionInfoRequest']
+_LISTPROTOCOLOUTPUTDIRFILESREQUEST = DESCRIPTOR.message_types_by_name['ListProtocolOutputDirFilesRequest']
+_LISTPROTOCOLOUTPUTDIRFILESRESPONSE = DESCRIPTOR.message_types_by_name['ListProtocolOutputDirFilesResponse']
+_LISTPROTOCOLOUTPUTDIRFILESRESPONSE_DIRECTORYINFO = _LISTPROTOCOLOUTPUTDIRFILESRESPONSE.nested_types_by_name['DirectoryInfo']
+_CREATEDIRECTORYREQUEST = DESCRIPTOR.message_types_by_name['CreateDirectoryRequest']
+_CREATEDIRECTORYRESPONSE = DESCRIPTOR.message_types_by_name['CreateDirectoryResponse']
+_FILESYSTEMDISKSPACEINFO = DESCRIPTOR.message_types_by_name['FilesystemDiskSpaceInfo']
+_GETDISKSPACEINFOREQUEST = DESCRIPTOR.message_types_by_name['GetDiskSpaceInfoRequest']
+_STREAMDISKSPACEINFOREQUEST = DESCRIPTOR.message_types_by_name['StreamDiskSpaceInfoRequest']
+_GETDISKSPACEINFORESPONSE = DESCRIPTOR.message_types_by_name['GetDiskSpaceInfoResponse']
+_GETBARCODEKITINFOREQUEST = DESCRIPTOR.message_types_by_name['GetBarcodeKitInfoRequest']
+_GETBARCODEKITINFORESPONSE = DESCRIPTOR.message_types_by_name['GetBarcodeKitInfoResponse']
+_GETBARCODEKITINFORESPONSE_BARCODEKITINFO = _GETBARCODEKITINFORESPONSE.nested_types_by_name['BarcodeKitInfo']
+_GETBARCODEKITINFORESPONSE_BARCODEKITINFOENTRY = _GETBARCODEKITINFORESPONSE.nested_types_by_name['BarcodeKitInfoEntry']
+_GETLAMPKITINFOREQUEST = DESCRIPTOR.message_types_by_name['GetLampKitInfoRequest']
+_GETLAMPKITINFORESPONSE = DESCRIPTOR.message_types_by_name['GetLampKitInfoResponse']
+_GETBARCODEKEYSREQUEST = DESCRIPTOR.message_types_by_name['GetBarcodeKeysRequest']
+_GETBARCODEKEYSRESPONSE = DESCRIPTOR.message_types_by_name['GetBarcodeKeysResponse']
+_GETFLOWCELLTYPESREQUEST = DESCRIPTOR.message_types_by_name['GetFlowCellTypesRequest']
+_GETFLOWCELLTYPESRESPONSE = DESCRIPTOR.message_types_by_name['GetFlowCellTypesResponse']
+_GETFLOWCELLTYPESRESPONSE_INFO = _GETFLOWCELLTYPESRESPONSE.nested_types_by_name['Info']
+_GETSEQUENCINGKITSREQUEST = DESCRIPTOR.message_types_by_name['GetSequencingKitsRequest']
+_GETSEQUENCINGKITSRESPONSE = DESCRIPTOR.message_types_by_name['GetSequencingKitsResponse']
+_GETSEQUENCINGKITSRESPONSE_KIT = _GETSEQUENCINGKITSRESPONSE.nested_types_by_name['Kit']
+_GETSEQUENCINGKITSRESPONSE_BARCODINGEXPANSIONKIT = _GETSEQUENCINGKITSRESPONSE.nested_types_by_name['BarcodingExpansionKit']
+_ADDSIMULATEDDEVICEREQUEST = DESCRIPTOR.message_types_by_name['AddSimulatedDeviceRequest']
+_ADDSIMULATEDDEVICERESPONSE = DESCRIPTOR.message_types_by_name['AddSimulatedDeviceResponse']
+_REMOVESIMULATEDDEVICEREQUEST = DESCRIPTOR.message_types_by_name['RemoveSimulatedDeviceRequest']
+_REMOVESIMULATEDDEVICERESPONSE = DESCRIPTOR.message_types_by_name['RemoveSimulatedDeviceResponse']
+_LOCALAUTHENTICATIONTOKENPATHREQUEST = DESCRIPTOR.message_types_by_name['LocalAuthenticationTokenPathRequest']
+_LOCALAUTHENTICATIONTOKENPATHRESPONSE = DESCRIPTOR.message_types_by_name['LocalAuthenticationTokenPathResponse']
+_GETALIGNMENTREFERENCEINFORMATIONREQUEST = DESCRIPTOR.message_types_by_name['GetAlignmentReferenceInformationRequest']
+_GETALIGNMENTREFERENCEINFORMATIONRESPONSE = DESCRIPTOR.message_types_by_name['GetAlignmentReferenceInformationResponse']
+_ASSOCIATIONDEVICECODEREQUEST = DESCRIPTOR.message_types_by_name['AssociationDeviceCodeRequest']
+_ASSOCIATIONDEVICECODERESPONSE = DESCRIPTOR.message_types_by_name['AssociationDeviceCodeResponse']
+_APPLYOFFLINEASSOCIATIONUNLOCKCODEREQUEST = DESCRIPTOR.message_types_by_name['ApplyOfflineAssociationUnlockCodeRequest']
+_APPLYOFFLINEASSOCIATIONUNLOCKCODERESPONSE = DESCRIPTOR.message_types_by_name['ApplyOfflineAssociationUnlockCodeResponse']
+_LISTDEVELOPERAPITOKENSREQUEST = DESCRIPTOR.message_types_by_name['ListDeveloperApiTokensRequest']
+_LISTDEVELOPERAPITOKENSRESPONSE = DESCRIPTOR.message_types_by_name['ListDeveloperApiTokensResponse']
+_LISTDEVELOPERAPITOKENSRESPONSE_DEVELOPERAPITOKEN = _LISTDEVELOPERAPITOKENSRESPONSE.nested_types_by_name['DeveloperApiToken']
+_CREATEDEVELOPERAPITOKENREQUEST = DESCRIPTOR.message_types_by_name['CreateDeveloperApiTokenRequest']
+_CREATEDEVELOPERAPITOKENRESPONSE = DESCRIPTOR.message_types_by_name['CreateDeveloperApiTokenResponse']
+_REVOKEDEVELOPERAPITOKENREQUEST = DESCRIPTOR.message_types_by_name['RevokeDeveloperApiTokenRequest']
+_REVOKEDEVELOPERAPITOKENSRESPONSE = DESCRIPTOR.message_types_by_name['RevokeDeveloperApiTokensResponse']
+_FINDPROTOCOLSREQUEST = DESCRIPTOR.message_types_by_name['FindProtocolsRequest']
+_FINDPROTOCOLSRESPONSE = DESCRIPTOR.message_types_by_name['FindProtocolsResponse']
+_FINDPROTOCOLSRESPONSE_PROTOCOL = _FINDPROTOCOLSRESPONSE.nested_types_by_name['Protocol']
+_LISTSETTINGSFORPROTOCOLREQUEST = DESCRIPTOR.message_types_by_name['ListSettingsForProtocolRequest']
+_LISTSETTINGSFORPROTOCOLRESPONSE = DESCRIPTOR.message_types_by_name['ListSettingsForProtocolResponse']
+_LISTSETTINGSFORPROTOCOLRESPONSE_RUNOPTIONS = _LISTSETTINGSFORPROTOCOLRESPONSE.nested_types_by_name['RunOptions']
+_LISTSETTINGSFORPROTOCOLRESPONSE_BASECALLING = _LISTSETTINGSFORPROTOCOLRESPONSE.nested_types_by_name['Basecalling']
+_LISTSETTINGSFORPROTOCOLRESPONSE_OUTPUT = _LISTSETTINGSFORPROTOCOLRESPONSE.nested_types_by_name['Output']
+_FLOWCELLPOSITION_STATE = _FLOWCELLPOSITION.enum_types_by_name['State']
 DescribeHostRequest = _reflection.GeneratedProtocolMessageType('DescribeHostRequest', (_message.Message,), {
   'DESCRIPTOR' : _DESCRIBEHOSTREQUEST,
   '__module__' : 'minknow_api.manager_pb2'
@@ -2814,14 +199,8 @@ FlowCellPosition = _reflection.GeneratedProtocolMessageType('FlowCellPosition', 
     '__doc__': """Attributes:
         secure:
             A port providing the standard gRPC protocol over TLS
-        insecure:
-            A port providing the standard gRPC protocol without TLS
         secure_grpc_web:
             A port providing the gRPC-Web protocol over TLS
-        insecure_grpc_web:
-            DEPRECATED: A port providing the gRPC-Web protocol without TLS
-            From 4.1, this field is now deprecated and will only ever
-            return a value of 0
     """,
     # @@protoc_insertion_point(class_scope:minknow_api.manager.FlowCellPosition.RpcPorts)
     })
@@ -2886,6 +265,9 @@ FlowCellPosition = _reflection.GeneratedProtocolMessageType('FlowCellPosition', 
           Indicates that this position can sequence offline.  For
           integrated positions, this is the same as the corresponding
           field returned from the describe_host RPC.
+      protocol_state:
+          Indicates the state of the last or current protocol on the
+          flow cell position.  Since 5.0.
   """,
   # @@protoc_insertion_point(class_scope:minknow_api.manager.FlowCellPosition)
   })
@@ -2999,17 +381,9 @@ BasecallerApiResponse = _reflection.GeneratedProtocolMessageType('BasecallerApiR
       secure:
           The port to use to access the minknow_api.basecaller API using
           the standard gRPC protocol over TLS
-      insecure:
-          The port to use to access the minknow_api.basecaller API using
-          the standard gRPC protocol without TLS
       secure_grpc_web:
           The port to use to access the minknow_api.basecaller API using
           the gRPC-Web protocol over TLS
-      insecure_grpc_web:
-          DEPRECATED: The port to use to access the
-          minknow_api.basecaller API using the gRPC-Web protocol without
-          TLS  From 4.1, this field is now deprecated and will only ever
-          return a value of 0
   """,
   # @@protoc_insertion_point(class_scope:minknow_api.manager.BasecallerApiResponse)
   })
@@ -3045,53 +419,6 @@ GetVersionInfoRequest = _reflection.GeneratedProtocolMessageType('GetVersionInfo
   # @@protoc_insertion_point(class_scope:minknow_api.manager.GetVersionInfoRequest)
   })
 _sym_db.RegisterMessage(GetVersionInfoRequest)
-
-GetVersionInfoResponse = _reflection.GeneratedProtocolMessageType('GetVersionInfoResponse', (_message.Message,), {
-  'DESCRIPTOR' : _GETVERSIONINFORESPONSE,
-  '__module__' : 'minknow_api.manager_pb2'
-  ,
-  '__doc__': """Attributes:
-      minknow:
-          What minknow version is installed. Split into major, minor and
-          patch versions Also includes the full version as a string,
-          which contain the major, minor and patch numbers as well as if
-          the version is pre-release version (-pre), whether it is a
-          release candidate (-rc#) or whether it is a variant version
-          (i.e. for conferences) (-variant). For non-release builds it
-          also includes the hash of the commit it is based on, and
-          whether the working copy is different from that has (-dirty)
-      protocols:
-          The protocols version specifies what version of bream is
-          installed. By default is set to '0.0.0.0', but will otherwise
-          be set to a Bream release version.
-      distribution_version:
-          Describes the distribution that this MinKNOW installation is
-          part of, ususally this will be the Metapackage version
-          number/identity, this will be "unknown" if the distribution-
-          version hasn't been set. This information is also communicated
-          in the Manager's DaemonMessage in daemon.proto
-      distribution_status:
-          Indicates if the MinKNOW distribution including components
-          such as Bream are stable, unstable or have been modified.
-      guppy_build_version:
-          Version of guppy MinKNOW was packaged against.
-      guppy_connected_version:
-          Version of guppy MinKNOW running with.
-      configuration:
-          The configuration version specifies what version of ont-
-          configuration (wanda) is installed. By default is set to
-          '0.0.0.0', but will otherwise be set to a Wanda release
-          version.  Since 3.6
-      installation_type:
-          Indicates what installation type minknow was installed as.
-          Certain installation types may turn features on or off
-          depending on the type. For example, for ont and prod installs,
-          the production.proto service will be enabled to make calls
-          such as writing to the eeprom
-  """,
-  # @@protoc_insertion_point(class_scope:minknow_api.manager.GetVersionInfoResponse)
-  })
-_sym_db.RegisterMessage(GetVersionInfoResponse)
 
 ListProtocolOutputDirFilesRequest = _reflection.GeneratedProtocolMessageType('ListProtocolOutputDirFilesRequest', (_message.Message,), {
   'DESCRIPTOR' : _LISTPROTOCOLOUTPUTDIRFILESREQUEST,
@@ -3129,7 +456,7 @@ ListProtocolOutputDirFilesResponse = _reflection.GeneratedProtocolMessageType('L
           List of files in the directory specified
       current_listed_path:
           The absolute directory that is being listed within this
-          repsonse
+          response
   """,
   # @@protoc_insertion_point(class_scope:minknow_api.manager.ListProtocolOutputDirFilesResponse)
   })
@@ -3795,295 +1122,282 @@ FindProtocolsResponse = _reflection.GeneratedProtocolMessageType('FindProtocolsR
 _sym_db.RegisterMessage(FindProtocolsResponse)
 _sym_db.RegisterMessage(FindProtocolsResponse.Protocol)
 
+ListSettingsForProtocolRequest = _reflection.GeneratedProtocolMessageType('ListSettingsForProtocolRequest', (_message.Message,), {
+  'DESCRIPTOR' : _LISTSETTINGSFORPROTOCOLREQUEST,
+  '__module__' : 'minknow_api.manager_pb2'
+  ,
+  '__doc__': """Attributes:
+      identifier:
+          specify the protocol with a string containing all the
+          protocol's identifying components, eg:
+          "sequencing/sequencing_MIN106_DNA:FLO-MIN106:SQK-RPB004"
+      components:
+          specify the protocol providing the identifying components
+          individually. All components are optional, if more than one
+          protocol matches given strings, information about the first
+          will be returned.
+      flow_cell_connector:
+          The flow-cell connector type identifies the type of hardware
+          and is used to identify the correct protocol. The flow-cell
+          connector types applicable to the device are listed by the
+          get_flow_cell_types rpc in this service and the
+          get_device_state rpc in the device service.
+  """,
+  # @@protoc_insertion_point(class_scope:minknow_api.manager.ListSettingsForProtocolRequest)
+  })
+_sym_db.RegisterMessage(ListSettingsForProtocolRequest)
 
-DESCRIPTOR._options = None
-_GETBARCODEKITINFORESPONSE_BARCODEKITINFOENTRY._options = None
-_ADDSIMULATEDDEVICEREQUEST.fields_by_name['name']._options = None
-_REMOVESIMULATEDDEVICEREQUEST.fields_by_name['name']._options = None
+ListSettingsForProtocolResponse = _reflection.GeneratedProtocolMessageType('ListSettingsForProtocolResponse', (_message.Message,), {
 
-_MANAGERSERVICE = _descriptor.ServiceDescriptor(
-  name='ManagerService',
-  full_name='minknow_api.manager.ManagerService',
-  file=DESCRIPTOR,
-  index=0,
-  serialized_options=None,
-  create_key=_descriptor._internal_create_key,
-  serialized_start=6204,
-  serialized_end=9727,
-  methods=[
-  _descriptor.MethodDescriptor(
-    name='describe_host',
-    full_name='minknow_api.manager.ManagerService.describe_host',
-    index=0,
-    containing_service=None,
-    input_type=_DESCRIBEHOSTREQUEST,
-    output_type=_DESCRIBEHOSTRESPONSE,
-    serialized_options=b'\220\002\001',
-    create_key=_descriptor._internal_create_key,
-  ),
-  _descriptor.MethodDescriptor(
-    name='flow_cell_positions',
-    full_name='minknow_api.manager.ManagerService.flow_cell_positions',
-    index=1,
-    containing_service=None,
-    input_type=_FLOWCELLPOSITIONSREQUEST,
-    output_type=_FLOWCELLPOSITIONSRESPONSE,
-    serialized_options=b'\220\002\001',
-    create_key=_descriptor._internal_create_key,
-  ),
-  _descriptor.MethodDescriptor(
-    name='watch_flow_cell_positions',
-    full_name='minknow_api.manager.ManagerService.watch_flow_cell_positions',
-    index=2,
-    containing_service=None,
-    input_type=_WATCHFLOWCELLPOSITIONSREQUEST,
-    output_type=_WATCHFLOWCELLPOSITIONSRESPONSE,
-    serialized_options=b'\220\002\001',
-    create_key=_descriptor._internal_create_key,
-  ),
-  _descriptor.MethodDescriptor(
-    name='reset_position',
-    full_name='minknow_api.manager.ManagerService.reset_position',
-    index=3,
-    containing_service=None,
-    input_type=_RESETPOSITIONREQUEST,
-    output_type=_RESETPOSITIONRESPONSE,
-    serialized_options=None,
-    create_key=_descriptor._internal_create_key,
-  ),
-  _descriptor.MethodDescriptor(
-    name='basecaller_api',
-    full_name='minknow_api.manager.ManagerService.basecaller_api',
-    index=4,
-    containing_service=None,
-    input_type=_BASECALLERAPIREQUEST,
-    output_type=_BASECALLERAPIRESPONSE,
-    serialized_options=b'\220\002\001',
-    create_key=_descriptor._internal_create_key,
-  ),
-  _descriptor.MethodDescriptor(
-    name='get_guppy_info',
-    full_name='minknow_api.manager.ManagerService.get_guppy_info',
-    index=5,
-    containing_service=None,
-    input_type=_GETGUPPYINFOREQUEST,
-    output_type=_GETGUPPYINFORESPONSE,
-    serialized_options=b'\220\002\001',
-    create_key=_descriptor._internal_create_key,
-  ),
-  _descriptor.MethodDescriptor(
-    name='get_version_info',
-    full_name='minknow_api.manager.ManagerService.get_version_info',
-    index=6,
-    containing_service=None,
-    input_type=_GETVERSIONINFOREQUEST,
-    output_type=_GETVERSIONINFORESPONSE,
-    serialized_options=b'\220\002\001',
-    create_key=_descriptor._internal_create_key,
-  ),
-  _descriptor.MethodDescriptor(
-    name='list_protocol_output_dir_files',
-    full_name='minknow_api.manager.ManagerService.list_protocol_output_dir_files',
-    index=7,
-    containing_service=None,
-    input_type=_LISTPROTOCOLOUTPUTDIRFILESREQUEST,
-    output_type=_LISTPROTOCOLOUTPUTDIRFILESRESPONSE,
-    serialized_options=b'\220\002\001',
-    create_key=_descriptor._internal_create_key,
-  ),
-  _descriptor.MethodDescriptor(
-    name='create_directory',
-    full_name='minknow_api.manager.ManagerService.create_directory',
-    index=8,
-    containing_service=None,
-    input_type=_CREATEDIRECTORYREQUEST,
-    output_type=_CREATEDIRECTORYRESPONSE,
-    serialized_options=b'\220\002\002',
-    create_key=_descriptor._internal_create_key,
-  ),
-  _descriptor.MethodDescriptor(
-    name='get_disk_space_info',
-    full_name='minknow_api.manager.ManagerService.get_disk_space_info',
-    index=9,
-    containing_service=None,
-    input_type=_GETDISKSPACEINFOREQUEST,
-    output_type=_GETDISKSPACEINFORESPONSE,
-    serialized_options=b'\220\002\001',
-    create_key=_descriptor._internal_create_key,
-  ),
-  _descriptor.MethodDescriptor(
-    name='get_default_output_directories',
-    full_name='minknow_api.manager.ManagerService.get_default_output_directories',
-    index=10,
-    containing_service=None,
-    input_type=minknow__api_dot_instance__pb2._GETDEFAULTOUTPUTDIRECTORIESREQUEST,
-    output_type=minknow__api_dot_instance__pb2._OUTPUTDIRECTORIES,
-    serialized_options=b'\220\002\001',
-    create_key=_descriptor._internal_create_key,
-  ),
-  _descriptor.MethodDescriptor(
-    name='stream_disk_space_info',
-    full_name='minknow_api.manager.ManagerService.stream_disk_space_info',
-    index=11,
-    containing_service=None,
-    input_type=_STREAMDISKSPACEINFOREQUEST,
-    output_type=_GETDISKSPACEINFORESPONSE,
-    serialized_options=b'\220\002\001',
-    create_key=_descriptor._internal_create_key,
-  ),
-  _descriptor.MethodDescriptor(
-    name='get_barcode_kit_info',
-    full_name='minknow_api.manager.ManagerService.get_barcode_kit_info',
-    index=12,
-    containing_service=None,
-    input_type=_GETBARCODEKITINFOREQUEST,
-    output_type=_GETBARCODEKITINFORESPONSE,
-    serialized_options=b'\220\002\001',
-    create_key=_descriptor._internal_create_key,
-  ),
-  _descriptor.MethodDescriptor(
-    name='get_lamp_kit_info',
-    full_name='minknow_api.manager.ManagerService.get_lamp_kit_info',
-    index=13,
-    containing_service=None,
-    input_type=_GETLAMPKITINFOREQUEST,
-    output_type=_GETLAMPKITINFORESPONSE,
-    serialized_options=b'\220\002\001',
-    create_key=_descriptor._internal_create_key,
-  ),
-  _descriptor.MethodDescriptor(
-    name='get_barcode_keys',
-    full_name='minknow_api.manager.ManagerService.get_barcode_keys',
-    index=14,
-    containing_service=None,
-    input_type=_GETBARCODEKEYSREQUEST,
-    output_type=_GETBARCODEKEYSRESPONSE,
-    serialized_options=b'\220\002\001',
-    create_key=_descriptor._internal_create_key,
-  ),
-  _descriptor.MethodDescriptor(
-    name='get_flow_cell_types',
-    full_name='minknow_api.manager.ManagerService.get_flow_cell_types',
-    index=15,
-    containing_service=None,
-    input_type=_GETFLOWCELLTYPESREQUEST,
-    output_type=_GETFLOWCELLTYPESRESPONSE,
-    serialized_options=b'\220\002\001\230\265\030\001',
-    create_key=_descriptor._internal_create_key,
-  ),
-  _descriptor.MethodDescriptor(
-    name='get_sequencing_kits',
-    full_name='minknow_api.manager.ManagerService.get_sequencing_kits',
-    index=16,
-    containing_service=None,
-    input_type=_GETSEQUENCINGKITSREQUEST,
-    output_type=_GETSEQUENCINGKITSRESPONSE,
-    serialized_options=b'\220\002\001\230\265\030\001',
-    create_key=_descriptor._internal_create_key,
-  ),
-  _descriptor.MethodDescriptor(
-    name='add_simulated_device',
-    full_name='minknow_api.manager.ManagerService.add_simulated_device',
-    index=17,
-    containing_service=None,
-    input_type=_ADDSIMULATEDDEVICEREQUEST,
-    output_type=_ADDSIMULATEDDEVICERESPONSE,
-    serialized_options=None,
-    create_key=_descriptor._internal_create_key,
-  ),
-  _descriptor.MethodDescriptor(
-    name='remove_simulated_device',
-    full_name='minknow_api.manager.ManagerService.remove_simulated_device',
-    index=18,
-    containing_service=None,
-    input_type=_REMOVESIMULATEDDEVICEREQUEST,
-    output_type=_REMOVESIMULATEDDEVICERESPONSE,
-    serialized_options=b'\220\002\002',
-    create_key=_descriptor._internal_create_key,
-  ),
-  _descriptor.MethodDescriptor(
-    name='local_authentication_token_path',
-    full_name='minknow_api.manager.ManagerService.local_authentication_token_path',
-    index=19,
-    containing_service=None,
-    input_type=_LOCALAUTHENTICATIONTOKENPATHREQUEST,
-    output_type=_LOCALAUTHENTICATIONTOKENPATHRESPONSE,
-    serialized_options=b'\220\002\001',
-    create_key=_descriptor._internal_create_key,
-  ),
-  _descriptor.MethodDescriptor(
-    name='get_alignment_reference_information',
-    full_name='minknow_api.manager.ManagerService.get_alignment_reference_information',
-    index=20,
-    containing_service=None,
-    input_type=_GETALIGNMENTREFERENCEINFORMATIONREQUEST,
-    output_type=_GETALIGNMENTREFERENCEINFORMATIONRESPONSE,
-    serialized_options=b'\220\002\001',
-    create_key=_descriptor._internal_create_key,
-  ),
-  _descriptor.MethodDescriptor(
-    name='association_device_code',
-    full_name='minknow_api.manager.ManagerService.association_device_code',
-    index=21,
-    containing_service=None,
-    input_type=_ASSOCIATIONDEVICECODEREQUEST,
-    output_type=_ASSOCIATIONDEVICECODERESPONSE,
-    serialized_options=b'\220\002\001',
-    create_key=_descriptor._internal_create_key,
-  ),
-  _descriptor.MethodDescriptor(
-    name='apply_offline_association_unlock_code',
-    full_name='minknow_api.manager.ManagerService.apply_offline_association_unlock_code',
-    index=22,
-    containing_service=None,
-    input_type=_APPLYOFFLINEASSOCIATIONUNLOCKCODEREQUEST,
-    output_type=_APPLYOFFLINEASSOCIATIONUNLOCKCODERESPONSE,
-    serialized_options=b'\220\002\002',
-    create_key=_descriptor._internal_create_key,
-  ),
-  _descriptor.MethodDescriptor(
-    name='list_developer_api_tokens',
-    full_name='minknow_api.manager.ManagerService.list_developer_api_tokens',
-    index=23,
-    containing_service=None,
-    input_type=_LISTDEVELOPERAPITOKENSREQUEST,
-    output_type=_LISTDEVELOPERAPITOKENSRESPONSE,
-    serialized_options=b'\220\002\002',
-    create_key=_descriptor._internal_create_key,
-  ),
-  _descriptor.MethodDescriptor(
-    name='create_developer_api_token',
-    full_name='minknow_api.manager.ManagerService.create_developer_api_token',
-    index=24,
-    containing_service=None,
-    input_type=_CREATEDEVELOPERAPITOKENREQUEST,
-    output_type=_CREATEDEVELOPERAPITOKENRESPONSE,
-    serialized_options=None,
-    create_key=_descriptor._internal_create_key,
-  ),
-  _descriptor.MethodDescriptor(
-    name='revoke_developer_api_token',
-    full_name='minknow_api.manager.ManagerService.revoke_developer_api_token',
-    index=25,
-    containing_service=None,
-    input_type=_REVOKEDEVELOPERAPITOKENREQUEST,
-    output_type=_REVOKEDEVELOPERAPITOKENSRESPONSE,
-    serialized_options=None,
-    create_key=_descriptor._internal_create_key,
-  ),
-  _descriptor.MethodDescriptor(
-    name='find_protocols',
-    full_name='minknow_api.manager.ManagerService.find_protocols',
-    index=26,
-    containing_service=None,
-    input_type=_FINDPROTOCOLSREQUEST,
-    output_type=_FINDPROTOCOLSRESPONSE,
-    serialized_options=b'\230\265\030\001',
-    create_key=_descriptor._internal_create_key,
-  ),
-])
-_sym_db.RegisterServiceDescriptor(_MANAGERSERVICE)
+  'RunOptions' : _reflection.GeneratedProtocolMessageType('RunOptions', (_message.Message,), {
+    'DESCRIPTOR' : _LISTSETTINGSFORPROTOCOLRESPONSE_RUNOPTIONS,
+    '__module__' : 'minknow_api.manager_pb2'
+    ,
+    '__doc__': """Run options
+    
+    Attributes:
+        active_channel_selection:
+             bool
+        mux_scan_period:
+             in hours
+    """,
+    # @@protoc_insertion_point(class_scope:minknow_api.manager.ListSettingsForProtocolResponse.RunOptions)
+    })
+  ,
 
-DESCRIPTOR.services_by_name['ManagerService'] = _MANAGERSERVICE
+  'Basecalling' : _reflection.GeneratedProtocolMessageType('Basecalling', (_message.Message,), {
+    'DESCRIPTOR' : _LISTSETTINGSFORPROTOCOLRESPONSE_BASECALLING,
+    '__module__' : 'minknow_api.manager_pb2'
+    # @@protoc_insertion_point(class_scope:minknow_api.manager.ListSettingsForProtocolResponse.Basecalling)
+    })
+  ,
 
+  'Output' : _reflection.GeneratedProtocolMessageType('Output', (_message.Message,), {
+    'DESCRIPTOR' : _LISTSETTINGSFORPROTOCOLRESPONSE_OUTPUT,
+    '__module__' : 'minknow_api.manager_pb2'
+    ,
+    '__doc__': """Output""",
+    # @@protoc_insertion_point(class_scope:minknow_api.manager.ListSettingsForProtocolResponse.Output)
+    })
+  ,
+  'DESCRIPTOR' : _LISTSETTINGSFORPROTOCOLRESPONSE,
+  '__module__' : 'minknow_api.manager_pb2'
+  ,
+  '__doc__': """Attributes:
+      protocol_settings:
+          Any protocol settings not covered by the above structures, for
+          example those required for custom-scripts.
+  """,
+  # @@protoc_insertion_point(class_scope:minknow_api.manager.ListSettingsForProtocolResponse)
+  })
+_sym_db.RegisterMessage(ListSettingsForProtocolResponse)
+_sym_db.RegisterMessage(ListSettingsForProtocolResponse.RunOptions)
+_sym_db.RegisterMessage(ListSettingsForProtocolResponse.Basecalling)
+_sym_db.RegisterMessage(ListSettingsForProtocolResponse.Output)
+
+_MANAGERSERVICE = DESCRIPTOR.services_by_name['ManagerService']
+if _descriptor._USE_C_DESCRIPTORS == False:
+
+  DESCRIPTOR._options = None
+  DESCRIPTOR._serialized_options = b'\n\034com.nanoporetech.minknow_api\242\002\005MKAPI'
+  _GETBARCODEKITINFORESPONSE_BARCODEKITINFOENTRY._options = None
+  _GETBARCODEKITINFORESPONSE_BARCODEKITINFOENTRY._serialized_options = b'8\001'
+  _ADDSIMULATEDDEVICEREQUEST.fields_by_name['name']._options = None
+  _ADDSIMULATEDDEVICEREQUEST.fields_by_name['name']._serialized_options = b'\210\265\030\001'
+  _REMOVESIMULATEDDEVICEREQUEST.fields_by_name['name']._options = None
+  _REMOVESIMULATEDDEVICEREQUEST.fields_by_name['name']._serialized_options = b'\210\265\030\001'
+  _LISTSETTINGSFORPROTOCOLREQUEST.fields_by_name['flow_cell_connector']._options = None
+  _LISTSETTINGSFORPROTOCOLREQUEST.fields_by_name['flow_cell_connector']._serialized_options = b'\210\265\030\001'
+  _MANAGERSERVICE.methods_by_name['describe_host']._options = None
+  _MANAGERSERVICE.methods_by_name['describe_host']._serialized_options = b'\220\002\001'
+  _MANAGERSERVICE.methods_by_name['flow_cell_positions']._options = None
+  _MANAGERSERVICE.methods_by_name['flow_cell_positions']._serialized_options = b'\220\002\001'
+  _MANAGERSERVICE.methods_by_name['watch_flow_cell_positions']._options = None
+  _MANAGERSERVICE.methods_by_name['watch_flow_cell_positions']._serialized_options = b'\220\002\001'
+  _MANAGERSERVICE.methods_by_name['basecaller_api']._options = None
+  _MANAGERSERVICE.methods_by_name['basecaller_api']._serialized_options = b'\220\002\001'
+  _MANAGERSERVICE.methods_by_name['get_guppy_info']._options = None
+  _MANAGERSERVICE.methods_by_name['get_guppy_info']._serialized_options = b'\220\002\001'
+  _MANAGERSERVICE.methods_by_name['get_version_info']._options = None
+  _MANAGERSERVICE.methods_by_name['get_version_info']._serialized_options = b'\220\002\001'
+  _MANAGERSERVICE.methods_by_name['list_protocol_output_dir_files']._options = None
+  _MANAGERSERVICE.methods_by_name['list_protocol_output_dir_files']._serialized_options = b'\220\002\001'
+  _MANAGERSERVICE.methods_by_name['create_directory']._options = None
+  _MANAGERSERVICE.methods_by_name['create_directory']._serialized_options = b'\220\002\002'
+  _MANAGERSERVICE.methods_by_name['get_disk_space_info']._options = None
+  _MANAGERSERVICE.methods_by_name['get_disk_space_info']._serialized_options = b'\220\002\001'
+  _MANAGERSERVICE.methods_by_name['get_default_output_directories']._options = None
+  _MANAGERSERVICE.methods_by_name['get_default_output_directories']._serialized_options = b'\220\002\001'
+  _MANAGERSERVICE.methods_by_name['stream_disk_space_info']._options = None
+  _MANAGERSERVICE.methods_by_name['stream_disk_space_info']._serialized_options = b'\220\002\001'
+  _MANAGERSERVICE.methods_by_name['get_barcode_kit_info']._options = None
+  _MANAGERSERVICE.methods_by_name['get_barcode_kit_info']._serialized_options = b'\220\002\001'
+  _MANAGERSERVICE.methods_by_name['get_lamp_kit_info']._options = None
+  _MANAGERSERVICE.methods_by_name['get_lamp_kit_info']._serialized_options = b'\220\002\001'
+  _MANAGERSERVICE.methods_by_name['get_barcode_keys']._options = None
+  _MANAGERSERVICE.methods_by_name['get_barcode_keys']._serialized_options = b'\220\002\001'
+  _MANAGERSERVICE.methods_by_name['get_flow_cell_types']._options = None
+  _MANAGERSERVICE.methods_by_name['get_flow_cell_types']._serialized_options = b'\220\002\001\230\265\030\001'
+  _MANAGERSERVICE.methods_by_name['get_sequencing_kits']._options = None
+  _MANAGERSERVICE.methods_by_name['get_sequencing_kits']._serialized_options = b'\220\002\001\230\265\030\001'
+  _MANAGERSERVICE.methods_by_name['remove_simulated_device']._options = None
+  _MANAGERSERVICE.methods_by_name['remove_simulated_device']._serialized_options = b'\220\002\002'
+  _MANAGERSERVICE.methods_by_name['local_authentication_token_path']._options = None
+  _MANAGERSERVICE.methods_by_name['local_authentication_token_path']._serialized_options = b'\220\002\001'
+  _MANAGERSERVICE.methods_by_name['get_alignment_reference_information']._options = None
+  _MANAGERSERVICE.methods_by_name['get_alignment_reference_information']._serialized_options = b'\220\002\001'
+  _MANAGERSERVICE.methods_by_name['association_device_code']._options = None
+  _MANAGERSERVICE.methods_by_name['association_device_code']._serialized_options = b'\220\002\001'
+  _MANAGERSERVICE.methods_by_name['apply_offline_association_unlock_code']._options = None
+  _MANAGERSERVICE.methods_by_name['apply_offline_association_unlock_code']._serialized_options = b'\220\002\002'
+  _MANAGERSERVICE.methods_by_name['list_developer_api_tokens']._options = None
+  _MANAGERSERVICE.methods_by_name['list_developer_api_tokens']._serialized_options = b'\220\002\002'
+  _MANAGERSERVICE.methods_by_name['find_protocols']._options = None
+  _MANAGERSERVICE.methods_by_name['find_protocols']._serialized_options = b'\230\265\030\001'
+  _MANAGERSERVICE.methods_by_name['list_settings_for_protocol']._options = None
+  _MANAGERSERVICE.methods_by_name['list_settings_for_protocol']._serialized_options = b'\220\002\001\230\265\030\001'
+  _SIMPLEPROTOCOLSTATE._serialized_start=10239
+  _SIMPLEPROTOCOLSTATE._serialized_end=10375
+  _EXPERIMENTTYPE._serialized_start=10377
+  _EXPERIMENTTYPE._serialized_end=10483
+  _DESCRIBEHOSTREQUEST._serialized_start=205
+  _DESCRIBEHOSTREQUEST._serialized_end=226
+  _DESCRIBEHOSTRESPONSE._serialized_start=229
+  _DESCRIBEHOSTRESPONSE._serialized_end=389
+  _FLOWCELLPOSITION._serialized_start=392
+  _FLOWCELLPOSITION._serialized_end=1157
+  _FLOWCELLPOSITION_LOCATION._serialized_start=848
+  _FLOWCELLPOSITION_LOCATION._serialized_end=880
+  _FLOWCELLPOSITION_RPCPORTS._serialized_start=882
+  _FLOWCELLPOSITION_RPCPORTS._serialized_end=933
+  _FLOWCELLPOSITION_SHAREDHARDWAREGROUP._serialized_start=935
+  _FLOWCELLPOSITION_SHAREDHARDWAREGROUP._serialized_end=974
+  _FLOWCELLPOSITION_STATE._serialized_start=977
+  _FLOWCELLPOSITION_STATE._serialized_end=1157
+  _FLOWCELLPOSITIONSREQUEST._serialized_start=1159
+  _FLOWCELLPOSITIONSREQUEST._serialized_end=1185
+  _FLOWCELLPOSITIONSRESPONSE._serialized_start=1187
+  _FLOWCELLPOSITIONSRESPONSE._serialized_end=1293
+  _WATCHFLOWCELLPOSITIONSREQUEST._serialized_start=1295
+  _WATCHFLOWCELLPOSITIONSREQUEST._serialized_end=1326
+  _WATCHFLOWCELLPOSITIONSRESPONSE._serialized_start=1329
+  _WATCHFLOWCELLPOSITIONSRESPONSE._serialized_end=1493
+  _RESETPOSITIONREQUEST._serialized_start=1495
+  _RESETPOSITIONREQUEST._serialized_end=1551
+  _RESETPOSITIONRESPONSE._serialized_start=1553
+  _RESETPOSITIONRESPONSE._serialized_end=1576
+  _BASECALLERAPIREQUEST._serialized_start=1578
+  _BASECALLERAPIREQUEST._serialized_end=1600
+  _BASECALLERAPIRESPONSE._serialized_start=1602
+  _BASECALLERAPIRESPONSE._serialized_end=1666
+  _GETGUPPYINFOREQUEST._serialized_start=1668
+  _GETGUPPYINFOREQUEST._serialized_end=1689
+  _GETGUPPYINFORESPONSE._serialized_start=1691
+  _GETGUPPYINFORESPONSE._serialized_end=1785
+  _GETVERSIONINFOREQUEST._serialized_start=1787
+  _GETVERSIONINFOREQUEST._serialized_end=1810
+  _LISTPROTOCOLOUTPUTDIRFILESREQUEST._serialized_start=1812
+  _LISTPROTOCOLOUTPUTDIRFILESREQUEST._serialized_end=1861
+  _LISTPROTOCOLOUTPUTDIRFILESRESPONSE._serialized_start=1864
+  _LISTPROTOCOLOUTPUTDIRFILESRESPONSE._serialized_end=2112
+  _LISTPROTOCOLOUTPUTDIRFILESRESPONSE_DIRECTORYINFO._serialized_start=2038
+  _LISTPROTOCOLOUTPUTDIRFILESRESPONSE_DIRECTORYINFO._serialized_end=2112
+  _CREATEDIRECTORYREQUEST._serialized_start=2114
+  _CREATEDIRECTORYREQUEST._serialized_end=2173
+  _CREATEDIRECTORYRESPONSE._serialized_start=2175
+  _CREATEDIRECTORYRESPONSE._serialized_end=2214
+  _FILESYSTEMDISKSPACEINFO._serialized_start=2217
+  _FILESYSTEMDISKSPACEINFO._serialized_end=2480
+  _GETDISKSPACEINFOREQUEST._serialized_start=2482
+  _GETDISKSPACEINFOREQUEST._serialized_end=2507
+  _STREAMDISKSPACEINFOREQUEST._serialized_start=2509
+  _STREAMDISKSPACEINFOREQUEST._serialized_end=2553
+  _GETDISKSPACEINFORESPONSE._serialized_start=2555
+  _GETDISKSPACEINFORESPONSE._serialized_end=2663
+  _GETBARCODEKITINFOREQUEST._serialized_start=2665
+  _GETBARCODEKITINFOREQUEST._serialized_end=2691
+  _GETBARCODEKITINFORESPONSE._serialized_start=2694
+  _GETBARCODEKITINFORESPONSE._serialized_end=2990
+  _GETBARCODEKITINFORESPONSE_BARCODEKITINFO._serialized_start=2817
+  _GETBARCODEKITINFORESPONSE_BARCODEKITINFO._serialized_end=2872
+  _GETBARCODEKITINFORESPONSE_BARCODEKITINFOENTRY._serialized_start=2874
+  _GETBARCODEKITINFORESPONSE_BARCODEKITINFOENTRY._serialized_end=2990
+  _GETLAMPKITINFOREQUEST._serialized_start=2992
+  _GETLAMPKITINFOREQUEST._serialized_end=3015
+  _GETLAMPKITINFORESPONSE._serialized_start=3017
+  _GETLAMPKITINFORESPONSE._serialized_end=3060
+  _GETBARCODEKEYSREQUEST._serialized_start=3062
+  _GETBARCODEKEYSREQUEST._serialized_end=3135
+  _GETBARCODEKEYSRESPONSE._serialized_start=3137
+  _GETBARCODEKEYSRESPONSE._serialized_end=3225
+  _GETFLOWCELLTYPESREQUEST._serialized_start=3227
+  _GETFLOWCELLTYPESREQUEST._serialized_end=3252
+  _GETFLOWCELLTYPESRESPONSE._serialized_start=3255
+  _GETFLOWCELLTYPESRESPONSE._serialized_end=3475
+  _GETFLOWCELLTYPESRESPONSE_INFO._serialized_start=3350
+  _GETFLOWCELLTYPESRESPONSE_INFO._serialized_end=3475
+  _GETSEQUENCINGKITSREQUEST._serialized_start=3477
+  _GETSEQUENCINGKITSREQUEST._serialized_end=3535
+  _GETSEQUENCINGKITSRESPONSE._serialized_start=3538
+  _GETSEQUENCINGKITSRESPONSE._serialized_end=4036
+  _GETSEQUENCINGKITSRESPONSE_KIT._serialized_start=3738
+  _GETSEQUENCINGKITSRESPONSE_KIT._serialized_end=3989
+  _GETSEQUENCINGKITSRESPONSE_BARCODINGEXPANSIONKIT._serialized_start=3991
+  _GETSEQUENCINGKITSRESPONSE_BARCODINGEXPANSIONKIT._serialized_end=4036
+  _ADDSIMULATEDDEVICEREQUEST._serialized_start=4038
+  _ADDSIMULATEDDEVICEREQUEST._serialized_end=4085
+  _ADDSIMULATEDDEVICERESPONSE._serialized_start=4087
+  _ADDSIMULATEDDEVICERESPONSE._serialized_end=4115
+  _REMOVESIMULATEDDEVICEREQUEST._serialized_start=4117
+  _REMOVESIMULATEDDEVICEREQUEST._serialized_end=4167
+  _REMOVESIMULATEDDEVICERESPONSE._serialized_start=4169
+  _REMOVESIMULATEDDEVICERESPONSE._serialized_end=4200
+  _LOCALAUTHENTICATIONTOKENPATHREQUEST._serialized_start=4202
+  _LOCALAUTHENTICATIONTOKENPATHREQUEST._serialized_end=4239
+  _LOCALAUTHENTICATIONTOKENPATHRESPONSE._serialized_start=4241
+  _LOCALAUTHENTICATIONTOKENPATHRESPONSE._serialized_end=4293
+  _GETALIGNMENTREFERENCEINFORMATIONREQUEST._serialized_start=4295
+  _GETALIGNMENTREFERENCEINFORMATIONREQUEST._serialized_end=4350
+  _GETALIGNMENTREFERENCEINFORMATIONRESPONSE._serialized_start=4353
+  _GETALIGNMENTREFERENCEINFORMATIONRESPONSE._serialized_end=4504
+  _ASSOCIATIONDEVICECODEREQUEST._serialized_start=4506
+  _ASSOCIATIONDEVICECODEREQUEST._serialized_end=4576
+  _ASSOCIATIONDEVICECODERESPONSE._serialized_start=4578
+  _ASSOCIATIONDEVICECODERESPONSE._serialized_end=4623
+  _APPLYOFFLINEASSOCIATIONUNLOCKCODEREQUEST._serialized_start=4625
+  _APPLYOFFLINEASSOCIATIONUNLOCKCODEREQUEST._serialized_end=4711
+  _APPLYOFFLINEASSOCIATIONUNLOCKCODERESPONSE._serialized_start=4713
+  _APPLYOFFLINEASSOCIATIONUNLOCKCODERESPONSE._serialized_end=4776
+  _LISTDEVELOPERAPITOKENSREQUEST._serialized_start=4778
+  _LISTDEVELOPERAPITOKENSREQUEST._serialized_end=4809
+  _LISTDEVELOPERAPITOKENSRESPONSE._serialized_start=4812
+  _LISTDEVELOPERAPITOKENSRESPONSE._serialized_end=5022
+  _LISTDEVELOPERAPITOKENSRESPONSE_DEVELOPERAPITOKEN._serialized_start=4933
+  _LISTDEVELOPERAPITOKENSRESPONSE_DEVELOPERAPITOKEN._serialized_end=5022
+  _CREATEDEVELOPERAPITOKENREQUEST._serialized_start=5024
+  _CREATEDEVELOPERAPITOKENREQUEST._serialized_end=5114
+  _CREATEDEVELOPERAPITOKENRESPONSE._serialized_start=5116
+  _CREATEDEVELOPERAPITOKENRESPONSE._serialized_end=5176
+  _REVOKEDEVELOPERAPITOKENREQUEST._serialized_start=5178
+  _REVOKEDEVELOPERAPITOKENREQUEST._serialized_end=5222
+  _REVOKEDEVELOPERAPITOKENSRESPONSE._serialized_start=5224
+  _REVOKEDEVELOPERAPITOKENSRESPONSE._serialized_end=5258
+  _FINDPROTOCOLSREQUEST._serialized_start=5261
+  _FINDPROTOCOLSREQUEST._serialized_end=5401
+  _FINDPROTOCOLSRESPONSE._serialized_start=5404
+  _FINDPROTOCOLSRESPONSE._serialized_end=5605
+  _FINDPROTOCOLSRESPONSE_PROTOCOL._serialized_start=5501
+  _FINDPROTOCOLSRESPONSE_PROTOCOL._serialized_end=5605
+  _LISTSETTINGSFORPROTOCOLREQUEST._serialized_start=5608
+  _LISTSETTINGSFORPROTOCOLREQUEST._serialized_end=5846
+  _LISTSETTINGSFORPROTOCOLRESPONSE._serialized_start=5849
+  _LISTSETTINGSFORPROTOCOLRESPONSE._serialized_end=10236
+  _LISTSETTINGSFORPROTOCOLRESPONSE_RUNOPTIONS._serialized_start=6289
+  _LISTSETTINGSFORPROTOCOLRESPONSE_RUNOPTIONS._serialized_end=7142
+  _LISTSETTINGSFORPROTOCOLRESPONSE_BASECALLING._serialized_start=7145
+  _LISTSETTINGSFORPROTOCOLRESPONSE_BASECALLING._serialized_end=8425
+  _LISTSETTINGSFORPROTOCOLRESPONSE_OUTPUT._serialized_start=8428
+  _LISTSETTINGSFORPROTOCOLRESPONSE_OUTPUT._serialized_end=10236
+  _MANAGERSERVICE._serialized_start=10486
+  _MANAGERSERVICE._serialized_end=14157
 # @@protoc_insertion_point(module_scope)

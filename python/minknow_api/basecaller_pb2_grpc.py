@@ -81,6 +81,11 @@ class BasecallerStub(object):
                 request_serializer=minknow__api_dot_basecaller__pb2.UpdateProgressRequest.SerializeToString,
                 response_deserializer=minknow__api_dot_basecaller__pb2.UpdateProgressResponse.FromString,
                 )
+        self.send_ping = channel.unary_unary(
+                '/minknow_api.basecaller.Basecaller/send_ping',
+                request_serializer=minknow__api_dot_basecaller__pb2.SendPingRequest.SerializeToString,
+                response_deserializer=minknow__api_dot_basecaller__pb2.SendPingResponse.FromString,
+                )
 
 
 class BasecallerServicer(object):
@@ -212,6 +217,20 @@ class BasecallerServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def send_ping(self, request, context):
+        """Send a ping to the configured ping server (see system config for ping server url)
+
+        The tracking_id and context_data section of the ping are filled in automatically by the basecall manager.
+
+        The ping is queued internally for sending immediately, if the basecall manager fails to send the message it
+        stores the message to send when possible.
+
+        Since 5.0
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_BasecallerServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -274,6 +293,11 @@ def add_BasecallerServicer_to_server(servicer, server):
                     servicer.update_post_processing_protocol_progress,
                     request_deserializer=minknow__api_dot_basecaller__pb2.UpdateProgressRequest.FromString,
                     response_serializer=minknow__api_dot_basecaller__pb2.UpdateProgressResponse.SerializeToString,
+            ),
+            'send_ping': grpc.unary_unary_rpc_method_handler(
+                    servicer.send_ping,
+                    request_deserializer=minknow__api_dot_basecaller__pb2.SendPingRequest.FromString,
+                    response_serializer=minknow__api_dot_basecaller__pb2.SendPingResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -493,5 +517,22 @@ class Basecaller(object):
         return grpc.experimental.unary_unary(request, target, '/minknow_api.basecaller.Basecaller/update_post_processing_protocol_progress',
             minknow__api_dot_basecaller__pb2.UpdateProgressRequest.SerializeToString,
             minknow__api_dot_basecaller__pb2.UpdateProgressResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def send_ping(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/minknow_api.basecaller.Basecaller/send_ping',
+            minknow__api_dot_basecaller__pb2.SendPingRequest.SerializeToString,
+            minknow__api_dot_basecaller__pb2.SendPingResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

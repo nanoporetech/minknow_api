@@ -109,15 +109,15 @@ class ProtocolServiceStub(object):
                 request_serializer=minknow__api_dot_protocol__pb2.BeginPlatformQcRequest.SerializeToString,
                 response_deserializer=minknow__api_dot_protocol__pb2.BeginPlatformQcResponse.FromString,
                 )
+        self.begin_protocol = channel.unary_unary(
+                '/minknow_api.protocol.ProtocolService/begin_protocol',
+                request_serializer=minknow__api_dot_protocol__pb2.BeginProtocolRequest.SerializeToString,
+                response_deserializer=minknow__api_dot_protocol__pb2.BeginProtocolResponse.FromString,
+                )
         self.set_platform_qc_result = channel.unary_unary(
                 '/minknow_api.protocol.ProtocolService/set_platform_qc_result',
                 request_serializer=minknow__api_dot_protocol__pb2.SetPlatformQcResultRequest.SerializeToString,
                 response_deserializer=minknow__api_dot_protocol__pb2.SetPlatformQcResultResponse.FromString,
-                )
-        self.list_settings_for_protocol = channel.unary_unary(
-                '/minknow_api.protocol.ProtocolService/list_settings_for_protocol',
-                request_serializer=minknow__api_dot_protocol__pb2.ListSettingsForProtocolRequest.SerializeToString,
-                response_deserializer=minknow__api_dot_protocol__pb2.ListSettingsForProtocolResponse.FromString,
                 )
         self.associate_post_processing_analysis_for_protocol = channel.unary_unary(
                 '/minknow_api.protocol.ProtocolService/associate_post_processing_analysis_for_protocol',
@@ -133,6 +133,11 @@ class ProtocolServiceStub(object):
                 '/minknow_api.protocol.ProtocolService/protocol_phase_management',
                 request_serializer=minknow__api_dot_protocol__pb2.ProtocolPhaseManagementRequest.SerializeToString,
                 response_deserializer=minknow__api_dot_protocol__pb2.ProtocolPhaseManagementResponse.FromString,
+                )
+        self.generate_run_report = channel.unary_stream(
+                '/minknow_api.protocol.ProtocolService/generate_run_report',
+                request_serializer=minknow__api_dot_protocol__pb2.GenerateRunReportRequest.SerializeToString,
+                response_deserializer=minknow__api_dot_protocol__pb2.GenerateRunReportResponse.FromString,
                 )
 
 
@@ -344,18 +349,23 @@ class ProtocolServiceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
-    def set_platform_qc_result(self, request, context):
-        """Missing associated documentation comment in .proto file."""
+    def begin_protocol(self, request, context):
+        """Run protocol on the connected flow cell
+
+        The protocol must be described by a toml file. The request identifies the
+        protocol and supplies overrides to the default protocol-settings described
+        in the toml file, in addition it provides user-info for the experiment.
+
+        Throws an error if there is no flow cell connected.
+
+        Since 5.0
+        """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
-    def list_settings_for_protocol(self, request, context):
-        """Given a protocol and some information about the flow-cell and kits will provide a list
-        of settings required by the protocol, their defaults and dependencies.
-
-        Since 4.3
-        """
+    def set_platform_qc_result(self, request, context):
+        """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
@@ -398,6 +408,18 @@ class ProtocolServiceServicer(object):
         PHASE_UNKNOWN and clear any set capabilities.
 
         Since 4.4.
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def generate_run_report(self, request, context):
+        """Generate a run report and return the report data.
+
+        If the protocol selected for report generation is already complete the report is a completed report, otherwise
+        the report will be from the in progress protocol.
+
+        Since 5.0
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -501,15 +523,15 @@ def add_ProtocolServiceServicer_to_server(servicer, server):
                     request_deserializer=minknow__api_dot_protocol__pb2.BeginPlatformQcRequest.FromString,
                     response_serializer=minknow__api_dot_protocol__pb2.BeginPlatformQcResponse.SerializeToString,
             ),
+            'begin_protocol': grpc.unary_unary_rpc_method_handler(
+                    servicer.begin_protocol,
+                    request_deserializer=minknow__api_dot_protocol__pb2.BeginProtocolRequest.FromString,
+                    response_serializer=minknow__api_dot_protocol__pb2.BeginProtocolResponse.SerializeToString,
+            ),
             'set_platform_qc_result': grpc.unary_unary_rpc_method_handler(
                     servicer.set_platform_qc_result,
                     request_deserializer=minknow__api_dot_protocol__pb2.SetPlatformQcResultRequest.FromString,
                     response_serializer=minknow__api_dot_protocol__pb2.SetPlatformQcResultResponse.SerializeToString,
-            ),
-            'list_settings_for_protocol': grpc.unary_unary_rpc_method_handler(
-                    servicer.list_settings_for_protocol,
-                    request_deserializer=minknow__api_dot_protocol__pb2.ListSettingsForProtocolRequest.FromString,
-                    response_serializer=minknow__api_dot_protocol__pb2.ListSettingsForProtocolResponse.SerializeToString,
             ),
             'associate_post_processing_analysis_for_protocol': grpc.unary_unary_rpc_method_handler(
                     servicer.associate_post_processing_analysis_for_protocol,
@@ -525,6 +547,11 @@ def add_ProtocolServiceServicer_to_server(servicer, server):
                     servicer.protocol_phase_management,
                     request_deserializer=minknow__api_dot_protocol__pb2.ProtocolPhaseManagementRequest.FromString,
                     response_serializer=minknow__api_dot_protocol__pb2.ProtocolPhaseManagementResponse.SerializeToString,
+            ),
+            'generate_run_report': grpc.unary_stream_rpc_method_handler(
+                    servicer.generate_run_report,
+                    request_deserializer=minknow__api_dot_protocol__pb2.GenerateRunReportRequest.FromString,
+                    response_serializer=minknow__api_dot_protocol__pb2.GenerateRunReportResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -860,6 +887,23 @@ class ProtocolService(object):
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
+    def begin_protocol(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/minknow_api.protocol.ProtocolService/begin_protocol',
+            minknow__api_dot_protocol__pb2.BeginProtocolRequest.SerializeToString,
+            minknow__api_dot_protocol__pb2.BeginProtocolResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
     def set_platform_qc_result(request,
             target,
             options=(),
@@ -873,23 +917,6 @@ class ProtocolService(object):
         return grpc.experimental.unary_unary(request, target, '/minknow_api.protocol.ProtocolService/set_platform_qc_result',
             minknow__api_dot_protocol__pb2.SetPlatformQcResultRequest.SerializeToString,
             minknow__api_dot_protocol__pb2.SetPlatformQcResultResponse.FromString,
-            options, channel_credentials,
-            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
-
-    @staticmethod
-    def list_settings_for_protocol(request,
-            target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            insecure=False,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/minknow_api.protocol.ProtocolService/list_settings_for_protocol',
-            minknow__api_dot_protocol__pb2.ListSettingsForProtocolRequest.SerializeToString,
-            minknow__api_dot_protocol__pb2.ListSettingsForProtocolResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
@@ -941,5 +968,22 @@ class ProtocolService(object):
         return grpc.experimental.stream_stream(request_iterator, target, '/minknow_api.protocol.ProtocolService/protocol_phase_management',
             minknow__api_dot_protocol__pb2.ProtocolPhaseManagementRequest.SerializeToString,
             minknow__api_dot_protocol__pb2.ProtocolPhaseManagementResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def generate_run_report(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_stream(request, target, '/minknow_api.protocol.ProtocolService/generate_run_report',
+            minknow__api_dot_protocol__pb2.GenerateRunReportRequest.SerializeToString,
+            minknow__api_dot_protocol__pb2.GenerateRunReportResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

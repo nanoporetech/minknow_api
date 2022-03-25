@@ -144,6 +144,11 @@ class DeviceServiceStub(object):
                 request_serializer=minknow__api_dot_device__pb2.SetBiasVoltageRequest.SerializeToString,
                 response_deserializer=minknow__api_dot_device__pb2.SetBiasVoltageResponse.FromString,
                 )
+        self.dump_state = channel.unary_unary(
+                '/minknow_api.device.DeviceService/dump_state',
+                request_serializer=minknow__api_dot_device__pb2.DumpStateRequest.SerializeToString,
+                response_deserializer=minknow__api_dot_device__pb2.DumpStateResponse.FromString,
+                )
 
 
 class DeviceServiceServicer(object):
@@ -261,7 +266,7 @@ class DeviceServiceServicer(object):
         from the device into picoamps (pA).
 
         Note that calibration depends on the device, flow cell and some of the device settings
-        (including sampling frequency and the capacitance used in the integratation circuit). If
+        (including sampling frequency and the capacitance used in the integration circuit). If
         any of these are changed, the calibration will no longer be used. Instead, a previously-saved
         calibration (for that combination of flow cell and settings) might be used, or the identity
         calibration might be used.
@@ -344,7 +349,7 @@ class DeviceServiceServicer(object):
         one.
 
         The user should NOT change the overload mode during an unblock - this will confuse the return from
-        unblock, which tries to reset the overload mode to the state preceeding the unblock.
+        unblock, which tries to reset the overload mode to the state preceding the unblock.
 
         The unblock can fail if the channel is not in a valid well state (this means a channel needs to be
         in one of pore1-4, not test current, regen pore or unblock). If a mux is not valid, the unblock grpc
@@ -412,7 +417,7 @@ class DeviceServiceServicer(object):
     def get_saturation_config(self, request, context):
         """Get the saturation control configuration.
 
-        The default configuration is specifed by the MinKNOW application configuration, the command returns the most
+        The default configuration is specified by the MinKNOW application configuration, the command returns the most
         recently applied saturation config.
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
@@ -450,6 +455,16 @@ class DeviceServiceServicer(object):
 
     def set_bias_voltage(self, request, context):
         """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def dump_state(self, request, context):
+        """Trigger a device specific dump of device-state control-server log. The
+        information will appear in a "diagnostic_information" message
+
+        Since 5.0
+        """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
@@ -586,6 +601,11 @@ def add_DeviceServiceServicer_to_server(servicer, server):
                     servicer.set_bias_voltage,
                     request_deserializer=minknow__api_dot_device__pb2.SetBiasVoltageRequest.FromString,
                     response_serializer=minknow__api_dot_device__pb2.SetBiasVoltageResponse.SerializeToString,
+            ),
+            'dump_state': grpc.unary_unary_rpc_method_handler(
+                    servicer.dump_state,
+                    request_deserializer=minknow__api_dot_device__pb2.DumpStateRequest.FromString,
+                    response_serializer=minknow__api_dot_device__pb2.DumpStateResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -1036,5 +1056,22 @@ class DeviceService(object):
         return grpc.experimental.unary_unary(request, target, '/minknow_api.device.DeviceService/set_bias_voltage',
             minknow__api_dot_device__pb2.SetBiasVoltageRequest.SerializeToString,
             minknow__api_dot_device__pb2.SetBiasVoltageResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def dump_state(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/minknow_api.device.DeviceService/dump_state',
+            minknow__api_dot_device__pb2.DumpStateRequest.SerializeToString,
+            minknow__api_dot_device__pb2.DumpStateResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

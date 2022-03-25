@@ -19,13 +19,10 @@ class PostProcessingProtocolConnection(object):
     """
 
     def __init__(
-        self, protocol_id=None, host="127.0.0.1", port=None, use_tls=True,
+        self, protocol_id=None, host="127.0.0.1", port=None, credentials=None,
     ):
         if port is None:
-            if use_tls:
-                port = int(os.environ["MINKNOW_BASECALLER_RPC_PORT_SECURE"])
-            else:
-                port = int(os.environ["MINKNOW_BASECALLER_RPC_PORT"])
+            port = int(os.environ["MINKNOW_BASECALLER_RPC_PORT_SECURE"])
 
         if protocol_id is None:
             protocol_id = os.environ["POST_PROCESSING_PROTOCOL_ID"]
@@ -33,9 +30,10 @@ class PostProcessingProtocolConnection(object):
         if not self.id:
             raise Exception("Invalid id specified for PostProcessingProtocolConnection")
 
-        grpc_credentials = minknow_api.load_grpc_credentials()
+        if credentials is None:
+            credentials = minknow_api.grpc_credentials(host=host)
         self._basecaller = minknow_api.manager.Basecaller(
-            port=port, grpc_credentials=grpc_credentials
+            port=port, credentials=credentials
         )
         self._protocol_directories = None
         self._protocol_id = None

@@ -175,17 +175,21 @@ service ProtocolService {
         option (experimental) = true;
     }
 
-    rpc set_platform_qc_result(SetPlatformQcResultRequest) returns (SetPlatformQcResultResponse) {
-        option idempotency_level = IDEMPOTENT;
+    // Run protocol on the connected flow cell
+    //
+    // The protocol must be described by a toml file. The request identifies the
+    // protocol and supplies overrides to the default protocol-settings described
+    // in the toml file, in addition it provides user-info for the experiment.
+    //
+    // Throws an error if there is no flow cell connected.
+    //
+    // Since 5.0
+    rpc begin_protocol(BeginProtocolRequest) returns (BeginProtocolResponse) {
+        option (experimental) = true;
     }
 
-    // Given a protocol and some information about the flow-cell and kits will provide a list
-    // of settings required by the protocol, their defaults and dependencies.
-    //
-    // Since 4.3
-    rpc list_settings_for_protocol(ListSettingsForProtocolRequest) returns (ListSettingsForProtocolResponse) {
-        option (experimental) = true;
-        option idempotency_level = NO_SIDE_EFFECTS;
+    rpc set_platform_qc_result(SetPlatformQcResultRequest) returns (SetPlatformQcResultResponse) {
+        option idempotency_level = IDEMPOTENT;
     }
 
     // Associated a post processing analysis process, and schedule it to run once the protocol is complete.
@@ -219,6 +223,17 @@ service ProtocolService {
     // Since 4.4.
     rpc protocol_phase_management (stream ProtocolPhaseManagementRequest)
                           returns (stream ProtocolPhaseManagementResponse) {}
+
+
+    // Generate a run report and return the report data.
+    //
+    // If the protocol selected for report generation is already complete the report is a completed report, otherwise
+    // the report will be from the in progress protocol.
+    //
+    // Since 5.0
+    rpc generate_run_report(GenerateRunReportRequest) returns (stream GenerateRunReportResponse) {
+        option idempotency_level = IDEMPOTENT;
+    }
 }
 
 message BarcodeUserData {
@@ -268,6 +283,15 @@ message ProtocolRunUserInfo {
     repeated BarcodeUserData barcode_user_info = 3;
 }
 
+message OffloadLocationInfo {
+    // Data offload locations to use to store protocol data, specified using their `location_id`.
+    //
+    // Valid `location_id`s can be retrieved using mooneye.offload_manager.list_offload_locations()
+    //
+    // Since 5.0.
+    repeated string offload_location_ids = 1;
+}
+
 message StartProtocolRequest {
     // The identifier of the protocol, as provided by list_protocols().
     string identifier = 1 [(rpc_required) = true];
@@ -277,6 +301,11 @@ message StartProtocolRequest {
 
     // User input describing the protocol.
     ProtocolRunUserInfo user_info = 3;
+
+    // Information about data offload locations to use to store data
+    //
+    // Since 5.0.
+    OffloadLocationInfo offload_location_info = 4;
 }
 
 message StartProtocolResponse {
@@ -398,7 +427,7 @@ enum ProtocolState {
     PROTOCOL_WAITING_FOR_TEMPERATURE = 4;
 
     // Occurs when data protocol has stopped (either from a explicit rpc request or the script naturally ended)
-    // and data is still being processed (albacore is still in catchup and processing reads).
+    // and data is still being processed (basecalling is still in catchup and processing reads).
     PROTOCOL_WAITING_FOR_ACQUISITION = 5;
 
     // The protocol finished on its own and did not report an error.
@@ -484,6 +513,12 @@ message PlatformQcResult {
 
     // Total number of pores that were found on the flow cell, across all muxes.
     uint32 total_pore_count = 3;
+}
+
+message ExternalOffload {
+    // The `id`s associated with active external data offloads associated with the protocol
+    // The offload status can be queried using `mooneye.offload_manager.watch_offloads()``
+    repeated string offload_ids = 1;
 }
 
 message ProtocolRunInfo {
@@ -595,6 +630,10 @@ message ProtocolRunInfo {
     // Possible to not be set (e.g. not a pqc run)
     PlatformQcResult pqc_result = 20;
 
+    // Contains information about external data offloads associated with this protocol
+    //
+    // Since 5.0
+    ExternalOffload external_offload = 21;
 }
 
 message FilteringInfo {
@@ -698,6 +737,34 @@ message BeginPlatformQcResponse {
     string run_id = 1;
 }
 
+message BeginProtocolRequest {
+    oneof protocol_identifier {
+        // Specify the protocol with a string containing all the protocol's identifying components, eg:
+        // "sequencing/sequencing_MIN106_DNA:FLO-MIN106:SQK-RPB004"
+        string identifier = 1;
+
+        // Specify the protocol providing the identifying components individually, all components are optional.
+        // Exactly one protocol should match the given components otherwise and error will be returned
+        protocol_settings.ProtocolIdentifierComponents components = 2;
+    }
+
+    // User info options for the protocol
+    ProtocolRunUserInfo user_info = 3;
+
+    // Information about data offload locations to use to store data
+    //
+    // Since 5.0.
+    OffloadLocationInfo offload_location_info = 5;
+
+    // Any settings changed from the defaults specified in the protocol's .toml file.
+    map<string, protocol_settings.ProtocolSetting.ProtocolSettingValue> settings = 4;
+}
+
+message BeginProtocolResponse {
+    // UUID generated when the protocol is started, to uniquely represent this protocol instance
+    string run_id = 1;
+}
+
 message SetPlatformQcResultRequest {
     // The protocol_run_id that was given when the pqc run was started
     string protocol_run_id = 1;
@@ -707,110 +774,6 @@ message SetPlatformQcResultRequest {
 
 message SetPlatformQcResultResponse {
 
-}
-
-message ProtocolIdentifierComponents {
-    enum Location {
-        ANY = 0;
-        SYSTEM_SCRIPTS = 1;
-        USER_SCRIPTS = 2;
-    };
-    // If not specified, will default to "ANY"
-    Location location = 1;
-    // one of "custom", "sequencing", "control", "ctc", "platform qc" or "flowcell_plugin"
-    string experiment_type = 2;
-    // Name (or path) of the protocol, without the .toml extension eg: "sequencing/sequencing_MIN106_DNA" this is relative to the
-    // system or user protocol directory
-    string name = 3;
-    // eg: "FLO-MIN106"
-    string flow_cell_product_code = 4;
-    // eg: "SQK-RPB004"
-    string kit = 5;
-}
-
-
-message ListSettingsForProtocolRequest {
-    oneof protocol_identifier {
-        // specify the protocol with a string containing all the protocol's identifying components, eg:
-        // "sequencing/sequencing_MIN106_DNA:FLO-MIN106:SQK-RPB004"
-        string identifier = 1;
-
-        // specify the protocol providing the identifying components individually. All components are optional, if more
-        // than one protocol matches given strings, information about the first will be returned.
-        ProtocolIdentifierComponents components = 2;
-    }
-}
-
-message ListSettingsForProtocolResponse {
-    // Run options
-    message RunOptions {
-        protocol_settings.ProtocolSetting run_length = 1;
-        protocol_settings.ProtocolSetting bias_voltage = 2;
-        protocol_settings.ProtocolSetting read_until_enabled = 3;
-        protocol_settings.ProtocolSetting read_until_ref_file = 4;
-        protocol_settings.ProtocolSetting read_until_channels = 5;
-        protocol_settings.ProtocolSetting read_until_bed_file_enabled = 6;
-        protocol_settings.ProtocolSetting read_until_bed_file = 7;
-        protocol_settings.ProtocolSetting read_until_enrichment = 8;
-        protocol_settings.ProtocolSetting active_channel_selection = 9; // bool
-        protocol_settings.ProtocolSetting mux_scan_period = 10; // in hours
-        protocol_settings.ProtocolSetting group_change_period = 11;
-    }
-
-    message Basecalling {
-        protocol_settings.ProtocolSetting basecalling_enabled = 1;
-        protocol_settings.ProtocolSetting barcoding_enabled = 2;
-        protocol_settings.ProtocolSetting basecall_model = 3;
-        protocol_settings.ProtocolSetting trim_barcodes_enabled = 4;
-        protocol_settings.ProtocolSetting require_barcodes_both_ends = 5;
-        protocol_settings.ProtocolSetting detect_mid_strand_barcodes = 6;
-        protocol_settings.ProtocolSetting override_mid_barcoding_score = 7;
-        protocol_settings.ProtocolSetting override_rear_barcoding_score = 8;
-        protocol_settings.ProtocolSetting min_barcoding_score = 9;
-        protocol_settings.ProtocolSetting min_barcoding_score_rear = 10;
-        protocol_settings.ProtocolSetting min_barcoding_score_mid = 11;
-        protocol_settings.ProtocolSetting alignment_enabled = 12;
-        protocol_settings.ProtocolSetting alignment_ref_file = 13;
-        protocol_settings.ProtocolSetting alignment_bed_file_enabled = 14;
-        protocol_settings.ProtocolSetting alignment_bed_file = 15;
-    }
-
-    // Output
-    message Output {
-        protocol_settings.ProtocolSetting output_location = 1;
-        protocol_settings.ProtocolSetting fast_q_enabled = 2;
-        protocol_settings.ProtocolSetting fast_q_reads_per_file = 3;
-        protocol_settings.ProtocolSetting fast_q_data_compression = 4;
-        protocol_settings.ProtocolSetting fast_5_enabled = 5;
-        protocol_settings.ProtocolSetting fast_5_reads_per_file = 6;
-        protocol_settings.ProtocolSetting fast_5_data_trace_table = 7;
-        protocol_settings.ProtocolSetting fast_5_data_move_table = 8;
-        protocol_settings.ProtocolSetting fast_5_data_fast_q = 9;
-        protocol_settings.ProtocolSetting fast_5_data_raw = 10;
-        protocol_settings.ProtocolSetting fast_5_data_compression = 11;
-        protocol_settings.ProtocolSetting bam_enabled = 12;
-        protocol_settings.ProtocolSetting read_filtering_enabled = 13;
-        protocol_settings.ProtocolSetting read_filtering_min_qscore = 14;
-        protocol_settings.ProtocolSetting read_filtering_min_read_length = 15;
-        protocol_settings.ProtocolSetting read_filtering_max_read_length = 16;
-        protocol_settings.ProtocolSetting bulk_file_enabled = 17;
-        protocol_settings.ProtocolSetting bulk_file_raw = 18;
-        protocol_settings.ProtocolSetting bulk_file_events = 19;
-        protocol_settings.ProtocolSetting bulk_file_read_table = 20;
-        protocol_settings.ProtocolSetting bulk_file_raw_enabled = 21;
-        protocol_settings.ProtocolSetting bulk_file_events_enabled = 22;
-        protocol_settings.ProtocolSetting bulk_file_read_table_enabled = 23;
-    }
-
-    ProtocolIdentifierComponents protocol = 1;
-
-    RunOptions run_options = 2;
-    Basecalling basecalling = 3;
-    Output output = 4;
-
-    // Any protocol settings not covered by the above structures, for example
-    // those required for custom-scripts.
-    repeated protocol_settings.ProtocolSetting protocol_settings = 5;
 }
 
 message AssociatePostProcessingAnalysisRequest {
@@ -889,4 +852,20 @@ message ProtocolPhaseManagementResponse {
     // If this is set to ACTION_NONE, the message should be ignored (this is for future
     // compatibility).
     Action action = 1;
+}
+
+message GenerateRunReportRequest {
+    // The protocol_run_id to generate a report for.
+    string protocol_run_id = 1;
+}
+
+message GenerateRunReportResponse {
+    // Protocol ID the run report is for.
+    string protocol_run_id = 1;
+
+    // A section of the run report data (note the api to return this data may stream back several sections).
+    string report_data = 2;
+
+    // How many further characters of data remain after this message (excluding of this message).
+    int32 remaining_length = 3;
 }

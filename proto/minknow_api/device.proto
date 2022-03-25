@@ -102,7 +102,7 @@ service DeviceService {
     // from the device into picoamps (pA).
     //
     // Note that calibration depends on the device, flow cell and some of the device settings
-    // (including sampling frequency and the capacitance used in the integratation circuit). If
+    // (including sampling frequency and the capacitance used in the integration circuit). If
     // any of these are changed, the calibration will no longer be used. Instead, a previously-saved
     // calibration (for that combination of flow cell and settings) might be used, or the identity
     // calibration might be used.
@@ -173,7 +173,7 @@ service DeviceService {
     // one.
     //
     // The user should NOT change the overload mode during an unblock - this will confuse the return from
-    // unblock, which tries to reset the overload mode to the state preceeding the unblock.
+    // unblock, which tries to reset the overload mode to the state preceding the unblock.
     //
     // The unblock can fail if the channel is not in a valid well state (this means a channel needs to be
     // in one of pore1-4, not test current, regen pore or unblock). If a mux is not valid, the unblock grpc
@@ -223,7 +223,7 @@ service DeviceService {
 
     // Get the saturation control configuration.
     //
-    // The default configuration is specifed by the MinKNOW application configuration, the command returns the most
+    // The default configuration is specified by the MinKNOW application configuration, the command returns the most
     // recently applied saturation config.
     rpc get_saturation_config(GetSaturationConfigRequest) returns (GetSaturationConfigResponse) {
         option idempotency_level = NO_SIDE_EFFECTS;
@@ -254,6 +254,13 @@ service DeviceService {
 
     rpc set_bias_voltage (SetBiasVoltageRequest) returns (SetBiasVoltageResponse) {
         option idempotency_level = IDEMPOTENT;
+    }
+
+    // Trigger a device specific dump of device-state control-server log. The
+    // information will appear in a "diagnostic_information" message
+    //
+    // Since 5.0
+    rpc dump_state(DumpStateRequest) returns (DumpStateResponse) {
     }
 }
 
@@ -363,7 +370,7 @@ message GetDeviceInfoResponse {
 
     // Whether the device is simulated.
     //
-    // If this is true, there is no physical device - MinKNOW is simluating it. If it is false,
+    // If this is true, there is no physical device - MinKNOW is simulating it. If it is false,
     // MinKNOW will be acquiring data from a real device.
     bool is_simulated = 3;
 
@@ -450,6 +457,20 @@ message StreamDeviceStateRequest {}
 
 message GetFlowCellInfoRequest {}
 
+enum InsertionScriptStatus {
+    // An insertion script has not been run for a flow-cell. Not all
+    // platforms use an insertion script.
+    NOT_RUN = 0;
+
+    // An insertion script has been run and has failed to complete
+    // successfully. This can indicate a faulty flow-cell or that the flow-cell
+    // has not been inserted correctly.
+    FAILED = 1;
+
+    // Script run successfully, hardware ready to use.
+    SUCCEEDED = 2;
+}
+
 message GetFlowCellInfoResponse {
     // Whether there is a flow cell present.
     //
@@ -525,7 +546,7 @@ message GetFlowCellInfoResponse {
     // provide useful information, even if has_flow_cell is false.
     bool has_adapter = 9;
 
-    // The unique identifier of an attached flongle adatper.
+    // The unique identifier of an attached flongle adapter.
     //
     // This should be same as the value printed onto the adapter casing.
     string adapter_id = 10;
@@ -542,7 +563,7 @@ message GetFlowCellInfoResponse {
         float temperature_offset = 11;
     }
 
-    // The version of the ASIC contained in the flowcell (if specified by the hardware).
+    // The version of the ASIC contained in the flow cell (if specified by the hardware).
     //
     // This can be used to determine if the hardware should support certain features
     // added to only newer ASICs.
@@ -552,6 +573,13 @@ message GetFlowCellInfoResponse {
     //
     // Since 1.14
     string asic_version = 12;
+
+    // If the configuration specifies a script to run when a flow-cell is inserted,
+    // this shows if it completed successfully.
+    //
+    // Since 5.0
+    InsertionScriptStatus insertion_script_status = 14;
+
 }
 
 message StreamFlowCellInfoRequest {}
@@ -855,7 +883,7 @@ message SaturationConfig
     //
     // Each packet of frames minknow receive is delivered to the saturation
     // check (in approx 64 frame chunks), only the first frame of each packet is inspected.
-    // The thresolds control how many _packets_ must be outside the valid range.
+    // The thresholds control how many _packets_ must be outside the valid range.
     // ie. if general_threshold is set to 10, at least 640 frames are
     // required to trigger saturation.
     //
@@ -989,4 +1017,10 @@ message SetBiasVoltageRequest {
 
 message SetBiasVoltageResponse {
 
+}
+
+message DumpStateRequest {
+}
+
+message DumpStateResponse {
 }
