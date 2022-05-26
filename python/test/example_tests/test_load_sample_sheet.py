@@ -50,8 +50,14 @@ class TestLoadSampleSheet(unittest.TestCase):
             else:
                 self.assertIsNotNone(actual_entry.barcode_info)
                 self.assertEqual(
-                    sorted(actual_entry.barcode_info, key=sort_barcode_info,),
-                    sorted(expected_entry.barcode_info, key=sort_barcode_info,),
+                    sorted(
+                        actual_entry.barcode_info,
+                        key=sort_barcode_info,
+                    ),
+                    sorted(
+                        expected_entry.barcode_info,
+                        key=sort_barcode_info,
+                    ),
                 )
 
     def test_no_barcoding(self):
@@ -126,11 +132,13 @@ class TestLoadSampleSheet(unittest.TestCase):
                     experiment_id=None,
                     barcode_info=[
                         BarcodeUserData(
-                            barcode_name="barcode_external01_internal01",
+                            barcode_name="external01",
+                            barcode_name_internal="internal01",
                             alias="alias01",
                         ),
                         BarcodeUserData(
-                            barcode_name="barcode_external02_internal01",
+                            barcode_name="external02",
+                            barcode_name_internal="internal01",
                             alias="alias02",
                         ),
                     ],

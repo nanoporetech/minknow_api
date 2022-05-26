@@ -257,8 +257,17 @@ message BarcodeUserData {
         positive_control_2 = 5;
     }
 
-    // Barcode name the user data applies to, eg: "barcode02"
+    // Barcode name the user data applies to, eg: "barcode02". 
+    //
+    // Acts as the external barcode name `barcode_name_internal` is 
+    // also set for dual barcoding 
+    //
+    // Acts as the rapid barcode name in lampore barcoding if `lamp_barcode_id`
+    // is set
     string barcode_name = 1;
+
+    // The internal barcode name if using dual barcode
+    string barcode_name_internal = 5;
 
     // Lamp barcode id the user data applies to, eg: "FIP04"
     string lamp_barcode_id = 2;
@@ -268,6 +277,14 @@ message BarcodeUserData {
 
     // Sample type grouping for the barcode.
     SampleType type = 4;
+}
+
+message KitInfo {
+    // The sequencing kit used to select the protocol e.g. "SQK-LSK108"
+    string sequencing_kit = 1;
+
+    // The expansion barcoding kits that the protocol supports e.g. "EXP-NBD104"
+    repeated string barcode_expansion_kits = 2;
 }
 
 message ProtocolRunUserInfo {
@@ -281,6 +298,15 @@ message ProtocolRunUserInfo {
 
     // User supplied info for barcodes
     repeated BarcodeUserData barcode_user_info = 3;
+
+    // user_specified_flow_cell_id created by the user
+    google.protobuf.StringValue user_specified_flow_cell_id = 4;
+
+    // user_specified_product_code created by the user
+    google.protobuf.StringValue user_specified_product_code = 5;
+
+    // Kit information the user requested
+    KitInfo kit_info = 6;
 }
 
 message OffloadLocationInfo {
@@ -288,8 +314,17 @@ message OffloadLocationInfo {
     //
     // Valid `location_id`s can be retrieved using mooneye.offload_manager.list_offload_locations()
     //
+    // This requires a running instance of Mooneye
+    //
     // Since 5.0.
     repeated string offload_location_ids = 1;
+
+    // Local, e.g., internal / external drive, paths to where the protocol output will be stored.
+    //
+    // This does not require a running instance of Mooneye
+    //
+    // Since 5.0
+    string offload_location_path = 2;
 }
 
 message StartProtocolRequest {

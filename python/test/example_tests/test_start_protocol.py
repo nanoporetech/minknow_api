@@ -62,7 +62,13 @@ TEST_BARCODING_PROTOCOL = protocol_pb2.ProtocolInfo(
 
 def run_start_protocol_example(port, args):
     p = subprocess.run(
-        [sys.executable, str(start_protocol_source), "--port", str(port), "--verbose",]
+        [
+            sys.executable,
+            str(start_protocol_source),
+            "--port",
+            str(port),
+            "--verbose",
+        ]
         + args,
         stdout=subprocess.PIPE,
         stderr=subprocess.STDOUT,
@@ -95,7 +101,13 @@ def test_basic_start_protocol():
 
             # Missing position/flow cell/sample sheet argument
             assert (
-                run_start_protocol_example(server.port, ["--kit", TEST_KIT_NAME,])[0]
+                run_start_protocol_example(
+                    server.port,
+                    [
+                        "--kit",
+                        TEST_KIT_NAME,
+                    ],
+                )[0]
                 == 2
             )
 

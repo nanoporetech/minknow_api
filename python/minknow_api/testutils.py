@@ -117,7 +117,10 @@ class InstanceService(minknow_api.instance_pb2_grpc.InstanceServiceServicer):
         """Find the version information for the instance"""
         return minknow_api.instance_pb2.GetVersionInfoResponse(
             minknow=minknow_api.instance_pb2.GetVersionInfoResponse.MinknowVersion(
-                major=MAJOR, minor=MINOR, patch=MICRO, full=minknow_api.__version__,
+                major=MAJOR,
+                minor=MINOR,
+                patch=MICRO,
+                full=minknow_api.__version__,
             )
         )
 
@@ -165,7 +168,8 @@ class MockMinKNOWServer:
 
         # Init the server
         self.server = grpc.server(
-            futures.ThreadPoolExecutor(max_workers=10), interceptors=interceptors,
+            futures.ThreadPoolExecutor(max_workers=10),
+            interceptors=interceptors,
         )
 
         for service in kwargs:
@@ -203,7 +207,8 @@ class MockMinKNOWServer:
                     # Get the user overridden module from kwargs
                     #   or fallback onto the baseclass from grpc
                     module = self.kwargs.get(
-                        svc_name, getattr(svc_module, svc_servicer),
+                        svc_name,
+                        getattr(svc_module, svc_servicer),
                     )
 
                     # Same as: self.{name}_service = minknow_api.{name}_pb2_grpc.{svc}Servicer

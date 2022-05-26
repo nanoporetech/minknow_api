@@ -22,7 +22,12 @@ import minknow_api.testutils
 
 LOGGER = logging.getLogger(__name__)
 
-PositionInfo = namedtuple("PositionInfo", ["position_name",])
+PositionInfo = namedtuple(
+    "PositionInfo",
+    [
+        "position_name",
+    ],
+)
 FlowCellInfo = namedtuple("PositionInfo", ["flow_cell_id", "has_flow_cell"])
 
 

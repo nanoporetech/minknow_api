@@ -350,7 +350,6 @@ message DescribeHostResponse {
     // GRD-X5B001    GridION X5
     // GRD-X5B002    GridION X5
     // GRD-X5B003    GridION X5 Mk1
-    // MIN-101B      MinIT
     // MIN-101C      MinION Mk1C
     // PRO-PRMC01    PromethION Beta
     // PRO-PRC024    PromethION 24
@@ -557,6 +556,19 @@ message FlowCellPosition {
     //
     // Since 5.0.
     SimpleProtocolState protocol_state = 9;
+
+    // Whether the device is simulated.
+    //
+    // If this is true, there is no physical device - MinKNOW is simulating it. If it is false,
+    // MinKNOW will be acquiring data from a real device.
+    //
+    // Since 5.2
+    bool is_simulated = 10;
+
+    // The type of the device.
+    //
+    // Since 5.2
+    minknow_api.device.GetDeviceInfoResponse.DeviceType device_type = 11;
 }
 
 message FlowCellPositionsRequest {
@@ -935,7 +947,15 @@ message GetSequencingKitsResponse {
     repeated BarcodingExpansionKit barcoding_expansion_kits = 2;
 }
 
+enum SimulatedDeviceType {
+    SIMULATED_AUTO = 0;
+    SIMULATED_MINION = 1;
+    SIMULATED_TRAXION = 2;
+    SIMULATED_PROMETHION = 3;
+}
+
 message AddSimulatedDeviceRequest {
+
     // The name of the position, this must be unique and the correct format:
     //
     // For MinIONs and MinION-mk1Cs, "MS" followed by five digits, eg: "MS12345".
@@ -943,6 +963,11 @@ message AddSimulatedDeviceRequest {
     //
     // PromethIONs position-names have no format restriction, but must be unique
     string name = 1 [(rpc_required) = true];
+
+    // The type of the simulated device to create.
+    //
+    // If left at default (AUTO), then a sensible default device type is selected.
+    SimulatedDeviceType type = 2 [(rpc_required) = true];
 }
 
 message AddSimulatedDeviceResponse {

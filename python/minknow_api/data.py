@@ -36,7 +36,12 @@ Attributes:
 """
 
 ChannelSignalData = collections.namedtuple(
-    "ChannelSignalData", ["name", "signal", "config_changes",]
+    "ChannelSignalData",
+    [
+        "name",
+        "signal",
+        "config_changes",
+    ],
 )
 ChannelSignalData.__doc__ = """\
 The per-channel data in SignalData.
@@ -46,14 +51,19 @@ Attributes:
     signal (numpy.ndarray): The signal data, as a 1-dimensional numpy array. If calibrated data was
         requested, this will be floating-point data in picoamps. Otherwise, this will be integer
         data (ADC values). Note that the exact type will depend on the sequencing device (and the
-        host machine in the case of MinIONs - MinITs will use a slightly different format to PCs).
+        host machine in the case of MinIONs).
     config_changes (list of ChannelConfigChange): If channel configuration changes were requested, a
         list of those changes . This will contain at least one element, with offset 0, which is the configuration
         that applies to the first sample returned.
 """
 
 NumpyDTypes = collections.namedtuple(
-    "NumpyDTypes", ["bias_voltages", "calibrated_signal", "uncalibrated_signal",]
+    "NumpyDTypes",
+    [
+        "bias_voltages",
+        "calibrated_signal",
+        "uncalibrated_signal",
+    ],
 )
 NumpyDTypes.__doc__ = """\
 The types of data returned by the data.get_signal_bytes() RPC, as numpy dtypes.

@@ -69,6 +69,11 @@ __all__ = [
     "PROTOCOL_RUNNING",
     "PROTOCOL_FINISHED_SUCCESSFULLY",
     "PROTOCOL_FINISHED_WITH_ERROR",
+    "SimulatedDeviceType",
+    "SIMULATED_AUTO",
+    "SIMULATED_MINION",
+    "SIMULATED_TRAXION",
+    "SIMULATED_PROMETHION",
     "ExperimentType",
     "SEQUENCING",
     "CONTROL",
@@ -950,6 +955,9 @@ class ManagerService(object):
                 For GridIONs, "GS" followed by five digits, eg: "GS12345".
 
                 PromethIONs position-names have no format restriction, but must be unique
+            type (minknow_api.manager_pb2.SimulatedDeviceType): The type of the simulated device to create.
+
+                If left at default (AUTO), then a sensible default device type is selected.
 
         Returns:
             minknow_api.manager_pb2.AddSimulatedDeviceResponse
@@ -974,6 +982,12 @@ class ManagerService(object):
             _message.name = kwargs['name']
         else:
             raise ArgumentError("add_simulated_device requires a 'name' argument")
+
+        if "type" in kwargs:
+            unused_args.remove("type")
+            _message.type = kwargs['type']
+        else:
+            raise ArgumentError("add_simulated_device requires a 'type' argument")
 
         if len(unused_args) > 0:
             raise ArgumentError("Unexpected keyword arguments to add_simulated_device: '{}'".format(", ".join(unused_args)))

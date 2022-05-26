@@ -705,5 +705,14 @@ message BoxplotResponse {
 
         // Number of items in this box plot's stats.
         uint64 count = 6;
+
+        // Estimated lower value where there is half the data compared to the mode.
+        // provides some estimate on the sharpness of the mode peak.
+        float lower_full_width_half_maximum = 7;
+        // Estimated mode for the dataset.
+        float mode = 8;
+        // Estimated upper value where there is half the data compared to the mode.
+        // provides some estimate on the sharpness of the mode peak.
+        float upper_full_width_half_maximum = 9;
     }
 }

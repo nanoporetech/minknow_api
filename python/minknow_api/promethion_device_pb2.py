@@ -130,12 +130,15 @@ TimingEnginePeriods = _reflection.GeneratedProtocolMessageType('TimingEnginePeri
       CDS1_DATA:
           CDS1 to DATA transiton
       DATA:
-          DATA transfer phase
+          DATA transfer phase  NOTE: Setting this value has no effect,
+          MinKNOW will choose a value for DATA itself to acheive the
+          required frame-rate. Reading it will return the chosen DATA
+          period.
       DATA_RST2:
-          DATA transfer to Reset2 transition.  NOTE: Setting this value
-          has no effect, MinKNOW will choose a value for DATA_RST2
-          itself to maintain the required frame-rate. Reading it will
-          return the chosen DATA_RST2 period.
+          DATA transfer to Reset2 transition. MinKNOW may increase this
+          value by small amounts so that when changing the DATA period,
+          the sum of the RST1 and DATA periods is a multiple of 16 and
+          the frame-rate and integration-period are maintained.
       RST2:
           Reset2
       RST2_CDS2:

@@ -206,6 +206,7 @@ BarcodeInfo = NamedTuple(
     "BarcodeInfo",
     [
         ("barcode_name", str),
+        ("barcode_name_internal", str),
         ("lamp_barcode_id", Optional[str]),
         ("alias", str),
         ("type", Optional[int]),
@@ -264,6 +265,7 @@ def parse_record(parsed_data: ParsedDataDict, record: Record, line_num: int):
             )
 
         barcode_name = record["barcode"]
+        barcode_name_internal = None
         lamp_barcode_id = None
         barcode_key = barcode_name
 
@@ -286,7 +288,8 @@ def parse_record(parsed_data: ParsedDataDict, record: Record, line_num: int):
                 + "expected a name like 'external01'"
             )
 
-        barcode_name = "barcode_{}_{}".format(external_barcode, internal_barcode)
+        barcode_name = external_barcode
+        barcode_name_internal = internal_barcode
         lamp_barcode_id = None
         barcode_key = (external_barcode, internal_barcode)
 
@@ -309,6 +312,7 @@ def parse_record(parsed_data: ParsedDataDict, record: Record, line_num: int):
             )
 
         barcode_name = rapid_barcode
+        barcode_name_internal = None
         lamp_barcode_id = fip_barcode
         barcode_key = (barcode_name, lamp_barcode_id)
     else:
@@ -331,6 +335,7 @@ def parse_record(parsed_data: ParsedDataDict, record: Record, line_num: int):
 
     data["barcode_info"][barcode_key] = BarcodeInfo(
         barcode_name=barcode_name,
+        barcode_name_internal=barcode_name_internal,
         lamp_barcode_id=lamp_barcode_id,
         # We know the alias exists because we checked in `check_fieldnames`
         alias=record["alias"],
@@ -343,6 +348,8 @@ def make_barcode_user_data(barcode_info: BarcodeInfo) -> BarcodeUserData:
     barcode_user_data = BarcodeUserData()
     if barcode_info.barcode_name:
         barcode_user_data.barcode_name = barcode_info.barcode_name
+    if barcode_info.barcode_name_internal:
+        barcode_user_data.barcode_name_internal = barcode_info.barcode_name_internal
     if barcode_info.lamp_barcode_id:
         barcode_user_data.lamp_barcode_id = barcode_info.lamp_barcode_id
     if barcode_info.alias:

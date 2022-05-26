@@ -1,6 +1,19 @@
 Examples
 ========
 
+Developer API Tokens
+--------------------
+
+When using remote execution (not running the example on the sequencer itself), some of the examples in this directory require
+an API token, which can be generated using the MinKNOW UI. This token will authenticate access to the sequencer remotely,
+and is specific to each sequencer used.
+
+The examples in this directory accept an `--api-token` argument and pass this to the required API classes, when the example
+requires a token.
+
+See [developer api tokens](../../../API_TOKENS.md) for further info.
+
+
 [list_sequencing_positions](list_sequencing_positions.py)
 -----------------------------------------------------------
 
@@ -12,12 +25,12 @@ Example usage:
 > python list_sequencing_positions.py
 
 # Possible output if running minknow locally:
-#   Available sequencing positions on localhost:9501:
+#   Available sequencing positions on localhost:9502:
 #   MN00001: running
 #     secure: 8000
-#     insecure: 8001
 
 ```
+
 
 [start_protocol](start_protocol.py)
 -------------------------------------
@@ -30,6 +43,7 @@ Example usage:
 > python list_sequencing_positions.py
 
 > python ./python/minknow_api/examples/start_protocol.py \
+>     --api-token ${MY_DEVELOPER_API_TOKEN} \
 >     --host localhost --position 1A \                        # Select which host + position will run a script
 >     --sample-id "my_sample" --experiment-group "my_group" \ # Set sample id + experiment group
 >     --experiment-duration 24 \                              # Set the run time of the experiment (hours)

@@ -120,7 +120,13 @@ def main():
         help="IP address of the machine running MinKNOW (defaults to localhost)",
     )
     parser.add_argument(
-        "--port", help="Port to connect to on host (defaults to standard MinKNOW port)",
+        "--port",
+        help="Port to connect to on host (defaults to standard MinKNOW port)",
+    )
+    parser.add_argument(
+        "--api-token",
+        default=None,
+        help="Specify an API token to use, should be returned from the sequencer as a developer API token.",
     )
     parser.add_argument(
         "--position",
@@ -146,7 +152,9 @@ def main():
         logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
 
     # Construct a manager using the host + port provided:
-    manager = Manager(host=args.host, port=args.port)
+    manager = Manager(
+        host=args.host, port=args.port, developer_api_token=args.api_token
+    )
 
     # Find which positions we are going to start protocol on:
     positions = list(manager.flow_cell_positions())

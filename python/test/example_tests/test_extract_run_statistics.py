@@ -18,7 +18,9 @@ start_protocol_source = example_root / "extract_run_statistics.py"
 
 TEST_ACQUISITION = acquisition_pb2.AcquisitionRunInfo(run_id=str(uuid.uuid4()))
 
-TEST_PROTOCOL = protocol_pb2.ProtocolRunInfo(run_id=str(uuid.uuid4()),)
+TEST_PROTOCOL = protocol_pb2.ProtocolRunInfo(
+    run_id=str(uuid.uuid4()),
+)
 TEST_PROTOCOL_WITH_ACQUISTIIONS = protocol_pb2.ProtocolRunInfo(
     run_id=str(uuid.uuid4()), acquisition_run_ids=[TEST_ACQUISITION.run_id]
 )
@@ -84,7 +86,11 @@ def test_basic_start_protocol():
             # No protocols available
             assert (
                 run_extract_run_statistics_example(
-                    server.port, ["--position", position_info.position_name,]
+                    server.port,
+                    [
+                        "--position",
+                        position_info.position_name,
+                    ],
                 )[0]
                 == 1
             )
@@ -93,7 +99,11 @@ def test_basic_start_protocol():
             sequencing_position.set_protocol_runs([TEST_PROTOCOL])
             assert (
                 run_extract_run_statistics_example(
-                    server.port, ["--position", position_info.position_name,]
+                    server.port,
+                    [
+                        "--position",
+                        position_info.position_name,
+                    ],
                 )[0]
                 == 1
             )
@@ -106,7 +116,11 @@ def test_basic_start_protocol():
             )
             assert (
                 run_extract_run_statistics_example(
-                    server.port, ["--position", position_info.position_name,]
+                    server.port,
+                    [
+                        "--position",
+                        position_info.position_name,
+                    ],
                 )[0]
                 == 0
             )

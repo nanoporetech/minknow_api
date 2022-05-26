@@ -90,7 +90,10 @@ class ServiceBase(object):
 
 GuppyConnectionInfo = typing.NamedTuple(
     "GuppyConnectionInfo",
-    [("port", typing.Optional[int]), ("ipc_path", typing.Optional[str]),],
+    [
+        ("port", typing.Optional[int]),
+        ("ipc_path", typing.Optional[str]),
+    ],
 )
 
 
@@ -134,7 +137,11 @@ class Manager(ServiceBase):
     DEFAULT_TIMEOUT = 5
 
     def __init__(
-        self, host="127.0.0.1", port=None, developer_api_token=None, credentials=None,
+        self,
+        host="127.0.0.1",
+        port=None,
+        developer_api_token=None,
+        credentials=None,
     ):
         if port is None:
             port = 9502
@@ -312,8 +319,8 @@ class Manager(ServiceBase):
                     credentials=self.credentials,
                 )
 
-    def add_simulated_device(self, name, timeout=DEFAULT_TIMEOUT):
-        """ Dynamically create a simulated device
+    def add_simulated_device(self, name, type, timeout=DEFAULT_TIMEOUT):
+        """Dynamically create a simulated device
 
         Args:
             name (string): name of simulated device to create. Should not exist already.
@@ -321,13 +328,14 @@ class Manager(ServiceBase):
                 For MinIONs and MinION-mk1Cs, "MS" followed by five digits, eg: "MS12345".
                 For GridIONs, "GS" followed by five digits, eg: "GS12345".
                 PromethIONs position-names have no format restriction
+            type (minknow_api.manager_pb2.SimulatedDeviceType): Type of device to create.
             timeout (float, optional): The maximum time to wait for the call to complete. Should
             usually be left at the default.
         """
-        self.rpc.add_simulated_device(_timeout=timeout, name=name)
+        self.rpc.add_simulated_device(_timeout=timeout, name=name, type=type)
 
     def remove_simulated_device(self, name, timeout=DEFAULT_TIMEOUT):
-        """ Dynamically remove a simulated device
+        """Dynamically remove a simulated device
 
         Args:
             name (string): name of device to remove. It should exist and be simulated.
@@ -337,7 +345,7 @@ class Manager(ServiceBase):
         self.rpc.remove_simulated_device(_timeout=timeout, name=name)
 
     def get_alignment_reference_information(self, path, timeout=DEFAULT_TIMEOUT):
-        """ Query alignment reference information from a file path.
+        """Query alignment reference information from a file path.
 
         Args:
             path (string): Path of the alignment reference file.
@@ -347,7 +355,7 @@ class Manager(ServiceBase):
         return self.rpc.get_alignment_reference_information(_timeout=timeout, path=path)
 
     def create_developer_api_token(self, name, expiry=None, timeout=DEFAULT_TIMEOUT):
-        """ Create a new developer api token, which expires at [expiry].
+        """Create a new developer api token, which expires at [expiry].
 
         Can not be invoked when using a developer token as authorisation method.
 
@@ -368,7 +376,7 @@ class Manager(ServiceBase):
         )
 
     def revoke_developer_api_token(self, id, timeout=DEFAULT_TIMEOUT):
-        """ Revoke an existing developer api tokens.
+        """Revoke an existing developer api tokens.
 
         Args:
             id (string): The identification of the token (available from list_developer_api_tokens).
@@ -378,7 +386,7 @@ class Manager(ServiceBase):
         return self.rpc.revoke_developer_api_token(id=id, _timeout=timeout)
 
     def list_developer_api_tokens(self, timeout=DEFAULT_TIMEOUT):
-        """ List existing developer api tokens.
+        """List existing developer api tokens.
 
         Args:
             timeout (float, optional): The maximum time to wait for the call to complete. Should
@@ -393,7 +401,7 @@ class Manager(ServiceBase):
         sequencing_kit=None,
         timeout=DEFAULT_TIMEOUT,
     ):
-        """ List existing developer api tokens.
+        """List existing developer api tokens.
 
         Args:
             experiment_type (manager.ExperimentType): Type of experiment to search for.
@@ -443,7 +451,11 @@ class FlowCellPosition(object):
     """
 
     def __init__(
-        self, description, host="127.0.0.1", developer_api_token=None, credentials=None,
+        self,
+        description,
+        host="127.0.0.1",
+        developer_api_token=None,
+        credentials=None,
     ):
         self.host = host
         self.description = description
@@ -512,6 +524,17 @@ class FlowCellPosition(object):
         """
         return self.description.is_integrated
 
+    @property
+    def is_simulated(self):
+        return self.description.is_simulated
+
+    @property
+    def device_type(self):
+        device_type_value = self.description.device_type
+        return minknow_api.device_pb2.GetDeviceInfoResponse.DeviceType.Name(
+            device_type_value
+        )
+
     def connect(self, credentials=None, developer_api_token=None):
         """Connect to the position.
 
@@ -525,6 +548,10 @@ class FlowCellPosition(object):
             credentials = self.credentials
         if not developer_api_token:
             developer_api_token = self._developer_api_token
+        if port == 0:
+            raise RuntimeError(
+                "Invalid port for connection to '%s': '%s'" % (self.description, port)
+            )
         return minknow_api.Connection(
             host=self.host,
             port=port,
@@ -539,7 +566,7 @@ class Basecaller(ServiceBase):
     You should not normally construct this directly - use `Manager.basecaller` instead.
     The constructor arguments may change between minor releases.
 
-    Note that 
+    Note that
 
     Args:
         host (str, optional): The hostname to connect to (IP address will not work due to TLS).

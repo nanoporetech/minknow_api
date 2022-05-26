@@ -35,8 +35,7 @@ class DataServicer(minknow_api.data_pb2_grpc.DataServiceServicer):
         self.logger = logging.getLogger("[SERVER]")
 
     def _read_data_generator(self):
-        """Generate a (channel, ReadData) tuple, using random numbers
-        """
+        """Generate a (channel, ReadData) tuple, using random numbers"""
         for channel in range(self.first, self.last + 1):
             # 40% chance of skipping a read, simulates sparse read data
             if np.random.choice([True, False], 1, p=[0.4, 0.6]):
@@ -186,7 +185,10 @@ class TestBidirectionalRPC(unittest.TestCase):
 
         sent_actions = return_queue.get()
         logger.info(
-            "{} {}".format(sent_actions, self.server.data_service.processed_requests,)
+            "{} {}".format(
+                sent_actions,
+                self.server.data_service.processed_requests,
+            )
         )
         self.assertEqual(sent_actions, self.server.data_service.processed_requests)
 

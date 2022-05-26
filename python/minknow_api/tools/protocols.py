@@ -40,7 +40,7 @@ def find_protocol(
                                                 the protocol default will be used (if specified)
         barcoding (bool):                       True if barcoding is required.
         barcoding_kits (:obj:`list`):           Barcoding kits that the protocol should support. If specified,
-                                                barcoding is assumed to be True.        
+                                                barcoding is assumed to be True.
         force_reload (bool):                    If true will force reloading the protocols from their descriptions,
                                                 this will take a few seconds.
         experiment_type(:obj:`str`):            Type of experiment to be run.
@@ -191,7 +191,7 @@ def make_protocol_arguments(
     is_flongle: bool = False,
 ) -> typing.List[str]:
     """Build arguments to be used when starting a protocol.
-    
+
     This will assemble the arguments passed to this script into arguments to pass to the protocol.
 
     Args:

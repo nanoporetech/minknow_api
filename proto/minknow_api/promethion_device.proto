@@ -132,13 +132,16 @@ message TimingEnginePeriods {
     google.protobuf.UInt32Value CDS1_DATA   = 4;
 
     // DATA transfer phase
-    google.protobuf.UInt32Value DATA        = 5;
-
-    // DATA transfer to Reset2 transition.
     //
     // NOTE: Setting this value has no effect, MinKNOW will choose a value for
-    // DATA_RST2 itself to maintain the required frame-rate. Reading it will
-    // return the chosen DATA_RST2 period.
+    // DATA itself to acheive the required frame-rate. Reading it will return
+    // the chosen DATA period.
+    google.protobuf.UInt32Value DATA        = 5;
+
+    // DATA transfer to Reset2 transition. MinKNOW may increase this value by
+    // small amounts so that when changing the DATA period, the sum of the
+    // RST1 and DATA periods is a multiple of 16 and the frame-rate and
+    // integration-period are maintained.
     google.protobuf.UInt32Value DATA_RST2   = 6;
 
     // Reset2

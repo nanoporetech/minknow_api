@@ -341,6 +341,12 @@ message ReadClassificationParams {
     // By default 0.5 is used.
     google.protobuf.DoubleValue open_pore_ewma_weight = 7;
 
+    // A number of seconds to ignore new chunks for after a reset occurs on a channel
+    // this allows analysis to ignore spikes or bad data on the channel for a small section of time.
+    //
+    // By default 0.0 is used - and chunks are accepted immediately.
+    google.protobuf.DoubleValue open_pore_ignore_after_reset_seconds = 8;
+
     // Determine how to classify a whole read based on the strategy
     //
     // 'ultimate':      Chooses the last (ultimate) read chunk's classification
@@ -956,6 +962,9 @@ message WriterConfiguration {
 
         // How many files are placed in each batch (after batch_count files {batch_number} is increased in the filename).
         uint32 batch_count = 3;
+
+        // If true minknow will only write the primary alignment for each read.
+        bool disable_writing_multiple_alignments = 4;
     }
 
     message ReadProtobufConfiguration {
@@ -1051,6 +1060,9 @@ message WriterConfiguration {
 
     // Control settings for the report writer
     message ReportConfiguration {
+        // DEPRECATED 6.0: As of 5.1 a pdf report is not generated at all. This field will
+        // be removed in 6.0
+        //
         // The pattern used to find the pdf report filename. If left empty but output is
         // enabled a default pattern is used.
         //
@@ -1130,6 +1142,16 @@ message WriterConfiguration {
         //
         // See file pattern attributes above.
         string barcode_alignment_report_file_pattern = 6;
+
+        // The pattern used to name the sample sheet report. If left empty but output is
+        // enabled a default pattern is used.
+        //
+        // default: sample_sheet_{flow_cell_id}_{daq_start_time}_{short_protocol_run_id}.csv
+        // Where each {xxx} section is replaced with an attribute from the minknow
+        // state when the file is written.
+        //
+        // See file pattern attributes above.
+        string sample_sheet_report_file_pattern = 10;
 
         // The pattern used to suffix custom reports.
         //

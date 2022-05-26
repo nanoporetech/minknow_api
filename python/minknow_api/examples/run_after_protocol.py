@@ -23,7 +23,7 @@ from minknow_api.manager import Manager
 
 
 def parse_args():
-    """Build and execute a command line argument for running a script after the 
+    """Build and execute a command line argument for running a script after the
 
     Returns:
         Parsed arguments to be used when starting a protocol.
@@ -45,6 +45,11 @@ def parse_args():
         help="Port to connect to on host (defaults to standard MinKNOW port)",
         type=int,
     )
+    parser.add_argument(
+        "--api-token",
+        default=None,
+        help="Specify an API token to use, should be returned from the sequencer as a developer API token.",
+    )
     parser.add_argument("--verbose", action="store_true", help="Enable debug logging")
 
     # Sequencing position can be identified by a position name, or a flowcell ID
@@ -60,7 +65,9 @@ def parse_args():
     )
 
     parser.add_argument(
-        "--run-id", required=True, help="ID of the protocol run.",
+        "--run-id",
+        required=True,
+        help="ID of the protocol run.",
     )
 
     parser.add_argument(
@@ -89,15 +96,18 @@ def is_position_selected(position, args):
         return True
 
     # If no position name match is found, see if the flowcell ID can be matched
-    connected_position = position.connect()
-    if args.flow_cell_id is not None:
-        flow_cell_info = connected_position.device.get_flow_cell_info()
-        if (
-            flow_cell_info.user_specified_flow_cell_id == args.flow_cell_id
-            or flow_cell_info.flow_cell_id == args.flow_cell_id
-        ):
-            print(f"Found flow cell {args.flow_cell_id}")
-            return True
+    try:
+        connected_position = position.connect()
+        if args.flow_cell_id is not None:
+            flow_cell_info = connected_position.device.get_flow_cell_info()
+            if (
+                flow_cell_info.user_specified_flow_cell_id == args.flow_cell_id
+                or flow_cell_info.flow_cell_id == args.flow_cell_id
+            ):
+                print(f"Found flow cell {args.flow_cell_id}")
+                return True
+    except (grpc.RpcError, RuntimeError):
+        print(f"Failed to connect to position {position.name}")
 
     return False
 
@@ -112,7 +122,9 @@ def main():
         logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
 
     # Construct a manager using the host + port provided:
-    manager = Manager(host=args.host, port=args.port)
+    manager = Manager(
+        host=args.host, port=args.port, developer_api_token=args.api_token
+    )
 
     # Find on which position we are going to wait for the protocol to finish:
     positions = manager.flow_cell_positions()

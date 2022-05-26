@@ -6,7 +6,7 @@
 
 ### Overview
 
-MinKNOW is Oxford Nanopore Technologies Device Control software embedded in MinIT, GridION,
+MinKNOW is Oxford Nanopore Technologies Device Control software embedded in MinION-mk1C, GridION,
 PromethION and provided for installation on user PCs to run MinIONs. It carries out several core
 tasks: data acquisition, real-time analysis and feedback, basecalling, data streaming, device
 control (including selecting the run parameters), sample identification and tracking, and ensuring
@@ -60,27 +60,26 @@ to get it is from PyPI using pip, but it can also be built from source (see [BUI
 > pip install minknow_api
 
 # Verify API is installed correctly (from a checkout of this repository):
-> python ./python/minknow_api/examples/list_sequencing_positions.py --host localhost --port 9501
+> python ./python/minknow_api/examples/list_sequencing_positions.py --host localhost
 
 # Possible output if running minknow locally:
-#   Available sequencing positions on localhost:9501:
+#   Available sequencing positions on localhost:9502:
 #   MN12345: running
 #     secure: 8000
 ```
 
 The package contains plenty of documentation in its docstrings, although for an overview of the
-MinKNOW APIs themselves you may prefer to read the [API description files](protos/minknow_api/) -
+MinKNOW APIs themselves you may prefer to read the [API description files](proto/minknow_api/) -
 see below for further discussion of these files. There are also [examples](python/minknow_api/examples/) (like
 the `list_sequencing_positions.py` script in the above instructions) that show how to perform some
 common tasks.
-
 
 ### Other Languages
 
 MinKNOW's API is based on [gRPC][grpc] and can be used from any language supported by gRPC. This
 includes Go, Java, Ruby, JavaScript (although see the note below about JavaScript) and many more.
 The [gRPC documentation][grpc-docs] describes how to generate client libraries from the [API
-descriptions](protos/minknow_api/) in this repository, and how to use those libraries. The `.proto`
+descriptions](proto/minknow_api/) in this repository, and how to use those libraries. The `.proto`
 files themselves contain documentation about what the various RPCs do, and a more general overview
 is given below.
 
@@ -104,19 +103,23 @@ get ports for other services, you should use fields with `grpc_web` in the name,
 
 ### API Highlights
 
-The files in [`protos/minknow_api`](protos/minknow_api/) describe MinKNOW's APIs. Each file
+The files in [`proto/minknow_api`](proto/minknow_api/) describe MinKNOW's APIs. Each file
 describes a single *service*, which covers a specific area of MinKNOW's functionality.
 
-There are two global services, the [manager service](protos/minknow_api/manager.proto) and
-[basecaller service](protos/minknow_api/basecaller.proto). There is only one instance of each of
+There are two global services, the [manager service](proto/minknow_api/manager.proto) and
+[basecaller service](proto/minknow_api/basecaller.proto). There is only one instance of each of
 these services: see below for how to connect to them. All other services are provided by each flow
 cell position independently. For example, if you are using a GridION X5, which has 5 flow cell
 positions, there will be 5 ports (or sets of ports - secure, gRPC Web, etc), each of which
 will provide *all* the other services.
 
+### Authentication
+
+See [API Tokens](API_TOKENS.md) for information on authenticating with the MinKNOW API.
+
 #### manager.proto
 
-[manager.proto](protos/minknow_api/manager.proto) is the entry point of MinKNOW's APIs. It is always
+[manager.proto](proto/minknow_api/manager.proto) is the entry point of MinKNOW's APIs. It is always
 available on a specific port `9502`.
 
 The most important method is `flow_cell_positions`, which provides information about how to connect
@@ -125,12 +128,12 @@ position-specific services.
 
 Other methods on the manager service provide general information about the MinKNOW installation and
 its high-level state, as well as port information for the [basecaller
-service](protos/minknow_api/basecaller.proto) service, which can be used to basecall data from
+service](proto/minknow_api/basecaller.proto) service, which can be used to basecall data from
 previous experiments.
 
 #### instance.proto
 
-[instance.proto](protos/minknow_api/instance.proto) provides general information about the flow cell
+[instance.proto](proto/minknow_api/instance.proto) provides general information about the flow cell
 position. Of particular interest is the `get_output_directories` method, which indicates where data
 files will be written to. `set_output_directories` can be used to change this.
 
@@ -141,7 +144,7 @@ This can be accessed via the ports reported by `flow_cell_positions` on the mana
 
 #### protocol.proto
 
-[protocol.proto](protos/minknow_api/protocol.proto) allows starting and stopping experiment
+[protocol.proto](proto/minknow_api/protocol.proto) allows starting and stopping experiment
 protocols, as well as providing information about the current and previous protocol runs. Note that
 information about protocol runs from before the last restart is not available via this API.
 
@@ -151,13 +154,13 @@ this service to start a protocol.
 #### acquisition.proto
 
 The main work of a protocol is acquiring data, and this is managed in
-[acquisition.proto](protos/minknow_api/acquisition.proto). While most of the methods in
+[acquisition.proto](proto/minknow_api/acquisition.proto). While most of the methods in
 acquisition.proto will not be useful to most external tools, `get_acquisition_info` is helpful for
 access detailed information about what was done by a protocol run reported by protocol.proto.
 
 #### device.proto
 
-[device.proto](protos/minknow_api/device.proto) provides more detailed information about the
+[device.proto](proto/minknow_api/device.proto) provides more detailed information about the
 hardware of the flow cell position and the inserted flow cell. `get_device_info` provides some
 constant information about the position, while `get_flow_cell_info` provides information about the
 flow cell (a streaming version that provides updates about changes to the flow cell, such as it
@@ -166,7 +169,7 @@ product code via this service (although this is not generally recommended).
 
 #### statistics.proto
 
-[statistics.proto](protos/minknow_api/statistics.proto) provides statistics about current and
+[statistics.proto](proto/minknow_api/statistics.proto) provides statistics about current and
 previous protocol runs, including duty time and temperature information. This is useful for
 generating reports or tables of data describing how well an experiment has performed.
 
@@ -205,7 +208,7 @@ with MinKNOW Core 3.6 or 5.0. There is also no guarantee it will work with MinKN
 #### What port should I connect to?
 
 There is one standard port that MinKNOW exposes, which provides the [manager
-service](protos/minknow_api/manager.proto):
+service](proto/minknow_api/manager.proto):
 
 * `9502` can be used with a gRPC or gRPC-Web "secure channel"
 

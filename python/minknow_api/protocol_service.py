@@ -11,6 +11,7 @@ import sys
 __all__ = [
     "ProtocolService",
     "BarcodeUserData",
+    "KitInfo",
     "ProtocolRunUserInfo",
     "OffloadLocationInfo",
     "StartProtocolRequest",

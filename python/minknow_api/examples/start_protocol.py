@@ -56,6 +56,11 @@ def parse_args():
         "--port",
         help="Port to connect to on host (defaults to standard MinKNOW port based on tls setting)",
     )
+    parser.add_argument(
+        "--api-token",
+        default=None,
+        help="Specify an API token to use, should be returned from the sequencer as a developer API token.",
+    )
     parser.add_argument("--verbose", action="store_true", help="Enable debug logging")
 
     parser.add_argument("--sample-id", help="sample ID to set")
@@ -110,7 +115,9 @@ def parse_args():
 
     # BARCODING ARGUMENTS
     parser.add_argument(
-        "--barcoding", action="store_true", help="protocol uses barcoding",
+        "--barcoding",
+        action="store_true",
+        help="protocol uses barcoding",
     )
     parser.add_argument(
         "--barcode-kits",
@@ -118,7 +125,9 @@ def parse_args():
         help="bar-coding expansion kits used in the experiment",
     )
     parser.add_argument(
-        "--trim-barcodes", action="store_true", help="enable bar-code trimming",
+        "--trim-barcodes",
+        action="store_true",
+        help="enable bar-code trimming",
     )
     parser.add_argument(
         "--barcodes-both-ends",
@@ -159,7 +168,8 @@ def parse_args():
         help="Specify alignment reference to send to basecaller for live alignment.",
     )
     parser.add_argument(
-        "--bed-file", help="Specify bed file to send to basecaller.",
+        "--bed-file",
+        help="Specify bed file to send to basecaller.",
     )
 
     # Output arguments
@@ -205,11 +215,15 @@ def parse_args():
 
     # Read until
     parser.add_argument(
-        "--read-until-reference", type=str, help="Reference file to use in read until",
+        "--read-until-reference",
+        type=str,
+        help="Reference file to use in read until",
     )
 
     parser.add_argument(
-        "--read-until-bed-file", type=str, help="Bed file to use in read until",
+        "--read-until-bed-file",
+        type=str,
+        help="Bed file to use in read until",
     )
 
     parser.add_argument(
@@ -524,7 +538,9 @@ def main():
         logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
 
     # Construct a manager using the host + port provided:
-    manager = Manager(host=args.host, port=args.port)
+    manager = Manager(
+        host=args.host, port=args.port, developer_api_token=args.api_token
+    )
 
     experiment_specs = []
     add_sample_sheet_entries(experiment_specs, args)
@@ -549,7 +565,8 @@ def main():
 
         if args.alignment_reference:
             alignment_args = protocols.AlignmentArgs(
-                reference_files=[args.alignment_reference], bed_file=args.bed_file,
+                reference_files=[args.alignment_reference],
+                bed_file=args.bed_file,
             )
 
         basecalling_args = protocols.BasecallingArgs(

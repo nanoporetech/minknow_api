@@ -86,6 +86,20 @@ import threading
 
 from minknow_api.manager import get_local_authentication_token_file
 
+# Try and import from minknow_api_production package
+try:
+    from minknow_api_production import (
+        production_service,
+        production_pb2,
+        production_pb2_grpc,
+    )
+
+    sys.modules["minknow_api.production_service"] = production_service
+    sys.modules["minknow_api.production_pb2"] = production_pb2
+    sys.modules["minknow_api.production_pb2_grpc"] = production_pb2_grpc
+except ImportError:
+    pass
+
 #
 # Services
 #
@@ -158,7 +172,10 @@ GRPC_CHANNEL_OPTIONS = [
     ("grpc.max_send_message_length", 16 * 1024 * 1024),
     ("grpc.max_receive_message_length", 16 * 1024 * 1024),
     ("grpc.http2.min_time_between_pings_ms", 1000),
-    ("grpc.ssl_target_name_override", "localhost",),  # that's what our cert's CN is
+    (
+        "grpc.ssl_target_name_override",
+        "localhost",
+    ),  # that's what our cert's CN is
 ]
 
 
@@ -455,7 +472,11 @@ class Connection(object):
     """
 
     def __init__(
-        self, port=None, host="127.0.0.1", credentials=None, developer_api_token=None,
+        self,
+        port=None,
+        host="127.0.0.1",
+        credentials=None,
+        developer_api_token=None,
     ):
         """Connect to MinKNOW.
 

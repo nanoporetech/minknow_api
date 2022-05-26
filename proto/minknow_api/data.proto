@@ -578,6 +578,10 @@ message GetLiveReadsRequest {
             // 
             double max_unblock_read_length_seconds = 6;
         }
+
+        // A set of classification identifiers which the client is interested in.
+        // If a read starts with a classification not listed here the read is never sent to the client.
+        repeated int32 accepted_first_chunk_classifications = 7;
     }
 
     message Actions {
