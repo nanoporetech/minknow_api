@@ -448,6 +448,9 @@ class FlowCellPosition(object):
             connection. Can used to connect to other MinKNOW interfaces. Changing this
             will affect future calls to connect().
         host (string): The hostname of the machine the position is running on.
+
+    Attributes on minknow_api.manager_pb.FlowCellPosition (the protobuf message) will be
+    available as attributes here as well.
     """
 
     def __init__(
@@ -469,32 +472,15 @@ class FlowCellPosition(object):
     def __str__(self):
         return "{} ({})".format(self.name, self.state)
 
-    @property
-    def name(self):
-        """str: The name of the position."""
-        return self.description.name
-
-    @property
-    def location(self):
-        """minknow_api.manager_service.FlowCellPosition.Location: The location of the position.
-
-        Returns None if no location information is available. Location information should always be
-        available for integrated positions.
-        """
-        if self.description.HasField("location"):
-            return self.description.location
-        else:
-            return None
-
-    @property
-    def shared_hardware_group(self):
-        """minknow_api.manager_service.FlowCellPosition.SharedHardwareGroup: The information about
-        shared hardware (if built-in, otherwise None).
-        """
-        if self.description.HasField("shared_hardware_group"):
-            return self.description.shared_hardware_group
-        else:
-            return None
+    def __getattr__(self, name):
+        info = self.description.DESCRIPTOR.fields_by_name.get(name)
+        if not info:
+            raise AttributeError(name)
+        if info.message_type:
+            # returning None for missing messages is more pythonic
+            if not self.description.HasField(name):
+                return None
+        return getattr(self.description, name)
 
     @property
     def state(self):
@@ -514,19 +500,6 @@ class FlowCellPosition(object):
         are hardware errors, the software may still be running.
         """
         return self.description.HasField("rpc_ports")
-
-    @property
-    def is_integrated(self):
-        """bool: Whether the position is integrated.
-
-        For example, the X1 through X5 positions on a GridION are integrated positions: they are
-        part of the GridION itself. A MinION Mk1B is not integrated.
-        """
-        return self.description.is_integrated
-
-    @property
-    def is_simulated(self):
-        return self.description.is_simulated
 
     @property
     def device_type(self):

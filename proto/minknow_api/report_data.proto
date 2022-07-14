@@ -10,13 +10,11 @@ import "minknow_api/statistics.proto";
 
 enum AcquisitionOutputTypes {
     AllData = 0;
-
     SplitByBarcodeAndAlignment = 1;
-
     SplitByBarcode = 2;
     SplitByAlignment = 3;
-
     SplitByEndReason = 4;
+    SplitByBedRegion = 5;
 }
 
 message AcquisitionOutput {
