@@ -16,7 +16,6 @@ __all__ = [
     "ReadClassificationParams",
     "ChannelStates",
     "GetAnalysisConfigurationRequest",
-    "ScalingParams",
     "AnalysisConfiguration",
     "SetAnalysisConfigurationResponse",
     "ResetAnalysisConfigurationRequest",
@@ -155,7 +154,6 @@ class AnalysisConfigurationService(object):
             read_detection (minknow_api.analysis_configuration_pb2.ReadDetectionParams, optional): 
             read_classification (minknow_api.analysis_configuration_pb2.ReadClassificationParams, optional): 
             channel_states (minknow_api.analysis_configuration_pb2.AnalysisConfiguration.ChannelStatesEntry, optional): 
-            scaling (minknow_api.analysis_configuration_pb2.ScalingParams, optional): 
 
         Returns:
             minknow_api.analysis_configuration_pb2.SetAnalysisConfigurationResponse
@@ -191,10 +189,6 @@ class AnalysisConfigurationService(object):
             unused_args.remove("channel_states")
             for key, value in kwargs['channel_states'].items():
                 _message.channel_states[key].CopyFrom(value)
-
-        if "scaling" in kwargs:
-            unused_args.remove("scaling")
-            _message.scaling.CopyFrom(kwargs['scaling'])
 
         if len(unused_args) > 0:
             raise ArgumentError("Unexpected keyword arguments to set_analysis_configuration: '{}'".format(", ".join(unused_args)))
@@ -793,9 +787,6 @@ class AnalysisConfigurationService(object):
             read_bam (minknow_api.analysis_configuration_pb2.WriterConfiguration.ReadBamConfiguration, optional): Configuration for the BAM writer.
 
                 If not specified, no BAM outputs are generated.
-            read_pod5 (minknow_api.analysis_configuration_pb2.WriterConfiguration.ReadPod5Configuration, optional): Configuration for the POD5 writer.
-
-                If not specified no POD5 outputs are generated.
             read_protobuf (minknow_api.analysis_configuration_pb2.WriterConfiguration.ReadProtobufConfiguration, optional): Configuration for the protobuf writer.
 
                 If not specified, no protobuf outputs are generated.
@@ -842,10 +833,6 @@ class AnalysisConfigurationService(object):
         if "read_bam" in kwargs:
             unused_args.remove("read_bam")
             _message.read_bam.CopyFrom(kwargs['read_bam'])
-
-        if "read_pod5" in kwargs:
-            unused_args.remove("read_pod5")
-            _message.read_pod5.CopyFrom(kwargs['read_pod5'])
 
         if "read_protobuf" in kwargs:
             unused_args.remove("read_protobuf")

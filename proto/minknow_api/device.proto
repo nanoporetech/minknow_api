@@ -352,7 +352,6 @@ message GetDeviceInfoResponse {
         PROMETHION = 3;
         MINION_MK1C = 4;
         TRAXION = 5;
-        P2_SOLO = 6;
     }
 
     // A unique identifier for the device.

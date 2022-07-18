@@ -441,11 +441,6 @@ message AcquisitionOutputKey {
     // If unspecified all alignment regions are returned.
     string alignment_bed_file_region = 3;
 
-    // An alias to `alignment_bed_file_region`
-    //
-    // An optional name can be used to identify a target region in the bed file
-    string alignment_bed_file_region_name = 8;
-
     // Only return data for the given lamp barcode.
     //
     // Special values:

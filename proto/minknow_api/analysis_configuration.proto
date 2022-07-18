@@ -460,25 +460,12 @@ message ChannelStates {
 message GetAnalysisConfigurationRequest {
 }
 
-
-// Since 5.3
-message ScalingParams
-{
-    // If present, must be 20 long
-    repeated float q_weights_shift = 1;
-
-    // If present, must be 20 long
-    repeated float q_weights_scale = 2;   
-}
-
 message AnalysisConfiguration {
     EventDetection event_detection = 1;
     ReadDetectionParams read_detection = 2;
 
     ReadClassificationParams read_classification = 4;
     map<string, ChannelStates> channel_states = 7;
-    
-    ScalingParams scaling = 8;
 }
 
 message SetAnalysisConfigurationResponse {
@@ -975,34 +962,6 @@ message WriterConfiguration {
 
         // How many files are placed in each batch (after batch_count files {batch_number} is increased in the filename).
         uint32 batch_count = 3;
-
-        // If true minknow will only write the primary alignment for each read.
-        bool disable_writing_multiple_alignments = 4;
-    }
-
-    message ReadPod5Configuration {
-        // Control if a POD5 file should be generated per channel.
-        ChannelConfiguration enable = 1;
-
-        // The pattern used to find a POD5 files name.
-        //
-        // default: pod5{basecall_status}/{flow_cell_id}_{run_id}_{batch_number}.pod5
-        // Where each {xxx} section is replaced with an attribute from the minknow state when the file is written.
-        //
-        // See file pattern attributes above.
-        string file_pattern = 2;
-
-        // How many files are placed in each batch (after batch_count files {batch_number} is increased in the filename).
-        //
-        // Set to zero to disable batching.
-        uint32 batch_count = 3;
-
-        // Prevent reads which have successfully basecalled being written to pod5.
-        bool disable_writing_passed_reads = 4;
-        // Prevent reads which have failed basecalling being written to pod5.
-        bool disable_writing_failed_reads = 5;
-        // disable writing reads which have been force skipped by the basecaller.
-        bool disable_writing_force_skipped_reads = 6;
     }
 
     message ReadProtobufConfiguration {
@@ -1098,9 +1057,6 @@ message WriterConfiguration {
 
     // Control settings for the report writer
     message ReportConfiguration {
-        // DEPRECATED 6.0: As of 5.1 a pdf report is not generated at all. This field will
-        // be removed in 6.0
-        //
         // The pattern used to find the pdf report filename. If left empty but output is
         // enabled a default pattern is used.
         //
@@ -1218,11 +1174,6 @@ message WriterConfiguration {
     //
     // If not specified, no BAM outputs are generated.
     ReadBamConfiguration read_bam = 8;
-
-    // Configuration for the POD5 writer.
-    //
-    // If not specified no POD5 outputs are generated.
-    ReadPod5Configuration read_pod5 = 10;
 
     // Configuration for the protobuf writer.
     //

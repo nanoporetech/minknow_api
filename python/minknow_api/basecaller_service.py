@@ -324,7 +324,6 @@ class Basecaller(object):
             input_fast5_directory (str, optional): Input directories for the protocol (omit those which the protocol doesn't require).
             input_fastq_directory (str, optional): 
             input_bam_directory (str, optional): 
-            sample_sheet_path (str, optional): Path to the sample sheet output by minknow
             output_directory (str, optional): Output directory where the analysed output should be written.
             setting_values (minknow_api.basecaller_pb2.StartPostProcessingProtocolRequest.SettingValuesEntry, optional): Configured values for display settings for the protocol (see basecaller.list_settings_for_protocol)
                 keys missing from the original protocol will cause errors.
@@ -366,10 +365,6 @@ class Basecaller(object):
         if "input_bam_directory" in kwargs:
             unused_args.remove("input_bam_directory")
             _message.input_bam_directory = kwargs['input_bam_directory']
-
-        if "sample_sheet_path" in kwargs:
-            unused_args.remove("sample_sheet_path")
-            _message.sample_sheet_path = kwargs['sample_sheet_path']
 
         if "output_directory" in kwargs:
             unused_args.remove("output_directory")

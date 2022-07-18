@@ -556,30 +556,6 @@ message FlowCellPosition {
     //
     // Since 5.0.
     SimpleProtocolState protocol_state = 9;
-
-    // Whether the device is simulated.
-    //
-    // If this is true, there is no physical device - MinKNOW is simulating it. If it is false,
-    // MinKNOW will be acquiring data from a real device.
-    //
-    // Since 5.2
-    bool is_simulated = 10;
-
-    // The type of the device.
-    //
-    // Since 5.2
-    minknow_api.device.GetDeviceInfoResponse.DeviceType device_type = 11;
-
-    // The name of the device this flow cell position is part of.
-    //
-    // For an integrated position, this will be the host serial, as returned by describe_host().
-    //
-    // For a MinION Mk1B, this will be the same as the `name` field.
-    //
-    // For a P2 Solo, this will be the name of the P2 Solo unit.
-    //
-    // Since 5.3
-    string parent_name = 12;
 }
 
 message FlowCellPositionsRequest {

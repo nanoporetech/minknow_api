@@ -21,7 +21,6 @@ __all__ = [
     "SplitByBarcode",
     "SplitByAlignment",
     "SplitByEndReason",
-    "SplitByBedRegion",
 ]
 
 def run_with_retry(method, message, timeout, unwraps, full_name):

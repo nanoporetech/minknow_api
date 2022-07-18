@@ -295,13 +295,13 @@ message DeviceInfo {
 }
 
 message BasecallSpeed {
-    // Mean basecall speed, in bases per second.
-    //
-    // This value is only streamed for acquisitions where basecalling is enabled.
-    //
-    // The value reported here is the value stored in last completed basecall boxplot bucket
-    // Each boxplot bucket covers a duration of `boxplot_time_coverage_in_minutes`
-    float mean_basecall_speed = 1;
+        // Mean basecall speed, in bases per second.
+        //
+        // This value is only streamed for acquisitions where basecalling is enabled.
+        //
+        // The value reported here is the value stored in last completed basecall boxplot bucket
+        // Each boxplot bucket covers a duration of `boxplot_time_coverage_in_minutes`
+        float mean_basecall_speed = 1;
 }
 
 message N50 {
