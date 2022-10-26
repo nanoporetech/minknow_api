@@ -9,6 +9,7 @@ class ProtocolPaths(typing.NamedTuple):
     input_fastq: typing.Optional[Path]
     input_fast5: typing.Optional[Path]
     input_bam: typing.Optional[Path]
+    sample_sheet: typing.Optional[Path]
 
 
 class PostProcessingProtocolConnection(object):
@@ -76,6 +77,7 @@ class PostProcessingProtocolConnection(object):
                 input_fastq=path_or_none(start_request.input_fastq_directory),
                 input_fast5=path_or_none(start_request.input_fast5_directory),
                 input_bam=path_or_none(start_request.input_bam_directory),
+                sample_sheet=path_or_none(start_request.sample_sheet_path),
                 output=Path(start_request.output_directory),
             )
 

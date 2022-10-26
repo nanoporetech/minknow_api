@@ -524,6 +524,17 @@ class FlowCellPosition(object):
         """
         return self.description.is_integrated
 
+    @property
+    def is_simulated(self):
+        return self.description.is_simulated
+
+    @property
+    def device_type(self):
+        device_type_value = self.description.device_type
+        return minknow_api.device_pb2.GetDeviceInfoResponse.DeviceType.Name(
+            device_type_value
+        )
+
     def connect(self, credentials=None, developer_api_token=None):
         """Connect to the position.
 

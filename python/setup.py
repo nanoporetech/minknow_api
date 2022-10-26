@@ -1,4 +1,5 @@
 from setuptools import setup, find_packages
+from pathlib import Path
 import sys
 
 # this allows us to import the version without importing the minknow module (which may require
@@ -7,6 +8,12 @@ sys.path.insert(0, "./minknow_api")
 from _version import __version__ as VERSION
 
 del sys.path[0]
+
+
+def get_readme():
+    MK_API_ROOT = Path(__file__).parent
+    return (MK_API_ROOT / "README.md").read_text()
+
 
 INSTALL_REQUIRES = [
     # Python 3.7 has importlib.resources built in
@@ -26,6 +33,8 @@ setup(
     author_email="info@nanoporetech.com",
     url="https://github.com/nanoporetech/minknow_api",
     description="MinKNOW RPC API bindings",
+    long_description=get_readme(),
+    long_description_content_type="text/markdown",
     packages=find_packages(),
     install_requires=INSTALL_REQUIRES,
     package_data={"": ["*.crt"]},

@@ -962,6 +962,9 @@ message WriterConfiguration {
 
         // How many files are placed in each batch (after batch_count files {batch_number} is increased in the filename).
         uint32 batch_count = 3;
+
+        // If true minknow will only write the primary alignment for each read.
+        bool disable_writing_multiple_alignments = 4;
     }
 
     message ReadProtobufConfiguration {
@@ -1057,6 +1060,9 @@ message WriterConfiguration {
 
     // Control settings for the report writer
     message ReportConfiguration {
+        // DEPRECATED 6.0: As of 5.1 a pdf report is not generated at all. This field will
+        // be removed in 6.0
+        //
         // The pattern used to find the pdf report filename. If left empty but output is
         // enabled a default pattern is used.
         //

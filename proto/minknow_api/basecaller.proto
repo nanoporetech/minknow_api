@@ -261,6 +261,9 @@ message StartPostProcessingProtocolRequest {
     string input_fast5_directory = 2;
     string input_fastq_directory = 3;
     string input_bam_directory = 4;
+    
+    // Path to the sample sheet output by minknow
+    string sample_sheet_path = 8;
 
     // Output directory where the analysed output should be written.
     string output_directory = 5;

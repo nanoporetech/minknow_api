@@ -556,6 +556,19 @@ message FlowCellPosition {
     //
     // Since 5.0.
     SimpleProtocolState protocol_state = 9;
+
+    // Whether the device is simulated.
+    //
+    // If this is true, there is no physical device - MinKNOW is simulating it. If it is false,
+    // MinKNOW will be acquiring data from a real device.
+    //
+    // Since 5.2
+    bool is_simulated = 10;
+
+    // The type of the device.
+    //
+    // Since 5.2
+    minknow_api.device.GetDeviceInfoResponse.DeviceType device_type = 11;
 }
 
 message FlowCellPositionsRequest {

@@ -86,6 +86,20 @@ import threading
 
 from minknow_api.manager import get_local_authentication_token_file
 
+# Try and import from minknow_api_production package
+try:
+    from minknow_api_production import (
+        production_service,
+        production_pb2,
+        production_pb2_grpc,
+    )
+
+    sys.modules["minknow_api.production_service"] = production_service
+    sys.modules["minknow_api.production_pb2"] = production_pb2
+    sys.modules["minknow_api.production_pb2_grpc"] = production_pb2_grpc
+except ImportError:
+    pass
+
 #
 # Services
 #
