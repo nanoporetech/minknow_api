@@ -7,6 +7,7 @@ option objc_class_prefix = "MKAPI";
 
 import "minknow_api/rpc_options.proto";
 import "minknow_api/device.proto";
+import "minknow_api/statistics.proto";
 import "google/protobuf/duration.proto";
 import "google/protobuf/wrappers.proto";
 
@@ -646,6 +647,12 @@ message GetLiveReadsResponse {
 
         // The media pA level of this read from all aggregated read chunks so far.
         float median = 9;
+
+        // The classification of the chunk prior to this read starting.
+        int32 previous_read_classification = 10;
+
+        // The classification of the chunk prior to this read starting.
+        statistics.ReadEndReason previous_read_end_reason = 11;
     };
 
     message ActionResponse {

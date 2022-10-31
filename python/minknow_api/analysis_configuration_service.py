@@ -16,6 +16,7 @@ __all__ = [
     "ReadClassificationParams",
     "ChannelStates",
     "GetAnalysisConfigurationRequest",
+    "ReadScalingParams",
     "AnalysisConfiguration",
     "SetAnalysisConfigurationResponse",
     "ResetAnalysisConfigurationRequest",
@@ -41,6 +42,9 @@ __all__ = [
     "GetWriterConfigurationRequest",
     "GetReadClassificationsRequest",
     "GetReadClassificationsResponse",
+    "DynamicAnalysisConfiguration",
+    "GetDynamicAnalysisConfigurationRequest",
+    "SetDynamicAnalysisConfigurationResponse",
 ]
 
 def run_with_retry(method, message, timeout, unwraps, full_name):
@@ -154,6 +158,8 @@ class AnalysisConfigurationService(object):
             read_detection (minknow_api.analysis_configuration_pb2.ReadDetectionParams, optional): 
             read_classification (minknow_api.analysis_configuration_pb2.ReadClassificationParams, optional): 
             channel_states (minknow_api.analysis_configuration_pb2.AnalysisConfiguration.ChannelStatesEntry, optional): 
+            read_scaling (minknow_api.analysis_configuration_pb2.ReadScalingParams, optional): Add read scale tracking to the pipeline.
+                If this message is unspecified, read scaling is not enabled.
 
         Returns:
             minknow_api.analysis_configuration_pb2.SetAnalysisConfigurationResponse
@@ -189,6 +195,10 @@ class AnalysisConfigurationService(object):
             unused_args.remove("channel_states")
             for key, value in kwargs['channel_states'].items():
                 _message.channel_states[key].CopyFrom(value)
+
+        if "read_scaling" in kwargs:
+            unused_args.remove("read_scaling")
+            _message.read_scaling.CopyFrom(kwargs['read_scaling'])
 
         if len(unused_args) > 0:
             raise ArgumentError("Unexpected keyword arguments to set_analysis_configuration: '{}'".format(", ".join(unused_args)))
@@ -787,6 +797,9 @@ class AnalysisConfigurationService(object):
             read_bam (minknow_api.analysis_configuration_pb2.WriterConfiguration.ReadBamConfiguration, optional): Configuration for the BAM writer.
 
                 If not specified, no BAM outputs are generated.
+            read_pod5 (minknow_api.analysis_configuration_pb2.WriterConfiguration.ReadPod5Configuration, optional): Configuration for the POD5 writer.
+
+                If not specified no POD5 outputs are generated.
             read_protobuf (minknow_api.analysis_configuration_pb2.WriterConfiguration.ReadProtobufConfiguration, optional): Configuration for the protobuf writer.
 
                 If not specified, no protobuf outputs are generated.
@@ -833,6 +846,10 @@ class AnalysisConfigurationService(object):
         if "read_bam" in kwargs:
             unused_args.remove("read_bam")
             _message.read_bam.CopyFrom(kwargs['read_bam'])
+
+        if "read_pod5" in kwargs:
+            unused_args.remove("read_pod5")
+            _message.read_pod5.CopyFrom(kwargs['read_pod5'])
 
         if "read_protobuf" in kwargs:
             unused_args.remove("read_protobuf")
@@ -938,6 +955,89 @@ class AnalysisConfigurationService(object):
             raise ArgumentError("Unexpected keyword arguments to get_read_classifications: '{}'".format(", ".join(unused_args)))
 
         return run_with_retry(self._stub.get_read_classifications,
+                              _message, _timeout,
+                              [],
+                              "minknow_api.analysis_configuration.AnalysisConfigurationService")
+    def get_dynamic_analysis_configuration(self, _message=None, _timeout=None, **kwargs):
+        """Get the dynamic analysis configuration - this configuration can be changed during acquisition periods,
+        and is reset at the start of acquisition.
+
+        This RPC has no side effects. Calling it will have no effect on the state of the
+        system. It is safe to call repeatedly, or to retry on failure, although there is no
+        guarantee it will return the same information each time.
+
+        Args:
+            _message (minknow_api.analysis_configuration_pb2.GetDynamicAnalysisConfigurationRequest, optional): The message to send.
+                This can be passed instead of the keyword arguments.
+            _timeout (float, optional): The call will be cancelled after this number of seconds
+                if it has not been completed.
+
+        Returns:
+            minknow_api.analysis_configuration_pb2.DynamicAnalysisConfiguration
+
+        Note that the returned messages are actually wrapped in a type that collapses
+        submessages for fields marked with ``[rpc_unwrap]``.
+        """
+        if _message is not None:
+            if isinstance(_message, MessageWrapper):
+                _message = _message._message
+            return run_with_retry(self._stub.get_dynamic_analysis_configuration,
+                                  _message, _timeout,
+                                  [],
+                                  "minknow_api.analysis_configuration.AnalysisConfigurationService")
+
+        unused_args = set(kwargs.keys())
+
+        _message = GetDynamicAnalysisConfigurationRequest()
+
+        if len(unused_args) > 0:
+            raise ArgumentError("Unexpected keyword arguments to get_dynamic_analysis_configuration: '{}'".format(", ".join(unused_args)))
+
+        return run_with_retry(self._stub.get_dynamic_analysis_configuration,
+                              _message, _timeout,
+                              [],
+                              "minknow_api.analysis_configuration.AnalysisConfigurationService")
+    def set_dynamic_analysis_configuration(self, _message=None, _timeout=None, **kwargs):
+        """Set the dynamic analysis configuration, used during 
+
+        This can be changed during an acquisition period, and should be called as new values become appropriate.
+        The new analysis parameters will be used after any data already received has been processe.
+
+        
+
+        Args:
+            _message (minknow_api.analysis_configuration_pb2.DynamicAnalysisConfiguration, optional): The message to send.
+                This can be passed instead of the keyword arguments.
+            _timeout (float, optional): The call will be cancelled after this number of seconds
+                if it has not been completed.
+            read_scale_tracking (minknow_api.analysis_configuration_pb2.DynamicAnalysisConfiguration.ReadScaleTracking, optional): Parameters for read scale tracking:
+
+        Returns:
+            minknow_api.analysis_configuration_pb2.SetDynamicAnalysisConfigurationResponse
+
+        Note that the returned messages are actually wrapped in a type that collapses
+        submessages for fields marked with ``[rpc_unwrap]``.
+        """
+        if _message is not None:
+            if isinstance(_message, MessageWrapper):
+                _message = _message._message
+            return run_with_retry(self._stub.set_dynamic_analysis_configuration,
+                                  _message, _timeout,
+                                  [],
+                                  "minknow_api.analysis_configuration.AnalysisConfigurationService")
+
+        unused_args = set(kwargs.keys())
+
+        _message = DynamicAnalysisConfiguration()
+
+        if "read_scale_tracking" in kwargs:
+            unused_args.remove("read_scale_tracking")
+            _message.read_scale_tracking.CopyFrom(kwargs['read_scale_tracking'])
+
+        if len(unused_args) > 0:
+            raise ArgumentError("Unexpected keyword arguments to set_dynamic_analysis_configuration: '{}'".format(", ".join(unused_args)))
+
+        return run_with_retry(self._stub.set_dynamic_analysis_configuration,
                               _message, _timeout,
                               [],
                               "minknow_api.analysis_configuration.AnalysisConfigurationService")

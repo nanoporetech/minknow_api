@@ -28,6 +28,7 @@ __all__ = [
     "MuxScanMetadata",
     "MuxScanResult",
     "BreamInfo",
+    "TargetRunUntilCriteria",
     "AcquisitionRunInfo",
     "ListAcquisitionRunsRequest",
     "ListAcquisitionRunsResponse",

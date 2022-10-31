@@ -5,6 +5,7 @@ package minknow_api.acquisition;
 option java_package = "com.nanoporetech.minknow_api";
 option objc_class_prefix = "MKAPI";
 
+import "minknow_api/run_until.proto";
 import "minknow_api/rpc_options.proto";
 import "google/protobuf/timestamp.proto";
 
@@ -187,7 +188,6 @@ enum Purpose {
 //
 // Protobuf messages for input/output of RPC calls
 //
-
 message StartRequest {
     // Prevent waiting until the device is ready before starting acquisition.
     //
@@ -819,6 +819,11 @@ message BreamInfo {
     Range target_temperature = 5;
 }
 
+message TargetRunUntilCriteria {
+    run_until.CriteriaValues pause_criteria = 1;
+    run_until.CriteriaValues stop_criteria = 2;
+}
+
 message AcquisitionRunInfo {
     // The unique identifier assigned to this acquisition run.
     //
@@ -885,6 +890,12 @@ message AcquisitionRunInfo {
 
     // Set information provided by the Bream toolkit.
     BreamInfo bream_info = 15;
+
+    // Target Run-Until Critiera, used to determine when the acquisition should be paused
+    // or stopped.
+    //
+    // Since 5.3
+    TargetRunUntilCriteria target_run_until_criteria = 16;
 }
 
 message ListAcquisitionRunsRequest {

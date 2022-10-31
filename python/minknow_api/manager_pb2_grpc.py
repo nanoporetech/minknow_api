@@ -155,6 +155,16 @@ class ManagerServiceStub(object):
                 request_serializer=minknow__api_dot_manager__pb2.ListSettingsForProtocolRequest.SerializeToString,
                 response_deserializer=minknow__api_dot_manager__pb2.ListSettingsForProtocolResponse.FromString,
                 )
+        self.get_features = channel.unary_unary(
+                '/minknow_api.manager.ManagerService/get_features',
+                request_serializer=minknow__api_dot_manager__pb2.GetFeaturesRequest.SerializeToString,
+                response_deserializer=minknow__api_dot_manager__pb2.GetFeaturesResponse.FromString,
+                )
+        self.set_features = channel.unary_unary(
+                '/minknow_api.manager.ManagerService/set_features',
+                request_serializer=minknow__api_dot_manager__pb2.SetFeaturesRequest.SerializeToString,
+                response_deserializer=minknow__api_dot_manager__pb2.SetFeaturesResponse.FromString,
+                )
 
 
 class ManagerServiceServicer(object):
@@ -538,6 +548,20 @@ class ManagerServiceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def get_features(self, request, context):
+        """Get the status of BETA/experimental features
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def set_features(self, request, context):
+        """Change whether features are enabled or disabled
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_ManagerServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -680,6 +704,16 @@ def add_ManagerServiceServicer_to_server(servicer, server):
                     servicer.list_settings_for_protocol,
                     request_deserializer=minknow__api_dot_manager__pb2.ListSettingsForProtocolRequest.FromString,
                     response_serializer=minknow__api_dot_manager__pb2.ListSettingsForProtocolResponse.SerializeToString,
+            ),
+            'get_features': grpc.unary_unary_rpc_method_handler(
+                    servicer.get_features,
+                    request_deserializer=minknow__api_dot_manager__pb2.GetFeaturesRequest.FromString,
+                    response_serializer=minknow__api_dot_manager__pb2.GetFeaturesResponse.SerializeToString,
+            ),
+            'set_features': grpc.unary_unary_rpc_method_handler(
+                    servicer.set_features,
+                    request_deserializer=minknow__api_dot_manager__pb2.SetFeaturesRequest.FromString,
+                    response_serializer=minknow__api_dot_manager__pb2.SetFeaturesResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -1164,5 +1198,39 @@ class ManagerService(object):
         return grpc.experimental.unary_unary(request, target, '/minknow_api.manager.ManagerService/list_settings_for_protocol',
             minknow__api_dot_manager__pb2.ListSettingsForProtocolRequest.SerializeToString,
             minknow__api_dot_manager__pb2.ListSettingsForProtocolResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def get_features(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/minknow_api.manager.ManagerService/get_features',
+            minknow__api_dot_manager__pb2.GetFeaturesRequest.SerializeToString,
+            minknow__api_dot_manager__pb2.GetFeaturesResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def set_features(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/minknow_api.manager.ManagerService/set_features',
+            minknow__api_dot_manager__pb2.SetFeaturesRequest.SerializeToString,
+            minknow__api_dot_manager__pb2.SetFeaturesResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

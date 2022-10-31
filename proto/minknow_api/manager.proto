@@ -328,8 +328,19 @@ service ManagerService {
         option (experimental) = true;
         option idempotency_level = NO_SIDE_EFFECTS;
     }
-}
 
+    // Get the status of BETA/experimental features
+    rpc get_features(GetFeaturesRequest) returns (GetFeaturesResponse) {
+        option (experimental) = true;
+        option idempotency_level = NO_SIDE_EFFECTS;
+    }
+
+    // Change whether features are enabled or disabled
+    rpc set_features(SetFeaturesRequest) returns (SetFeaturesResponse) {
+        option (experimental) = true;
+    }
+
+}
 
 message DescribeHostRequest {
 }
@@ -569,6 +580,17 @@ message FlowCellPosition {
     //
     // Since 5.2
     minknow_api.device.GetDeviceInfoResponse.DeviceType device_type = 11;
+
+    // The name of the device this flow cell position is part of.
+    //
+    // For an integrated position, this will be the host serial, as returned by describe_host().
+    //
+    // For a MinION Mk1B, this will be the same as the `name` field.
+    //
+    // For a P2 Solo, this will be the name of the P2 Solo unit.
+    //
+    // Since 5.3
+    string parent_name = 12;
 }
 
 message FlowCellPositionsRequest {
@@ -1240,4 +1262,52 @@ message ListSettingsForProtocolResponse {
     // Any protocol settings not covered by the above structures, for example
     // those required for custom-scripts.
     repeated protocol_settings.ProtocolSetting protocol_settings = 5;
+}
+
+
+message Feature {
+    // Enable or disable the feature
+    bool enabled = 1;
+}
+
+message FeatureList {
+    // feature_flags is a special value 
+    // If false, turns off all other feature flags
+    // If true, allows individual flags to be enabled and disabled
+    Feature feature_flags = 3;
+    Feature enrich_deplete = 1;
+    Feature barcode_balancing = 2;
+    Feature data_offload = 4;
+}
+
+message GetFeaturesRequest {
+    
+}
+
+message GetFeaturesResponse {
+    enum State {
+        // MinKNOW shouldn't send this, likely a bug
+        UNKNOWN = 0;
+
+        // No saved config was detected, so a default from minknow was provided
+        NO_FILE = 1;
+
+        // Saved config was detected, but there was an error in processing it
+        // The values may be different from what the user expects
+        ERROR_LOADING_FROM_FILE = 2;
+
+        // A saved config was detected and was loaded successfully
+        LOADED_FROM_FILE = 3;
+    }
+
+    State state = 1;
+    FeatureList features = 2;
+}
+
+message SetFeaturesRequest {
+    FeatureList features = 1;
+}
+
+message SetFeaturesResponse {
+    
 }

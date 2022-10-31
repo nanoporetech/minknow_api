@@ -134,6 +134,10 @@ class ProtocolService(object):
             offload_location_info (minknow_api.protocol_pb2.OffloadLocationInfo, optional): Information about data offload locations to use to store data
 
                 Since 5.0.
+            target_run_until_criteria (minknow_api.acquisition_pb2.TargetRunUntilCriteria, optional): Initial Target Run-Until Criteria to use when starting an acquisition for this protocol.
+                These can be updated during the acquisition using the Run-Until API.
+
+                Since 5.3
 
         Returns:
             minknow_api.protocol_pb2.StartProtocolResponse
@@ -170,6 +174,10 @@ class ProtocolService(object):
         if "offload_location_info" in kwargs:
             unused_args.remove("offload_location_info")
             _message.offload_location_info.CopyFrom(kwargs['offload_location_info'])
+
+        if "target_run_until_criteria" in kwargs:
+            unused_args.remove("target_run_until_criteria")
+            _message.target_run_until_criteria.CopyFrom(kwargs['target_run_until_criteria'])
 
         if len(unused_args) > 0:
             raise ArgumentError("Unexpected keyword arguments to start_protocol: '{}'".format(", ".join(unused_args)))
@@ -1047,6 +1055,10 @@ class ProtocolService(object):
             offload_location_info (minknow_api.protocol_pb2.OffloadLocationInfo, optional): Information about data offload locations to use to store data
 
                 Since 5.0.
+            target_run_until_criteria (minknow_api.acquisition_pb2.TargetRunUntilCriteria, optional): Initial Target Run-Until Criteria to use when starting an acquisition for this protocol.
+                These can be updated during the acquisition using the Run-Until API.
+
+                Since 5.3
             settings (minknow_api.protocol_pb2.BeginProtocolRequest.SettingsEntry, optional): Any settings changed from the defaults specified in the protocol's .toml file.
 
         Returns:
@@ -1092,6 +1104,10 @@ class ProtocolService(object):
         if "offload_location_info" in kwargs:
             unused_args.remove("offload_location_info")
             _message.offload_location_info.CopyFrom(kwargs['offload_location_info'])
+
+        if "target_run_until_criteria" in kwargs:
+            unused_args.remove("target_run_until_criteria")
+            _message.target_run_until_criteria.CopyFrom(kwargs['target_run_until_criteria'])
 
         if "settings" in kwargs:
             unused_args.remove("settings")

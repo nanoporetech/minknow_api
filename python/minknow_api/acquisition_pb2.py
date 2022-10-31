@@ -13,11 +13,12 @@ from google.protobuf import symbol_database as _symbol_database
 _sym_db = _symbol_database.Default()
 
 
+from minknow_api import run_until_pb2 as minknow__api_dot_run__until__pb2
 from minknow_api import rpc_options_pb2 as minknow__api_dot_rpc__options__pb2
 from google.protobuf import timestamp_pb2 as google_dot_protobuf_dot_timestamp__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x1dminknow_api/acquisition.proto\x12\x17minknow_api.acquisition\x1a\x1dminknow_api/rpc_options.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\xd3\x03\n\x0cStartRequest\x12\"\n\x1a\x64ont_wait_for_device_ready\x18\x02 \x01(\x08\x12\x38\n\x0fgenerate_report\x18\x03 \x01(\x0e\x32\x1f.minknow_api.acquisition.Option\x12\x45\n\x1csend_sequencing_read_metrics\x18\x04 \x01(\x0e\x32\x1f.minknow_api.acquisition.Option\x12\x41\n\x18send_basecalling_metrics\x18\x05 \x01(\x0e\x32\x1f.minknow_api.acquisition.Option\x12\x31\n\x07purpose\x18\x06 \x01(\x0e\x32 .minknow_api.acquisition.Purpose\x12\x31\n\x08\x61nalysis\x18\x07 \x01(\x0e\x32\x1f.minknow_api.acquisition.Option\x12\x34\n\x0b\x66ile_output\x18\x08 \x01(\x0e\x32\x1f.minknow_api.acquisition.Option\x12?\n\x16generate_final_summary\x18\t \x01(\x0e\x32\x1f.minknow_api.acquisition.Option\"\x1f\n\rStartResponse\x12\x0e\n\x06run_id\x18\x01 \x01(\t\"\xe0\x01\n\x0bStopRequest\x12L\n\x13\x64\x61ta_action_on_stop\x18\x01 \x01(\x0e\x32/.minknow_api.acquisition.StopRequest.DataAction\x12\x18\n\x10wait_until_ready\x18\x02 \x01(\x08\x12\x15\n\rkeep_power_on\x18\x03 \x01(\x08\"R\n\nDataAction\x12\x10\n\x0cSTOP_DEFAULT\x10\x00\x12\x16\n\x12STOP_KEEP_ALL_DATA\x10\x01\x12\x1a\n\x16STOP_FINISH_PROCESSING\x10\x02\"\x0e\n\x0cStopResponse\"+\n\x1bWatchForStatusChangeRequest\x12\x0c\n\x04stop\x18\x01 \x01(\x08\"V\n\x1cWatchForStatusChangeResponse\x12\x36\n\x06status\x18\x01 \x01(\x0e\x32&.minknow_api.acquisition.MinknowStatus\"\x16\n\x14\x43urrentStatusRequest\"O\n\x15\x43urrentStatusResponse\x12\x36\n\x06status\x18\x01 \x01(\x0e\x32&.minknow_api.acquisition.MinknowStatus\"\x14\n\x12GetProgressRequest\"\xa0\x01\n\x13GetProgressResponse\x12S\n\x0fraw_per_channel\x18\x01 \x01(\x0b\x32:.minknow_api.acquisition.GetProgressResponse.RawPerChannel\x1a\x34\n\rRawPerChannel\x12\x10\n\x08\x61\x63quired\x18\x01 \x01(\x04\x12\x11\n\tprocessed\x18\x02 \x01(\x04\".\n\x1cGetAcquisitionRunInfoRequest\x12\x0e\n\x06run_id\x18\x01 \x01(\t\"\x96\x04\n\x17\x41\x63quisitionYieldSummary\x12\x12\n\nread_count\x18\x01 \x01(\x03\x12\x1b\n\x13\x66raction_basecalled\x18\x14 \x01(\x02\x12\x18\n\x10\x66raction_skipped\x18\x15 \x01(\x02\x12\"\n\x1a\x62\x61secalled_pass_read_count\x18\x03 \x01(\x03\x12\"\n\x1a\x62\x61secalled_fail_read_count\x18\x04 \x01(\x03\x12%\n\x1d\x62\x61secalled_skipped_read_count\x18\n \x01(\x03\x12\x1d\n\x15\x62\x61secalled_pass_bases\x18\x05 \x01(\x03\x12\x1d\n\x15\x62\x61secalled_fail_bases\x18\x12 \x01(\x03\x12\x1a\n\x12\x62\x61secalled_samples\x18\x06 \x01(\x03\x12\x1c\n\x14selected_raw_samples\x18\x07 \x01(\x03\x12\x17\n\x0fselected_events\x18\x08 \x01(\x03\x12 \n\x18\x65stimated_selected_bases\x18\t \x01(\x03\x12\x19\n\x11\x61lignment_matches\x18\x0e \x01(\x03\x12\x1c\n\x14\x61lignment_mismatches\x18\x0f \x01(\x03\x12\x1c\n\x14\x61lignment_insertions\x18\x10 \x01(\x03\x12\x1b\n\x13\x61lignment_deletions\x18\x11 \x01(\x03\x12\x1a\n\x12\x61lignment_coverage\x18\x13 \x01(\x02\"\x96\x01\n\x18\x41\x63quisitionWriterSummary\x12\x1f\n\x17\x62ytes_to_write_produced\x18\x02 \x01(\x03\x12\x1d\n\x15\x62ytes_to_write_failed\x18\x03 \x01(\x03\x12 \n\x18\x62ytes_to_write_completed\x18\x04 \x01(\x03J\x04\x08\x01\x10\x02R\x12written_read_count\"\xb0\x03\n\x10\x43hannelStateInfo\x12?\n\x06groups\x18\x01 \x03(\x0b\x32/.minknow_api.acquisition.ChannelStateInfo.Group\x1a;\n\x05Style\x12\r\n\x05label\x18\x01 \x01(\t\x12\x13\n\x0b\x64\x65scription\x18\x02 \x01(\t\x12\x0e\n\x06\x63olour\x18\x03 \x01(\t\x1a~\n\x0c\x43hannelState\x12\n\n\x02id\x18\x01 \x01(\r\x12\x0c\n\x04name\x18\x02 \x01(\t\x12>\n\x05style\x18\x03 \x01(\x0b\x32/.minknow_api.acquisition.ChannelStateInfo.Style\x12\x14\n\x0cglobal_order\x18\x04 \x01(\r\x1a\x9d\x01\n\x05Group\x12\x0c\n\x04name\x18\x01 \x01(\t\x12>\n\x05style\x18\x02 \x01(\x0b\x32/.minknow_api.acquisition.ChannelStateInfo.Style\x12\x46\n\x06states\x18\x03 \x03(\x0b\x32\x36.minknow_api.acquisition.ChannelStateInfo.ChannelState\"\x9f\x05\n\x18\x41\x63quisitionConfigSummary\x12\x31\n\x07purpose\x18\x15 \x01(\x0e\x32 .minknow_api.acquisition.Purpose\x12\x1b\n\x13\x62\x61secalling_enabled\x18\x01 \x01(\x08\x12#\n\x1b\x62\x61secalling_config_filename\x18\x10 \x01(\t\x12\x19\n\x11\x62\x61rcoding_enabled\x18\r \x01(\x08\x12\x16\n\x0e\x62\x61rcoding_kits\x18\x11 \x03(\t\x12\x19\n\x11\x61lignment_enabled\x18\x0e \x01(\x08\x12!\n\x19\x61lignment_reference_files\x18\x12 \x03(\t\x12\x1a\n\x12\x61lignment_bed_file\x18\x13 \x01(\t\x12\x14\n\x0clamp_enabled\x18\x0f \x01(\x08\x12\x10\n\x08lamp_kit\x18\x14 \x01(\t\x12\x17\n\x0freads_directory\x18\x02 \x01(\t\x12\"\n\x1areads_fallback_directories\x18\x03 \x03(\t\x12\x1b\n\x13\x66\x61st5_reads_enabled\x18\x04 \x01(\x08\x12\x1b\n\x13\x66\x61stq_reads_enabled\x18\x05 \x01(\x08\x12\x1e\n\x16protobuf_reads_enabled\x18\x06 \x01(\x08\x12\x16\n\x0e\x62ulk_file_path\x18\x07 \x01(\t\x12\x19\n\x11\x62ulk_file_enabled\x18\x08 \x01(\x08\x12\x45\n\x12\x63hannel_state_info\x18\t \x01(\x0b\x32).minknow_api.acquisition.ChannelStateInfo\x12\x1c\n\x14\x65vents_to_base_ratio\x18\n \x01(\x02\x12\x13\n\x0bsample_rate\x18\x0b \x01(\r\x12\x15\n\rchannel_count\x18\x0c \x01(\r\"\xd6\x03\n\x0fMuxScanMetadata\x12\"\n\x1a\x61uto_mux_scan_period_hours\x18\x01 \x01(\x02\x12O\n\x0f\x63\x61tegory_groups\x18\x02 \x03(\x0b\x32\x36.minknow_api.acquisition.MuxScanMetadata.CategoryGroup\x1a;\n\x05Style\x12\r\n\x05label\x18\x01 \x01(\t\x12\x13\n\x0b\x64\x65scription\x18\x02 \x01(\t\x12\x0e\n\x06\x63olour\x18\x03 \x01(\t\x1am\n\x08\x43\x61tegory\x12\x0c\n\x04name\x18\x01 \x01(\t\x12=\n\x05style\x18\x02 \x01(\x0b\x32..minknow_api.acquisition.MuxScanMetadata.Style\x12\x14\n\x0cglobal_order\x18\x03 \x01(\r\x1a\xa1\x01\n\rCategoryGroup\x12\x0c\n\x04name\x18\x01 \x01(\t\x12=\n\x05style\x18\x02 \x01(\x0b\x32..minknow_api.acquisition.MuxScanMetadata.Style\x12\x43\n\x08\x63\x61tegory\x18\x03 \x03(\x0b\x32\x31.minknow_api.acquisition.MuxScanMetadata.Category\"\x9e\x01\n\rMuxScanResult\x12\x42\n\x06\x63ounts\x18\x01 \x03(\x0b\x32\x32.minknow_api.acquisition.MuxScanResult.CountsEntry\x12\x1a\n\x12mux_scan_timestamp\x18\x02 \x01(\x04\x1a-\n\x0b\x43ountsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\r:\x02\x38\x01\"\x93\x03\n\tBreamInfo\x12\x43\n\x11mux_scan_metadata\x18\x01 \x01(\x0b\x32(.minknow_api.acquisition.MuxScanMetadata\x12@\n\x10mux_scan_results\x18\x02 \x03(\x0b\x32&.minknow_api.acquisition.MuxScanResult\x12L\n\x1atarget_translocation_speed\x18\x03 \x01(\x0b\x32(.minknow_api.acquisition.BreamInfo.Range\x12@\n\x0etarget_q_score\x18\x04 \x01(\x0b\x32(.minknow_api.acquisition.BreamInfo.Range\x12\x44\n\x12target_temperature\x18\x05 \x01(\x0b\x32(.minknow_api.acquisition.BreamInfo.Range\x1a)\n\x05Range\x12\x0f\n\x07minimum\x18\x01 \x01(\x01\x12\x0f\n\x07maximum\x18\x02 \x01(\x01\"\xfd\x06\n\x12\x41\x63quisitionRunInfo\x12\x0e\n\x06run_id\x18\x01 \x01(\t\x12<\n\rstartup_state\x18\x0c \x01(\x0e\x32%.minknow_api.acquisition.StartupState\x12?\n\x1bstartup_state_estimated_end\x18\r \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x30\n(startup_state_estimated_percent_complete\x18\x0e \x01(\x02\x12\x38\n\x05state\x18\x02 \x01(\x0e\x32).minknow_api.acquisition.AcquisitionState\x12@\n\x0f\x66inishing_state\x18\n \x01(\x0e\x32\'.minknow_api.acquisition.FinishingState\x12\x43\n\x0bstop_reason\x18\x03 \x01(\x0e\x32..minknow_api.acquisition.AcquisitionStopReason\x12.\n\nstart_time\x18\x04 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x38\n\x14\x64\x61ta_read_start_time\x18\x05 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x36\n\x12\x64\x61ta_read_end_time\x18\x06 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12,\n\x08\x65nd_time\x18\x07 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12G\n\ryield_summary\x18\x08 \x01(\x0b\x32\x30.minknow_api.acquisition.AcquisitionYieldSummary\x12I\n\x0e\x63onfig_summary\x18\t \x01(\x0b\x32\x31.minknow_api.acquisition.AcquisitionConfigSummary\x12I\n\x0ewriter_summary\x18\x0b \x01(\x0b\x32\x31.minknow_api.acquisition.AcquisitionWriterSummary\x12\x36\n\nbream_info\x18\x0f \x01(\x0b\x32\".minknow_api.acquisition.BreamInfo\"\x1c\n\x1aListAcquisitionRunsRequest\".\n\x1bListAcquisitionRunsResponse\x12\x0f\n\x07run_ids\x18\x01 \x03(\t\"!\n\x1fGetCurrentAcquisitionRunRequest\"#\n!WatchCurrentAcquisitionRunRequest\"\xdf\x02\n\x16SetSignalReaderRequest\x12V\n\x06reader\x18\x01 \x01(\x0e\x32@.minknow_api.acquisition.SetSignalReaderRequest.SignalReaderTypeB\x04\x88\xb5\x18\x01\x12\x12\n\nhdf_source\x18\x02 \x01(\t\x12P\n\x08hdf_mode\x18\x03 \x01(\x0e\x32>.minknow_api.acquisition.SetSignalReaderRequest.SourceFileMode\x12 \n\x18sample_rate_scale_factor\x18\x04 \x01(\x02\"(\n\x10SignalReaderType\x12\x08\n\x04HDF5\x10\x00\x12\n\n\x06\x44\x45VICE\x10\x01\";\n\x0eSourceFileMode\x12\x0f\n\x0bUNSPECIFIED\x10\x00\x12\x0e\n\nSINGLE_RUN\x10\x01\x12\x08\n\x04LOOP\x10\x02\"\x19\n\x17SetSignalReaderResponse\"g\n\x13SetBreamInfoRequest\x12\x30\n\x04info\x18\x01 \x01(\x0b\x32\".minknow_api.acquisition.BreamInfo\x12\x1e\n\x16overwrite_unset_fields\x18\x02 \x01(\x08\"\x16\n\x14SetBreamInfoResponse\"\x1d\n\x1b\x41ppendMuxScanResultResponse*Y\n\rMinknowStatus\x12\x10\n\x0c\x45RROR_STATUS\x10\x00\x12\t\n\x05READY\x10\x01\x12\x0c\n\x08STARTING\x10\x02\x12\x0e\n\nPROCESSING\x10\x03\x12\r\n\tFINISHING\x10\x04**\n\x06Option\x12\x08\n\x04\x41UTO\x10\x00\x12\x0b\n\x07\x44ISABLE\x10\x01\x12\t\n\x05\x46ORCE\x10\x02*=\n\x07Purpose\x12\x11\n\rOTHER_PURPOSE\x10\x00\x12\x0e\n\nSEQUENCING\x10\x02\x12\x0f\n\x0b\x43\x41LIBRATION\x10\x03*{\n\x10\x41\x63quisitionState\x12\x18\n\x14\x41\x43QUISITION_STARTING\x10\x00\x12\x17\n\x13\x41\x43QUISITION_RUNNING\x10\x01\x12\x19\n\x15\x41\x43QUISITION_FINISHING\x10\x02\x12\x19\n\x15\x41\x43QUISITION_COMPLETED\x10\x03*\xb2\x02\n\x15\x41\x63quisitionStopReason\x12\x13\n\x0fSTOPPED_NOT_SET\x10\x00\x12\x1a\n\x16STOPPED_USER_REQUESTED\x10\x01\x12\x19\n\x15STOPPED_NO_DISK_SPACE\x10\x02\x12&\n\"STOPPED_DEVICE_STOPPED_ACQUISITION\x10\x03\x12 \n\x1cSTOPPED_STARTING_ANOTHER_RUN\x10\x04\x12\x1a\n\x16STOPPED_PROTOCOL_ENDED\x10\x05\x12\x18\n\x14STOPPED_DEVICE_ERROR\x10\x06\x12\x1b\n\x17STOPPED_BAD_TEMPERATURE\x10\x07\x12\x14\n\x10STOPPED_SHUTDOWN\x10\x08\x12\x1a\n\x16STOPPED_INTERNAL_ERROR\x10\t*\x96\x02\n\x0cStartupState\x12\x13\n\x0fSTARTUP_UNKNOWN\x10\x00\x12\x1d\n\x19STARTUP_BUILDING_PIPELINE\x10\x02\x12#\n\x1fSTARTUP_INITIALISING_BASECALLER\x10\x03\x12-\n)STARTUP_INITIALISING_BASECALLER_ALIGNMENT\x10\x04\x12%\n!STARTUP_INITIALISING_DATA_WRITERS\x10\x05\x12\x32\n.STARTUP_INITIALISING_INTERMEDIATE_DATA_STORAGE\x10\x06\x12#\n\x1fSTARTUP_INITIALISING_STATISTICS\x10\x07*\x8b\x01\n\x0e\x46inishingState\x12\x15\n\x11\x46INISHING_UNKNOWN\x10\x00\x12&\n\"FINISHING_PROCESSING_DEVICE_SIGNAL\x10\x01\x12\x1f\n\x1b\x46INISHING_BASECALLING_READS\x10\x02\x12\x19\n\x15\x46INISHING_SAVING_DATA\x10\x03\x32\xd4\x0b\n\x12\x41\x63quisitionService\x12X\n\x05start\x12%.minknow_api.acquisition.StartRequest\x1a&.minknow_api.acquisition.StartResponse\"\x00\x12U\n\x04stop\x12$.minknow_api.acquisition.StopRequest\x1a%.minknow_api.acquisition.StopResponse\"\x00\x12\x8f\x01\n\x17watch_for_status_change\x12\x34.minknow_api.acquisition.WatchForStatusChangeRequest\x1a\x35.minknow_api.acquisition.WatchForStatusChangeResponse\"\x03\x90\x02\x01(\x01\x30\x01\x12\x8f\x01\n\x1dwatch_current_acquisition_run\x12:.minknow_api.acquisition.WatchCurrentAcquisitionRunRequest\x1a+.minknow_api.acquisition.AcquisitionRunInfo\"\x03\x90\x02\x01\x30\x01\x12t\n\x0e\x63urrent_status\x12-.minknow_api.acquisition.CurrentStatusRequest\x1a..minknow_api.acquisition.CurrentStatusResponse\"\x03\x90\x02\x01\x12n\n\x0cget_progress\x12+.minknow_api.acquisition.GetProgressRequest\x1a,.minknow_api.acquisition.GetProgressResponse\"\x03\x90\x02\x01\x12\x7f\n\x14get_acquisition_info\x12\x35.minknow_api.acquisition.GetAcquisitionRunInfoRequest\x1a+.minknow_api.acquisition.AcquisitionRunInfo\"\x03\x90\x02\x01\x12\x87\x01\n\x15list_acquisition_runs\x12\x33.minknow_api.acquisition.ListAcquisitionRunsRequest\x1a\x34.minknow_api.acquisition.ListAcquisitionRunsResponse\"\x03\x90\x02\x01\x12\x89\x01\n\x1bget_current_acquisition_run\x12\x38.minknow_api.acquisition.GetCurrentAcquisitionRunRequest\x1a+.minknow_api.acquisition.AcquisitionRunInfo\"\x03\x90\x02\x01\x12{\n\x11set_signal_reader\x12/.minknow_api.acquisition.SetSignalReaderRequest\x1a\x30.minknow_api.acquisition.SetSignalReaderResponse\"\x03\x90\x02\x02\x12r\n\x0eset_bream_info\x12,.minknow_api.acquisition.SetBreamInfoRequest\x1a-.minknow_api.acquisition.SetBreamInfoResponse\"\x03\x90\x02\x02\x12{\n\x16\x61ppend_mux_scan_result\x12&.minknow_api.acquisition.MuxScanResult\x1a\x34.minknow_api.acquisition.AppendMuxScanResultResponse\"\x03\x90\x02\x02\x42&\n\x1c\x63om.nanoporetech.minknow_api\xa2\x02\x05MKAPIb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x1dminknow_api/acquisition.proto\x12\x17minknow_api.acquisition\x1a\x1bminknow_api/run_until.proto\x1a\x1dminknow_api/rpc_options.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\xd3\x03\n\x0cStartRequest\x12\"\n\x1a\x64ont_wait_for_device_ready\x18\x02 \x01(\x08\x12\x38\n\x0fgenerate_report\x18\x03 \x01(\x0e\x32\x1f.minknow_api.acquisition.Option\x12\x45\n\x1csend_sequencing_read_metrics\x18\x04 \x01(\x0e\x32\x1f.minknow_api.acquisition.Option\x12\x41\n\x18send_basecalling_metrics\x18\x05 \x01(\x0e\x32\x1f.minknow_api.acquisition.Option\x12\x31\n\x07purpose\x18\x06 \x01(\x0e\x32 .minknow_api.acquisition.Purpose\x12\x31\n\x08\x61nalysis\x18\x07 \x01(\x0e\x32\x1f.minknow_api.acquisition.Option\x12\x34\n\x0b\x66ile_output\x18\x08 \x01(\x0e\x32\x1f.minknow_api.acquisition.Option\x12?\n\x16generate_final_summary\x18\t \x01(\x0e\x32\x1f.minknow_api.acquisition.Option\"\x1f\n\rStartResponse\x12\x0e\n\x06run_id\x18\x01 \x01(\t\"\xe0\x01\n\x0bStopRequest\x12L\n\x13\x64\x61ta_action_on_stop\x18\x01 \x01(\x0e\x32/.minknow_api.acquisition.StopRequest.DataAction\x12\x18\n\x10wait_until_ready\x18\x02 \x01(\x08\x12\x15\n\rkeep_power_on\x18\x03 \x01(\x08\"R\n\nDataAction\x12\x10\n\x0cSTOP_DEFAULT\x10\x00\x12\x16\n\x12STOP_KEEP_ALL_DATA\x10\x01\x12\x1a\n\x16STOP_FINISH_PROCESSING\x10\x02\"\x0e\n\x0cStopResponse\"+\n\x1bWatchForStatusChangeRequest\x12\x0c\n\x04stop\x18\x01 \x01(\x08\"V\n\x1cWatchForStatusChangeResponse\x12\x36\n\x06status\x18\x01 \x01(\x0e\x32&.minknow_api.acquisition.MinknowStatus\"\x16\n\x14\x43urrentStatusRequest\"O\n\x15\x43urrentStatusResponse\x12\x36\n\x06status\x18\x01 \x01(\x0e\x32&.minknow_api.acquisition.MinknowStatus\"\x14\n\x12GetProgressRequest\"\xa0\x01\n\x13GetProgressResponse\x12S\n\x0fraw_per_channel\x18\x01 \x01(\x0b\x32:.minknow_api.acquisition.GetProgressResponse.RawPerChannel\x1a\x34\n\rRawPerChannel\x12\x10\n\x08\x61\x63quired\x18\x01 \x01(\x04\x12\x11\n\tprocessed\x18\x02 \x01(\x04\".\n\x1cGetAcquisitionRunInfoRequest\x12\x0e\n\x06run_id\x18\x01 \x01(\t\"\x96\x04\n\x17\x41\x63quisitionYieldSummary\x12\x12\n\nread_count\x18\x01 \x01(\x03\x12\x1b\n\x13\x66raction_basecalled\x18\x14 \x01(\x02\x12\x18\n\x10\x66raction_skipped\x18\x15 \x01(\x02\x12\"\n\x1a\x62\x61secalled_pass_read_count\x18\x03 \x01(\x03\x12\"\n\x1a\x62\x61secalled_fail_read_count\x18\x04 \x01(\x03\x12%\n\x1d\x62\x61secalled_skipped_read_count\x18\n \x01(\x03\x12\x1d\n\x15\x62\x61secalled_pass_bases\x18\x05 \x01(\x03\x12\x1d\n\x15\x62\x61secalled_fail_bases\x18\x12 \x01(\x03\x12\x1a\n\x12\x62\x61secalled_samples\x18\x06 \x01(\x03\x12\x1c\n\x14selected_raw_samples\x18\x07 \x01(\x03\x12\x17\n\x0fselected_events\x18\x08 \x01(\x03\x12 \n\x18\x65stimated_selected_bases\x18\t \x01(\x03\x12\x19\n\x11\x61lignment_matches\x18\x0e \x01(\x03\x12\x1c\n\x14\x61lignment_mismatches\x18\x0f \x01(\x03\x12\x1c\n\x14\x61lignment_insertions\x18\x10 \x01(\x03\x12\x1b\n\x13\x61lignment_deletions\x18\x11 \x01(\x03\x12\x1a\n\x12\x61lignment_coverage\x18\x13 \x01(\x02\"\x96\x01\n\x18\x41\x63quisitionWriterSummary\x12\x1f\n\x17\x62ytes_to_write_produced\x18\x02 \x01(\x03\x12\x1d\n\x15\x62ytes_to_write_failed\x18\x03 \x01(\x03\x12 \n\x18\x62ytes_to_write_completed\x18\x04 \x01(\x03J\x04\x08\x01\x10\x02R\x12written_read_count\"\xb0\x03\n\x10\x43hannelStateInfo\x12?\n\x06groups\x18\x01 \x03(\x0b\x32/.minknow_api.acquisition.ChannelStateInfo.Group\x1a;\n\x05Style\x12\r\n\x05label\x18\x01 \x01(\t\x12\x13\n\x0b\x64\x65scription\x18\x02 \x01(\t\x12\x0e\n\x06\x63olour\x18\x03 \x01(\t\x1a~\n\x0c\x43hannelState\x12\n\n\x02id\x18\x01 \x01(\r\x12\x0c\n\x04name\x18\x02 \x01(\t\x12>\n\x05style\x18\x03 \x01(\x0b\x32/.minknow_api.acquisition.ChannelStateInfo.Style\x12\x14\n\x0cglobal_order\x18\x04 \x01(\r\x1a\x9d\x01\n\x05Group\x12\x0c\n\x04name\x18\x01 \x01(\t\x12>\n\x05style\x18\x02 \x01(\x0b\x32/.minknow_api.acquisition.ChannelStateInfo.Style\x12\x46\n\x06states\x18\x03 \x03(\x0b\x32\x36.minknow_api.acquisition.ChannelStateInfo.ChannelState\"\x9f\x05\n\x18\x41\x63quisitionConfigSummary\x12\x31\n\x07purpose\x18\x15 \x01(\x0e\x32 .minknow_api.acquisition.Purpose\x12\x1b\n\x13\x62\x61secalling_enabled\x18\x01 \x01(\x08\x12#\n\x1b\x62\x61secalling_config_filename\x18\x10 \x01(\t\x12\x19\n\x11\x62\x61rcoding_enabled\x18\r \x01(\x08\x12\x16\n\x0e\x62\x61rcoding_kits\x18\x11 \x03(\t\x12\x19\n\x11\x61lignment_enabled\x18\x0e \x01(\x08\x12!\n\x19\x61lignment_reference_files\x18\x12 \x03(\t\x12\x1a\n\x12\x61lignment_bed_file\x18\x13 \x01(\t\x12\x14\n\x0clamp_enabled\x18\x0f \x01(\x08\x12\x10\n\x08lamp_kit\x18\x14 \x01(\t\x12\x17\n\x0freads_directory\x18\x02 \x01(\t\x12\"\n\x1areads_fallback_directories\x18\x03 \x03(\t\x12\x1b\n\x13\x66\x61st5_reads_enabled\x18\x04 \x01(\x08\x12\x1b\n\x13\x66\x61stq_reads_enabled\x18\x05 \x01(\x08\x12\x1e\n\x16protobuf_reads_enabled\x18\x06 \x01(\x08\x12\x16\n\x0e\x62ulk_file_path\x18\x07 \x01(\t\x12\x19\n\x11\x62ulk_file_enabled\x18\x08 \x01(\x08\x12\x45\n\x12\x63hannel_state_info\x18\t \x01(\x0b\x32).minknow_api.acquisition.ChannelStateInfo\x12\x1c\n\x14\x65vents_to_base_ratio\x18\n \x01(\x02\x12\x13\n\x0bsample_rate\x18\x0b \x01(\r\x12\x15\n\rchannel_count\x18\x0c \x01(\r\"\xd6\x03\n\x0fMuxScanMetadata\x12\"\n\x1a\x61uto_mux_scan_period_hours\x18\x01 \x01(\x02\x12O\n\x0f\x63\x61tegory_groups\x18\x02 \x03(\x0b\x32\x36.minknow_api.acquisition.MuxScanMetadata.CategoryGroup\x1a;\n\x05Style\x12\r\n\x05label\x18\x01 \x01(\t\x12\x13\n\x0b\x64\x65scription\x18\x02 \x01(\t\x12\x0e\n\x06\x63olour\x18\x03 \x01(\t\x1am\n\x08\x43\x61tegory\x12\x0c\n\x04name\x18\x01 \x01(\t\x12=\n\x05style\x18\x02 \x01(\x0b\x32..minknow_api.acquisition.MuxScanMetadata.Style\x12\x14\n\x0cglobal_order\x18\x03 \x01(\r\x1a\xa1\x01\n\rCategoryGroup\x12\x0c\n\x04name\x18\x01 \x01(\t\x12=\n\x05style\x18\x02 \x01(\x0b\x32..minknow_api.acquisition.MuxScanMetadata.Style\x12\x43\n\x08\x63\x61tegory\x18\x03 \x03(\x0b\x32\x31.minknow_api.acquisition.MuxScanMetadata.Category\"\x9e\x01\n\rMuxScanResult\x12\x42\n\x06\x63ounts\x18\x01 \x03(\x0b\x32\x32.minknow_api.acquisition.MuxScanResult.CountsEntry\x12\x1a\n\x12mux_scan_timestamp\x18\x02 \x01(\x04\x1a-\n\x0b\x43ountsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\r:\x02\x38\x01\"\x93\x03\n\tBreamInfo\x12\x43\n\x11mux_scan_metadata\x18\x01 \x01(\x0b\x32(.minknow_api.acquisition.MuxScanMetadata\x12@\n\x10mux_scan_results\x18\x02 \x03(\x0b\x32&.minknow_api.acquisition.MuxScanResult\x12L\n\x1atarget_translocation_speed\x18\x03 \x01(\x0b\x32(.minknow_api.acquisition.BreamInfo.Range\x12@\n\x0etarget_q_score\x18\x04 \x01(\x0b\x32(.minknow_api.acquisition.BreamInfo.Range\x12\x44\n\x12target_temperature\x18\x05 \x01(\x0b\x32(.minknow_api.acquisition.BreamInfo.Range\x1a)\n\x05Range\x12\x0f\n\x07minimum\x18\x01 \x01(\x01\x12\x0f\n\x07maximum\x18\x02 \x01(\x01\"\x95\x01\n\x16TargetRunUntilCriteria\x12=\n\x0epause_criteria\x18\x01 \x01(\x0b\x32%.minknow_api.run_until.CriteriaValues\x12<\n\rstop_criteria\x18\x02 \x01(\x0b\x32%.minknow_api.run_until.CriteriaValues\"\xd1\x07\n\x12\x41\x63quisitionRunInfo\x12\x0e\n\x06run_id\x18\x01 \x01(\t\x12<\n\rstartup_state\x18\x0c \x01(\x0e\x32%.minknow_api.acquisition.StartupState\x12?\n\x1bstartup_state_estimated_end\x18\r \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x30\n(startup_state_estimated_percent_complete\x18\x0e \x01(\x02\x12\x38\n\x05state\x18\x02 \x01(\x0e\x32).minknow_api.acquisition.AcquisitionState\x12@\n\x0f\x66inishing_state\x18\n \x01(\x0e\x32\'.minknow_api.acquisition.FinishingState\x12\x43\n\x0bstop_reason\x18\x03 \x01(\x0e\x32..minknow_api.acquisition.AcquisitionStopReason\x12.\n\nstart_time\x18\x04 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x38\n\x14\x64\x61ta_read_start_time\x18\x05 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x36\n\x12\x64\x61ta_read_end_time\x18\x06 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12,\n\x08\x65nd_time\x18\x07 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12G\n\ryield_summary\x18\x08 \x01(\x0b\x32\x30.minknow_api.acquisition.AcquisitionYieldSummary\x12I\n\x0e\x63onfig_summary\x18\t \x01(\x0b\x32\x31.minknow_api.acquisition.AcquisitionConfigSummary\x12I\n\x0ewriter_summary\x18\x0b \x01(\x0b\x32\x31.minknow_api.acquisition.AcquisitionWriterSummary\x12\x36\n\nbream_info\x18\x0f \x01(\x0b\x32\".minknow_api.acquisition.BreamInfo\x12R\n\x19target_run_until_criteria\x18\x10 \x01(\x0b\x32/.minknow_api.acquisition.TargetRunUntilCriteria\"\x1c\n\x1aListAcquisitionRunsRequest\".\n\x1bListAcquisitionRunsResponse\x12\x0f\n\x07run_ids\x18\x01 \x03(\t\"!\n\x1fGetCurrentAcquisitionRunRequest\"#\n!WatchCurrentAcquisitionRunRequest\"\xdf\x02\n\x16SetSignalReaderRequest\x12V\n\x06reader\x18\x01 \x01(\x0e\x32@.minknow_api.acquisition.SetSignalReaderRequest.SignalReaderTypeB\x04\x88\xb5\x18\x01\x12\x12\n\nhdf_source\x18\x02 \x01(\t\x12P\n\x08hdf_mode\x18\x03 \x01(\x0e\x32>.minknow_api.acquisition.SetSignalReaderRequest.SourceFileMode\x12 \n\x18sample_rate_scale_factor\x18\x04 \x01(\x02\"(\n\x10SignalReaderType\x12\x08\n\x04HDF5\x10\x00\x12\n\n\x06\x44\x45VICE\x10\x01\";\n\x0eSourceFileMode\x12\x0f\n\x0bUNSPECIFIED\x10\x00\x12\x0e\n\nSINGLE_RUN\x10\x01\x12\x08\n\x04LOOP\x10\x02\"\x19\n\x17SetSignalReaderResponse\"g\n\x13SetBreamInfoRequest\x12\x30\n\x04info\x18\x01 \x01(\x0b\x32\".minknow_api.acquisition.BreamInfo\x12\x1e\n\x16overwrite_unset_fields\x18\x02 \x01(\x08\"\x16\n\x14SetBreamInfoResponse\"\x1d\n\x1b\x41ppendMuxScanResultResponse*Y\n\rMinknowStatus\x12\x10\n\x0c\x45RROR_STATUS\x10\x00\x12\t\n\x05READY\x10\x01\x12\x0c\n\x08STARTING\x10\x02\x12\x0e\n\nPROCESSING\x10\x03\x12\r\n\tFINISHING\x10\x04**\n\x06Option\x12\x08\n\x04\x41UTO\x10\x00\x12\x0b\n\x07\x44ISABLE\x10\x01\x12\t\n\x05\x46ORCE\x10\x02*=\n\x07Purpose\x12\x11\n\rOTHER_PURPOSE\x10\x00\x12\x0e\n\nSEQUENCING\x10\x02\x12\x0f\n\x0b\x43\x41LIBRATION\x10\x03*{\n\x10\x41\x63quisitionState\x12\x18\n\x14\x41\x43QUISITION_STARTING\x10\x00\x12\x17\n\x13\x41\x43QUISITION_RUNNING\x10\x01\x12\x19\n\x15\x41\x43QUISITION_FINISHING\x10\x02\x12\x19\n\x15\x41\x43QUISITION_COMPLETED\x10\x03*\xb2\x02\n\x15\x41\x63quisitionStopReason\x12\x13\n\x0fSTOPPED_NOT_SET\x10\x00\x12\x1a\n\x16STOPPED_USER_REQUESTED\x10\x01\x12\x19\n\x15STOPPED_NO_DISK_SPACE\x10\x02\x12&\n\"STOPPED_DEVICE_STOPPED_ACQUISITION\x10\x03\x12 \n\x1cSTOPPED_STARTING_ANOTHER_RUN\x10\x04\x12\x1a\n\x16STOPPED_PROTOCOL_ENDED\x10\x05\x12\x18\n\x14STOPPED_DEVICE_ERROR\x10\x06\x12\x1b\n\x17STOPPED_BAD_TEMPERATURE\x10\x07\x12\x14\n\x10STOPPED_SHUTDOWN\x10\x08\x12\x1a\n\x16STOPPED_INTERNAL_ERROR\x10\t*\x96\x02\n\x0cStartupState\x12\x13\n\x0fSTARTUP_UNKNOWN\x10\x00\x12\x1d\n\x19STARTUP_BUILDING_PIPELINE\x10\x02\x12#\n\x1fSTARTUP_INITIALISING_BASECALLER\x10\x03\x12-\n)STARTUP_INITIALISING_BASECALLER_ALIGNMENT\x10\x04\x12%\n!STARTUP_INITIALISING_DATA_WRITERS\x10\x05\x12\x32\n.STARTUP_INITIALISING_INTERMEDIATE_DATA_STORAGE\x10\x06\x12#\n\x1fSTARTUP_INITIALISING_STATISTICS\x10\x07*\x8b\x01\n\x0e\x46inishingState\x12\x15\n\x11\x46INISHING_UNKNOWN\x10\x00\x12&\n\"FINISHING_PROCESSING_DEVICE_SIGNAL\x10\x01\x12\x1f\n\x1b\x46INISHING_BASECALLING_READS\x10\x02\x12\x19\n\x15\x46INISHING_SAVING_DATA\x10\x03\x32\xd4\x0b\n\x12\x41\x63quisitionService\x12X\n\x05start\x12%.minknow_api.acquisition.StartRequest\x1a&.minknow_api.acquisition.StartResponse\"\x00\x12U\n\x04stop\x12$.minknow_api.acquisition.StopRequest\x1a%.minknow_api.acquisition.StopResponse\"\x00\x12\x8f\x01\n\x17watch_for_status_change\x12\x34.minknow_api.acquisition.WatchForStatusChangeRequest\x1a\x35.minknow_api.acquisition.WatchForStatusChangeResponse\"\x03\x90\x02\x01(\x01\x30\x01\x12\x8f\x01\n\x1dwatch_current_acquisition_run\x12:.minknow_api.acquisition.WatchCurrentAcquisitionRunRequest\x1a+.minknow_api.acquisition.AcquisitionRunInfo\"\x03\x90\x02\x01\x30\x01\x12t\n\x0e\x63urrent_status\x12-.minknow_api.acquisition.CurrentStatusRequest\x1a..minknow_api.acquisition.CurrentStatusResponse\"\x03\x90\x02\x01\x12n\n\x0cget_progress\x12+.minknow_api.acquisition.GetProgressRequest\x1a,.minknow_api.acquisition.GetProgressResponse\"\x03\x90\x02\x01\x12\x7f\n\x14get_acquisition_info\x12\x35.minknow_api.acquisition.GetAcquisitionRunInfoRequest\x1a+.minknow_api.acquisition.AcquisitionRunInfo\"\x03\x90\x02\x01\x12\x87\x01\n\x15list_acquisition_runs\x12\x33.minknow_api.acquisition.ListAcquisitionRunsRequest\x1a\x34.minknow_api.acquisition.ListAcquisitionRunsResponse\"\x03\x90\x02\x01\x12\x89\x01\n\x1bget_current_acquisition_run\x12\x38.minknow_api.acquisition.GetCurrentAcquisitionRunRequest\x1a+.minknow_api.acquisition.AcquisitionRunInfo\"\x03\x90\x02\x01\x12{\n\x11set_signal_reader\x12/.minknow_api.acquisition.SetSignalReaderRequest\x1a\x30.minknow_api.acquisition.SetSignalReaderResponse\"\x03\x90\x02\x02\x12r\n\x0eset_bream_info\x12,.minknow_api.acquisition.SetBreamInfoRequest\x1a-.minknow_api.acquisition.SetBreamInfoResponse\"\x03\x90\x02\x02\x12{\n\x16\x61ppend_mux_scan_result\x12&.minknow_api.acquisition.MuxScanResult\x1a\x34.minknow_api.acquisition.AppendMuxScanResultResponse\"\x03\x90\x02\x02\x42&\n\x1c\x63om.nanoporetech.minknow_api\xa2\x02\x05MKAPIb\x06proto3')
 
 _MINKNOWSTATUS = DESCRIPTOR.enum_types_by_name['MinknowStatus']
 MinknowStatus = enum_type_wrapper.EnumTypeWrapper(_MINKNOWSTATUS)
@@ -98,6 +99,7 @@ _MUXSCANRESULT = DESCRIPTOR.message_types_by_name['MuxScanResult']
 _MUXSCANRESULT_COUNTSENTRY = _MUXSCANRESULT.nested_types_by_name['CountsEntry']
 _BREAMINFO = DESCRIPTOR.message_types_by_name['BreamInfo']
 _BREAMINFO_RANGE = _BREAMINFO.nested_types_by_name['Range']
+_TARGETRUNUNTILCRITERIA = DESCRIPTOR.message_types_by_name['TargetRunUntilCriteria']
 _ACQUISITIONRUNINFO = DESCRIPTOR.message_types_by_name['AcquisitionRunInfo']
 _LISTACQUISITIONRUNSREQUEST = DESCRIPTOR.message_types_by_name['ListAcquisitionRunsRequest']
 _LISTACQUISITIONRUNSRESPONSE = DESCRIPTOR.message_types_by_name['ListAcquisitionRunsResponse']
@@ -115,7 +117,9 @@ StartRequest = _reflection.GeneratedProtocolMessageType('StartRequest', (_messag
   'DESCRIPTOR' : _STARTREQUEST,
   '__module__' : 'minknow_api.acquisition_pb2'
   ,
-  '__doc__': """Attributes:
+  '__doc__': """ Protobuf messages for input/output of RPC calls
+  
+  Attributes:
       dont_wait_for_device_ready:
           Prevent waiting until the device is ready before starting
           acquisition.  Defaults to false.  By default, MinKNOW will
@@ -699,6 +703,13 @@ BreamInfo = _reflection.GeneratedProtocolMessageType('BreamInfo', (_message.Mess
 _sym_db.RegisterMessage(BreamInfo)
 _sym_db.RegisterMessage(BreamInfo.Range)
 
+TargetRunUntilCriteria = _reflection.GeneratedProtocolMessageType('TargetRunUntilCriteria', (_message.Message,), {
+  'DESCRIPTOR' : _TARGETRUNUNTILCRITERIA,
+  '__module__' : 'minknow_api.acquisition_pb2'
+  # @@protoc_insertion_point(class_scope:minknow_api.acquisition.TargetRunUntilCriteria)
+  })
+_sym_db.RegisterMessage(TargetRunUntilCriteria)
+
 AcquisitionRunInfo = _reflection.GeneratedProtocolMessageType('AcquisitionRunInfo', (_message.Message,), {
   'DESCRIPTOR' : _ACQUISITIONRUNINFO,
   '__module__' : 'minknow_api.acquisition_pb2'
@@ -743,6 +754,9 @@ AcquisitionRunInfo = _reflection.GeneratedProtocolMessageType('AcquisitionRunInf
           Summary of writer yields.  Since 4.0
       bream_info:
           Set information provided by the Bream toolkit.
+      target_run_until_criteria:
+          Target Run-Until Critiera, used to determine when the
+          acquisition should be paused or stopped.  Since 5.3
   """,
   # @@protoc_insertion_point(class_scope:minknow_api.acquisition.AcquisitionRunInfo)
   })
@@ -867,100 +881,102 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   _ACQUISITIONSERVICE.methods_by_name['set_bream_info']._serialized_options = b'\220\002\002'
   _ACQUISITIONSERVICE.methods_by_name['append_mux_scan_result']._options = None
   _ACQUISITIONSERVICE.methods_by_name['append_mux_scan_result']._serialized_options = b'\220\002\002'
-  _MINKNOWSTATUS._serialized_start=5765
-  _MINKNOWSTATUS._serialized_end=5854
-  _OPTION._serialized_start=5856
-  _OPTION._serialized_end=5898
-  _PURPOSE._serialized_start=5900
-  _PURPOSE._serialized_end=5961
-  _ACQUISITIONSTATE._serialized_start=5963
-  _ACQUISITIONSTATE._serialized_end=6086
-  _ACQUISITIONSTOPREASON._serialized_start=6089
-  _ACQUISITIONSTOPREASON._serialized_end=6395
-  _STARTUPSTATE._serialized_start=6398
-  _STARTUPSTATE._serialized_end=6676
-  _FINISHINGSTATE._serialized_start=6679
-  _FINISHINGSTATE._serialized_end=6818
-  _STARTREQUEST._serialized_start=123
-  _STARTREQUEST._serialized_end=590
-  _STARTRESPONSE._serialized_start=592
-  _STARTRESPONSE._serialized_end=623
-  _STOPREQUEST._serialized_start=626
-  _STOPREQUEST._serialized_end=850
-  _STOPREQUEST_DATAACTION._serialized_start=768
-  _STOPREQUEST_DATAACTION._serialized_end=850
-  _STOPRESPONSE._serialized_start=852
-  _STOPRESPONSE._serialized_end=866
-  _WATCHFORSTATUSCHANGEREQUEST._serialized_start=868
-  _WATCHFORSTATUSCHANGEREQUEST._serialized_end=911
-  _WATCHFORSTATUSCHANGERESPONSE._serialized_start=913
-  _WATCHFORSTATUSCHANGERESPONSE._serialized_end=999
-  _CURRENTSTATUSREQUEST._serialized_start=1001
-  _CURRENTSTATUSREQUEST._serialized_end=1023
-  _CURRENTSTATUSRESPONSE._serialized_start=1025
-  _CURRENTSTATUSRESPONSE._serialized_end=1104
-  _GETPROGRESSREQUEST._serialized_start=1106
-  _GETPROGRESSREQUEST._serialized_end=1126
-  _GETPROGRESSRESPONSE._serialized_start=1129
-  _GETPROGRESSRESPONSE._serialized_end=1289
-  _GETPROGRESSRESPONSE_RAWPERCHANNEL._serialized_start=1237
-  _GETPROGRESSRESPONSE_RAWPERCHANNEL._serialized_end=1289
-  _GETACQUISITIONRUNINFOREQUEST._serialized_start=1291
-  _GETACQUISITIONRUNINFOREQUEST._serialized_end=1337
-  _ACQUISITIONYIELDSUMMARY._serialized_start=1340
-  _ACQUISITIONYIELDSUMMARY._serialized_end=1874
-  _ACQUISITIONWRITERSUMMARY._serialized_start=1877
-  _ACQUISITIONWRITERSUMMARY._serialized_end=2027
-  _CHANNELSTATEINFO._serialized_start=2030
-  _CHANNELSTATEINFO._serialized_end=2462
-  _CHANNELSTATEINFO_STYLE._serialized_start=2115
-  _CHANNELSTATEINFO_STYLE._serialized_end=2174
-  _CHANNELSTATEINFO_CHANNELSTATE._serialized_start=2176
-  _CHANNELSTATEINFO_CHANNELSTATE._serialized_end=2302
-  _CHANNELSTATEINFO_GROUP._serialized_start=2305
-  _CHANNELSTATEINFO_GROUP._serialized_end=2462
-  _ACQUISITIONCONFIGSUMMARY._serialized_start=2465
-  _ACQUISITIONCONFIGSUMMARY._serialized_end=3136
-  _MUXSCANMETADATA._serialized_start=3139
-  _MUXSCANMETADATA._serialized_end=3609
-  _MUXSCANMETADATA_STYLE._serialized_start=2115
-  _MUXSCANMETADATA_STYLE._serialized_end=2174
-  _MUXSCANMETADATA_CATEGORY._serialized_start=3336
-  _MUXSCANMETADATA_CATEGORY._serialized_end=3445
-  _MUXSCANMETADATA_CATEGORYGROUP._serialized_start=3448
-  _MUXSCANMETADATA_CATEGORYGROUP._serialized_end=3609
-  _MUXSCANRESULT._serialized_start=3612
-  _MUXSCANRESULT._serialized_end=3770
-  _MUXSCANRESULT_COUNTSENTRY._serialized_start=3725
-  _MUXSCANRESULT_COUNTSENTRY._serialized_end=3770
-  _BREAMINFO._serialized_start=3773
-  _BREAMINFO._serialized_end=4176
-  _BREAMINFO_RANGE._serialized_start=4135
-  _BREAMINFO_RANGE._serialized_end=4176
-  _ACQUISITIONRUNINFO._serialized_start=4179
-  _ACQUISITIONRUNINFO._serialized_end=5072
-  _LISTACQUISITIONRUNSREQUEST._serialized_start=5074
-  _LISTACQUISITIONRUNSREQUEST._serialized_end=5102
-  _LISTACQUISITIONRUNSRESPONSE._serialized_start=5104
-  _LISTACQUISITIONRUNSRESPONSE._serialized_end=5150
-  _GETCURRENTACQUISITIONRUNREQUEST._serialized_start=5152
-  _GETCURRENTACQUISITIONRUNREQUEST._serialized_end=5185
-  _WATCHCURRENTACQUISITIONRUNREQUEST._serialized_start=5187
-  _WATCHCURRENTACQUISITIONRUNREQUEST._serialized_end=5222
-  _SETSIGNALREADERREQUEST._serialized_start=5225
-  _SETSIGNALREADERREQUEST._serialized_end=5576
-  _SETSIGNALREADERREQUEST_SIGNALREADERTYPE._serialized_start=5475
-  _SETSIGNALREADERREQUEST_SIGNALREADERTYPE._serialized_end=5515
-  _SETSIGNALREADERREQUEST_SOURCEFILEMODE._serialized_start=5517
-  _SETSIGNALREADERREQUEST_SOURCEFILEMODE._serialized_end=5576
-  _SETSIGNALREADERRESPONSE._serialized_start=5578
-  _SETSIGNALREADERRESPONSE._serialized_end=5603
-  _SETBREAMINFOREQUEST._serialized_start=5605
-  _SETBREAMINFOREQUEST._serialized_end=5708
-  _SETBREAMINFORESPONSE._serialized_start=5710
-  _SETBREAMINFORESPONSE._serialized_end=5732
-  _APPENDMUXSCANRESULTRESPONSE._serialized_start=5734
-  _APPENDMUXSCANRESULTRESPONSE._serialized_end=5763
-  _ACQUISITIONSERVICE._serialized_start=6821
-  _ACQUISITIONSERVICE._serialized_end=8313
+  _MINKNOWSTATUS._serialized_start=6030
+  _MINKNOWSTATUS._serialized_end=6119
+  _OPTION._serialized_start=6121
+  _OPTION._serialized_end=6163
+  _PURPOSE._serialized_start=6165
+  _PURPOSE._serialized_end=6226
+  _ACQUISITIONSTATE._serialized_start=6228
+  _ACQUISITIONSTATE._serialized_end=6351
+  _ACQUISITIONSTOPREASON._serialized_start=6354
+  _ACQUISITIONSTOPREASON._serialized_end=6660
+  _STARTUPSTATE._serialized_start=6663
+  _STARTUPSTATE._serialized_end=6941
+  _FINISHINGSTATE._serialized_start=6944
+  _FINISHINGSTATE._serialized_end=7083
+  _STARTREQUEST._serialized_start=152
+  _STARTREQUEST._serialized_end=619
+  _STARTRESPONSE._serialized_start=621
+  _STARTRESPONSE._serialized_end=652
+  _STOPREQUEST._serialized_start=655
+  _STOPREQUEST._serialized_end=879
+  _STOPREQUEST_DATAACTION._serialized_start=797
+  _STOPREQUEST_DATAACTION._serialized_end=879
+  _STOPRESPONSE._serialized_start=881
+  _STOPRESPONSE._serialized_end=895
+  _WATCHFORSTATUSCHANGEREQUEST._serialized_start=897
+  _WATCHFORSTATUSCHANGEREQUEST._serialized_end=940
+  _WATCHFORSTATUSCHANGERESPONSE._serialized_start=942
+  _WATCHFORSTATUSCHANGERESPONSE._serialized_end=1028
+  _CURRENTSTATUSREQUEST._serialized_start=1030
+  _CURRENTSTATUSREQUEST._serialized_end=1052
+  _CURRENTSTATUSRESPONSE._serialized_start=1054
+  _CURRENTSTATUSRESPONSE._serialized_end=1133
+  _GETPROGRESSREQUEST._serialized_start=1135
+  _GETPROGRESSREQUEST._serialized_end=1155
+  _GETPROGRESSRESPONSE._serialized_start=1158
+  _GETPROGRESSRESPONSE._serialized_end=1318
+  _GETPROGRESSRESPONSE_RAWPERCHANNEL._serialized_start=1266
+  _GETPROGRESSRESPONSE_RAWPERCHANNEL._serialized_end=1318
+  _GETACQUISITIONRUNINFOREQUEST._serialized_start=1320
+  _GETACQUISITIONRUNINFOREQUEST._serialized_end=1366
+  _ACQUISITIONYIELDSUMMARY._serialized_start=1369
+  _ACQUISITIONYIELDSUMMARY._serialized_end=1903
+  _ACQUISITIONWRITERSUMMARY._serialized_start=1906
+  _ACQUISITIONWRITERSUMMARY._serialized_end=2056
+  _CHANNELSTATEINFO._serialized_start=2059
+  _CHANNELSTATEINFO._serialized_end=2491
+  _CHANNELSTATEINFO_STYLE._serialized_start=2144
+  _CHANNELSTATEINFO_STYLE._serialized_end=2203
+  _CHANNELSTATEINFO_CHANNELSTATE._serialized_start=2205
+  _CHANNELSTATEINFO_CHANNELSTATE._serialized_end=2331
+  _CHANNELSTATEINFO_GROUP._serialized_start=2334
+  _CHANNELSTATEINFO_GROUP._serialized_end=2491
+  _ACQUISITIONCONFIGSUMMARY._serialized_start=2494
+  _ACQUISITIONCONFIGSUMMARY._serialized_end=3165
+  _MUXSCANMETADATA._serialized_start=3168
+  _MUXSCANMETADATA._serialized_end=3638
+  _MUXSCANMETADATA_STYLE._serialized_start=2144
+  _MUXSCANMETADATA_STYLE._serialized_end=2203
+  _MUXSCANMETADATA_CATEGORY._serialized_start=3365
+  _MUXSCANMETADATA_CATEGORY._serialized_end=3474
+  _MUXSCANMETADATA_CATEGORYGROUP._serialized_start=3477
+  _MUXSCANMETADATA_CATEGORYGROUP._serialized_end=3638
+  _MUXSCANRESULT._serialized_start=3641
+  _MUXSCANRESULT._serialized_end=3799
+  _MUXSCANRESULT_COUNTSENTRY._serialized_start=3754
+  _MUXSCANRESULT_COUNTSENTRY._serialized_end=3799
+  _BREAMINFO._serialized_start=3802
+  _BREAMINFO._serialized_end=4205
+  _BREAMINFO_RANGE._serialized_start=4164
+  _BREAMINFO_RANGE._serialized_end=4205
+  _TARGETRUNUNTILCRITERIA._serialized_start=4208
+  _TARGETRUNUNTILCRITERIA._serialized_end=4357
+  _ACQUISITIONRUNINFO._serialized_start=4360
+  _ACQUISITIONRUNINFO._serialized_end=5337
+  _LISTACQUISITIONRUNSREQUEST._serialized_start=5339
+  _LISTACQUISITIONRUNSREQUEST._serialized_end=5367
+  _LISTACQUISITIONRUNSRESPONSE._serialized_start=5369
+  _LISTACQUISITIONRUNSRESPONSE._serialized_end=5415
+  _GETCURRENTACQUISITIONRUNREQUEST._serialized_start=5417
+  _GETCURRENTACQUISITIONRUNREQUEST._serialized_end=5450
+  _WATCHCURRENTACQUISITIONRUNREQUEST._serialized_start=5452
+  _WATCHCURRENTACQUISITIONRUNREQUEST._serialized_end=5487
+  _SETSIGNALREADERREQUEST._serialized_start=5490
+  _SETSIGNALREADERREQUEST._serialized_end=5841
+  _SETSIGNALREADERREQUEST_SIGNALREADERTYPE._serialized_start=5740
+  _SETSIGNALREADERREQUEST_SIGNALREADERTYPE._serialized_end=5780
+  _SETSIGNALREADERREQUEST_SOURCEFILEMODE._serialized_start=5782
+  _SETSIGNALREADERREQUEST_SOURCEFILEMODE._serialized_end=5841
+  _SETSIGNALREADERRESPONSE._serialized_start=5843
+  _SETSIGNALREADERRESPONSE._serialized_end=5868
+  _SETBREAMINFOREQUEST._serialized_start=5870
+  _SETBREAMINFOREQUEST._serialized_end=5973
+  _SETBREAMINFORESPONSE._serialized_start=5975
+  _SETBREAMINFORESPONSE._serialized_end=5997
+  _APPENDMUXSCANRESULTRESPONSE._serialized_start=5999
+  _APPENDMUXSCANRESULTRESPONSE._serialized_end=6028
+  _ACQUISITIONSERVICE._serialized_start=7086
+  _ACQUISITIONSERVICE._serialized_end=8578
 # @@protoc_insertion_point(module_scope)

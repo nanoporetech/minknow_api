@@ -64,6 +64,12 @@ __all__ = [
     "FindProtocolsResponse",
     "ListSettingsForProtocolRequest",
     "ListSettingsForProtocolResponse",
+    "Feature",
+    "FeatureList",
+    "GetFeaturesRequest",
+    "GetFeaturesResponse",
+    "SetFeaturesRequest",
+    "SetFeaturesResponse",
     "SimpleProtocolState",
     "NO_PROTOCOL_STATE",
     "PROTOCOL_RUNNING",
@@ -1571,6 +1577,91 @@ class ManagerService(object):
             raise ArgumentError("Unexpected keyword arguments to list_settings_for_protocol: '{}'".format(", ".join(unused_args)))
 
         return run_with_retry(self._stub.list_settings_for_protocol,
+                              _message, _timeout,
+                              [],
+                              "minknow_api.manager.ManagerService")
+    def get_features(self, _message=None, _timeout=None, **kwargs):
+        """Get the status of BETA/experimental features
+
+        This RPC has no side effects. Calling it will have no effect on the state of the
+        system. It is safe to call repeatedly, or to retry on failure, although there is no
+        guarantee it will return the same information each time.
+
+        Note this API is experimental - it may be changed, revised or removed in future minor versions.
+
+        Args:
+            _message (minknow_api.manager_pb2.GetFeaturesRequest, optional): The message to send.
+                This can be passed instead of the keyword arguments.
+            _timeout (float, optional): The call will be cancelled after this number of seconds
+                if it has not been completed.
+
+        Returns:
+            minknow_api.manager_pb2.GetFeaturesResponse
+
+        Note that the returned messages are actually wrapped in a type that collapses
+        submessages for fields marked with ``[rpc_unwrap]``.
+        """
+        print("Warning: Method ManagerService.get_features is experimental and may be changed, revised or removed in future minor versions.", file=sys.stderr)
+        if _message is not None:
+            if isinstance(_message, MessageWrapper):
+                _message = _message._message
+            return run_with_retry(self._stub.get_features,
+                                  _message, _timeout,
+                                  [],
+                                  "minknow_api.manager.ManagerService")
+
+        unused_args = set(kwargs.keys())
+
+        _message = GetFeaturesRequest()
+
+        if len(unused_args) > 0:
+            raise ArgumentError("Unexpected keyword arguments to get_features: '{}'".format(", ".join(unused_args)))
+
+        return run_with_retry(self._stub.get_features,
+                              _message, _timeout,
+                              [],
+                              "minknow_api.manager.ManagerService")
+    def set_features(self, _message=None, _timeout=None, **kwargs):
+        """Change whether features are enabled or disabled
+
+        
+
+        Note this API is experimental - it may be changed, revised or removed in future minor versions.
+
+        Args:
+            _message (minknow_api.manager_pb2.SetFeaturesRequest, optional): The message to send.
+                This can be passed instead of the keyword arguments.
+            _timeout (float, optional): The call will be cancelled after this number of seconds
+                if it has not been completed.
+            features (minknow_api.manager_pb2.FeatureList, optional): 
+
+        Returns:
+            minknow_api.manager_pb2.SetFeaturesResponse
+
+        Note that the returned messages are actually wrapped in a type that collapses
+        submessages for fields marked with ``[rpc_unwrap]``.
+        """
+        print("Warning: Method ManagerService.set_features is experimental and may be changed, revised or removed in future minor versions.", file=sys.stderr)
+        if _message is not None:
+            if isinstance(_message, MessageWrapper):
+                _message = _message._message
+            return run_with_retry(self._stub.set_features,
+                                  _message, _timeout,
+                                  [],
+                                  "minknow_api.manager.ManagerService")
+
+        unused_args = set(kwargs.keys())
+
+        _message = SetFeaturesRequest()
+
+        if "features" in kwargs:
+            unused_args.remove("features")
+            _message.features.CopyFrom(kwargs['features'])
+
+        if len(unused_args) > 0:
+            raise ArgumentError("Unexpected keyword arguments to set_features: '{}'".format(", ".join(unused_args)))
+
+        return run_with_retry(self._stub.set_features,
                               _message, _timeout,
                               [],
                               "minknow_api.manager.ManagerService")

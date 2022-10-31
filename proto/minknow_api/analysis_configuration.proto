@@ -168,8 +168,21 @@ service AnalysisConfigurationService {
     // This will change when the analysis configuration changes.
     rpc get_read_classifications (GetReadClassificationsRequest) returns (GetReadClassificationsResponse) {
         option idempotency_level = NO_SIDE_EFFECTS;
+    }
+
+
+    // Get the dynamic analysis configuration - this configuration can be changed during acquisition periods,
+    // and is reset at the start of acquisition.
+    rpc get_dynamic_analysis_configuration (GetDynamicAnalysisConfigurationRequest) returns (DynamicAnalysisConfiguration) {
+        option idempotency_level = NO_SIDE_EFFECTS;
     };
 
+    // Set the dynamic analysis configuration, used during 
+    //
+    // This can be changed during an acquisition period, and should be called as new values become appropriate.
+    // The new analysis parameters will be used after any data already received has been processe.
+    rpc set_dynamic_analysis_configuration(DynamicAnalysisConfiguration) returns (SetDynamicAnalysisConfigurationResponse) { }
+    
 }
 
 message EventDetection {
@@ -460,12 +473,68 @@ message ChannelStates {
 message GetAnalysisConfigurationRequest {
 }
 
+
+// Since 5.3
+message ReadScalingParams
+{
+    // Quantile Information:
+
+    // Position of quantiles in scaling data to use when computing scale parameters.
+    repeated float quantile_locations = 3;
+
+    // If present, must be the same length as quantile_locations.
+    // Represents the coefficients that shall be multiplied with measured quantiles to give a predicted_shift
+    repeated float quantile_weights_shift = 1;
+
+    // If present, must be the same length as quantile_locations.
+    // Represents the coefficients that shall be multiplied with measured quantiles to give a predicted_scale
+    repeated float quantile_weights_scale = 2;
+
+    // Tracking Information:
+
+    // Alpha value to use in ewma calculation for scale and shift tracking. 1 updates instantly. 0 does not update.
+    float tracking_alpha = 4;
+
+    // Alpha decay value to use. Higher values cause a more rapid decay in greater trust of earlier numbers.
+    float alpha_number_estimates_decay = 5;
+
+    // Maximum difference in event quantiles which will be added into trackers. 
+    // This is used to filter away cases where pore signal is included in the read and thus cannot be trusted.
+    float quantile_maxdiff = 10;
+
+
+    // Maximum fraction change between one tracked value and the next which will be trusted. Higher values are not trusted.
+    float trust_limit_fraction = 6;
+
+    // Event collection Params:
+
+    // The minimum difference between an event and the next to include it in the subsampling
+    float diff_threshold = 7;
+
+    // After how many cumulative pA is a new event emitted in the subsampling
+    float emission_threshold = 8;
+
+    // Cumulative pA sum required to compute scaling. Any events after this sum are not considered in scaling.
+    float dacs_breakpoint = 9;
+
+    // Scale factor applied to conductance to produce a basic scale estimate, also combined with q90_q10_to_normal.
+    float conductance_factor_scale = 11;
+    
+    // Scale factor applied to conductance to produce a basic shift estimate.
+    float conductance_factor_shift = 12;
+    float q90_q10_to_normal = 13;
+}
+
 message AnalysisConfiguration {
     EventDetection event_detection = 1;
     ReadDetectionParams read_detection = 2;
 
     ReadClassificationParams read_classification = 4;
     map<string, ChannelStates> channel_states = 7;
+    
+    // Add read scale tracking to the pipeline.
+    // If this message is unspecified, read scaling is not enabled.
+    ReadScalingParams read_scaling = 8;
 }
 
 message SetAnalysisConfigurationResponse {
@@ -967,6 +1036,31 @@ message WriterConfiguration {
         bool disable_writing_multiple_alignments = 4;
     }
 
+    message ReadPod5Configuration {
+        // Control if a POD5 file should be generated per channel.
+        ChannelConfiguration enable = 1;
+
+        // The pattern used to find a POD5 files name.
+        //
+        // default: pod5{basecall_status}/{flow_cell_id}_{run_id}_{batch_number}.pod5
+        // Where each {xxx} section is replaced with an attribute from the minknow state when the file is written.
+        //
+        // See file pattern attributes above.
+        string file_pattern = 2;
+
+        // How many files are placed in each batch (after batch_count files {batch_number} is increased in the filename).
+        //
+        // Set to zero to disable batching.
+        uint32 batch_count = 3;
+
+        // Prevent reads which have successfully basecalled being written to pod5.
+        bool disable_writing_passed_reads = 4;
+        // Prevent reads which have failed basecalling being written to pod5.
+        bool disable_writing_failed_reads = 5;
+        // disable writing reads which have been force skipped by the basecaller.
+        bool disable_writing_force_skipped_reads = 6;
+    }
+
     message ReadProtobufConfiguration {
         // Control if a protobuf file should be generated per channel.
         ChannelConfiguration enable = 1;
@@ -1181,6 +1275,11 @@ message WriterConfiguration {
     // If not specified, no BAM outputs are generated.
     ReadBamConfiguration read_bam = 8;
 
+    // Configuration for the POD5 writer.
+    //
+    // If not specified no POD5 outputs are generated.
+    ReadPod5Configuration read_pod5 = 10;
+
     // Configuration for the protobuf writer.
     //
     // If not specified, no protobuf outputs are generated.
@@ -1219,3 +1318,25 @@ message GetReadClassificationsRequest {}
 message GetReadClassificationsResponse {
     map<int32, string> read_classifications = 1;
 }
+
+message DynamicAnalysisConfiguration {
+
+    message ReadScaleTracking {
+        // Set the voltage the most recent conductance scan occured at.
+        float conductance_scan_voltage = 1;
+
+        message ChannelConductance {
+            // Per well conductance values.
+            repeated float well_conductance = 1;
+        }
+
+        // Per channel/well conductance values
+        repeated ChannelConductance channel_conductance = 2;
+    }
+
+    // Parameters for read scale tracking:
+    ReadScaleTracking read_scale_tracking = 1;
+}
+
+message GetDynamicAnalysisConfigurationRequest {}
+message SetDynamicAnalysisConfigurationResponse {}

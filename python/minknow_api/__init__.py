@@ -60,6 +60,10 @@ protocol
 promethion_device
     PromethION-specific device interface. This exposes low-level settings for PromethIONs. See
     `promethion_device_service.PromethionDeviceService` for a description of the available methods.
+run_until
+    Get and set criteria, values and updates which relate to stopping an acquisition when certain
+    run-until criteria are met.  See run_until_service.RunUntilService for a description of the
+    available methods.
 statistics
     Get statistics about an acquisition period. Statistics can be streamed live during acquisition,
     or retreived afterwards. See `statistics_service.StatisticsService` for a description of the
@@ -115,6 +119,7 @@ _services = {
     "production": ["ProductionService"],
     "promethion_device": ["PromethionDeviceService"],
     "protocol": ["ProtocolService"],
+    "run_until": ["RunUntilService"],
     "statistics": ["StatisticsService"],
     "traxion_device": ["TraxionDeviceService"],
 }

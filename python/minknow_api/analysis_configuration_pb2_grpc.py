@@ -84,6 +84,16 @@ class AnalysisConfigurationServiceStub(object):
                 request_serializer=minknow__api_dot_analysis__configuration__pb2.GetReadClassificationsRequest.SerializeToString,
                 response_deserializer=minknow__api_dot_analysis__configuration__pb2.GetReadClassificationsResponse.FromString,
                 )
+        self.get_dynamic_analysis_configuration = channel.unary_unary(
+                '/minknow_api.analysis_configuration.AnalysisConfigurationService/get_dynamic_analysis_configuration',
+                request_serializer=minknow__api_dot_analysis__configuration__pb2.GetDynamicAnalysisConfigurationRequest.SerializeToString,
+                response_deserializer=minknow__api_dot_analysis__configuration__pb2.DynamicAnalysisConfiguration.FromString,
+                )
+        self.set_dynamic_analysis_configuration = channel.unary_unary(
+                '/minknow_api.analysis_configuration.AnalysisConfigurationService/set_dynamic_analysis_configuration',
+                request_serializer=minknow__api_dot_analysis__configuration__pb2.DynamicAnalysisConfiguration.SerializeToString,
+                response_deserializer=minknow__api_dot_analysis__configuration__pb2.SetDynamicAnalysisConfigurationResponse.FromString,
+                )
 
 
 class AnalysisConfigurationServiceServicer(object):
@@ -278,6 +288,24 @@ class AnalysisConfigurationServiceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def get_dynamic_analysis_configuration(self, request, context):
+        """Get the dynamic analysis configuration - this configuration can be changed during acquisition periods,
+        and is reset at the start of acquisition.
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def set_dynamic_analysis_configuration(self, request, context):
+        """Set the dynamic analysis configuration, used during 
+
+        This can be changed during an acquisition period, and should be called as new values become appropriate.
+        The new analysis parameters will be used after any data already received has been processe.
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_AnalysisConfigurationServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -350,6 +378,16 @@ def add_AnalysisConfigurationServiceServicer_to_server(servicer, server):
                     servicer.get_read_classifications,
                     request_deserializer=minknow__api_dot_analysis__configuration__pb2.GetReadClassificationsRequest.FromString,
                     response_serializer=minknow__api_dot_analysis__configuration__pb2.GetReadClassificationsResponse.SerializeToString,
+            ),
+            'get_dynamic_analysis_configuration': grpc.unary_unary_rpc_method_handler(
+                    servicer.get_dynamic_analysis_configuration,
+                    request_deserializer=minknow__api_dot_analysis__configuration__pb2.GetDynamicAnalysisConfigurationRequest.FromString,
+                    response_serializer=minknow__api_dot_analysis__configuration__pb2.DynamicAnalysisConfiguration.SerializeToString,
+            ),
+            'set_dynamic_analysis_configuration': grpc.unary_unary_rpc_method_handler(
+                    servicer.set_dynamic_analysis_configuration,
+                    request_deserializer=minknow__api_dot_analysis__configuration__pb2.DynamicAnalysisConfiguration.FromString,
+                    response_serializer=minknow__api_dot_analysis__configuration__pb2.SetDynamicAnalysisConfigurationResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -596,5 +634,39 @@ class AnalysisConfigurationService(object):
         return grpc.experimental.unary_unary(request, target, '/minknow_api.analysis_configuration.AnalysisConfigurationService/get_read_classifications',
             minknow__api_dot_analysis__configuration__pb2.GetReadClassificationsRequest.SerializeToString,
             minknow__api_dot_analysis__configuration__pb2.GetReadClassificationsResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def get_dynamic_analysis_configuration(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/minknow_api.analysis_configuration.AnalysisConfigurationService/get_dynamic_analysis_configuration',
+            minknow__api_dot_analysis__configuration__pb2.GetDynamicAnalysisConfigurationRequest.SerializeToString,
+            minknow__api_dot_analysis__configuration__pb2.DynamicAnalysisConfiguration.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def set_dynamic_analysis_configuration(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/minknow_api.analysis_configuration.AnalysisConfigurationService/set_dynamic_analysis_configuration',
+            minknow__api_dot_analysis__configuration__pb2.DynamicAnalysisConfiguration.SerializeToString,
+            minknow__api_dot_analysis__configuration__pb2.SetDynamicAnalysisConfigurationResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

@@ -162,6 +162,9 @@ class Basecaller(object):
                 basecalled. If True, subdirectories of those directories will also be searched recursively.
             barcoding_configuration (minknow_api.analysis_configuration_pb2.BarcodingConfiguration, optional): Options to control barcoding performed once basecalling reads is complete.
             alignment_configuration (minknow_api.analysis_configuration_pb2.AlignmentConfiguration, optional): Options to control alignment performed once basecalling reads is complete.
+            enable_read_splitting (bool, optional): Enable read splitting in guppy
+            min_score_read_splitting (google.protobuf.wrappers_pb2.FloatValue, optional): Override score to use for guppy read splitting. If not specified a default value
+                is used from guppy.
 
         Returns:
             minknow_api.basecaller_pb2.StartBasecallingResponse
@@ -220,6 +223,14 @@ class Basecaller(object):
         if "alignment_configuration" in kwargs:
             unused_args.remove("alignment_configuration")
             _message.alignment_configuration.CopyFrom(kwargs['alignment_configuration'])
+
+        if "enable_read_splitting" in kwargs:
+            unused_args.remove("enable_read_splitting")
+            _message.enable_read_splitting = kwargs['enable_read_splitting']
+
+        if "min_score_read_splitting" in kwargs:
+            unused_args.remove("min_score_read_splitting")
+            _message.min_score_read_splitting.value = kwargs['min_score_read_splitting']
 
         if len(unused_args) > 0:
             raise ArgumentError("Unexpected keyword arguments to start_basecalling: '{}'".format(", ".join(unused_args)))

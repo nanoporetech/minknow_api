@@ -314,12 +314,28 @@ message OffloadLocationInfo {
     //
     // Valid `location_id`s can be retrieved using mooneye.offload_manager.list_offload_locations()
     //
+    // If any `offload_location_ids` are specified, then:
+    //   - Data is not stored locally
+    //   - `offload_location_path` must NOT be set (or must be set to an empty value)
+    //      - The `offload_location_ids` indicate that data should be offloaded, rather than
+    //        stored locally; the `offload_location_path` is used to set a local storage location.
+    //      - If both are set, an error is returned
+    //
     // This requires a running instance of Mooneye
     //
     // Since 5.0.
     repeated string offload_location_ids = 1;
 
     // Local, e.g., internal / external drive, paths to where the protocol output will be stored.
+    //
+    // This setting overrides the default output locations (as set through configuration files
+    // and/or the instance service).
+    //
+    // If `offload_location_path` is set to a non-empty value, then:
+    //  -  `offload_location_ids` MUST be empty
+    //      - The `offload_location_ids` indicate that data should be offloaded, rather than
+    //        stored locally; the `offload_location_path` is used to set a local storage location.
+    //      - If both are set, an error is returned
     //
     // This does not require a running instance of Mooneye
     //
@@ -341,6 +357,12 @@ message StartProtocolRequest {
     //
     // Since 5.0.
     OffloadLocationInfo offload_location_info = 4;
+
+    // Initial Target Run-Until Criteria to use when starting an acquisition for this protocol.
+    // These can be updated during the acquisition using the Run-Until API.
+    //
+    // Since 5.3
+    acquisition.TargetRunUntilCriteria target_run_until_criteria = 5;
 }
 
 message StartProtocolResponse {
@@ -790,6 +812,12 @@ message BeginProtocolRequest {
     //
     // Since 5.0.
     OffloadLocationInfo offload_location_info = 5;
+
+    // Initial Target Run-Until Criteria to use when starting an acquisition for this protocol.
+    // These can be updated during the acquisition using the Run-Until API.
+    //
+    // Since 5.3
+    acquisition.TargetRunUntilCriteria target_run_until_criteria = 6;
 
     // Any settings changed from the defaults specified in the protocol's .toml file.
     map<string, protocol_settings.ProtocolSetting.ProtocolSettingValue> settings = 4;

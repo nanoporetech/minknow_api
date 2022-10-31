@@ -14,12 +14,13 @@ _sym_db = _symbol_database.Default()
 
 
 from google.protobuf import timestamp_pb2 as google_dot_protobuf_dot_timestamp__pb2
+from google.protobuf import wrappers_pb2 as google_dot_protobuf_dot_wrappers__pb2
 from minknow_api import analysis_configuration_pb2 as minknow__api_dot_analysis__configuration__pb2
 from minknow_api import protocol_settings_pb2 as minknow__api_dot_protocol__settings__pb2
 from minknow_api import rpc_options_pb2 as minknow__api_dot_rpc__options__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x1cminknow_api/basecaller.proto\x12\x16minknow_api.basecaller\x1a\x1fgoogle/protobuf/timestamp.proto\x1a(minknow_api/analysis_configuration.proto\x1a#minknow_api/protocol_settings.proto\x1a\x1dminknow_api/rpc_options.proto\"\x19\n\x17ListConfigsByKitRequest\"\xf4\x03\n\x18ListConfigsByKitResponse\x12`\n\x11\x66low_cell_configs\x18\x01 \x03(\x0b\x32\x45.minknow_api.basecaller.ListConfigsByKitResponse.FlowCellConfigsEntry\x1a\x1d\n\nConfigList\x12\x0f\n\x07\x63onfigs\x18\x01 \x03(\t\x1a\xe0\x01\n\x0bPerFlowCell\x12\x61\n\x0bkit_configs\x18\x01 \x03(\x0b\x32L.minknow_api.basecaller.ListConfigsByKitResponse.PerFlowCell.KitConfigsEntry\x1an\n\x0fKitConfigsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12J\n\x05value\x18\x02 \x01(\x0b\x32;.minknow_api.basecaller.ListConfigsByKitResponse.ConfigList:\x02\x38\x01\x1at\n\x14\x46lowCellConfigsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12K\n\x05value\x18\x02 \x01(\x0b\x32<.minknow_api.basecaller.ListConfigsByKitResponse.PerFlowCell:\x02\x38\x01\"\x8f\x03\n\x17StartBasecallingRequest\x12\x0c\n\x04name\x18\x0c \x01(\t\x12\x1f\n\x17input_reads_directories\x18\x01 \x03(\t\x12\x1e\n\x16output_reads_directory\x18\x02 \x01(\t\x12\x15\n\rconfiguration\x18\x03 \x01(\t\x12\x11\n\tfast5_out\x18\x04 \x01(\x08\x12\x16\n\x0e\x63ompress_fastq\x18\x05 \x01(\x08\x12\x16\n\x0e\x64isable_events\x18\x06 \x01(\x08\x12\x11\n\trecursive\x18\x07 \x01(\x08\x12[\n\x17\x62\x61rcoding_configuration\x18\n \x01(\x0b\x32:.minknow_api.analysis_configuration.BarcodingConfiguration\x12[\n\x17\x61lignment_configuration\x18\x0b \x01(\x0b\x32:.minknow_api.analysis_configuration.AlignmentConfiguration\"&\n\x18StartBasecallingResponse\x12\n\n\x02id\x18\x01 \x01(\t\"\xee\x01\n\x15StartBarcodingRequest\x12\x0c\n\x04name\x18\x0b \x01(\t\x12\x1f\n\x17input_reads_directories\x18\x01 \x03(\t\x12\x1e\n\x16output_reads_directory\x18\x02 \x01(\t\x12\x16\n\x0e\x63ompress_fastq\x18\x04 \x01(\x08\x12\x11\n\trecursive\x18\x05 \x01(\x08\x12[\n\x17\x62\x61rcoding_configuration\x18\n \x01(\x0b\x32:.minknow_api.analysis_configuration.BarcodingConfiguration\"$\n\x16StartBarcodingResponse\x12\n\n\x02id\x18\x01 \x01(\t\"\xd6\x01\n\x15StartAlignmentRequest\x12\x0c\n\x04name\x18\x07 \x01(\t\x12\x1f\n\x17input_reads_directories\x18\x01 \x03(\t\x12\x1e\n\x16output_reads_directory\x18\x02 \x01(\t\x12\x11\n\trecursive\x18\x04 \x01(\x08\x12[\n\x17\x61lignment_configuration\x18\x06 \x01(\x0b\x32:.minknow_api.analysis_configuration.AlignmentConfiguration\"$\n\x16StartAlignmentResponse\x12\n\n\x02id\x18\x01 \x01(\t\"\xce\x03\n\"StartPostProcessingProtocolRequest\x12\x12\n\nidentifier\x18\x01 \x01(\t\x12\"\n\x1asequencing_protocol_run_id\x18\x07 \x01(\t\x12\x1d\n\x15input_fast5_directory\x18\x02 \x01(\t\x12\x1d\n\x15input_fastq_directory\x18\x03 \x01(\t\x12\x1b\n\x13input_bam_directory\x18\x04 \x01(\t\x12\x19\n\x11sample_sheet_path\x18\x08 \x01(\t\x12\x18\n\x10output_directory\x18\x05 \x01(\t\x12\x65\n\x0esetting_values\x18\x06 \x03(\x0b\x32M.minknow_api.basecaller.StartPostProcessingProtocolRequest.SettingValuesEntry\x1ay\n\x12SettingValuesEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12R\n\x05value\x18\x02 \x01(\x0b\x32\x43.minknow_api.protocol_settings.ProtocolSetting.ProtocolSettingValue:\x02\x38\x01\"\x87\x03\n\x0cStartRequest\x12T\n\x19start_basecalling_request\x18\x02 \x01(\x0b\x32/.minknow_api.basecaller.StartBasecallingRequestH\x00\x12P\n\x17start_barcoding_request\x18\x03 \x01(\x0b\x32-.minknow_api.basecaller.StartBarcodingRequestH\x00\x12P\n\x17start_alignment_request\x18\x04 \x01(\x0b\x32-.minknow_api.basecaller.StartAlignmentRequestH\x00\x12l\n&start_post_processing_protocol_request\x18\x05 \x01(\x0b\x32:.minknow_api.basecaller.StartPostProcessingProtocolRequestH\x00\x42\x0f\n\rstart_request\"1\n#StartPostProcessingProtocolResponse\x12\n\n\x02id\x18\x01 \x01(\t\"\x1b\n\rCancelRequest\x12\n\n\x02id\x18\x01 \x01(\t\"\x10\n\x0e\x43\x61ncelResponse\"\xb4\x05\n\x07RunInfo\x12\n\n\x02id\x18\x01 \x01(\t\x12T\n\x19start_basecalling_request\x18\x02 \x01(\x0b\x32/.minknow_api.basecaller.StartBasecallingRequestH\x00\x12P\n\x17start_barcoding_request\x18\x0b \x01(\x0b\x32-.minknow_api.basecaller.StartBarcodingRequestH\x00\x12P\n\x17start_alignment_request\x18\x0c \x01(\x0b\x32-.minknow_api.basecaller.StartAlignmentRequestH\x00\x12l\n&start_post_processing_protocol_request\x18\r \x01(\x0b\x32:.minknow_api.basecaller.StartPostProcessingProtocolRequestH\x00\x12,\n\x05state\x18\x03 \x01(\x0e\x32\x1d.minknow_api.basecaller.State\x12\x0e\n\x06\x65rrors\x18\x04 \x03(\t\x12\x18\n\x10\x66iles_discovered\x18\x05 \x01(\x05\x12\x18\n\x10progress_current\x18\x06 \x01(\x05\x12\x16\n\x0eprogress_total\x18\x07 \x01(\x05\x12.\n\nstart_time\x18\x08 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12,\n\x08\x65nd_time\x18\t \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x36\n\x12\x65stimated_end_time\x18\n \x01(\x0b\x32\x1a.google.protobuf.TimestampB\x15\n\x13start_request_oneof\"\xbc\x01\n\x0eGetInfoRequest\x12\x39\n\x06preset\x18\x01 \x01(\x0e\x32\'.minknow_api.basecaller.SelectionPresetH\x00\x12\x0c\n\x02id\x18\x02 \x01(\tH\x00\x12=\n\x04list\x18\x03 \x01(\x0b\x32-.minknow_api.basecaller.GetInfoRequest.IdListH\x00\x1a\x15\n\x06IdList\x12\x0b\n\x03ids\x18\x01 \x03(\tB\x0b\n\tselection\"@\n\x0fGetInfoResponse\x12-\n\x04runs\x18\x01 \x03(\x0b\x32\x1f.minknow_api.basecaller.RunInfo\"*\n\x0cWatchRequest\x12\x1a\n\x12send_finished_runs\x18\x01 \x01(\x08\">\n\rWatchResponse\x12-\n\x04runs\x18\x01 \x03(\x0b\x32\x1f.minknow_api.basecaller.RunInfo\"^\n\x19MakeAlignmentIndexRequest\x12!\n\x19input_alignment_reference\x18\x01 \x01(\t\x12\x1e\n\x16output_alignment_index\x18\x02 \x01(\t\"\x1c\n\x1aMakeAlignmentIndexResponse\"$\n\"ListPostProcessingProtocolsRequest\"\xa6\x01\n\x1aPostProcessingProtocolInfo\x12\x12\n\nidentifier\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x0f\n\x07version\x18\x03 \x01(\t\x12\x13\n\x0b\x64\x65scription\x18\x04 \x01(\t\x12@\n\x08provider\x18\x05 \x01(\x0e\x32..minknow_api.basecaller.PostProcessingProvider\"l\n#ListPostProcessingProtocolsResponse\x12\x45\n\tprotocols\x18\x01 \x03(\x0b\x32\x32.minknow_api.basecaller.PostProcessingProtocolInfo\"B\n,ListSettingsForPostProcessingProtocolRequest\x12\x12\n\nidentifier\x18\x01 \x01(\t\"\xd2\x01\n-ListSettingsForPostProcessingProtocolResponse\x12\x1c\n\x14requires_fast5_input\x18\x01 \x01(\x08\x12\x1c\n\x14requires_fastq_input\x18\x02 \x01(\x08\x12\x1a\n\x12requires_bam_input\x18\x03 \x01(\x08\x12I\n\x11protocol_settings\x18\x04 \x03(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\"5\n\x15UpdateProgressRequest\x12\n\n\x02id\x18\x01 \x01(\t\x12\x10\n\x08progress\x18\x02 \x01(\x02\"\x18\n\x16UpdateProgressResponse\"*\n\x0fSendPingRequest\x12\x17\n\tping_data\x18\x01 \x01(\tB\x04\x88\xb5\x18\x01\"\x12\n\x10SendPingResponse*S\n\x05State\x12\x11\n\rSTATE_RUNNING\x10\x00\x12\x11\n\rSTATE_SUCCESS\x10\x01\x12\x0f\n\x0bSTATE_ERROR\x10\x02\x12\x13\n\x0fSTATE_CANCELLED\x10\x03*[\n\x0fSelectionPreset\x12\x16\n\x12PRESET_ALL_RUNNING\x10\x00\x12 \n\x1cPRESET_MOST_RECENTLY_STARTED\x10\x01\x12\x0e\n\nPRESET_ALL\x10\x02*0\n\x16PostProcessingProvider\x12\n\n\x06SCRIPT\x10\x00\x12\n\n\x06\x45PI2ME\x10\x01\x32\xfd\x0c\n\nBasecaller\x12}\n\x13list_configs_by_kit\x12/.minknow_api.basecaller.ListConfigsByKitRequest\x1a\x30.minknow_api.basecaller.ListConfigsByKitResponse\"\x03\x90\x02\x01\x12x\n\x11start_basecalling\x12/.minknow_api.basecaller.StartBasecallingRequest\x1a\x30.minknow_api.basecaller.StartBasecallingResponse\"\x00\x12r\n\x0fstart_barcoding\x12-.minknow_api.basecaller.StartBarcodingRequest\x1a..minknow_api.basecaller.StartBarcodingResponse\"\x00\x12\x9b\x01\n\x1estart_post_processing_protocol\x12:.minknow_api.basecaller.StartPostProcessingProtocolRequest\x1a;.minknow_api.basecaller.StartPostProcessingProtocolResponse\"\x00\x12r\n\x0fstart_alignment\x12-.minknow_api.basecaller.StartAlignmentRequest\x1a..minknow_api.basecaller.StartAlignmentResponse\"\x00\x12\\\n\x06\x63\x61ncel\x12%.minknow_api.basecaller.CancelRequest\x1a&.minknow_api.basecaller.CancelResponse\"\x03\x90\x02\x02\x12\x62\n\x08get_info\x12&.minknow_api.basecaller.GetInfoRequest\x1a\'.minknow_api.basecaller.GetInfoResponse\"\x03\x90\x02\x01\x30\x01\x12[\n\x05watch\x12$.minknow_api.basecaller.WatchRequest\x1a%.minknow_api.basecaller.WatchResponse\"\x03\x90\x02\x01\x30\x01\x12\x7f\n\x14make_alignment_index\x12\x31.minknow_api.basecaller.MakeAlignmentIndexRequest\x1a\x32.minknow_api.basecaller.MakeAlignmentIndexResponse\"\x00\x12\x9e\x01\n\x1elist_post_processing_protocols\x12:.minknow_api.basecaller.ListPostProcessingProtocolsRequest\x1a;.minknow_api.basecaller.ListPostProcessingProtocolsResponse\"\x03\x90\x02\x02\x12\xbe\x01\n*list_settings_for_post_processing_protocol\x12\x44.minknow_api.basecaller.ListSettingsForPostProcessingProtocolRequest\x1a\x45.minknow_api.basecaller.ListSettingsForPostProcessingProtocolResponse\"\x03\x90\x02\x01\x12\x8b\x01\n(update_post_processing_protocol_progress\x12-.minknow_api.basecaller.UpdateProgressRequest\x1a..minknow_api.basecaller.UpdateProgressResponse\"\x00\x12`\n\tsend_ping\x12\'.minknow_api.basecaller.SendPingRequest\x1a(.minknow_api.basecaller.SendPingResponse\"\x00\x42&\n\x1c\x63om.nanoporetech.minknow_api\xa2\x02\x05MKAPIb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x1cminknow_api/basecaller.proto\x12\x16minknow_api.basecaller\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1egoogle/protobuf/wrappers.proto\x1a(minknow_api/analysis_configuration.proto\x1a#minknow_api/protocol_settings.proto\x1a\x1dminknow_api/rpc_options.proto\"\x19\n\x17ListConfigsByKitRequest\"\xf4\x03\n\x18ListConfigsByKitResponse\x12`\n\x11\x66low_cell_configs\x18\x01 \x03(\x0b\x32\x45.minknow_api.basecaller.ListConfigsByKitResponse.FlowCellConfigsEntry\x1a\x1d\n\nConfigList\x12\x0f\n\x07\x63onfigs\x18\x01 \x03(\t\x1a\xe0\x01\n\x0bPerFlowCell\x12\x61\n\x0bkit_configs\x18\x01 \x03(\x0b\x32L.minknow_api.basecaller.ListConfigsByKitResponse.PerFlowCell.KitConfigsEntry\x1an\n\x0fKitConfigsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12J\n\x05value\x18\x02 \x01(\x0b\x32;.minknow_api.basecaller.ListConfigsByKitResponse.ConfigList:\x02\x38\x01\x1at\n\x14\x46lowCellConfigsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12K\n\x05value\x18\x02 \x01(\x0b\x32<.minknow_api.basecaller.ListConfigsByKitResponse.PerFlowCell:\x02\x38\x01\"\xed\x03\n\x17StartBasecallingRequest\x12\x0c\n\x04name\x18\x0c \x01(\t\x12\x1f\n\x17input_reads_directories\x18\x01 \x03(\t\x12\x1e\n\x16output_reads_directory\x18\x02 \x01(\t\x12\x15\n\rconfiguration\x18\x03 \x01(\t\x12\x11\n\tfast5_out\x18\x04 \x01(\x08\x12\x16\n\x0e\x63ompress_fastq\x18\x05 \x01(\x08\x12\x16\n\x0e\x64isable_events\x18\x06 \x01(\x08\x12\x11\n\trecursive\x18\x07 \x01(\x08\x12[\n\x17\x62\x61rcoding_configuration\x18\n \x01(\x0b\x32:.minknow_api.analysis_configuration.BarcodingConfiguration\x12[\n\x17\x61lignment_configuration\x18\x0b \x01(\x0b\x32:.minknow_api.analysis_configuration.AlignmentConfiguration\x12\x1d\n\x15\x65nable_read_splitting\x18\r \x01(\x08\x12=\n\x18min_score_read_splitting\x18\x0e \x01(\x0b\x32\x1b.google.protobuf.FloatValue\"&\n\x18StartBasecallingResponse\x12\n\n\x02id\x18\x01 \x01(\t\"\xee\x01\n\x15StartBarcodingRequest\x12\x0c\n\x04name\x18\x0b \x01(\t\x12\x1f\n\x17input_reads_directories\x18\x01 \x03(\t\x12\x1e\n\x16output_reads_directory\x18\x02 \x01(\t\x12\x16\n\x0e\x63ompress_fastq\x18\x04 \x01(\x08\x12\x11\n\trecursive\x18\x05 \x01(\x08\x12[\n\x17\x62\x61rcoding_configuration\x18\n \x01(\x0b\x32:.minknow_api.analysis_configuration.BarcodingConfiguration\"$\n\x16StartBarcodingResponse\x12\n\n\x02id\x18\x01 \x01(\t\"\xd6\x01\n\x15StartAlignmentRequest\x12\x0c\n\x04name\x18\x07 \x01(\t\x12\x1f\n\x17input_reads_directories\x18\x01 \x03(\t\x12\x1e\n\x16output_reads_directory\x18\x02 \x01(\t\x12\x11\n\trecursive\x18\x04 \x01(\x08\x12[\n\x17\x61lignment_configuration\x18\x06 \x01(\x0b\x32:.minknow_api.analysis_configuration.AlignmentConfiguration\"$\n\x16StartAlignmentResponse\x12\n\n\x02id\x18\x01 \x01(\t\"\xce\x03\n\"StartPostProcessingProtocolRequest\x12\x12\n\nidentifier\x18\x01 \x01(\t\x12\"\n\x1asequencing_protocol_run_id\x18\x07 \x01(\t\x12\x1d\n\x15input_fast5_directory\x18\x02 \x01(\t\x12\x1d\n\x15input_fastq_directory\x18\x03 \x01(\t\x12\x1b\n\x13input_bam_directory\x18\x04 \x01(\t\x12\x19\n\x11sample_sheet_path\x18\x08 \x01(\t\x12\x18\n\x10output_directory\x18\x05 \x01(\t\x12\x65\n\x0esetting_values\x18\x06 \x03(\x0b\x32M.minknow_api.basecaller.StartPostProcessingProtocolRequest.SettingValuesEntry\x1ay\n\x12SettingValuesEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12R\n\x05value\x18\x02 \x01(\x0b\x32\x43.minknow_api.protocol_settings.ProtocolSetting.ProtocolSettingValue:\x02\x38\x01\"\x87\x03\n\x0cStartRequest\x12T\n\x19start_basecalling_request\x18\x02 \x01(\x0b\x32/.minknow_api.basecaller.StartBasecallingRequestH\x00\x12P\n\x17start_barcoding_request\x18\x03 \x01(\x0b\x32-.minknow_api.basecaller.StartBarcodingRequestH\x00\x12P\n\x17start_alignment_request\x18\x04 \x01(\x0b\x32-.minknow_api.basecaller.StartAlignmentRequestH\x00\x12l\n&start_post_processing_protocol_request\x18\x05 \x01(\x0b\x32:.minknow_api.basecaller.StartPostProcessingProtocolRequestH\x00\x42\x0f\n\rstart_request\"1\n#StartPostProcessingProtocolResponse\x12\n\n\x02id\x18\x01 \x01(\t\"\x1b\n\rCancelRequest\x12\n\n\x02id\x18\x01 \x01(\t\"\x10\n\x0e\x43\x61ncelResponse\"\xb4\x05\n\x07RunInfo\x12\n\n\x02id\x18\x01 \x01(\t\x12T\n\x19start_basecalling_request\x18\x02 \x01(\x0b\x32/.minknow_api.basecaller.StartBasecallingRequestH\x00\x12P\n\x17start_barcoding_request\x18\x0b \x01(\x0b\x32-.minknow_api.basecaller.StartBarcodingRequestH\x00\x12P\n\x17start_alignment_request\x18\x0c \x01(\x0b\x32-.minknow_api.basecaller.StartAlignmentRequestH\x00\x12l\n&start_post_processing_protocol_request\x18\r \x01(\x0b\x32:.minknow_api.basecaller.StartPostProcessingProtocolRequestH\x00\x12,\n\x05state\x18\x03 \x01(\x0e\x32\x1d.minknow_api.basecaller.State\x12\x0e\n\x06\x65rrors\x18\x04 \x03(\t\x12\x18\n\x10\x66iles_discovered\x18\x05 \x01(\x05\x12\x18\n\x10progress_current\x18\x06 \x01(\x05\x12\x16\n\x0eprogress_total\x18\x07 \x01(\x05\x12.\n\nstart_time\x18\x08 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12,\n\x08\x65nd_time\x18\t \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x36\n\x12\x65stimated_end_time\x18\n \x01(\x0b\x32\x1a.google.protobuf.TimestampB\x15\n\x13start_request_oneof\"\xbc\x01\n\x0eGetInfoRequest\x12\x39\n\x06preset\x18\x01 \x01(\x0e\x32\'.minknow_api.basecaller.SelectionPresetH\x00\x12\x0c\n\x02id\x18\x02 \x01(\tH\x00\x12=\n\x04list\x18\x03 \x01(\x0b\x32-.minknow_api.basecaller.GetInfoRequest.IdListH\x00\x1a\x15\n\x06IdList\x12\x0b\n\x03ids\x18\x01 \x03(\tB\x0b\n\tselection\"@\n\x0fGetInfoResponse\x12-\n\x04runs\x18\x01 \x03(\x0b\x32\x1f.minknow_api.basecaller.RunInfo\"*\n\x0cWatchRequest\x12\x1a\n\x12send_finished_runs\x18\x01 \x01(\x08\">\n\rWatchResponse\x12-\n\x04runs\x18\x01 \x03(\x0b\x32\x1f.minknow_api.basecaller.RunInfo\"^\n\x19MakeAlignmentIndexRequest\x12!\n\x19input_alignment_reference\x18\x01 \x01(\t\x12\x1e\n\x16output_alignment_index\x18\x02 \x01(\t\"\x1c\n\x1aMakeAlignmentIndexResponse\"$\n\"ListPostProcessingProtocolsRequest\"\xa6\x01\n\x1aPostProcessingProtocolInfo\x12\x12\n\nidentifier\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x0f\n\x07version\x18\x03 \x01(\t\x12\x13\n\x0b\x64\x65scription\x18\x04 \x01(\t\x12@\n\x08provider\x18\x05 \x01(\x0e\x32..minknow_api.basecaller.PostProcessingProvider\"l\n#ListPostProcessingProtocolsResponse\x12\x45\n\tprotocols\x18\x01 \x03(\x0b\x32\x32.minknow_api.basecaller.PostProcessingProtocolInfo\"B\n,ListSettingsForPostProcessingProtocolRequest\x12\x12\n\nidentifier\x18\x01 \x01(\t\"\xd2\x01\n-ListSettingsForPostProcessingProtocolResponse\x12\x1c\n\x14requires_fast5_input\x18\x01 \x01(\x08\x12\x1c\n\x14requires_fastq_input\x18\x02 \x01(\x08\x12\x1a\n\x12requires_bam_input\x18\x03 \x01(\x08\x12I\n\x11protocol_settings\x18\x04 \x03(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\"5\n\x15UpdateProgressRequest\x12\n\n\x02id\x18\x01 \x01(\t\x12\x10\n\x08progress\x18\x02 \x01(\x02\"\x18\n\x16UpdateProgressResponse\"*\n\x0fSendPingRequest\x12\x17\n\tping_data\x18\x01 \x01(\tB\x04\x88\xb5\x18\x01\"\x12\n\x10SendPingResponse*S\n\x05State\x12\x11\n\rSTATE_RUNNING\x10\x00\x12\x11\n\rSTATE_SUCCESS\x10\x01\x12\x0f\n\x0bSTATE_ERROR\x10\x02\x12\x13\n\x0fSTATE_CANCELLED\x10\x03*[\n\x0fSelectionPreset\x12\x16\n\x12PRESET_ALL_RUNNING\x10\x00\x12 \n\x1cPRESET_MOST_RECENTLY_STARTED\x10\x01\x12\x0e\n\nPRESET_ALL\x10\x02*0\n\x16PostProcessingProvider\x12\n\n\x06SCRIPT\x10\x00\x12\n\n\x06\x45PI2ME\x10\x01\x32\xfd\x0c\n\nBasecaller\x12}\n\x13list_configs_by_kit\x12/.minknow_api.basecaller.ListConfigsByKitRequest\x1a\x30.minknow_api.basecaller.ListConfigsByKitResponse\"\x03\x90\x02\x01\x12x\n\x11start_basecalling\x12/.minknow_api.basecaller.StartBasecallingRequest\x1a\x30.minknow_api.basecaller.StartBasecallingResponse\"\x00\x12r\n\x0fstart_barcoding\x12-.minknow_api.basecaller.StartBarcodingRequest\x1a..minknow_api.basecaller.StartBarcodingResponse\"\x00\x12\x9b\x01\n\x1estart_post_processing_protocol\x12:.minknow_api.basecaller.StartPostProcessingProtocolRequest\x1a;.minknow_api.basecaller.StartPostProcessingProtocolResponse\"\x00\x12r\n\x0fstart_alignment\x12-.minknow_api.basecaller.StartAlignmentRequest\x1a..minknow_api.basecaller.StartAlignmentResponse\"\x00\x12\\\n\x06\x63\x61ncel\x12%.minknow_api.basecaller.CancelRequest\x1a&.minknow_api.basecaller.CancelResponse\"\x03\x90\x02\x02\x12\x62\n\x08get_info\x12&.minknow_api.basecaller.GetInfoRequest\x1a\'.minknow_api.basecaller.GetInfoResponse\"\x03\x90\x02\x01\x30\x01\x12[\n\x05watch\x12$.minknow_api.basecaller.WatchRequest\x1a%.minknow_api.basecaller.WatchResponse\"\x03\x90\x02\x01\x30\x01\x12\x7f\n\x14make_alignment_index\x12\x31.minknow_api.basecaller.MakeAlignmentIndexRequest\x1a\x32.minknow_api.basecaller.MakeAlignmentIndexResponse\"\x00\x12\x9e\x01\n\x1elist_post_processing_protocols\x12:.minknow_api.basecaller.ListPostProcessingProtocolsRequest\x1a;.minknow_api.basecaller.ListPostProcessingProtocolsResponse\"\x03\x90\x02\x02\x12\xbe\x01\n*list_settings_for_post_processing_protocol\x12\x44.minknow_api.basecaller.ListSettingsForPostProcessingProtocolRequest\x1a\x45.minknow_api.basecaller.ListSettingsForPostProcessingProtocolResponse\"\x03\x90\x02\x01\x12\x8b\x01\n(update_post_processing_protocol_progress\x12-.minknow_api.basecaller.UpdateProgressRequest\x1a..minknow_api.basecaller.UpdateProgressResponse\"\x00\x12`\n\tsend_ping\x12\'.minknow_api.basecaller.SendPingRequest\x1a(.minknow_api.basecaller.SendPingResponse\"\x00\x42&\n\x1c\x63om.nanoporetech.minknow_api\xa2\x02\x05MKAPIb\x06proto3')
 
 _STATE = DESCRIPTOR.enum_types_by_name['State']
 State = enum_type_wrapper.EnumTypeWrapper(_STATE)
@@ -180,6 +181,11 @@ StartBasecallingRequest = _reflection.GeneratedProtocolMessageType('StartBasecal
       alignment_configuration:
           Options to control alignment performed once basecalling reads
           is complete.
+      enable_read_splitting:
+          Enable read splitting in guppy
+      min_score_read_splitting:
+          Override score to use for guppy read splitting. If not
+          specified a default value is used from guppy.
   """,
   # @@protoc_insertion_point(class_scope:minknow_api.basecaller.StartBasecallingRequest)
   })
@@ -649,82 +655,82 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   _BASECALLER.methods_by_name['list_post_processing_protocols']._serialized_options = b'\220\002\002'
   _BASECALLER.methods_by_name['list_settings_for_post_processing_protocol']._options = None
   _BASECALLER.methods_by_name['list_settings_for_post_processing_protocol']._serialized_options = b'\220\002\001'
-  _STATE._serialized_start=4591
-  _STATE._serialized_end=4674
-  _SELECTIONPRESET._serialized_start=4676
-  _SELECTIONPRESET._serialized_end=4767
-  _POSTPROCESSINGPROVIDER._serialized_start=4769
-  _POSTPROCESSINGPROVIDER._serialized_end=4817
-  _LISTCONFIGSBYKITREQUEST._serialized_start=199
-  _LISTCONFIGSBYKITREQUEST._serialized_end=224
-  _LISTCONFIGSBYKITRESPONSE._serialized_start=227
-  _LISTCONFIGSBYKITRESPONSE._serialized_end=727
-  _LISTCONFIGSBYKITRESPONSE_CONFIGLIST._serialized_start=353
-  _LISTCONFIGSBYKITRESPONSE_CONFIGLIST._serialized_end=382
-  _LISTCONFIGSBYKITRESPONSE_PERFLOWCELL._serialized_start=385
-  _LISTCONFIGSBYKITRESPONSE_PERFLOWCELL._serialized_end=609
-  _LISTCONFIGSBYKITRESPONSE_PERFLOWCELL_KITCONFIGSENTRY._serialized_start=499
-  _LISTCONFIGSBYKITRESPONSE_PERFLOWCELL_KITCONFIGSENTRY._serialized_end=609
-  _LISTCONFIGSBYKITRESPONSE_FLOWCELLCONFIGSENTRY._serialized_start=611
-  _LISTCONFIGSBYKITRESPONSE_FLOWCELLCONFIGSENTRY._serialized_end=727
-  _STARTBASECALLINGREQUEST._serialized_start=730
-  _STARTBASECALLINGREQUEST._serialized_end=1129
-  _STARTBASECALLINGRESPONSE._serialized_start=1131
-  _STARTBASECALLINGRESPONSE._serialized_end=1169
-  _STARTBARCODINGREQUEST._serialized_start=1172
-  _STARTBARCODINGREQUEST._serialized_end=1410
-  _STARTBARCODINGRESPONSE._serialized_start=1412
-  _STARTBARCODINGRESPONSE._serialized_end=1448
-  _STARTALIGNMENTREQUEST._serialized_start=1451
-  _STARTALIGNMENTREQUEST._serialized_end=1665
-  _STARTALIGNMENTRESPONSE._serialized_start=1667
-  _STARTALIGNMENTRESPONSE._serialized_end=1703
-  _STARTPOSTPROCESSINGPROTOCOLREQUEST._serialized_start=1706
-  _STARTPOSTPROCESSINGPROTOCOLREQUEST._serialized_end=2168
-  _STARTPOSTPROCESSINGPROTOCOLREQUEST_SETTINGVALUESENTRY._serialized_start=2047
-  _STARTPOSTPROCESSINGPROTOCOLREQUEST_SETTINGVALUESENTRY._serialized_end=2168
-  _STARTREQUEST._serialized_start=2171
-  _STARTREQUEST._serialized_end=2562
-  _STARTPOSTPROCESSINGPROTOCOLRESPONSE._serialized_start=2564
-  _STARTPOSTPROCESSINGPROTOCOLRESPONSE._serialized_end=2613
-  _CANCELREQUEST._serialized_start=2615
-  _CANCELREQUEST._serialized_end=2642
-  _CANCELRESPONSE._serialized_start=2644
-  _CANCELRESPONSE._serialized_end=2660
-  _RUNINFO._serialized_start=2663
-  _RUNINFO._serialized_end=3355
-  _GETINFOREQUEST._serialized_start=3358
-  _GETINFOREQUEST._serialized_end=3546
-  _GETINFOREQUEST_IDLIST._serialized_start=3512
-  _GETINFOREQUEST_IDLIST._serialized_end=3533
-  _GETINFORESPONSE._serialized_start=3548
-  _GETINFORESPONSE._serialized_end=3612
-  _WATCHREQUEST._serialized_start=3614
-  _WATCHREQUEST._serialized_end=3656
-  _WATCHRESPONSE._serialized_start=3658
-  _WATCHRESPONSE._serialized_end=3720
-  _MAKEALIGNMENTINDEXREQUEST._serialized_start=3722
-  _MAKEALIGNMENTINDEXREQUEST._serialized_end=3816
-  _MAKEALIGNMENTINDEXRESPONSE._serialized_start=3818
-  _MAKEALIGNMENTINDEXRESPONSE._serialized_end=3846
-  _LISTPOSTPROCESSINGPROTOCOLSREQUEST._serialized_start=3848
-  _LISTPOSTPROCESSINGPROTOCOLSREQUEST._serialized_end=3884
-  _POSTPROCESSINGPROTOCOLINFO._serialized_start=3887
-  _POSTPROCESSINGPROTOCOLINFO._serialized_end=4053
-  _LISTPOSTPROCESSINGPROTOCOLSRESPONSE._serialized_start=4055
-  _LISTPOSTPROCESSINGPROTOCOLSRESPONSE._serialized_end=4163
-  _LISTSETTINGSFORPOSTPROCESSINGPROTOCOLREQUEST._serialized_start=4165
-  _LISTSETTINGSFORPOSTPROCESSINGPROTOCOLREQUEST._serialized_end=4231
-  _LISTSETTINGSFORPOSTPROCESSINGPROTOCOLRESPONSE._serialized_start=4234
-  _LISTSETTINGSFORPOSTPROCESSINGPROTOCOLRESPONSE._serialized_end=4444
-  _UPDATEPROGRESSREQUEST._serialized_start=4446
-  _UPDATEPROGRESSREQUEST._serialized_end=4499
-  _UPDATEPROGRESSRESPONSE._serialized_start=4501
-  _UPDATEPROGRESSRESPONSE._serialized_end=4525
-  _SENDPINGREQUEST._serialized_start=4527
-  _SENDPINGREQUEST._serialized_end=4569
-  _SENDPINGRESPONSE._serialized_start=4571
-  _SENDPINGRESPONSE._serialized_end=4589
-  _BASECALLER._serialized_start=4820
-  _BASECALLER._serialized_end=6481
+  _STATE._serialized_start=4717
+  _STATE._serialized_end=4800
+  _SELECTIONPRESET._serialized_start=4802
+  _SELECTIONPRESET._serialized_end=4893
+  _POSTPROCESSINGPROVIDER._serialized_start=4895
+  _POSTPROCESSINGPROVIDER._serialized_end=4943
+  _LISTCONFIGSBYKITREQUEST._serialized_start=231
+  _LISTCONFIGSBYKITREQUEST._serialized_end=256
+  _LISTCONFIGSBYKITRESPONSE._serialized_start=259
+  _LISTCONFIGSBYKITRESPONSE._serialized_end=759
+  _LISTCONFIGSBYKITRESPONSE_CONFIGLIST._serialized_start=385
+  _LISTCONFIGSBYKITRESPONSE_CONFIGLIST._serialized_end=414
+  _LISTCONFIGSBYKITRESPONSE_PERFLOWCELL._serialized_start=417
+  _LISTCONFIGSBYKITRESPONSE_PERFLOWCELL._serialized_end=641
+  _LISTCONFIGSBYKITRESPONSE_PERFLOWCELL_KITCONFIGSENTRY._serialized_start=531
+  _LISTCONFIGSBYKITRESPONSE_PERFLOWCELL_KITCONFIGSENTRY._serialized_end=641
+  _LISTCONFIGSBYKITRESPONSE_FLOWCELLCONFIGSENTRY._serialized_start=643
+  _LISTCONFIGSBYKITRESPONSE_FLOWCELLCONFIGSENTRY._serialized_end=759
+  _STARTBASECALLINGREQUEST._serialized_start=762
+  _STARTBASECALLINGREQUEST._serialized_end=1255
+  _STARTBASECALLINGRESPONSE._serialized_start=1257
+  _STARTBASECALLINGRESPONSE._serialized_end=1295
+  _STARTBARCODINGREQUEST._serialized_start=1298
+  _STARTBARCODINGREQUEST._serialized_end=1536
+  _STARTBARCODINGRESPONSE._serialized_start=1538
+  _STARTBARCODINGRESPONSE._serialized_end=1574
+  _STARTALIGNMENTREQUEST._serialized_start=1577
+  _STARTALIGNMENTREQUEST._serialized_end=1791
+  _STARTALIGNMENTRESPONSE._serialized_start=1793
+  _STARTALIGNMENTRESPONSE._serialized_end=1829
+  _STARTPOSTPROCESSINGPROTOCOLREQUEST._serialized_start=1832
+  _STARTPOSTPROCESSINGPROTOCOLREQUEST._serialized_end=2294
+  _STARTPOSTPROCESSINGPROTOCOLREQUEST_SETTINGVALUESENTRY._serialized_start=2173
+  _STARTPOSTPROCESSINGPROTOCOLREQUEST_SETTINGVALUESENTRY._serialized_end=2294
+  _STARTREQUEST._serialized_start=2297
+  _STARTREQUEST._serialized_end=2688
+  _STARTPOSTPROCESSINGPROTOCOLRESPONSE._serialized_start=2690
+  _STARTPOSTPROCESSINGPROTOCOLRESPONSE._serialized_end=2739
+  _CANCELREQUEST._serialized_start=2741
+  _CANCELREQUEST._serialized_end=2768
+  _CANCELRESPONSE._serialized_start=2770
+  _CANCELRESPONSE._serialized_end=2786
+  _RUNINFO._serialized_start=2789
+  _RUNINFO._serialized_end=3481
+  _GETINFOREQUEST._serialized_start=3484
+  _GETINFOREQUEST._serialized_end=3672
+  _GETINFOREQUEST_IDLIST._serialized_start=3638
+  _GETINFOREQUEST_IDLIST._serialized_end=3659
+  _GETINFORESPONSE._serialized_start=3674
+  _GETINFORESPONSE._serialized_end=3738
+  _WATCHREQUEST._serialized_start=3740
+  _WATCHREQUEST._serialized_end=3782
+  _WATCHRESPONSE._serialized_start=3784
+  _WATCHRESPONSE._serialized_end=3846
+  _MAKEALIGNMENTINDEXREQUEST._serialized_start=3848
+  _MAKEALIGNMENTINDEXREQUEST._serialized_end=3942
+  _MAKEALIGNMENTINDEXRESPONSE._serialized_start=3944
+  _MAKEALIGNMENTINDEXRESPONSE._serialized_end=3972
+  _LISTPOSTPROCESSINGPROTOCOLSREQUEST._serialized_start=3974
+  _LISTPOSTPROCESSINGPROTOCOLSREQUEST._serialized_end=4010
+  _POSTPROCESSINGPROTOCOLINFO._serialized_start=4013
+  _POSTPROCESSINGPROTOCOLINFO._serialized_end=4179
+  _LISTPOSTPROCESSINGPROTOCOLSRESPONSE._serialized_start=4181
+  _LISTPOSTPROCESSINGPROTOCOLSRESPONSE._serialized_end=4289
+  _LISTSETTINGSFORPOSTPROCESSINGPROTOCOLREQUEST._serialized_start=4291
+  _LISTSETTINGSFORPOSTPROCESSINGPROTOCOLREQUEST._serialized_end=4357
+  _LISTSETTINGSFORPOSTPROCESSINGPROTOCOLRESPONSE._serialized_start=4360
+  _LISTSETTINGSFORPOSTPROCESSINGPROTOCOLRESPONSE._serialized_end=4570
+  _UPDATEPROGRESSREQUEST._serialized_start=4572
+  _UPDATEPROGRESSREQUEST._serialized_end=4625
+  _UPDATEPROGRESSRESPONSE._serialized_start=4627
+  _UPDATEPROGRESSRESPONSE._serialized_end=4651
+  _SENDPINGREQUEST._serialized_start=4653
+  _SENDPINGREQUEST._serialized_end=4695
+  _SENDPINGRESPONSE._serialized_start=4697
+  _SENDPINGRESPONSE._serialized_end=4715
+  _BASECALLER._serialized_start=4946
+  _BASECALLER._serialized_end=6607
 # @@protoc_insertion_point(module_scope)
