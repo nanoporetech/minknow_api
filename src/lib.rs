@@ -1,3 +1,9 @@
+//! A Rust implementation of the minknow_api client that supports communicating
+//! with a MinKNOW server.
+//!
+//! For more information on MinKNOW and minknow_api clients, see [the minknow_api
+//! python client repository].
+
 use hyper::{
     client::{HttpConnector, ResponseFuture},
     header::HeaderValue,
@@ -58,7 +64,7 @@ pub mod minknow_api {
     }
 }
 
-// A flow cell position
+// A flow cell position.
 //
 // You should not normally construct this directly, but instead call
 // `Manager.flow_cell_positions`. The constructor arguments may change between minor
@@ -303,6 +309,7 @@ impl Manager {
         self.reset_positions(vec![position], force).await
     }
 
+    // Reset flow cell positions.
     async fn reset_positions(
         &self,
         positions: Vec<String>,
@@ -329,6 +336,9 @@ impl Manager {
         Ok(response)
     }
 
+    // Create a new developer api token, which expires at [expiry]
+    //
+    // Cannot be invoked when using a developer token as authorisation method.
     async fn create_developer_api_token(
         &self,
         name: String
@@ -354,6 +364,7 @@ impl Manager {
         Ok(response)
     }    
 
+    // Revoke an existing developer API token.
     async fn revoke_developer_api_token(
         &self,
         id: String
@@ -378,6 +389,7 @@ impl Manager {
         Ok(response)
     }    
 
+    // List existing developer API tokens.
     async fn list_developer_api_tokens(
         &self
     ) -> Result<minknow_api::manager::ListDeveloperApiTokensResponse, Status> {
@@ -399,6 +411,7 @@ impl Manager {
         Ok(response)
     }    
 
+    // List available protocols for the given experiment type.
     async fn find_protocols(
         &self,
         experiment_type: minknow_api::manager::ExperimentType
@@ -449,7 +462,8 @@ mod tests {
             9502
         ).await;
         
-        manager.channel.set_token("5bd16355-3e52-4be0-8462-23eda1fb3c06".to_string());
+        let test_base_token = env::var("MINKNOW_API_TEST_TOKEN").ok().unwrap();
+        manager.channel.set_token(test_base_token);
 
         let response = manager.create_developer_api_token(
             "test_simulated_end_to_end".to_string()
@@ -494,7 +508,8 @@ mod tests {
             9502
         ).await;
         
-        manager.channel.set_token("5bd16355-3e52-4be0-8462-23eda1fb3c06".to_string());
+        let test_base_token = env::var("MINKNOW_API_TEST_TOKEN").ok().unwrap();
+        manager.channel.set_token(test_base_token);
 
         let response = manager.create_developer_api_token(
             "test_developer_api_token_management".to_string()
@@ -519,7 +534,8 @@ mod tests {
             9502
         ).await;
         
-        manager.channel.set_token("5bd16355-3e52-4be0-8462-23eda1fb3c06".to_string());
+        let test_base_token = env::var("MINKNOW_API_TEST_TOKEN").ok().unwrap();
+        manager.channel.set_token(test_base_token);
 
         let response = manager.find_protocols(
             minknow_api::manager::ExperimentType::Sequencing
