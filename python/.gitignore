@@ -1,8 +1,0 @@
-build/
-dist/
-*egg-info
-__pycache__
-
-# Common virtualenvironment names
-venv/
-.venv/
