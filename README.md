@@ -4,6 +4,8 @@
 
 A rust implementation of the minknow_api client for interacting with MinKNOW. More information on MinKNOW and minknow_api client, see [the minknow_api python client repository](https://github.com/nanoporetech/minknow_api).
 
+Note that this library attempts to match the interfaces of the minknow_api python client, however, in some cases, additional interfaces have been added to simplify client usage.
+
 ## Contributing
 
 Prequisites:
@@ -16,6 +18,6 @@ End to end tests associated with the `minknow-api-rust` client currently interac
 
 1. Create a developer API token by opening the MinKNOW desktop application and navigating to 'Host Settings' -> 'API Access Tokens'.
 1. An environment variable must reference this token, run `export MINKNOW_API_TEST_TOKEN={created_token}`
-1. An environment variable must reference the self-signed certificate provided with the MinKNOW installation (for example, on MacOS run `export MIKNOW_TRUSTED_CA="/Applications/MinKNOW.app/Contents/Resources/conf/rpc-certs/ca.crt"`)
+1. An environment variable must reference the self-signed certificate provided with the MinKNOW installation (for example, on MacOS run `export MINKNOW_TRUSTED_CA="/Applications/MinKNOW.app/Contents/Resources/conf/rpc-certs/ca.crt"`)
 
 Once above prerequisites tests can be run with `cargo test --tests`.

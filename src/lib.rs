@@ -21,10 +21,12 @@ use tonic::body::BoxBody;
 use tonic_openssl::ALPN_H2_WIRE;
 use tonic::{Request, Status};
 use tower::Service;
-use tokio_stream::StreamExt;
+use tokio_stream::{self as stream, StreamExt};
 
 use minknow_api::manager::manager_service_client::ManagerServiceClient as MinKNOWManagerClient;
 use minknow_api::manager::{DescribeHostRequest, DescribeHostResponse, FlowCellPositionsRequest};
+
+use minknow_api::protocol::protocol_service_client::ProtocolServiceClient as MinKNOWProtocolClient;
 
 pub mod minknow_api {
     pub mod acquisition {
@@ -62,16 +64,6 @@ pub mod minknow_api {
     pub mod run_until {
         tonic::include_proto!("minknow_api.run_until");
     }
-}
-
-// A flow cell position.
-//
-// You should not normally construct this directly, but instead call
-// `Manager.flow_cell_positions`. The constructor arguments may change between minor
-// releases.
-#[derive(Clone, Debug)]
-pub struct FlowCellPosition {
-    name: String
 }
 
 // A channel for communicating with MinKNOW that supports TLS
@@ -173,6 +165,120 @@ impl Service<HyperRequest<BoxBody>> for MinKNOWChannel {
     }
 }
 
+// A flow cell position.
+//
+// You should not normally construct this directly, but instead call
+// `Manager.flow_cell_positions`. The constructor arguments may change between minor
+// releases.
+#[derive(Debug)]
+pub struct FlowCellPosition {
+    host: String,
+    token: Option<String>,
+    pub description: minknow_api::manager::FlowCellPosition,
+}
+
+impl FlowCellPosition {
+    // Create a new MinKNOWChannel that will handle SSL communication with this
+    // flow cell position.
+    async fn channel(&self) -> MinKNOWChannel {
+        let cert_path = env::var("MINKNOW_TRUSTED_CA").ok().unwrap();
+        let cert = tokio::fs::read(cert_path).await.ok().unwrap();
+
+        let host = self.host.clone();
+        println!("{:?}", self.description);
+        let port = self.description.rpc_ports.as_ref().unwrap().secure.clone();
+        let uri = Uri::from_maybe_shared(format!("https://{host}:{port}"))
+            .unwrap();
+
+        let mut channel = MinKNOWChannel::new(cert, uri).await.unwrap();
+        if !self.token.is_none() {
+            channel.set_token(self.token.as_ref().unwrap().clone())
+        }
+
+        return channel;
+    }
+
+}
+
+pub struct Protocol {
+    pub channel: MinKNOWChannel
+}
+
+impl Protocol {
+    // Initiates a python instance that run the script specified by the 'identifier' argument.
+    // `list_protocols` will give back a list of protocol scripts that can be started by this
+    // call.
+    async fn start_protocol(
+        &self, 
+        identifier: String,
+        args: Vec<String>,
+        user_info: Option<minknow_api::protocol::ProtocolRunUserInfo>,
+        offload_location_info: Option<minknow_api::protocol::OffloadLocationInfo>,
+        target_run_until_criteria: Option<minknow_api::acquisition::TargetRunUntilCriteria>
+    ) -> Result<minknow_api::protocol::StartProtocolResponse, Status> {
+        let channel = self.channel.clone();
+
+        let mut client = MinKNOWProtocolClient::new(channel);
+        let request = Request::new(minknow_api::protocol::StartProtocolRequest {
+            identifier,
+            args,
+            user_info,
+            offload_location_info,
+            target_run_until_criteria
+        });
+
+        let response = match client.start_protocol(request).await {
+            Ok(response) => response.into_inner(),
+            Err(err) => {
+                return Err(Status::unavailable("Not available"))
+            }
+        };
+
+        Ok(response)
+    }
+
+    // Wait for a protocol run to finish.
+    //
+    // This call blocks until the run with the given run ID has finished (or returns immediately
+    // if it had already finished) and returns information about the protocol run.
+    //
+    // If no run has been started with the provided run ID (or no run ID is given), and error is
+    // returned.
+    //
+    // If NOTIFY_BEFORE_TERMINATION is specified for state, the protocol end time is an estimate,
+    // including the the allowed timeout.
+    async fn wait_for_finished(
+        &self, 
+        run_id: String,
+        state: Option<minknow_api::protocol::wait_for_finished_request::NotificationState>,
+        timeout: f32
+    ) -> Result<minknow_api::protocol::ProtocolRunInfo, Status> {
+        let channel = self.channel.clone();
+
+        let mut client = MinKNOWProtocolClient::new(channel);
+
+        let request_state = match state {
+            Some(state) => state as i32,
+            None => minknow_api::protocol::wait_for_finished_request::NotificationState::NotifyOnTermination as i32
+        };
+
+        let request = Request::new(minknow_api::protocol::WaitForFinishedRequest {
+            run_id: run_id,
+            state: request_state,
+            timeout: timeout
+        });
+
+        let response = match client.wait_for_finished(request).await {
+            Ok(response) => response.into_inner(),
+            Err(err) => {
+                return Err(Status::unavailable("Not available"))
+            }
+        };
+
+        Ok(response)
+    }
+}
+
 // A connection to the manager gRPC interface.
 #[derive(Debug)]
 pub struct Manager {
@@ -221,6 +327,7 @@ impl Manager {
     // Get a list of flow cell positions.
     async fn flow_cell_positions(&self) -> Result<Vec<FlowCellPosition>, Status> {
         let channel = self.channel.clone();
+        let token = channel.token.clone();
 
         let mut client = MinKNOWManagerClient::new(channel);
         let request = Request::new(FlowCellPositionsRequest {});
@@ -240,7 +347,9 @@ impl Manager {
             .into_iter()
             .map(|position| {
                 FlowCellPosition {
-                    name: position.name.clone()
+                    host: "localhost".to_string(),
+                    token: token.clone(),
+                    description: position
                 }
             })
             .collect::<Vec<FlowCellPosition>>();
@@ -493,7 +602,7 @@ mod tests {
         let response = manager.remove_simulated_device("MS12345".to_string()).await;
         assert!(response.is_ok());
 
-        let position_name = &flow_cell_positions[0].name;
+        let position_name = &flow_cell_positions[0].description.name;
         let response = manager.reset_position("MS12345".to_string(), false).await;
         assert!(response.is_ok());
 
@@ -543,4 +652,5 @@ mod tests {
 
         assert!(response.is_ok());
     }
+
 }
