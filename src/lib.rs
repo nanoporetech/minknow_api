@@ -3,6 +3,7 @@
 //!
 //! For more information on MinKNOW and minknow_api clients, see [the minknow_api
 //! python client repository].
+use std::{thread, time};
 
 use hyper::{
     client::{HttpConnector, ResponseFuture},
@@ -565,52 +566,6 @@ mod tests {
     }
 
     #[tokio::test]
-    async fn test_simulated_device_end_to_end() {
-        let mut manager = Manager::new(
-            "localhost".to_string(),
-            9502
-        ).await;
-        
-        let test_base_token = env::var("MINKNOW_API_TEST_TOKEN").ok().unwrap();
-        manager.channel.set_token(test_base_token);
-
-        let response = manager.create_developer_api_token(
-            "test_simulated_end_to_end".to_string()
-        ).await;
-
-        assert!(response.is_ok());
-
-        let unwrapped_response = &response.unwrap();
-        let token = unwrapped_response.token.clone();
-        let id = unwrapped_response.id.clone();
-
-        manager.channel.set_token(token);
-
-        let response = manager.add_simulated_device(
-          "MS12345".to_string(),
-          minknow_api::manager::SimulatedDeviceType::SimulatedMinion
-        ).await;
-
-        assert!(response.is_ok());
-
-        let response = manager.flow_cell_positions().await;
-        assert!(response.is_ok());
-
-        let flow_cell_positions = response.unwrap();
-        assert_eq!(flow_cell_positions.len(), 1);
-
-        let response = manager.remove_simulated_device("MS12345".to_string()).await;
-        assert!(response.is_ok());
-
-        let position_name = &flow_cell_positions[0].description.name;
-        let response = manager.reset_position("MS12345".to_string(), false).await;
-        assert!(response.is_ok());
-
-        let response = manager.revoke_developer_api_token(id).await;
-        assert!(response.is_ok());
-    }
-
-    #[tokio::test]
     async fn test_developer_api_token_management() {
         let mut manager = Manager::new(
             "localhost".to_string(),
@@ -647,9 +602,165 @@ mod tests {
         manager.channel.set_token(test_base_token);
 
         let response = manager.find_protocols(
-            minknow_api::manager::ExperimentType::Sequencing
+            minknow_api::manager::ExperimentType::AllIncludingHidden
         ).await;
 
+        assert!(response.is_ok());
+    }
+
+    #[tokio::test]
+    async fn test_simulated_minion_e2e() {
+        let device_name = "MS12345".to_string();
+        let mut manager = Manager::new(
+            "localhost".to_string(),
+            9502
+        ).await;
+        
+        let test_base_token = env::var("MINKNOW_API_TEST_TOKEN").ok().unwrap();
+        manager.channel.set_token(test_base_token);
+
+        let response = manager.create_developer_api_token(
+            "test_simulated_minion_end_to_end".to_string()
+        ).await;
+
+        assert!(response.is_ok());
+
+        let unwrapped_response = &response.unwrap();
+        let token = unwrapped_response.token.clone();
+        let id = unwrapped_response.id.clone();
+
+        manager.channel.set_token(token);
+
+        let response = manager.add_simulated_device(
+          device_name.clone(),
+          minknow_api::manager::SimulatedDeviceType::SimulatedMinion
+        ).await;
+
+        assert!(response.is_ok());
+        
+        let five_secs = time::Duration::from_secs(5);
+        thread::sleep(five_secs);
+
+        let response = manager.flow_cell_positions().await;
+        let potentially_found_flow_cell = response
+            .unwrap()
+            .into_iter()
+            .find(|position| {
+                position.description.name == device_name.clone()
+            });
+
+        let found_flow_cell = match potentially_found_flow_cell {
+            Some(found_flow_cell) => found_flow_cell,
+            None => panic!("Could not find flow cell")
+        };
+
+        let channel = found_flow_cell.channel().await;
+
+        let protocol = Protocol{ channel };
+        let response = protocol.start_protocol(
+            "checks/flowcell_check/platform_qc:FLO-MIN106".to_string(),
+            Vec::new(),
+            None,
+            None,
+            None
+        ).await;
+        assert!(response.is_ok());
+
+        let unwrapped_response = &response.unwrap();
+        let run_id = unwrapped_response.run_id.clone();
+        let response = protocol.wait_for_finished(
+            run_id,
+            None,
+            10000.0
+        ).await;
+        assert!(response.is_ok());
+        
+        let response = manager.remove_simulated_device(device_name.clone()).await;
+        assert!(response.is_ok());
+
+        let response = manager.reset_position(device_name.clone(), false).await;
+        assert!(response.is_ok());
+
+        let response = manager.revoke_developer_api_token(id).await;
+        assert!(response.is_ok());
+    }
+
+    #[tokio::test]
+    async fn test_simulated_promethion_e2e() {
+        let device_name = "P2S_00007-1".to_string();
+
+        let mut manager = Manager::new(
+            "localhost".to_string(),
+            9502
+        ).await;
+        
+        let test_base_token = env::var("MINKNOW_API_TEST_TOKEN").ok().unwrap();
+        manager.channel.set_token(test_base_token);
+
+        let response = manager.create_developer_api_token(
+            "test_simulated_promethion_end_to_end".to_string()
+        ).await;
+
+        assert!(response.is_ok());
+
+        let unwrapped_response = &response.unwrap();
+        let token = unwrapped_response.token.clone();
+        let id = unwrapped_response.id.clone();
+
+        manager.channel.set_token(token);
+
+        let response = manager.add_simulated_device(
+            device_name.clone(), 
+            minknow_api::manager::SimulatedDeviceType::SimulatedPromethion
+        ).await;
+
+        assert!(response.is_ok());
+        
+        let five_secs = time::Duration::from_secs(5);
+        thread::sleep(five_secs);
+
+        let response = manager.flow_cell_positions().await;
+
+        let potentially_found_flow_cell = response
+            .unwrap()
+            .into_iter()
+            .find(|position| {
+                position.description.name == device_name.clone()
+            });
+
+        let found_flow_cell = match potentially_found_flow_cell {
+            Some(found_flow_cell) => found_flow_cell,
+            None => panic!("Could not find flow cell")
+        };
+
+        let channel = found_flow_cell.channel().await;
+
+        let protocol = Protocol{ channel };
+        let response = protocol.start_protocol(
+            "checks/flowcell_check/platform_qc:FLO-PRO002".to_string(),
+            Vec::new(),
+            None,
+            None,
+            None
+        ).await;
+        assert!(response.is_ok());
+
+        let unwrapped_response = &response.unwrap();
+        let run_id = unwrapped_response.run_id.clone();
+        let response = protocol.wait_for_finished(
+            run_id,
+            None,
+            10000.0
+        ).await;
+        assert!(response.is_ok());
+        
+        let response = manager.remove_simulated_device(device_name.clone()).await;
+        assert!(response.is_ok());
+
+        let response = manager.reset_position(device_name.clone(), false).await;
+        assert!(response.is_ok());
+
+        let response = manager.revoke_developer_api_token(id).await;
         assert!(response.is_ok());
     }
 

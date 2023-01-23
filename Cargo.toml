@@ -9,6 +9,9 @@ repository = "https://github.com/dayzerodx/minknow_api_rust"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
+[lib]
+doctest = false
+
 [dependencies]
 tonic = { version = "0.8", features = ["transport", "tls", "tls-roots", "tls-webpki-roots"] }
 prost = "0.11"
