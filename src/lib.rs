@@ -3,6 +3,7 @@
 //!
 //! For more information on MinKNOW and minknow_api clients, see [the minknow_api
 //! python client repository].
+use std::collections::HashMap;
 use std::{thread, time};
 
 use hyper::{
@@ -17,12 +18,13 @@ use openssl::{
     x509::X509,
 };
 
-use std::{error::Error, task::Poll, env};
-use tonic::body::BoxBody;
-use tonic_openssl::ALPN_H2_WIRE;
-use tonic::{Request, Status};
-use tower::Service;
+use prost::Message;
+use std::{env, error::Error, task::Poll};
 use tokio_stream::{self as stream, StreamExt};
+use tonic::body::BoxBody;
+use tonic::{Request, Status};
+use tonic_openssl::ALPN_H2_WIRE;
+use tower::Service;
 
 use minknow_api::manager::manager_service_client::ManagerServiceClient as MinKNOWManagerClient;
 use minknow_api::manager::{DescribeHostRequest, DescribeHostResponse, FlowCellPositionsRequest};
@@ -83,7 +85,7 @@ pub struct MinKNOWChannel {
     uri: Uri,
     client: Client<HttpsConnector<HttpConnector>, BoxBody>,
     token: Option<String>,
-    pub certificate: Vec<u8>
+    pub certificate: Vec<u8>,
 }
 
 impl MinKNOWChannel {
@@ -135,14 +137,14 @@ impl Service<HyperRequest<BoxBody>> for MinKNOWChannel {
     type Error = hyper::Error;
     type Future = ResponseFuture;
 
-    fn poll_ready(&mut self, _: & mut std::task::Context<'_>) -> Poll<Result<(), Self::Error>> {
+    fn poll_ready(&mut self, _: &mut std::task::Context<'_>) -> Poll<Result<(), Self::Error>> {
         Ok(()).into()
     }
 
     // Make an RPC via this MinKNOW channel and if a token is set on this channel,
     // using the channel base URI for scheme and authority and the request URI
     // for RPC endpoint path.
-    // 
+    //
     // If an auth token is set on the channel, add that auth token to headers of
     // outgoing request.
     fn call(&mut self, mut req: HyperRequest<BoxBody>) -> Self::Future {
@@ -188,8 +190,7 @@ impl FlowCellPosition {
         let host = self.host.clone();
         println!("{:?}", self.description);
         let port = self.description.rpc_ports.as_ref().unwrap().secure.clone();
-        let uri = Uri::from_maybe_shared(format!("https://{host}:{port}"))
-            .unwrap();
+        let uri = Uri::from_maybe_shared(format!("https://{host}:{port}")).unwrap();
 
         let mut channel = MinKNOWChannel::new(cert, uri).await.unwrap();
         if !self.token.is_none() {
@@ -198,11 +199,10 @@ impl FlowCellPosition {
 
         return channel;
     }
-
 }
 
 pub struct Protocol {
-    pub channel: MinKNOWChannel
+    pub channel: MinKNOWChannel,
 }
 
 impl Protocol {
@@ -210,12 +210,12 @@ impl Protocol {
     // `list_protocols` will give back a list of protocol scripts that can be started by this
     // call.
     async fn start_protocol(
-        &self, 
+        &self,
         identifier: String,
         args: Vec<String>,
         user_info: Option<minknow_api::protocol::ProtocolRunUserInfo>,
         offload_location_info: Option<minknow_api::protocol::OffloadLocationInfo>,
-        target_run_until_criteria: Option<minknow_api::acquisition::TargetRunUntilCriteria>
+        target_run_until_criteria: Option<minknow_api::acquisition::TargetRunUntilCriteria>,
     ) -> Result<minknow_api::protocol::StartProtocolResponse, Status> {
         let channel = self.channel.clone();
 
@@ -225,14 +225,12 @@ impl Protocol {
             args,
             user_info,
             offload_location_info,
-            target_run_until_criteria
+            target_run_until_criteria,
         });
 
         let response = match client.start_protocol(request).await {
             Ok(response) => response.into_inner(),
-            Err(err) => {
-                return Err(Status::unavailable("Not available"))
-            }
+            Err(err) => return Err(Status::unavailable("Not available")),
         };
 
         Ok(response)
@@ -249,10 +247,10 @@ impl Protocol {
     // If NOTIFY_BEFORE_TERMINATION is specified for state, the protocol end time is an estimate,
     // including the the allowed timeout.
     async fn wait_for_finished(
-        &self, 
+        &self,
         run_id: String,
         state: Option<minknow_api::protocol::wait_for_finished_request::NotificationState>,
-        timeout: f32
+        timeout: f32,
     ) -> Result<minknow_api::protocol::ProtocolRunInfo, Status> {
         let channel = self.channel.clone();
 
@@ -266,14 +264,12 @@ impl Protocol {
         let request = Request::new(minknow_api::protocol::WaitForFinishedRequest {
             run_id: run_id,
             state: request_state,
-            timeout: timeout
+            timeout: timeout,
         });
 
         let response = match client.wait_for_finished(request).await {
             Ok(response) => response.into_inner(),
-            Err(err) => {
-                return Err(Status::unavailable("Not available"))
-            }
+            Err(err) => return Err(Status::unavailable("Not available")),
         };
 
         Ok(response)
@@ -283,7 +279,7 @@ impl Protocol {
 // A connection to the manager gRPC interface.
 #[derive(Debug)]
 pub struct Manager {
-    pub channel: MinKNOWChannel
+    pub channel: MinKNOWChannel,
 }
 
 impl Manager {
@@ -299,13 +295,10 @@ impl Manager {
     async fn new(host: String, port: u32) -> Manager {
         let cert_path = env::var("MINKNOW_TRUSTED_CA").ok().unwrap();
         let cert = tokio::fs::read(cert_path).await.ok().unwrap();
-        let uri = Uri::from_maybe_shared(format!("https://{host}:{port}"))
-            .unwrap();
+        let uri = Uri::from_maybe_shared(format!("https://{host}:{port}")).unwrap();
 
         let channel = MinKNOWChannel::new(cert, uri).await.unwrap();
-        Self {
-            channel: channel
-        }
+        Self { channel: channel }
     }
 
     // Get information about the machine running MinKNOW.
@@ -317,9 +310,7 @@ impl Manager {
 
         let response = match client.describe_host(request).await {
             Ok(response) => response.into_inner(),
-            Err(err) => {
-                return Err(Status::unavailable("Not available"))
-            }
+            Err(err) => return Err(Status::unavailable("Not available")),
         };
 
         Ok(response)
@@ -335,9 +326,7 @@ impl Manager {
 
         let response = match client.flow_cell_positions(request).await {
             Ok(response) => response.into_inner(),
-            Err(err) => {
-                return Err(Status::unavailable("Not available"))
-            }
+            Err(err) => return Err(Status::unavailable("Not available")),
         };
 
         let flow_cells = response
@@ -346,12 +335,10 @@ impl Manager {
             })
             .await
             .into_iter()
-            .map(|position| {
-                FlowCellPosition {
-                    host: "localhost".to_string(),
-                    token: token.clone(),
-                    description: position
-                }
+            .map(|position| FlowCellPosition {
+                host: "localhost".to_string(),
+                token: token.clone(),
+                description: position,
             })
             .collect::<Vec<FlowCellPosition>>();
 
@@ -362,23 +349,21 @@ impl Manager {
     async fn add_simulated_device(
         &self,
         name: String,
-        simulated_type: minknow_api::manager::SimulatedDeviceType
+        simulated_type: minknow_api::manager::SimulatedDeviceType,
     ) -> Result<minknow_api::manager::AddSimulatedDeviceResponse, Status> {
         let channel = self.channel.clone();
 
         let mut client = MinKNOWManagerClient::new(channel);
-        let request = Request::new(
-            minknow_api::manager::AddSimulatedDeviceRequest {
-                name,
-                r#type: simulated_type as i32,
-            }
-        );
+        let request = Request::new(minknow_api::manager::AddSimulatedDeviceRequest {
+            name,
+            r#type: simulated_type as i32,
+        });
 
         let response = match client.add_simulated_device(request).await {
             Ok(response) => response.into_inner(),
             Err(err) => {
                 println!("{:?}", err);
-                return Err(Status::unavailable("Not available"))
+                return Err(Status::unavailable("Not available"));
             }
         };
 
@@ -393,17 +378,13 @@ impl Manager {
         let channel = self.channel.clone();
 
         let mut client = MinKNOWManagerClient::new(channel);
-        let request = Request::new(
-            minknow_api::manager::RemoveSimulatedDeviceRequest {
-                name,
-            }
-        );
+        let request = Request::new(minknow_api::manager::RemoveSimulatedDeviceRequest { name });
 
         let response = match client.remove_simulated_device(request).await {
             Ok(response) => response.into_inner(),
             Err(err) => {
                 println!("{:?}", err);
-                return Err(Status::unavailable("Not available"))
+                return Err(Status::unavailable("Not available"));
             }
         };
 
@@ -414,7 +395,7 @@ impl Manager {
     async fn reset_position(
         &self,
         position: String,
-        force: bool
+        force: bool,
     ) -> Result<minknow_api::manager::ResetPositionResponse, Status> {
         self.reset_positions(vec![position], force).await
     }
@@ -423,23 +404,18 @@ impl Manager {
     async fn reset_positions(
         &self,
         positions: Vec<String>,
-        force: bool
+        force: bool,
     ) -> Result<minknow_api::manager::ResetPositionResponse, Status> {
         let channel = self.channel.clone();
 
         let mut client = MinKNOWManagerClient::new(channel);
-        let request = Request::new(
-            minknow_api::manager::ResetPositionRequest {
-                positions,
-                force
-            }
-        );
+        let request = Request::new(minknow_api::manager::ResetPositionRequest { positions, force });
 
         let response = match client.reset_position(request).await {
             Ok(response) => response.into_inner(),
             Err(err) => {
                 println!("{:?}", err);
-                return Err(Status::unavailable("Not available"))
+                return Err(Status::unavailable("Not available"));
             }
         };
 
@@ -451,103 +427,92 @@ impl Manager {
     // Cannot be invoked when using a developer token as authorisation method.
     async fn create_developer_api_token(
         &self,
-        name: String
+        name: String,
     ) -> Result<minknow_api::manager::CreateDeveloperApiTokenResponse, Status> {
         let channel = self.channel.clone();
 
         let mut client = MinKNOWManagerClient::new(channel);
-        let request = Request::new(
-            minknow_api::manager::CreateDeveloperApiTokenRequest {
-                name,
-                expiry: None
-            }
-        );
+        let request = Request::new(minknow_api::manager::CreateDeveloperApiTokenRequest {
+            name,
+            expiry: None,
+        });
 
         let response = match client.create_developer_api_token(request).await {
             Ok(response) => response.into_inner(),
             Err(err) => {
                 println!("{:?}", err);
-                return Err(Status::unavailable("Not available"))
+                return Err(Status::unavailable("Not available"));
             }
         };
 
         Ok(response)
-    }    
+    }
 
     // Revoke an existing developer API token.
     async fn revoke_developer_api_token(
         &self,
-        id: String
+        id: String,
     ) -> Result<minknow_api::manager::RevokeDeveloperApiTokensResponse, Status> {
         let channel = self.channel.clone();
 
         let mut client = MinKNOWManagerClient::new(channel);
-        let request = Request::new(
-            minknow_api::manager::RevokeDeveloperApiTokenRequest {
-                id
-            }
-        );
+        let request = Request::new(minknow_api::manager::RevokeDeveloperApiTokenRequest { id });
 
         let response = match client.revoke_developer_api_token(request).await {
             Ok(response) => response.into_inner(),
             Err(err) => {
                 println!("{:?}", err);
-                return Err(Status::unavailable("Not available"))
+                return Err(Status::unavailable("Not available"));
             }
         };
 
         Ok(response)
-    }    
+    }
 
     // List existing developer API tokens.
     async fn list_developer_api_tokens(
-        &self
+        &self,
     ) -> Result<minknow_api::manager::ListDeveloperApiTokensResponse, Status> {
         let channel = self.channel.clone();
 
         let mut client = MinKNOWManagerClient::new(channel);
-        let request = Request::new(
-            minknow_api::manager::ListDeveloperApiTokensRequest {}
-        );
+        let request = Request::new(minknow_api::manager::ListDeveloperApiTokensRequest {});
 
         let response = match client.list_developer_api_tokens(request).await {
             Ok(response) => response.into_inner(),
             Err(err) => {
                 println!("{:?}", err);
-                return Err(Status::unavailable("Not available"))
+                return Err(Status::unavailable("Not available"));
             }
         };
 
         Ok(response)
-    }    
+    }
 
     // List available protocols for the given experiment type.
     async fn find_protocols(
         &self,
-        experiment_type: minknow_api::manager::ExperimentType
+        experiment_type: minknow_api::manager::ExperimentType,
     ) -> Result<minknow_api::manager::FindProtocolsResponse, Status> {
         let channel = self.channel.clone();
 
         let mut client = MinKNOWManagerClient::new(channel);
-        let request = Request::new(
-            minknow_api::manager::FindProtocolsRequest {
-                experiment_type: experiment_type as i32,
-                flow_cell_product_code: String::default(),
-                sequencing_kit: String::default()
-            }
-        );
+        let request = Request::new(minknow_api::manager::FindProtocolsRequest {
+            experiment_type: experiment_type as i32,
+            flow_cell_product_code: String::default(),
+            sequencing_kit: String::default(),
+        });
 
         let response = match client.find_protocols(request).await {
             Ok(response) => response.into_inner(),
             Err(err) => {
                 println!("{:?}", err);
-                return Err(Status::unavailable("Not available"))
+                return Err(Status::unavailable("Not available"));
             }
         };
 
         Ok(response)
-    }    
-
+    }
 }
 
 #[cfg(test)]
@@ -556,10 +521,7 @@ mod tests {
 
     #[tokio::test]
     async fn test_describe_host() {
-        let manager = Manager::new(
-            "localhost".to_string(),
-            9502
-        ).await;
+        let manager = Manager::new("localhost".to_string(), 9502).await;
 
         let response = manager.describe_host().await;
         assert!(response.is_ok());
@@ -567,17 +529,14 @@ mod tests {
 
     #[tokio::test]
     async fn test_developer_api_token_management() {
-        let mut manager = Manager::new(
-            "localhost".to_string(),
-            9502
-        ).await;
-        
+        let mut manager = Manager::new("localhost".to_string(), 9502).await;
+
         let test_base_token = env::var("MINKNOW_API_TEST_TOKEN").ok().unwrap();
         manager.channel.set_token(test_base_token);
 
-        let response = manager.create_developer_api_token(
-            "test_developer_api_token_management".to_string()
-        ).await;
+        let response = manager
+            .create_developer_api_token("test_developer_api_token_management".to_string())
+            .await;
 
         assert!(response.is_ok());
 
@@ -593,35 +552,31 @@ mod tests {
 
     #[tokio::test]
     async fn test_find_protocols() {
-        let mut manager = Manager::new(
-            "localhost".to_string(),
-            9502
-        ).await;
-        
+        let mut manager = Manager::new("localhost".to_string(), 9502).await;
+
         let test_base_token = env::var("MINKNOW_API_TEST_TOKEN").ok().unwrap();
         manager.channel.set_token(test_base_token);
 
-        let response = manager.find_protocols(
-            minknow_api::manager::ExperimentType::AllIncludingHidden
-        ).await;
+        let response = manager
+            .find_protocols(minknow_api::manager::ExperimentType::AllIncludingHidden)
+            .await;
 
         assert!(response.is_ok());
+
+        println!("{:?}", &response.unwrap().protocols.clone());
     }
 
     #[tokio::test]
     async fn test_simulated_minion_e2e() {
         let device_name = "MS12345".to_string();
-        let mut manager = Manager::new(
-            "localhost".to_string(),
-            9502
-        ).await;
-        
+        let mut manager = Manager::new("localhost".to_string(), 9502).await;
+
         let test_base_token = env::var("MINKNOW_API_TEST_TOKEN").ok().unwrap();
         manager.channel.set_token(test_base_token);
 
-        let response = manager.create_developer_api_token(
-            "test_simulated_minion_end_to_end".to_string()
-        ).await;
+        let response = manager
+            .create_developer_api_token("test_simulated_minion_end_to_end".to_string())
+            .await;
 
         assert!(response.is_ok());
 
@@ -631,13 +586,15 @@ mod tests {
 
         manager.channel.set_token(token);
 
-        let response = manager.add_simulated_device(
-          device_name.clone(),
-          minknow_api::manager::SimulatedDeviceType::SimulatedMinion
-        ).await;
+        let response = manager
+            .add_simulated_device(
+                device_name.clone(),
+                minknow_api::manager::SimulatedDeviceType::SimulatedMinion,
+            )
+            .await;
 
         assert!(response.is_ok());
-        
+
         let five_secs = time::Duration::from_secs(5);
         thread::sleep(five_secs);
 
@@ -645,36 +602,32 @@ mod tests {
         let potentially_found_flow_cell = response
             .unwrap()
             .into_iter()
-            .find(|position| {
-                position.description.name == device_name.clone()
-            });
+            .find(|position| position.description.name == device_name.clone());
 
         let found_flow_cell = match potentially_found_flow_cell {
             Some(found_flow_cell) => found_flow_cell,
-            None => panic!("Could not find flow cell")
+            None => panic!("Could not find flow cell"),
         };
 
         let channel = found_flow_cell.channel().await;
 
-        let protocol = Protocol{ channel };
-        let response = protocol.start_protocol(
-            "checks/flowcell_check/platform_qc:FLO-MIN106".to_string(),
-            Vec::new(),
-            None,
-            None,
-            None
-        ).await;
+        let protocol = Protocol { channel };
+        let response = protocol
+            .start_protocol(
+                "checks/flowcell_check/platform_qc:FLO-MIN106".to_string(),
+                Vec::new(),
+                None,
+                None,
+                None,
+            )
+            .await;
         assert!(response.is_ok());
 
         let unwrapped_response = &response.unwrap();
         let run_id = unwrapped_response.run_id.clone();
-        let response = protocol.wait_for_finished(
-            run_id,
-            None,
-            10000.0
-        ).await;
+        let response = protocol.wait_for_finished(run_id, None, 10000.0).await;
         assert!(response.is_ok());
-        
+
         let response = manager.remove_simulated_device(device_name.clone()).await;
         assert!(response.is_ok());
 
@@ -689,17 +642,14 @@ mod tests {
     async fn test_simulated_promethion_e2e() {
         let device_name = "P2S_00007-1".to_string();
 
-        let mut manager = Manager::new(
-            "localhost".to_string(),
-            9502
-        ).await;
-        
+        let mut manager = Manager::new("localhost".to_string(), 9502).await;
+
         let test_base_token = env::var("MINKNOW_API_TEST_TOKEN").ok().unwrap();
         manager.channel.set_token(test_base_token);
 
-        let response = manager.create_developer_api_token(
-            "test_simulated_promethion_end_to_end".to_string()
-        ).await;
+        let response = manager
+            .create_developer_api_token("test_simulated_promethion_end_to_end".to_string())
+            .await;
 
         assert!(response.is_ok());
 
@@ -709,13 +659,15 @@ mod tests {
 
         manager.channel.set_token(token);
 
-        let response = manager.add_simulated_device(
-            device_name.clone(), 
-            minknow_api::manager::SimulatedDeviceType::SimulatedPromethion
-        ).await;
+        let response = manager
+            .add_simulated_device(
+                device_name.clone(),
+                minknow_api::manager::SimulatedDeviceType::SimulatedPromethion,
+            )
+            .await;
 
         assert!(response.is_ok());
-        
+
         let five_secs = time::Duration::from_secs(5);
         thread::sleep(five_secs);
 
@@ -724,36 +676,66 @@ mod tests {
         let potentially_found_flow_cell = response
             .unwrap()
             .into_iter()
-            .find(|position| {
-                position.description.name == device_name.clone()
-            });
+            .find(|position| position.description.name == device_name.clone());
 
         let found_flow_cell = match potentially_found_flow_cell {
             Some(found_flow_cell) => found_flow_cell,
-            None => panic!("Could not find flow cell")
+            None => panic!("Could not find flow cell"),
         };
 
         let channel = found_flow_cell.channel().await;
 
-        let protocol = Protocol{ channel };
-        let response = protocol.start_protocol(
-            "checks/flowcell_check/platform_qc:FLO-PRO002".to_string(),
-            Vec::new(),
-            None,
-            None,
-            None
-        ).await;
+        let protocol = Protocol { channel };
+        let response = protocol
+            .start_protocol(
+                "checks/flowcell_check/platform_qc:FLO-PRO002".to_string(),
+                Vec::new(),
+                None,
+                None,
+                None,
+            )
+            .await;
         assert!(response.is_ok());
 
         let unwrapped_response = &response.unwrap();
         let run_id = unwrapped_response.run_id.clone();
-        let response = protocol.wait_for_finished(
-            run_id,
-            None,
-            10000.0
-        ).await;
+        let response = protocol.wait_for_finished(run_id, None, 10000.0).await;
         assert!(response.is_ok());
-        
+
+        let mut stop_after_60_secs = HashMap::new();
+        let int_type_60_secs = prost_types::Value {
+            kind: Some(prost_types::value::Kind::NumberValue(60.0)),
+        };
+
+        stop_after_60_secs.insert(
+            String::from("runtime"),
+            prost_types::Any {
+                type_url: String::from("type.googleapis.com/google.protobuf.Int64Value"),
+                value: int_type_60_secs.encode_to_vec(),
+            },
+        );
+
+        let response = protocol
+            .start_protocol(
+                "sequencing/sequencing_PRO002_DNA:FLO-PRO002:SQK-LSK110".to_string(),
+                Vec::new(),
+                None,
+                None,
+                Some(minknow_api::acquisition::TargetRunUntilCriteria {
+                    pause_criteria: None,
+                    stop_criteria: Some(minknow_api::run_until::CriteriaValues {
+                        criteria: stop_after_60_secs,
+                    }),
+                }),
+            )
+            .await;
+        assert!(response.is_ok());
+
+        let unwrapped_response = &response.unwrap();
+        let run_id = unwrapped_response.run_id.clone();
+        let response = protocol.wait_for_finished(run_id, None, 10000.0).await;
+        assert!(response.is_ok());
+
         let response = manager.remove_simulated_device(device_name.clone()).await;
         assert!(response.is_ok());
 
@@ -763,5 +745,4 @@ mod tests {
         let response = manager.revoke_developer_api_token(id).await;
         assert!(response.is_ok());
     }
-
 }

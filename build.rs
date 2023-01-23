@@ -25,5 +25,5 @@ fn main() {
                 &["proto"],
             )
             .unwrap();
-    }    
+    }
 }
