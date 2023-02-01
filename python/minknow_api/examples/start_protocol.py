@@ -201,6 +201,19 @@ def parse_args():
     )
 
     parser.add_argument(
+        "--pod5",
+        action="store_true",
+        help="enables Pod5 file output, defaulting to 4000 reads per file, this will store raw data.",
+    )
+
+    parser.add_argument(
+        "--pod5-reads-per-file",
+        type=int,
+        default=4000,
+        help="set the number of reads combined into one Pod5 file.",
+    )
+
+    parser.add_argument(
         "--bam",
         action="store_true",
         help="enables BAM file output, defaulting to 4000 reads per file",
@@ -292,8 +305,8 @@ def parse_args():
         print("Unable to specify `--alignment-reference` without `--basecalling`.")
         sys.exit(1)
 
-    if not (args.fast5 or args.fastq):
-        print("No output (fast5 or fastq) specified")
+    if not (args.fast5 or args.pod5 or args.bam or args.fastq):
+        print("No output (fast5, pod5, bam or fastq) specified")
 
     return args
 
@@ -594,6 +607,7 @@ def main():
 
     fastq_arguments = build_output_arguments(args, "fastq")
     fast5_arguments = build_output_arguments(args, "fast5")
+    pod5_arguments = build_output_arguments(args, "pod5")
     bam_arguments = build_output_arguments(args, "bam")
 
     # Now start the protocol(s):
@@ -617,6 +631,7 @@ def main():
             read_until=read_until_args,
             fastq_arguments=fastq_arguments,
             fast5_arguments=fast5_arguments,
+            pod5_arguments=pod5_arguments,
             bam_arguments=bam_arguments,
             disable_active_channel_selection=args.no_active_channel_selection,
             mux_scan_period=args.mux_scan_period,

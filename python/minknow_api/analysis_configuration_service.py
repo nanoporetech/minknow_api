@@ -400,7 +400,21 @@ class AnalysisConfigurationService(object):
 
                 Filename can be absolute, or a basename (eg dna_r9.4_450bps.cfg)
                 which guppy should locate (see guppy application config entry: "data_path")
+            align_filter (bool, optional): Enable or disable pass/fail filtering based on alignment.  When enabled, reads which
+                do not align to any references will be marked as "failed", and written to the folder
+                specified in MinKNOW configuration for failed reads.  
+
+                The setting applies to both regular read filtering and target filtering; if it is 
+                enabled, then a read will not be marked as a target read if it does not align to a reference.
+
+                Default setting is false, i.e. disabled.
+
+                Since 5.4
             read_filtering (minknow_api.analysis_configuration_pb2.BasecallerConfiguration.ReadFiltering, optional): Control how read filtering is applied to output of basecaller.
+                These settings determine whether a read is marked as "passed"
+                or "failed".  Reads are written to different folders based on
+                the result of this filtering.  Those folders are specified in
+                MinKNOW configuration.
 
                 If no filtering parameters are provided then reads will not
                 be filtered.
@@ -409,6 +423,12 @@ class AnalysisConfigurationService(object):
 
                 Since 3.5
             target_filtering (minknow_api.analysis_configuration_pb2.BasecallerConfiguration.TargetFiltering, optional): Control how target filtering is applied to output of basecaller.
+                Reads which pass these filtering criteria will be marked as
+                "target" reads, and will be written to a separate folder; this 
+                folder is specified in MinKNOW configuration.  Reads which do 
+                not pass these criteria will have the regular read filtering
+                applied to them, as specified by the `read-filtering` settings
+                above.
 
                 If no filtering parameters are provided then reads will not
                 be target-filtered.
@@ -455,6 +475,10 @@ class AnalysisConfigurationService(object):
         if "config_filename" in kwargs:
             unused_args.remove("config_filename")
             _message.configs.config_filename = kwargs['config_filename']
+
+        if "align_filter" in kwargs:
+            unused_args.remove("align_filter")
+            _message.configs.align_filter = kwargs['align_filter']
 
         if "read_filtering" in kwargs:
             unused_args.remove("read_filtering")
@@ -518,7 +542,21 @@ class AnalysisConfigurationService(object):
 
                 Filename can be absolute, or a basename (eg dna_r9.4_450bps.cfg)
                 which guppy should locate (see guppy application config entry: "data_path")
+            align_filter (bool, optional): Enable or disable pass/fail filtering based on alignment.  When enabled, reads which
+                do not align to any references will be marked as "failed", and written to the folder
+                specified in MinKNOW configuration for failed reads.  
+
+                The setting applies to both regular read filtering and target filtering; if it is 
+                enabled, then a read will not be marked as a target read if it does not align to a reference.
+
+                Default setting is false, i.e. disabled.
+
+                Since 5.4
             read_filtering (minknow_api.analysis_configuration_pb2.BasecallerConfiguration.ReadFiltering, optional): Control how read filtering is applied to output of basecaller.
+                These settings determine whether a read is marked as "passed"
+                or "failed".  Reads are written to different folders based on
+                the result of this filtering.  Those folders are specified in
+                MinKNOW configuration.
 
                 If no filtering parameters are provided then reads will not
                 be filtered.
@@ -527,6 +565,12 @@ class AnalysisConfigurationService(object):
 
                 Since 3.5
             target_filtering (minknow_api.analysis_configuration_pb2.BasecallerConfiguration.TargetFiltering, optional): Control how target filtering is applied to output of basecaller.
+                Reads which pass these filtering criteria will be marked as
+                "target" reads, and will be written to a separate folder; this 
+                folder is specified in MinKNOW configuration.  Reads which do 
+                not pass these criteria will have the regular read filtering
+                applied to them, as specified by the `read-filtering` settings
+                above.
 
                 If no filtering parameters are provided then reads will not
                 be target-filtered.
@@ -573,6 +617,10 @@ class AnalysisConfigurationService(object):
         if "config_filename" in kwargs:
             unused_args.remove("config_filename")
             _message.configs.config_filename = kwargs['config_filename']
+
+        if "align_filter" in kwargs:
+            unused_args.remove("align_filter")
+            _message.configs.align_filter = kwargs['align_filter']
 
         if "read_filtering" in kwargs:
             unused_args.remove("read_filtering")

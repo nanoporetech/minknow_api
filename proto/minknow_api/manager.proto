@@ -416,6 +416,30 @@ message DescribeHostResponse {
     //
     // Since 4.4
     bool can_sequence_offline = 5;
+
+    enum BasecallingAvailability {
+        // Basecalling is available and the underlying services are up and running
+        BASECALLING_AVAILABLE = 0;
+        // Basecalling is unavailable
+        // 
+        // This may be due to failing to start or has failed to recover after being restarted
+        BASECALLING_UNAVAILABLE = 1;
+        // Basecalling is unavailable due to bad configuration of the underlying service
+        // and automatic recovery is not possible
+        //
+        // This may be due to hardware configuration or compatibility when GPU basecalling is
+        // enabled but the server is unable to support or use the GPU
+        BASECALLING_UNAVAILABLE_BAD_CONFIGURATION = 2;
+        // Basecalling is temporarily unavailable and the system is attempting to restart
+        // the underlying service
+        // 
+        // This may be due to a runtime issue and attempts are being made to recover
+        BASECALLING_UNAVAILABLE_ATTEMPTING_RECOVERY = 3;
+     };
+     // Whether the device can currently provide basecalling
+     //
+     // 
+     BasecallingAvailability can_basecall = 6;
 }
 
 enum SimpleProtocolState {
@@ -974,6 +998,7 @@ enum SimulatedDeviceType {
     SIMULATED_MINION = 1;
     SIMULATED_TRAXION = 2;
     SIMULATED_PROMETHION = 3;
+    SIMULATED_P2 = 4;
 }
 
 message AddSimulatedDeviceRequest {
@@ -982,6 +1007,7 @@ message AddSimulatedDeviceRequest {
     //
     // For MinIONs and MinION-mk1Cs, "MS" followed by five digits, eg: "MS12345".
     // For GridIONs, "GS" followed by five digits, eg: "GS12345".
+    // For P2Solos, "P2S" followed by four digits, eg: "P2S1234".
     //
     // PromethIONs position-names have no format restriction, but must be unique
     string name = 1 [(rpc_required) = true];
@@ -1046,11 +1072,11 @@ message AssociationDeviceCodeRequest {
     // device.
     string position_name = 1;
 
-    // Get a code suitable for offline association rather than online association.
+    // Offline association is now the default workflow
     //
-    // Set this to true if the user will manually enter the code into the customer portal to get an
-    // unlock code. Set to false if the code will be used directly in the online association API.
-    bool offline = 2;
+    // The following are therefore reserved/deprecated
+    reserved "offline";
+    reserved 2;
 }
 
 message AssociationDeviceCodeResponse {

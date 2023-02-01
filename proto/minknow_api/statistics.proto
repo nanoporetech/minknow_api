@@ -595,6 +595,12 @@ message StreamTemperatureRequest {
 }
 
 message TemperaturePacket {
+    // Represents a range of values.
+    message Range {
+        float minimum = 1;
+        float maximum = 2;
+    }
+
     // Packet of temperatures appropriate for a MinION.
     message MinIONTemperature
     {
@@ -618,6 +624,12 @@ message TemperaturePacket {
         MinIONTemperature minion = 1;
         PromethIONTemperature promethion = 2;
     }
+
+    // The range is based on the requested target temperature and tolerance.
+    //
+    // For example, if the target temperature is 35, and the tolerance is 1
+    // then target temperatures will return as 34(min) and 36(max).
+    Range target_temperature = 3;
 }
 
 message StreamTemperatureResponse {

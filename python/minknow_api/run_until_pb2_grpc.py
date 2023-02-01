@@ -68,9 +68,9 @@ class RunUntilServiceStub(object):
     Acquisition runtime, in seconds
     Criterion is met if the runtime is greater than or equal to the specified value.
 
-    `available_pores` (uint64)
+    `available_pores` (float)
     Pores marked available, following a mux scan.
-    Criterion is met if the number of available pores is less than the specified value.
+    Criterion is met if the percentage of available pores is less than the specified value.
     An update will be supplied after each mux scan that is performed.
 
     `estimated_bases` (uint64)
@@ -250,9 +250,9 @@ class RunUntilServiceServicer(object):
     Acquisition runtime, in seconds
     Criterion is met if the runtime is greater than or equal to the specified value.
 
-    `available_pores` (uint64)
+    `available_pores` (float)
     Pores marked available, following a mux scan.
-    Criterion is met if the number of available pores is less than the specified value.
+    Criterion is met if the percentage of available pores is less than the specified value.
     An update will be supplied after each mux scan that is performed.
 
     `estimated_bases` (uint64)
@@ -516,9 +516,9 @@ class RunUntilService(object):
     Acquisition runtime, in seconds
     Criterion is met if the runtime is greater than or equal to the specified value.
 
-    `available_pores` (uint64)
+    `available_pores` (float)
     Pores marked available, following a mux scan.
-    Criterion is met if the number of available pores is less than the specified value.
+    Criterion is met if the percentage of available pores is less than the specified value.
     An update will be supplied after each mux scan that is performed.
 
     `estimated_bases` (uint64)

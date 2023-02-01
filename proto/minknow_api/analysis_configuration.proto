@@ -666,7 +666,7 @@ message AlignmentConfiguration
 {
     // Provide an index to align reads against once basecalled.
     //
-    // Any acceptable referece format to guppy can be passed here:
+    // Any acceptable reference format to guppy can be passed here:
     //   - fasta reference file
     //   - minimap index file
     repeated string reference_files = 1;
@@ -743,7 +743,23 @@ message BasecallerConfiguration
     // which guppy should locate (see guppy application config entry: "data_path")
     string config_filename = 1;
 
+    // Enable or disable pass/fail filtering based on alignment.  When enabled, reads which
+    // do not align to any references will be marked as "failed", and written to the folder
+    // specified in MinKNOW configuration for failed reads.  
+    //
+    // The setting applies to both regular read filtering and target filtering; if it is 
+    // enabled, then a read will not be marked as a target read if it does not align to a reference.
+    //
+    // Default setting is false, i.e. disabled.
+    //
+    // Since 5.4
+    bool align_filter = 10;
+
     // Control how read filtering is applied to output of basecaller.
+    // These settings determine whether a read is marked as "passed"
+    // or "failed".  Reads are written to different folders based on
+    // the result of this filtering.  Those folders are specified in
+    // MinKNOW configuration.
     //
     // If no filtering parameters are provided then reads will not
     // be filtered.
@@ -756,6 +772,12 @@ message BasecallerConfiguration
     BarcodingConfiguration barcoding_configuration = 4;
 
     // Control how target filtering is applied to output of basecaller.
+    // Reads which pass these filtering criteria will be marked as
+    // "target" reads, and will be written to a separate folder; this 
+    // folder is specified in MinKNOW configuration.  Reads which do 
+    // not pass these criteria will have the regular read filtering
+    // applied to them, as specified by the `read-filtering` settings
+    // above.
     //
     // If no filtering parameters are provided then reads will not
     // be target-filtered.
@@ -1150,6 +1172,11 @@ message WriterConfiguration {
         //
         // Stored with the frame commands take effect sequence in /Device/AsicCommands
         bool device_commands = 12;
+        
+        // Dynamic analysis configuration
+        //
+        // Stored with the frame config took effect in /Meta/User/DynamicAnalysisConfiguration
+        bool dynamic_analysis_config = 15;
     }
 
     // Control settings for the report writer

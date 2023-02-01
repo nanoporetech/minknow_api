@@ -160,7 +160,9 @@ StartBasecallingRequest = _reflection.GeneratedProtocolMessageType('StartBasecal
           Enable output of .fast5 files containing original raw reads,
           event data/trace table from basecall and basecall result
           sequence.  This causes .fast5 files to be output in addition
-          to FASTQ files.
+          to FASTQ files.  DEPRECATED: This option does not have any
+          effect - the basecaller no longer has the ability to write
+          fast5 files.
       compress_fastq:
           Enable gzip compression of output FASTQ files.
       disable_events:

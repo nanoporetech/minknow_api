@@ -80,6 +80,7 @@ __all__ = [
     "SIMULATED_MINION",
     "SIMULATED_TRAXION",
     "SIMULATED_PROMETHION",
+    "SIMULATED_P2",
     "ExperimentType",
     "SEQUENCING",
     "CONTROL",
@@ -959,6 +960,7 @@ class ManagerService(object):
 
                 For MinIONs and MinION-mk1Cs, "MS" followed by five digits, eg: "MS12345".
                 For GridIONs, "GS" followed by five digits, eg: "GS12345".
+                For P2Solos, "P2S" followed by four digits, eg: "P2S1234".
 
                 PromethIONs position-names have no format restriction, but must be unique
             type (minknow_api.manager_pb2.SimulatedDeviceType): The type of the simulated device to create.
@@ -1197,10 +1199,6 @@ class ManagerService(object):
 
                 Passing a integrated flow cell position will return the code/key for the whole sequencing
                 device.
-            offline (bool, optional): Get a code suitable for offline association rather than online association.
-
-                Set this to true if the user will manually enter the code into the customer portal to get an
-                unlock code. Set to false if the code will be used directly in the online association API.
 
         Returns:
             minknow_api.manager_pb2.AssociationDeviceCodeResponse
@@ -1223,10 +1221,6 @@ class ManagerService(object):
         if "position_name" in kwargs:
             unused_args.remove("position_name")
             _message.position_name = kwargs['position_name']
-
-        if "offline" in kwargs:
-            unused_args.remove("offline")
-            _message.offline = kwargs['offline']
 
         if len(unused_args) > 0:
             raise ArgumentError("Unexpected keyword arguments to association_device_code: '{}'".format(", ".join(unused_args)))

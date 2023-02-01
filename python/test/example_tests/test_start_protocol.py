@@ -70,8 +70,7 @@ def run_start_protocol_example(port, args):
             "--verbose",
         ]
         + args,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.STDOUT,
+        capture_output=True,
     )
     if p.returncode:
         print(p.stdout.decode("utf-8"))
@@ -215,6 +214,7 @@ def test_basic_start_protocol():
             assert protocol.args == [
                 "--experiment_time=72",
                 "--fast5=off",
+                "--pod5=off",
                 "--fastq=off",
                 "--bam=off",
                 "--active_channel_selection=on",
@@ -239,6 +239,7 @@ def test_basic_start_protocol():
             assert protocol.args == [
                 "--experiment_time=72",
                 "--fast5=off",
+                "--pod5=off",
                 "--fastq=off",
                 "--bam=off",
                 "--active_channel_selection=on",
@@ -295,6 +296,7 @@ def test_naming_start_protocol():
             assert protocol.args == [
                 "--experiment_time=72",
                 "--fast5=off",
+                "--pod5=off",
                 "--fastq=off",
                 "--bam=off",
                 "--active_channel_selection=on",
@@ -347,6 +349,7 @@ def test_basecalling_start_protocol():
                 "--base_calling=on",
                 "--experiment_time=72",
                 "--fast5=off",
+                "--pod5=off",
                 "--fastq=off",
                 "--bam=off",
                 "--active_channel_selection=on",
@@ -377,6 +380,7 @@ def test_basecalling_start_protocol():
                 "--guppy_filename=%s" % TEST_BASECLL_MODEL_OTHER,
                 "--experiment_time=72",
                 "--fast5=off",
+                "--pod5=off",
                 "--fastq=off",
                 "--bam=off",
                 "--active_channel_selection=on",
@@ -449,6 +453,7 @@ def test_barcoding_start_protocol():
                 "--barcoding",
                 "--experiment_time=72",
                 "--fast5=off",
+                "--pod5=off",
                 "--fastq=off",
                 "--bam=off",
                 "--active_channel_selection=on",
@@ -497,6 +502,7 @@ def test_barcoding_start_protocol():
                 "min_score_mid=7.0",
                 "--experiment_time=72",
                 "--fast5=off",
+                "--pod5=off",
                 "--fastq=off",
                 "--bam=off",
                 "--active_channel_selection=on",
@@ -590,6 +596,7 @@ def test_alignment_start_protocol():
                 "reference_files=['foo.fasta',]",
                 "--experiment_time=72",
                 "--fast5=off",
+                "--pod5=off",
                 "--fastq=off",
                 "--bam=off",
                 "--active_channel_selection=on",
@@ -625,6 +632,7 @@ def test_alignment_start_protocol():
                 "bed_file='bar.bed'",
                 "--experiment_time=72",
                 "--fast5=off",
+                "--pod5=off",
                 "--fastq=off",
                 "--bam=off",
                 "--active_channel_selection=on",
@@ -680,6 +688,7 @@ def test_output_start_protocol():
             assert protocol.args == [
                 "--experiment_time=72",
                 "--fast5=off",
+                "--pod5=off",
                 "--fastq=on",
                 "--fastq_data",
                 "compress",
@@ -719,6 +728,39 @@ def test_output_start_protocol():
                 "raw",
                 "vbz_compress",
                 "--fast5_reads_per_file=501",
+                "--pod5=off",
+                "--fastq=off",
+                "--bam=off",
+                "--active_channel_selection=on",
+                "--mux_scan_period=1.5",
+            ]
+
+            # Pod5
+            assert (
+                run_start_protocol_example(
+                    server.port,
+                    [
+                        "--kit",
+                        TEST_KIT_NAME,
+                        "--position",
+                        position_info.position_name,
+                        "--pod5",
+                        "--pod5-reads-per-file",
+                        "502",
+                    ],
+                )[0]
+                == 0
+            )
+            assert len(sequencing_position.protocol_service.protocol_runs) == 3
+            protocol = sequencing_position.protocol_service.protocol_runs[-1]
+            assert protocol.identifier == TEST_PROTOCOL_IDENTIFIER
+            assert protocol.user_info.sample_id.value == ""
+            assert protocol.user_info.protocol_group_id.value == ""
+            assert protocol.args == [
+                "--experiment_time=72",
+                "--fast5=off",
+                "--pod5=on",
+                "--pod5_reads_per_file=502",
                 "--fastq=off",
                 "--bam=off",
                 "--active_channel_selection=on",
@@ -739,7 +781,7 @@ def test_output_start_protocol():
                 )[0]
                 == 0
             )
-            assert len(sequencing_position.protocol_service.protocol_runs) == 3
+            assert len(sequencing_position.protocol_service.protocol_runs) == 4
             protocol = sequencing_position.protocol_service.protocol_runs[-1]
             assert protocol.identifier == TEST_PROTOCOL_IDENTIFIER
             assert protocol.user_info.sample_id.value == ""
@@ -747,6 +789,7 @@ def test_output_start_protocol():
             assert protocol.args == [
                 "--experiment_time=72",
                 "--fast5=off",
+                "--pod5=off",
                 "--fastq=off",
                 "--bam=on",
                 "--active_channel_selection=on",
@@ -832,6 +875,7 @@ def test_sample_sheet_start_protocol():
                 "min_score_mid=7.0",
                 "--experiment_time=72",
                 "--fast5=off",
+                "--pod5=off",
                 "--fastq=off",
                 "--bam=off",
                 "--active_channel_selection=on",
@@ -915,6 +959,7 @@ def test_sample_sheet_start_protocol():
                 "min_score_mid=7.0",
                 "--experiment_time=72",
                 "--fast5=off",
+                "--pod5=off",
                 "--fastq=off",
                 "--bam=off",
                 "--active_channel_selection=on",
@@ -977,6 +1022,7 @@ def test_sample_sheet_start_protocol():
             assert protocol.args == [
                 "--experiment_time=72",
                 "--fast5=off",
+                "--pod5=off",
                 "--fastq=off",
                 "--bam=off",
                 "--active_channel_selection=on",
@@ -1161,6 +1207,7 @@ def test_read_until_start_protocol():
                 "bed_file='test.bed'",
                 "--experiment_time=72",
                 "--fast5=off",
+                "--pod5=off",
                 "--fastq=off",
                 "--bam=off",
                 "--active_channel_selection=on",

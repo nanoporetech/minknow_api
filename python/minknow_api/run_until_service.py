@@ -115,9 +115,9 @@ class RunUntilService(object):
          Acquisition runtime, in seconds
          Criterion is met if the runtime is greater than or equal to the specified value.
 
-    `available_pores` (uint64)
+    `available_pores` (float)
          Pores marked available, following a mux scan.
-         Criterion is met if the number of available pores is less than the specified value.
+         Criterion is met if the percentage of available pores is less than the specified value.
          An update will be supplied after each mux scan that is performed.
 
     `estimated_bases` (uint64)
@@ -520,6 +520,17 @@ class RunUntilService(object):
                 Note that this is the time until the call ends, not the time between returned
                 messages.
             acquisition_run_id (str): The acquisition to stream Run-Until updates for
+            start_idx (int, optional): The index of the first update to send.
+
+                If an index is set that is greater than the current greatest update index, no past updates
+                will be sent, but any future updates will be sent.  This may mean that you receive updates
+                with an `idx` smaller than `start_idx`.
+
+                In order to receive only updates that are sent after the call to `stream_updates()`, and no
+                historic updates, set `start_idx`` to `uint64_max`.
+
+                By default, start_idx is `0`, which means that all updates from the first update onwards
+                will be sent.
 
         Returns:
             iter of minknow_api.run_until_pb2.StreamUpdatesResponse
@@ -544,6 +555,10 @@ class RunUntilService(object):
             _message.acquisition_run_id = kwargs['acquisition_run_id']
         else:
             raise ArgumentError("stream_updates requires a 'acquisition_run_id' argument")
+
+        if "start_idx" in kwargs:
+            unused_args.remove("start_idx")
+            _message.start_idx = kwargs['start_idx']
 
         if len(unused_args) > 0:
             raise ArgumentError("Unexpected keyword arguments to stream_updates: '{}'".format(", ".join(unused_args)))

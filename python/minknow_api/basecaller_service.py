@@ -149,6 +149,8 @@ class Basecaller(object):
                 basecall and basecall result sequence.
 
                 This causes .fast5 files to be output in addition to FASTQ files.
+
+                DEPRECATED: This option does not have any effect - the basecaller no longer has the ability to write fast5 files.
             compress_fastq (bool, optional): Enable gzip compression of output FASTQ files.
             disable_events (bool, optional): Prevent events / trace tables being written to .fast5 files.
 

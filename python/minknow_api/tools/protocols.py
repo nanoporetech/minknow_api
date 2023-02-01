@@ -184,6 +184,7 @@ def make_protocol_arguments(
     read_until: ReadUntilArgs = None,
     fastq_arguments: OutputArgs = None,
     fast5_arguments: OutputArgs = None,
+    pod5_arguments: OutputArgs = None,
     bam_arguments: OutputArgs = None,
     disable_active_channel_selection: bool = False,
     mux_scan_period: float = 1.5,
@@ -199,7 +200,8 @@ def make_protocol_arguments(
         basecalling(:obj:`BasecallingArgs`):    Arguments to control basecalling.
         read_until(:obj:`ReadUntilArgs):        Arguments to control read until.
         fastq_arguments(:obj:`OutputArgs`):     Control fastq file generation.
-        fast5_arguments(:obj:`OutputArgs`):     Control fastq file generation.
+        fast5_arguments(:obj:`OutputArgs`):     Control fast5 file generation.
+        pod5_arguments(:obj:`OutputArgs`):      Control pod5 file generation.
         bam_arguments(:obj:`OutputArgs`):       Control bam file generation.
         disable_active_channel_selection(bool): Disable active channel selection
         mux_scan_period(float):                 Period of time between mux scans in hours.
@@ -318,6 +320,12 @@ def make_protocol_arguments(
         )
         protocol_args.append(
             "--fast5_reads_per_file={}".format(fast5_arguments.reads_per_file)
+        )
+
+    protocol_args.append("--pod5=" + on_off(pod5_arguments))
+    if pod5_arguments:
+        protocol_args.append(
+            "--pod5_reads_per_file={}".format(pod5_arguments.reads_per_file)
         )
 
     protocol_args.append("--fastq=" + on_off(fastq_arguments))

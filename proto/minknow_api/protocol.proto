@@ -508,6 +508,17 @@ enum ProtocolState {
 
     // The protocol was terminated because MinKNOW could not send telemetry to start acquisition.
     PROTOCOL_FINISHED_UNABLE_TO_SEND_TELEMETRY = 7;
+
+    // Enums 20-120 are "reserved" for any new script exit codes we may want to forward
+
+    // The protocol has reported and error during calibration
+    PROTOCOL_FINISHED_WITH_ERROR_CALIBRATION = 20;              // Exit with code 20
+
+    // Setting basecall settings failed (Bad config etc)
+    PROTOCOL_FINISHED_WITH_ERROR_BASECALL_SETTINGS = 21;        // Exit with code 21
+    
+    // OND requires us to reach temperature and fail if not
+    PROTOCOL_FINISHED_WITH_ERROR_TEMPERATURE_REQUIRED = 22;     // Exit with code 22
 }
 
 enum ProtocolPhase {
@@ -694,18 +705,21 @@ message ProtocolRunInfo {
 }
 
 message FilteringInfo {
-    // Intialising this message a filter like `pqc_filter` will imply to restrict results to
-    // that type only.
-    // 
-    // Each filter type should also be using wrapper types for each individual value, to
-    // allow for specific filtering within each type
-
     message PlatformQcFilter {
         optional string flow_cell_id = 1;
     }
 
+    // Filter by runs that have platform QC results
+    //
+    // Just initialising this message is enough to filter out runs with
+    // platform QC results from ones that don't
+    //
+    // Further filtering on the platform QC results can be applied by using
+    // the fields within PlatformQcFilter
     PlatformQcFilter pqc_filter = 1;
-    
+
+    // Filter runs by a specific protocol_group_id
+    optional string protocol_group_id = 2; 
 }
 
 message ListProtocolRunsRequest {
