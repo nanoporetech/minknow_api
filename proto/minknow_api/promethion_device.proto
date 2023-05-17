@@ -90,6 +90,8 @@ message DeviceSettings {
     google.protobuf.BoolValue saturation_control_enabled = 5;
 
     // Enable use of the fast calibration mode across the device
+    //
+    // DEPRECATED since 5.5. This will be removed in a future release.
     google.protobuf.BoolValue fast_calibration_enabled = 6;
 
     // If the device is capable (see device.get_device_info().temperature_controllable)

@@ -958,11 +958,23 @@ class ManagerService(object):
                 if it has not been completed.
             name (str): The name of the position, this must be unique and the correct format:
 
-                For MinIONs and MinION-mk1Cs, "MS" followed by five digits, eg: "MS12345".
-                For GridIONs, "GS" followed by five digits, eg: "GS12345".
-                For P2Solos, "P2S" followed by four digits, eg: "P2S1234".
+                For MinION Mk1B and Mk1C: "MS" followed by five digits, eg: "MS12345".
+                For GridION: "GS" followed by five digits, eg: "GS12345".
+                For P2 Solo: "P2S_" followed by five digits, and then "-A" or "-B" eg: "P2S_12345-A".
 
-                PromethIONs position-names have no format restriction, but must be unique
+                PromethION and P2 Solo position-names have no format restriction, but must be unique. It is
+                strongly recommended to follow standard naming conventions:
+
+                For PromethION: start with "1A" and then increase the number and/or the letter as you add
+                more positions.
+                For P2 Solo: use "P2S_00000-A" and "P2S_00000-B" (these fit the format of real P2 Solo devices,
+                but do not correspond to any real device).
+
+                Future versions might constrain PromethION and P2 Solo device names. Using the above
+                suggestions should ensure that your code will continue to work.
+
+                Note that MinKNOW Core 5.5 and earlier required the P2 Solo device name to be "P2S" followed
+                by four digits. This is no longer recommended.
             type (minknow_api.manager_pb2.SimulatedDeviceType): The type of the simulated device to create.
 
                 If left at default (AUTO), then a sensible default device type is selected.

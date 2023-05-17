@@ -49,6 +49,11 @@ class StatisticsServiceStub(object):
                 request_serializer=minknow__api_dot_statistics__pb2.StreamReadLengthHistogramRequest.SerializeToString,
                 response_deserializer=minknow__api_dot_statistics__pb2.StreamReadLengthHistogramResponse.FromString,
                 )
+        self.read_length_n50 = channel.unary_unary(
+                '/minknow_api.statistics.StatisticsService/read_length_n50',
+                request_serializer=minknow__api_dot_statistics__pb2.ReadLengthN50Request.SerializeToString,
+                response_deserializer=minknow__api_dot_statistics__pb2.ReadLengthN50Response.FromString,
+                )
         self.get_read_length_types = channel.unary_unary(
                 '/minknow_api.statistics.StatisticsService/get_read_length_types',
                 request_serializer=minknow__api_dot_statistics__pb2.GetReadLengthTypesRequest.SerializeToString,
@@ -151,6 +156,24 @@ class StatisticsServiceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def read_length_n50(self, request, context):
+        """Read lengths N50 value
+
+        Derived from RPC stream_read_length_histogram
+        Returns the same N50 data as you'd get from the stream_read_length_histogram RPC
+
+        Returns N50 value for estimated bases data
+
+        If no basecalling, one value will return as 0.0 exactly
+
+        No filtering, discarded outliers, or split
+
+        Since 5.5
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
     def get_read_length_types(self, request, context):
         """Gets a list of the types of read-length values for which a histogram is available
 
@@ -221,6 +244,11 @@ def add_StatisticsServiceServicer_to_server(servicer, server):
                     servicer.stream_read_length_histogram,
                     request_deserializer=minknow__api_dot_statistics__pb2.StreamReadLengthHistogramRequest.FromString,
                     response_serializer=minknow__api_dot_statistics__pb2.StreamReadLengthHistogramResponse.SerializeToString,
+            ),
+            'read_length_n50': grpc.unary_unary_rpc_method_handler(
+                    servicer.read_length_n50,
+                    request_deserializer=minknow__api_dot_statistics__pb2.ReadLengthN50Request.FromString,
+                    response_serializer=minknow__api_dot_statistics__pb2.ReadLengthN50Response.SerializeToString,
             ),
             'get_read_length_types': grpc.unary_unary_rpc_method_handler(
                     servicer.get_read_length_types,
@@ -358,6 +386,23 @@ class StatisticsService(object):
         return grpc.experimental.unary_stream(request, target, '/minknow_api.statistics.StatisticsService/stream_read_length_histogram',
             minknow__api_dot_statistics__pb2.StreamReadLengthHistogramRequest.SerializeToString,
             minknow__api_dot_statistics__pb2.StreamReadLengthHistogramResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def read_length_n50(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/minknow_api.statistics.StatisticsService/read_length_n50',
+            minknow__api_dot_statistics__pb2.ReadLengthN50Request.SerializeToString,
+            minknow__api_dot_statistics__pb2.ReadLengthN50Response.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 

@@ -139,8 +139,13 @@ service DeviceService {
         option idempotency_level = NO_SIDE_EFFECTS;
     }
 
-    // If the device is capable (see GetDeviceInfoResponse.temperature_controllable)
-    // then this sets the minimum and maximum temperatures of the flow-cell.
+    // Set the target primary device temperature
+    //
+    // If the device is not temperature-controllable (see the fields
+    // `device.GetDeviceInfoResponse.can_set_temperature` and
+    // `minion_device.MinionDeviceSettings.enable_temperature_control`) then this call will have
+    // no effect
+    //
     rpc set_temperature (SetTemperatureRequest) returns (SetTemperatureResponse) {
         option idempotency_level = IDEMPOTENT;
     }
@@ -734,25 +739,112 @@ message SetTemperatureRequest {
     // The desired temperature in degrees Celsius.
     //
     // If temperature control is supported and enabled, the device will attempt to keep its
-    // temperature at this value. See the ``can_set_temperature`` field returned by the
-    // DeviceService.get_device_info() RPC.
+    // primary temperature at this value. The reading used as the "primary" temperature depends
+    // on the device:
+    // - For MinIONs, the primary temperature is the heatsink temperature
+    // - For PromethIONs, the primary temperature is the flow cell temperature
+    //
+    // (If temperature control is not supported or is not enabled, the call to `set_temperature`
+    // will fail with `FAILED_PRECONDITION`)
+    //
     float temperature = 1;
 
     // Settings which can be specified in order to wait for the temperature to be reached.
     //
-    // If this is not set at all, not waiting will be done. If it is set (even to an empty
-    // WaitForTemperatureSettings object), the call will not return until either the temperature was
-    // reached or the timeout was reached. In this case, on MinIONs and GridIONs, the ASIC power
-    // will be enabled if it was not already. See acquisition.StopRequest.keep_power_on for more
-    // details about the implications of this.
+    // If this is not set at all, no waiting will be done. If it is set (even to an empty
+    // WaitForTemperatureSettings object), the call will not return until either:
+    // - The target temperature was reached, or
+    // - The timeout was reached, or
+    // - The secondary temperature limits were exceeded
+    //
+    // If `wait_for_temperature` is supplied then, on MinIONs and GridIONs, the ASIC power will be
+    // enabled if it was not already. See `acquisition.StopRequest.keep_power_on` for more details
+    // about the implications of this.
     //
     // Since 1.15
     WaitForTemperatureSettings wait_for_temperature = 2;
+
+    message SecondaryTemperatureLimits {
+        // The minimum permissible "secondary" temperature
+        float min = 1;
+        // The maximum permissible "secondary" temperature
+        float max = 2;
+    }
+
+    // Specify "secondary" temperature limits
+    //
+    // This field allows limits to be placed on the "secondary" temperature, while waiting for
+    // the primary temperature to reach its target value (as specified in the `temperature` field,
+    // above).
+    //
+    // The meaning of the "secondary" temperature depends on the device in question:
+    // - For MinIONs, this is the ASIC temperature (i.e. flow cell or flow cell adapter
+    //   temperature)
+    // - For PromethIONs, this is the "chamber" temperature (which is derived from the measurements
+    //   of the ASIC temperature)
+    //
+    // These limits are intended to act as a safeguard against the case where the flow cell does
+    // not have good thermal contact with temperature control hardware (e.g. if the flow cell was
+    // not fully seated when it was inserted into the device). In such cases, the flow cell
+    // temperature may rise high enough to damage the flow cell; these limits may be used to
+    // mitigate the risk of the flow cell temperature rising high enough to cause damage to the
+    // flow cell.
+    //
+    // If the secondary temperature exceeds the specified limits while waiting for the target
+    // temperature to be reached, then all temperature control settings are reset to the values
+    // they had prior to the call to `set_temperature()` being made.
+    //
+    // NB - These limits apply ONLY when waiting for the target temperature to be reached; once the
+    // call to `set_temperature()` returns, these limits are no longer checked.
+    //
+    // Since 5.5
+    SecondaryTemperatureLimits secondary_temperature_limits = 3;
 }
 
 message SetTemperatureResponse {
     // Find if we hit a timeout waiting for the temperature to be hit.
+    //
+    // Deprecated since 5.5; in favour of the `TIMED_OUT_WAITING_FOR_TEMPERATURE` result code.
     bool timed_out_waiting_for_temperature = 1;
+
+    enum SetTemperatureResult {
+        // The specified target temperature was set
+        // This result will be returned if the request did not specify `wait_for_temperature`
+        TARGET_TEMPERATURE_SET = 0;
+
+        // The target temperature was set successfully, and the requested temperature was reached
+        // while waiting for temperature
+        REACHED_TEMPERATURE = 1;
+
+        // The `wait_for_temperature` timeout expired while waiting for the target temperature to
+        // be reached.
+        //
+        // If this result is returned, then `timed_out_waiting_for_temperature` will be set to
+        // true
+        TIMED_OUT_WAITING_FOR_TEMPERATURE = 2;
+
+        // The secondary temperature limits were exceeded while waiting for the target temperature
+        // to be reached
+        // The temperature control state has been reset to the state it was in before the call to
+        //  `set_temperature()`
+        SECONDARY_TEMPERATURE_LIMITS_EXCEEDED = 3;
+    }
+    
+    // The result of setting the temperature
+    //
+    // Since 5.5
+    //
+    // NB - before 5.5, checking this field will always return a value of `TARGET_TEMPERATURE_SET`
+    // The "real" value may be inferred as follows:
+    //  - If `wait_for_temperature` was NOT specified, the "real" result is
+    //    `TARGET_TEMPERATURE_SET`
+    //  - If `wait_for_temperature` was specified, and `timed_out_waiting_for_temperature` is
+    //    false, the "real" result is `REACHED_TEMPERATURE`
+    //  - If `wait_for_temperature` was specified, and `timed_out_waiting_for_temperature` is
+    //    true, the "real" result is `TIMED_OUT_WAITING_FOR_TEMPERATURE`
+    //  - Versions prior to 5.5 do not support setting the secondary temperature limit, and so (for
+    //    these versions) the "real" value can never be `SECONDARY_TEMPERATURE_LIMITS_EXCEEDED`
+    SetTemperatureResult result = 2;
 }
 
 message GetTemperatureRequest
@@ -765,8 +857,11 @@ message GetTemperatureResponse
     message MinIONTemperature
     {
         // Temperature as measured by the probe inside the asic.
+        // This is the "secondary" temperature
         google.protobuf.FloatValue asic_temperature = 1;
+
         // Temperature as measured by the probe in the minion heatsink.
+        // This is the "primary" temperature
         google.protobuf.FloatValue heatsink_temperature = 2;
     }
 
@@ -774,9 +869,11 @@ message GetTemperatureResponse
     message PromethIONTemperature
     {
         // Temperature as measured by thermistor TH2 on the P-Chip.
+        // This is the "primary" temperature
         google.protobuf.FloatValue flowcell_temperature = 1;
 
         // Mean of 12 pixel-blocks temperatures measured with sensors in the ASIC.
+        // This is the "secondary" temperature
         google.protobuf.FloatValue chamber_temperature = 2;
     }
 

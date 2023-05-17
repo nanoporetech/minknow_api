@@ -717,8 +717,12 @@ class DeviceService(object):
                               [],
                               "minknow_api.device.DeviceService")
     def set_temperature(self, _message=None, _timeout=None, **kwargs):
-        """If the device is capable (see GetDeviceInfoResponse.temperature_controllable)
-        then this sets the minimum and maximum temperatures of the flow-cell.
+        """Set the target primary device temperature
+
+        If the device is not temperature-controllable (see the fields
+        `device.GetDeviceInfoResponse.can_set_temperature` and
+        `minion_device.MinionDeviceSettings.enable_temperature_control`) then this call will have
+        no effect
 
         This RPC is idempotent. It may change the state of the system, but if the requested
         change has already happened, it will not fail because of this, make any additional
@@ -732,17 +736,53 @@ class DeviceService(object):
             temperature (float, optional): The desired temperature in degrees Celsius.
 
                 If temperature control is supported and enabled, the device will attempt to keep its
-                temperature at this value. See the ``can_set_temperature`` field returned by the
-                DeviceService.get_device_info() RPC.
+                primary temperature at this value. The reading used as the "primary" temperature depends
+                on the device:
+                - For MinIONs, the primary temperature is the heatsink temperature
+                - For PromethIONs, the primary temperature is the flow cell temperature
+
+                (If temperature control is not supported or is not enabled, the call to `set_temperature`
+                will fail with `FAILED_PRECONDITION`)
             wait_for_temperature (minknow_api.device_pb2.SetTemperatureRequest.WaitForTemperatureSettings, optional): Settings which can be specified in order to wait for the temperature to be reached.
 
-                If this is not set at all, not waiting will be done. If it is set (even to an empty
-                WaitForTemperatureSettings object), the call will not return until either the temperature was
-                reached or the timeout was reached. In this case, on MinIONs and GridIONs, the ASIC power
-                will be enabled if it was not already. See acquisition.StopRequest.keep_power_on for more
-                details about the implications of this.
+                If this is not set at all, no waiting will be done. If it is set (even to an empty
+                WaitForTemperatureSettings object), the call will not return until either:
+                - The target temperature was reached, or
+                - The timeout was reached, or
+                - The secondary temperature limits were exceeded
+
+                If `wait_for_temperature` is supplied then, on MinIONs and GridIONs, the ASIC power will be
+                enabled if it was not already. See `acquisition.StopRequest.keep_power_on` for more details
+                about the implications of this.
 
                 Since 1.15
+            secondary_temperature_limits (minknow_api.device_pb2.SetTemperatureRequest.SecondaryTemperatureLimits, optional): Specify "secondary" temperature limits
+
+                This field allows limits to be placed on the "secondary" temperature, while waiting for
+                the primary temperature to reach its target value (as specified in the `temperature` field,
+                above).
+
+                The meaning of the "secondary" temperature depends on the device in question:
+                - For MinIONs, this is the ASIC temperature (i.e. flow cell or flow cell adapter
+                  temperature)
+                - For PromethIONs, this is the "chamber" temperature (which is derived from the measurements
+                  of the ASIC temperature)
+
+                These limits are intended to act as a safeguard against the case where the flow cell does
+                not have good thermal contact with temperature control hardware (e.g. if the flow cell was
+                not fully seated when it was inserted into the device). In such cases, the flow cell
+                temperature may rise high enough to damage the flow cell; these limits may be used to
+                mitigate the risk of the flow cell temperature rising high enough to cause damage to the
+                flow cell.
+
+                If the secondary temperature exceeds the specified limits while waiting for the target
+                temperature to be reached, then all temperature control settings are reset to the values
+                they had prior to the call to `set_temperature()` being made.
+
+                NB - These limits apply ONLY when waiting for the target temperature to be reached; once the
+                call to `set_temperature()` returns, these limits are no longer checked.
+
+                Since 5.5
 
         Returns:
             minknow_api.device_pb2.SetTemperatureResponse
@@ -769,6 +809,10 @@ class DeviceService(object):
         if "wait_for_temperature" in kwargs:
             unused_args.remove("wait_for_temperature")
             _message.wait_for_temperature.CopyFrom(kwargs['wait_for_temperature'])
+
+        if "secondary_temperature_limits" in kwargs:
+            unused_args.remove("secondary_temperature_limits")
+            _message.secondary_temperature_limits.CopyFrom(kwargs['secondary_temperature_limits'])
 
         if len(unused_args) > 0:
             raise ArgumentError("Unexpected keyword arguments to set_temperature: '{}'".format(", ".join(unused_args)))

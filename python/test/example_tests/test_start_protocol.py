@@ -3,8 +3,9 @@ from pathlib import Path
 import subprocess
 import sys
 
-from minknow_api import manager_pb2, protocol_pb2
+from minknow_api import acquisition_pb2, manager_pb2, protocol_pb2, run_until_pb2
 from minknow_api.protocol_pb2 import BarcodeUserData
+from minknow_api.tools.any_helpers import make_uint64_any
 
 from test_minknow_server import (
     FlowCellInfo,
@@ -57,6 +58,11 @@ TEST_BARCODING_PROTOCOL = protocol_pb2.ProtocolInfo(
             array_value='["%s"]' % (TEST_BARCODING_KIT)
         ),
     },
+)
+TEST_RUN_UNTIL_CRITERIA = acquisition_pb2.TargetRunUntilCriteria(
+    stop_criteria=run_until_pb2.CriteriaValues(
+        criteria={"runtime": make_uint64_any(72 * 60 * 60)}
+    )
 )
 
 
@@ -212,7 +218,6 @@ def test_basic_start_protocol():
             assert protocol.user_info.sample_id.value == ""
             assert protocol.user_info.protocol_group_id.value == ""
             assert protocol.args == [
-                "--experiment_time=72",
                 "--fast5=off",
                 "--pod5=off",
                 "--fastq=off",
@@ -220,6 +225,7 @@ def test_basic_start_protocol():
                 "--active_channel_selection=on",
                 "--mux_scan_period=1.5",
             ]
+            assert protocol.target_run_until_criteria == TEST_RUN_UNTIL_CRITERIA
 
             sequencing_position.set_flow_cell_info(
                 FlowCellInfo(has_flow_cell=True, flow_cell_id=test_flow_cell_id)
@@ -237,7 +243,6 @@ def test_basic_start_protocol():
             assert protocol.user_info.sample_id.value == ""
             assert protocol.user_info.protocol_group_id.value == ""
             assert protocol.args == [
-                "--experiment_time=72",
                 "--fast5=off",
                 "--pod5=off",
                 "--fastq=off",
@@ -245,6 +250,7 @@ def test_basic_start_protocol():
                 "--active_channel_selection=on",
                 "--mux_scan_period=1.5",
             ]
+            assert protocol.target_run_until_criteria == TEST_RUN_UNTIL_CRITERIA
 
 
 def test_naming_start_protocol():
@@ -294,7 +300,6 @@ def test_naming_start_protocol():
             assert protocol.user_info.sample_id.value == "my-sample-id"
             assert protocol.user_info.protocol_group_id.value == "my-experiment-group"
             assert protocol.args == [
-                "--experiment_time=72",
                 "--fast5=off",
                 "--pod5=off",
                 "--fastq=off",
@@ -302,6 +307,7 @@ def test_naming_start_protocol():
                 "--active_channel_selection=on",
                 "--mux_scan_period=1.5",
             ]
+            assert protocol.target_run_until_criteria == TEST_RUN_UNTIL_CRITERIA
 
 
 def test_basecalling_start_protocol():
@@ -347,7 +353,6 @@ def test_basecalling_start_protocol():
             assert protocol.identifier == TEST_PROTOCOL_IDENTIFIER
             assert protocol.args == [
                 "--base_calling=on",
-                "--experiment_time=72",
                 "--fast5=off",
                 "--pod5=off",
                 "--fastq=off",
@@ -355,6 +360,7 @@ def test_basecalling_start_protocol():
                 "--active_channel_selection=on",
                 "--mux_scan_period=1.5",
             ]
+            assert protocol.target_run_until_criteria == TEST_RUN_UNTIL_CRITERIA
 
             # Basecalling enabled
             assert (
@@ -378,7 +384,6 @@ def test_basecalling_start_protocol():
             assert protocol.args == [
                 "--base_calling=on",
                 "--guppy_filename=%s" % TEST_BASECLL_MODEL_OTHER,
-                "--experiment_time=72",
                 "--fast5=off",
                 "--pod5=off",
                 "--fastq=off",
@@ -386,6 +391,7 @@ def test_basecalling_start_protocol():
                 "--active_channel_selection=on",
                 "--mux_scan_period=1.5",
             ]
+            assert protocol.target_run_until_criteria == TEST_RUN_UNTIL_CRITERIA
 
 
 def test_barcoding_start_protocol():
@@ -451,7 +457,6 @@ def test_barcoding_start_protocol():
             assert protocol.args == [
                 "--base_calling=on",
                 "--barcoding",
-                "--experiment_time=72",
                 "--fast5=off",
                 "--pod5=off",
                 "--fastq=off",
@@ -459,6 +464,7 @@ def test_barcoding_start_protocol():
                 "--active_channel_selection=on",
                 "--mux_scan_period=1.5",
             ]
+            assert protocol.target_run_until_criteria == TEST_RUN_UNTIL_CRITERIA
 
             # Barcoding with all options
             assert (
@@ -500,7 +506,6 @@ def test_barcoding_start_protocol():
                 "min_score=5.0",
                 "min_score_rear=6.0",
                 "min_score_mid=7.0",
-                "--experiment_time=72",
                 "--fast5=off",
                 "--pod5=off",
                 "--fastq=off",
@@ -508,6 +513,7 @@ def test_barcoding_start_protocol():
                 "--active_channel_selection=on",
                 "--mux_scan_period=1.5",
             ]
+            assert protocol.target_run_until_criteria == TEST_RUN_UNTIL_CRITERIA
 
 
 def test_alignment_start_protocol():
@@ -594,7 +600,6 @@ def test_alignment_start_protocol():
                 "--base_calling=on",
                 "--alignment",
                 "reference_files=['foo.fasta',]",
-                "--experiment_time=72",
                 "--fast5=off",
                 "--pod5=off",
                 "--fastq=off",
@@ -602,6 +607,7 @@ def test_alignment_start_protocol():
                 "--active_channel_selection=on",
                 "--mux_scan_period=1.5",
             ]
+            assert protocol.target_run_until_criteria == TEST_RUN_UNTIL_CRITERIA
 
             # Alignment with bed file
             assert (
@@ -630,7 +636,6 @@ def test_alignment_start_protocol():
                 "--alignment",
                 "reference_files=['foo.fasta',]",
                 "bed_file='bar.bed'",
-                "--experiment_time=72",
                 "--fast5=off",
                 "--pod5=off",
                 "--fastq=off",
@@ -638,6 +643,7 @@ def test_alignment_start_protocol():
                 "--active_channel_selection=on",
                 "--mux_scan_period=1.5",
             ]
+            assert protocol.target_run_until_criteria == TEST_RUN_UNTIL_CRITERIA
 
 
 def test_output_start_protocol():
@@ -686,7 +692,6 @@ def test_output_start_protocol():
             assert protocol.user_info.sample_id.value == ""
             assert protocol.user_info.protocol_group_id.value == ""
             assert protocol.args == [
-                "--experiment_time=72",
                 "--fast5=off",
                 "--pod5=off",
                 "--fastq=on",
@@ -697,6 +702,7 @@ def test_output_start_protocol():
                 "--active_channel_selection=on",
                 "--mux_scan_period=1.5",
             ]
+            assert protocol.target_run_until_criteria == TEST_RUN_UNTIL_CRITERIA
 
             # Fast5
             assert (
@@ -720,7 +726,6 @@ def test_output_start_protocol():
             assert protocol.user_info.sample_id.value == ""
             assert protocol.user_info.protocol_group_id.value == ""
             assert protocol.args == [
-                "--experiment_time=72",
                 "--fast5=on",
                 "--fast5_data",
                 "trace_table",
@@ -734,6 +739,7 @@ def test_output_start_protocol():
                 "--active_channel_selection=on",
                 "--mux_scan_period=1.5",
             ]
+            assert protocol.target_run_until_criteria == TEST_RUN_UNTIL_CRITERIA
 
             # Pod5
             assert (
@@ -757,7 +763,6 @@ def test_output_start_protocol():
             assert protocol.user_info.sample_id.value == ""
             assert protocol.user_info.protocol_group_id.value == ""
             assert protocol.args == [
-                "--experiment_time=72",
                 "--fast5=off",
                 "--pod5=on",
                 "--pod5_reads_per_file=502",
@@ -766,6 +771,7 @@ def test_output_start_protocol():
                 "--active_channel_selection=on",
                 "--mux_scan_period=1.5",
             ]
+            assert protocol.target_run_until_criteria == TEST_RUN_UNTIL_CRITERIA
 
             # BAM
             assert (
@@ -787,7 +793,6 @@ def test_output_start_protocol():
             assert protocol.user_info.sample_id.value == ""
             assert protocol.user_info.protocol_group_id.value == ""
             assert protocol.args == [
-                "--experiment_time=72",
                 "--fast5=off",
                 "--pod5=off",
                 "--fastq=off",
@@ -795,6 +800,7 @@ def test_output_start_protocol():
                 "--active_channel_selection=on",
                 "--mux_scan_period=1.5",
             ]
+            assert protocol.target_run_until_criteria == TEST_RUN_UNTIL_CRITERIA
 
 
 def sample_sheet_csv_path(*args):
@@ -873,7 +879,6 @@ def test_sample_sheet_start_protocol():
                 "min_score=5.0",
                 "min_score_rear=6.0",
                 "min_score_mid=7.0",
-                "--experiment_time=72",
                 "--fast5=off",
                 "--pod5=off",
                 "--fastq=off",
@@ -881,6 +886,7 @@ def test_sample_sheet_start_protocol():
                 "--active_channel_selection=on",
                 "--mux_scan_period=1.5",
             ]
+            assert protocol.target_run_until_criteria == TEST_RUN_UNTIL_CRITERIA
 
             # Get the sorted barcode user info
             actual_barcode_user_info = [
@@ -957,7 +963,6 @@ def test_sample_sheet_start_protocol():
                 "min_score=5.0",
                 "min_score_rear=6.0",
                 "min_score_mid=7.0",
-                "--experiment_time=72",
                 "--fast5=off",
                 "--pod5=off",
                 "--fastq=off",
@@ -965,6 +970,7 @@ def test_sample_sheet_start_protocol():
                 "--active_channel_selection=on",
                 "--mux_scan_period=1.5",
             ]
+            assert protocol.target_run_until_criteria == TEST_RUN_UNTIL_CRITERIA
 
             # Get the sorted barcode user info
             actual_barcode_user_info = [
@@ -1020,7 +1026,6 @@ def test_sample_sheet_start_protocol():
                 == "my_sample_sheet_experiment"
             )
             assert protocol.args == [
-                "--experiment_time=72",
                 "--fast5=off",
                 "--pod5=off",
                 "--fastq=off",
@@ -1028,6 +1033,7 @@ def test_sample_sheet_start_protocol():
                 "--active_channel_selection=on",
                 "--mux_scan_period=1.5",
             ]
+            assert protocol.target_run_until_criteria == TEST_RUN_UNTIL_CRITERIA
 
             # Get the sorted barcode user info
             actual_barcode_user_info = [
@@ -1205,7 +1211,6 @@ def test_read_until_start_protocol():
                 "filter_type=deplete",
                 "reference_files=['test.fasta',]",
                 "bed_file='test.bed'",
-                "--experiment_time=72",
                 "--fast5=off",
                 "--pod5=off",
                 "--fastq=off",
@@ -1213,3 +1218,4 @@ def test_read_until_start_protocol():
                 "--active_channel_selection=on",
                 "--mux_scan_period=1.5",
             ]
+            assert protocol.target_run_until_criteria == TEST_RUN_UNTIL_CRITERIA

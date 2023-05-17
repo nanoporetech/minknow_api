@@ -258,7 +258,7 @@ def parse_record(parsed_data: ParsedDataDict, record: Record, line_num: int):
         data["barcode_info"] = {}
 
     if "barcode" in record:
-        if not re.match("barcode(\d{2})", record["barcode"]):
+        if not re.match(r"barcode(\d{2})", record["barcode"]):
             raise SampleSheetParseError(
                 "Line {}: Bad 'barcode' name '{}'; ".format(line_num, record["barcode"])
                 + "expected a name like 'barcode01'"
@@ -273,14 +273,14 @@ def parse_record(parsed_data: ParsedDataDict, record: Record, line_num: int):
         external_barcode = record["external_barcode"]
         internal_barcode = record["internal_barcode"]
 
-        if not re.match("internal(\d{2})", internal_barcode):
+        if not re.match(r"internal(\d{2})", internal_barcode):
             raise SampleSheetParseError(
                 "Line {}: Bad 'internal_barcode' name '{}'; ".format(
                     line_num, internal_barcode
                 )
                 + "expected a name like 'internal01'"
             )
-        if not re.match("external(\d{2})", external_barcode):
+        if not re.match(r"external(\d{2})", external_barcode):
             raise SampleSheetParseError(
                 "Line {}: Bad 'external_barcode' name '{}'; ".format(
                     line_num, external_barcode
@@ -297,7 +297,7 @@ def parse_record(parsed_data: ParsedDataDict, record: Record, line_num: int):
         rapid_barcode = record["rapid_barcode"]
         fip_barcode = record["fip_barcode"]
 
-        if not re.match("barcode(\d{2})", rapid_barcode):
+        if not re.match(r"barcode(\d{2})", rapid_barcode):
             raise SampleSheetParseError(
                 "Line {}: Bad 'rapid_barcode' name '{}'; ".format(
                     line_num, rapid_barcode
@@ -305,7 +305,7 @@ def parse_record(parsed_data: ParsedDataDict, record: Record, line_num: int):
                 + "expected a name like 'barcode01'"
             )
 
-        if not re.match("FIP(\d{2})", fip_barcode):
+        if not re.match(r"FIP(\d{2})", fip_barcode):
             raise SampleSheetParseError(
                 "Line {}: Bad 'fip_barcode' name '{}'; ".format(line_num, fip_barcode)
                 + "expected a name like 'FIP01'"

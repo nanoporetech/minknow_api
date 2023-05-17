@@ -260,6 +260,7 @@ def get_protocol_token_credentials():
 
 def get_local_auth_token_credentials(manager_port):
     local_auth_path = get_local_authentication_token_file(port=manager_port)
+    logger.debug("Retrieving local token from file: '%s'", local_auth_path)
     if local_auth_path:
         if os.path.exists(local_auth_path):
             return grpc.metadata_call_credentials(
@@ -426,7 +427,9 @@ def grpc_credentials(manager_port=None, developer_api_token=None, host=None):
         grpc_credentials.cached_credentials = cache
 
     try:
-        return cache[cache_key]
+        creds = cache[cache_key]
+        logger.debug("Using grpc credentials with cache key: (%s)", cache_key)
+        return creds
     except KeyError:
         pass
 

@@ -509,6 +509,12 @@ enum ProtocolState {
     // The protocol was terminated because MinKNOW could not send telemetry to start acquisition.
     PROTOCOL_FINISHED_UNABLE_TO_SEND_TELEMETRY = 7;
 
+    // The protocol was terminated because the flow cell was disconnected
+    PROTOCOL_FINISHED_WITH_FLOW_CELL_DISCONNECT = 8;
+
+    // The protocol was terminated because the device was disconnected
+    PROTOCOL_FINISHED_WITH_DEVICE_DISCONNECT = 9;
+
     // Enums 20-120 are "reserved" for any new script exit codes we may want to forward
 
     // The protocol has reported and error during calibration
@@ -549,11 +555,40 @@ enum ProtocolPhase {
     // It should move into PHASE_PAUSED within a short time.
     PHASE_PAUSING = 6;
 
+    // The protocol is paused due to high temperature
+    //
+    // The user will have to confirm if they want to proceed with sequencing before resuming
+    PHASE_BAD_TEMPERATURE_AUTOMATIC_PAUSE = 8;
+
     // The protocol is in the process of resuming from a paused state.
     //
     // It should move into another phase, such as PHASE_SEQUENCING or PHASE_PREPARING_FOR_MUX_SCAN,
     // in a short time.
     PHASE_RESUMING = 7;
+}
+
+message RequestOrigin {
+    // 'User' based changes will typically come from calls made by the UI
+    // such as 'stop_protocol'
+    message User {}
+    // A request from minknow will usually come in the form of something ending
+    // naturally, or an error occuring where minknow has to take action
+    message MinKNOW {}
+    // The protocol script/bream is mainly responsible for making changes via
+    // protocol_phase_management
+    message ProtocolPhaseManagement {}
+    // A request made by the run until script due to certain criteria being met
+    message RunUntil {
+        // What criteria caused the state change
+        string criteria = 1;
+    }
+
+    oneof origin {
+        User user = 1;
+        MinKNOW minknow = 2;
+        ProtocolPhaseManagement protocol_phase_management = 3;
+        RunUntil run_until = 4;
+    }
 }
 
 message Epi2meWorkflowReference {
@@ -661,6 +696,14 @@ message ProtocolRunInfo {
     //
     // Unset if the protocol is still running.
     google.protobuf.Timestamp end_time = 6;
+
+    // Who is responsible for stopping the protocol
+    //
+    // Candidates:
+    //  MinKNOW:     Any error that causes the protocol to stop
+    //  UI:          Through stop_protocol API
+    //  RunUntil:    Through stop criteria
+    RequestOrigin stop_origin = 23;
 
     // A list of acquisition periods started whilst this protocol was running.
     //

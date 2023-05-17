@@ -1,4 +1,5 @@
-grpcio-tools
+grpcio==1.41.0
+grpcio-tools==1.41.0
 minknow-api-service-plugin
 pre-commit
 pytest

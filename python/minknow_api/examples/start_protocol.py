@@ -20,7 +20,7 @@ import sys
 # minknow_api.manager supplies "Manager" a wrapper around MinKNOW's Manager gRPC API with utilities
 # for querying sequencing positions + offline basecalling tools.
 from enum import Enum
-from typing import Optional, NamedTuple, Sequence
+from typing import Sequence
 
 from minknow_api.examples.load_sample_sheet import (
     load_sample_sheet_csv,
@@ -621,6 +621,12 @@ def main():
                 code=args.product_code
             )
 
+        # Generate stop criteria for use by Run Until
+        # The `runtime` is in seconds, while the `experiment_duration` is in hours
+        stop_criteria = protocols.CriteriaValues(
+            runtime=int(args.experiment_duration * 60 * 60)
+        )
+
         run_id = protocols.start_protocol(
             position_connection,
             identifier=spec.protocol_id,
@@ -635,7 +641,7 @@ def main():
             bam_arguments=bam_arguments,
             disable_active_channel_selection=args.no_active_channel_selection,
             mux_scan_period=args.mux_scan_period,
-            experiment_duration=args.experiment_duration,
+            stop_criteria=stop_criteria,
             args=args.extra_args,  # Any extra args passed.
         )
 

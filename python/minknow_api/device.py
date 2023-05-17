@@ -22,6 +22,7 @@ class DeviceType(Enum):
     GRIDION = minknow_api.device_service.GetDeviceInfoResponse.GRIDION
     MINION_MK1C = minknow_api.device_service.GetDeviceInfoResponse.MINION_MK1C
     TRAXION = minknow_api.device_service.GetDeviceInfoResponse.TRAXION
+    P2_SOLO = minknow_api.device_service.GetDeviceInfoResponse.P2_SOLO
 
     def is_minion_like(self):
         """Whether the device acts like a MinION.
@@ -42,7 +43,7 @@ class DeviceType(Enum):
         Among other things, this means it can be used with the ``promethion`` RPC service (see
         `minknow_api.prometion_service`).
         """
-        return self in [DeviceType.PROMETHION]
+        return self in [DeviceType.PROMETHION, DeviceType.P2_SOLO]
 
 
 def get_device_type(connection):

@@ -125,24 +125,6 @@ class RunUntilService(object):
          Criterion is met if the number of estimated bases is greater than or equal to the specified
          value.
 
-    `reads` (uint64)
-         Reads generated during the experiment.
-         Criterion is met if the number of reads is greater than or equal to the specified value.
-
-    `basecalled_bases` (uint64)
-         Basecalled bases generated during the experiment
-         Criterion will never be met if basecalling is not enabled.
-         Updates will not be supplied if basecalling is not enabled.
-         Criterion is met if the number of basecalled bases is greater than or equal to the
-         specified value.
-
-    `passed_reads` (uint64)
-         Reads which pass filtering (following basecalling)
-         Criterion will never be met if basecalling is not enabled.
-         Updates will not be supplied if basecalling is not enabled.
-         Criterion is met if the number of reads which pass filtering is greater than or equal to
-         the specified value.
-
     `passed_basecalled_bases` (uint64)
          Basecalled bases which pass filtering (following basecalling)
          Criterion will never be met if basecalling is not enabled.
@@ -187,7 +169,34 @@ class RunUntilService(object):
 
     Finally, the Run-Until Script can perform actions and send updates to the user using the
     `write_updates()` interface.  Actions include pausing, resuming and stopping the
-    acquisition.  Updates include estimated time remaining."""
+    acquisition.  Updates include estimated time remaining.
+
+    Update History
+    ==============
+
+    MinKNOW stores an "merged" history of updates that are receieved on the `write_updates()`
+    interface.  The history is calculated as MinKNOW receives updates on the `write_updates()`
+    stream as follows:
+
+     - When the protocol starts, an empty message is added to the history
+     - When an update is received on the `write_updates()` interface, the values of the 
+       `estimated_time_remaining_update` and `current_progress_update` fields are updated, by
+       "merging" the corresponding fields of the last message in the history.  "Merging" here means
+       copying keys/values which appear in the "previous" message, but which don't have
+       corresponding keys in the newly received message.
+     - Once the values in the update have been updated, the "merged" message is then added to the
+       history:
+         - If the previous message in the history has no fields set, besides the
+           `estimated_time_remaining_update` and/or `current_progress_update` fields, then the
+           previous message in the history is overwritten with the "merged" message
+         - Otherwise, the "merged" message is appended to the history.
+
+     After updating the history, the final entry in the history is sent to any open 
+     `stream_updates()` streams.  The `idx` in the `StreamUpdatesResponse` message is set equal to
+     the index of the entry in the history.  This means that the `stream_updates()` stream will
+     likely contain repeated `idx` values -- this will happen when the previous message in the
+     history is overwritten by the "merged" message.  The `time` in the `StreamUpdatesResponse`
+     message is set equal to the time at which the entry in the history was last updated."""
     def __init__(self, channel):
         self._stub = RunUntilServiceStub(channel)
         self._pb = run_until_pb2
@@ -527,9 +536,14 @@ class RunUntilService(object):
                 with an `idx` smaller than `start_idx`.
 
                 In order to receive only updates that are sent after the call to `stream_updates()`, and no
-                historic updates, set `start_idx`` to `uint64_max`.
+                historic updates, set `start_idx` to `int64_max`.
 
-                By default, start_idx is `0`, which means that all updates from the first update onwards
+                Setting `start_idx` to a negative number will be treated as an offset from the end of the
+                updates history. A `start_idx` of `-1` will cause the last update to be sent, and any future
+                updates to be streamed.  The negative value is clamped such that a "large" negative number
+                will be equivalent to setting a `start_idx` of `0`.
+
+                By default, `start_idx` is `0`, which means that all updates from the first update onwards
                 will be sent.
 
         Returns:

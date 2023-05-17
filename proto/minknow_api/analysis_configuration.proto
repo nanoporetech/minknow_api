@@ -1007,9 +1007,14 @@ message WriterConfiguration {
         // when the fastq is generated.
         string fastq_header_pattern = 9;
 
-        // How many reads are placed in each file (after batch_count files {batch_number}
-        // is increased in the filename).
-        uint32 batch_count = 10;
+        oneof batch_info {
+            // How many reads are placed in each batch (after batch_count reads {batch_number}
+            // is increased in the pattern).
+            uint32 batch_count = 10;
+
+            // Number of estimated bases within a batch before it rotates to a new batch
+            uint64 bases_per_batch = 15;
+        }
     }
 
     message ReadFastqConfiguration {
@@ -1031,8 +1036,14 @@ message WriterConfiguration {
         // when the fastq is generated.
         string header_pattern = 3;
 
-        // How many files are placed in each batch (after batch_count files {batch_number} is increased in the filename).
-        uint32 batch_count = 4;
+        oneof batch_info {
+            // How many reads are placed in each batch (after batch_count reads {batch_number}
+            // is increased in the pattern).
+            uint32 batch_count = 4;
+
+            // Number of estimated bases within a batch before it rotates to a new batch
+            uint64 bases_per_batch = 6;
+        }
 
         // Compress fastq files with gzip compression.
         // default: false
@@ -1051,8 +1062,14 @@ message WriterConfiguration {
         // See file pattern attributes above.
         string file_pattern = 2;
 
-        // How many files are placed in each batch (after batch_count files {batch_number} is increased in the filename).
-        uint32 batch_count = 3;
+        oneof batch_info {
+            // How many reads are placed in each batch (after batch_count reads {batch_number}
+            // is increased in the pattern).
+            uint32 batch_count = 3;
+
+            // Number of estimated bases within a batch before it rotates to a new batch
+            uint64 bases_per_batch = 5;
+        }
 
         // If true minknow will only write the primary alignment for each read.
         bool disable_writing_multiple_alignments = 4;
@@ -1070,10 +1087,14 @@ message WriterConfiguration {
         // See file pattern attributes above.
         string file_pattern = 2;
 
-        // How many files are placed in each batch (after batch_count files {batch_number} is increased in the filename).
-        //
-        // Set to zero to disable batching.
-        uint32 batch_count = 3;
+        oneof batch_info {
+            // How many reads are placed in each batch (after batch_count reads {batch_number}
+            // is increased in the pattern).
+            uint32 batch_count = 3;
+
+            // Number of estimated bases within a batch before it rotates to a new batch
+            uint64 bases_per_batch = 7;
+        }
 
         // Prevent reads which have successfully basecalled being written to pod5.
         bool disable_writing_passed_reads = 4;
@@ -1096,8 +1117,14 @@ message WriterConfiguration {
         // See file pattern attributes above.
         string file_pattern = 2;
 
-        // How many files are placed in each batch (after batch_count files {batch_number} is increased in the filename).
-        uint32 batch_count = 3;
+        oneof batch_info {
+            // How many reads are placed in each batch (after batch_count reads {batch_number}
+            // is increased in the pattern).
+            uint32 batch_count = 3;
+
+            // Number of estimated bases within a batch before it rotates to a new batch
+            uint64 bases_per_batch = 4;
+        }
     }
 
     message SequencingSummaryConfiguration {

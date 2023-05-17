@@ -309,8 +309,13 @@ class DeviceServiceServicer(object):
         raise NotImplementedError('Method not implemented!')
 
     def set_temperature(self, request, context):
-        """If the device is capable (see GetDeviceInfoResponse.temperature_controllable)
-        then this sets the minimum and maximum temperatures of the flow-cell.
+        """Set the target primary device temperature
+
+        If the device is not temperature-controllable (see the fields
+        `device.GetDeviceInfoResponse.can_set_temperature` and
+        `minion_device.MinionDeviceSettings.enable_temperature_control`) then this call will have
+        no effect
+
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')

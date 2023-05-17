@@ -82,13 +82,28 @@ service StatisticsService {
         option idempotency_level = NO_SIDE_EFFECTS;
     }
 
+    // Read lengths N50 value
+    //
+    // Derived from RPC stream_read_length_histogram
+    // Returns the same N50 data as you'd get from the stream_read_length_histogram RPC
+    //
+    // Returns N50 value for estimated bases data
+    //
+    // If no basecalling, one value will return as 0.0 exactly
+    //
+    // No filtering, discarded outliers, or split
+    //
+    // Since 5.5
+    rpc read_length_n50 (ReadLengthN50Request) returns (ReadLengthN50Response) {
+        option idempotency_level = NO_SIDE_EFFECTS;
+    }
+
     // Gets a list of the types of read-length values for which a histogram is available
     //
     // Since 3.2
     rpc get_read_length_types (GetReadLengthTypesRequest) returns (GetReadLengthTypesResponse) {
         option idempotency_level = NO_SIDE_EFFECTS;
     }
-
 
     // Returns the qscore over time metric represented as datasets (i.e. boxplots).
     //
@@ -214,7 +229,6 @@ enum ReadLengthType {
     BasecalledBases = 2;
 }
 
-
 // The data accumulated in read length histogram buckets
 enum BucketValueType {
 
@@ -255,7 +269,6 @@ message ReadLengthHistogramSplit {
     // Split returned data by read_end_reason
     bool read_end_reason = 1;
 }
-
 
 message StreamReadLengthHistogramRequest {
     // The `acquisition_run_id` of the acquisition to obtain data for
@@ -396,6 +409,32 @@ message StreamReadLengthHistogramResponse {
 
     // The histogram data
     repeated ReadLengthHistogramData histogram_data = 4;
+ }
+
+
+message ReadLengthN50Request {
+    // The `acquisition_run_id` of the acquisition to obtain data for
+    string acquisition_run_id = 1 [(rpc_required) = true];
+}
+
+message ReadLengthN50Response {
+    
+    message ReadN50Data {
+        // The estimated N50 value in bases
+        //
+        // This is always set
+        //
+        float estimated_n50 = 1;
+        
+        // The basecalled N50 value
+        //
+        // If the acquisition did/does not have live basecalling enabled, this will be 0.0
+        //
+        float basecalled_n50 = 2;
+    }
+
+    // The N50 return data
+    ReadN50Data n50_data = 1;
 }
 
 message GetReadLengthTypesRequest {

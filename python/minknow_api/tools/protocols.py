@@ -2,12 +2,14 @@
 
 import collections
 import logging
-import typing
 
 import grpc
 
-from minknow_api import protocol_pb2
+import dataclasses
+from typing import Optional, List, Sequence
+from minknow_api import protocol_pb2, run_until_pb2, acquisition_pb2
 from minknow_api.protocol_pb2 import BarcodeUserData
+from minknow_api.tools.any_helpers import make_float_any, make_uint64_any
 
 from .. import Connection
 
@@ -19,12 +21,12 @@ def find_protocol(
     product_code: str,
     kit: str,
     basecalling: bool = False,
-    basecall_config: typing.Optional[str] = None,
+    basecall_config: Optional[str] = None,
     barcoding: bool = False,
-    barcoding_kits: typing.Optional[typing.List[str]] = None,
+    barcoding_kits: Optional[List[str]] = None,
     force_reload: bool = False,
     experiment_type: str = "sequencing",
-) -> typing.Optional[str]:
+) -> Optional[str]:
     """Find a protocol identifier.
 
     This will fetch a list of protocols from the device-instance, then search through the protocols
@@ -161,6 +163,40 @@ BasecallingArgs = collections.namedtuple(
 )
 OutputArgs = collections.namedtuple("OutputArgs", ["reads_per_file"])
 
+
+@dataclasses.dataclass
+class CriteriaValues:
+    """
+    Python representation of a `minknow_api.run_until.CriteriaValues` message
+
+    See the `Standard Run-Until Criteria` in `run_until.proto` for further descriptions of the fields
+    """
+
+    # Runtime, in seconds
+    runtime: Optional[int] = None
+    # Estimated bases, in bases
+    estimated_bases: Optional[int] = None
+    # Passed basecalled bases, in seconds
+    passed_basecalled_bases: Optional[int] = None
+    # Available pores
+    available_pores: Optional[float] = None
+
+    def as_protobuf(self):
+        criteria_dict = {}
+        if self.runtime is not None:
+            criteria_dict["runtime"] = make_uint64_any(self.runtime)
+        if self.estimated_bases is not None:
+            criteria_dict["estimated_bases"] = make_uint64_any(self.estimated_bases)
+        if self.passed_basecalled_bases is not None:
+            criteria_dict["passed_basecalled_bases"] = make_uint64_any(
+                self.passed_basecalled_bases
+            )
+        if self.available_pores is not None:
+            criteria_dict["available_pores"] = make_float_any(self.available_pores)
+
+        return run_until_pb2.CriteriaValues(criteria=criteria_dict)
+
+
 ReadUntilArgs = collections.namedtuple(
     "ReadUntilArgs",
     [
@@ -179,7 +215,6 @@ ReadUntilArgs = collections.namedtuple(
 
 
 def make_protocol_arguments(
-    experiment_duration: float = 72,
     basecalling: BasecallingArgs = None,
     read_until: ReadUntilArgs = None,
     fastq_arguments: OutputArgs = None,
@@ -188,15 +223,14 @@ def make_protocol_arguments(
     bam_arguments: OutputArgs = None,
     disable_active_channel_selection: bool = False,
     mux_scan_period: float = 1.5,
-    args: typing.Optional[typing.List[str]] = None,
+    args: Optional[List[str]] = None,
     is_flongle: bool = False,
-) -> typing.List[str]:
+) -> List[str]:
     """Build arguments to be used when starting a protocol.
 
     This will assemble the arguments passed to this script into arguments to pass to the protocol.
 
     Args:
-        experiment_duration(float):             Length of the experiment in hours.
         basecalling(:obj:`BasecallingArgs`):    Arguments to control basecalling.
         read_until(:obj:`ReadUntilArgs):        Arguments to control read until.
         fastq_arguments(:obj:`OutputArgs`):     Control fastq file generation.
@@ -312,7 +346,6 @@ def make_protocol_arguments(
         print(read_until_args)
         protocol_args.extend(["--read_until"] + read_until_args)
 
-    protocol_args.append("--experiment_time={}".format(experiment_duration))
     protocol_args.append("--fast5=" + on_off(fast5_arguments))
     if fast5_arguments:
         protocol_args.extend(
@@ -355,14 +388,59 @@ def make_protocol_arguments(
     return protocol_args
 
 
+def make_target_run_until_criteria(
+    stop_criteria: Optional[CriteriaValues] = None,
+    experiment_duration: Optional[float] = None,
+) -> acquisition_pb2.TargetRunUntilCriteria:
+    """Make an `acquisition.TargetRunUntilCriteria` message based on the supplied parameters
+
+    If `stop_criteria` is supplied, then the `stop_criteria` in the returned message are set to match the supplied
+    criteria.  Otherwise, if `experiment_duration` is supplied, then the "runtime" stop criterion in the returned
+    message is set to match the supplied `experiment_duration`.
+
+    If no arguments are supplied, the returned message will be empty.  If both arguments are supplied, a `ValueError`
+    is raised, since only one or the other argument may be supplied
+
+    Args:
+        stop_criteria(:obj:`CriteriaValues`):   Stop criteria to set.
+        experiment_duration(float):             Length of the experiment in hours.
+
+    Returns:
+        An `acquisition.TargetRunUntilCriteria` message with the specified criteria
+    """
+
+    if stop_criteria and experiment_duration:
+        raise ValueError(
+            "Can specify `stop_criteria` or `experiment_duration` but not both"
+        )
+
+    if experiment_duration:
+        # Case of having both is handled above
+        assert not stop_criteria
+
+        # `experiment_duration` is in hours
+        # `runtime` is in seconds
+        stop_criteria = CriteriaValues(runtime=int(experiment_duration * 60 * 60))
+
+    if stop_criteria:
+        return acquisition_pb2.TargetRunUntilCriteria(
+            stop_criteria=stop_criteria.as_protobuf()
+        )
+    else:
+        # Empty target criteria
+        return acquisition_pb2.TargetRunUntilCriteria()
+
+
 def start_protocol(
     device_connection: Connection,
     identifier: str,
     sample_id: str,
     experiment_group: str,
-    barcode_info: typing.Optional[typing.Sequence[BarcodeUserData]],
+    barcode_info: Optional[Sequence[BarcodeUserData]],
+    stop_criteria: Optional[CriteriaValues] = None,
+    experiment_duration: Optional[float] = None,
     *args,
-    **kwargs
+    **kwargs,
 ) -> str:
     """Start a protocol on the passed {device_connection}.
 
@@ -373,11 +451,16 @@ def start_protocol(
         experiment_group(str):                  Experiment group of protocol to start.
         barcode_info(Sequence[:obj:`BarcodeUserData`]):
                 Barcode user data (sample type and alias)
+        stop_criteria(::obj::`TargetCriteria`): When to stop the acquisition
+        experiment_duration(float):             Length of the experiment in hours.
         *args: Additional arguments forwarded to {make_protocol_arguments}
         **kwargs: Additional arguments forwarded to {make_protocol_arguments}
 
     Returns:
         The protocol_run_id of the started protocol.
+
+    Notes:
+        Only one of `stop_criteria` and `experiment_duration` may be specified
     """
 
     flow_cell_info = device_connection.device.get_flow_cell_info()
@@ -395,8 +478,17 @@ def start_protocol(
     if barcode_info:
         user_info.barcode_user_info.extend(barcode_info)
 
+    # Run until criteria
+    target_run_until_criteria = make_target_run_until_criteria(
+        stop_criteria=stop_criteria,
+        experiment_duration=experiment_duration,
+    )
+
     result = device_connection.protocol.start_protocol(
-        identifier=identifier, args=protocol_arguments, user_info=user_info
+        identifier=identifier,
+        args=protocol_arguments,
+        user_info=user_info,
+        target_run_until_criteria=target_run_until_criteria,
     )
 
     return result.run_id

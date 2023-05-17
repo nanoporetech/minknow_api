@@ -83,6 +83,8 @@ class PromethionDeviceService(object):
             bias_voltage_waveform (minknow_api.promethion_device_pb2.WaveformSettings, optional): The waveform settings
             saturation_control_enabled (google.protobuf.wrappers_pb2.BoolValue, optional): Enables saturation control on the device
             fast_calibration_enabled (google.protobuf.wrappers_pb2.BoolValue, optional): Enable use of the fast calibration mode across the device
+
+                DEPRECATED since 5.5. This will be removed in a future release.
             temperature_target (google.protobuf.wrappers_pb2.FloatValue, optional): If the device is capable (see device.get_device_info().temperature_controllable)
                 then this sets the minimum and maximum temperatures of the flow-cell.
 

@@ -17,6 +17,8 @@ __all__ = [
     "ReadLengthHistogramSplit",
     "StreamReadLengthHistogramRequest",
     "StreamReadLengthHistogramResponse",
+    "ReadLengthN50Request",
+    "ReadLengthN50Response",
     "GetReadLengthTypesRequest",
     "GetReadLengthTypesResponse",
     "AcquisitionOutputKey",
@@ -563,6 +565,62 @@ class StatisticsService(object):
             raise ArgumentError("Unexpected keyword arguments to stream_read_length_histogram: '{}'".format(", ".join(unused_args)))
 
         return run_with_retry(self._stub.stream_read_length_histogram,
+                              _message, _timeout,
+                              [],
+                              "minknow_api.statistics.StatisticsService")
+    def read_length_n50(self, _message=None, _timeout=None, **kwargs):
+        """Read lengths N50 value
+
+        Derived from RPC stream_read_length_histogram
+        Returns the same N50 data as you'd get from the stream_read_length_histogram RPC
+
+        Returns N50 value for estimated bases data
+
+        If no basecalling, one value will return as 0.0 exactly
+
+        No filtering, discarded outliers, or split
+
+        Since 5.5
+
+        This RPC has no side effects. Calling it will have no effect on the state of the
+        system. It is safe to call repeatedly, or to retry on failure, although there is no
+        guarantee it will return the same information each time.
+
+        Args:
+            _message (minknow_api.statistics_pb2.ReadLengthN50Request, optional): The message to send.
+                This can be passed instead of the keyword arguments.
+            _timeout (float, optional): The call will be cancelled after this number of seconds
+                if it has not been completed.
+            acquisition_run_id (str): The `acquisition_run_id` of the acquisition to obtain data for
+
+        Returns:
+            minknow_api.statistics_pb2.ReadLengthN50Response
+
+        Note that the returned messages are actually wrapped in a type that collapses
+        submessages for fields marked with ``[rpc_unwrap]``.
+        """
+        if _message is not None:
+            if isinstance(_message, MessageWrapper):
+                _message = _message._message
+            return run_with_retry(self._stub.read_length_n50,
+                                  _message, _timeout,
+                                  [],
+                                  "minknow_api.statistics.StatisticsService")
+
+        unused_args = set(kwargs.keys())
+
+        _message = ReadLengthN50Request()
+
+        if "acquisition_run_id" in kwargs:
+            unused_args.remove("acquisition_run_id")
+            _message.acquisition_run_id = kwargs['acquisition_run_id']
+        else:
+            raise ArgumentError("read_length_n50 requires a 'acquisition_run_id' argument")
+
+        if len(unused_args) > 0:
+            raise ArgumentError("Unexpected keyword arguments to read_length_n50: '{}'".format(", ".join(unused_args)))
+
+        return run_with_retry(self._stub.read_length_n50,
                               _message, _timeout,
                               [],
                               "minknow_api.statistics.StatisticsService")
