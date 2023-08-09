@@ -149,6 +149,21 @@ class DeviceServiceStub(object):
                 request_serializer=minknow__api_dot_device__pb2.DumpStateRequest.SerializeToString,
                 response_deserializer=minknow__api_dot_device__pb2.DumpStateResponse.FromString,
                 )
+        self.increment_flow_cell_use_count = channel.unary_unary(
+                '/minknow_api.device.DeviceService/increment_flow_cell_use_count',
+                request_serializer=minknow__api_dot_device__pb2.IncrementFlowCellUseCountRequest.SerializeToString,
+                response_deserializer=minknow__api_dot_device__pb2.IncrementFlowCellUseCountResponse.FromString,
+                )
+        self.set_flow_cell_barcode_kit = channel.unary_unary(
+                '/minknow_api.device.DeviceService/set_flow_cell_barcode_kit',
+                request_serializer=minknow__api_dot_device__pb2.SetFlowCellBarcodeKitRequest.SerializeToString,
+                response_deserializer=minknow__api_dot_device__pb2.SetFlowCellBarcodeKitResponse.FromString,
+                )
+        self.register_flow_cell_barcodes = channel.unary_unary(
+                '/minknow_api.device.DeviceService/register_flow_cell_barcodes',
+                request_serializer=minknow__api_dot_device__pb2.RegisterFlowCellBarcodesRequest.SerializeToString,
+                response_deserializer=minknow__api_dot_device__pb2.RegisterFlowCellBarcodesResponse.FromString,
+                )
 
 
 class DeviceServiceServicer(object):
@@ -474,6 +489,40 @@ class DeviceServiceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def increment_flow_cell_use_count(self, request, context):
+        """Increment use count so that it is possible to track the amount of times a flow cell has been used
+
+        This has a hard limit of 255, and an error will occur if an overflow is detected.
+
+        Since 5.6
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def set_flow_cell_barcode_kit(self, request, context):
+        """Specify the barcode kit that has been used with the flow cell
+
+        Once this has been set it cannot be modified. It is also not possible to register the
+        barcodes that have been used until this has been set.
+
+        Since 5.6
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def register_flow_cell_barcodes(self, request, context):
+        """Register that a distinct barcode has been used with the flow-cell
+
+        Barcodes cannot be cleared once registered. A Barcode Kit must also be set using set_flow_cell_barcode_kit()
+
+        Since 5.6
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_DeviceServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -611,6 +660,21 @@ def add_DeviceServiceServicer_to_server(servicer, server):
                     servicer.dump_state,
                     request_deserializer=minknow__api_dot_device__pb2.DumpStateRequest.FromString,
                     response_serializer=minknow__api_dot_device__pb2.DumpStateResponse.SerializeToString,
+            ),
+            'increment_flow_cell_use_count': grpc.unary_unary_rpc_method_handler(
+                    servicer.increment_flow_cell_use_count,
+                    request_deserializer=minknow__api_dot_device__pb2.IncrementFlowCellUseCountRequest.FromString,
+                    response_serializer=minknow__api_dot_device__pb2.IncrementFlowCellUseCountResponse.SerializeToString,
+            ),
+            'set_flow_cell_barcode_kit': grpc.unary_unary_rpc_method_handler(
+                    servicer.set_flow_cell_barcode_kit,
+                    request_deserializer=minknow__api_dot_device__pb2.SetFlowCellBarcodeKitRequest.FromString,
+                    response_serializer=minknow__api_dot_device__pb2.SetFlowCellBarcodeKitResponse.SerializeToString,
+            ),
+            'register_flow_cell_barcodes': grpc.unary_unary_rpc_method_handler(
+                    servicer.register_flow_cell_barcodes,
+                    request_deserializer=minknow__api_dot_device__pb2.RegisterFlowCellBarcodesRequest.FromString,
+                    response_serializer=minknow__api_dot_device__pb2.RegisterFlowCellBarcodesResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -1078,5 +1142,56 @@ class DeviceService(object):
         return grpc.experimental.unary_unary(request, target, '/minknow_api.device.DeviceService/dump_state',
             minknow__api_dot_device__pb2.DumpStateRequest.SerializeToString,
             minknow__api_dot_device__pb2.DumpStateResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def increment_flow_cell_use_count(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/minknow_api.device.DeviceService/increment_flow_cell_use_count',
+            minknow__api_dot_device__pb2.IncrementFlowCellUseCountRequest.SerializeToString,
+            minknow__api_dot_device__pb2.IncrementFlowCellUseCountResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def set_flow_cell_barcode_kit(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/minknow_api.device.DeviceService/set_flow_cell_barcode_kit',
+            minknow__api_dot_device__pb2.SetFlowCellBarcodeKitRequest.SerializeToString,
+            minknow__api_dot_device__pb2.SetFlowCellBarcodeKitResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def register_flow_cell_barcodes(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/minknow_api.device.DeviceService/register_flow_cell_barcodes',
+            minknow__api_dot_device__pb2.RegisterFlowCellBarcodesRequest.SerializeToString,
+            minknow__api_dot_device__pb2.RegisterFlowCellBarcodesResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

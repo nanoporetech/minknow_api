@@ -34,6 +34,7 @@ __all__ = [
     "AssociatedPostProcessingAnalysis",
     "PlatformQcResult",
     "ExternalOffload",
+    "GetVersionInfoResponse",
     "ProtocolRunInfo",
     "FilteringInfo",
     "ListProtocolRunsRequest",
@@ -51,6 +52,7 @@ __all__ = [
     "SetProtocolPurposeResponse",
     "AddEpi2meWorkflowRequest",
     "AddEpi2meWorkflowResponse",
+    "ProtocolGroupIdInfo",
     "ListProtocolGroupIdsRequest",
     "ListProtocolGroupIdsResponse",
     "BeginHardwareCheckRequest",
@@ -83,6 +85,7 @@ __all__ = [
     "PROTOCOL_FINISHED_WITH_ERROR_CALIBRATION",
     "PROTOCOL_FINISHED_WITH_ERROR_BASECALL_SETTINGS",
     "PROTOCOL_FINISHED_WITH_ERROR_TEMPERATURE_REQUIRED",
+    "PROTOCOL_FINISHED_WITH_ERROR_NO_DISK_SPACE",
     "ProtocolPhase",
     "PHASE_UNKNOWN",
     "PHASE_INITIALISING",
@@ -922,6 +925,7 @@ class ProtocolService(object):
                 This can be passed instead of the keyword arguments.
             _timeout (float, optional): The call will be cancelled after this number of seconds
                 if it has not been completed.
+            filter_info (minknow_api.protocol_pb2.FilteringInfo, optional): 
 
         Returns:
             minknow_api.protocol_pb2.ListProtocolGroupIdsResponse
@@ -940,6 +944,10 @@ class ProtocolService(object):
         unused_args = set(kwargs.keys())
 
         _message = ListProtocolGroupIdsRequest()
+
+        if "filter_info" in kwargs:
+            unused_args.remove("filter_info")
+            _message.filter_info.CopyFrom(kwargs['filter_info'])
 
         if len(unused_args) > 0:
             raise ArgumentError("Unexpected keyword arguments to list_protocol_group_ids: '{}'".format(", ".join(unused_args)))
@@ -1320,6 +1328,8 @@ class ProtocolService(object):
                 Note that this is the time until the call ends, not the time between returned
                 messages.
             protocol_run_id (str, optional): The protocol_run_id to generate a report for.
+            include_input_data (bool, optional): Optionally return the input data used to generate the report. This input data is
+                represented as the data seen in report_data.proto
 
         Returns:
             iter of minknow_api.protocol_pb2.GenerateRunReportResponse
@@ -1342,6 +1352,10 @@ class ProtocolService(object):
         if "protocol_run_id" in kwargs:
             unused_args.remove("protocol_run_id")
             _message.protocol_run_id = kwargs['protocol_run_id']
+
+        if "include_input_data" in kwargs:
+            unused_args.remove("include_input_data")
+            _message.include_input_data = kwargs['include_input_data']
 
         if len(unused_args) > 0:
             raise ArgumentError("Unexpected keyword arguments to generate_run_report: '{}'".format(", ".join(unused_args)))

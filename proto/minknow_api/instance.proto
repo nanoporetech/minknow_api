@@ -311,6 +311,11 @@ message N50 {
     //
     // The latest value is sent once per minute
     float n50 = 1;
+    
+    // N50 data, in estimated bases
+    //
+    // The latest value is sent once per minute
+    float estimated_n50 = 2;
 }
 
 message StreamInstanceActivityResponse {
@@ -358,9 +363,9 @@ message StreamInstanceActivityResponse {
 
         // n50 information
         //
-        // Contains the n50 value, measured in basecalled bases
+        // Contains the n50 value, measured in basecalled bases and estimated bases
         //
-        // Note: only available if an acquisition with basecalling enabled is in progress
+        // Note: basecalled bases only available if an acquisition with basecalling enabled is in progress
         N50 n50 = 8;
     }
 }

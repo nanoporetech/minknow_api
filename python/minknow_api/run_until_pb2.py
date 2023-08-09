@@ -108,17 +108,63 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   _STREAMUPDATESRESPONSE._serialized_end=3277
   _RUNUNTILSERVICE._serialized_start=3280
   _RUNUNTILSERVICE._serialized_end=4171
-StreamTargetCriteriaRequest.__doc__ = """Attributes:
-    acquisition_run_id:
-        The acquisition to obtain the Run-Until Criteria for
-"""
+EstimatedTimeRemainingUpdate.NotEstimated.__doc__ = """Indicates that a time is not estimated"""
 CriteriaValues.__doc__ = """A map of criterion name -> value  This message is deliberately
 flexible, to allow custom Run-Until Scripts to expand the range and
 types of available criteria."""
+WriteCustomProgressRequest.__doc__ = """NOTE: this will be removed in release 5.8 call currently not
+implemented
+
+Attributes:
+    acquisition_run_id:
+        The acquisition this Run-Until progress update relates to
+    criteria_values:
+        The current Run-Until criteria state  A Run-Until progress
+        update need not contain updates for all criteria.  It must not
+        contain updates for "standard" criteria
+"""
+StreamProgressResponse.__doc__ = """NOTE: this will be removed in release 5.8 call currently not
+implemented
+
+Attributes:
+    criteria_values:
+        The run until criteria status  The criteria will always
+        contain the `runtime` field, which acts as a timestamp for the
+        message.  A Run-Until progress update need not contain updates
+        for all criteria.
+"""
+GetStandardCriteriaRequest.__doc__ = """NOTE: this will be removed in release 5.8 call currently not
+implemented"""
+ErrorUpdate.__doc__ = """Indicates that a problem has been encountered by the Run-Until Script"""
 WriteTargetCriteriaRequest.__doc__ = """Attributes:
     acquisition_run_id:
         The acquisition to set the Run-Until Criteria for
 """
+GetStandardCriteriaResponse.__doc__ = """NOTE: this will be removed in release 5.8 call currently not
+implemented
+
+Attributes:
+    criteria:
+        A list of valid criteria  An empty value is included for each
+        criterion, to indicate the required type of that criterion.
+"""
+Update.__doc__ = """Attributes:
+    current_progress_update:
+        Gives the current values of the criteria (Compare to
+        stream_target_criteria call to see %)
+    other:
+        Space for custom updates from custom Run-Until scripts
+"""
+ActionUpdate.__doc__ = """Indicates that an action has been performed  When a request is sent
+using `write_updates()`, MinKNOW performs the specified action.
+
+Attributes:
+    criteria:
+        The criteria associated with this action
+"""
+ScriptUpdate.CriteriaUpdated.__doc__ = """Indicates the the Run-Until Script has update its criteria in response
+to receiving a `StreamTargetCriteriaResponse` message"""
+ScriptUpdate.Started.__doc__ = """Indicates that the run-until script has started and is running"""
 EstimatedTimeRemainingUpdate.Estimated.__doc__ = """ These times are estimates of the (UTC) time at which the condition
 will be fulfilled  Some idea of the expected accuracy of this estimate
 can be obtained by comparing `min_time` with `max_time`.  If the
@@ -136,66 +182,16 @@ Attributes:
         Estimated upper bound on the time at which the condition will
         occur (UTC)
 """
-ErrorUpdate.InvalidCriteria.__doc__ = """Indicates that one or more of the supplied target criteria is not
-recognised by the  Run-Until Script.  Unrecognised target criteria
-will not be used to pause or stop the run."""
-EstimatedTimeRemainingUpdate.__doc__ = """Indicates the estimated time remaining  An estimated time may be
-provided for each Run-Until Criterion that is specified as an end-
-point."""
-ErrorUpdate.OtherError.__doc__ = """An error that is not covered by one of the other error types, above."""
-EstimatedTimeRemainingUpdate.NotEstimated.__doc__ = """Indicates that a time is not estimated"""
-WriteUpdatesRequest.__doc__ = """Attributes:
+StreamTargetCriteriaRequest.__doc__ = """Attributes:
     acquisition_run_id:
-        The acquisition this Run-Until update applies to
+        The acquisition to obtain the Run-Until Criteria for
 """
-StreamProgressResponse.__doc__ = """Attributes:
-    criteria_values:
-        The run until criteria status  The criteria will always
-        contain the `runtime` field, which acts as a timestamp for the
-        message.  A Run-Until progress update need not contain updates
-        for all criteria.
-"""
-ScriptUpdate.Started.__doc__ = """Indicates that the run-until script has started and is running"""
-ActionUpdate.__doc__ = """Indicates that an action has been performed  When a request is sent
-using `write_updates()`, MinKNOW performs the specified action.
+StreamProgressRequest.__doc__ = """NOTE: this will be removed in release 5.8 call currently not
+implemented
 
 Attributes:
-    criteria:
-        The criteria associated with this action
-"""
-GetStandardCriteriaResponse.__doc__ = """Attributes:
-    criteria:
-        A list of valid criteria  An empty value is included for each
-        criterion, to indicate the required type of that criterion.
-"""
-ScriptUpdate.CriteriaUpdated.__doc__ = """Indicates the the Run-Until Script has update its criteria in response
-to receiving a `StreamTargetCriteriaResponse` message"""
-StreamUpdatesResponse.__doc__ = """Attributes:
-    idx:
-        The index of this update  The index is incremented after each
-        "interesting" update (i.e. an update that contains information
-        besides an `estimated_time_remaining_update` or a
-        `current_progress_update`). See `Update History`, above, for
-        further information.
-    time:
-        The timestamp of this update (UTC)
-    update:
-        The update data itself
-"""
-Update.__doc__ = """Attributes:
-    current_progress_update:
-        Gives the current values of the criteria (Compare to
-        stream_target_criteria call to see %)
-    other:
-        Space for custom updates from custom Run-Until scripts
-"""
-WriteCustomProgressRequest.__doc__ = """Attributes:
     acquisition_run_id:
-        The acquisition this Run-Until progress update relates to
-    criteria_values:
-        The current Run-Until criteria state  A Run-Until progress
-        update need not contain updates for all criteria.  It must not
-        contain updates for "standard" criteria
+        The acquisition to obtain the Run-Until progress updates for
 """
 StreamUpdatesRequest.__doc__ = """Attributes:
     acquisition_run_id:
@@ -220,9 +216,29 @@ StreamUpdatesRequest.__doc__ = """Attributes:
 EstimatedTimeRemainingUpdate.EstimatedTimes.__doc__ = """Map of Run-Until Criterion to `EstimatedTime` when the criterion will
 be fulfilled  Only criteria for which an update is being provided are
 contained in the map."""
-StreamProgressRequest.__doc__ = """Attributes:
+EstimatedTimeRemainingUpdate.__doc__ = """Indicates the estimated time remaining  An estimated time may be
+provided for each Run-Until Criterion that is specified as an end-
+point."""
+ErrorUpdate.OtherError.__doc__ = """An error that is not covered by one of the other error types, above."""
+WriteUpdatesRequest.__doc__ = """Attributes:
     acquisition_run_id:
-        The acquisition to obtain the Run-Until progress updates for
+        The acquisition this Run-Until update applies to
 """
-ErrorUpdate.__doc__ = """Indicates that a problem has been encountered by the Run-Until Script"""
+WriteCustomProgressResponse.__doc__ = """NOTE: this will be removed in release 5.8 call currently not
+implemented"""
+ErrorUpdate.InvalidCriteria.__doc__ = """Indicates that one or more of the supplied target criteria is not
+recognised by the  Run-Until Script.  Unrecognised target criteria
+will not be used to pause or stop the run."""
+StreamUpdatesResponse.__doc__ = """Attributes:
+    idx:
+        The index of this update  The index is incremented after each
+        "interesting" update (i.e. an update that contains information
+        besides an `estimated_time_remaining_update` or a
+        `current_progress_update`). See `Update History`, above, for
+        further information.
+    time:
+        The timestamp of this update (UTC)
+    update:
+        The update data itself
+"""
 # @@protoc_insertion_point(module_scope)

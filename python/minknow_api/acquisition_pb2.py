@@ -146,242 +146,6 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   _APPENDMUXSCANRESULTRESPONSE._serialized_end=6028
   _ACQUISITIONSERVICE._serialized_start=7086
   _ACQUISITIONSERVICE._serialized_end=8578
-StartResponse.__doc__ = """Attributes:
-    run_id:
-        Globally-unique identifier generated when the acquisition is
-        started.  This is guaranteed to unique, including aross
-        sequencing devices.
-"""
-AcquisitionConfigSummary.__doc__ = """Attributes:
-    purpose:
-        The purpose, as supplied to `acquisition.start()`
-    basecalling_enabled:
-        Was basecalling enabled for the run.
-    basecalling_config_filename:
-        Basecalling configuration filename (if basecalling enabled)
-    barcoding_enabled:
-        Is barcoding enabled for the run
-    barcoding_kits:
-        / Barcoding kit(s) used (if barcoding enabled)
-    alignment_enabled:
-        Is alignment enabled for the run
-    alignment_reference_files:
-        Alignment reference file(s) used (if alignment enabled)
-    alignment_bed_file:
-        bed file used (if alignment enabled, and bed file specified)
-    lamp_enabled:
-        Is lamp enabled for the run
-    lamp_kit:
-        The LAMP kit used (if LAMP enabled)
-    reads_directory:
-        Root directory reads were written to for the run.  Empty if no
-        reads were enabled.
-    reads_fallback_directories:
-        Directories reads are written to if the reads_directory is on
-        the network and writes to it fail.  Empty if no reads were
-        enabled.
-    fast5_reads_enabled:
-        Determine if fast5 reads were enabled for the run.
-    fastq_reads_enabled:
-        Determine if fastq reads were enabled for the run.
-    protobuf_reads_enabled:
-        Determine if protobuf reads were enabled for the run.
-    bulk_file_path:
-        The path of the bulk file for the run.  Empty if no reads were
-        enabled.
-    bulk_file_enabled:
-        Find if the bulk writer was enabled for a run.
-    channel_state_info:
-        Channel state styling information
-    events_to_base_ratio:
-        Number of bases per event
-    sample_rate:
-        Sample rate for the acquisition.  Since 3.3
-    channel_count:
-        Channel count used in the acquisition.  Since 3.3
-"""
-GetProgressResponse.__doc__ = """Attributes:
-    raw_per_channel:
-        The amount of raw data (per channel) that has been acquired
-        and processed.
-"""
-ChannelStateInfo.Style.__doc__ = """Attributes:
-    label:
-        The human-readable name to display when rendering this channel
-        state or group.
-    description:
-        A sentence describing the meaning of the channel state or
-        group.  This can be used as a tooltip, for example.
-    colour:
-        The colour to use when rendering this channel state or group.
-        This is a six-digit hex string describing an RGB colour (eg:
-        "ff00ff" for purple).
-"""
-AcquisitionYieldSummary.__doc__ = """Attributes:
-    read_count:
-        Number of reads selected by analysis as good reads.  The reads
-        in this counter are completed, but not necessarily on disk
-        yet.
-    fraction_basecalled:
-        This is the fraction of whole reads that the base-caller has
-        finished with. The value should be in the range [0.0, 1.0]
-        When base-calling is enabled, it can be added to
-        fraction_skipped and multiplied by 100 to give the percentage
-        of reads processed and by implication, the percentage of reads
-        the user is waiting for the base-caller to process.  Since 5.0
-    fraction_skipped:
-        This is the fraction of whole reads that have been skipped.
-        The value should be in the range [0.0, 1.0]  Since 5.0
-    basecalled_pass_read_count:
-        Number of reads successfully basecalled.
-    basecalled_fail_read_count:
-        Number of reads which have failed to basecall.
-    basecalled_skipped_read_count:
-        Number of reads which have been skipped
-    basecalled_pass_bases:
-        Number of bases which have been called and classed as pass.
-    basecalled_fail_bases:
-        Number of bases which have been called and were classed as
-        fail.
-    basecalled_samples:
-        Number of raw samples which have been called.
-    selected_raw_samples:
-        Number of minknow raw samples which have been selected for
-        writing to disk as reads.
-    selected_events:
-        Number of minknow events which have been selected for writing
-        to disk as reads.
-    estimated_selected_bases:
-        Estimated number of bases MinKNOW has selected for writing.
-        This is estimated based on already called bases and samples.
-    alignment_matches:
-        Number of bases which have matched target reference.  Only
-        specified when running live alignment.  Since 4.0
-    alignment_mismatches:
-        Number of bases which have not matched target reference.  Only
-        specified when running live alignment.  Since 4.0
-    alignment_insertions:
-        Number of bases which were inserted into alignments that
-        matched the reference.  Only specified when running live
-        alignment.  Since 4.0
-    alignment_deletions:
-        Number of bases which were deleted from alignments that
-        matched the reference.  Only specified when running live
-        alignment.  Since 4.0
-    alignment_coverage:
-        Number of bases that match the target reference(s) expressed
-        as a fraction of the total size of the target reference(s).
-        eg: For a specified alignment-targets with 2000 and 3000
-        bases, if "alignment_matches" is 2500, then
-        "alignment_coverage" will be 0.5  Since 4.3
-"""
-StartRequest.__doc__ = """ Protobuf messages for input/output of RPC calls
-
-Attributes:
-    dont_wait_for_device_ready:
-        Prevent waiting until the device is ready before starting
-        acquisition.  Defaults to false.  By default, MinKNOW will
-        block in the start() call for the device and flow cell to be
-        ready for acquisition (which may take several seconds after
-        plugging in the flow cell on some devices). Setting this
-        option will cause the call to return with an error if the
-        device is not already prepared to acquire data.  Since 1.14
-    generate_report:
-        Generate duty time and throughput reports.  Note that this
-        setting will be ignored (and no reports will be generated) if
-        no protocol is running at the time acquisition is started.
-        The default setting (AUTO) will only generate reports if
-        purpose is set to SEQUENCING.  Since 3.0
-    send_sequencing_read_metrics:
-        Whether sequencing read metrics should be reported to Oxford
-        Nanopore.  These are performance metrics that are used to
-        improve the sequencing technology. They do not include any
-        actual sequencing data, only statistics about read lengths,
-        duty time and similar generic performance information.  The
-        default setting (AUTO) will only send metrics if purpose is
-        set to SEQUENCING.  Since 3.0
-    send_basecalling_metrics:
-        Whether basecalling metrics should be reported to Oxford
-        Nanopore.  These are performance metrics that are used to
-        improve the sequencing technology. They do not include any
-        actual sequencing data, only statistics about basecalling
-        performance.  The default setting (AUTO) will only send
-        metrics if purpose is set to SEQUENCING.  NB: this setting is
-        ignored if live basecalling is not enabled, since there will
-        be no metrics to send.  Since 3.2
-    purpose:
-        Specify the purpose of this acquisition period.  This affects
-        various defaults (see the Purpose enum documentation for more
-        details). It may also affect how the user interface presents
-        the state of the protocol.  Since 3.2
-    analysis:
-        Perform analysis for this acquisition period.  If this is
-        disabled, no reads, no events, no channel states and no
-        basecalls will be generated. Any RPCs that depend on any of
-        these will fail. No reads-based files will be produced at all,
-        regardless of any other settings.  This is mostly useful for
-        calibration (although you should normally use the purpose
-        field rather than setting this explicitly).  The default
-        setting (AUTO) will use the persistent setting from the
-        analysis_configuraiton service, unless the purpose is set to
-        CALIBRATION.  Since 3.2
-    file_output:
-        Allow file output for this acquisition period.  If this is
-        disabled, the file output settings will be ignored for this
-        acquisition period, and no data files will be produced. Note
-        that reports are NOT managed by this setting.  Note that
-        setting this to FORCE will simply make file output respect the
-        bulk and read writer configurations. If each file output type
-        is disabled, you will still get no file output.  This is
-        mostly useful for calibration (although you should normally
-        use the purpose field rather than setting this explicitly).
-        The default setting (AUTO) will only suppress file output if
-        purpose is set to CALIBRATION.  Since 3.2
-    generate_final_summary:
-        Write a final_summary.txt file.  If file_output is disabled,
-        the final_summary.txt file will not be written regardless of
-        this setting.  The default setting (AUTO) will only enable
-        writing a final_summary.txt file if the purpose is set to
-        SEQUENCING.  Since 3.5 (NB: in 3.3 and 3.4, final_summary.txt
-        was always written out if file_output was enabled).
-    start_request:
-        Start request that will be used to trigger analysis, used to
-        union over all the different types of analysis possible.
-"""
-GetProgressResponse.RawPerChannel.__doc__ = """Attributes:
-    acquired:
-        Number of samples (per channel) acquired from the device.
-    processed:
-        Number of samples (per channel) passed to the analysis
-        pipeline for processing.  This can be compared to acquired to
-        see how far behind the analysis is lagging.
-"""
-MuxScanMetadata.__doc__ = """Provides information about how mux scans are configured.  This
-primarily information to help present mux scan results to the user
-(see `MuxScanResult`).
-
-Attributes:
-    auto_mux_scan_period_hours:
-        How frequently automatic scans are scheduled to occur.
-    category_groups:
-        Presentation information for categories.  Describes the
-        preferred way to present mux scan categories to users. Groups
-        should be presented in the order of this list.
-"""
-MuxScanMetadata.Style.__doc__ = """Presentation information for a category or group.
-
-Attributes:
-    label:
-        The human-readable name to display when rendering this
-        category or group.
-    description:
-        A sentence describing the meaning of the category or group.
-        This can be used as a tooltip, for example.
-    colour:
-        The colour to use when rendering this category or group.  This
-        is a six-digit hex string describing an RGB colour (eg:
-        "ff0000" for red).
-"""
 AcquisitionRunInfo.__doc__ = """Attributes:
     run_id:
         The unique identifier assigned to this acquisition run.  This
@@ -460,6 +224,45 @@ StopRequest.__doc__ = """Attributes:
         configuration options for further details.  This option has no
         effect on PromethIONs.  Since 1.15.2
 """
+MuxScanMetadata.Category.__doc__ = """A category that a channel mux can be assigned.
+
+Attributes:
+    name:
+        Name of the category.  This is the value that will be in the
+        `MuxScanResult.counts` field.  The user should not be shown
+        this. Instead, `style.label` should be displayed.
+    style:
+        How to render the category in a graphical user interface.
+    global_order:
+        An order ranking for the category when displaying them without
+        using groups.
+"""
+MuxScanMetadata.CategoryGroup.__doc__ = """Attributes:
+    name:
+        The name of the group.
+    style:
+        How to render the group in a graphical user interface.
+    category:
+        The categories contained in the group.  Within this group,
+        categories should be presented in the order of this list.
+"""
+MuxScanResult.__doc__ = """A report of the states of channel muxes (wells) across the flow cell.
+Every channel mux (well) is assigned to a specific category describing
+its state (for example, is it expected to produce good results, and if
+not why not?). This is a report of how many channel muxes are in each
+category.
+
+Attributes:
+    counts:
+        How many channel muxes are in each category.  The sum of all
+        the values in this map should be the number of channels
+        multiplied by the number of muxes on each channel (eg:
+        512x4=2048 on a MinION Mk1B without a flongle adapter).  eg.
+        'sequencing': 1500
+    mux_scan_timestamp:
+        When this mux scan result was added (Seconds since the start
+        of the acquisition).
+"""
 BreamInfo.__doc__ = """Information provided by Bream.  Note that this is provided by the
 protocol, and some protocols may choose not to provide this.
 
@@ -489,51 +292,6 @@ GetAcquisitionRunInfoRequest.__doc__ = """Attributes:
     run_id:
         The acquisition period to get information about.
 """
-ChannelStateInfo.ChannelState.__doc__ = """Attributes:
-    id:
-        The numeric identifier of the state.  This is what is reported
-        in any other APIs that return a channel state ID.
-    name:
-        The internal name of the state.  This is what is reported in
-        any other APIs that return a channel state name.
-    style:
-        How to render the channel state in a graphical user interface.
-        Note that the style may be missing from some channel states
-        (such as the ones that are built in to MinKNOW).
-    global_order:
-        An order ranking for the channel states when they are
-        ungrouped.  This can be used to order the channel states after
-        merging the groups.
-"""
-AcquisitionWriterSummary.__doc__ = """Attributes:
-    bytes_to_write_produced:
-        Number of bytes which minknow needs to write in order to
-        finish the experiment.
-    bytes_to_write_failed:
-        Number of bytes which minknow has failed to write to final
-        location. These reads are instead contained in the
-        fallback/tmp locations.
-    bytes_to_write_completed:
-        Number of bytes which minknow has written to final location.
-"""
-ChannelStateInfo.Group.__doc__ = """Attributes:
-    name:
-        The name of the group.
-    style:
-        How to render the group in a graphical user interface.  Note
-        that the style may be missing from some groups (such as the
-        ones that are built in to MinKNOW).
-    states:
-        The channel states contained in the group.  The groups are
-        ordered according to the "order" attribute of the channel
-        state style in the channel states configuration.
-"""
-ChannelStateInfo.__doc__ = """Attributes:
-    groups:
-        The groups of channel states.  The groups are ordered
-        according to the "order" attribute of the group style in the
-        channel states configuration.
-"""
 SetBreamInfoRequest.__doc__ = """Attributes:
     info:
         The information to set.  Note that, other than treating the
@@ -550,44 +308,286 @@ SetBreamInfoRequest.__doc__ = """Attributes:
         clear the entire BreamInfo structure, leave `info` empty and
         set this to True.
 """
-BreamInfo.Range.__doc__ = """Represents a range of values."""
-MuxScanResult.__doc__ = """A report of the states of channel muxes (wells) across the flow cell.
-Every channel mux (well) is assigned to a specific category describing
-its state (for example, is it expected to produce good results, and if
-not why not?). This is a report of how many channel muxes are in each
-category.
+MuxScanMetadata.__doc__ = """Provides information about how mux scans are configured.  This
+primarily information to help present mux scan results to the user
+(see `MuxScanResult`).
 
 Attributes:
-    counts:
-        How many channel muxes are in each category.  The sum of all
-        the values in this map should be the number of channels
-        multiplied by the number of muxes on each channel (eg:
-        512x4=2048 on a MinION Mk1B without a flongle adapter).  eg.
-        'sequencing': 1500
-    mux_scan_timestamp:
-        When this mux scan result was added (Seconds since the start
-        of the acquisition).
+    auto_mux_scan_period_hours:
+        How frequently automatic scans are scheduled to occur.
+    category_groups:
+        Presentation information for categories.  Describes the
+        preferred way to present mux scan categories to users. Groups
+        should be presented in the order of this list.
 """
-MuxScanMetadata.Category.__doc__ = """A category that a channel mux can be assigned.
+GetProgressResponse.RawPerChannel.__doc__ = """Attributes:
+    acquired:
+        Number of samples (per channel) acquired from the device.
+    processed:
+        Number of samples (per channel) passed to the analysis
+        pipeline for processing.  This can be compared to acquired to
+        see how far behind the analysis is lagging.
+"""
+AcquisitionYieldSummary.__doc__ = """Attributes:
+    read_count:
+        Number of reads selected by analysis as good reads.  The reads
+        in this counter are completed, but not necessarily on disk
+        yet.
+    fraction_basecalled:
+        This is the fraction of whole reads that the base-caller has
+        finished with. The value should be in the range [0.0, 1.0]
+        When base-calling is enabled, it can be added to
+        fraction_skipped and multiplied by 100 to give the percentage
+        of reads processed and by implication, the percentage of reads
+        the user is waiting for the base-caller to process.  Since 5.0
+    fraction_skipped:
+        This is the fraction of whole reads that have been skipped.
+        The value should be in the range [0.0, 1.0]  Since 5.0
+    basecalled_pass_read_count:
+        Number of reads successfully basecalled.
+    basecalled_fail_read_count:
+        Number of reads which have failed to basecall.
+    basecalled_skipped_read_count:
+        Number of reads which have been skipped
+    basecalled_pass_bases:
+        Number of bases which have been called and classed as pass.
+    basecalled_fail_bases:
+        Number of bases which have been called and were classed as
+        fail.
+    basecalled_samples:
+        Number of raw samples which have been called.
+    selected_raw_samples:
+        Number of minknow raw samples which have been selected for
+        writing to disk as reads.
+    selected_events:
+        Number of minknow events which have been selected for writing
+        to disk as reads.
+    estimated_selected_bases:
+        Estimated number of bases MinKNOW has selected for writing.
+        This is estimated based on already called bases and samples.
+    alignment_matches:
+        Number of bases which have matched target reference.  Only
+        specified when running live alignment.  Since 4.0
+    alignment_mismatches:
+        Number of bases which have not matched target reference.  Only
+        specified when running live alignment.  Since 4.0
+    alignment_insertions:
+        Number of bases which were inserted into alignments that
+        matched the reference.  Only specified when running live
+        alignment.  Since 4.0
+    alignment_deletions:
+        Number of bases which were deleted from alignments that
+        matched the reference.  Only specified when running live
+        alignment.  Since 4.0
+    alignment_coverage:
+        Number of bases that match the target reference(s) expressed
+        as a fraction of the total size of the target reference(s).
+        eg: For a specified alignment-targets with 2000 and 3000
+        bases, if "alignment_matches" is 2500, then
+        "alignment_coverage" will be 0.5  Since 4.3
+"""
+GetProgressResponse.__doc__ = """Attributes:
+    raw_per_channel:
+        The amount of raw data (per channel) that has been acquired
+        and processed.
+"""
+StartRequest.__doc__ = """ Protobuf messages for input/output of RPC calls
 
 Attributes:
+    dont_wait_for_device_ready:
+        Prevent waiting until the device is ready before starting
+        acquisition.  Defaults to false.  By default, MinKNOW will
+        block in the start() call for the device and flow cell to be
+        ready for acquisition (which may take several seconds after
+        plugging in the flow cell on some devices). Setting this
+        option will cause the call to return with an error if the
+        device is not already prepared to acquire data.  Since 1.14
+    generate_report:
+        Generate duty time and throughput reports.  Note that this
+        setting will be ignored (and no reports will be generated) if
+        no protocol is running at the time acquisition is started.
+        The default setting (AUTO) will only generate reports if
+        purpose is set to SEQUENCING.  Since 3.0
+    send_sequencing_read_metrics:
+        Whether sequencing read metrics should be reported to Oxford
+        Nanopore.  These are performance metrics that are used to
+        improve the sequencing technology. They do not include any
+        actual sequencing data, only statistics about read lengths,
+        duty time and similar generic performance information.  The
+        default setting (AUTO) will only send metrics if purpose is
+        set to SEQUENCING.  Since 3.0
+    send_basecalling_metrics:
+        Whether basecalling metrics should be reported to Oxford
+        Nanopore.  These are performance metrics that are used to
+        improve the sequencing technology. They do not include any
+        actual sequencing data, only statistics about basecalling
+        performance.  The default setting (AUTO) will only send
+        metrics if purpose is set to SEQUENCING.  NB: this setting is
+        ignored if live basecalling is not enabled, since there will
+        be no metrics to send.  Since 3.2
+    purpose:
+        Specify the purpose of this acquisition period.  This affects
+        various defaults (see the Purpose enum documentation for more
+        details). It may also affect how the user interface presents
+        the state of the protocol.  Since 3.2
+    analysis:
+        Perform analysis for this acquisition period.  If this is
+        disabled, no reads, no events, no channel states and no
+        basecalls will be generated. Any RPCs that depend on any of
+        these will fail. No reads-based files will be produced at all,
+        regardless of any other settings.  This is mostly useful for
+        calibration (although you should normally use the purpose
+        field rather than setting this explicitly).  The default
+        setting (AUTO) will use the persistent setting from the
+        analysis_configuraiton service, unless the purpose is set to
+        CALIBRATION.  Since 3.2
+    file_output:
+        Allow file output for this acquisition period.  If this is
+        disabled, the file output settings will be ignored for this
+        acquisition period, and no data files will be produced. Note
+        that reports are NOT managed by this setting.  Note that
+        setting this to FORCE will simply make file output respect the
+        bulk and read writer configurations. If each file output type
+        is disabled, you will still get no file output.  This is
+        mostly useful for calibration (although you should normally
+        use the purpose field rather than setting this explicitly).
+        The default setting (AUTO) will only suppress file output if
+        purpose is set to CALIBRATION.  Since 3.2
+    generate_final_summary:
+        Write a final_summary.txt file.  If file_output is disabled,
+        the final_summary.txt file will not be written regardless of
+        this setting.  The default setting (AUTO) will only enable
+        writing a final_summary.txt file if the purpose is set to
+        SEQUENCING.  Since 3.5 (NB: in 3.3 and 3.4, final_summary.txt
+        was always written out if file_output was enabled).
+    start_request:
+        Start request that will be used to trigger analysis, used to
+        union over all the different types of analysis possible.
+"""
+ChannelStateInfo.ChannelState.__doc__ = """Attributes:
+    id:
+        The numeric identifier of the state.  This is what is reported
+        in any other APIs that return a channel state ID.
     name:
-        Name of the category.  This is the value that will be in the
-        `MuxScanResult.counts` field.  The user should not be shown
-        this. Instead, `style.label` should be displayed.
+        The internal name of the state.  This is what is reported in
+        any other APIs that return a channel state name.
     style:
-        How to render the category in a graphical user interface.
+        How to render the channel state in a graphical user interface.
+        Note that the style may be missing from some channel states
+        (such as the ones that are built in to MinKNOW).
     global_order:
-        An order ranking for the category when displaying them without
-        using groups.
+        An order ranking for the channel states when they are
+        ungrouped.  This can be used to order the channel states after
+        merging the groups.
 """
-MuxScanMetadata.CategoryGroup.__doc__ = """Attributes:
+ChannelStateInfo.Group.__doc__ = """Attributes:
     name:
         The name of the group.
     style:
-        How to render the group in a graphical user interface.
-    category:
-        The categories contained in the group.  Within this group,
-        categories should be presented in the order of this list.
+        How to render the group in a graphical user interface.  Note
+        that the style may be missing from some groups (such as the
+        ones that are built in to MinKNOW).
+    states:
+        The channel states contained in the group.  The groups are
+        ordered according to the "order" attribute of the channel
+        state style in the channel states configuration.
+"""
+StartResponse.__doc__ = """Attributes:
+    run_id:
+        Globally-unique identifier generated when the acquisition is
+        started.  This is guaranteed to unique, including aross
+        sequencing devices.
+"""
+AcquisitionWriterSummary.__doc__ = """Attributes:
+    bytes_to_write_produced:
+        Number of bytes which minknow needs to write in order to
+        finish the experiment.
+    bytes_to_write_failed:
+        Number of bytes which minknow has failed to write to final
+        location. These reads are instead contained in the
+        fallback/tmp locations.
+    bytes_to_write_completed:
+        Number of bytes which minknow has written to final location.
+"""
+ChannelStateInfo.Style.__doc__ = """Attributes:
+    label:
+        The human-readable name to display when rendering this channel
+        state or group.
+    description:
+        A sentence describing the meaning of the channel state or
+        group.  This can be used as a tooltip, for example.
+    colour:
+        The colour to use when rendering this channel state or group.
+        This is a six-digit hex string describing an RGB colour (eg:
+        "ff00ff" for purple).
+"""
+BreamInfo.Range.__doc__ = """Represents a range of values."""
+MuxScanMetadata.Style.__doc__ = """Presentation information for a category or group.
+
+Attributes:
+    label:
+        The human-readable name to display when rendering this
+        category or group.
+    description:
+        A sentence describing the meaning of the category or group.
+        This can be used as a tooltip, for example.
+    colour:
+        The colour to use when rendering this category or group.  This
+        is a six-digit hex string describing an RGB colour (eg:
+        "ff0000" for red).
+"""
+AcquisitionConfigSummary.__doc__ = """Attributes:
+    purpose:
+        The purpose, as supplied to `acquisition.start()`
+    basecalling_enabled:
+        Was basecalling enabled for the run.
+    basecalling_config_filename:
+        Basecalling configuration filename (if basecalling enabled)
+    barcoding_enabled:
+        Is barcoding enabled for the run
+    barcoding_kits:
+        / Barcoding kit(s) used (if barcoding enabled)
+    alignment_enabled:
+        Is alignment enabled for the run
+    alignment_reference_files:
+        Alignment reference file(s) used (if alignment enabled)
+    alignment_bed_file:
+        bed file used (if alignment enabled, and bed file specified)
+    lamp_enabled:
+        Is lamp enabled for the run
+    lamp_kit:
+        The LAMP kit used (if LAMP enabled)
+    reads_directory:
+        Root directory reads were written to for the run.  Empty if no
+        reads were enabled.
+    reads_fallback_directories:
+        Directories reads are written to if the reads_directory is on
+        the network and writes to it fail.  Empty if no reads were
+        enabled.
+    fast5_reads_enabled:
+        Determine if fast5 reads were enabled for the run.
+    fastq_reads_enabled:
+        Determine if fastq reads were enabled for the run.
+    protobuf_reads_enabled:
+        Determine if protobuf reads were enabled for the run.
+    bulk_file_path:
+        The path of the bulk file for the run.  Empty if no reads were
+        enabled.
+    bulk_file_enabled:
+        Find if the bulk writer was enabled for a run.
+    channel_state_info:
+        Channel state styling information
+    events_to_base_ratio:
+        Number of bases per event
+    sample_rate:
+        Sample rate for the acquisition.  Since 3.3
+    channel_count:
+        Channel count used in the acquisition.  Since 3.3
+"""
+ChannelStateInfo.__doc__ = """Attributes:
+    groups:
+        The groups of channel states.  The groups are ordered
+        according to the "order" attribute of the group style in the
+        channel states configuration.
 """
 # @@protoc_insertion_point(module_scope)

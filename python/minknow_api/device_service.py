@@ -65,6 +65,12 @@ __all__ = [
     "SetBiasVoltageResponse",
     "DumpStateRequest",
     "DumpStateResponse",
+    "IncrementFlowCellUseCountRequest",
+    "IncrementFlowCellUseCountResponse",
+    "SetFlowCellBarcodeKitRequest",
+    "SetFlowCellBarcodeKitResponse",
+    "RegisterFlowCellBarcodesRequest",
+    "RegisterFlowCellBarcodesResponse",
     "FlowCellConnectorType",
     "FCCON_NOT_SET",
     "FCCON_PROMETHION",
@@ -1511,6 +1517,140 @@ class DeviceService(object):
             raise ArgumentError("Unexpected keyword arguments to dump_state: '{}'".format(", ".join(unused_args)))
 
         return run_with_retry(self._stub.dump_state,
+                              _message, _timeout,
+                              [],
+                              "minknow_api.device.DeviceService")
+    def increment_flow_cell_use_count(self, _message=None, _timeout=None, **kwargs):
+        """Increment use count so that it is possible to track the amount of times a flow cell has been used
+
+        This has a hard limit of 255, and an error will occur if an overflow is detected.
+
+        Since 5.6
+
+        
+
+        Args:
+            _message (minknow_api.device_pb2.IncrementFlowCellUseCountRequest, optional): The message to send.
+                This can be passed instead of the keyword arguments.
+            _timeout (float, optional): The call will be cancelled after this number of seconds
+                if it has not been completed.
+
+        Returns:
+            minknow_api.device_pb2.IncrementFlowCellUseCountResponse
+
+        Note that the returned messages are actually wrapped in a type that collapses
+        submessages for fields marked with ``[rpc_unwrap]``.
+        """
+        if _message is not None:
+            if isinstance(_message, MessageWrapper):
+                _message = _message._message
+            return run_with_retry(self._stub.increment_flow_cell_use_count,
+                                  _message, _timeout,
+                                  [],
+                                  "minknow_api.device.DeviceService")
+
+        unused_args = set(kwargs.keys())
+
+        _message = IncrementFlowCellUseCountRequest()
+
+        if len(unused_args) > 0:
+            raise ArgumentError("Unexpected keyword arguments to increment_flow_cell_use_count: '{}'".format(", ".join(unused_args)))
+
+        return run_with_retry(self._stub.increment_flow_cell_use_count,
+                              _message, _timeout,
+                              [],
+                              "minknow_api.device.DeviceService")
+    def set_flow_cell_barcode_kit(self, _message=None, _timeout=None, **kwargs):
+        """Specify the barcode kit that has been used with the flow cell
+
+        Once this has been set it cannot be modified. It is also not possible to register the
+        barcodes that have been used until this has been set.
+
+        Since 5.6
+
+        
+
+        Args:
+            _message (minknow_api.device_pb2.SetFlowCellBarcodeKitRequest, optional): The message to send.
+                This can be passed instead of the keyword arguments.
+            _timeout (float, optional): The call will be cancelled after this number of seconds
+                if it has not been completed.
+            id (str): The Barcode Kit ID can be up to 8 characters long
+
+        Returns:
+            minknow_api.device_pb2.SetFlowCellBarcodeKitResponse
+
+        Note that the returned messages are actually wrapped in a type that collapses
+        submessages for fields marked with ``[rpc_unwrap]``.
+        """
+        if _message is not None:
+            if isinstance(_message, MessageWrapper):
+                _message = _message._message
+            return run_with_retry(self._stub.set_flow_cell_barcode_kit,
+                                  _message, _timeout,
+                                  [],
+                                  "minknow_api.device.DeviceService")
+
+        unused_args = set(kwargs.keys())
+
+        _message = SetFlowCellBarcodeKitRequest()
+
+        if "id" in kwargs:
+            unused_args.remove("id")
+            _message.id = kwargs['id']
+        else:
+            raise ArgumentError("set_flow_cell_barcode_kit requires a 'id' argument")
+
+        if len(unused_args) > 0:
+            raise ArgumentError("Unexpected keyword arguments to set_flow_cell_barcode_kit: '{}'".format(", ".join(unused_args)))
+
+        return run_with_retry(self._stub.set_flow_cell_barcode_kit,
+                              _message, _timeout,
+                              [],
+                              "minknow_api.device.DeviceService")
+    def register_flow_cell_barcodes(self, _message=None, _timeout=None, **kwargs):
+        """Register that a distinct barcode has been used with the flow-cell
+
+        Barcodes cannot be cleared once registered. A Barcode Kit must also be set using set_flow_cell_barcode_kit()
+
+        Since 5.6
+
+        
+
+        Args:
+            _message (minknow_api.device_pb2.RegisterFlowCellBarcodesRequest, optional): The message to send.
+                This can be passed instead of the keyword arguments.
+            _timeout (float, optional): The call will be cancelled after this number of seconds
+                if it has not been completed.
+            barcodes (int, optional): List of unique barcodes that have been used with the flow-cell
+                Where a barcode is represented by an index in the range of 1 to 384 only.
+
+        Returns:
+            minknow_api.device_pb2.RegisterFlowCellBarcodesResponse
+
+        Note that the returned messages are actually wrapped in a type that collapses
+        submessages for fields marked with ``[rpc_unwrap]``.
+        """
+        if _message is not None:
+            if isinstance(_message, MessageWrapper):
+                _message = _message._message
+            return run_with_retry(self._stub.register_flow_cell_barcodes,
+                                  _message, _timeout,
+                                  [],
+                                  "minknow_api.device.DeviceService")
+
+        unused_args = set(kwargs.keys())
+
+        _message = RegisterFlowCellBarcodesRequest()
+
+        if "barcodes" in kwargs:
+            unused_args.remove("barcodes")
+            _message.barcodes.extend(kwargs['barcodes'])
+
+        if len(unused_args) > 0:
+            raise ArgumentError("Unexpected keyword arguments to register_flow_cell_barcodes: '{}'".format(", ".join(unused_args)))
+
+        return run_with_retry(self._stub.register_flow_cell_barcodes,
                               _message, _timeout,
                               [],
                               "minknow_api.device.DeviceService")

@@ -1,52 +1,26 @@
 """
-A minimal server implementation that is compatible with
-the minkow_api.Connection class. To use this server for
-tests you should provide Servicer classes using keyword
-arguments when initialising the server. Services should
-implement all the methods that your tests require.
+DEPRECATED.
 
-Eg:
->>> import minknow_api
->>> # Create a custom service
->>> class InstanceService(minknow_api.instance_pb2_grpc.InstanceServiceServicer):
-...     def get_version_info(self, _request, _context):
-...         pass
->>> # Add the custom service to the mock server
->>> server = minknow_api.testutils.MockMinKNOWServer(
-...     instance_service=InstanceService
-... )
->>> # Start mock server for 30 seconds
->>> with server:
-...     server.wait_for_termination(timeout=30)
+This was originally intended to provide users of minknow_api with a convenient test
+harness for their code. However, it is quite strongly tied to minknow_api's own test
+directory structure, and also proved to be too inflexible to use with even the tests for
+minknow_api's own example code.
 
-There is one required method for the connection class
-InstanceService.get_version_info() which supplies the
-current version information. This is already included
-in the mock server, however if you require methods in
-the instance service then the mock InstanceService is
-importable from this module:
-
->>> from minknow_api.testutils import MockMinKNOWServer, InstanceService
->>> class MyInstanceService(InstanceService):
-...     def get_disk_space_info(self, request, context):
-...         pass
->>> # Add the custom service to the mock server
->>> server = MockMinKNOWServer(instance_service=MyInstanceService)
-
-For examples of other service implementations check the
-test cases for this mock server.
+Consider taking inspiration from python/test/mock_server.py in the minknow_api source
+repository instead.
 """
+import inspect
 import logging
-from collections import namedtuple
+import warnings
 from concurrent import futures
 from importlib import import_module
-import inspect
-from packaging.version import parse
 from pathlib import Path
 
 import grpc
+from packaging.version import parse
+
 import minknow_api
-from minknow_api import _services, _optional_services
+from minknow_api import _optional_services, _services
 
 LOGGER = logging.getLogger(__name__)
 VERSION = parse(minknow_api.__version__)
@@ -56,6 +30,11 @@ MAJOR, MINOR, MICRO = map(int, VERSION.base_version.split("."))
 DEFAULT_SERVER_PORT = 0
 
 found_test_certs_dir = None
+
+warnings.warn(
+    "minknow_api.testutils is deprecated and will be removed in a future release",
+    DeprecationWarning,
+)
 
 
 def find_test_certs_dir(extra_stack_frames_up=0):

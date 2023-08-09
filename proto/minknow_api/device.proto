@@ -267,6 +267,31 @@ service DeviceService {
     // Since 5.0
     rpc dump_state(DumpStateRequest) returns (DumpStateResponse) {
     }
+
+    // Increment use count so that it is possible to track the amount of times a flow cell has been used
+    //
+    // This has a hard limit of 255, and an error will occur if an overflow is detected.
+    //
+    // Since 5.6
+    rpc increment_flow_cell_use_count (IncrementFlowCellUseCountRequest) returns (IncrementFlowCellUseCountResponse) {        
+    }
+
+    // Specify the barcode kit that has been used with the flow cell
+    //
+    // Once this has been set it cannot be modified. It is also not possible to register the
+    // barcodes that have been used until this has been set.
+    //
+    // Since 5.6
+    rpc set_flow_cell_barcode_kit(SetFlowCellBarcodeKitRequest) returns (SetFlowCellBarcodeKitResponse) {        
+    }
+
+    // Register that a distinct barcode has been used with the flow-cell
+    //
+    // Barcodes cannot be cleared once registered. A Barcode Kit must also be set using set_flow_cell_barcode_kit()
+    //
+    // Since 5.6
+    rpc register_flow_cell_barcodes(RegisterFlowCellBarcodesRequest) returns (RegisterFlowCellBarcodesResponse) {        
+    }
 }
 
 // Describes the configuration of a channel on the device.
@@ -586,6 +611,26 @@ message GetFlowCellInfoResponse {
     // Since 5.0
     InsertionScriptStatus insertion_script_status = 14;
 
+    // The use count for this flow cell. 
+    //
+    // Since 5.6
+    uint32 use_count = 15;
+
+    // The advised flow-cell use_count_limit from the configuration.
+    // This limit will not be enforced by MinKNOW-Core.
+    //
+    // Since 5.6
+    uint32 use_count_limit = 16;
+
+    // The flow cell barcode kit identity
+    //
+    // Since 5.6
+    string barcode_kit = 17;
+
+    // The unique barcodes (as represented by indices between 1 to 384) that have been
+    // set by calls to register_flow_cell_barcodes() on this flow cell.
+    // Since 5.6
+    repeated uint32 barcodes = 18;
 }
 
 message StreamFlowCellInfoRequest {}
@@ -1121,4 +1166,27 @@ message DumpStateRequest {
 }
 
 message DumpStateResponse {
+}
+
+message IncrementFlowCellUseCountRequest {    
+}
+
+message IncrementFlowCellUseCountResponse {    
+}
+
+message SetFlowCellBarcodeKitRequest {
+    // The Barcode Kit ID can be up to 8 characters long
+    string id = 1 [(rpc_required) = true];
+}
+
+message SetFlowCellBarcodeKitResponse {
+}
+
+message RegisterFlowCellBarcodesRequest {    
+    // List of unique barcodes that have been used with the flow-cell
+    // Where a barcode is represented by an index in the range of 1 to 384 only.
+    repeated uint32 barcodes = 1;
+}
+
+message RegisterFlowCellBarcodesResponse {    
 }

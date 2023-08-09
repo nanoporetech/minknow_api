@@ -20,9 +20,6 @@ class MessageWrapper(object):
         self._objs.append(message)
         self._message = message
 
-    def __iter__(self):
-        return self
-
     def __next__(self):
         try:
             return MessageWrapper(next(self._message))

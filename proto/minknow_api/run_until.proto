@@ -159,6 +159,9 @@ service RunUntilService {
     // Get the standard Run-Until Criteria
     //
     // Updates for these criteria will be provided by MinKNOW
+    //
+    // NOTE: this will be removed in release 5.8
+    // call currently not implemented
     rpc get_standard_criteria (GetStandardCriteriaRequest) returns (GetStandardCriteriaResponse) {}
 
     // Write target run-until criteria
@@ -179,6 +182,9 @@ service RunUntilService {
     //
     // Updates written here are forwarded on to `stream_progress()`.  The Run-Until Script can use
     // this to supply updates on "custom" Run-Until Criteria
+    //
+    // NOTE: this will be removed in release 5.8
+    // call currently not implemented
     rpc write_custom_progress (WriteCustomProgressRequest) returns (WriteCustomProgressResponse)  {
         option (experimental) = true;
     }
@@ -194,6 +200,8 @@ service RunUntilService {
     // Note that streaming of progress updates for standard run-until has not yet been implemented
     // in MinKNOW.
     //
+    // NOTE: this will be removed in release 5.8
+    // call currently not implemented
     rpc stream_progress (StreamProgressRequest) returns (stream StreamProgressResponse)  {
         option (experimental) = true;
     }
@@ -223,8 +231,12 @@ message CriteriaValues {
     map<string, google.protobuf.Any> criteria = 1;
 }
 
+// NOTE: this will be removed in release 5.8
+// call currently not implemented
 message GetStandardCriteriaRequest {}
 
+// NOTE: this will be removed in release 5.8
+// call currently not implemented
 message GetStandardCriteriaResponse {
     // A list of valid criteria
     //
@@ -254,6 +266,8 @@ message StreamTargetCriteriaResponse {
     CriteriaValues stop_criteria = 2;
 }
 
+// NOTE: this will be removed in release 5.8
+// call currently not implemented
 message WriteCustomProgressRequest {
     // The acquisition this Run-Until progress update relates to
     string acquisition_run_id = 1 [(rpc_required) = true];
@@ -265,13 +279,19 @@ message WriteCustomProgressRequest {
     CriteriaValues criteria_values = 2;
 }
 
+// NOTE: this will be removed in release 5.8
+// call currently not implemented
 message WriteCustomProgressResponse {}
 
+// NOTE: this will be removed in release 5.8
+// call currently not implemented
 message StreamProgressRequest {
     // The acquisition to obtain the Run-Until progress updates for
     string acquisition_run_id = 1 [(rpc_required) = true];
 }
 
+// NOTE: this will be removed in release 5.8
+// call currently not implemented
 message StreamProgressResponse {
     // The run until criteria status
     //

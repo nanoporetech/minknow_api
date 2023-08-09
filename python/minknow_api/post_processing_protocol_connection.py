@@ -1,7 +1,8 @@
-import minknow_api.manager
 import os
-from pathlib import Path
 import typing
+from pathlib import Path
+
+import minknow_api.manager
 
 
 class ProtocolPaths(typing.NamedTuple):
@@ -38,7 +39,7 @@ class PostProcessingProtocolConnection(object):
         if credentials is None:
             credentials = minknow_api.grpc_credentials(host=host)
         self._basecaller = minknow_api.manager.Basecaller(
-            port=port, credentials=credentials
+            host="127.0.0.1", port=port, credentials=credentials
         )
         self._protocol_directories = None
         self._protocol_id = None

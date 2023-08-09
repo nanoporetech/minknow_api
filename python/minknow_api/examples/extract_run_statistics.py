@@ -13,20 +13,20 @@ This script generates a set of files in the current dir summarising acquisition 
 
 import argparse
 import logging
-from pathlib import Path
 import sys
+from pathlib import Path
 
 import grpc
+
+import minknow_api.statistics_pb2
 
 # minknow_api.manager supplies "Manager" a wrapper around MinKNOW's Manager gRPC API with utilities
 # for querying sequencing positions + offline basecalling tools.
 from minknow_api.manager import Manager
-import minknow_api.statistics_pb2
 
 
 def dump_statistics_for_acquisition(connection, acquisition_run_id, output_dir):
     """Extract any acquisition output information about `acquisition_run_id`, and write a report into `output_dir`."""
-    run_info = connection.acquisition.get_acquisition_info(run_id=acquisition_run_id)
 
     def do_title(title_str, title_char):
         """Format a markdown title for `title_str`"""
@@ -105,6 +105,11 @@ def dump_statistics_for_acquisition(connection, acquisition_run_id, output_dir):
         file.write(report)
 
 
+def _load_file(path: str) -> bytes:
+    with open(path, "rb") as f:
+        return f.read()
+
+
 def main():
     """Entrypoint to extract run statistics example"""
     # Parse arguments to be passed to started protocols:
@@ -129,6 +134,18 @@ def main():
         help="Specify an API token to use, should be returned from the sequencer as a developer API token.",
     )
     parser.add_argument(
+        "--client-cert-chain",
+        type=_load_file,
+        default=None,
+        help="Path to a PEM-encoded X.509 certificate chain for client authentication.",
+    )
+    parser.add_argument(
+        "--client-key",
+        type=_load_file,
+        default=None,
+        help="Path to a PEM-encoded private key for client certificate authentication.",
+    )
+    parser.add_argument(
         "--position",
         help="position on the machine (or MinION serial number) to run the protocol at",
         required=True,
@@ -147,13 +164,22 @@ def main():
 
     args = parser.parse_args()
 
+    if (args.client_cert_chain is None) != (args.client_key is None):
+        parser.error(
+            "--client-cert-chain and --client-key must either both be provided, or neither"
+        )
+
     # Specify --verbose on the command line to get extra details about
     if args.verbose:
         logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
 
     # Construct a manager using the host + port provided:
     manager = Manager(
-        host=args.host, port=args.port, developer_api_token=args.api_token
+        host=args.host,
+        port=args.port,
+        developer_api_token=args.api_token,
+        client_certificate_chain=args.client_cert_chain,
+        client_private_key=args.client_key,
     )
 
     # Find which positions we are going to start protocol on:
@@ -166,7 +192,7 @@ def main():
             "Failed to find position %s in available positions '%s'"
             % (args.position, ", ".join([p.name for p in positions]))
         )
-        sys.exit(1)
+        exit(1)
 
     # Connect to the grpc port for the position:
     connection = filtered_positions[0].connect()
@@ -186,7 +212,7 @@ def main():
     # Find the correct acquisition run to query:
     try:
         run_info = connection.protocol.get_run_info(run_id=protocol_id)
-    except grpc.RpcError as e:
+    except grpc.RpcError:
         print("Failed to get protocol info for id '%s'" % protocol_id, file=sys.stderr)
         sys.exit(1)
 

@@ -350,6 +350,9 @@ class RunUntilServiceServicer(object):
         """Get the standard Run-Until Criteria
 
         Updates for these criteria will be provided by MinKNOW
+
+        NOTE: this will be removed in release 5.8
+        call currently not implemented
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -382,6 +385,9 @@ class RunUntilServiceServicer(object):
 
         Updates written here are forwarded on to `stream_progress()`.  The Run-Until Script can use
         this to supply updates on "custom" Run-Until Criteria
+
+        NOTE: this will be removed in release 5.8
+        call currently not implemented
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -399,6 +405,8 @@ class RunUntilServiceServicer(object):
         Note that streaming of progress updates for standard run-until has not yet been implemented
         in MinKNOW.
 
+        NOTE: this will be removed in release 5.8
+        call currently not implemented
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')

@@ -8,8 +8,9 @@ to obtain this value.
 
 """
 
-import minknow_api.device_service
 from enum import Enum
+
+import minknow_api.device_service
 
 __all__ = ["DeviceType", "get_device_type"]
 

@@ -8,17 +8,10 @@ Produce a list of extracted information, which includes:
 
 import csv
 import re
-from collections import namedtuple, Counter
-from typing import (
-    Any,
-    Mapping,
-    Optional,
-    NamedTuple,
-    Sequence,
-    MutableMapping,
-)
+from collections import Counter
+from typing import Any, Mapping, MutableMapping, NamedTuple, Optional, Sequence
 
-from minknow_api.protocol_pb2 import BarcodeUserData, ProtocolRunUserInfo
+from minknow_api.protocol_pb2 import BarcodeUserData
 
 
 # Error raised when the sample sheet cannot be parsed
@@ -179,7 +172,10 @@ def check_fieldnames(
 def get_key(record: Record) -> str:
     # We checked above that we had exactly one of `position_id` and `flow_cell_id` in the record
     # So one must be in the record, and the other must not be
-    assert ("position_id" in record) != ("flow_cell_id" in record)
+    if ("position_id" in record) == ("flow_cell_id" in record):
+        raise ValueError(
+            "exactly one of 'position_id' and 'flow_cell_id' must be specified in the sample sheet"
+        )
 
     return record.get("position_id") or record.get("flow_cell_id")
 

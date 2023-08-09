@@ -1,5 +1,4 @@
 import logging
-from pathlib import Path
 import unittest
 
 import minknow_api

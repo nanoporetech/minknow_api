@@ -205,6 +205,9 @@ class RunUntilService(object):
 
         Updates for these criteria will be provided by MinKNOW
 
+        NOTE: this will be removed in release 5.8
+        call currently not implemented
+
         
 
         Args:
@@ -350,6 +353,9 @@ class RunUntilService(object):
         Updates written here are forwarded on to `stream_progress()`.  The Run-Until Script can use
         this to supply updates on "custom" Run-Until Criteria
 
+        NOTE: this will be removed in release 5.8
+        call currently not implemented
+
         
 
         Note this API is experimental - it may be changed, revised or removed in future minor versions.
@@ -412,6 +418,9 @@ class RunUntilService(object):
 
         Note that streaming of progress updates for standard run-until has not yet been implemented
         in MinKNOW.
+
+        NOTE: this will be removed in release 5.8
+        call currently not implemented
 
         
 

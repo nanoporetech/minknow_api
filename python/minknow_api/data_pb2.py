@@ -176,9 +176,182 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   _GETEXPERIMENTYIELDINFORESPONSE_FILEOPERATIONQUEUEPROGRESS_FILETYPEINFO._serialized_end=9698
   _DATASERVICE._serialized_start=9701
   _DATASERVICE._serialized_end=10864
-GetLiveReadsRequest.UnblockAction.__doc__ = """Attributes:
+GetReadStatisticsResponse.PerClassificationData.__doc__ = """Attributes:
+    duration_statistics:
+        Statistics of read (chunk) durations. These will be in the
+        same units as the requested duration (if you ask for X seconds
+        of data, you will get durations back in seconds, but if you
+        ask for X samples of data, you will get durations back in
+        samples).  NB: statistics may be estimates.
+    current_statistics:
+        Statistics for all current (signal) values for all reads under
+        this channel/configuration/classification combination.  NB:
+        Statistics are calculated from raw data.
+    chunk_statistics:
+        Statistics generated from the analysed read chunks (or
+        complete reads), rather than the raw signal.
+    samples_duration:
+        The number of samples seen with this classification on this
+        channel in this channel configuration.
+    seconds_duration:
+        The number of seconds spent in this classification on this
+        channel in this channel configuration.  This is the same as
+        ``samples_duration``, but expressed in seconds.
+"""
+GetLiveReadsRequest.StreamSetup.__doc__ = """Attributes:
+    first_channel:
+        The first channel (inclusive) to return data for.  Note that
+        channel numbering starts at 1.
+    last_channel:
+        The last channel (inclusive) to return data for.  Note that
+        channel numbering starts at 1.
+    raw_data_type:
+        Specify the type of raw data to retrieve
+    sample_minimum_chunk_size:
+        Minimum chunk size read data is returned in.
+    max_unblock_read_length:
+        Maximum read length MinKNOW will attempt to unblock reads
+        beyond this length will not be unblocked when Action's
+        request, instead minknow will skip any further data from the
+        read.
+    max_unblock_read_length_samples:
+        Maximum read length MinKNOW will attempt to unblock (in
+        samples).  A value of 0 will cause minknow to unblock reads of
+        any length.
+    max_unblock_read_length_seconds:
+        Maximum read length MinKNOW will attempt to unblock (in
+        seconds).  A value of 0.0 will cause minknow to unblock reads
+        of any length.
+    accepted_first_chunk_classifications:
+        A set of classification identifiers which the client is
+        interested in. If a read starts with a classification not
+        listed here the read is never sent to the client.
+"""
+GetSignalBytesResponse.ChannelData.__doc__ = """Attributes:
+    data:
+        The signal data.  This is the byte representation of a C-style
+        array of values. Values are stored in order and adjacent to
+        each other.  The type of the elements will depend on whether
+        calibrated data was chosen. The get_data_types() RPC call
+        should be used to determine the precise format of the data,
+        but in general terms, uncalibrated data will be signed
+        integers and calibrated data will be floating-point numbers.
+        Returning the data in this format allows it to be efficiently
+        processed in dynamic languages that can pass the data straight
+        down to a native runtime. For example, in Python, this data
+        can be intepreted directly into a numpy array using
+        numpy.fromstring().  Calibrated data is in picoamps.
+        Uncalibrated data is the raw values output by the device's ADC
+        (analogue-digital converter).
+    config_changes:
+        The configuration changes on the channel during data
+        collection.  If channel configuration changes were requested,
+        this will contain all the channel configuration changes that
+        affect the returned data. This will include at least one
+        element, with offset 0, that describes the configuration at
+        the time the first sample was taken.  Note that the offset is
+        the zero-based index into the adc or picoamps list.  The
+        changes will be ordered by offset.
+"""
+GetSignalBytesResponse.ChannelConfigChange.__doc__ = """Attributes:
+    config:
+        The new channel configuration.
+    offset:
+        The offset in the returned data where the change was applied.
+"""
+GetReadStatisticsRequest.__doc__ = """Attributes:
+    channels:
+        List of channels required, indexed from 1.
     duration:
-        Duration of unblock in seconds.
+        How long to collect the statistics for
+    no_current_statistics:
+        Disable current_statistics results in returned data.  Intended
+        for use when the consumer doesn't need specific fields
+        allowing the implementation to be more efficient.
+    no_chunk_statistics:
+        Disable chunk_statistics results in returned data.  Intended
+        for use when the consumer doesn't need specific fields
+        allowing the implementation to be more efficient.
+    required_classifications:
+        Specify classifications which the user wants information
+        about.  The default behaviour (when empty) is to return
+        information on all classifications.  Specifying which
+        classifications the user needs information about may allow the
+        implementation to be more efficient.
+"""
+GetLiveReadsRequest.Action.__doc__ = """Attributes:
+    channel:
+        Channel name to unblock
+    read:
+        Identifier for the read to act on.  If the read requested is
+        no longer in progress, the action fails.
+    unblock:
+        Unblock a read and skip further data from this read.
+    stop_further_data:
+        Skip further data from this read, doesn't affect the read
+        data.
+"""
+GetDataTypesResponse.DataType.__doc__ = """Attributes:
+    type:
+        The basic type of the data item.
+    big_endian:
+        Whether the type is big-endian (high-byte first).  For numeric
+        data types, if this is not set, they are little-endian (low-
+        byte first).
+    size:
+        The size of the data type in bytes.
+"""
+GetDataTypesResponse.__doc__ = """Attributes:
+    uncalibrated_signal:
+        The format of the uncalibrated (ADC) signal data returned by
+        get_raw_signal_bytes().  In the current release, this will
+        describe 16-bit little-endian integers.
+    calibrated_signal:
+        The format of the calibrated (picoamp) signal data returned by
+        get_raw_signal_bytes().  In the current release, this will
+        describe 32-bit IEEE 754 floating point values.
+    bias_voltages:
+        The format of the bias voltage data returned by
+        get_raw_signal_bytes().  In the current release, this will
+        describe 16-bit little-endian integers.
+"""
+UnlockChannelStatesRequest.__doc__ = """Attributes:
+    channels:
+        The channels to activate (active = they will be considered for
+        channel state evaluation in the future). Channels are indexed
+        from 1.
+"""
+GetSignalBytesRequest.__doc__ = """Attributes:
+    length:
+        The amount of data to return.  If this is omitted, data will
+        be streamed until the call is cancelled.
+    seconds:
+        The amount of data to return in seconds.  The number of
+        samples returned will be just enough to cover this period of
+        time. Cannot be specified at the same time as ``samples``.
+    samples:
+        The amount of data to return in samples.  The result will
+        contain exactly this many samples. If this is not possible,
+        the call will fail. Cannot be specified at the same time as
+        ``seconds``.
+    first_channel:
+        The first channel (inclusive) to return data for.  Note that
+        channel numbering starts at 1.
+    last_channel:
+        The last channel (inclusive) to return data for.  Note that
+        channel numbering starts at 1.
+    include_channel_configs:
+        Whether to include channel configuration settings.
+    include_bias_voltages:
+        Whether to include bias voltage information.
+    calibrated_data:
+        Whether the data should be calibrated.
+    return_when_listening:
+        When this value is set to true, then an empty message will be
+        sent back to the client to indicate that the backend has
+        acknowleged the request, and that any calls made that will
+        affect the signal after that initial  response will be
+        reflected in the next messages
 """
 LockChannelStatesRequest.__doc__ = """Attributes:
     channels:
@@ -192,6 +365,65 @@ LockChannelStatesRequest.__doc__ = """Attributes:
         configuration. It HAS to be different to 'unclassified', which
         denotes that the channel is active, but had not met any
         successful criteria yet.
+"""
+GetSignalMinMaxRequest.__doc__ = """Attributes:
+    first_channel:
+        The first channel (inclusive) to return data for.  Note that
+        channel numbering starts at 1.
+    last_channel:
+        The last channel (inclusive) to return data for.  Note that
+        channel numbering starts at 1.
+    window_size:
+        The size of window to summarise.  A value of zero will be
+        rejected; there is no default.
+    calibrated_data:
+        Whether the data should be calibrated.
+"""
+GetReadStatisticsResponse.__doc__ = """Attributes:
+    channels:
+        Data for each requested channel, in the same order as
+        requested.
+    samples_since_start:
+        The number of samples collected before the first sample
+        included in this response.  This gives the position of the
+        first data point which all channels share in the calculated
+        statistics. Each individual channel may have samples from read
+        chunks previous to this sample due to read boundaries not
+        being consistent across channels.
+    seconds_since_start:
+        The number of seconds elapsed before the first sample included
+        in this response.  This is the same as
+        ``samples_since_start``, but expressed in seconds.
+"""
+GetSignalBytesResponse.__doc__ = """Attributes:
+    samples_since_start:
+        The number of samples collected before the first sample
+        included in this response.  This gives the position of the
+        first data point on each channel in the overall stream of data
+        being acquired from the device (since this period of data
+        acquisition was started).
+    seconds_since_start:
+        The number of seconds elapsed since data acquisition started.
+        This is the same as ``samples_since_start``, but expressed in
+        seconds.
+    skipped_channels:
+        The number of channels omitted at the start of the
+        ``channels`` array.
+    channels:
+        The signal for each requested channel.  Note that
+        ``skipped_channels`` must be used to determine which channels
+        are given here, as not all channels will be included in every
+        message. The channels that are provided are contiguous and in
+        order, with the first channel being ``first_channel +
+        skipped_channels`` (where ``first_channel`` is from the
+        request message).
+    bias_voltages:
+        The bias voltages set for each sample.  If bias voltages were
+        requested, this will provide voltage data, one voltage per
+        sample. Note that not every message may include bias_voltages
+        (they will generally be included when ``skipped_channels`` is
+        0, but that is not guaranteed).  The get_data_types() RPC call
+        should be used to determine the format of the data.
 """
 GetSignalMinMaxResponse.ChannelData.__doc__ = """Attributes:
     calibrated_minima:
@@ -215,25 +447,88 @@ GetSignalMinMaxResponse.ChannelData.__doc__ = """Attributes:
         uncalibrated data.  This is guaranteed to be the same size as
         the respective foo_minima field.
 """
-GetReadStatisticsRequest.__doc__ = """Attributes:
-    channels:
-        List of channels required, indexed from 1.
+GetLiveReadsRequest.UnblockAction.__doc__ = """Attributes:
     duration:
-        How long to collect the statistics for
-    no_current_statistics:
-        Disable current_statistics results in returned data.  Intended
-        for use when the consumer doesn't need specific fields
-        allowing the implementation to be more efficient.
-    no_chunk_statistics:
-        Disable chunk_statistics results in returned data.  Intended
-        for use when the consumer doesn't need specific fields
-        allowing the implementation to be more efficient.
-    required_classifications:
-        Specify classifications which the user wants information
-        about.  The default behaviour (when empty) is to return
-        information on all classifications.  Specifying which
-        classifications the user needs information about may allow the
-        implementation to be more efficient.
+        Duration of unblock in seconds.
+"""
+GetReadStatisticsResponse.PerConfigurationData.__doc__ = """Attributes:
+    channel_configuration:
+        The channel configuration active during the reads these
+        statistics were gathered for.
+    classifications:
+        Map from classification names to statistics about read
+        (chunks) with that classification.
+    incomplete:
+        If statistics about complete reads were requested, this field
+        may contain data for a final, incomplete read (whose
+        classification is therefore unknown).  This field will not be
+        set if read chunks were requested, or if the data capture
+        happened to end at a complete read boundary.
+"""
+GetReadStatisticsResponse.Statistics.__doc__ = """Attributes:
+    q_5:
+         Quantiles (percentiles)
+"""
+GetReadStatisticsResponse.PerChannelData.__doc__ = """Attributes:
+    configurations:
+        Data for each channel configuration seen on this channel.
+        Note that each channel configuration will only appear once in
+        this list, and this list is *not* in any way ordered by time.
+        The only reason it is not a map is because of restrictions on
+        map key types.
+    samples_since_start:
+        The number of samples collected before this channel's first
+        sample.
+    seconds_since_start:
+        The number of seconds elapsed since data acquisition started.
+        This is the same as ``samples_since_start``, but expressed in
+        seconds.
+    samples_duration:
+        The number of samples collected for this channel.
+    seconds_duration:
+        The number of seconds of data captured for this session.  This
+        is the same as ``samples_duration``, but expressed in seconds.
+"""
+GetChannelStatesResponse.ChannelStateData.__doc__ = """Attributes:
+    channel:
+        Represents the channel number, indexed from one. (i.e. what
+        channel did the channel state change happened on)
+    state:
+        depending on the channel state request, MinKNOW can fill in
+        either the name or the criteria id of the channel state. The
+        criteria id (or state_id) is the number passed in the channel
+        states configuration. Note that MinKNOW also has some default
+        channel states (like unclassified, pending mux change) which
+        receive unique ids - these are numbers bigger than 200.
+    acquisition_raw_index:
+        Indices of when the channel state was first seen. For example,
+        if a request is done half way through the experiment, the
+        first message will contain the current state on the requested
+        channels. The acquisition/analysis index of these would be
+        from when the channel states were set. These are exactly the
+        same numbers we see in the bulk file, in the 'states' table
+    config:
+        Channel config (mux state) the channel state was determined
+        on.
+"""
+GetReadStatisticsResponse.ChunkStatistics.__doc__ = """Attributes:
+    median_sd:
+        Aggregated median_sd value from all classified reads. Computed
+        as median(median_sd[...])
+    median:
+        Aggregated median_sd value from all classified reads.
+        Computed as median(median[...])
+    range:
+        Aggregated range value from all classified reads.  Computed as
+        median(q90[...] - q10[...])
+"""
+GetChannelStatesResponse.__doc__ = """Attributes:
+    channel_states:
+        The streamed data for all channels will be appended to this
+        vector. After the request is made, all the channel state
+        changes are streamed through this array. This is implemented
+        in the idea of a sparse array because we can have channels
+        that remain in the same state for a long time.
 """
 GetLiveReadsResponse.ReadData.__doc__ = """Attributes:
     id:
@@ -274,75 +569,6 @@ GetLiveReadsResponse.ReadData.__doc__ = """Attributes:
     previous_read_end_reason:
         The classification of the chunk prior to this read starting.
 """
-GetReadStatisticsResponse.ChunkStatistics.__doc__ = """Attributes:
-    median_sd:
-        Aggregated median_sd value from all classified reads. Computed
-        as median(median_sd[...])
-    median:
-        Aggregated median_sd value from all classified reads.
-        Computed as median(median[...])
-    range:
-        Aggregated range value from all classified reads.  Computed as
-        median(q90[...] - q10[...])
-"""
-GetReadStatisticsResponse.PerChannelData.__doc__ = """Attributes:
-    configurations:
-        Data for each channel configuration seen on this channel.
-        Note that each channel configuration will only appear once in
-        this list, and this list is *not* in any way ordered by time.
-        The only reason it is not a map is because of restrictions on
-        map key types.
-    samples_since_start:
-        The number of samples collected before this channel's first
-        sample.
-    seconds_since_start:
-        The number of seconds elapsed since data acquisition started.
-        This is the same as ``samples_since_start``, but expressed in
-        seconds.
-    samples_duration:
-        The number of samples collected for this channel.
-    seconds_duration:
-        The number of seconds of data captured for this session.  This
-        is the same as ``samples_duration``, but expressed in seconds.
-"""
-GetReadStatisticsResponse.__doc__ = """Attributes:
-    channels:
-        Data for each requested channel, in the same order as
-        requested.
-    samples_since_start:
-        The number of samples collected before the first sample
-        included in this response.  This gives the position of the
-        first data point which all channels share in the calculated
-        statistics. Each individual channel may have samples from read
-        chunks previous to this sample due to read boundaries not
-        being consistent across channels.
-    seconds_since_start:
-        The number of seconds elapsed before the first sample included
-        in this response.  This is the same as
-        ``samples_since_start``, but expressed in seconds.
-"""
-GetChannelStatesResponse.__doc__ = """Attributes:
-    channel_states:
-        The streamed data for all channels will be appended to this
-        vector. After the request is made, all the channel state
-        changes are streamed through this array. This is implemented
-        in the idea of a sparse array because we can have channels
-        that remain in the same state for a long time.
-"""
-GetDataTypesResponse.DataType.__doc__ = """Attributes:
-    type:
-        The basic type of the data item.
-    big_endian:
-        Whether the type is big-endian (high-byte first).  For numeric
-        data types, if this is not set, they are little-endian (low-
-        byte first).
-    size:
-        The size of the data type in bytes.
-"""
-GetReadStatisticsResponse.Statistics.__doc__ = """Attributes:
-    q_5:
-         Quantiles (percentiles)
-"""
 GetLiveReadsResponse.__doc__ = """Attributes:
     samples_since_start:
         The number of samples collected before the first sample
@@ -360,225 +586,6 @@ GetLiveReadsResponse.__doc__ = """Attributes:
     action_responses:
         List of responses to requested actions, informing the caller
         of results to requested unblocks or discards of data.
-"""
-GetLiveReadsRequest.Action.__doc__ = """Attributes:
-    channel:
-        Channel name to unblock
-    read:
-        Identifier for the read to act on.  If the read requested is
-        no longer in progress, the action fails.
-    unblock:
-        Unblock a read and skip further data from this read.
-    stop_further_data:
-        Skip further data from this read, doesn't affect the read
-        data.
-"""
-GetReadStatisticsResponse.PerClassificationData.__doc__ = """Attributes:
-    duration_statistics:
-        Statistics of read (chunk) durations. These will be in the
-        same units as the requested duration (if you ask for X seconds
-        of data, you will get durations back in seconds, but if you
-        ask for X samples of data, you will get durations back in
-        samples).  NB: statistics may be estimates.
-    current_statistics:
-        Statistics for all current (signal) values for all reads under
-        this channel/configuration/classification combination.  NB:
-        Statistics are calculated from raw data.
-    chunk_statistics:
-        Statistics generated from the analysed read chunks (or
-        complete reads), rather than the raw signal.
-    samples_duration:
-        The number of samples seen with this classification on this
-        channel in this channel configuration.
-    seconds_duration:
-        The number of seconds spent in this classification on this
-        channel in this channel configuration.  This is the same as
-        ``samples_duration``, but expressed in seconds.
-"""
-GetDataTypesResponse.__doc__ = """Attributes:
-    uncalibrated_signal:
-        The format of the uncalibrated (ADC) signal data returned by
-        get_raw_signal_bytes().  In the current release, this will
-        describe 16-bit little-endian integers.
-    calibrated_signal:
-        The format of the calibrated (picoamp) signal data returned by
-        get_raw_signal_bytes().  In the current release, this will
-        describe 32-bit IEEE 754 floating point values.
-    bias_voltages:
-        The format of the bias voltage data returned by
-        get_raw_signal_bytes().  In the current release, this will
-        describe 16-bit little-endian integers.
-"""
-UnlockChannelStatesRequest.__doc__ = """Attributes:
-    channels:
-        The channels to activate (active = they will be considered for
-        channel state evaluation in the future). Channels are indexed
-        from 1.
-"""
-GetSignalBytesResponse.__doc__ = """Attributes:
-    samples_since_start:
-        The number of samples collected before the first sample
-        included in this response.  This gives the position of the
-        first data point on each channel in the overall stream of data
-        being acquired from the device (since this period of data
-        acquisition was started).
-    seconds_since_start:
-        The number of seconds elapsed since data acquisition started.
-        This is the same as ``samples_since_start``, but expressed in
-        seconds.
-    skipped_channels:
-        The number of channels omitted at the start of the
-        ``channels`` array.
-    channels:
-        The signal for each requested channel.  Note that
-        ``skipped_channels`` must be used to determine which channels
-        are given here, as not all channels will be included in every
-        message. The channels that are provided are contiguous and in
-        order, with the first channel being ``first_channel +
-        skipped_channels`` (where ``first_channel`` is from the
-        request message).
-    bias_voltages:
-        The bias voltages set for each sample.  If bias voltages were
-        requested, this will provide voltage data, one voltage per
-        sample. Note that not every message may include bias_voltages
-        (they will generally be included when ``skipped_channels`` is
-        0, but that is not guaranteed).  The get_data_types() RPC call
-        should be used to determine the format of the data.
-"""
-GetSignalMinMaxResponse.__doc__ = """Attributes:
-    samples_since_start:
-        The number of samples collected before the first sample
-        included in this response.  This gives the position of the
-        first data point on each channel in the overall stream of data
-        being acquired from the device (since this period of data
-        acquisition was started).
-    seconds_since_start:
-        The number of seconds elapsed since data acquisition started.
-        This is the same as ``samples_since_start``, but expressed in
-        seconds.
-    skipped_channels:
-        The number of channels omitted at the start of the
-        ``channels`` array.
-    channels:
-        The window bounds for each requested channel.  Note that
-        ``skipped_channels`` must be used to determine which channels
-        are given here, as not all channels will be included in every
-        message. The channels that are provided are contiguous and in
-        order, with the first channel being ``first_channel +
-        skipped_channels`` (where ``first_channel`` is from the
-        request message).
-"""
-GetSignalMinMaxRequest.__doc__ = """Attributes:
-    first_channel:
-        The first channel (inclusive) to return data for.  Note that
-        channel numbering starts at 1.
-    last_channel:
-        The last channel (inclusive) to return data for.  Note that
-        channel numbering starts at 1.
-    window_size:
-        The size of window to summarise.  A value of zero will be
-        rejected; there is no default.
-    calibrated_data:
-        Whether the data should be calibrated.
-"""
-GetLiveReadsRequest.__doc__ = """Attributes:
-    setup:
-        Read setup request, initialises channel numbers and type of
-        data returned.  note: Must be specified in the first message
-        sent to MinKNOW. Once MinKNOW has the first setup message
-        reads are sent to the caller as requested. The user can then
-        resend a setup message as frequently as they need to in order
-        to reconfigure live reads - for example by changing if raw
-        data is sent with reads or not.
-    actions:
-        Actions to take given data returned to the user - can only be
-        sent once the setup message above has been sent.
-"""
-GetSignalBytesRequest.__doc__ = """Attributes:
-    length:
-        The amount of data to return.  If this is omitted, data will
-        be streamed until the call is cancelled.
-    seconds:
-        The amount of data to return in seconds.  The number of
-        samples returned will be just enough to cover this period of
-        time. Cannot be specified at the same time as ``samples``.
-    samples:
-        The amount of data to return in samples.  The result will
-        contain exactly this many samples. If this is not possible,
-        the call will fail. Cannot be specified at the same time as
-        ``seconds``.
-    first_channel:
-        The first channel (inclusive) to return data for.  Note that
-        channel numbering starts at 1.
-    last_channel:
-        The last channel (inclusive) to return data for.  Note that
-        channel numbering starts at 1.
-    include_channel_configs:
-        Whether to include channel configuration settings.
-    include_bias_voltages:
-        Whether to include bias voltage information.
-    calibrated_data:
-        Whether the data should be calibrated.
-    return_when_listening:
-        When this value is set to true, then an empty message will be
-        sent back to the client to indicate that the backend has
-        acknowleged the request, and that any calls made that will
-        affect the signal after that initial  response will be
-        reflected in the next messages
-"""
-GetChannelStatesResponse.ChannelStateData.__doc__ = """Attributes:
-    channel:
-        Represents the channel number, indexed from one. (i.e. what
-        channel did the channel state change happened on)
-    state:
-        depending on the channel state request, MinKNOW can fill in
-        either the name or the criteria id of the channel state. The
-        criteria id (or state_id) is the number passed in the channel
-        states configuration. Note that MinKNOW also has some default
-        channel states (like unclassified, pending mux change) which
-        receive unique ids - these are numbers bigger than 200.
-    acquisition_raw_index:
-        Indices of when the channel state was first seen. For example,
-        if a request is done half way through the experiment, the
-        first message will contain the current state on the requested
-        channels. The acquisition/analysis index of these would be
-        from when the channel states were set. These are exactly the
-        same numbers we see in the bulk file, in the 'states' table
-    config:
-        Channel config (mux state) the channel state was determined
-        on.
-"""
-GetSignalBytesResponse.ChannelConfigChange.__doc__ = """Attributes:
-    config:
-        The new channel configuration.
-    offset:
-        The offset in the returned data where the change was applied.
-"""
-GetSignalBytesResponse.ChannelData.__doc__ = """Attributes:
-    data:
-        The signal data.  This is the byte representation of a C-style
-        array of values. Values are stored in order and adjacent to
-        each other.  The type of the elements will depend on whether
-        calibrated data was chosen. The get_data_types() RPC call
-        should be used to determine the precise format of the data,
-        but in general terms, uncalibrated data will be signed
-        integers and calibrated data will be floating-point numbers.
-        Returning the data in this format allows it to be efficiently
-        processed in dynamic languages that can pass the data straight
-        down to a native runtime. For example, in Python, this data
-        can be intepreted directly into a numpy array using
-        numpy.fromstring().  Calibrated data is in picoamps.
-        Uncalibrated data is the raw values output by the device's ADC
-        (analogue-digital converter).
-    config_changes:
-        The configuration changes on the channel during data
-        collection.  If channel configuration changes were requested,
-        this will contain all the channel configuration changes that
-        affect the returned data. This will include at least one
-        element, with offset 0, that describes the configuration at
-        the time the first sample was taken.  Note that the offset is
-        the zero-based index into the adc or picoamps list.  The
-        changes will be ordered by offset.
 """
 GetChannelStatesRequest.__doc__ = """Attributes:
     first_channel:
@@ -605,47 +612,40 @@ GetChannelStatesRequest.__doc__ = """Attributes:
         message will be sent. This can be useful to force a minimum
         wakeup interval in the client code.
 """
-GetReadStatisticsResponse.PerConfigurationData.__doc__ = """Attributes:
-    channel_configuration:
-        The channel configuration active during the reads these
-        statistics were gathered for.
-    classifications:
-        Map from classification names to statistics about read
-        (chunks) with that classification.
-    incomplete:
-        If statistics about complete reads were requested, this field
-        may contain data for a final, incomplete read (whose
-        classification is therefore unknown).  This field will not be
-        set if read chunks were requested, or if the data capture
-        happened to end at a complete read boundary.
+GetSignalMinMaxResponse.__doc__ = """Attributes:
+    samples_since_start:
+        The number of samples collected before the first sample
+        included in this response.  This gives the position of the
+        first data point on each channel in the overall stream of data
+        being acquired from the device (since this period of data
+        acquisition was started).
+    seconds_since_start:
+        The number of seconds elapsed since data acquisition started.
+        This is the same as ``samples_since_start``, but expressed in
+        seconds.
+    skipped_channels:
+        The number of channels omitted at the start of the
+        ``channels`` array.
+    channels:
+        The window bounds for each requested channel.  Note that
+        ``skipped_channels`` must be used to determine which channels
+        are given here, as not all channels will be included in every
+        message. The channels that are provided are contiguous and in
+        order, with the first channel being ``first_channel +
+        skipped_channels`` (where ``first_channel`` is from the
+        request message).
 """
-GetLiveReadsRequest.StreamSetup.__doc__ = """Attributes:
-    first_channel:
-        The first channel (inclusive) to return data for.  Note that
-        channel numbering starts at 1.
-    last_channel:
-        The last channel (inclusive) to return data for.  Note that
-        channel numbering starts at 1.
-    raw_data_type:
-        Specify the type of raw data to retrieve
-    sample_minimum_chunk_size:
-        Minimum chunk size read data is returned in.
-    max_unblock_read_length:
-        Maximum read length MinKNOW will attempt to unblock reads
-        beyond this length will not be unblocked when Action's
-        request, instead minknow will skip any further data from the
-        read.
-    max_unblock_read_length_samples:
-        Maximum read length MinKNOW will attempt to unblock (in
-        samples).  A value of 0 will cause minknow to unblock reads of
-        any length.
-    max_unblock_read_length_seconds:
-        Maximum read length MinKNOW will attempt to unblock (in
-        seconds).  A value of 0.0 will cause minknow to unblock reads
-        of any length.
-    accepted_first_chunk_classifications:
-        A set of classification identifiers which the client is
-        interested in. If a read starts with a classification not
-        listed here the read is never sent to the client.
+GetLiveReadsRequest.__doc__ = """Attributes:
+    setup:
+        Read setup request, initialises channel numbers and type of
+        data returned.  note: Must be specified in the first message
+        sent to MinKNOW. Once MinKNOW has the first setup message
+        reads are sent to the caller as requested. The user can then
+        resend a setup message as frequently as they need to in order
+        to reconfigure live reads - for example by changing if raw
+        data is sent with reads or not.
+    actions:
+        Actions to take given data returned to the user - can only be
+        sent once the setup message above has been sent.
 """
 # @@protoc_insertion_point(module_scope)

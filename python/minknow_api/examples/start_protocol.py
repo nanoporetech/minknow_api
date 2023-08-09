@@ -11,7 +11,7 @@ python ./python/minknow_api/examples/start_protocol.py \
     --basecalling \                                         # Enable basecalling
     --fastq --bam                                           # Choose fastq + bam output options
 
-"""
+"""  # noqa W605
 
 import argparse
 import logging
@@ -23,15 +23,19 @@ from enum import Enum
 from typing import Sequence
 
 from minknow_api.examples.load_sample_sheet import (
-    load_sample_sheet_csv,
-    SampleSheetParseError,
     ParsedSampleSheetEntry,
+    SampleSheetParseError,
+    load_sample_sheet_csv,
 )
-from minknow_api.manager import Manager, FlowCellPosition
+from minknow_api.manager import Manager
 
 # We need `find_protocol` to search for the required protocol given a kit + product code.
-from minknow_api.protocol_pb2 import ProtocolRunUserInfo
 from minknow_api.tools import protocols
+
+
+def _load_file(path: str) -> bytes:
+    with open(path, "rb") as f:
+        return f.read()
 
 
 def parse_args():
@@ -60,6 +64,18 @@ def parse_args():
         "--api-token",
         default=None,
         help="Specify an API token to use, should be returned from the sequencer as a developer API token.",
+    )
+    parser.add_argument(
+        "--client-cert-chain",
+        type=_load_file,
+        default=None,
+        help="Path to a PEM-encoded X.509 certificate chain for client authentication.",
+    )
+    parser.add_argument(
+        "--client-key",
+        type=_load_file,
+        default=None,
+        help="Path to a PEM-encoded private key for client certificate authentication.",
     )
     parser.add_argument("--verbose", action="store_true", help="Enable debug logging")
 
@@ -283,30 +299,38 @@ def parse_args():
         or args.read_until_bed_file is not None
     ):
         if args.read_until_filter is None:
-            print("Unable to specify read until arguments without a filter type.")
-            sys.exit(1)
+            parser.error(
+                "Unable to specify read until arguments without a filter type."
+            )
 
         if args.read_until_reference is None:
-            print("Unable to specify read until arguments without a reference type.")
+            parser.error(
+                "Unable to specify read until arguments without a reference type."
+            )
 
     if args.bed_file and not args.alignment_reference:
-        print("Unable to specify `--bed-file` without `--alignment-reference`.")
-        sys.exit(1)
+        parser.error("Unable to specify `--bed-file` without `--alignment-reference`.")
 
     if (args.barcoding or args.barcode_kits) and not (
         args.basecalling or args.basecall_config
     ):
-        print(
+        parser.error(
             "Unable to specify `--barcoding` or `--barcode-kits` without `--basecalling`."
         )
-        sys.exit(1)
 
     if args.alignment_reference and not (args.basecalling or args.basecall_config):
-        print("Unable to specify `--alignment-reference` without `--basecalling`.")
-        sys.exit(1)
+        parser.error(
+            "Unable to specify `--alignment-reference` without `--basecalling`."
+        )
 
     if not (args.fast5 or args.pod5 or args.bam or args.fastq):
         print("No output (fast5, pod5, bam or fastq) specified")
+        # not fatal, just warning the user
+
+    if (args.client_cert_chain is None) != (args.client_key is None):
+        parser.error(
+            "--client-cert-chain and --client-key must either both be provided, or neither"
+        )
 
     return args
 
@@ -329,14 +353,20 @@ ExperimentSpecs = Sequence[ExperimentSpec]
 # Add sample sheet entry info to experiment_specs
 def add_sample_sheet_entries(experiment_specs: ExperimentSpecs, args):
     if args.sample_sheet:
-        assert not args.position
-        assert not args.flow_cell_id
+        if args.position:
+            raise ValueError(
+                "has position and sample_sheet, but these are mutually exclusive"
+            )
+        if args.flow_cell_id:
+            raise ValueError(
+                "has flow_cell_id and sample_sheet, but these are mutually exclusive"
+            )
         try:
             sample_sheet = load_sample_sheet_csv(args.sample_sheet)
         except SampleSheetParseError as e:
             print("Error loading sample sheet CSV: {}".format(e))
             sys.exit(1)
-        except FileNotFoundError as e:
+        except FileNotFoundError:
             print("Sample sheet file not found: {}".format(args.sample_sheet))
             sys.exit(1)
 
@@ -367,7 +397,10 @@ def add_sample_sheet_entries(experiment_specs: ExperimentSpecs, args):
                 experiment_id = entry.experiment_id
 
             # Check that we have exactly one of `position_id` and `flow_cell_id`
-            assert not (entry.position_id and entry.flow_cell_id)
+            if entry.position_id and entry.flow_cell_id:
+                raise ValueError(
+                    "There is not exactly one of position_id and flow_cell_id"
+                )
 
             # Add the entry to the specs
             experiment_specs.append(
@@ -383,8 +416,15 @@ def add_sample_sheet_entries(experiment_specs: ExperimentSpecs, args):
             )
 
     elif args.position:
-        assert not args.sample_sheet
-        assert not args.flow_cell_id
+        if args.sample_sheet:
+            raise ValueError(
+                "has sample_sheet and position, but these are mutually exclusive"
+            )
+        if args.flow_cell_id:
+            raise ValueError(
+                "has flow_cell_id and position, but these are mutually exclusive"
+            )
+
         experiment_specs.append(
             ExperimentSpec(
                 entry=ParsedSampleSheetEntry(
@@ -398,8 +438,14 @@ def add_sample_sheet_entries(experiment_specs: ExperimentSpecs, args):
         )
 
     elif args.flow_cell_id:
-        assert not args.sample_sheet
-        assert not args.position
+        if args.sample_sheet:
+            raise ValueError(
+                "has sample_sheet and flow_cell_id, but these are mutually exclusive"
+            )
+        if args.position:
+            raise ValueError(
+                "has position and flow_cell_id, but these are mutually exclusive"
+            )
         experiment_specs.append(
             ExperimentSpec(
                 entry=ParsedSampleSheetEntry(
@@ -421,15 +467,21 @@ def add_sample_sheet_entries(experiment_specs: ExperimentSpecs, args):
 # Determine whether to look up positions by position name or by flow_cell_id
 def determine_position_key_type(experiment_specs: ExperimentSpecs) -> PositionKeyType:
     if all(spec.entry.position_id for spec in experiment_specs):
-        assert not any(spec.entry.flow_cell_id for spec in experiment_specs)
+        if any(spec.entry.flow_cell_id for spec in experiment_specs):
+            raise ValueError(
+                "flow_cell_id in experiment_specs despite look-up by position_id"
+            )
         return PositionKeyType.PositionId
     elif all(spec.entry.flow_cell_id for spec in experiment_specs):
-        assert not any(spec.entry.position_id for spec in experiment_specs)
+        if any(spec.entry.position_id for spec in experiment_specs):
+            raise ValueError(
+                "position_id in experiment_specs despite look-up by flow_cell_id"
+            )
         return PositionKeyType.FlowCellId
     else:
         # Could not determine what to look up by
         # This should not occur
-        assert False
+        raise ValueError("Neither position_id nor flow_cell_id in experiment_specs")
 
 
 # Check if any spec has requested to be started on the supplied position
@@ -458,7 +510,7 @@ def add_position_to_specs(
         ]
     else:
         # Should not happen - only two options for PositionKeyType
-        assert False
+        raise ValueError("PositionKeyType is neither PositionID nor FlowCellId")
 
     if not matches:
         # No requests to start any experiments on this position
@@ -552,7 +604,11 @@ def main():
 
     # Construct a manager using the host + port provided:
     manager = Manager(
-        host=args.host, port=args.port, developer_api_token=args.api_token
+        host=args.host,
+        port=args.port,
+        developer_api_token=args.api_token,
+        client_certificate_chain=args.client_cert_chain,
+        client_private_key=args.client_key,
     )
 
     experiment_specs = []

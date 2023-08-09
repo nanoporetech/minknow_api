@@ -364,9 +364,34 @@ message ReadClassificationParams {
     //
     // 'ultimate':      Chooses the last (ultimate) read chunk's classification
     // 'penultimate':   Chooses the second-to-last read chunk's clasification
-    // 'modal':         Chooses the most common classification out of the all read chunks
+    // 'modal':         Chooses the most common classification out of all read chunks
+    // 'threshold':     Chooses a classification based on the combination of threshold parameters.
+    //                  If selected, values for the "selected_classifications_fraction_required"
+    //                  and "selected_chunks_required" fields will be used to determine the
+    //                  read classification (see below).
+    //
     string classification_strategy = 4;
     Parameters parameters = 5;
+
+    // For the "threshold" classification strategy, specify the minimum fraction (in duration) of a completed read
+    // that needs to be in any of the "selected_classifications".
+    // For example, using 0 means that all reads will written out unless further constrained by the
+    // "selected_classifications_chunk_required" field.
+    //
+    // Note that this option only applies to the 'threshold' classification strategy and will be ignored
+    // for other classification strategies.
+    //
+    google.protobuf.DoubleValue selected_classifications_fraction_required = 9;
+
+    // For the "threshold" classification strategy, specify the minimum number of chunks of a completed read
+    // that needs to be in any of the "selected_classifications".
+    // For example, using 1 means that the entire read will be written if ANY chunk has a classification in
+    // "selected_classifications" unless further constrained by the "selected_classifications_fraction_required" field.
+    //
+    // Note that this option only applies to the 'threshold' classification strategy and will be ignored
+    // for other classification strategies.
+    //
+    google.protobuf.UInt32Value selected_classifications_chunks_required = 10;
 }
 
 message ChannelStates {
@@ -460,8 +485,13 @@ message ChannelStates {
     }
 
     message Group {
+        // TODO: group styling and description should not be defined here, as this
+        // allows channel states to declare themselves as being part of the same group
+        // but specify different styling and descriptions.
+
         string name = 1;
         Style style = 2;
+        string description = 3;
     }
 
     Group group = 2;
@@ -659,6 +689,12 @@ message BarcodingConfiguration
     //
     // Maximum value is 100, defaults to 40. 
     google.protobuf.FloatValue min_score_mask = 8;
+        
+    // If set, barcodes that aren't in barcode user data list will be ignored
+    //
+    // Since 5.6
+    bool ignore_unspecified_barcodes = 9;
+
 }
 
 // Since 4.0

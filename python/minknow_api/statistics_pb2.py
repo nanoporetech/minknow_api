@@ -155,56 +155,20 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   _BOXPLOTRESPONSE_BOXPLOTDATASET._serialized_end=5425
   _STATISTICSSERVICE._serialized_start=5721
   _STATISTICSSERVICE._serialized_end=7140
-StreamReadLengthHistogramResponse.ReadLengthHistogramData.__doc__ = """Attributes:
-    filtering:
-        The filtering parameters which contributed to this bucket.
-    bucket_values:
-        Counts for each histogram bucket  Units are as specified in
-        `read_length_type` The range covered by each bucket is as in
-        `bucket_ranges` The type of data accumulated in each bucket is
-        given by `bucket_value_type`
-    n50:
-        The N50 value for the read length data for the selected
-        `read_length_type` and `read_end_reasons`.  Units are as
-        specified by `read_length_type`.  Measured across all source
-        data, after excluding the reads specified by
-        `discard_outlier_percent` in the stream request.
-"""
-StreamAcquisitionOutputResponse.FilteredSnapshots.__doc__ = """Attributes:
-    filtering:
-        The filtering parameters which contributed to this bucket.
-"""
-TemperaturePacket.PromethIONTemperature.__doc__ = """Packet of temperatures appropriate for a PromethION.
+WriterOutputSnapshot.__doc__ = """A snapshot of writer data.
 
 Attributes:
-    flowcell_temperature:
-        Temperature as measured by thermistor TH2 on the P-Chip.
-    chamber_temperature:
-        Mean of 12 pixel-blocks temperatures measured with sensors in
-        the ASIC.
+    seconds:
+        The time the snapshot was collected, in seconds.  Represents
+        the number of seconds since the start of the experiment Will
+        usually stream in minute chunks, so will first see 60, then
+        120 etc
+    writer_output:
+        The writer data for this bucket.
 """
-GetReadLengthTypesResponse.__doc__ = """Attributes:
-    available_types:
-        Array of the types of bucket for which a histogram is
-        currently available
-"""
-StreamDutyTimeResponse.BucketRange.__doc__ = """Attributes:
-    start:
-        The range covered by a bucket Values are in seconds  The range
-        [start, end) is half open (i.e. the start value is included,
-        the end value is not).
-"""
-StreamDutyTimeResponse.ChannelStateData.__doc__ = """Attributes:
-    state_times:
-        How much time (in samples) spent in this channel state, for
-        each bucket
-"""
-StreamWriterOutputRequest.__doc__ = """Attributes:
+ReadLengthN50Request.__doc__ = """Attributes:
     acquisition_run_id:
-        The acquisition id of the experiment.
-    data_selection:
-        The desired data selection.  The units for all values are
-        `seconds since the start of the experiment`.
+        The `acquisition_run_id` of the acquisition to obtain data for
 """
 StreamBoxplotRequest.__doc__ = """Attributes:
     acquisition_run_id:
@@ -235,82 +199,103 @@ StreamBoxplotRequest.__doc__ = """Attributes:
         basecalled_stats_refresh_rate_seconds in the configs (set to 1
         second in MinKNOW 3.2).  If unspecified, defaults to 1 minute.
 """
-ReadLengthN50Response.ReadN50Data.__doc__ = """Attributes:
-    estimated_n50:
-        The estimated N50 value in bases  This is always set
-    basecalled_n50:
-        The basecalled N50 value  If the acquisition did/does not have
-        live basecalling enabled, this will be 0.0
-"""
-StreamDutyTimeRequest.__doc__ = """Attributes:
+StreamTemperatureRequest.__doc__ = """Attributes:
+    period_seconds:
+        How often temperature updates should be sent Defaults to a
+        period of 1 second, if not specified, or set to 0
     acquisition_run_id:
         The acquisition id of the experiment.
     data_selection:
         The desired data selection.  The units for all values are
         `seconds since the start of the experiment`.
 """
-TemperaturePacket.Range.__doc__ = """Represents a range of values."""
-ReadLengthHistogramSplit.__doc__ = """Attributes:
+StreamDutyTimeResponse.ChannelStateData.__doc__ = """Attributes:
+    state_times:
+        How much time (in samples) spent in this channel state, for
+        each bucket
+"""
+GetReadLengthTypesResponse.__doc__ = """Attributes:
+    available_types:
+        Array of the types of bucket for which a histogram is
+        currently available
+"""
+AcquisitionOutputKey.__doc__ = """Attributes:
+    barcode_name:
+        Only return data for the given barcode.  Special values:   -
+        Specify "unclassified" for data which does not have a barcode.
+        - Specify "classified" for all data which has a barcode.  If
+        unspecified all barcodes are returned.
+    alignment_reference:
+        Only return data for the given alignment reference.  Special
+        values:   - Specify "unaligned" for data which does not align
+        to a reference   - Specify "aligned" for all data which aligns
+        to a reference  If unspecified all alignment targets are
+        returned.
+    alignment_bed_file_region:
+        Only return data for the given target region.  Target regions
+        are defined in bed files.  The region is a string which
+        identifies an entry in the bed file.  Special values:   -
+        Specify "offtarget" for data which does not have a bed region.
+        - Specify "ontarget" for all data which has a bed region.  If
+        unspecified all alignment regions are returned.
+    alignment_bed_file_region_name:
+        An alias to `alignment_bed_file_region`  An optional name can
+        be used to identify a target region in the bed file
+    lamp_barcode_id:
+        Only return data for the given lamp barcode.  Special values:
+        - Specify "unclassified" for data which does not have a lamp
+        barcode.   - Specify "classified" for all data which has a
+        lamp barcode.  If unspecified all lamp barcodes are returned.
+    lamp_target_id:
+        Only return data for the given lamp target.  Special values:
+        - Specify "unclassified" for data which does not have a lamp
+        target.   - Specify "classified" for all data which has a lamp
+        target. Using barcode terms here as lamp is part of barcoding
+        pipeline  If unspecified all lamp target are returned.
+    barcode_alias:
+        The barcode alias corresponding to the `barcode_name` and
+        `lamp_barcode_id`
     read_end_reason:
-        Split returned data by read_end_reason
+        Only return data for the given ReadEndReason.  Special values:
+        - Specify `ReadEndReason::All` to return data for all read end
+        reasons  If unspecified all read end reasons are returned.
 """
-StreamReadLengthHistogramResponse.__doc__ = """Attributes:
-    read_length_type:
-        The data source for the histograms  Also specifies the units
-        for `data_selection` and `n50`  See `ReadLengthType` for
-        further information about the possible options.
-    bucket_ranges:
-        The range covered by each bucket in the histogram data
-    source_data_end:
-        The right hand edge of the last source bucket which contains
-        data  Measured across all source data, after excluding the
-        reads specified by `discard_outlier_percent` in the stream
-        request.
-    bucket_value_type:
-        The data accumulated in the read length histogram buckets  See
-        `BucketValueType` for further information about the possible
-        options.
-    histogram_data:
-        The histogram data
-"""
-WriterOutputSnapshot.__doc__ = """A snapshot of writer data.
+TemperaturePacket.PromethIONTemperature.__doc__ = """Packet of temperatures appropriate for a PromethION.
 
 Attributes:
-    seconds:
-        The time the snapshot was collected, in seconds.  Represents
-        the number of seconds since the start of the experiment Will
-        usually stream in minute chunks, so will first see 60, then
-        120 etc
-    writer_output:
-        The writer data for this bucket.
-"""
-StreamReadLengthHistogramResponse.BucketRange.__doc__ = """Attributes:
-    start:
-        The range covered by a bucket Units are as set in
-        `read_length_type`, above  The range [start, end) is half open
-        (i.e. the start value is included, the end value is not).
+    flowcell_temperature:
+        Temperature as measured by thermistor TH2 on the P-Chip.
+    chamber_temperature:
+        Mean of 12 pixel-blocks temperatures measured with sensors in
+        the ASIC.
 """
 StreamAcquisitionOutputResponse.__doc__ = """Attributes:
     snapshots:
         Snapshots split by requested filtering parameters.
 """
-StreamDutyTimeResponse.__doc__ = """Attributes:
-    bucket_ranges:
-        The range covered by each entry in state_times
-    channel_states:
-        Map between channel state names, and a list of bucketed duty
-        time data
-"""
-GetReadLengthTypesRequest.__doc__ = """Attributes:
-    acquisition_run_id:
-        The acquisition id of the experiment.
-"""
-BoxplotResponse.__doc__ = """Attributes:
-    datasets:
-        Result boxplots are stored in this array. This is an overview
-        of the stored data from the START of the acquisition period.
-        This includes ALL the basecalled stats from MinKNOW, not just
-        updates since previous calls!
+BoxplotResponse.BoxplotDataset.__doc__ = """Attributes:
+    min:
+        Minimum value for any point in the dataset.
+    q25:
+        25th quartile value for all points in the dataset.
+    q50:
+        50th quartile or median value for all points in the dataset.
+    q75:
+        75th quartile value for all points in the dataset.
+    max:
+        Maximum value for any point in the dataset.
+    count:
+        Number of items in this box plot's stats.
+    lower_full_width_half_maximum:
+        Estimated lower value where there is half the data compared to
+        the mode. provides some estimate on the sharpness of the mode
+        peak.
+    mode:
+        Estimated mode for the dataset.
+    upper_full_width_half_maximum:
+        Estimated upper value where there is half the data compared to
+        the mode. provides some estimate on the sharpness of the mode
+        peak.
 """
 StreamReadLengthHistogramRequest.__doc__ = """Attributes:
     acquisition_run_id:
@@ -375,46 +360,61 @@ StreamReadLengthHistogramRequest.__doc__ = """Attributes:
     split:
         Define how results are split for returned data.
 """
-AcquisitionOutputKey.__doc__ = """Attributes:
-    barcode_name:
-        Only return data for the given barcode.  Special values:   -
-        Specify "unclassified" for data which does not have a barcode.
-        - Specify "classified" for all data which has a barcode.  If
-        unspecified all barcodes are returned.
-    alignment_reference:
-        Only return data for the given alignment reference.  Special
-        values:   - Specify "unaligned" for data which does not align
-        to a reference   - Specify "aligned" for all data which aligns
-        to a reference  If unspecified all alignment targets are
-        returned.
-    alignment_bed_file_region:
-        Only return data for the given target region.  Target regions
-        are defined in bed files.  The region is a string which
-        identifies an entry in the bed file.  Special values:   -
-        Specify "offtarget" for data which does not have a bed region.
-        - Specify "ontarget" for all data which has a bed region.  If
-        unspecified all alignment regions are returned.
-    alignment_bed_file_region_name:
-        An alias to `alignment_bed_file_region`  An optional name can
-        be used to identify a target region in the bed file
-    lamp_barcode_id:
-        Only return data for the given lamp barcode.  Special values:
-        - Specify "unclassified" for data which does not have a lamp
-        barcode.   - Specify "classified" for all data which has a
-        lamp barcode.  If unspecified all lamp barcodes are returned.
-    lamp_target_id:
-        Only return data for the given lamp target.  Special values:
-        - Specify "unclassified" for data which does not have a lamp
-        target.   - Specify "classified" for all data which has a lamp
-        target. Using barcode terms here as lamp is part of barcoding
-        pipeline  If unspecified all lamp target are returned.
-    barcode_alias:
-        The barcode alias corresponding to the `barcode_name` and
-        `lamp_barcode_id`
+ReadLengthHistogramSplit.__doc__ = """Attributes:
+    read_end_reason:
+        Split returned data by read_end_reason
+"""
+ReadLengthHistogramKey.__doc__ = """Attributes:
     read_end_reason:
         Only return data for the given ReadEndReason.  Special values:
         - Specify `ReadEndReason::All` to return data for all read end
         reasons  If unspecified all read end reasons are returned.
+"""
+StreamBiasVoltagesRequest.__doc__ = """Attributes:
+    acquisition_run_id:
+        The acquisition id of the experiment.
+"""
+StreamAcquisitionOutputRequest.__doc__ = """Attributes:
+    acquisition_run_id:
+        The acquisition id of the experiment.
+    data_selection:
+        The desired data selection.  The units for all values are
+        `seconds since the start of the experiment`.
+    filtering:
+        Define filtering parameters for streamed data.
+    split:
+        Define how results are split for returned data.
+"""
+AcquisitionOutputSnapshot.__doc__ = """A snapshot of acquisition output data, for a given set of filtering
+criteria.
+
+Attributes:
+    seconds:
+        The time the snapshot was collected, in seconds.  Represents
+        the number of seconds since the start of the experiment Will
+        usually stream in minute chunks, so will first see 60, then
+        120 etc
+    yield_summary:
+        The yield summary data.
+"""
+StreamReadLengthHistogramResponse.ReadLengthHistogramData.__doc__ = """Attributes:
+    filtering:
+        The filtering parameters which contributed to this bucket.
+    bucket_values:
+        Counts for each histogram bucket  Units are as specified in
+        `read_length_type` The range covered by each bucket is as in
+        `bucket_ranges` The type of data accumulated in each bucket is
+        given by `bucket_value_type`
+    n50:
+        The N50 value for the read length data for the selected
+        `read_length_type` and `read_end_reasons`.  Units are as
+        specified by `read_length_type`.  Measured across all source
+        data, after excluding the reads specified by
+        `discard_outlier_percent` in the stream request.
+"""
+ReadLengthN50Response.__doc__ = """Attributes:
+    n50_data:
+        The N50 return data
 """
 AcquisitionOutputSplit.__doc__ = """Attributes:
     barcode_name:
@@ -434,39 +434,26 @@ AcquisitionOutputSplit.__doc__ = """Attributes:
     read_end_reason:
         Split returned data by read_end_reason
 """
-ReadLengthN50Response.__doc__ = """Attributes:
-    n50_data:
-        The N50 return data
+ReadLengthN50Response.ReadN50Data.__doc__ = """Attributes:
+    estimated_n50:
+        The estimated N50 value in bases  This is always set
+    basecalled_n50:
+        The basecalled N50 value  If the acquisition did/does not have
+        live basecalling enabled, this will be 0.0
 """
-ReadLengthHistogramKey.__doc__ = """Attributes:
-    read_end_reason:
-        Only return data for the given ReadEndReason.  Special values:
-        - Specify `ReadEndReason::All` to return data for all read end
-        reasons  If unspecified all read end reasons are returned.
+TemperaturePacket.Range.__doc__ = """Represents a range of values."""
+StreamDutyTimeResponse.BucketRange.__doc__ = """Attributes:
+    start:
+        The range covered by a bucket Values are in seconds  The range
+        [start, end) is half open (i.e. the start value is included,
+        the end value is not).
 """
-BoxplotResponse.BoxplotDataset.__doc__ = """Attributes:
-    min:
-        Minimum value for any point in the dataset.
-    q25:
-        25th quartile value for all points in the dataset.
-    q50:
-        50th quartile or median value for all points in the dataset.
-    q75:
-        75th quartile value for all points in the dataset.
-    max:
-        Maximum value for any point in the dataset.
-    count:
-        Number of items in this box plot's stats.
-    lower_full_width_half_maximum:
-        Estimated lower value where there is half the data compared to
-        the mode. provides some estimate on the sharpness of the mode
-        peak.
-    mode:
-        Estimated mode for the dataset.
-    upper_full_width_half_maximum:
-        Estimated upper value where there is half the data compared to
-        the mode. provides some estimate on the sharpness of the mode
-        peak.
+BoxplotResponse.__doc__ = """Attributes:
+    datasets:
+        Result boxplots are stored in this array. This is an overview
+        of the stored data from the START of the acquisition period.
+        This includes ALL the basecalled stats from MinKNOW, not just
+        updates since previous calls!
 """
 TemperaturePacket.MinIONTemperature.__doc__ = """Packet of temperatures appropriate for a MinION.
 
@@ -475,6 +462,39 @@ Attributes:
         Temperature as measured by the probe inside the asic.
     heatsink_temperature:
         Temperature as measured by the probe in the minion heatsink.
+"""
+StreamEncounteredAcquisitionOutputKeysRequest.__doc__ = """Attributes:
+    acquisition_run_id:
+        The acquisition id of the experiment.
+"""
+StreamDutyTimeRequest.__doc__ = """Attributes:
+    acquisition_run_id:
+        The acquisition id of the experiment.
+    data_selection:
+        The desired data selection.  The units for all values are
+        `seconds since the start of the experiment`.
+"""
+StreamWriterOutputRequest.__doc__ = """Attributes:
+    acquisition_run_id:
+        The acquisition id of the experiment.
+    data_selection:
+        The desired data selection.  The units for all values are
+        `seconds since the start of the experiment`.
+"""
+GetReadLengthTypesRequest.__doc__ = """Attributes:
+    acquisition_run_id:
+        The acquisition id of the experiment.
+"""
+TemperaturePacket.__doc__ = """Attributes:
+    target_temperature:
+        The range is based on the requested target temperature and
+        tolerance.  For example, if the target temperature is 35, and
+        the tolerance is 1 then target temperatures will return as
+        34(min) and 36(max).
+"""
+StreamAcquisitionOutputResponse.FilteredSnapshots.__doc__ = """Attributes:
+    filtering:
+        The filtering parameters which contributed to this bucket.
 """
 DataSelection.__doc__ = """Specify a desired data selection.  Units for values are as specified
 in the corresponding Request  The actual data selection used may
@@ -510,56 +530,36 @@ collection is still ongoing -- for example, the maximum valid time for
 time series data.  If this is the case, then the maximum valid value
 will be determined when the experiment ends, and values in use will be
 adjusted acordingly."""
-StreamEncounteredAcquisitionOutputKeysRequest.__doc__ = """Attributes:
-    acquisition_run_id:
-        The acquisition id of the experiment.
+StreamReadLengthHistogramResponse.__doc__ = """Attributes:
+    read_length_type:
+        The data source for the histograms  Also specifies the units
+        for `data_selection` and `n50`  See `ReadLengthType` for
+        further information about the possible options.
+    bucket_ranges:
+        The range covered by each bucket in the histogram data
+    source_data_end:
+        The right hand edge of the last source bucket which contains
+        data  Measured across all source data, after excluding the
+        reads specified by `discard_outlier_percent` in the stream
+        request.
+    bucket_value_type:
+        The data accumulated in the read length histogram buckets  See
+        `BucketValueType` for further information about the possible
+        options.
+    histogram_data:
+        The histogram data
 """
-StreamBiasVoltagesRequest.__doc__ = """Attributes:
-    acquisition_run_id:
-        The acquisition id of the experiment.
+StreamReadLengthHistogramResponse.BucketRange.__doc__ = """Attributes:
+    start:
+        The range covered by a bucket Units are as set in
+        `read_length_type`, above  The range [start, end) is half open
+        (i.e. the start value is included, the end value is not).
 """
-ReadLengthN50Request.__doc__ = """Attributes:
-    acquisition_run_id:
-        The `acquisition_run_id` of the acquisition to obtain data for
-"""
-TemperaturePacket.__doc__ = """Attributes:
-    target_temperature:
-        The range is based on the requested target temperature and
-        tolerance.  For example, if the target temperature is 35, and
-        the tolerance is 1 then target temperatures will return as
-        34(min) and 36(max).
-"""
-StreamTemperatureRequest.__doc__ = """Attributes:
-    period_seconds:
-        How often temperature updates should be sent Defaults to a
-        period of 1 second, if not specified, or set to 0
-    acquisition_run_id:
-        The acquisition id of the experiment.
-    data_selection:
-        The desired data selection.  The units for all values are
-        `seconds since the start of the experiment`.
-"""
-AcquisitionOutputSnapshot.__doc__ = """A snapshot of acquisition output data, for a given set of filtering
-criteria.
-
-Attributes:
-    seconds:
-        The time the snapshot was collected, in seconds.  Represents
-        the number of seconds since the start of the experiment Will
-        usually stream in minute chunks, so will first see 60, then
-        120 etc
-    yield_summary:
-        The yield summary data.
-"""
-StreamAcquisitionOutputRequest.__doc__ = """Attributes:
-    acquisition_run_id:
-        The acquisition id of the experiment.
-    data_selection:
-        The desired data selection.  The units for all values are
-        `seconds since the start of the experiment`.
-    filtering:
-        Define filtering parameters for streamed data.
-    split:
-        Define how results are split for returned data.
+StreamDutyTimeResponse.__doc__ = """Attributes:
+    bucket_ranges:
+        The range covered by each entry in state_times
+    channel_states:
+        Map between channel state names, and a list of bucketed duty
+        time data
 """
 # @@protoc_insertion_point(module_scope)

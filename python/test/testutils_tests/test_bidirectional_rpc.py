@@ -8,16 +8,14 @@ function from the data service. This RPC works by:
 
 # TODO: Explanation of data flow in this RPC
 """
-from uuid import uuid4
-from queue import Queue, Empty
-import random
 import logging
-from pathlib import Path
-from threading import Thread
+import random
 import time
 import unittest
+from queue import Empty, Queue
+from threading import Thread
+from uuid import uuid4
 
-import grpc
 import numpy as np
 
 import minknow_api

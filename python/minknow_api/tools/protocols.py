@@ -1,17 +1,16 @@
 """Tools for interacting with protocols in minknow"""
 
 import collections
+import dataclasses
 import logging
+from typing import Optional, List, Sequence
 
 import grpc
 
-import dataclasses
-from typing import Optional, List, Sequence
+from .. import Connection
 from minknow_api import protocol_pb2, run_until_pb2, acquisition_pb2
 from minknow_api.protocol_pb2 import BarcodeUserData
 from minknow_api.tools.any_helpers import make_float_any, make_uint64_any
-
-from .. import Connection
 
 LOGGER = logging.getLogger(__name__)
 
@@ -127,7 +126,7 @@ def find_protocol(
         # specified or default if not
         basecalling_required = basecalling or basecall_config is not None
         if basecalling_required:
-            if not "default basecall model" in tags:
+            if "default basecall model" not in tags:
                 continue
             default_basecall_model = tags.get("default basecall model").string_value
             if not basecall_config:
@@ -416,7 +415,8 @@ def make_target_run_until_criteria(
 
     if experiment_duration:
         # Case of having both is handled above
-        assert not stop_criteria
+        # The assert below corresponds to the comment above, and is NOT a run-time check
+        assert not stop_criteria  # nosec B101
 
         # `experiment_duration` is in hours
         # `runtime` is in seconds

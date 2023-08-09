@@ -1,10 +1,10 @@
-from pathlib import Path
 import subprocess
 import sys
+from pathlib import Path
+
+from mock_server import ManagerServicer, Server
 
 from minknow_api import manager_pb2
-
-from test_minknow_server import ManagerTestServer
 
 list_positions_source = (
     Path(__file__).parent.parent.parent
@@ -21,15 +21,23 @@ def normalize_new_lines(val):
 def test_list_sequencing_positions_no_positions():
     """Verify no positions are listed when nothing available."""
 
-    with ManagerTestServer() as server:
+    with Server([ManagerServicer()]) as server:
+        # setting an IP address for host (rather than using "localhost") significantly
+        # speeds up tests on Windows
         p = subprocess.run(
-            [sys.executable, str(list_positions_source), "--port", str(server.port)],
+            [
+                sys.executable,
+                str(list_positions_source),
+                "--host=127.0.0.1",
+                "--port",
+                str(server.port),
+            ],
             check=True,
             stdout=subprocess.PIPE,
         )
 
         expected_output = (
-            """Available sequencing positions on localhost:%s:
+            """Available sequencing positions on 127.0.0.1:%s:
 """
             % server.port
         )
@@ -67,15 +75,22 @@ def test_list_sequencing_positions_gridion_positions():
         ),
     ]
 
-    with ManagerTestServer(positions=test_positions) as server:
+    manager_servicer = ManagerServicer(positions=test_positions)
+    with Server([manager_servicer]) as server:
         p = subprocess.run(
-            [sys.executable, str(list_positions_source), "--port", str(server.port)],
+            [
+                sys.executable,
+                str(list_positions_source),
+                "--host=127.0.0.1",
+                "--port",
+                str(server.port),
+            ],
             check=False,
             stdout=subprocess.PIPE,
         )
 
         expected_output = (
-            """Available sequencing positions on localhost:%s:
+            """Available sequencing positions on 127.0.0.1:%s:
 X1: running
   secure: 8000
 X2: running

@@ -73,19 +73,18 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   _WATCHRESPONSE_VALUESENTRY._serialized_end=314
   _KEYSTORESERVICE._serialized_start=1061
   _KEYSTORESERVICE._serialized_end=1510
+GetRequest.__doc__ = """Attributes:
+    names:
+        The names of the values you wish to fetch.
+    allow_missing:
+        Whether to allow missing values.  If set, names that are not
+        present in the store will simply be omitted from the response.
+        Otherwise, missing values will cause an error to be returned.
+        Defaults to 'false'
+"""
 GetOneRequest.__doc__ = """Attributes:
     name:
         The name of the value to fetch.
-"""
-WatchResponse.__doc__ = """Attributes:
-    runs:
-        The current state of some of the runs.
-    values:
-        The values that have changed.  The first received message will
-        contain the current state of all the watched values.
-        Subsequent messages will only contain the values that changed.
-    removed_values:
-        The values that have been removed.
 """
 WatchRequest.__doc__ = """Attributes:
     send_finished_runs:
@@ -101,23 +100,15 @@ WatchRequest.__doc__ = """Attributes:
         message will be sent with the set values. Otherwise, missing
         values will cause an immediate error.  Defaults to 'false'
 """
-StoreRequest.__doc__ = """Attributes:
+WatchResponse.__doc__ = """Attributes:
+    runs:
+        The current state of some of the runs.
     values:
-        The values to store.  See the notes in the KeyStore service
-        documentation about names - in short, for any values not
-        documented elsewhere, you should be prefixing the name with
-        "<product>:", where <product> is the name of your software
-        product.
-    lifetime:
-        Specify the lifetime of a value.  When storing values in the
-        manager, the only valid values are `UNTIL_INSTANCE_END` and
-        `PERSIST_ACROSS_RESTARTS`.  Using any other value will cause
-        the call to fail with `INVALID_ARGUMENT`  Note that calling
-        remove() will remove the value regardless of this setting.
-"""
-GetResponse.__doc__ = """Attributes:
-    values:
-        The requested values.
+        The values that have changed.  The first received message will
+        contain the current state of all the watched values.
+        Subsequent messages will only contain the values that changed.
+    removed_values:
+        The values that have been removed.
 """
 GetOneResponse.__doc__ = """Attributes:
     value:
@@ -133,13 +124,22 @@ RemoveRequest.__doc__ = """Attributes:
         error to be returned (in which case nothing will be removed).
         Defaults to 'false'
 """
-GetRequest.__doc__ = """Attributes:
-    names:
-        The names of the values you wish to fetch.
-    allow_missing:
-        Whether to allow missing values.  If set, names that are not
-        present in the store will simply be omitted from the response.
-        Otherwise, missing values will cause an error to be returned.
-        Defaults to 'false'
+GetResponse.__doc__ = """Attributes:
+    values:
+        The requested values.
+"""
+StoreRequest.__doc__ = """Attributes:
+    values:
+        The values to store.  See the notes in the KeyStore service
+        documentation about names - in short, for any values not
+        documented elsewhere, you should be prefixing the name with
+        "<product>:", where <product> is the name of your software
+        product.
+    lifetime:
+        Specify the lifetime of a value.  When storing values in the
+        manager, the only valid values are `UNTIL_INSTANCE_END` and
+        `PERSIST_ACROSS_RESTARTS`.  Using any other value will cause
+        the call to fail with `INVALID_ARGUMENT`  Note that calling
+        remove() will remove the value regardless of this setting.
 """
 # @@protoc_insertion_point(module_scope)

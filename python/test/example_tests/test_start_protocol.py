@@ -1,18 +1,25 @@
-import logging
-from pathlib import Path
 import subprocess
 import sys
+from dataclasses import dataclass
+from pathlib import Path
 
-from minknow_api import acquisition_pb2, manager_pb2, protocol_pb2, run_until_pb2
+from mock_server import (
+    InstanceServicer,
+    ManagerServicer,
+    Server,
+)
+
+from minknow_api import (
+    acquisition_pb2,
+    device_pb2,
+    device_pb2_grpc,
+    manager_pb2,
+    protocol_pb2,
+    protocol_pb2_grpc,
+    run_until_pb2,
+)
 from minknow_api.protocol_pb2 import BarcodeUserData
 from minknow_api.tools.any_helpers import make_uint64_any
-
-from test_minknow_server import (
-    FlowCellInfo,
-    ManagerTestServer,
-    PositionInfo,
-    SequencingPositionTestServer,
-)
 
 example_root = Path(__file__).parent.parent.parent / "minknow_api" / "examples"
 
@@ -66,11 +73,83 @@ TEST_RUN_UNTIL_CRITERIA = acquisition_pb2.TargetRunUntilCriteria(
 )
 
 
+@dataclass
+class FlowCellInfo:
+    flow_cell_id: str
+    has_flow_cell: bool
+
+
+class DeviceServicer(device_pb2_grpc.DeviceServiceServicer):
+    def __init__(self):
+        self.flow_cell_info = FlowCellInfo(flow_cell_id="", has_flow_cell=False)
+
+    def get_flow_cell_info(
+        self, _request: device_pb2.GetFlowCellInfoRequest, _context
+    ) -> device_pb2.GetFlowCellInfoResponse:
+        """Find the version information for the connected flow cell"""
+        return device_pb2.GetFlowCellInfoResponse(
+            channel_count=512,
+            wells_per_channel=4,
+            has_flow_cell=self.flow_cell_info.has_flow_cell,
+            flow_cell_id=self.flow_cell_info.flow_cell_id,
+            has_adapter=False,
+        )
+
+
+class ProtocolServicer(protocol_pb2_grpc.ProtocolServiceServicer):
+    def __init__(self):
+        self.protocol_list = []
+        self.protocol_runs = []
+
+    def list_protocols(
+        self, _request: protocol_pb2.ListProtocolsRequest, _context
+    ) -> protocol_pb2.ListProtocolsResponse:
+        """Find the available protocols to start"""
+        return protocol_pb2.ListProtocolsResponse(protocols=self.protocol_list)
+
+    def start_protocol(
+        self, request: protocol_pb2.StartProtocolRequest, _context
+    ) -> protocol_pb2.StartProtocolResponse:
+        """Start a new protocol"""
+        self.protocol_runs.append(request)
+        return protocol_pb2.StartProtocolResponse(run_id=str(len(self.protocol_runs)))
+
+
+class SequencingPositionTestServer(Server):
+    """
+    Test server runs grpc manager service on a port.
+    """
+
+    def __init__(self):
+        self.device_service = DeviceServicer()
+        self.instance_service = InstanceServicer()
+        self.protocol_service = ProtocolServicer()
+
+        super().__init__(
+            [
+                self.device_service,
+                self.instance_service,
+                self.protocol_service,
+            ]
+        )
+
+    def set_flow_cell_info(self, flow_cell_info):
+        """Set connected flow cell info"""
+        self.device_service.flow_cell_info = flow_cell_info
+
+    def set_protocol_list(self, protocol_list):
+        """Set available protocols on the position"""
+        self.protocol_service.protocol_list = protocol_list
+
+
 def run_start_protocol_example(port, args):
+    # setting an IP address for host (rather than using "localhost") significantly
+    # speeds up tests on Windows
     p = subprocess.run(
         [
             sys.executable,
             str(start_protocol_source),
+            "--host=127.0.0.1",
             "--port",
             str(port),
             "--verbose",
@@ -86,20 +165,19 @@ def run_start_protocol_example(port, args):
 def test_basic_start_protocol():
     """Verify basic arguments are passed correctly for starting protocols."""
 
-    position_info = PositionInfo(position_name="MN00000")
-
-    with SequencingPositionTestServer(position_info) as sequencing_position:
-        test_positions = [
-            manager_pb2.FlowCellPosition(
-                name=position_info.position_name,
-                state=manager_pb2.FlowCellPosition.State.STATE_RUNNING,
-                rpc_ports=manager_pb2.FlowCellPosition.RpcPorts(
-                    secure=sequencing_position.port
+    with SequencingPositionTestServer() as sequencing_position:
+        manager_servicer = ManagerServicer(
+            [
+                manager_pb2.FlowCellPosition(
+                    name="MN00000",
+                    state=manager_pb2.FlowCellPosition.State.STATE_RUNNING,
+                    rpc_ports=manager_pb2.FlowCellPosition.RpcPorts(
+                        secure=sequencing_position.port
+                    ),
                 ),
-            ),
-        ]
-
-        with ManagerTestServer(positions=test_positions) as server:
+            ]
+        )
+        with Server([manager_servicer]) as server:
 
             # Missing kit argument
             assert run_start_protocol_example(server.port, [])[0] == 2
@@ -181,7 +259,7 @@ def test_basic_start_protocol():
             assert (
                 run_start_protocol_example(
                     server.port,
-                    ["--kit", TEST_KIT_NAME, "--position", position_info.position_name],
+                    ["--kit", TEST_KIT_NAME, "--position=MN00000"],
                 )[0]
                 == 1
             )
@@ -196,7 +274,7 @@ def test_basic_start_protocol():
             assert (
                 run_start_protocol_example(
                     server.port,
-                    ["--kit", TEST_KIT_NAME, "--position", position_info.position_name],
+                    ["--kit", TEST_KIT_NAME, "--position=MN00000"],
                 )[0]
                 == 1
             )
@@ -208,7 +286,7 @@ def test_basic_start_protocol():
             assert (
                 run_start_protocol_example(
                     server.port,
-                    ["--kit", TEST_KIT_NAME, "--position", position_info.position_name],
+                    ["--kit", TEST_KIT_NAME, "--position=MN00000"],
                 )[0]
                 == 0
             )
@@ -256,20 +334,19 @@ def test_basic_start_protocol():
 def test_naming_start_protocol():
     """Verify naming experiments works as expected."""
 
-    position_info = PositionInfo(position_name="MN00000")
-
-    with SequencingPositionTestServer(position_info) as sequencing_position:
-        test_positions = [
-            manager_pb2.FlowCellPosition(
-                name=position_info.position_name,
-                state=manager_pb2.FlowCellPosition.State.STATE_RUNNING,
-                rpc_ports=manager_pb2.FlowCellPosition.RpcPorts(
-                    secure=sequencing_position.port
+    with SequencingPositionTestServer() as sequencing_position:
+        manager_servicer = ManagerServicer(
+            [
+                manager_pb2.FlowCellPosition(
+                    name="MN00000",
+                    state=manager_pb2.FlowCellPosition.State.STATE_RUNNING,
+                    rpc_ports=manager_pb2.FlowCellPosition.RpcPorts(
+                        secure=sequencing_position.port
+                    ),
                 ),
-            ),
-        ]
-
-        with ManagerTestServer(positions=test_positions) as server:
+            ]
+        )
+        with Server([manager_servicer]) as server:
             # Setup for experiment
             test_flow_cell_id = "foo-bar-flow-cell"
             sequencing_position.set_flow_cell_info(
@@ -284,8 +361,7 @@ def test_naming_start_protocol():
                     [
                         "--kit",
                         TEST_KIT_NAME,
-                        "--position",
-                        position_info.position_name,
+                        "--position=MN00000",
                         "--sample-id",
                         "my-sample-id",
                         "--experiment-group",
@@ -313,20 +389,19 @@ def test_naming_start_protocol():
 def test_basecalling_start_protocol():
     """Verify basecalling arguments work as expected."""
 
-    position_info = PositionInfo(position_name="MN00000")
-
-    with SequencingPositionTestServer(position_info) as sequencing_position:
-        test_positions = [
-            manager_pb2.FlowCellPosition(
-                name=position_info.position_name,
-                state=manager_pb2.FlowCellPosition.State.STATE_RUNNING,
-                rpc_ports=manager_pb2.FlowCellPosition.RpcPorts(
-                    secure=sequencing_position.port
+    with SequencingPositionTestServer() as sequencing_position:
+        manager_servicer = ManagerServicer(
+            [
+                manager_pb2.FlowCellPosition(
+                    name="MN00000",
+                    state=manager_pb2.FlowCellPosition.State.STATE_RUNNING,
+                    rpc_ports=manager_pb2.FlowCellPosition.RpcPorts(
+                        secure=sequencing_position.port
+                    ),
                 ),
-            ),
-        ]
-
-        with ManagerTestServer(positions=test_positions) as server:
+            ]
+        )
+        with Server([manager_servicer]) as server:
             # Setup for experiment
             test_flow_cell_id = "foo-bar-flow-cell"
             sequencing_position.set_flow_cell_info(
@@ -341,8 +416,7 @@ def test_basecalling_start_protocol():
                     [
                         "--kit",
                         TEST_KIT_NAME,
-                        "--position",
-                        position_info.position_name,
+                        "--position=MN00000",
                         "--basecalling",
                     ],
                 )[0]
@@ -369,8 +443,7 @@ def test_basecalling_start_protocol():
                     [
                         "--kit",
                         TEST_KIT_NAME,
-                        "--position",
-                        position_info.position_name,
+                        "--position=MN00000",
                         "--basecalling",
                         "--basecall-config",
                         TEST_BASECLL_MODEL_OTHER,
@@ -397,20 +470,19 @@ def test_basecalling_start_protocol():
 def test_barcoding_start_protocol():
     """Verify basecalling barcoding arguments work as expected."""
 
-    position_info = PositionInfo(position_name="MN00000")
-
-    with SequencingPositionTestServer(position_info) as sequencing_position:
-        test_positions = [
-            manager_pb2.FlowCellPosition(
-                name=position_info.position_name,
-                state=manager_pb2.FlowCellPosition.State.STATE_RUNNING,
-                rpc_ports=manager_pb2.FlowCellPosition.RpcPorts(
-                    secure=sequencing_position.port
+    with SequencingPositionTestServer() as sequencing_position:
+        manager_servicer = ManagerServicer(
+            [
+                manager_pb2.FlowCellPosition(
+                    name="MN00000",
+                    state=manager_pb2.FlowCellPosition.State.STATE_RUNNING,
+                    rpc_ports=manager_pb2.FlowCellPosition.RpcPorts(
+                        secure=sequencing_position.port
+                    ),
                 ),
-            ),
-        ]
-
-        with ManagerTestServer(positions=test_positions) as server:
+            ]
+        )
+        with Server([manager_servicer]) as server:
             # Setup for experiment
             test_flow_cell_id = "foo-bar-flow-cell"
             sequencing_position.set_flow_cell_info(
@@ -427,12 +499,11 @@ def test_barcoding_start_protocol():
                     [
                         "--kit",
                         TEST_KIT_NAME,
-                        "--position",
-                        position_info.position_name,
+                        "--position=MN00000",
                         "--barcoding",
                     ],
                 )[0]
-                == 1
+                == 2
             )
 
             # Barcoding with basecalling enabled
@@ -442,8 +513,7 @@ def test_barcoding_start_protocol():
                     [
                         "--kit",
                         TEST_KIT_NAME,
-                        "--position",
-                        position_info.position_name,
+                        "--position=MN00000",
                         "--basecalling",
                         "--barcoding",
                     ],
@@ -473,8 +543,7 @@ def test_barcoding_start_protocol():
                     [
                         "--kit",
                         TEST_KIT_NAME,
-                        "--position",
-                        position_info.position_name,
+                        "--position=MN00000",
                         "--basecalling",
                         "--barcoding",
                         "--barcode-kits",
@@ -519,20 +588,19 @@ def test_barcoding_start_protocol():
 def test_alignment_start_protocol():
     """Verify basecalling alignment arguments work as expected."""
 
-    position_info = PositionInfo(position_name="MN00000")
-
-    with SequencingPositionTestServer(position_info) as sequencing_position:
-        test_positions = [
-            manager_pb2.FlowCellPosition(
-                name=position_info.position_name,
-                state=manager_pb2.FlowCellPosition.State.STATE_RUNNING,
-                rpc_ports=manager_pb2.FlowCellPosition.RpcPorts(
-                    secure=sequencing_position.port
+    with SequencingPositionTestServer() as sequencing_position:
+        manager_servicer = ManagerServicer(
+            [
+                manager_pb2.FlowCellPosition(
+                    name="MN00000",
+                    state=manager_pb2.FlowCellPosition.State.STATE_RUNNING,
+                    rpc_ports=manager_pb2.FlowCellPosition.RpcPorts(
+                        secure=sequencing_position.port
+                    ),
                 ),
-            ),
-        ]
-
-        with ManagerTestServer(positions=test_positions) as server:
+            ]
+        )
+        with Server([manager_servicer]) as server:
             # Setup for experiment
             test_flow_cell_id = "foo-bar-flow-cell"
             sequencing_position.set_flow_cell_info(
@@ -552,13 +620,12 @@ def test_alignment_start_protocol():
                     [
                         "--kit",
                         TEST_KIT_NAME,
-                        "--position",
-                        position_info.position_name,
+                        "--position=MN00000",
                         "--alignment-reference",
                         alignment_ref,
                     ],
                 )[0]
-                == 1
+                == 2
             )
             # Alignment not enabled
             assert (
@@ -567,13 +634,12 @@ def test_alignment_start_protocol():
                     [
                         "--kit",
                         TEST_KIT_NAME,
-                        "--position",
-                        position_info.position_name,
+                        "--position=MN00000",
                         "--bed-file",
                         bed_file,
                     ],
                 )[0]
-                == 1
+                == 2
             )
 
             # Alignment with basecalling enabled
@@ -583,8 +649,7 @@ def test_alignment_start_protocol():
                     [
                         "--kit",
                         TEST_KIT_NAME,
-                        "--position",
-                        position_info.position_name,
+                        "--position=MN00000",
                         "--basecalling",
                         "--alignment-reference",
                         alignment_ref,
@@ -616,8 +681,7 @@ def test_alignment_start_protocol():
                     [
                         "--kit",
                         TEST_KIT_NAME,
-                        "--position",
-                        position_info.position_name,
+                        "--position=MN00000",
                         "--basecalling",
                         "--alignment-reference",
                         alignment_ref,
@@ -649,20 +713,19 @@ def test_alignment_start_protocol():
 def test_output_start_protocol():
     """Verify output options work as expected."""
 
-    position_info = PositionInfo(position_name="MN00000")
-
-    with SequencingPositionTestServer(position_info) as sequencing_position:
-        test_positions = [
-            manager_pb2.FlowCellPosition(
-                name=position_info.position_name,
-                state=manager_pb2.FlowCellPosition.State.STATE_RUNNING,
-                rpc_ports=manager_pb2.FlowCellPosition.RpcPorts(
-                    secure=sequencing_position.port
+    with SequencingPositionTestServer() as sequencing_position:
+        manager_servicer = ManagerServicer(
+            [
+                manager_pb2.FlowCellPosition(
+                    name="MN00000",
+                    state=manager_pb2.FlowCellPosition.State.STATE_RUNNING,
+                    rpc_ports=manager_pb2.FlowCellPosition.RpcPorts(
+                        secure=sequencing_position.port
+                    ),
                 ),
-            ),
-        ]
-
-        with ManagerTestServer(positions=test_positions) as server:
+            ]
+        )
+        with Server([manager_servicer]) as server:
             # Setup for experiment
             test_flow_cell_id = "foo-bar-flow-cell"
             sequencing_position.set_flow_cell_info(
@@ -677,8 +740,7 @@ def test_output_start_protocol():
                     [
                         "--kit",
                         TEST_KIT_NAME,
-                        "--position",
-                        position_info.position_name,
+                        "--position=MN00000",
                         "--fastq",
                         "--fastq-reads-per-file",
                         "5000",
@@ -711,8 +773,7 @@ def test_output_start_protocol():
                     [
                         "--kit",
                         TEST_KIT_NAME,
-                        "--position",
-                        position_info.position_name,
+                        "--position=MN00000",
                         "--fast5",
                         "--fast5-reads-per-file",
                         "501",
@@ -748,8 +809,7 @@ def test_output_start_protocol():
                     [
                         "--kit",
                         TEST_KIT_NAME,
-                        "--position",
-                        position_info.position_name,
+                        "--position=MN00000",
                         "--pod5",
                         "--pod5-reads-per-file",
                         "502",
@@ -780,8 +840,7 @@ def test_output_start_protocol():
                     [
                         "--kit",
                         TEST_KIT_NAME,
-                        "--position",
-                        position_info.position_name,
+                        "--position=MN00000",
                         "--bam",
                     ],
                 )[0]
@@ -813,20 +872,19 @@ def test_sample_sheet_start_protocol():
     """Verify that the `--sample-sheet` argument works as expected."""
     """Verify basecalling barcoding arguments work as expected."""
 
-    position_info = PositionInfo(position_name="MN00000")
-
-    with SequencingPositionTestServer(position_info) as sequencing_position:
-        test_positions = [
-            manager_pb2.FlowCellPosition(
-                name=position_info.position_name,
-                state=manager_pb2.FlowCellPosition.State.STATE_RUNNING,
-                rpc_ports=manager_pb2.FlowCellPosition.RpcPorts(
-                    secure=sequencing_position.port
+    with SequencingPositionTestServer() as sequencing_position:
+        manager_servicer = ManagerServicer(
+            [
+                manager_pb2.FlowCellPosition(
+                    name="MN00000",
+                    state=manager_pb2.FlowCellPosition.State.STATE_RUNNING,
+                    rpc_ports=manager_pb2.FlowCellPosition.RpcPorts(
+                        secure=sequencing_position.port
+                    ),
                 ),
-            ),
-        ]
-
-        with ManagerTestServer(positions=test_positions) as server:
+            ]
+        )
+        with Server([manager_servicer]) as server:
             # Setup for experiment
             test_flow_cell_id = "foo-bar-flow-cell"
             sequencing_position.set_flow_cell_info(
@@ -1106,20 +1164,19 @@ def test_sample_sheet_start_protocol():
 def test_read_until_start_protocol():
     """Verify read until arguments work as expected."""
 
-    position_info = PositionInfo(position_name="MN00000")
-
-    with SequencingPositionTestServer(position_info) as sequencing_position:
-        test_positions = [
-            manager_pb2.FlowCellPosition(
-                name=position_info.position_name,
-                state=manager_pb2.FlowCellPosition.State.STATE_RUNNING,
-                rpc_ports=manager_pb2.FlowCellPosition.RpcPorts(
-                    secure=sequencing_position.port
+    with SequencingPositionTestServer() as sequencing_position:
+        manager_servicer = ManagerServicer(
+            [
+                manager_pb2.FlowCellPosition(
+                    name="MN00000",
+                    state=manager_pb2.FlowCellPosition.State.STATE_RUNNING,
+                    rpc_ports=manager_pb2.FlowCellPosition.RpcPorts(
+                        secure=sequencing_position.port
+                    ),
                 ),
-            ),
-        ]
-
-        with ManagerTestServer(positions=test_positions) as server:
+            ]
+        )
+        with Server([manager_servicer]) as server:
             # Setup for experiment
             test_flow_cell_id = "foo-bar-flow-cell"
             sequencing_position.set_flow_cell_info(
@@ -1134,8 +1191,7 @@ def test_read_until_start_protocol():
                     [
                         "--kit",
                         TEST_KIT_NAME,
-                        "--position",
-                        position_info.position_name,
+                        "--position=MN00000",
                         "--read-until-reference",
                         "test.fasta",
                         "--read-until-bed-file",
@@ -1152,8 +1208,7 @@ def test_read_until_start_protocol():
                     [
                         "--kit",
                         TEST_KIT_NAME,
-                        "--position",
-                        position_info.position_name,
+                        "--position=MN00000",
                         "--read-until-bed-file",
                         "test.bed",
                         "--read-until-filter",
@@ -1170,8 +1225,7 @@ def test_read_until_start_protocol():
                     [
                         "--kit",
                         TEST_KIT_NAME,
-                        "--position",
-                        position_info.position_name,
+                        "--position=MN00000",
                         "--read-until-reference",
                         "test.fasta",
                         "--read-until-bed-file",
@@ -1190,8 +1244,7 @@ def test_read_until_start_protocol():
                     [
                         "--kit",
                         TEST_KIT_NAME,
-                        "--position",
-                        position_info.position_name,
+                        "--position=MN00000",
                         "--read-until-reference",
                         "test.fasta",
                         "--read-until-bed-file",

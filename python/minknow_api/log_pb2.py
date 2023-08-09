@@ -53,6 +53,14 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   _SENDPINGRESPONSE._serialized_end=763
   _LOGSERVICE._serialized_start=891
   _LOGSERVICE._serialized_end=1189
+GetUserMessagesRequest.__doc__ = """Attributes:
+    include_old_messages:
+        If set, any messages which have already been sent to listeners
+        will be sent to the new stream again, before new messages are
+        sent.  If not specified - the default will not send messages
+        that were sent previously.  note: there is a limit on how many
+        messages are recorded for replay.
+"""
 UserMessage.__doc__ = """Attributes:
     time:
         Timestamp for when the log message was emitted
@@ -66,14 +74,6 @@ UserMessage.__doc__ = """Attributes:
     extra_data:
         Any extra data associated with the user message, as a map from
         key to data.
-"""
-GetUserMessagesRequest.__doc__ = """Attributes:
-    include_old_messages:
-        If set, any messages which have already been sent to listeners
-        will be sent to the new stream again, before new messages are
-        sent.  If not specified - the default will not send messages
-        that were sent previously.  note: there is a limit on how many
-        messages are recorded for replay.
 """
 SendPingRequest.__doc__ = """Since 5.0
 

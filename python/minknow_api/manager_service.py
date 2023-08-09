@@ -1318,6 +1318,8 @@ class ManagerService(object):
 
         Since 4.4
 
+        DEPRECATED since 5.6. Use client TLS certificates instead (see AUTH.md).
+
         This RPC is idempotent. It may change the state of the system, but if the requested
         change has already happened, it will not fail because of this, make any additional
         changes or return a different value.
@@ -1361,6 +1363,8 @@ class ManagerService(object):
         The token cannot be obtained a second time, once the CreateDeveloperApiTokenResponse is destroyed.
 
         Since 4.4
+
+        DEPRECATED since 5.6. Use client TLS certificates instead (see AUTH.md).
 
         
 
@@ -1409,6 +1413,8 @@ class ManagerService(object):
         """Remove a developer api token.
 
         Since 4.4
+
+        DEPRECATED since 5.6. Use client TLS certificates instead (see AUTH.md).
 
         
 

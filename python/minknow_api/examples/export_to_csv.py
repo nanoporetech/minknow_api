@@ -4,9 +4,14 @@ Example script to export a number of fields for all experiments that match some 
 
 import argparse
 import csv
-import minknow_api
 import sys
+
 from minknow_api.manager import Manager
+
+
+def _load_file(path: str) -> bytes:
+    with open(path, "rb") as f:
+        return f.read()
 
 
 def main():
@@ -32,6 +37,18 @@ def main():
         help="Specify an API token to use, should be returned from the sequencer as a developer API token. This can only be left unset if there is a local token available.",
     )
     parser.add_argument(
+        "--client-cert-chain",
+        type=_load_file,
+        default=None,
+        help="Path to a PEM-encoded X.509 certificate chain for client authentication.",
+    )
+    parser.add_argument(
+        "--client-key",
+        type=_load_file,
+        default=None,
+        help="Path to a PEM-encoded private key for client certificate authentication.",
+    )
+    parser.add_argument(
         "--position",
         default=None,
         help="Restrict results to those ran on a position on the machine (or MinION serial number)",
@@ -43,13 +60,22 @@ def main():
     )
     args = parser.parse_args()
 
+    if (args.client_cert_chain is None) != (args.client_key is None):
+        parser.error(
+            "--client-cert-chain and --client-key must either both be provided, or neither"
+        )
+
     # Try and connect to the minknow-core manager passing the host, port and developer-api token.  If the Python code
     # can't connect it will throw, catch the exception and exit with an error message.
     try:
         manager = Manager(
-            host=args.host, port=args.port, developer_api_token=args.api_token
+            host=args.host,
+            port=args.port,
+            developer_api_token=args.api_token,
+            client_certificate_chain=args.client_cert_chain,
+            client_private_key=args.client_key,
         )
-    except:
+    except Exception:
         port = f":{args.port}" if args.port else ""
         print(f"Unable to connect to MinKNOW at {args.host}{port}", file=sys.stderr)
         exit(1)
@@ -58,7 +84,7 @@ def main():
     # contents multiple times.
     reported_positions = list(manager.flow_cell_positions())
     if not reported_positions:
-        printf("No sequencing positions reported", file=sys.stderr)
+        print("No sequencing positions reported", file=sys.stderr)
         exit(1)
 
     # If a position has been specified on the command-line, filter out all the positions which don't contain the
@@ -91,7 +117,7 @@ def main():
             # provides a key for fetching further information about experiments from other services.
             try:
                 proto_run_info = connection.protocol.get_run_info(run_id=run_id)
-            except:
+            except Exception:
                 print(
                     f"Warning : Couldn't find information about the experiment with run-id {run_id}",
                     file=sys.stderr,
@@ -129,7 +155,7 @@ def main():
                     acq_run_info = connection.acquisition.get_acquisition_info(
                         run_id=acq_run_id
                     )
-                except:
+                except Exception:
                     print(
                         f"Warning: Couldn't find acquisition info for run-id {acq_run_id}",
                         file=sys.stderr,

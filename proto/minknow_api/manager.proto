@@ -293,8 +293,11 @@ service ManagerService {
     // List all developer tokens, and their expiry times. Note this does not return the actual token value - this is only available at creation time.
     //
     // Since 4.4
+    //
+    // DEPRECATED since 5.6. Use client TLS certificates instead (see AUTH.md).
     rpc list_developer_api_tokens(ListDeveloperApiTokensRequest) returns (ListDeveloperApiTokensResponse) {
         option idempotency_level = IDEMPOTENT;
+        option deprecated = true;
     }
 
     // Create a new developer API token, with a user facing name, and optional expiry time.
@@ -304,12 +307,20 @@ service ManagerService {
     // The token cannot be obtained a second time, once the CreateDeveloperApiTokenResponse is destroyed.
     //
     // Since 4.4
-    rpc create_developer_api_token(CreateDeveloperApiTokenRequest) returns (CreateDeveloperApiTokenResponse) {}
+    //
+    // DEPRECATED since 5.6. Use client TLS certificates instead (see AUTH.md).
+    rpc create_developer_api_token(CreateDeveloperApiTokenRequest) returns (CreateDeveloperApiTokenResponse) {
+        option deprecated = true;
+    }
 
     // Remove a developer api token.
     //
     // Since 4.4
-    rpc revoke_developer_api_token(RevokeDeveloperApiTokenRequest) returns (RevokeDeveloperApiTokensResponse) {}
+    //
+    // DEPRECATED since 5.6. Use client TLS certificates instead (see AUTH.md).
+    rpc revoke_developer_api_token(RevokeDeveloperApiTokenRequest) returns (RevokeDeveloperApiTokensResponse) {
+        option deprecated = true;
+    }
 
     // Find protocols which can be run based on the current device + flowcell.
     //

@@ -525,6 +525,9 @@ enum ProtocolState {
     
     // OND requires us to reach temperature and fail if not
     PROTOCOL_FINISHED_WITH_ERROR_TEMPERATURE_REQUIRED = 22;     // Exit with code 22
+
+    // The protocol was terminated due to insufficient disk space
+    PROTOCOL_FINISHED_WITH_ERROR_NO_DISK_SPACE = 23;            // Exit with code 23
 }
 
 enum ProtocolPhase {
@@ -570,10 +573,17 @@ enum ProtocolPhase {
 message RequestOrigin {
     // 'User' based changes will typically come from calls made by the UI
     // such as 'stop_protocol'
-    message User {}
+    message User {
+        // If available then provide any identity information MinKNOW 
+        // has about the client that made the RPC request
+        string identity = 1;
+    }
     // A request from minknow will usually come in the form of something ending
     // naturally, or an error occuring where minknow has to take action
-    message MinKNOW {}
+    message MinKNOW {
+        // Optional further details on the cause of the request
+        string cause = 1;
+    }
     // The protocol script/bream is mainly responsible for making changes via
     // protocol_phase_management
     message ProtocolPhaseManagement {}
@@ -622,6 +632,96 @@ message ExternalOffload {
     // The `id`s associated with active external data offloads associated with the protocol
     // The offload status can be queried using `mooneye.offload_manager.watch_offloads()``
     repeated string offload_ids = 1;
+}
+
+// From instance.proto
+//
+// Since 5.6
+message GetVersionInfoResponse {
+    message MinknowVersion {
+        int32 major = 1;
+        int32 minor = 2;
+        int32 patch = 3;
+        string full = 4;
+    }
+
+    // What minknow version is installed. Split into major, minor and patch versions
+    // Also includes the full version as a string, which contain the major, minor and patch numbers
+    // as well as if the version is pre-release version (-pre), whether it is a release candidate (-rc#)
+    // or whether it is a variant version (i.e. for conferences) (-variant). For non-release builds it also 
+    // includes the hash of the commit it is based on, and whether the working copy is different from that has (-dirty)
+    MinknowVersion minknow = 1;
+
+    // The version of Bream that is installed.
+    //
+    // An invalid installation will cause this to return "0.0.0".
+    //
+    // Prior to 5.0, this field was called "protocols".
+    //
+    // Since 5.0
+    string bream = 2;
+
+    // Describes the distribution that this MinKNOW installation is part of, usually
+    // this will be the Metapackage version number/identity, this will be "unknown"
+    // if the distribution-version hasn't been set. This information is also communicated
+    // in the Manager's DaemonMessage in daemon.proto
+    string distribution_version = 3;
+
+    enum DistributionStatus {
+        UNKNOWN  = 0; // The distribution status is unknown or can not be determined
+        STABLE   = 1; // Released software in that same configuration in which
+                      // it was distributed.
+        UNSTABLE = 2; // Pre-release or release-candidate software that has not
+                      // been fully tested, but has not been modified from how it
+                      // was distributed.
+        MODIFIED = 3; // Some or all components have been replaced after distribution
+    }
+    // Indicates if the MinKNOW distribution including components such as Bream
+    // are stable, unstable or have been modified.
+    DistributionStatus distribution_status = 4;
+
+    // The version of the protocol configuration files that is installed.
+    //
+    // An invalid installation will cause this to return "0.0.0".
+    //
+    // Prior to 5.0, this field was called "configuration".
+    //
+    // Since 5.0
+    string protocol_configuration = 5;
+
+    enum InstallationType {
+        // For internal release. production.proto will be enabled for this type
+        ONT = 0;
+
+        // For customer releases
+        NC = 1;
+
+        // For production release. production.proto will be enabled for this type
+        PROD = 2;
+
+        // For Q releases (nanopore long term support release)
+        Q_RELEASE = 3;
+
+        // Oxford Nanopore Diagnostic
+        OND_RELEASE = 4;
+    }
+
+    // The installation type of MinKNOW.
+    //
+    // The installation type may affect the available features, or the update process.
+    //
+    // Since 4.1
+    InstallationType installation_type = 6;
+
+    // Version of guppy MinKNOW was packaged against.
+    //
+    // Since 5.0
+    string guppy_build_version = 7;
+
+    // Version of guppy MinKNOW running with.
+    //
+    // Since 5.0
+    string guppy_connected_version = 8;
 }
 
 message ProtocolRunInfo {
@@ -745,6 +845,11 @@ message ProtocolRunInfo {
     //
     // Since 5.0
     ExternalOffload external_offload = 21;
+    
+    // For storing version numbers to output to run report
+    //
+    // Since 5.6
+    GetVersionInfoResponse software_versions = 22;
 }
 
 message FilteringInfo {
@@ -762,7 +867,25 @@ message FilteringInfo {
     PlatformQcFilter pqc_filter = 1;
 
     // Filter runs by a specific protocol_group_id
-    optional string protocol_group_id = 2; 
+    optional string protocol_group_id = 2;
+
+    // Filter by start time of the run.  If the start time falls within the
+    // specified time period, then the run will be included.
+    //
+    // If no start_time is specified, then this will match all runs
+    // before the specified end time.
+    //
+    // If no end_time is specified, then this will match all runs
+    // later than the specified start time.
+    //
+    // Since 5.5.
+
+    message TimeFilter {
+        google.protobuf.Timestamp start_range = 1;
+        google.protobuf.Timestamp end_range = 2;
+    }
+
+    TimeFilter experiment_start_time = 3;
 }
 
 message ListProtocolRunsRequest {
@@ -824,15 +947,40 @@ message AddEpi2meWorkflowRequest {
 
 message AddEpi2meWorkflowResponse {
 }
+    
+// timestamp for the last activity for experiment ordering
+// since 5.6
+message ProtocolGroupIdInfo {
+    string protocol_group_id = 1;
+    
+    // Most recent start time for the protocol group id
+    // 
+    google.protobuf.Timestamp start_time = 2;
+}
 
 message ListProtocolGroupIdsRequest {
+    FilteringInfo filter_info = 1;
 }
 
 message ListProtocolGroupIdsResponse {
     // A list of protocol group ids used in any
     // protocol started on this instance of minknow.
     //
+    // deprecated and replaced by string protocol_group_id
+    // in message ProtocolGroupIdInfo
+    // 
+    // string data is guaranteed to be ordered by most recent
+    // start time, since 5.6
+    // 
     repeated string protocol_group_ids = 1;
+    
+    // A list of the most recent start time for each
+    // protocol group id on this instance of minknow.
+    // 
+    // guaranteed to be ordered by most recent start time
+    // since 5.6
+    // 
+    repeated ProtocolGroupIdInfo protocol_group_ids_info = 2;
 }
 
 message BeginHardwareCheckRequest {}
@@ -977,6 +1125,10 @@ message ProtocolPhaseManagementResponse {
 message GenerateRunReportRequest {
     // The protocol_run_id to generate a report for.
     string protocol_run_id = 1;
+
+    // Optionally return the input data used to generate the report. This input data is
+    // represented as the data seen in report_data.proto
+    bool include_input_data = 2;
 }
 
 message GenerateRunReportResponse {
@@ -988,4 +1140,12 @@ message GenerateRunReportResponse {
 
     // How many further characters of data remain after this message (excluding of this message).
     int32 remaining_length = 3;
+
+    // If include_input_data was set, this will be a section of that data
+    // (note the api to return this data may stream back several sections).
+    string input_data = 4;
+
+    // If include_input_data was set, how many further characters of input data remain 
+    // after this message (excluding of this message).
+    int32 remaining_input_length = 5;
 }

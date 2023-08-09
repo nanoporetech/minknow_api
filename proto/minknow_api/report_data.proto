@@ -3,7 +3,6 @@ syntax="proto3";
 package minknow_api.report_data;
 
 import "minknow_api/acquisition.proto";
-import "minknow_api/instance.proto";
 import "minknow_api/log.proto";
 import "minknow_api/protocol.proto";
 import "minknow_api/run_until.proto";
@@ -69,7 +68,10 @@ message Host {
 }
 
 message ReportData {
-    instance.GetVersionInfoResponse software_versions = 1;
+    // This field has been removed
+    //
+    // Since 5.6
+    reserved 1;
 
     Host host = 2;
 

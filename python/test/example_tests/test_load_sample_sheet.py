@@ -1,19 +1,18 @@
 import re
-from pathlib import Path
 import sys
 import unittest
+from pathlib import Path
 from typing import Sequence
 
-from google.protobuf.wrappers_pb2 import StringValue
-from minknow_api.protocol_pb2 import ProtocolRunUserInfo, BarcodeUserData
+from minknow_api.protocol_pb2 import BarcodeUserData
 
 example_root = Path(__file__).parent.parent.parent / "minknow_api" / "examples"
 sys.path.insert(0, example_root)
 
-from minknow_api.examples.load_sample_sheet import (
+from minknow_api.examples.load_sample_sheet import (  # noqa E402
+    ParsedSampleSheetEntry,
     SampleSheetParseError,
     load_sample_sheet_csv,
-    ParsedSampleSheetEntry,
 )
 
 

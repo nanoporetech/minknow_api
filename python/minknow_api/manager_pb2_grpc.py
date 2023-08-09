@@ -500,6 +500,8 @@ class ManagerServiceServicer(object):
         List all developer tokens, and their expiry times. Note this does not return the actual token value - this is only available at creation time.
 
         Since 4.4
+
+        DEPRECATED since 5.6. Use client TLS certificates instead (see AUTH.md).
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -513,6 +515,8 @@ class ManagerServiceServicer(object):
         The token cannot be obtained a second time, once the CreateDeveloperApiTokenResponse is destroyed.
 
         Since 4.4
+
+        DEPRECATED since 5.6. Use client TLS certificates instead (see AUTH.md).
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -522,6 +526,8 @@ class ManagerServiceServicer(object):
         """Remove a developer api token.
 
         Since 4.4
+
+        DEPRECATED since 5.6. Use client TLS certificates instead (see AUTH.md).
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')

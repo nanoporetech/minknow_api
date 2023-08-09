@@ -10,16 +10,23 @@ python ./python/minknow_api/examples/run_after_protocol.py \
                                                             # If no script is specified, then the status of the protocol will be
                                                             # displayed before finishing.
 
-"""
+"""  # noqa W605
 
 import argparse
 import logging
 import os
 import sys
 
+import grpc
+
 # minknow_api.manager supplies "Manager" a wrapper around MinKNOW's Manager gRPC API with utilities
 # for querying sequencing positions + offline basecalling tools.
 from minknow_api.manager import Manager
+
+
+def _load_file(path: str) -> bytes:
+    with open(path, "rb") as f:
+        return f.read()
 
 
 def parse_args():
@@ -50,6 +57,18 @@ def parse_args():
         default=None,
         help="Specify an API token to use, should be returned from the sequencer as a developer API token.",
     )
+    parser.add_argument(
+        "--client-cert-chain",
+        type=_load_file,
+        default=None,
+        help="Path to a PEM-encoded X.509 certificate chain for client authentication.",
+    )
+    parser.add_argument(
+        "--client-key",
+        type=_load_file,
+        default=None,
+        help="Path to a PEM-encoded private key for client certificate authentication.",
+    )
     parser.add_argument("--verbose", action="store_true", help="Enable debug logging")
 
     # Sequencing position can be identified by a position name, or a flowcell ID
@@ -79,9 +98,14 @@ def parse_args():
 
     # Further argument checks
 
+    if (args.client_cert_chain is None) != (args.client_key is None):
+        parser.error(
+            "--client-cert-chain and --client-key must either both be provided, or neither"
+        )
+
     # Check the script exists
     if args.script_to_run and not os.path.isfile(args.script_to_run):
-        print(f"The script {args.script_to_run} was not found")
+        print(f"The script {args.script_to_run} was not found", file=sys.stderr)
         exit(1)
 
     return args
@@ -164,7 +188,7 @@ def main():
     # If a script was specified, run it.
     if args.script_to_run:
         print(f"Running the following command: {args.script_to_run}")
-        os.system(args.script_to_run)
+        os.system(args.script_to_run)  # nosec B605
 
 
 if __name__ == "__main__":

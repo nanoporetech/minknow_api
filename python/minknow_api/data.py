@@ -9,6 +9,7 @@ where you just want to obtain a fixed amount of data, to be processed after you 
 """
 
 import collections
+
 import numpy
 
 from ._support import ArgumentError
