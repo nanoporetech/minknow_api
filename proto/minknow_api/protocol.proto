@@ -124,7 +124,7 @@ service ProtocolService {
         option idempotency_level = NO_SIDE_EFFECTS;
     }
 
-    // Store context tags as arbitary string-to-string map
+    // Store context tags as arbitrary string-to-string map
     //
     // Since 1.11
     rpc set_context_info (SetContextInfoRequest) returns (SetContextInfoResponse) {
@@ -194,7 +194,7 @@ service ProtocolService {
 
     // Associated a post processing analysis process, and schedule it to run once the protocol is complete.
     //
-    // If the protocol is already complete, the post proecssing analysis is executed immediately.
+    // If the protocol is already complete, the post processing analysis is executed immediately.
     //
     // Since 4.4
     rpc associate_post_processing_analysis_for_protocol(AssociatePostProcessingAnalysisRequest) returns (AssociatePostProcessingAnalysisResponse) {}
@@ -247,7 +247,7 @@ message BarcodeUserData {
         // The barcode sample is a control which is expected to result in negative identification.
         negative_control = 2;
 
-        // Indended to show that a result has not occured due to contamination.
+        // Intended to show that a result has not occurred due to contamination.
         no_template_control = 3;
 
         // Separate positive controls for when kits expect 2.
@@ -285,6 +285,17 @@ message KitInfo {
 
     // The expansion barcoding kits that the protocol supports e.g. "EXP-NBD104"
     repeated string barcode_expansion_kits = 2;
+}
+
+message PassengerInfo {
+    enum Extension {
+        TXT = 0;
+        CSV = 1;
+        JSON = 2;
+    }
+    
+    bytes passenger_info = 1;
+    Extension file_extension = 2;
 }
 
 message ProtocolRunUserInfo {
@@ -363,6 +374,15 @@ message StartProtocolRequest {
     //
     // Since 5.3
     acquisition.TargetRunUntilCriteria target_run_until_criteria = 5;
+
+    // Extra info taken as bytes, that will be output to a file in the output location
+    //
+    // The filename in the output location will be in the format:
+    // passenger_info_{run_id}.{extension}
+    //
+    // If the size of this argument exceeds 2MB in size, then the call will fail
+    // with INVALID_ARGUMENT
+    PassengerInfo passenger_info = 6;
 }
 
 message StartProtocolResponse {
@@ -438,10 +458,10 @@ message ListProtocolsResponse {
 
 message WaitForFinishedRequest {
     enum NotificationState {
-        // Request return just after the protocol has temrinated, including any acquisition periods completing.
+        // Request return just after the protocol has terminated, including any acquisition periods completing.
         NOTIFY_ON_TERMINATION = 0;
 
-        // Request return prior to the script being termiated.
+        // Request return prior to the script being terminated.
         // note: will try to return 5s before killing the protocol script.
         NOTIFY_BEFORE_TERMINATION = 1;
 
@@ -579,7 +599,7 @@ message RequestOrigin {
         string identity = 1;
     }
     // A request from minknow will usually come in the form of something ending
-    // naturally, or an error occuring where minknow has to take action
+    // naturally, or an error occurring where minknow has to take action
     message MinKNOW {
         // Optional further details on the cause of the request
         string cause = 1;
@@ -788,7 +808,7 @@ message ProtocolRunInfo {
     //
     // Unset if the protocol script is still running.
     //
-    // Note that the protocol may still run until final acquisiton completes.
+    // Note that the protocol may still run until final acquisition completes.
     google.protobuf.Timestamp script_end_time = 9;
 
     // When the protocol terminated (UTC), indicating both the
@@ -1026,6 +1046,15 @@ message BeginProtocolRequest {
 
     // Any settings changed from the defaults specified in the protocol's .toml file.
     map<string, protocol_settings.ProtocolSetting.ProtocolSettingValue> settings = 4;
+
+    // Extra info taken as bytes, that will be output to a file in the output location
+    //
+    // The filename in the output location will be in the format:
+    // passenger_info_{run_id}.{extension}
+    //
+    // If the size of this argument exceeds 2MB in size, then the call will fail
+    // with INVALID_ARGUMENT
+    PassengerInfo passenger_info = 7;
 }
 
 message BeginProtocolResponse {

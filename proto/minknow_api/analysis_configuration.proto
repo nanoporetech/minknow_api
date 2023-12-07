@@ -5,6 +5,7 @@ package minknow_api.analysis_configuration;
 option java_package = "com.nanoporetech.minknow_api";
 option objc_class_prefix = "MKAPI";
 
+import "google/protobuf/duration.proto";
 import "google/protobuf/wrappers.proto";
 import "minknow_api/rpc_options.proto";
 
@@ -759,6 +760,9 @@ message BasecallerConfiguration
         google.protobuf.UInt64Value min_bases = 4;
         google.protobuf.UInt64Value max_bases = 5;
         google.protobuf.UInt64Value max_failed_chunks = 6;
+        
+        // Since 5.8
+        google.protobuf.DoubleValue min_duplex_qscore = 7;
     }
 
     // Since 3.7
@@ -1051,6 +1055,22 @@ message WriterConfiguration {
             // Number of estimated bases within a batch before it rotates to a new batch
             uint64 bases_per_batch = 15;
         }
+
+        // The batch duration, for time-based batching
+        //
+        // If time-based batching is enabled then, in addition to completing batches when the
+        // `batch_count` or `bases_per_batch` target (above) is reached, batches will also be
+        // completed when:
+        // - At least one read has been written to the batch, AND
+        // - `batch_duration` has elapsed since the last batch was completed (or since the start
+        //   of the acquisition, for the first batch)
+        //
+        // If this field is not set, then the default time-based batching configuration will be
+        // used.  If this field is set to zero or a negative value, then time-based batching will
+        // be disabled.
+        //
+        // Since 5.6
+        google.protobuf.Duration batch_duration = 16;
     }
 
     message ReadFastqConfiguration {
@@ -1084,6 +1104,30 @@ message WriterConfiguration {
         // Compress fastq files with gzip compression.
         // default: false
         bool compression = 5;
+
+        // Since 5.8
+        // Prevent reads which have successfully basecalled being written to fastq.
+        bool disable_writing_passed_reads = 7;
+        // Prevent reads which have failed basecalling being written to fastq.
+        bool disable_writing_failed_reads = 8;
+        // disable writing reads which have been force skipped by the basecaller.
+        bool disable_writing_force_skipped_reads = 9;
+
+        // The batch duration, for time-based batching
+        //
+        // If time-based batching is enabled then, in addition to completing batches when the
+        // `batch_count` or `bases_per_batch` target (above) is reached, batches will also be
+        // completed when:
+        // - At least one read has been written to the batch, AND
+        // - `batch_duration` has elapsed since the last batch was completed (or since the start
+        //   of the acquisition, for the first batch)
+        //
+        // If this field is not set, then the default time-based batching configuration will be
+        // used.  If this field is set to zero or a negative value, then time-based batching will
+        // be disabled.
+        //
+        // Since 5.6
+        google.protobuf.Duration batch_duration = 10;
     }
 
     message ReadBamConfiguration {
@@ -1109,6 +1153,30 @@ message WriterConfiguration {
 
         // If true minknow will only write the primary alignment for each read.
         bool disable_writing_multiple_alignments = 4;
+
+        // Since 5.8
+        // Prevent reads which have successfully basecalled being written to bam.
+        bool disable_writing_passed_reads = 6;
+        // Prevent reads which have failed basecalling being written to bam.
+        bool disable_writing_failed_reads = 7;
+        // disable writing reads which have been force skipped by the basecaller.
+        bool disable_writing_force_skipped_reads = 8;
+
+        // The batch duration, for time-based batching
+        //
+        // If time-based batching is enabled then, in addition to completing batches when the
+        // `batch_count` or `bases_per_batch` target (above) is reached, batches will also be
+        // completed when:
+        // - At least one read has been written to the batch, AND
+        // - `batch_duration` has elapsed since the last batch was completed (or since the start
+        //   of the acquisition, for the first batch)
+        //
+        // If this field is not set, then the default time-based batching configuration will be
+        // used.  If this field is set to zero or a negative value, then time-based batching will
+        // be disabled.
+        //
+        // Since 5.6
+        google.protobuf.Duration batch_duration = 9;
     }
 
     message ReadPod5Configuration {
@@ -1138,29 +1206,22 @@ message WriterConfiguration {
         bool disable_writing_failed_reads = 5;
         // disable writing reads which have been force skipped by the basecaller.
         bool disable_writing_force_skipped_reads = 6;
-    }
 
-    message ReadProtobufConfiguration {
-        // Control if a protobuf file should be generated per channel.
-        ChannelConfiguration enable = 1;
-
-        // The pattern used to find a protobuf files name.
+        // The batch duration, for time-based batching
         //
-        // default: pbread{basecall_status}/{batch_number}/{flow_cell_id}_{run_id}_ch_{channel_name}_read_{read_number}.pbread
-        // Where each {xxx} section is replaced with an attribute from the minknow state
-        // when the file is written.
+        // If time-based batching is enabled then, in addition to completing batches when the
+        // `batch_count` or `bases_per_batch` target (above) is reached, batches will also be
+        // completed when:
+        // - At least one read has been written to the batch, AND
+        // - `batch_duration` has elapsed since the last batch was completed (or since the start
+        //   of the acquisition, for the first batch)
         //
-        // See file pattern attributes above.
-        string file_pattern = 2;
-
-        oneof batch_info {
-            // How many reads are placed in each batch (after batch_count reads {batch_number}
-            // is increased in the pattern).
-            uint32 batch_count = 3;
-
-            // Number of estimated bases within a batch before it rotates to a new batch
-            uint64 bases_per_batch = 4;
-        }
+        // If this field is not set, then the default time-based batching configuration will be
+        // used.  If this field is set to zero or a negative value, then time-based batching will
+        // be disabled.
+        //
+        // Since 5.6
+        google.protobuf.Duration batch_duration = 8;
     }
 
     message SequencingSummaryConfiguration {
@@ -1369,11 +1430,6 @@ message WriterConfiguration {
     //
     // If not specified no POD5 outputs are generated.
     ReadPod5Configuration read_pod5 = 10;
-
-    // Configuration for the protobuf writer.
-    //
-    // If not specified, no protobuf outputs are generated.
-    ReadProtobufConfiguration read_protobuf = 4;
 
     // Configuration for Sequencing Summary file
     //

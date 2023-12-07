@@ -29,6 +29,11 @@ class LogServiceStub(object):
                 request_serializer=minknow__api_dot_log__pb2.SendPingRequest.SerializeToString,
                 response_deserializer=minknow__api_dot_log__pb2.SendPingResponse.FromString,
                 )
+        self.collect_pings = channel.unary_stream(
+                '/minknow_api.log.LogService/collect_pings',
+                request_serializer=minknow__api_dot_log__pb2.CollectPingsRequest.SerializeToString,
+                response_deserializer=minknow__api_dot_log__pb2.CollectPingsResponse.FromString,
+                )
 
 
 class LogServiceServicer(object):
@@ -68,6 +73,18 @@ class LogServiceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def collect_pings(self, request, context):
+        """Collect any pings that haven't been sent yet and write them into a file
+        instead of sending them.  Once collected, the pings cannot be collected
+        again and will be cleaned-up at a time determined by their
+        expiry-period/lifetime.
+
+        Since 5.8 and backported to 5.6
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_LogServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -85,6 +102,11 @@ def add_LogServiceServicer_to_server(servicer, server):
                     servicer.send_ping,
                     request_deserializer=minknow__api_dot_log__pb2.SendPingRequest.FromString,
                     response_serializer=minknow__api_dot_log__pb2.SendPingResponse.SerializeToString,
+            ),
+            'collect_pings': grpc.unary_stream_rpc_method_handler(
+                    servicer.collect_pings,
+                    request_deserializer=minknow__api_dot_log__pb2.CollectPingsRequest.FromString,
+                    response_serializer=minknow__api_dot_log__pb2.CollectPingsResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -144,5 +166,22 @@ class LogService(object):
         return grpc.experimental.unary_unary(request, target, '/minknow_api.log.LogService/send_ping',
             minknow__api_dot_log__pb2.SendPingRequest.SerializeToString,
             minknow__api_dot_log__pb2.SendPingResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def collect_pings(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_stream(request, target, '/minknow_api.log.LogService/collect_pings',
+            minknow__api_dot_log__pb2.CollectPingsRequest.SerializeToString,
+            minknow__api_dot_log__pb2.CollectPingsResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

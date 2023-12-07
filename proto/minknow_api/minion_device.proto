@@ -318,7 +318,7 @@ message MinionDeviceSettings {
 
     // Whether to enable detection of excessive current.
     //
-    // The ADC output of a channel that trips the overcurrent depends on what track and hold gain
+    // The ADC output of a channel that trips the over-current depends on what track and hold gain
     // has been set to.
     //
     // Default is enabled.
@@ -428,7 +428,7 @@ message MinionDeviceSettings {
     //
     // "Soft" temperature control is a more intelligent temperature control algorithm. It works on a
     // single target temperature, and dynamically adjusts the fan speed to reach that temperature
-    // quickly, and then mainains the target temperature with high precision.
+    // quickly, and then maintains the target temperature with high precision.
     //
     // If this is disabled, "hard" temperature control is used instead. This is a naive algorithm
     // that simply turns the fan up when dropping below the minimum temperature and turns it down

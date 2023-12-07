@@ -15,7 +15,7 @@ from minknow_api import acquisition_pb2 as minknow__api_dot_acquisition__pb2
 from minknow_api import rpc_options_pb2 as minknow__api_dot_rpc__options__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x1cminknow_api/statistics.proto\x12\x16minknow_api.statistics\x1a\x1dminknow_api/acquisition.proto\x1a\x1dminknow_api/rpc_options.proto\"9\n\rDataSelection\x12\r\n\x05start\x18\x01 \x01(\x03\x12\x0c\n\x04step\x18\x02 \x01(\x04\x12\x0b\n\x03\x65nd\x18\x03 \x01(\x03\"x\n\x15StreamDutyTimeRequest\x12 \n\x12\x61\x63quisition_run_id\x18\x01 \x01(\tB\x04\x88\xb5\x18\x01\x12=\n\x0e\x64\x61ta_selection\x18\x02 \x01(\x0b\x32%.minknow_api.statistics.DataSelection\"\x91\x03\n\x16StreamDutyTimeResponse\x12Q\n\rbucket_ranges\x18\x01 \x03(\x0b\x32:.minknow_api.statistics.StreamDutyTimeResponse.BucketRange\x12Y\n\x0e\x63hannel_states\x18\x02 \x03(\x0b\x32\x41.minknow_api.statistics.StreamDutyTimeResponse.ChannelStatesEntry\x1a)\n\x0b\x42ucketRange\x12\r\n\x05start\x18\x01 \x01(\r\x12\x0b\n\x03\x65nd\x18\x02 \x01(\r\x1a\'\n\x10\x43hannelStateData\x12\x13\n\x0bstate_times\x18\x01 \x03(\x04\x1au\n\x12\x43hannelStatesEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12N\n\x05value\x18\x02 \x01(\x0b\x32?.minknow_api.statistics.StreamDutyTimeResponse.ChannelStateData:\x02\x38\x01\"X\n\x16ReadLengthHistogramKey\x12>\n\x0fread_end_reason\x18\x01 \x01(\x0e\x32%.minknow_api.statistics.ReadEndReason\"3\n\x18ReadLengthHistogramSplit\x12\x17\n\x0fread_end_reason\x18\x01 \x01(\x08\"\xc9\x03\n StreamReadLengthHistogramRequest\x12 \n\x12\x61\x63quisition_run_id\x18\x01 \x01(\tB\x04\x88\xb5\x18\x01\x12\x19\n\x11poll_time_seconds\x18\x02 \x01(\r\x12@\n\x10read_length_type\x18\x03 \x01(\x0e\x32&.minknow_api.statistics.ReadLengthType\x12=\n\x0e\x64\x61ta_selection\x18\x04 \x01(\x0b\x32%.minknow_api.statistics.DataSelection\x12\x42\n\x11\x62ucket_value_type\x18\x05 \x01(\x0e\x32\'.minknow_api.statistics.BucketValueType\x12\x1f\n\x17\x64iscard_outlier_percent\x18\x06 \x01(\x02\x12\x41\n\tfiltering\x18\x07 \x03(\x0b\x32..minknow_api.statistics.ReadLengthHistogramKey\x12?\n\x05split\x18\x08 \x01(\x0b\x32\x30.minknow_api.statistics.ReadLengthHistogramSplit\"\xb9\x04\n!StreamReadLengthHistogramResponse\x12@\n\x10read_length_type\x18\x01 \x01(\x0e\x32&.minknow_api.statistics.ReadLengthType\x12\\\n\rbucket_ranges\x18\x02 \x03(\x0b\x32\x45.minknow_api.statistics.StreamReadLengthHistogramResponse.BucketRange\x12\x17\n\x0fsource_data_end\x18\x05 \x01(\x04\x12\x42\n\x11\x62ucket_value_type\x18\x03 \x01(\x0e\x32\'.minknow_api.statistics.BucketValueType\x12i\n\x0ehistogram_data\x18\x04 \x03(\x0b\x32Q.minknow_api.statistics.StreamReadLengthHistogramResponse.ReadLengthHistogramData\x1a)\n\x0b\x42ucketRange\x12\r\n\x05start\x18\x01 \x01(\x04\x12\x0b\n\x03\x65nd\x18\x02 \x01(\x04\x1a\x80\x01\n\x17ReadLengthHistogramData\x12\x41\n\tfiltering\x18\x03 \x03(\x0b\x32..minknow_api.statistics.ReadLengthHistogramKey\x12\x15\n\rbucket_values\x18\x01 \x03(\x04\x12\x0b\n\x03n50\x18\x02 \x01(\x02\"8\n\x14ReadLengthN50Request\x12 \n\x12\x61\x63quisition_run_id\x18\x01 \x01(\tB\x04\x88\xb5\x18\x01\"\xa2\x01\n\x15ReadLengthN50Response\x12K\n\x08n50_data\x18\x01 \x01(\x0b\x32\x39.minknow_api.statistics.ReadLengthN50Response.ReadN50Data\x1a<\n\x0bReadN50Data\x12\x15\n\restimated_n50\x18\x01 \x01(\x02\x12\x16\n\x0e\x62\x61secalled_n50\x18\x02 \x01(\x02\"=\n\x19GetReadLengthTypesRequest\x12 \n\x12\x61\x63quisition_run_id\x18\x01 \x01(\tB\x04\x88\xb5\x18\x01\"]\n\x1aGetReadLengthTypesResponse\x12?\n\x0f\x61vailable_types\x18\x01 \x03(\x0e\x32&.minknow_api.statistics.ReadLengthType\"\x9c\x02\n\x14\x41\x63quisitionOutputKey\x12\x14\n\x0c\x62\x61rcode_name\x18\x01 \x01(\t\x12\x1b\n\x13\x61lignment_reference\x18\x02 \x01(\t\x12!\n\x19\x61lignment_bed_file_region\x18\x03 \x01(\t\x12&\n\x1e\x61lignment_bed_file_region_name\x18\x08 \x01(\t\x12\x17\n\x0flamp_barcode_id\x18\x04 \x01(\t\x12\x16\n\x0elamp_target_id\x18\x05 \x01(\t\x12\x15\n\rbarcode_alias\x18\x06 \x01(\t\x12>\n\x0fread_end_reason\x18\x07 \x01(\x0e\x32%.minknow_api.statistics.ReadEndReason\"\xb8\x01\n\x16\x41\x63quisitionOutputSplit\x12\x14\n\x0c\x62\x61rcode_name\x18\x01 \x01(\x08\x12\x1b\n\x13\x61lignment_reference\x18\x02 \x01(\x08\x12!\n\x19\x61lignment_bed_file_region\x18\x03 \x01(\x08\x12\x17\n\x0flamp_barcode_id\x18\x04 \x01(\x08\x12\x16\n\x0elamp_target_id\x18\x05 \x01(\x08\x12\x17\n\x0fread_end_reason\x18\x06 \x01(\x08\"\x81\x02\n\x1eStreamAcquisitionOutputRequest\x12 \n\x12\x61\x63quisition_run_id\x18\x01 \x01(\tB\x04\x88\xb5\x18\x01\x12=\n\x0e\x64\x61ta_selection\x18\x02 \x01(\x0b\x32%.minknow_api.statistics.DataSelection\x12?\n\tfiltering\x18\x03 \x03(\x0b\x32,.minknow_api.statistics.AcquisitionOutputKey\x12=\n\x05split\x18\x04 \x01(\x0b\x32..minknow_api.statistics.AcquisitionOutputSplit\"u\n\x19\x41\x63quisitionOutputSnapshot\x12\x0f\n\x07seconds\x18\x01 \x01(\r\x12G\n\ryield_summary\x18\x02 \x01(\x0b\x32\x30.minknow_api.acquisition.AcquisitionYieldSummary\"\x9c\x02\n\x1fStreamAcquisitionOutputResponse\x12\\\n\tsnapshots\x18\x01 \x03(\x0b\x32I.minknow_api.statistics.StreamAcquisitionOutputResponse.FilteredSnapshots\x1a\x9a\x01\n\x11\x46ilteredSnapshots\x12?\n\tfiltering\x18\x01 \x03(\x0b\x32,.minknow_api.statistics.AcquisitionOutputKey\x12\x44\n\tsnapshots\x18\x02 \x03(\x0b\x32\x31.minknow_api.statistics.AcquisitionOutputSnapshot\"|\n\x19StreamWriterOutputRequest\x12 \n\x12\x61\x63quisition_run_id\x18\x01 \x01(\tB\x04\x88\xb5\x18\x01\x12=\n\x0e\x64\x61ta_selection\x18\x02 \x01(\x0b\x32%.minknow_api.statistics.DataSelection\"q\n\x14WriterOutputSnapshot\x12\x0f\n\x07seconds\x18\x01 \x01(\r\x12H\n\rwriter_output\x18\x02 \x01(\x0b\x32\x31.minknow_api.acquisition.AcquisitionWriterSummary\"]\n\x1aStreamWriterOutputResponse\x12?\n\tsnapshots\x18\x01 \x03(\x0b\x32,.minknow_api.statistics.WriterOutputSnapshot\"Q\n-StreamEncounteredAcquisitionOutputKeysRequest\x12 \n\x12\x61\x63quisition_run_id\x18\x01 \x01(\tB\x04\x88\xb5\x18\x01\"\x7f\n.StreamEncounteredAcquisitionOutputKeysResponse\x12M\n\x17\x61\x63quisition_output_keys\x18\x01 \x03(\x0b\x32,.minknow_api.statistics.AcquisitionOutputKey\"{\n\x18StreamTemperatureRequest\x12 \n\x12\x61\x63quisition_run_id\x18\x01 \x01(\tB\x04\x88\xb5\x18\x01\x12=\n\x0e\x64\x61ta_selection\x18\x02 \x01(\x0b\x32%.minknow_api.statistics.DataSelection\"\xe1\x03\n\x11TemperaturePacket\x12M\n\x06minion\x18\x01 \x01(\x0b\x32;.minknow_api.statistics.TemperaturePacket.MinIONTemperatureH\x00\x12U\n\npromethion\x18\x02 \x01(\x0b\x32?.minknow_api.statistics.TemperaturePacket.PromethIONTemperatureH\x00\x12K\n\x12target_temperature\x18\x03 \x01(\x0b\x32/.minknow_api.statistics.TemperaturePacket.Range\x1a)\n\x05Range\x12\x0f\n\x07minimum\x18\x01 \x01(\x02\x12\x0f\n\x07maximum\x18\x02 \x01(\x02\x1aK\n\x11MinIONTemperature\x12\x18\n\x10\x61sic_temperature\x18\x01 \x01(\x01\x12\x1c\n\x14heatsink_temperature\x18\x02 \x01(\x01\x1aR\n\x15PromethIONTemperature\x12\x1c\n\x14\x66lowcell_temperature\x18\x01 \x01(\x01\x12\x1b\n\x13\x63hamber_temperature\x18\x02 \x01(\x01\x42\r\n\x0btemperature\"\\\n\x19StreamTemperatureResponse\x12?\n\x0ctemperatures\x18\x01 \x03(\x0b\x32).minknow_api.statistics.TemperaturePacket\"Z\n\x11\x42iasVoltagePacket\x12\x19\n\x11\x61\x63quisition_index\x18\x01 \x01(\x04\x12\x14\n\x0c\x62ias_voltage\x18\x02 \x01(\x01\x12\x14\n\x0ctime_seconds\x18\x03 \x01(\x04\"=\n\x19StreamBiasVoltagesRequest\x12 \n\x12\x61\x63quisition_run_id\x18\x01 \x01(\tB\x04\x88\xb5\x18\x01\"^\n\x1aStreamBiasVoltagesResponse\x12@\n\rbias_voltages\x18\x01 \x03(\x0b\x32).minknow_api.statistics.BiasVoltagePacket\"\xee\x01\n\x14StreamBoxplotRequest\x12 \n\x12\x61\x63quisition_run_id\x18\x01 \x01(\tB\x04\x88\xb5\x18\x01\x12K\n\tdata_type\x18\x02 \x01(\x0e\x32\x38.minknow_api.statistics.StreamBoxplotRequest.BoxplotType\x12\x15\n\rdataset_width\x18\x03 \x01(\r\x12\x11\n\tpoll_time\x18\x04 \x01(\r\"=\n\x0b\x42oxplotType\x12\n\n\x06QSCORE\x10\x00\x12\x14\n\x10\x42\x41SES_PER_SECOND\x10\x01\x12\x0c\n\x08\x41\x43\x43URACY\x10\x02\"\x9a\x02\n\x0f\x42oxplotResponse\x12H\n\x08\x64\x61tasets\x18\x01 \x03(\x0b\x32\x36.minknow_api.statistics.BoxplotResponse.BoxplotDataset\x1a\xbc\x01\n\x0e\x42oxplotDataset\x12\x0b\n\x03min\x18\x01 \x01(\x02\x12\x0b\n\x03q25\x18\x02 \x01(\x02\x12\x0b\n\x03q50\x18\x03 \x01(\x02\x12\x0b\n\x03q75\x18\x04 \x01(\x02\x12\x0b\n\x03max\x18\x05 \x01(\x02\x12\r\n\x05\x63ount\x18\x06 \x01(\x04\x12%\n\x1dlower_full_width_half_maximum\x18\x07 \x01(\x02\x12\x0c\n\x04mode\x18\x08 \x01(\x02\x12%\n\x1dupper_full_width_half_maximum\x18\t \x01(\x02*L\n\x0eReadLengthType\x12\x11\n\rMinknowEvents\x10\x00\x12\x12\n\x0e\x45stimatedBases\x10\x01\x12\x13\n\x0f\x42\x61secalledBases\x10\x02*2\n\x0f\x42ucketValueType\x12\x0e\n\nReadCounts\x10\x00\x12\x0f\n\x0bReadLengths\x10\x01*\xa0\x01\n\rReadEndReason\x12\x07\n\x03\x41ll\x10\x00\x12\x0b\n\x07Unknown\x10\x01\x12\x0b\n\x07Partial\x10\x02\x12\r\n\tMuxChange\x10\x03\x12\x14\n\x10UnblockMuxChange\x10\x04\x12\x12\n\x0eSignalPositive\x10\x05\x12\x12\n\x0eSignalNegative\x10\x06\x12\x1f\n\x1b\x44\x61taServiceUnblockMuxChange\x10\x07\x32\x8b\x0b\n\x11StatisticsService\x12x\n\x10stream_duty_time\x12-.minknow_api.statistics.StreamDutyTimeRequest\x1a..minknow_api.statistics.StreamDutyTimeResponse\"\x03\x90\x02\x01\x30\x01\x12\x93\x01\n\x19stream_acquisition_output\x12\x36.minknow_api.statistics.StreamAcquisitionOutputRequest\x1a\x37.minknow_api.statistics.StreamAcquisitionOutputResponse\"\x03\x90\x02\x01\x30\x01\x12\x84\x01\n\x14stream_writer_output\x12\x31.minknow_api.statistics.StreamWriterOutputRequest\x1a\x32.minknow_api.statistics.StreamWriterOutputResponse\"\x03\x90\x02\x01\x30\x01\x12\xc2\x01\n*stream_encountered_acquisition_output_keys\x12\x45.minknow_api.statistics.StreamEncounteredAcquisitionOutputKeysRequest\x1a\x46.minknow_api.statistics.StreamEncounteredAcquisitionOutputKeysResponse\"\x03\x90\x02\x01\x30\x01\x12\x80\x01\n\x12stream_temperature\x12\x30.minknow_api.statistics.StreamTemperatureRequest\x1a\x31.minknow_api.statistics.StreamTemperatureResponse\"\x03\x90\x02\x01\x30\x01\x12\x84\x01\n\x14stream_bias_voltages\x12\x31.minknow_api.statistics.StreamBiasVoltagesRequest\x1a\x32.minknow_api.statistics.StreamBiasVoltagesResponse\"\x03\x90\x02\x01\x30\x01\x12\x9a\x01\n\x1cstream_read_length_histogram\x12\x38.minknow_api.statistics.StreamReadLengthHistogramRequest\x1a\x39.minknow_api.statistics.StreamReadLengthHistogramResponse\"\x03\x90\x02\x01\x30\x01\x12s\n\x0fread_length_n50\x12,.minknow_api.statistics.ReadLengthN50Request\x1a-.minknow_api.statistics.ReadLengthN50Response\"\x03\x90\x02\x01\x12\x83\x01\n\x15get_read_length_types\x12\x31.minknow_api.statistics.GetReadLengthTypesRequest\x1a\x32.minknow_api.statistics.GetReadLengthTypesResponse\"\x03\x90\x02\x01\x12x\n\x18stream_basecall_boxplots\x12,.minknow_api.statistics.StreamBoxplotRequest\x1a\'.minknow_api.statistics.BoxplotResponse\"\x03\x90\x02\x01\x30\x01\x42&\n\x1c\x63om.nanoporetech.minknow_api\xa2\x02\x05MKAPIb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x1cminknow_api/statistics.proto\x12\x16minknow_api.statistics\x1a\x1dminknow_api/acquisition.proto\x1a\x1dminknow_api/rpc_options.proto\"9\n\rDataSelection\x12\r\n\x05start\x18\x01 \x01(\x03\x12\x0c\n\x04step\x18\x02 \x01(\x04\x12\x0b\n\x03\x65nd\x18\x03 \x01(\x03\"h\n\x12\x46loatDataSelection\x12\x12\n\x05start\x18\x01 \x01(\x02H\x00\x88\x01\x01\x12\x11\n\x04step\x18\x02 \x01(\x02H\x01\x88\x01\x01\x12\x10\n\x03\x65nd\x18\x03 \x01(\x02H\x02\x88\x01\x01\x42\x08\n\x06_startB\x07\n\x05_stepB\x06\n\x04_end\"x\n\x15StreamDutyTimeRequest\x12 \n\x12\x61\x63quisition_run_id\x18\x01 \x01(\tB\x04\x88\xb5\x18\x01\x12=\n\x0e\x64\x61ta_selection\x18\x02 \x01(\x0b\x32%.minknow_api.statistics.DataSelection\"\x91\x03\n\x16StreamDutyTimeResponse\x12Q\n\rbucket_ranges\x18\x01 \x03(\x0b\x32:.minknow_api.statistics.StreamDutyTimeResponse.BucketRange\x12Y\n\x0e\x63hannel_states\x18\x02 \x03(\x0b\x32\x41.minknow_api.statistics.StreamDutyTimeResponse.ChannelStatesEntry\x1a)\n\x0b\x42ucketRange\x12\r\n\x05start\x18\x01 \x01(\r\x12\x0b\n\x03\x65nd\x18\x02 \x01(\r\x1a\'\n\x10\x43hannelStateData\x12\x13\n\x0bstate_times\x18\x01 \x03(\x04\x1au\n\x12\x43hannelStatesEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12N\n\x05value\x18\x02 \x01(\x0b\x32?.minknow_api.statistics.StreamDutyTimeResponse.ChannelStateData:\x02\x38\x01\"X\n\x16ReadLengthHistogramKey\x12>\n\x0fread_end_reason\x18\x01 \x01(\x0e\x32%.minknow_api.statistics.ReadEndReason\"3\n\x18ReadLengthHistogramSplit\x12\x17\n\x0fread_end_reason\x18\x01 \x01(\x08\"\xc9\x03\n StreamReadLengthHistogramRequest\x12 \n\x12\x61\x63quisition_run_id\x18\x01 \x01(\tB\x04\x88\xb5\x18\x01\x12\x19\n\x11poll_time_seconds\x18\x02 \x01(\r\x12@\n\x10read_length_type\x18\x03 \x01(\x0e\x32&.minknow_api.statistics.ReadLengthType\x12=\n\x0e\x64\x61ta_selection\x18\x04 \x01(\x0b\x32%.minknow_api.statistics.DataSelection\x12\x42\n\x11\x62ucket_value_type\x18\x05 \x01(\x0e\x32\'.minknow_api.statistics.BucketValueType\x12\x1f\n\x17\x64iscard_outlier_percent\x18\x06 \x01(\x02\x12\x41\n\tfiltering\x18\x07 \x03(\x0b\x32..minknow_api.statistics.ReadLengthHistogramKey\x12?\n\x05split\x18\x08 \x01(\x0b\x32\x30.minknow_api.statistics.ReadLengthHistogramSplit\"\xb9\x04\n!StreamReadLengthHistogramResponse\x12@\n\x10read_length_type\x18\x01 \x01(\x0e\x32&.minknow_api.statistics.ReadLengthType\x12\\\n\rbucket_ranges\x18\x02 \x03(\x0b\x32\x45.minknow_api.statistics.StreamReadLengthHistogramResponse.BucketRange\x12\x17\n\x0fsource_data_end\x18\x05 \x01(\x04\x12\x42\n\x11\x62ucket_value_type\x18\x03 \x01(\x0e\x32\'.minknow_api.statistics.BucketValueType\x12i\n\x0ehistogram_data\x18\x04 \x03(\x0b\x32Q.minknow_api.statistics.StreamReadLengthHistogramResponse.ReadLengthHistogramData\x1a)\n\x0b\x42ucketRange\x12\r\n\x05start\x18\x01 \x01(\x04\x12\x0b\n\x03\x65nd\x18\x02 \x01(\x04\x1a\x80\x01\n\x17ReadLengthHistogramData\x12\x41\n\tfiltering\x18\x03 \x03(\x0b\x32..minknow_api.statistics.ReadLengthHistogramKey\x12\x15\n\rbucket_values\x18\x01 \x03(\x04\x12\x0b\n\x03n50\x18\x02 \x01(\x02\"8\n\x14ReadLengthN50Request\x12 \n\x12\x61\x63quisition_run_id\x18\x01 \x01(\tB\x04\x88\xb5\x18\x01\"\xa2\x01\n\x15ReadLengthN50Response\x12K\n\x08n50_data\x18\x01 \x01(\x0b\x32\x39.minknow_api.statistics.ReadLengthN50Response.ReadN50Data\x1a<\n\x0bReadN50Data\x12\x15\n\restimated_n50\x18\x01 \x01(\x02\x12\x16\n\x0e\x62\x61secalled_n50\x18\x02 \x01(\x02\"=\n\x19GetReadLengthTypesRequest\x12 \n\x12\x61\x63quisition_run_id\x18\x01 \x01(\tB\x04\x88\xb5\x18\x01\"]\n\x1aGetReadLengthTypesResponse\x12?\n\x0f\x61vailable_types\x18\x01 \x03(\x0e\x32&.minknow_api.statistics.ReadLengthType\"\x8a\x01\n\x12QScoreHistogramKey\x12\x46\n\tread_type\x18\x01 \x01(\x0e\x32\x33.minknow_api.statistics.QScoreHistogramKey.ReadType\",\n\x08ReadType\x12\x07\n\x03\x41ll\x10\x00\x12\x0b\n\x07Simplex\x10\x01\x12\n\n\x06\x44uplex\x10\x02\"\xf2\x01\n\x1cStreamQScoreHistogramRequest\x12 \n\x12\x61\x63quisition_run_id\x18\x01 \x01(\tB\x04\x88\xb5\x18\x01\x12\x19\n\x11poll_time_seconds\x18\x02 \x01(\r\x12\x42\n\x0e\x64\x61ta_selection\x18\x03 \x01(\x0b\x32*.minknow_api.statistics.FloatDataSelection\x12Q\n\x11\x62ucket_value_type\x18\x04 \x01(\x0e\x32\x36.minknow_api.statistics.QScoreHistogramBucketValueType\"\xbd\x04\n\x1dStreamQScoreHistogramResponse\x12Q\n\x11\x62ucket_value_type\x18\x01 \x01(\x0e\x32\x36.minknow_api.statistics.QScoreHistogramBucketValueType\x12X\n\rbucket_ranges\x18\x02 \x03(\x0b\x32\x41.minknow_api.statistics.StreamQScoreHistogramResponse.BucketRange\x12\\\n\x11source_data_range\x18\x03 \x01(\x0b\x32\x41.minknow_api.statistics.StreamQScoreHistogramResponse.BucketRange\x12\x61\n\x0ehistogram_data\x18\x04 \x03(\x0b\x32I.minknow_api.statistics.StreamQScoreHistogramResponse.QScoreHistogramData\x1a)\n\x0b\x42ucketRange\x12\r\n\x05start\x18\x01 \x01(\x02\x12\x0b\n\x03\x65nd\x18\x02 \x01(\x02\x1a\x82\x01\n\x13QScoreHistogramData\x12=\n\tfiltering\x18\x01 \x03(\x0b\x32*.minknow_api.statistics.QScoreHistogramKey\x12\x15\n\rbucket_values\x18\x02 \x03(\x04\x12\x15\n\rmodal_q_score\x18\x03 \x01(\x02\"\x9c\x02\n\x14\x41\x63quisitionOutputKey\x12\x14\n\x0c\x62\x61rcode_name\x18\x01 \x01(\t\x12\x1b\n\x13\x61lignment_reference\x18\x02 \x01(\t\x12!\n\x19\x61lignment_bed_file_region\x18\x03 \x01(\t\x12&\n\x1e\x61lignment_bed_file_region_name\x18\x08 \x01(\t\x12\x17\n\x0flamp_barcode_id\x18\x04 \x01(\t\x12\x16\n\x0elamp_target_id\x18\x05 \x01(\t\x12\x15\n\rbarcode_alias\x18\x06 \x01(\t\x12>\n\x0fread_end_reason\x18\x07 \x01(\x0e\x32%.minknow_api.statistics.ReadEndReason\"\xb8\x01\n\x16\x41\x63quisitionOutputSplit\x12\x14\n\x0c\x62\x61rcode_name\x18\x01 \x01(\x08\x12\x1b\n\x13\x61lignment_reference\x18\x02 \x01(\x08\x12!\n\x19\x61lignment_bed_file_region\x18\x03 \x01(\x08\x12\x17\n\x0flamp_barcode_id\x18\x04 \x01(\x08\x12\x16\n\x0elamp_target_id\x18\x05 \x01(\x08\x12\x17\n\x0fread_end_reason\x18\x06 \x01(\x08\"\x81\x02\n\x1eStreamAcquisitionOutputRequest\x12 \n\x12\x61\x63quisition_run_id\x18\x01 \x01(\tB\x04\x88\xb5\x18\x01\x12=\n\x0e\x64\x61ta_selection\x18\x02 \x01(\x0b\x32%.minknow_api.statistics.DataSelection\x12?\n\tfiltering\x18\x03 \x03(\x0b\x32,.minknow_api.statistics.AcquisitionOutputKey\x12=\n\x05split\x18\x04 \x01(\x0b\x32..minknow_api.statistics.AcquisitionOutputSplit\"u\n\x19\x41\x63quisitionOutputSnapshot\x12\x0f\n\x07seconds\x18\x01 \x01(\r\x12G\n\ryield_summary\x18\x02 \x01(\x0b\x32\x30.minknow_api.acquisition.AcquisitionYieldSummary\"\x9c\x02\n\x1fStreamAcquisitionOutputResponse\x12\\\n\tsnapshots\x18\x01 \x03(\x0b\x32I.minknow_api.statistics.StreamAcquisitionOutputResponse.FilteredSnapshots\x1a\x9a\x01\n\x11\x46ilteredSnapshots\x12?\n\tfiltering\x18\x01 \x03(\x0b\x32,.minknow_api.statistics.AcquisitionOutputKey\x12\x44\n\tsnapshots\x18\x02 \x03(\x0b\x32\x31.minknow_api.statistics.AcquisitionOutputSnapshot\"|\n\x19StreamWriterOutputRequest\x12 \n\x12\x61\x63quisition_run_id\x18\x01 \x01(\tB\x04\x88\xb5\x18\x01\x12=\n\x0e\x64\x61ta_selection\x18\x02 \x01(\x0b\x32%.minknow_api.statistics.DataSelection\"q\n\x14WriterOutputSnapshot\x12\x0f\n\x07seconds\x18\x01 \x01(\r\x12H\n\rwriter_output\x18\x02 \x01(\x0b\x32\x31.minknow_api.acquisition.AcquisitionWriterSummary\"]\n\x1aStreamWriterOutputResponse\x12?\n\tsnapshots\x18\x01 \x03(\x0b\x32,.minknow_api.statistics.WriterOutputSnapshot\"Q\n-StreamEncounteredAcquisitionOutputKeysRequest\x12 \n\x12\x61\x63quisition_run_id\x18\x01 \x01(\tB\x04\x88\xb5\x18\x01\"\x7f\n.StreamEncounteredAcquisitionOutputKeysResponse\x12M\n\x17\x61\x63quisition_output_keys\x18\x01 \x03(\x0b\x32,.minknow_api.statistics.AcquisitionOutputKey\"{\n\x18StreamTemperatureRequest\x12 \n\x12\x61\x63quisition_run_id\x18\x01 \x01(\tB\x04\x88\xb5\x18\x01\x12=\n\x0e\x64\x61ta_selection\x18\x02 \x01(\x0b\x32%.minknow_api.statistics.DataSelection\"\xe1\x03\n\x11TemperaturePacket\x12M\n\x06minion\x18\x01 \x01(\x0b\x32;.minknow_api.statistics.TemperaturePacket.MinIONTemperatureH\x00\x12U\n\npromethion\x18\x02 \x01(\x0b\x32?.minknow_api.statistics.TemperaturePacket.PromethIONTemperatureH\x00\x12K\n\x12target_temperature\x18\x03 \x01(\x0b\x32/.minknow_api.statistics.TemperaturePacket.Range\x1a)\n\x05Range\x12\x0f\n\x07minimum\x18\x01 \x01(\x02\x12\x0f\n\x07maximum\x18\x02 \x01(\x02\x1aK\n\x11MinIONTemperature\x12\x18\n\x10\x61sic_temperature\x18\x01 \x01(\x01\x12\x1c\n\x14heatsink_temperature\x18\x02 \x01(\x01\x1aR\n\x15PromethIONTemperature\x12\x1c\n\x14\x66lowcell_temperature\x18\x01 \x01(\x01\x12\x1b\n\x13\x63hamber_temperature\x18\x02 \x01(\x01\x42\r\n\x0btemperature\"\\\n\x19StreamTemperatureResponse\x12?\n\x0ctemperatures\x18\x01 \x03(\x0b\x32).minknow_api.statistics.TemperaturePacket\"Z\n\x11\x42iasVoltagePacket\x12\x19\n\x11\x61\x63quisition_index\x18\x01 \x01(\x04\x12\x14\n\x0c\x62ias_voltage\x18\x02 \x01(\x01\x12\x14\n\x0ctime_seconds\x18\x03 \x01(\x04\"=\n\x19StreamBiasVoltagesRequest\x12 \n\x12\x61\x63quisition_run_id\x18\x01 \x01(\tB\x04\x88\xb5\x18\x01\"^\n\x1aStreamBiasVoltagesResponse\x12@\n\rbias_voltages\x18\x01 \x03(\x0b\x32).minknow_api.statistics.BiasVoltagePacket\"\xee\x01\n\x14StreamBoxplotRequest\x12 \n\x12\x61\x63quisition_run_id\x18\x01 \x01(\tB\x04\x88\xb5\x18\x01\x12K\n\tdata_type\x18\x02 \x01(\x0e\x32\x38.minknow_api.statistics.StreamBoxplotRequest.BoxplotType\x12\x15\n\rdataset_width\x18\x03 \x01(\r\x12\x11\n\tpoll_time\x18\x04 \x01(\r\"=\n\x0b\x42oxplotType\x12\n\n\x06QSCORE\x10\x00\x12\x14\n\x10\x42\x41SES_PER_SECOND\x10\x01\x12\x0c\n\x08\x41\x43\x43URACY\x10\x02\"\x9a\x02\n\x0f\x42oxplotResponse\x12H\n\x08\x64\x61tasets\x18\x01 \x03(\x0b\x32\x36.minknow_api.statistics.BoxplotResponse.BoxplotDataset\x1a\xbc\x01\n\x0e\x42oxplotDataset\x12\x0b\n\x03min\x18\x01 \x01(\x02\x12\x0b\n\x03q25\x18\x02 \x01(\x02\x12\x0b\n\x03q50\x18\x03 \x01(\x02\x12\x0b\n\x03q75\x18\x04 \x01(\x02\x12\x0b\n\x03max\x18\x05 \x01(\x02\x12\r\n\x05\x63ount\x18\x06 \x01(\x04\x12%\n\x1dlower_full_width_half_maximum\x18\x07 \x01(\x02\x12\x0c\n\x04mode\x18\x08 \x01(\x02\x12%\n\x1dupper_full_width_half_maximum\x18\t \x01(\x02*L\n\x0eReadLengthType\x12\x11\n\rMinknowEvents\x10\x00\x12\x12\n\x0e\x45stimatedBases\x10\x01\x12\x13\n\x0f\x42\x61secalledBases\x10\x02*2\n\x0f\x42ucketValueType\x12\x0e\n\nReadCounts\x10\x00\x12\x0f\n\x0bReadLengths\x10\x01*\xa0\x01\n\rReadEndReason\x12\x07\n\x03\x41ll\x10\x00\x12\x0b\n\x07Unknown\x10\x01\x12\x0b\n\x07Partial\x10\x02\x12\r\n\tMuxChange\x10\x03\x12\x14\n\x10UnblockMuxChange\x10\x04\x12\x12\n\x0eSignalPositive\x10\x05\x12\x12\n\x0eSignalNegative\x10\x06\x12\x1f\n\x1b\x44\x61taServiceUnblockMuxChange\x10\x07*S\n\x1eQScoreHistogramBucketValueType\x12\x15\n\x11QScore_ReadCounts\x10\x00\x12\x1a\n\x16QScore_BasecalledBases\x10\x01\x32\x9c\x0c\n\x11StatisticsService\x12x\n\x10stream_duty_time\x12-.minknow_api.statistics.StreamDutyTimeRequest\x1a..minknow_api.statistics.StreamDutyTimeResponse\"\x03\x90\x02\x01\x30\x01\x12\x93\x01\n\x19stream_acquisition_output\x12\x36.minknow_api.statistics.StreamAcquisitionOutputRequest\x1a\x37.minknow_api.statistics.StreamAcquisitionOutputResponse\"\x03\x90\x02\x01\x30\x01\x12\x84\x01\n\x14stream_writer_output\x12\x31.minknow_api.statistics.StreamWriterOutputRequest\x1a\x32.minknow_api.statistics.StreamWriterOutputResponse\"\x03\x90\x02\x01\x30\x01\x12\xc2\x01\n*stream_encountered_acquisition_output_keys\x12\x45.minknow_api.statistics.StreamEncounteredAcquisitionOutputKeysRequest\x1a\x46.minknow_api.statistics.StreamEncounteredAcquisitionOutputKeysResponse\"\x03\x90\x02\x01\x30\x01\x12\x80\x01\n\x12stream_temperature\x12\x30.minknow_api.statistics.StreamTemperatureRequest\x1a\x31.minknow_api.statistics.StreamTemperatureResponse\"\x03\x90\x02\x01\x30\x01\x12\x84\x01\n\x14stream_bias_voltages\x12\x31.minknow_api.statistics.StreamBiasVoltagesRequest\x1a\x32.minknow_api.statistics.StreamBiasVoltagesResponse\"\x03\x90\x02\x01\x30\x01\x12\x9a\x01\n\x1cstream_read_length_histogram\x12\x38.minknow_api.statistics.StreamReadLengthHistogramRequest\x1a\x39.minknow_api.statistics.StreamReadLengthHistogramResponse\"\x03\x90\x02\x01\x30\x01\x12s\n\x0fread_length_n50\x12,.minknow_api.statistics.ReadLengthN50Request\x1a-.minknow_api.statistics.ReadLengthN50Response\"\x03\x90\x02\x01\x12\x83\x01\n\x15get_read_length_types\x12\x31.minknow_api.statistics.GetReadLengthTypesRequest\x1a\x32.minknow_api.statistics.GetReadLengthTypesResponse\"\x03\x90\x02\x01\x12\x8e\x01\n\x18stream_q_score_histogram\x12\x34.minknow_api.statistics.StreamQScoreHistogramRequest\x1a\x35.minknow_api.statistics.StreamQScoreHistogramResponse\"\x03\x90\x02\x01\x30\x01\x12x\n\x18stream_basecall_boxplots\x12,.minknow_api.statistics.StreamBoxplotRequest\x1a\'.minknow_api.statistics.BoxplotResponse\"\x03\x90\x02\x01\x30\x01\x42&\n\x1c\x63om.nanoporetech.minknow_api\xa2\x02\x05MKAPIb\x06proto3')
 
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, globals())
 _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'minknow_api.statistics_pb2', globals())
@@ -33,6 +33,8 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   _READLENGTHN50REQUEST.fields_by_name['acquisition_run_id']._serialized_options = b'\210\265\030\001'
   _GETREADLENGTHTYPESREQUEST.fields_by_name['acquisition_run_id']._options = None
   _GETREADLENGTHTYPESREQUEST.fields_by_name['acquisition_run_id']._serialized_options = b'\210\265\030\001'
+  _STREAMQSCOREHISTOGRAMREQUEST.fields_by_name['acquisition_run_id']._options = None
+  _STREAMQSCOREHISTOGRAMREQUEST.fields_by_name['acquisition_run_id']._serialized_options = b'\210\265\030\001'
   _STREAMACQUISITIONOUTPUTREQUEST.fields_by_name['acquisition_run_id']._options = None
   _STREAMACQUISITIONOUTPUTREQUEST.fields_by_name['acquisition_run_id']._serialized_options = b'\210\265\030\001'
   _STREAMWRITEROUTPUTREQUEST.fields_by_name['acquisition_run_id']._options = None
@@ -63,112 +65,137 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   _STATISTICSSERVICE.methods_by_name['read_length_n50']._serialized_options = b'\220\002\001'
   _STATISTICSSERVICE.methods_by_name['get_read_length_types']._options = None
   _STATISTICSSERVICE.methods_by_name['get_read_length_types']._serialized_options = b'\220\002\001'
+  _STATISTICSSERVICE.methods_by_name['stream_q_score_histogram']._options = None
+  _STATISTICSSERVICE.methods_by_name['stream_q_score_histogram']._serialized_options = b'\220\002\001'
   _STATISTICSSERVICE.methods_by_name['stream_basecall_boxplots']._options = None
   _STATISTICSSERVICE.methods_by_name['stream_basecall_boxplots']._serialized_options = b'\220\002\001'
-  _READLENGTHTYPE._serialized_start=5427
-  _READLENGTHTYPE._serialized_end=5503
-  _BUCKETVALUETYPE._serialized_start=5505
-  _BUCKETVALUETYPE._serialized_end=5555
-  _READENDREASON._serialized_start=5558
-  _READENDREASON._serialized_end=5718
+  _READLENGTHTYPE._serialized_start=6495
+  _READLENGTHTYPE._serialized_end=6571
+  _BUCKETVALUETYPE._serialized_start=6573
+  _BUCKETVALUETYPE._serialized_end=6623
+  _READENDREASON._serialized_start=6626
+  _READENDREASON._serialized_end=6786
+  _QSCOREHISTOGRAMBUCKETVALUETYPE._serialized_start=6788
+  _QSCOREHISTOGRAMBUCKETVALUETYPE._serialized_end=6871
   _DATASELECTION._serialized_start=118
   _DATASELECTION._serialized_end=175
-  _STREAMDUTYTIMEREQUEST._serialized_start=177
-  _STREAMDUTYTIMEREQUEST._serialized_end=297
-  _STREAMDUTYTIMERESPONSE._serialized_start=300
-  _STREAMDUTYTIMERESPONSE._serialized_end=701
-  _STREAMDUTYTIMERESPONSE_BUCKETRANGE._serialized_start=500
-  _STREAMDUTYTIMERESPONSE_BUCKETRANGE._serialized_end=541
-  _STREAMDUTYTIMERESPONSE_CHANNELSTATEDATA._serialized_start=543
-  _STREAMDUTYTIMERESPONSE_CHANNELSTATEDATA._serialized_end=582
-  _STREAMDUTYTIMERESPONSE_CHANNELSTATESENTRY._serialized_start=584
-  _STREAMDUTYTIMERESPONSE_CHANNELSTATESENTRY._serialized_end=701
-  _READLENGTHHISTOGRAMKEY._serialized_start=703
-  _READLENGTHHISTOGRAMKEY._serialized_end=791
-  _READLENGTHHISTOGRAMSPLIT._serialized_start=793
-  _READLENGTHHISTOGRAMSPLIT._serialized_end=844
-  _STREAMREADLENGTHHISTOGRAMREQUEST._serialized_start=847
-  _STREAMREADLENGTHHISTOGRAMREQUEST._serialized_end=1304
-  _STREAMREADLENGTHHISTOGRAMRESPONSE._serialized_start=1307
-  _STREAMREADLENGTHHISTOGRAMRESPONSE._serialized_end=1876
-  _STREAMREADLENGTHHISTOGRAMRESPONSE_BUCKETRANGE._serialized_start=1704
-  _STREAMREADLENGTHHISTOGRAMRESPONSE_BUCKETRANGE._serialized_end=1745
-  _STREAMREADLENGTHHISTOGRAMRESPONSE_READLENGTHHISTOGRAMDATA._serialized_start=1748
-  _STREAMREADLENGTHHISTOGRAMRESPONSE_READLENGTHHISTOGRAMDATA._serialized_end=1876
-  _READLENGTHN50REQUEST._serialized_start=1878
-  _READLENGTHN50REQUEST._serialized_end=1934
-  _READLENGTHN50RESPONSE._serialized_start=1937
-  _READLENGTHN50RESPONSE._serialized_end=2099
-  _READLENGTHN50RESPONSE_READN50DATA._serialized_start=2039
-  _READLENGTHN50RESPONSE_READN50DATA._serialized_end=2099
-  _GETREADLENGTHTYPESREQUEST._serialized_start=2101
-  _GETREADLENGTHTYPESREQUEST._serialized_end=2162
-  _GETREADLENGTHTYPESRESPONSE._serialized_start=2164
-  _GETREADLENGTHTYPESRESPONSE._serialized_end=2257
-  _ACQUISITIONOUTPUTKEY._serialized_start=2260
-  _ACQUISITIONOUTPUTKEY._serialized_end=2544
-  _ACQUISITIONOUTPUTSPLIT._serialized_start=2547
-  _ACQUISITIONOUTPUTSPLIT._serialized_end=2731
-  _STREAMACQUISITIONOUTPUTREQUEST._serialized_start=2734
-  _STREAMACQUISITIONOUTPUTREQUEST._serialized_end=2991
-  _ACQUISITIONOUTPUTSNAPSHOT._serialized_start=2993
-  _ACQUISITIONOUTPUTSNAPSHOT._serialized_end=3110
-  _STREAMACQUISITIONOUTPUTRESPONSE._serialized_start=3113
-  _STREAMACQUISITIONOUTPUTRESPONSE._serialized_end=3397
-  _STREAMACQUISITIONOUTPUTRESPONSE_FILTEREDSNAPSHOTS._serialized_start=3243
-  _STREAMACQUISITIONOUTPUTRESPONSE_FILTEREDSNAPSHOTS._serialized_end=3397
-  _STREAMWRITEROUTPUTREQUEST._serialized_start=3399
-  _STREAMWRITEROUTPUTREQUEST._serialized_end=3523
-  _WRITEROUTPUTSNAPSHOT._serialized_start=3525
-  _WRITEROUTPUTSNAPSHOT._serialized_end=3638
-  _STREAMWRITEROUTPUTRESPONSE._serialized_start=3640
-  _STREAMWRITEROUTPUTRESPONSE._serialized_end=3733
-  _STREAMENCOUNTEREDACQUISITIONOUTPUTKEYSREQUEST._serialized_start=3735
-  _STREAMENCOUNTEREDACQUISITIONOUTPUTKEYSREQUEST._serialized_end=3816
-  _STREAMENCOUNTEREDACQUISITIONOUTPUTKEYSRESPONSE._serialized_start=3818
-  _STREAMENCOUNTEREDACQUISITIONOUTPUTKEYSRESPONSE._serialized_end=3945
-  _STREAMTEMPERATUREREQUEST._serialized_start=3947
-  _STREAMTEMPERATUREREQUEST._serialized_end=4070
-  _TEMPERATUREPACKET._serialized_start=4073
-  _TEMPERATUREPACKET._serialized_end=4554
-  _TEMPERATUREPACKET_RANGE._serialized_start=4337
-  _TEMPERATUREPACKET_RANGE._serialized_end=4378
-  _TEMPERATUREPACKET_MINIONTEMPERATURE._serialized_start=4380
-  _TEMPERATUREPACKET_MINIONTEMPERATURE._serialized_end=4455
-  _TEMPERATUREPACKET_PROMETHIONTEMPERATURE._serialized_start=4457
-  _TEMPERATUREPACKET_PROMETHIONTEMPERATURE._serialized_end=4539
-  _STREAMTEMPERATURERESPONSE._serialized_start=4556
-  _STREAMTEMPERATURERESPONSE._serialized_end=4648
-  _BIASVOLTAGEPACKET._serialized_start=4650
-  _BIASVOLTAGEPACKET._serialized_end=4740
-  _STREAMBIASVOLTAGESREQUEST._serialized_start=4742
-  _STREAMBIASVOLTAGESREQUEST._serialized_end=4803
-  _STREAMBIASVOLTAGESRESPONSE._serialized_start=4805
-  _STREAMBIASVOLTAGESRESPONSE._serialized_end=4899
-  _STREAMBOXPLOTREQUEST._serialized_start=4902
-  _STREAMBOXPLOTREQUEST._serialized_end=5140
-  _STREAMBOXPLOTREQUEST_BOXPLOTTYPE._serialized_start=5079
-  _STREAMBOXPLOTREQUEST_BOXPLOTTYPE._serialized_end=5140
-  _BOXPLOTRESPONSE._serialized_start=5143
-  _BOXPLOTRESPONSE._serialized_end=5425
-  _BOXPLOTRESPONSE_BOXPLOTDATASET._serialized_start=5237
-  _BOXPLOTRESPONSE_BOXPLOTDATASET._serialized_end=5425
-  _STATISTICSSERVICE._serialized_start=5721
-  _STATISTICSSERVICE._serialized_end=7140
-WriterOutputSnapshot.__doc__ = """A snapshot of writer data.
+  _FLOATDATASELECTION._serialized_start=177
+  _FLOATDATASELECTION._serialized_end=281
+  _STREAMDUTYTIMEREQUEST._serialized_start=283
+  _STREAMDUTYTIMEREQUEST._serialized_end=403
+  _STREAMDUTYTIMERESPONSE._serialized_start=406
+  _STREAMDUTYTIMERESPONSE._serialized_end=807
+  _STREAMDUTYTIMERESPONSE_BUCKETRANGE._serialized_start=606
+  _STREAMDUTYTIMERESPONSE_BUCKETRANGE._serialized_end=647
+  _STREAMDUTYTIMERESPONSE_CHANNELSTATEDATA._serialized_start=649
+  _STREAMDUTYTIMERESPONSE_CHANNELSTATEDATA._serialized_end=688
+  _STREAMDUTYTIMERESPONSE_CHANNELSTATESENTRY._serialized_start=690
+  _STREAMDUTYTIMERESPONSE_CHANNELSTATESENTRY._serialized_end=807
+  _READLENGTHHISTOGRAMKEY._serialized_start=809
+  _READLENGTHHISTOGRAMKEY._serialized_end=897
+  _READLENGTHHISTOGRAMSPLIT._serialized_start=899
+  _READLENGTHHISTOGRAMSPLIT._serialized_end=950
+  _STREAMREADLENGTHHISTOGRAMREQUEST._serialized_start=953
+  _STREAMREADLENGTHHISTOGRAMREQUEST._serialized_end=1410
+  _STREAMREADLENGTHHISTOGRAMRESPONSE._serialized_start=1413
+  _STREAMREADLENGTHHISTOGRAMRESPONSE._serialized_end=1982
+  _STREAMREADLENGTHHISTOGRAMRESPONSE_BUCKETRANGE._serialized_start=1810
+  _STREAMREADLENGTHHISTOGRAMRESPONSE_BUCKETRANGE._serialized_end=1851
+  _STREAMREADLENGTHHISTOGRAMRESPONSE_READLENGTHHISTOGRAMDATA._serialized_start=1854
+  _STREAMREADLENGTHHISTOGRAMRESPONSE_READLENGTHHISTOGRAMDATA._serialized_end=1982
+  _READLENGTHN50REQUEST._serialized_start=1984
+  _READLENGTHN50REQUEST._serialized_end=2040
+  _READLENGTHN50RESPONSE._serialized_start=2043
+  _READLENGTHN50RESPONSE._serialized_end=2205
+  _READLENGTHN50RESPONSE_READN50DATA._serialized_start=2145
+  _READLENGTHN50RESPONSE_READN50DATA._serialized_end=2205
+  _GETREADLENGTHTYPESREQUEST._serialized_start=2207
+  _GETREADLENGTHTYPESREQUEST._serialized_end=2268
+  _GETREADLENGTHTYPESRESPONSE._serialized_start=2270
+  _GETREADLENGTHTYPESRESPONSE._serialized_end=2363
+  _QSCOREHISTOGRAMKEY._serialized_start=2366
+  _QSCOREHISTOGRAMKEY._serialized_end=2504
+  _QSCOREHISTOGRAMKEY_READTYPE._serialized_start=2460
+  _QSCOREHISTOGRAMKEY_READTYPE._serialized_end=2504
+  _STREAMQSCOREHISTOGRAMREQUEST._serialized_start=2507
+  _STREAMQSCOREHISTOGRAMREQUEST._serialized_end=2749
+  _STREAMQSCOREHISTOGRAMRESPONSE._serialized_start=2752
+  _STREAMQSCOREHISTOGRAMRESPONSE._serialized_end=3325
+  _STREAMQSCOREHISTOGRAMRESPONSE_BUCKETRANGE._serialized_start=3151
+  _STREAMQSCOREHISTOGRAMRESPONSE_BUCKETRANGE._serialized_end=3192
+  _STREAMQSCOREHISTOGRAMRESPONSE_QSCOREHISTOGRAMDATA._serialized_start=3195
+  _STREAMQSCOREHISTOGRAMRESPONSE_QSCOREHISTOGRAMDATA._serialized_end=3325
+  _ACQUISITIONOUTPUTKEY._serialized_start=3328
+  _ACQUISITIONOUTPUTKEY._serialized_end=3612
+  _ACQUISITIONOUTPUTSPLIT._serialized_start=3615
+  _ACQUISITIONOUTPUTSPLIT._serialized_end=3799
+  _STREAMACQUISITIONOUTPUTREQUEST._serialized_start=3802
+  _STREAMACQUISITIONOUTPUTREQUEST._serialized_end=4059
+  _ACQUISITIONOUTPUTSNAPSHOT._serialized_start=4061
+  _ACQUISITIONOUTPUTSNAPSHOT._serialized_end=4178
+  _STREAMACQUISITIONOUTPUTRESPONSE._serialized_start=4181
+  _STREAMACQUISITIONOUTPUTRESPONSE._serialized_end=4465
+  _STREAMACQUISITIONOUTPUTRESPONSE_FILTEREDSNAPSHOTS._serialized_start=4311
+  _STREAMACQUISITIONOUTPUTRESPONSE_FILTEREDSNAPSHOTS._serialized_end=4465
+  _STREAMWRITEROUTPUTREQUEST._serialized_start=4467
+  _STREAMWRITEROUTPUTREQUEST._serialized_end=4591
+  _WRITEROUTPUTSNAPSHOT._serialized_start=4593
+  _WRITEROUTPUTSNAPSHOT._serialized_end=4706
+  _STREAMWRITEROUTPUTRESPONSE._serialized_start=4708
+  _STREAMWRITEROUTPUTRESPONSE._serialized_end=4801
+  _STREAMENCOUNTEREDACQUISITIONOUTPUTKEYSREQUEST._serialized_start=4803
+  _STREAMENCOUNTEREDACQUISITIONOUTPUTKEYSREQUEST._serialized_end=4884
+  _STREAMENCOUNTEREDACQUISITIONOUTPUTKEYSRESPONSE._serialized_start=4886
+  _STREAMENCOUNTEREDACQUISITIONOUTPUTKEYSRESPONSE._serialized_end=5013
+  _STREAMTEMPERATUREREQUEST._serialized_start=5015
+  _STREAMTEMPERATUREREQUEST._serialized_end=5138
+  _TEMPERATUREPACKET._serialized_start=5141
+  _TEMPERATUREPACKET._serialized_end=5622
+  _TEMPERATUREPACKET_RANGE._serialized_start=5405
+  _TEMPERATUREPACKET_RANGE._serialized_end=5446
+  _TEMPERATUREPACKET_MINIONTEMPERATURE._serialized_start=5448
+  _TEMPERATUREPACKET_MINIONTEMPERATURE._serialized_end=5523
+  _TEMPERATUREPACKET_PROMETHIONTEMPERATURE._serialized_start=5525
+  _TEMPERATUREPACKET_PROMETHIONTEMPERATURE._serialized_end=5607
+  _STREAMTEMPERATURERESPONSE._serialized_start=5624
+  _STREAMTEMPERATURERESPONSE._serialized_end=5716
+  _BIASVOLTAGEPACKET._serialized_start=5718
+  _BIASVOLTAGEPACKET._serialized_end=5808
+  _STREAMBIASVOLTAGESREQUEST._serialized_start=5810
+  _STREAMBIASVOLTAGESREQUEST._serialized_end=5871
+  _STREAMBIASVOLTAGESRESPONSE._serialized_start=5873
+  _STREAMBIASVOLTAGESRESPONSE._serialized_end=5967
+  _STREAMBOXPLOTREQUEST._serialized_start=5970
+  _STREAMBOXPLOTREQUEST._serialized_end=6208
+  _STREAMBOXPLOTREQUEST_BOXPLOTTYPE._serialized_start=6147
+  _STREAMBOXPLOTREQUEST_BOXPLOTTYPE._serialized_end=6208
+  _BOXPLOTRESPONSE._serialized_start=6211
+  _BOXPLOTRESPONSE._serialized_end=6493
+  _BOXPLOTRESPONSE_BOXPLOTDATASET._serialized_start=6305
+  _BOXPLOTRESPONSE_BOXPLOTDATASET._serialized_end=6493
+  _STATISTICSSERVICE._serialized_start=6874
+  _STATISTICSSERVICE._serialized_end=8438
+TemperaturePacket.PromethIONTemperature.__doc__ = """Packet of temperatures appropriate for a PromethION.
 
 Attributes:
-    seconds:
-        The time the snapshot was collected, in seconds.  Represents
-        the number of seconds since the start of the experiment Will
-        usually stream in minute chunks, so will first see 60, then
-        120 etc
-    writer_output:
-        The writer data for this bucket.
+    flowcell_temperature:
+        Temperature as measured by thermistor TH2 on the P-Chip.
+    chamber_temperature:
+        Mean of 12 pixel-blocks temperatures measured with sensors in
+        the ASIC.
 """
-ReadLengthN50Request.__doc__ = """Attributes:
-    acquisition_run_id:
-        The `acquisition_run_id` of the acquisition to obtain data for
+StreamDutyTimeResponse.ChannelStateData.__doc__ = """Attributes:
+    state_times:
+        How much time (in samples) spent in this channel state, for
+        each bucket
+"""
+StreamAcquisitionOutputResponse.__doc__ = """Attributes:
+    snapshots:
+        Snapshots split by requested filtering parameters.
+"""
+StreamAcquisitionOutputResponse.FilteredSnapshots.__doc__ = """Attributes:
+    filtering:
+        The filtering parameters which contributed to this bucket.
 """
 StreamBoxplotRequest.__doc__ = """Attributes:
     acquisition_run_id:
@@ -199,103 +226,11 @@ StreamBoxplotRequest.__doc__ = """Attributes:
         basecalled_stats_refresh_rate_seconds in the configs (set to 1
         second in MinKNOW 3.2).  If unspecified, defaults to 1 minute.
 """
-StreamTemperatureRequest.__doc__ = """Attributes:
-    period_seconds:
-        How often temperature updates should be sent Defaults to a
-        period of 1 second, if not specified, or set to 0
-    acquisition_run_id:
-        The acquisition id of the experiment.
-    data_selection:
-        The desired data selection.  The units for all values are
-        `seconds since the start of the experiment`.
-"""
-StreamDutyTimeResponse.ChannelStateData.__doc__ = """Attributes:
-    state_times:
-        How much time (in samples) spent in this channel state, for
-        each bucket
-"""
-GetReadLengthTypesResponse.__doc__ = """Attributes:
-    available_types:
-        Array of the types of bucket for which a histogram is
-        currently available
-"""
-AcquisitionOutputKey.__doc__ = """Attributes:
-    barcode_name:
-        Only return data for the given barcode.  Special values:   -
-        Specify "unclassified" for data which does not have a barcode.
-        - Specify "classified" for all data which has a barcode.  If
-        unspecified all barcodes are returned.
-    alignment_reference:
-        Only return data for the given alignment reference.  Special
-        values:   - Specify "unaligned" for data which does not align
-        to a reference   - Specify "aligned" for all data which aligns
-        to a reference  If unspecified all alignment targets are
-        returned.
-    alignment_bed_file_region:
-        Only return data for the given target region.  Target regions
-        are defined in bed files.  The region is a string which
-        identifies an entry in the bed file.  Special values:   -
-        Specify "offtarget" for data which does not have a bed region.
-        - Specify "ontarget" for all data which has a bed region.  If
-        unspecified all alignment regions are returned.
-    alignment_bed_file_region_name:
-        An alias to `alignment_bed_file_region`  An optional name can
-        be used to identify a target region in the bed file
-    lamp_barcode_id:
-        Only return data for the given lamp barcode.  Special values:
-        - Specify "unclassified" for data which does not have a lamp
-        barcode.   - Specify "classified" for all data which has a
-        lamp barcode.  If unspecified all lamp barcodes are returned.
-    lamp_target_id:
-        Only return data for the given lamp target.  Special values:
-        - Specify "unclassified" for data which does not have a lamp
-        target.   - Specify "classified" for all data which has a lamp
-        target. Using barcode terms here as lamp is part of barcoding
-        pipeline  If unspecified all lamp target are returned.
-    barcode_alias:
-        The barcode alias corresponding to the `barcode_name` and
-        `lamp_barcode_id`
-    read_end_reason:
-        Only return data for the given ReadEndReason.  Special values:
-        - Specify `ReadEndReason::All` to return data for all read end
-        reasons  If unspecified all read end reasons are returned.
-"""
-TemperaturePacket.PromethIONTemperature.__doc__ = """Packet of temperatures appropriate for a PromethION.
-
-Attributes:
-    flowcell_temperature:
-        Temperature as measured by thermistor TH2 on the P-Chip.
-    chamber_temperature:
-        Mean of 12 pixel-blocks temperatures measured with sensors in
-        the ASIC.
-"""
-StreamAcquisitionOutputResponse.__doc__ = """Attributes:
-    snapshots:
-        Snapshots split by requested filtering parameters.
-"""
-BoxplotResponse.BoxplotDataset.__doc__ = """Attributes:
-    min:
-        Minimum value for any point in the dataset.
-    q25:
-        25th quartile value for all points in the dataset.
-    q50:
-        50th quartile or median value for all points in the dataset.
-    q75:
-        75th quartile value for all points in the dataset.
-    max:
-        Maximum value for any point in the dataset.
-    count:
-        Number of items in this box plot's stats.
-    lower_full_width_half_maximum:
-        Estimated lower value where there is half the data compared to
-        the mode. provides some estimate on the sharpness of the mode
-        peak.
-    mode:
-        Estimated mode for the dataset.
-    upper_full_width_half_maximum:
-        Estimated upper value where there is half the data compared to
-        the mode. provides some estimate on the sharpness of the mode
-        peak.
+StreamDutyTimeResponse.BucketRange.__doc__ = """Attributes:
+    start:
+        The range covered by a bucket Values are in seconds  The range
+        [start, end) is half open (i.e. the start value is included,
+        the end value is not).
 """
 StreamReadLengthHistogramRequest.__doc__ = """Attributes:
     acquisition_run_id:
@@ -360,100 +295,12 @@ StreamReadLengthHistogramRequest.__doc__ = """Attributes:
     split:
         Define how results are split for returned data.
 """
-ReadLengthHistogramSplit.__doc__ = """Attributes:
-    read_end_reason:
-        Split returned data by read_end_reason
-"""
-ReadLengthHistogramKey.__doc__ = """Attributes:
-    read_end_reason:
-        Only return data for the given ReadEndReason.  Special values:
-        - Specify `ReadEndReason::All` to return data for all read end
-        reasons  If unspecified all read end reasons are returned.
-"""
-StreamBiasVoltagesRequest.__doc__ = """Attributes:
-    acquisition_run_id:
-        The acquisition id of the experiment.
-"""
-StreamAcquisitionOutputRequest.__doc__ = """Attributes:
-    acquisition_run_id:
-        The acquisition id of the experiment.
-    data_selection:
-        The desired data selection.  The units for all values are
-        `seconds since the start of the experiment`.
-    filtering:
-        Define filtering parameters for streamed data.
-    split:
-        Define how results are split for returned data.
-"""
-AcquisitionOutputSnapshot.__doc__ = """A snapshot of acquisition output data, for a given set of filtering
-criteria.
-
-Attributes:
-    seconds:
-        The time the snapshot was collected, in seconds.  Represents
-        the number of seconds since the start of the experiment Will
-        usually stream in minute chunks, so will first see 60, then
-        120 etc
-    yield_summary:
-        The yield summary data.
-"""
-StreamReadLengthHistogramResponse.ReadLengthHistogramData.__doc__ = """Attributes:
-    filtering:
-        The filtering parameters which contributed to this bucket.
-    bucket_values:
-        Counts for each histogram bucket  Units are as specified in
-        `read_length_type` The range covered by each bucket is as in
-        `bucket_ranges` The type of data accumulated in each bucket is
-        given by `bucket_value_type`
-    n50:
-        The N50 value for the read length data for the selected
-        `read_length_type` and `read_end_reasons`.  Units are as
-        specified by `read_length_type`.  Measured across all source
-        data, after excluding the reads specified by
-        `discard_outlier_percent` in the stream request.
-"""
-ReadLengthN50Response.__doc__ = """Attributes:
-    n50_data:
-        The N50 return data
-"""
-AcquisitionOutputSplit.__doc__ = """Attributes:
-    barcode_name:
-        Split data for every individual barcode.
-    alignment_reference:
-        Split data for each individual alignment reference.
-        References are defined in alignment references.
-    alignment_bed_file_region:
-        Split data for each target region.  Target regions are defined
-        in bed files.
-    lamp_barcode_id:
-        Split data for each lamp barcode id.  Lamp barcodes are
-        defined by the active lamp kit.
-    lamp_target_id:
-        Split data for each lamp targets id.  Lamp targets are defined
-        by the active lamp kit.
-    read_end_reason:
-        Split returned data by read_end_reason
-"""
-ReadLengthN50Response.ReadN50Data.__doc__ = """Attributes:
-    estimated_n50:
-        The estimated N50 value in bases  This is always set
-    basecalled_n50:
-        The basecalled N50 value  If the acquisition did/does not have
-        live basecalling enabled, this will be 0.0
-"""
-TemperaturePacket.Range.__doc__ = """Represents a range of values."""
-StreamDutyTimeResponse.BucketRange.__doc__ = """Attributes:
-    start:
-        The range covered by a bucket Values are in seconds  The range
-        [start, end) is half open (i.e. the start value is included,
-        the end value is not).
-"""
-BoxplotResponse.__doc__ = """Attributes:
-    datasets:
-        Result boxplots are stored in this array. This is an overview
-        of the stored data from the START of the acquisition period.
-        This includes ALL the basecalled stats from MinKNOW, not just
-        updates since previous calls!
+TemperaturePacket.__doc__ = """Attributes:
+    target_temperature:
+        The range is based on the requested target temperature and
+        tolerance.  For example, if the target temperature is 35, and
+        the tolerance is 1 then target temperatures will return as
+        34(min) and 36(max).
 """
 TemperaturePacket.MinIONTemperature.__doc__ = """Packet of temperatures appropriate for a MinION.
 
@@ -463,7 +310,183 @@ Attributes:
     heatsink_temperature:
         Temperature as measured by the probe in the minion heatsink.
 """
+WriterOutputSnapshot.__doc__ = """A snapshot of writer data.
+
+Attributes:
+    seconds:
+        The time the snapshot was collected, in seconds.  Represents
+        the number of seconds since the start of the experiment Will
+        usually stream in minute chunks, so will first see 60, then
+        120 etc
+    writer_output:
+        The writer data for this bucket.
+"""
+StreamQScoreHistogramRequest.__doc__ = """Attributes:
+    acquisition_run_id:
+        The `acquisition_run_id` of the acquisition to obtain data for
+        If this is set to the `acquisition_run_id` of an acquisition
+        which is in-progress, then updates containing the latest
+        histogram data for that acquisition will be streamed regularly
+        until that acquisition finishes (see `poll_time_seconds`
+        below)  Otherwise, if this is set to the `acquisition_run_id`
+        of an acquisition which is finished, and for which final
+        histogram data is available, then the final histogram data for
+        that acquisition will be returned.  Final histogram data is
+        available until it is cleared.  Otherwise, if this parameter
+        is not set, or is set to a value which is neither the
+        `acquisition_run_id` of an acquisition which is in-progress,
+        nor the `acquisition_run_id` of an acquisition for which final
+        histogram data is available, then this call will fail with the
+        status `INVALID_ARGUMENT`.
+    poll_time_seconds:
+        How often to return new histogram data, in seconds  If not
+        specified, or set to `0`, then the poll time will be set to 60
+        seconds  If data is being returned for an acquisition which is
+        in progress, then one update will be sent when the call is
+        first performed, then subsequently every `poll_time` after
+        that, and then finally once again when the acquisition
+        finishes.  Otherwise, if final histogram data is being
+        returned for an acquisition that has already finished, this
+        parameter has no effect.  The final histogram data will be
+        returned, and the call will complete.
+    data_selection:
+        The desired q score range which histograms should cover.
+    bucket_value_type:
+        What data to accumulate in the histogram buckets  See
+        `QScoreHistogramBucketValueType` for further information about
+        the available options.
+"""
+ReadLengthN50Request.__doc__ = """Attributes:
+    acquisition_run_id:
+        The `acquisition_run_id` of the acquisition to obtain data for
+"""
+ReadLengthHistogramSplit.__doc__ = """Attributes:
+    read_end_reason:
+        Split returned data by read_end_reason
+"""
+FloatDataSelection.__doc__ = """Specify a desired data selection, using floating point values  The
+actual data selection used may differ from the desired one.  They are
+adjusted in the following sequence:   1. The selection is set equal to
+the desired selection  2. Any selection value that is not set is
+adjusted to its default value:      - `start` and `step` will be set
+to the minimum valid value      - `end` will be set to the maximum
+valid value  3. Values which are outside of the valid range are
+clamped to the nearest valid value:      - Values less than minimum
+valid value will be set equal to the minimum valid value      - Values
+greater than the maximum valid value will be set equal to the maximum
+valid value  4. Finally, all values are 'rounded' to a nearby valid
+value      - `start` and `step` will be rounded down to the first
+valid value less than or equal to        their current values      -
+`end` will be rounded up to the first valid value that is greater than
+or equal to its        current value      - This means that the range
+that is specified after rounding includes the range that was
+specified prior to rounding"""
+StreamReadLengthHistogramResponse.BucketRange.__doc__ = """Attributes:
+    start:
+        The range covered by a bucket Units are as set in
+        `read_length_type`, above  The range [start, end) is half open
+        (i.e. the start value is included, the end value is not).
+"""
+StreamQScoreHistogramResponse.QScoreHistogramData.__doc__ = """Attributes:
+    filtering:
+        The filtering parameters which contributed to this bucket.
+    bucket_values:
+        Counts for each histogram bucket  Units and type of
+        accumulated values are as specified in `bucket_value_type` The
+        range covered by each bucket is as in `bucket_ranges`
+    modal_q_score:
+        The modal q score, calculated using the `bucket_value_type`
+"""
+ReadLengthN50Response.__doc__ = """Attributes:
+    n50_data:
+        The N50 return data
+"""
+StreamQScoreHistogramResponse.BucketRange.__doc__ = """Attributes:
+    start:
+        The range covered by a bucket  The range [start, end) is half
+        open (i.e. the start value is included, the end value is not).
+"""
+StreamWriterOutputRequest.__doc__ = """Attributes:
+    acquisition_run_id:
+        The acquisition id of the experiment.
+    data_selection:
+        The desired data selection.  The units for all values are
+        `seconds since the start of the experiment`.
+"""
+AcquisitionOutputKey.__doc__ = """Attributes:
+    barcode_name:
+        Only return data for the given barcode.  Special values:   -
+        Specify "unclassified" for data which does not have a barcode.
+        - Specify "classified" for all data which has a barcode.  If
+        unspecified all barcodes are returned.
+    alignment_reference:
+        Only return data for the given alignment reference.  Special
+        values:   - Specify "unaligned" for data which does not align
+        to a reference   - Specify "aligned" for all data which aligns
+        to a reference  If unspecified all alignment targets are
+        returned.
+    alignment_bed_file_region:
+        Only return data for the given target region.  Target regions
+        are defined in bed files.  The region is a string which
+        identifies an entry in the bed file.  Special values:   -
+        Specify "offtarget" for data which does not have a bed region.
+        - Specify "ontarget" for all data which has a bed region.  If
+        unspecified all alignment regions are returned.
+    alignment_bed_file_region_name:
+        An alias to `alignment_bed_file_region`  An optional name can
+        be used to identify a target region in the bed file
+    lamp_barcode_id:
+        Only return data for the given lamp barcode.  Special values:
+        - Specify "unclassified" for data which does not have a lamp
+        barcode.   - Specify "classified" for all data which has a
+        lamp barcode.  If unspecified all lamp barcodes are returned.
+    lamp_target_id:
+        Only return data for the given lamp target.  Special values:
+        - Specify "unclassified" for data which does not have a lamp
+        target.   - Specify "classified" for all data which has a lamp
+        target. Using barcode terms here as lamp is part of barcoding
+        pipeline  If unspecified all lamp target are returned.
+    barcode_alias:
+        The barcode alias corresponding to the `barcode_name` and
+        `lamp_barcode_id`
+    read_end_reason:
+        Only return data for the given ReadEndReason.  Special values:
+        - Specify `ReadEndReason::All` to return data for all read end
+        reasons  If unspecified all read end reasons are returned.
+"""
+StreamTemperatureRequest.__doc__ = """Attributes:
+    acquisition_run_id:
+        The acquisition id of the experiment.
+    data_selection:
+        The desired data selection.  The units for all values are
+        `seconds since the start of the experiment`.
+    period_seconds:
+        How often temperature updates should be sent Defaults to a
+        period of 1 second, if not specified, or set to 0
+"""
+StreamBiasVoltagesRequest.__doc__ = """Attributes:
+    acquisition_run_id:
+        The acquisition id of the experiment.
+"""
+BoxplotResponse.__doc__ = """Attributes:
+    datasets:
+        Result boxplots are stored in this array. This is an overview
+        of the stored data from the START of the acquisition period.
+        This includes ALL the basecalled stats from MinKNOW, not just
+        updates since previous calls!
+"""
 StreamEncounteredAcquisitionOutputKeysRequest.__doc__ = """Attributes:
+    acquisition_run_id:
+        The acquisition id of the experiment.
+"""
+ReadLengthN50Response.ReadN50Data.__doc__ = """Attributes:
+    estimated_n50:
+        The estimated N50 value in bases  This is always set
+    basecalled_n50:
+        The basecalled N50 value  If the acquisition did/does not have
+        live basecalling enabled, this will be 0.0
+"""
+GetReadLengthTypesRequest.__doc__ = """Attributes:
     acquisition_run_id:
         The acquisition id of the experiment.
 """
@@ -474,28 +497,7 @@ StreamDutyTimeRequest.__doc__ = """Attributes:
         The desired data selection.  The units for all values are
         `seconds since the start of the experiment`.
 """
-StreamWriterOutputRequest.__doc__ = """Attributes:
-    acquisition_run_id:
-        The acquisition id of the experiment.
-    data_selection:
-        The desired data selection.  The units for all values are
-        `seconds since the start of the experiment`.
-"""
-GetReadLengthTypesRequest.__doc__ = """Attributes:
-    acquisition_run_id:
-        The acquisition id of the experiment.
-"""
-TemperaturePacket.__doc__ = """Attributes:
-    target_temperature:
-        The range is based on the requested target temperature and
-        tolerance.  For example, if the target temperature is 35, and
-        the tolerance is 1 then target temperatures will return as
-        34(min) and 36(max).
-"""
-StreamAcquisitionOutputResponse.FilteredSnapshots.__doc__ = """Attributes:
-    filtering:
-        The filtering parameters which contributed to this bucket.
-"""
+TemperaturePacket.Range.__doc__ = """Represents a range of values."""
 DataSelection.__doc__ = """Specify a desired data selection.  Units for values are as specified
 in the corresponding Request  The actual data selection used may
 differ from the desired one.  They are adjusted in the following
@@ -529,7 +531,68 @@ the maximum valid start and end value may not be known if data
 collection is still ongoing -- for example, the maximum valid time for
 time series data.  If this is the case, then the maximum valid value
 will be determined when the experiment ends, and values in use will be
-adjusted acordingly."""
+adjusted accordingly."""
+BoxplotResponse.BoxplotDataset.__doc__ = """Attributes:
+    min:
+        Minimum value for any point in the dataset.
+    q25:
+        25th quartile value for all points in the dataset.
+    q50:
+        50th quartile or median value for all points in the dataset.
+    q75:
+        75th quartile value for all points in the dataset.
+    max:
+        Maximum value for any point in the dataset.
+    count:
+        Number of items in this box plot's stats.
+    lower_full_width_half_maximum:
+        Estimated lower value where there is half the data compared to
+        the mode. provides some estimate on the sharpness of the mode
+        peak.
+    mode:
+        Estimated mode for the dataset.
+    upper_full_width_half_maximum:
+        Estimated upper value where there is half the data compared to
+        the mode. provides some estimate on the sharpness of the mode
+        peak.
+"""
+StreamAcquisitionOutputRequest.__doc__ = """Attributes:
+    acquisition_run_id:
+        The acquisition id of the experiment.
+    data_selection:
+        The desired data selection.  The units for all values are
+        `seconds since the start of the experiment`.
+    filtering:
+        Define filtering parameters for streamed data.
+    split:
+        Define how results are split for returned data.
+"""
+StreamReadLengthHistogramResponse.ReadLengthHistogramData.__doc__ = """Attributes:
+    filtering:
+        The filtering parameters which contributed to this bucket.
+    bucket_values:
+        Counts for each histogram bucket  Units are as specified in
+        `read_length_type` The range covered by each bucket is as in
+        `bucket_ranges` The type of data accumulated in each bucket is
+        given by `bucket_value_type`
+    n50:
+        The N50 value for the read length data for the selected
+        `read_length_type` and `read_end_reasons`.  Units are as
+        specified by `read_length_type`.  Measured across all source
+        data, after excluding the reads specified by
+        `discard_outlier_percent` in the stream request.
+"""
+GetReadLengthTypesResponse.__doc__ = """Attributes:
+    available_types:
+        Array of the types of bucket for which a histogram is
+        currently available
+"""
+ReadLengthHistogramKey.__doc__ = """Attributes:
+    read_end_reason:
+        Only return data for the given ReadEndReason.  Special values:
+        - Specify `ReadEndReason::All` to return data for all read end
+        reasons  If unspecified all read end reasons are returned.
+"""
 StreamReadLengthHistogramResponse.__doc__ = """Attributes:
     read_length_type:
         The data source for the histograms  Also specifies the units
@@ -549,11 +612,50 @@ StreamReadLengthHistogramResponse.__doc__ = """Attributes:
     histogram_data:
         The histogram data
 """
-StreamReadLengthHistogramResponse.BucketRange.__doc__ = """Attributes:
-    start:
-        The range covered by a bucket Units are as set in
-        `read_length_type`, above  The range [start, end) is half open
-        (i.e. the start value is included, the end value is not).
+AcquisitionOutputSplit.__doc__ = """Attributes:
+    barcode_name:
+        Split data for every individual barcode.
+    alignment_reference:
+        Split data for each individual alignment reference.
+        References are defined in alignment references.
+    alignment_bed_file_region:
+        Split data for each target region.  Target regions are defined
+        in bed files.
+    lamp_barcode_id:
+        Split data for each lamp barcode id.  Lamp barcodes are
+        defined by the active lamp kit.
+    lamp_target_id:
+        Split data for each lamp targets id.  Lamp targets are defined
+        by the active lamp kit.
+    read_end_reason:
+        Split returned data by read_end_reason
+"""
+StreamQScoreHistogramResponse.__doc__ = """Attributes:
+    bucket_value_type:
+        The data accumulated in the histogram buckets  See
+        `QScoreHistogramBucketValueType` for further information about
+        the possible options.
+    bucket_ranges:
+        The range covered by each bucket in the histogram data
+    source_data_range:
+        The range covered by non-empty buckets in the source data
+    histogram_data:
+        The histogram data  If duplex basecalling is not enabled, then
+        Simplex histogram data will be returned If duplex basecalling
+        is enabled, then Simplex, Duplex and "All" (i.e. overall)
+        histogram data will be returned
+"""
+AcquisitionOutputSnapshot.__doc__ = """A snapshot of acquisition output data, for a given set of filtering
+criteria.
+
+Attributes:
+    seconds:
+        The time the snapshot was collected, in seconds.  Represents
+        the number of seconds since the start of the experiment Will
+        usually stream in minute chunks, so will first see 60, then
+        120 etc
+    yield_summary:
+        The yield summary data.
 """
 StreamDutyTimeResponse.__doc__ = """Attributes:
     bucket_ranges:

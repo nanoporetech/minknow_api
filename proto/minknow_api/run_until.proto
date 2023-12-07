@@ -12,10 +12,10 @@ import "google/protobuf/timestamp.proto";
 // Overview
 // ========
 //
-// This service allows a user to set certain criteria (Target Run-Until Critera), which indicate
+// This service allows a user to set certain criteria (Target Run-Until Criteria), which indicate
 // the conditions under which the experiment should be stopped or paused.  For example, the user
 // can specify that the experiment should be stopped after a certain time has elapsed, or paused
-// when the number of avaiable pores drops below a certain level.  This functionality is referred
+// when the number of available pores drops below a certain level.  This functionality is referred
 // to as "Run-Until", since it allows the user to specify that an experiment should "run until"
 // some condition has been fulfilled.
 //
@@ -47,10 +47,6 @@ import "google/protobuf/timestamp.proto";
 //
 // The user may update these criteria as the experiment progresses by calling
 // `write_target_criteria()` with the new criteria.
-//
-// The user can determine progress towards these criteria by receiving message from
-// `stream_progress()`, which supplies updates of the current values of the Run-Until
-// Criteria.
 //
 // The user can also obtain updates from the Run-Until Script by calling
 // `stream_updates()`.  The Run-Until Script may send "estimated time remaining"
@@ -110,19 +106,6 @@ import "google/protobuf/timestamp.proto";
 // criteria specified are not support by the script, the script reports an error via
 // `write_updates()`.
 //
-// The script receives experiment progress updates.  Updates for the "standard" Run-Until Criteria
-// are transmitted by MinKNOW over `stream_progress()`.  The "standard" Run-Until Criteria values
-// that MinKNOW transmits over `stream_progress()` are supplied as a convenience for Run-Until
-// Scripts; the same data is also available through other separate MinKNOW APIs.
-//
-// A custom Run-Until Script can also determine additional custom Run-Until Criteria values using
-// any suitable method (e.g. reading another MinKNOW API).  Updates for custom Run-Until Criteria
-// can be transmitted to the user using the  the `write_custom_progress()` call. (Values for
-// "standard" Run-Until Criteria may not be transmitted from the script using the
-// `write_custom_progress()` call; the `write_custom_progress()` call will fail with an error if an
-// attempt is made to transmit such values.  The "standard" Run-Until Criteria can be obtained
-// using `get_standard_criteria()`.)
-//
 // Finally, the Run-Until Script can perform actions and send updates to the user using the
 // `write_updates()` interface.  Actions include pausing, resuming and stopping the
 // acquisition.  Updates include estimated time remaining.
@@ -130,7 +113,7 @@ import "google/protobuf/timestamp.proto";
 // Update History
 // ==============
 //
-// MinKNOW stores an "merged" history of updates that are receieved on the `write_updates()`
+// MinKNOW stores an "merged" history of updates that are received on the `write_updates()`
 // interface.  The history is calculated as MinKNOW receives updates on the `write_updates()`
 // stream as follows:
 //
@@ -156,14 +139,6 @@ import "google/protobuf/timestamp.proto";
 // 
 //
 service RunUntilService {
-    // Get the standard Run-Until Criteria
-    //
-    // Updates for these criteria will be provided by MinKNOW
-    //
-    // NOTE: this will be removed in release 5.8
-    // call currently not implemented
-    rpc get_standard_criteria (GetStandardCriteriaRequest) returns (GetStandardCriteriaResponse) {}
-
     // Write target run-until criteria
     //
     // Updates to these criteria are forwarded to `stream_target_criteria()`.  When an update is
@@ -177,34 +152,6 @@ service RunUntilService {
     // When an update is received, it specifies the new target criteria, which should replace all
     // existing criteria.
     rpc stream_target_criteria (StreamTargetCriteriaRequest) returns (stream StreamTargetCriteriaResponse) {}
-
-    // Send a Custom Run-Until Progress update
-    //
-    // Updates written here are forwarded on to `stream_progress()`.  The Run-Until Script can use
-    // this to supply updates on "custom" Run-Until Criteria
-    //
-    // NOTE: this will be removed in release 5.8
-    // call currently not implemented
-    rpc write_custom_progress (WriteCustomProgressRequest) returns (WriteCustomProgressResponse)  {
-        option (experimental) = true;
-    }
-
-    // Obtain Run-Until Progress updates
-    //
-    // The Run-Until Script can use this data to determine progress towards the Run-Until endpoints.
-    // The user can use this data to visualise progress towards the Run-Until endpoints.
-    //
-    // This data may come from MinKNOW itself (for standard run-until criteria), or may come from
-    // a call to `write_custom_progress` (for custom run-until criteria)
-    //
-    // Note that streaming of progress updates for standard run-until has not yet been implemented
-    // in MinKNOW.
-    //
-    // NOTE: this will be removed in release 5.8
-    // call currently not implemented
-    rpc stream_progress (StreamProgressRequest) returns (stream StreamProgressResponse)  {
-        option (experimental) = true;
-    }
 
     // Send an update about the current Run-Until state
     //
@@ -231,20 +178,6 @@ message CriteriaValues {
     map<string, google.protobuf.Any> criteria = 1;
 }
 
-// NOTE: this will be removed in release 5.8
-// call currently not implemented
-message GetStandardCriteriaRequest {}
-
-// NOTE: this will be removed in release 5.8
-// call currently not implemented
-message GetStandardCriteriaResponse {
-    // A list of valid criteria
-    //
-    // An empty value is included for each criterion, to indicate the required type of that
-    // criterion.
-    CriteriaValues criteria = 1;
-}
-
 message WriteTargetCriteriaRequest {
     // The acquisition to set the Run-Until Criteria for
     string acquisition_run_id = 1 [(rpc_required) = true];
@@ -264,42 +197,6 @@ message StreamTargetCriteriaRequest {
 message StreamTargetCriteriaResponse {
     CriteriaValues pause_criteria = 1;
     CriteriaValues stop_criteria = 2;
-}
-
-// NOTE: this will be removed in release 5.8
-// call currently not implemented
-message WriteCustomProgressRequest {
-    // The acquisition this Run-Until progress update relates to
-    string acquisition_run_id = 1 [(rpc_required) = true];
-
-    // The current Run-Until criteria state
-    //
-    // A Run-Until progress update need not contain updates for all criteria. 
-    // It must not contain updates for "standard" criteria
-    CriteriaValues criteria_values = 2;
-}
-
-// NOTE: this will be removed in release 5.8
-// call currently not implemented
-message WriteCustomProgressResponse {}
-
-// NOTE: this will be removed in release 5.8
-// call currently not implemented
-message StreamProgressRequest {
-    // The acquisition to obtain the Run-Until progress updates for
-    string acquisition_run_id = 1 [(rpc_required) = true];
-}
-
-// NOTE: this will be removed in release 5.8
-// call currently not implemented
-message StreamProgressResponse {
-    // The run until criteria status
-    //
-    // The criteria will always contain the `runtime` field, which acts as a timestamp for the message.
-    //
-    // A Run-Until progress update need not contain updates for all criteria.
-    //
-    CriteriaValues criteria_values = 1;
 }
 
 // Indicates the estimated time remaining

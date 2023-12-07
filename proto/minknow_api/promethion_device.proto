@@ -130,13 +130,13 @@ message TimingEnginePeriods {
     // CDS1 phase (Correlated Double Sampling) sample-point 1
     google.protobuf.UInt32Value CDS1        = 3;
 
-    // CDS1 to DATA transiton
+    // CDS1 to DATA transition
     google.protobuf.UInt32Value CDS1_DATA   = 4;
 
     // DATA transfer phase
     //
     // NOTE: Setting this value has no effect, MinKNOW will choose a value for
-    // DATA itself to acheive the required frame-rate. Reading it will return
+    // DATA itself to achieve the required frame-rate. Reading it will return
     // the chosen DATA period.
     google.protobuf.UInt32Value DATA        = 5;
 
@@ -313,7 +313,7 @@ message PixelSettings {
     // Signal gain multiplier, applied to the integrator circuit.
     GainMultiplier gain_multiplier = 4; 
 
-    // Gain capacitor, used in the integrtor circuit.
+    // Gain capacitor, used in the integrator circuit.
     GainCapacitor gain_capacitor = 5;
 
     // The calibration mode to use.

@@ -496,7 +496,9 @@ message AcquisitionYieldSummary
     // Since 5.0
     float fraction_skipped = 21;
 
-    // Number of reads successfully basecalled.
+    // Number of basecalls successfully produced. Note that one read may produce _multiple_ basecalls.
+    // Therefore the sum of this field, 'basecalled_fail_read_count', and 'basecalled_skipped_read_count'
+    // should be greater than or equal to 'read_count'.
     int64 basecalled_pass_read_count = 3;
 
     // Number of reads which have failed to basecall.
@@ -511,6 +513,23 @@ message AcquisitionYieldSummary
     // Number of bases which have been called and were classed as fail.
     int64 basecalled_fail_bases = 18;
 
+    // Note: If duplex isn't enabled, all reads and basecalls will be classed as 'simplex' and the 'duplex' fields will be 0.
+    message TotalsPerDuplexCategory
+    {
+        int64 simplex = 1;
+        int64 duplex_template = 2;
+        int64 duplex_complement = 3;
+        int64 duplex_combined = 4;
+    }
+
+    // How many of the basecalled reads so far have been classified by the basecaller as...
+    TotalsPerDuplexCategory basecalled_pass_reads_split = 22; // .simplex, .duplex_combined, etc.
+    TotalsPerDuplexCategory basecalled_fail_reads_split = 23;
+
+    // As above, but counted in bases rather than basecalls.
+    TotalsPerDuplexCategory basecalled_pass_bases_split = 24;
+    TotalsPerDuplexCategory basecalled_fail_bases_split = 25;
+    
     // Number of raw samples which have been called.
     int64 basecalled_samples = 6;
 
@@ -645,6 +664,8 @@ message AcquisitionConfigSummary {
     bool basecalling_enabled = 1;
     // Basecalling configuration filename (if basecalling enabled)
     string basecalling_config_filename = 16;
+    // Was the experiment a duplex basecalling experiment (false if basecalling is disabled)
+    bool duplex_enabled = 23;
 
     // Is barcoding enabled for the run
     bool barcoding_enabled = 13;
@@ -678,8 +699,12 @@ message AcquisitionConfigSummary {
     bool fast5_reads_enabled = 4;
     // Determine if fastq reads were enabled for the run.
     bool fastq_reads_enabled = 5;
-    // Determine if protobuf reads were enabled for the run.
-    bool protobuf_reads_enabled = 6;
+    // Determine if pod5 reads were enabled for the run.
+    bool pod5_reads_enabled = 22;
+    
+    // This field has been removed
+    // Since 5.8
+    reserved 6;
 
     // The path of the bulk file for the run.
     //

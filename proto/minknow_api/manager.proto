@@ -1300,6 +1300,9 @@ message ListSettingsForProtocolResponse {
         protocol_settings.ProtocolSetting bulk_file_raw_enabled = 21;
         protocol_settings.ProtocolSetting bulk_file_events_enabled = 22;
         protocol_settings.ProtocolSetting bulk_file_read_table_enabled = 23;
+        
+        // Since 5.8
+        protocol_settings.ProtocolSetting read_filtering_min_duplex_qscore = 24;
     }
 
     protocol_settings.ProtocolIdentifierComponents protocol = 1;

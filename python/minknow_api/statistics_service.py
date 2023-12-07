@@ -11,6 +11,7 @@ import sys
 __all__ = [
     "StatisticsService",
     "DataSelection",
+    "FloatDataSelection",
     "StreamDutyTimeRequest",
     "StreamDutyTimeResponse",
     "ReadLengthHistogramKey",
@@ -21,6 +22,9 @@ __all__ = [
     "ReadLengthN50Response",
     "GetReadLengthTypesRequest",
     "GetReadLengthTypesResponse",
+    "QScoreHistogramKey",
+    "StreamQScoreHistogramRequest",
+    "StreamQScoreHistogramResponse",
     "AcquisitionOutputKey",
     "AcquisitionOutputSplit",
     "StreamAcquisitionOutputRequest",
@@ -55,6 +59,9 @@ __all__ = [
     "SignalPositive",
     "SignalNegative",
     "DataServiceUnblockMuxChange",
+    "QScoreHistogramBucketValueType",
+    "QScore_ReadCounts",
+    "QScore_BasecalledBases",
 ]
 
 def run_with_retry(method, message, timeout, unwraps, full_name):
@@ -668,6 +675,101 @@ class StatisticsService(object):
             raise ArgumentError("Unexpected keyword arguments to get_read_length_types: '{}'".format(", ".join(unused_args)))
 
         return run_with_retry(self._stub.get_read_length_types,
+                              _message, _timeout,
+                              [],
+                              "minknow_api.statistics.StatisticsService")
+    def stream_q_score_histogram(self, _message=None, _timeout=None, **kwargs):
+        """A histogram of q scores
+
+        If the experiment is in-progress, then the latest histogram is streamed on a regular basis
+        If the experiment is complete, then the final histogram is returned
+
+        Note that basecalling must be enabled in order for q-score values to be calculated; as such
+        the call will fail with `FAILED_PRECONDITION` if basecalling is not enabled
+
+        Since 5.8
+
+        This RPC has no side effects. Calling it will have no effect on the state of the
+        system. It is safe to call repeatedly, or to retry on failure, although there is no
+        guarantee it will return the same information each time.
+
+        Args:
+            _message (minknow_api.statistics_pb2.StreamQScoreHistogramRequest, optional): The message to send.
+                This can be passed instead of the keyword arguments.
+            _timeout (float, optional): The call will be cancelled after this number of seconds
+                if it has not been completed.
+                Note that this is the time until the call ends, not the time between returned
+                messages.
+            acquisition_run_id (str): The `acquisition_run_id` of the acquisition to obtain data for
+
+                If this is set to the `acquisition_run_id` of an acquisition which is in-progress, then
+                updates containing the latest histogram data for that acquisition will be streamed regularly
+                until that acquisition finishes (see `poll_time_seconds` below)
+
+                Otherwise, if this is set to the `acquisition_run_id` of an acquisition which is finished,
+                and for which final histogram data is available, then the final histogram data for that
+                acquisition will be returned.  Final histogram data is available until it is cleared.
+
+                Otherwise, if this parameter is not set, or is set to a value which is neither the
+                `acquisition_run_id` of an acquisition which is in-progress, nor the `acquisition_run_id` of
+                an acquisition for which final histogram data is available, then this call will fail with the
+                status `INVALID_ARGUMENT`.
+            poll_time_seconds (int, optional): How often to return new histogram data, in seconds
+
+                If not specified, or set to `0`, then the poll time will be set to 60 seconds
+
+                If data is being returned for an acquisition which is in progress, then one update will be
+                sent when the call is first performed, then subsequently every `poll_time` after that, and
+                then finally once again when the acquisition finishes.
+
+                Otherwise, if final histogram data is being returned for an acquisition that has already
+                finished, this parameter has no effect.  The final histogram data will be returned, and the
+                call will complete.
+            data_selection (minknow_api.statistics_pb2.FloatDataSelection, optional): The desired q score range which histograms should cover.
+            bucket_value_type (minknow_api.statistics_pb2.QScoreHistogramBucketValueType, optional): What data to accumulate in the histogram buckets
+
+                See `QScoreHistogramBucketValueType` for further information about the available options.
+
+        Returns:
+            iter of minknow_api.statistics_pb2.StreamQScoreHistogramResponse
+
+        Note that the returned messages are actually wrapped in a type that collapses
+        submessages for fields marked with ``[rpc_unwrap]``.
+        """
+        if _message is not None:
+            if isinstance(_message, MessageWrapper):
+                _message = _message._message
+            return run_with_retry(self._stub.stream_q_score_histogram,
+                                  _message, _timeout,
+                                  [],
+                                  "minknow_api.statistics.StatisticsService")
+
+        unused_args = set(kwargs.keys())
+
+        _message = StreamQScoreHistogramRequest()
+
+        if "acquisition_run_id" in kwargs:
+            unused_args.remove("acquisition_run_id")
+            _message.acquisition_run_id = kwargs['acquisition_run_id']
+        else:
+            raise ArgumentError("stream_q_score_histogram requires a 'acquisition_run_id' argument")
+
+        if "poll_time_seconds" in kwargs:
+            unused_args.remove("poll_time_seconds")
+            _message.poll_time_seconds = kwargs['poll_time_seconds']
+
+        if "data_selection" in kwargs:
+            unused_args.remove("data_selection")
+            _message.data_selection.CopyFrom(kwargs['data_selection'])
+
+        if "bucket_value_type" in kwargs:
+            unused_args.remove("bucket_value_type")
+            _message.bucket_value_type = kwargs['bucket_value_type']
+
+        if len(unused_args) > 0:
+            raise ArgumentError("Unexpected keyword arguments to stream_q_score_histogram: '{}'".format(", ".join(unused_args)))
+
+        return run_with_retry(self._stub.stream_q_score_histogram,
                               _message, _timeout,
                               [],
                               "minknow_api.statistics.StatisticsService")

@@ -848,9 +848,6 @@ class AnalysisConfigurationService(object):
             read_pod5 (minknow_api.analysis_configuration_pb2.WriterConfiguration.ReadPod5Configuration, optional): Configuration for the POD5 writer.
 
                 If not specified no POD5 outputs are generated.
-            read_protobuf (minknow_api.analysis_configuration_pb2.WriterConfiguration.ReadProtobufConfiguration, optional): Configuration for the protobuf writer.
-
-                If not specified, no protobuf outputs are generated.
             sequencing_summary (minknow_api.analysis_configuration_pb2.WriterConfiguration.SequencingSummaryConfiguration, optional): Configuration for Sequencing Summary file
 
                 If not specified, no summary file is generated.
@@ -898,10 +895,6 @@ class AnalysisConfigurationService(object):
         if "read_pod5" in kwargs:
             unused_args.remove("read_pod5")
             _message.read_pod5.CopyFrom(kwargs['read_pod5'])
-
-        if "read_protobuf" in kwargs:
-            unused_args.remove("read_protobuf")
-            _message.read_protobuf.CopyFrom(kwargs['read_protobuf'])
 
         if "sequencing_summary" in kwargs:
             unused_args.remove("sequencing_summary")

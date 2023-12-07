@@ -30,6 +30,14 @@ service LogService {
     //
     // Since 1.11
     rpc send_ping(SendPingRequest) returns (SendPingResponse) {}
+
+    // Collect any pings that haven't been sent yet and write them into a file
+    // instead of sending them.  Once collected, the pings cannot be collected
+    // again and will be cleaned-up at a time determined by their
+    // expiry-period/lifetime.
+    //
+    // Since 5.8 and backported to 5.6
+    rpc collect_pings(CollectPingsRequest) returns (stream CollectPingsResponse) {}
 }
 
 message GetUserMessagesRequest {
@@ -99,7 +107,36 @@ message SendPingRequest {
     //
     // note: if this string is not a valid json object, an error will be raised.
     string ping_data = 1 [(rpc_required) = true];
+
+    // Should the ping fail to send, the number of days the ping will be stored
+    // before being cleaned up.
+    uint64 days_until_expiry = 2;
 }
 
 message SendPingResponse {
+}
+
+message CollectPingsRequest {
+    // Any pings that are queued to be sent will be collected into a zip file
+    // and written to this location. This location must be in a folder writable
+    // by minknow. If the file name does not end with ".zip", minknow will
+    // append ".zip" to the provided file name.
+    string collected_ping_file = 1 [(rpc_required) = true];
+
+    // Normally previously collected pings are ignored, but by setting this they
+    // will be included. Defaults to False.
+    bool include_previously_colleced_pings = 2;
+}
+
+enum CollectPingsStage {
+    PAUSING_PING_SERVICE = 0;
+    LOOKING_FOR_PING_FILES = 1;
+    CREATING_ARCHIVE = 2;
+    ADDING_PING_FILES_TO_ARCHIVE = 3;
+    RESTARTING_PING_SERVICE = 4;
+    COMPLETE = 5;
+};
+
+message CollectPingsResponse {
+    CollectPingsStage stage = 1;
 }

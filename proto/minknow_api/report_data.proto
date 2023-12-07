@@ -37,6 +37,7 @@ message BasecallBoxplot {
     statistics.BoxplotResponse plot = 2;
 }
 
+// This is spelt incorrectly (should be AcquisitionReportData)
 message AcquistionReportData {
     // Information about the executed acquisition
     acquisition.AcquisitionRunInfo acquisition_run_info = 1;
@@ -55,6 +56,8 @@ message AcquistionReportData {
     repeated AcquisitionOutput acquisition_output = 7;
 
     repeated ReadLengthHistogram read_length_histogram = 8;
+
+    repeated statistics.StreamQScoreHistogramResponse qscore_histograms = 11;
 
     repeated BasecallBoxplot basecall_boxplot = 9;
 

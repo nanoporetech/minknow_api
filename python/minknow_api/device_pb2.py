@@ -255,66 +255,104 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   _REGISTERFLOWCELLBARCODESRESPONSE._serialized_end=6454
   _DEVICESERVICE._serialized_start=6724
   _DEVICESERVICE._serialized_end=10383
-SetCalibrationRequest.__doc__ = """Attributes:
-    first_channel:
-        The first channel included in calibration data.  This must
-        always be 1. This is required in order to make sure the client
-        and MinKNOW agree on what data is being provided.
-    last_channel:
-        The last channel included in calibration data.  This must
-        always be the same as the channel count returned by
-        :meth:`get_flow_cell_info`. This is required in order to make
-        sure the client and MinKNOW agree on what data is being
-        provided.
-    offsets:
-        The ADC value adjustment to reach 0pA on each channel.  This
-        is ``-x``, where ``x`` is the (mean) ADC value at 0pA.
-    pa_ranges:
-        The range of possible pA values that can be produced by the
-        device.
+SetFlowCellBarcodeKitRequest.__doc__ = """Attributes:
+    id:
+        The Barcode Kit ID can be up to 8 characters long
 """
-GetDeviceInfoResponse.__doc__ = """Attributes:
-    device_id:
-        A unique identifier for the device.  This is the identifier of
-        the device MinKNOW was started for. It will only communicate
-        with this device.  Note that simulated device IDs are only
-        unique for this host, not globally.  This value will be set
-        even if the device is not currently connected (assuming
-        MinKNOW was started by the manager service).
-    device_type:
-        The type of the device.
-    is_simulated:
-        Whether the device is simulated.  If this is true, there is no
-        physical device - MinKNOW is simulating it. If it is false,
-        MinKNOW will be acquiring data from a real device.
-    max_channel_count:
-        The maximum number of channels supported by the device.  Each
-        channel provides a signal from the device. For example, a
-        MinION supports up to 512 channels, and so can provide 512
-        simultaneous streams of data.  This value is fixed for a given
-        device type. Note, however, that a flow cell might be attached
-        that has a smaller number of channels.
-    max_wells_per_channel:
-        The maximum number of wells connected to each channel.  A well
-        is a discrete location on the device where sensing can take
-        place. Normally, each well should have a single nanopore in
-        it.  For example, a MinION supports up to 4 wells per channel,
-        allowing for 2048 wells in total. So the value of this for a
-        MinION will be 4.  This value is fixed for a given device
-        type. Note, however, that a flow cell might be attached that
-        has a smaller number of wells on each channel.
-    can_set_temperature:
-        Whether the set_temperature() method can be expected to work.
-        On some systems, not all connected devices have the ability to
-        control their own temperature, as temperature controls are
-        managed in groups. If this field is true, this device can
-        control its own temperature. If it it false, it cannot, and
-        the temperature will be maintained at a pre-determined
-        temperature.
-    digitisation:
-        The range of uncalibrated data values.  This is the number of
-        distinct signal values that can be produced by the device's
-        analog to digital converter (ADC).
+GetTemperatureResponse.MinIONTemperature.__doc__ = """Packet of temperatures appropriate for a MinION.
+
+Attributes:
+    asic_temperature:
+        Temperature as measured by the probe inside the asic. This is
+        the "secondary" temperature
+    heatsink_temperature:
+        Temperature as measured by the probe in the minion heatsink.
+        This is the "primary" temperature
+"""
+SetUserSpecifiedFlowCellIdRequest.__doc__ = """Attributes:
+    id:
+        A unique identifier for the flow cell, which the user can
+        specify.  In the event a flow cell does not have an eeprom,
+        this field can be used by the user to record their
+        flow_cell_id.  Since 1.12
+"""
+RegisterFlowCellBarcodesRequest.__doc__ = """Attributes:
+    barcodes:
+        List of unique barcodes that have been used with the flow-cell
+        Where a barcode is represented by an index in the range of 1
+        to 384 only.
+"""
+SetTemperatureRequest.WaitForTemperatureSettings.__doc__ = """Attributes:
+    timeout:
+        Maximum duration (in seconds) to wait for the device to reach
+        temperature.  Not specifying a value will wait for a maximum
+        of 5 minutes.
+    min_stable_duration:
+        Minimum duration (in seconds) that the reported temperature
+        must be continually within the target temperature range,
+        before the device is considered to have reached temperature.
+        A value of zero means that the device will be considered to
+        have reached temperature as soon as the reported temperature
+        is equal to the target temperature.  Not specifying a value is
+        equivalent to specifying a value of zero.  The
+        min_stable_duration must be less than or equal to the timeout
+        duration (if it were greater, then the temperature would never
+        be read as 'stable' before the time-out occurred).  Since 3.4
+    tolerance:
+        Specify an optional tolerance to apply to the wait.  For
+        example, if the target temperature is 35, and the tolerance is
+        1 any temperature in the range 34 - 36 will cause the request
+        to return.  Default is 0.5 degree tolerance.
+"""
+ChannelConfiguration.__doc__ = """Describes the configuration of a channel on the device.  Note that
+this is a lossy representation. The device-specific APIs provide more
+precise information. This only describes common configurations, and
+omits anything that doesn't impact the received signal.
+
+Attributes:
+    well:
+        The currently-connected well.  Wells are counted from 1. 0
+        indicates that no well is connected. 5 indicates some non-
+        generic configuration such as ground for a minion or
+        connecting all wells on promethion  Note that MinKNOW can
+        return channel configurations where the well number is larger
+        than the ``max_well_count`` value returned by
+        :meth:`DeviceService.get_device_info`. This indicates that
+        some other connection has been made (for example, PromethIONs
+        can simultaneously connect all wells, and MinIONs can connect
+        to ground).
+    test_current:
+        Whether the test current is connected to the integrator
+        (measurement circuit).  The signal will be a steady test
+        current produced on the device. This can be used for
+        calibration or to test the device integration circuits.
+"""
+SetSampleRateResponse.__doc__ = """Attributes:
+    real_sample_rate:
+        The real sample rate is the actual sample rate that is set on
+        the device, which may be different from the actual value
+        passed into the rpc.  For example on promethion, when it is
+        given a sample rate, it will round to the nearest 1000. So
+        1499 becomes 1000 and 1500 becomes 2000 real sample rate  For
+        a minion, the actual sample rate is determined via 3 separate
+        values; clock speed, integration time and clock divider, and
+        so not all values are possible. e.g. setting 3000 will return
+        3012 real sample rate. See 'sampling_frequency' in
+        MinionDeviceService for a slightly more in depth explanation
+"""
+SaturationConfig.SoftwareSaturation.__doc__ = """The ranges specify the actual pA or ADC ranges which will trigger
+saturation. This range is checked against the first sample in each
+delivered packet.  software saturation is specified in adc units
+
+Attributes:
+    enabled:
+        Set to enable or disable software saturation.
+    software_min_adc:
+        The minimum adc value that is not a saturation.  If this value
+        is not specified, the previous value is kept.
+    software_max_adc:
+        The maximum adc value that is not a saturation.  If this value
+        is not specified, the previous value is kept.
 """
 GetFlowCellInfoResponse.__doc__ = """Attributes:
     has_flow_cell:
@@ -410,6 +448,133 @@ GetFlowCellInfoResponse.__doc__ = """Attributes:
         384) that have been set by calls to
         register_flow_cell_barcodes() on this flow cell. Since 5.6
 """
+SetUserSpecifiedProductCodeRequest.__doc__ = """Attributes:
+    code:
+        A product code for the flow cell, which the user can specify.
+        In the event a flow cell does not have an eeprom, the user can
+        specify product code here.  Since 1.12
+"""
+StreamTemperatureRequest.__doc__ = """Attributes:
+    acquisition_run_id:
+        The acquisition id of the experiment.
+    data_selection:
+        The desired data selection.  The units for all values are
+        `seconds since the start of the experiment`.
+    period_seconds:
+        How often temperature updates should be sent Defaults to a
+        period of 1 second, if not specified, or set to 0
+"""
+GetDeviceInfoResponse.ComponentVersion.__doc__ = """Firmware versions and serial-numbers of components associated with
+this device  Depending on the hardware, there may be several
+components associated with this device, each with their own firmware
+version and serial-number. Not all components have serial-numbers.
+
+Attributes:
+    component:
+        Description of the component that has firmware
+    version:
+        The firmware version, if this cannot be determined for a
+        component where the firmware version would usually be
+        available, this will contain "Unknown"
+    serial_number:
+        The serial-number of a component. If this in not applicable to
+        the type of component or cannot be read at the current time,
+        then this field will be blank.
+"""
+SetTemperatureResponse.__doc__ = """Attributes:
+    timed_out_waiting_for_temperature:
+        Find if we hit a timeout waiting for the temperature to be
+        hit.  Deprecated since 5.5; in favour of the
+        `TIMED_OUT_WAITING_FOR_TEMPERATURE` result code.
+    result:
+        The result of setting the temperature  Since 5.5  NB - before
+        5.5, checking this field will always return a value of
+        `TARGET_TEMPERATURE_SET` The "real" value may be inferred as
+        follows:  - If `wait_for_temperature` was NOT specified, the
+        "real" result is    `TARGET_TEMPERATURE_SET`  - If
+        `wait_for_temperature` was specified, and
+        `timed_out_waiting_for_temperature` is    false, the "real"
+        result is `REACHED_TEMPERATURE`  - If `wait_for_temperature`
+        was specified, and `timed_out_waiting_for_temperature` is
+        true, the "real" result is `TIMED_OUT_WAITING_FOR_TEMPERATURE`
+        - Versions prior to 5.5 do not support setting the secondary
+        temperature limit, and so (for    these versions) the "real"
+        value can never be `SECONDARY_TEMPERATURE_LIMITS_EXCEEDED`
+"""
+UnblockRequest.__doc__ = """Attributes:
+    channels:
+        List of channels indexed from 1.
+    duration:
+        How long should an unblock last.
+"""
+ReturnedChannelConfiguration.__doc__ = """Describes the configuration of a channel on the device.  Note that
+this is a lossy representation. The device-specific APIs provide more
+precise information. This only describes common configurations, and
+omits anything that doesn't impact the received signal.
+
+Attributes:
+    well:
+        The currently-connected well.  Wells are counted from 1. 0
+        indicates that no well is connected. 5 indicates some non-
+        generic configuration such as ground for a minion or
+        connecting all wells on promethion  Note that MinKNOW can
+        return channel configurations where the well number is larger
+        than the ``max_well_count`` value returned by
+        :meth:`DeviceService.get_device_info`. This indicates that
+        some other connection has been made (for example, PromethIONs
+        can simultaneously connect all wells, and MinIONs can connect
+        to ground).
+    test_current:
+        Whether the test current is connected to the integrator
+        (measurement circuit).  The signal will be a steady test
+        current produced on the device. This can be used for
+        calibration or to test the device integration circuits.
+    unblock:
+        Whether the unblock voltage is connected to the integrator
+        (measurement circuit).  Provides a reverse potential across
+        the connected well. This can be used to drive molecules back
+        out of the well.
+"""
+SaturationConfig.UserThresholdSaturation.__doc__ = """User threshold is specified in pico amps
+
+Attributes:
+    enabled:
+        Set to enable or disable software saturation.
+    user_threshold_min_pa:
+        The minimum pA value that is not a saturation.  If this value
+        is not specified, the previous value is kept.
+    user_threshold_max_pa:
+        The maximum pA value that is not a saturation.  If this value
+        is not specified, the previous value is kept.
+"""
+SetCalibrationRequest.__doc__ = """Attributes:
+    first_channel:
+        The first channel included in calibration data.  This must
+        always be 1. This is required in order to make sure the client
+        and MinKNOW agree on what data is being provided.
+    last_channel:
+        The last channel included in calibration data.  This must
+        always be the same as the channel count returned by
+        :meth:`get_flow_cell_info`. This is required in order to make
+        sure the client and MinKNOW agree on what data is being
+        provided.
+    offsets:
+        The ADC value adjustment to reach 0pA on each channel.  This
+        is ``-x``, where ``x`` is the (mean) ADC value at 0pA.
+    pa_ranges:
+        The range of possible pA values that can be produced by the
+        device.
+"""
+SetChannelConfigurationRequest.__doc__ = """Attributes:
+    channel_configurations:
+        A map between <channel name, config to set>  Will return an
+        error if any of the key values (representing channel names)
+        are below 1, or above the channel count value returned from
+        :meth:`get_flow_cell_info`  The selected well cannot be set to
+        WELL_OTHER, and will error if it tries to do so  DEPRECATED:
+        Note that the type to set may change from 4.0 to enforce the
+        fact that unblock cannot be set through this call
+"""
 SetTemperatureRequest.__doc__ = """Attributes:
     temperature:
         The desired temperature in degrees Celsius.  If temperature
@@ -458,6 +623,66 @@ SetTemperatureRequest.__doc__ = """Attributes:
         the call to `set_temperature()` returns, these limits are no
         longer checked.  Since 5.5
 """
+GetDeviceInfoResponse.__doc__ = """Attributes:
+    device_id:
+        A unique identifier for the device.  This is the identifier of
+        the device MinKNOW was started for. It will only communicate
+        with this device.  Note that simulated device IDs are only
+        unique for this host, not globally.  This value will be set
+        even if the device is not currently connected (assuming
+        MinKNOW was started by the manager service).
+    device_type:
+        The type of the device.
+    is_simulated:
+        Whether the device is simulated.  If this is true, there is no
+        physical device - MinKNOW is simulating it. If it is false,
+        MinKNOW will be acquiring data from a real device.
+    max_channel_count:
+        The maximum number of channels supported by the device.  Each
+        channel provides a signal from the device. For example, a
+        MinION supports up to 512 channels, and so can provide 512
+        simultaneous streams of data.  This value is fixed for a given
+        device type. Note, however, that a flow cell might be attached
+        that has a smaller number of channels.
+    max_wells_per_channel:
+        The maximum number of wells connected to each channel.  A well
+        is a discrete location on the device where sensing can take
+        place. Normally, each well should have a single nanopore in
+        it.  For example, a MinION supports up to 4 wells per channel,
+        allowing for 2048 wells in total. So the value of this for a
+        MinION will be 4.  This value is fixed for a given device
+        type. Note, however, that a flow cell might be attached that
+        has a smaller number of wells on each channel.
+    can_set_temperature:
+        Whether the set_temperature() method can be expected to work.
+        On some systems, not all connected devices have the ability to
+        control their own temperature, as temperature controls are
+        managed in groups. If this field is true, this device can
+        control its own temperature. If it it false, it cannot, and
+        the temperature will be maintained at a pre-determined
+        temperature.
+    digitisation:
+        The range of uncalibrated data values.  This is the number of
+        distinct signal values that can be produced by the device's
+        analog to digital converter (ADC).
+"""
+GetDeviceStateResponse.__doc__ = """Attributes:
+    device_state:
+        Whether the physical hardware is present.  This is really only
+        relevant to MinIONs, which could be unplugged by the user at
+        any time.
+    flow_cell_connector:
+        Indicates what sort of flow cell can be inserted.  For
+        example, if the user needs to set or override the flow cell
+        product code, this can be used to limit the list of possible
+        flow cell product codes to choose from.  Since 4.1
+"""
+GetChannelConfigurationResponse.__doc__ = """Attributes:
+    channel_configurations:
+        A list of channel configurations  The order of channel
+        configurations matches the channel order specified by
+        :attribute:`channels` in the request message
+"""
 GetCalibrationResponse.__doc__ = """Attributes:
     digitisation:
         The range of possible ADC values that can be produced by the
@@ -475,74 +700,21 @@ GetCalibrationResponse.__doc__ = """Attributes:
         Find if there is a stored calibration, or if the returned
         response is empty.  Since 1.12
 """
-RegisterFlowCellBarcodesRequest.__doc__ = """Attributes:
-    barcodes:
-        List of unique barcodes that have been used with the flow-cell
-        Where a barcode is represented by an index in the range of 1
-        to 384 only.
-"""
-SaturationConfig.UserThresholdSaturation.__doc__ = """User threshold is specified in pico amps
+GetTemperatureResponse.PromethIONTemperature.__doc__ = """Packet of temperatures appropriate for a PromethION.
 
 Attributes:
-    enabled:
-        Set to enable or disable software saturation.
-    user_threshold_min_pa:
-        The minimum pA value that is not a saturation.  If this value
-        is not specified, the previous value is kept.
-    user_threshold_max_pa:
-        The maximum pA value that is not a saturation.  If this value
-        is not specified, the previous value is kept.
-"""
-SetChannelConfigurationRequest.__doc__ = """Attributes:
-    channel_configurations:
-        A map between <channel name, config to set>  Will return an
-        error if any of the key values (representing channel names)
-        are below 1, or above the channel count value returned from
-        :meth:`get_flow_cell_info`  The selected well cannot be set to
-        WELL_OTHER, and will error if it tries to do so  DEPRECATED:
-        Note that the type to set may change from 4.0 to enforce the
-        fact that unblock cannot be set through this call
-"""
-StreamTemperatureRequest.__doc__ = """Attributes:
-    period_seconds:
-        How often temperature updates should be sent Defaults to a
-        period of 1 second, if not specified, or set to 0
-    acquisition_run_id:
-        The acquisition id of the experiment.
-    data_selection:
-        The desired data selection.  The units for all values are
-        `seconds since the start of the experiment`.
-"""
-GetCalibrationRequest.__doc__ = """Attributes:
-    first_channel:
-        The first channel to get calibration data for.  This should
-        normally be 1.
-    last_channel:
-        The last channel included in calibration data.  This should
-        normally be the channel count returned by
-        :meth:`get_flow_cell_info`.
-"""
-GetTemperatureResponse.__doc__ = """Attributes:
-    target_temperature:
-        Return the temperature target the device is aiming to reach.
     flowcell_temperature:
-        Temperature as measured by thermistor TH2 on the P-Chip.
+        Temperature as measured by thermistor TH2 on the P-Chip. This
+        is the "primary" temperature
     chamber_temperature:
-        Flow-cell chamber-temperature, calculated from the pixel-block
-        temperatures
-    pixel_block_temperature:
-        Temperature measured at each sensor in the ASIC, there are 12
-        sensors, one sensor per pixel-block
+        Mean of 12 pixel-blocks temperatures measured with sensors in
+        the ASIC. This is the "secondary" temperature
 """
-UnblockRequest.__doc__ = """Attributes:
-    channels:
-        List of channels indexed from 1.
-    duration:
-        How long should an unblock last.
-"""
-SetFlowCellBarcodeKitRequest.__doc__ = """Attributes:
-    id:
-        The Barcode Kit ID can be up to 8 characters long
+CancelUnblocksResponse.__doc__ = """Attributes:
+    cancelled_unblocks:
+        The number of unblocks which have been cancelled as part of
+        this request.  Should return the total number of unblock
+        operations which have been cancelled.
 """
 SaturationConfig.Thresholds.__doc__ = """The thresholds define how many over limit samples are required to
 trigger saturation on the device.  Each packet of frames minknow
@@ -565,151 +737,18 @@ Attributes:
     user_unblock_threshold:
         Threshold for user threshold saturation on unblock muxes
 """
-GetDeviceStateResponse.__doc__ = """Attributes:
-    device_state:
-        Whether the physical hardware is present.  This is really only
-        relevant to MinIONs, which could be unplugged by the user at
-        any time.
-    flow_cell_connector:
-        Indicates what sort of flow cell can be inserted.  For
-        example, if the user needs to set or override the flow cell
-        product code, this can be used to limit the list of possible
-        flow cell product codes to choose from.  Since 4.1
-"""
-SetSampleRateResponse.__doc__ = """Attributes:
-    real_sample_rate:
-        The real sample rate is the actual sample rate that is set on
-        the device, which may be different from the actual value
-        passed into the rpc.  For example on promethion, when it is
-        given a sample rate, it will round to the nearest 1000. So
-        1499 becomes 1000 and 1500 becomes 2000 real sample rate  For
-        a minion, the actual sample rate is determined via 3 separate
-        values; clock speed, integration time and clock divider, and
-        so not all values are possible. e.g. setting 3000 will return
-        3012 real sample rate. See 'sampling_frequency' in
-        MinionDeviceService for a slightly more in depth explanation
-"""
-SaturationConfig.SoftwareSaturation.__doc__ = """The ranges specify the actual pA or ADC ranges which will trigger
-saturation. This range is checked against the first sample in each
-delivered packet.  software saturation is specified in adc units
-
-Attributes:
-    enabled:
-        Set to enable or disable software saturation.
-    software_min_adc:
-        The minimum adc value that is not a saturation.  If this value
-        is not specified, the previous value is kept.
-    software_max_adc:
-        The maximum adc value that is not a saturation.  If this value
-        is not specified, the previous value is kept.
-"""
-ChannelConfiguration.__doc__ = """Describes the configuration of a channel on the device.  Note that
-this is a lossy representation. The device-specific APIs provide more
-precise information. This only describes common configurations, and
-omits anything that doesn't impact the received signal.
-
-Attributes:
-    well:
-        The currently-connected well.  Wells are counted from 1. 0
-        indicates that no well is connected. 5 indicates some non-
-        generic configuration such as ground for a minion or
-        connecting all wells on promethion  Note that MinKNOW can
-        return channel configurations where the well number is larger
-        than the ``max_well_count`` value returned by
-        :meth:`DeviceService.get_device_info`. This indicates that
-        some other connection has been made (for example, PromethIONs
-        can simultaneously connect all wells, and MinIONs can connect
-        to ground).
-    test_current:
-        Whether the test current is connected to the integrator
-        (measurement circuit).  The signal will be a steady test
-        current produced on the device. This can be used for
-        calibration or to test the device integration circuits.
-"""
-SetTemperatureRequest.SecondaryTemperatureLimits.__doc__ = """Attributes:
-    min:
-        The minimum permissible "secondary" temperature
-    max:
-        The maximum permissible "secondary" temperature
-"""
-SetUserSpecifiedFlowCellIdRequest.__doc__ = """Attributes:
-    id:
-        A unique identifier for the flow cell, which the user can
-        specify.  In the event a flow cell does not have an eeprom,
-        this field can be used by the user to record their
-        flow_cell_id.  Since 1.12
-"""
-GetTemperatureResponse.PromethIONTemperature.__doc__ = """Packet of temperatures appropriate for a PromethION.
-
-Attributes:
+GetTemperatureResponse.__doc__ = """Attributes:
     flowcell_temperature:
-        Temperature as measured by thermistor TH2 on the P-Chip. This
-        is the "primary" temperature
+        Temperature as measured by thermistor TH2 on the P-Chip.
     chamber_temperature:
-        Mean of 12 pixel-blocks temperatures measured with sensors in
-        the ASIC. This is the "secondary" temperature
-"""
-SetTemperatureRequest.WaitForTemperatureSettings.__doc__ = """Attributes:
-    timeout:
-        Maximum duration (in seconds) to wait for the device to reach
-        temperature.  Not specifying a value will wait for a maximum
-        of 5 minutes.
-    min_stable_duration:
-        Minimum duration (in seconds) that the reported temperature
-        must be continually within the target temperature range,
-        before the device is considered to have reached temperature.
-        A value of zero means that the device will be considered to
-        have reached temperature as soon as the reported temperature
-        is equal to the target temperature.  Not specifying a value is
-        equivalent to specifying a value of zero.  The
-        min_stable_duration must be less than or equal to the timeout
-        duration (if it were greater, then the temperature would never
-        be read as 'stable' before the time-out occurred).  Since 3.4
-    tolerance:
-        Specify an optional tolerance to apply to the wait.  For
-        example, if the target temperature is 35, and the tolerance is
-        1 any temperature in the range 34 - 36 will cause the request
-        to return.  Default is 0.5 degree tolerance.
-"""
-SetUserSpecifiedProductCodeRequest.__doc__ = """Attributes:
-    code:
-        A product code for the flow cell, which the user can specify.
-        In the event a flow cell does not have an eeprom, the user can
-        specify product code here.  Since 1.12
-"""
-GetTemperatureResponse.MinIONTemperature.__doc__ = """Packet of temperatures appropriate for a MinION.
-
-Attributes:
-    asic_temperature:
-        Temperature as measured by the probe inside the asic. This is
-        the "secondary" temperature
-    heatsink_temperature:
-        Temperature as measured by the probe in the minion heatsink.
-        This is the "primary" temperature
-"""
-GetDeviceInfoResponse.ComponentVersion.__doc__ = """Firmware versions and serial-numbers of components associated with
-this device  Depending on the hardware, there may be several
-components associated with this device, each with their own firmware
-version and serial-number. Not all components have serial-numbers.
-
-Attributes:
-    component:
-        Description of the component that has firmware
-    version:
-        The firmware version, if this cannot be determined for a
-        component where the firmware version would usually be
-        available, this will contain "Unknown"
-    serial_number:
-        The serial-number of a component. If this in not applicable to
-        the type of component or cannot be read at the current time,
-        then this field will be blank.
-"""
-GetChannelConfigurationRequest.__doc__ = """Attributes:
-    channels:
-        A list of channel names (1-indexed) to specify what channels
-        to get channel configs for  Will return an error if any of the
-        channel names are below 1, or above the channel count value
-        returned from :meth:`get_flow_cell_info`
+        Flow-cell chamber-temperature, calculated from the pixel-block
+        temperatures
+    pixel_block_temperature:
+        Temperature measured at each sensor in the ASIC, there are 12
+        sensors, one sensor per pixel-block
+    target_temperature:
+        Return the temperature target the device is aiming to reach.
+        Since 1.15
 """
 SaturationConfig.__doc__ = """Attributes:
     thresholds:
@@ -725,64 +764,26 @@ SaturationConfig.__doc__ = """Attributes:
         Settings for user threshold saturation, specified in pA.  If
         not specified, the previous thresholds are kept.
 """
-CancelUnblocksResponse.__doc__ = """Attributes:
-    cancelled_unblocks:
-        The number of unblocks which have been cancelled as part of
-        this request.  Should return the total number of unblock
-        operations which have been cancelled.
+GetChannelConfigurationRequest.__doc__ = """Attributes:
+    channels:
+        A list of channel names (1-indexed) to specify what channels
+        to get channel configs for  Will return an error if any of the
+        channel names are below 1, or above the channel count value
+        returned from :meth:`get_flow_cell_info`
 """
-GetChannelConfigurationResponse.__doc__ = """Attributes:
-    channel_configurations:
-        A list of channel configurations  The order of channel
-        configurations matches the channel order specified by
-        :attribute:`channels` in the request message
+SetTemperatureRequest.SecondaryTemperatureLimits.__doc__ = """Attributes:
+    min:
+        The minimum permissible "secondary" temperature
+    max:
+        The maximum permissible "secondary" temperature
 """
-ReturnedChannelConfiguration.__doc__ = """Describes the configuration of a channel on the device.  Note that
-this is a lossy representation. The device-specific APIs provide more
-precise information. This only describes common configurations, and
-omits anything that doesn't impact the received signal.
-
-Attributes:
-    well:
-        The currently-connected well.  Wells are counted from 1. 0
-        indicates that no well is connected. 5 indicates some non-
-        generic configuration such as ground for a minion or
-        connecting all wells on promethion  Note that MinKNOW can
-        return channel configurations where the well number is larger
-        than the ``max_well_count`` value returned by
-        :meth:`DeviceService.get_device_info`. This indicates that
-        some other connection has been made (for example, PromethIONs
-        can simultaneously connect all wells, and MinIONs can connect
-        to ground).
-    test_current:
-        Whether the test current is connected to the integrator
-        (measurement circuit).  The signal will be a steady test
-        current produced on the device. This can be used for
-        calibration or to test the device integration circuits.
-    unblock:
-        Whether the unblock voltage is connected to the integrator
-        (measurement circuit).  Provides a reverse potential across
-        the connected well. This can be used to drive molecules back
-        out of the well.
-"""
-SetTemperatureResponse.__doc__ = """Attributes:
-    timed_out_waiting_for_temperature:
-        Find if we hit a timeout waiting for the temperature to be
-        hit.  Deprecated since 5.5; in favour of the
-        `TIMED_OUT_WAITING_FOR_TEMPERATURE` result code.
-    result:
-        The result of setting the temperature  Since 5.5  NB - before
-        5.5, checking this field will always return a value of
-        `TARGET_TEMPERATURE_SET` The "real" value may be inferred as
-        follows:  - If `wait_for_temperature` was NOT specified, the
-        "real" result is    `TARGET_TEMPERATURE_SET`  - If
-        `wait_for_temperature` was specified, and
-        `timed_out_waiting_for_temperature` is    false, the "real"
-        result is `REACHED_TEMPERATURE`  - If `wait_for_temperature`
-        was specified, and `timed_out_waiting_for_temperature` is
-        true, the "real" result is `TIMED_OUT_WAITING_FOR_TEMPERATURE`
-        - Versions prior to 5.5 do not support setting the secondary
-        temperature limit, and so (for    these versions) the "real"
-        value can never be `SECONDARY_TEMPERATURE_LIMITS_EXCEEDED`
+GetCalibrationRequest.__doc__ = """Attributes:
+    first_channel:
+        The first channel to get calibration data for.  This should
+        normally be 1.
+    last_channel:
+        The last channel included in calibration data.  This should
+        normally be the channel count returned by
+        :meth:`get_flow_cell_info`.
 """
 # @@protoc_insertion_point(module_scope)

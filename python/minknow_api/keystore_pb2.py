@@ -73,18 +73,19 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   _WATCHRESPONSE_VALUESENTRY._serialized_end=314
   _KEYSTORESERVICE._serialized_start=1061
   _KEYSTORESERVICE._serialized_end=1510
-GetRequest.__doc__ = """Attributes:
-    names:
-        The names of the values you wish to fetch.
-    allow_missing:
-        Whether to allow missing values.  If set, names that are not
-        present in the store will simply be omitted from the response.
-        Otherwise, missing values will cause an error to be returned.
-        Defaults to 'false'
+WatchResponse.__doc__ = """Attributes:
+    runs:
+        The current state of some of the runs.
+    values:
+        The values that have changed.  The first received message will
+        contain the current state of all the watched values.
+        Subsequent messages will only contain the values that changed.
+    removed_values:
+        The values that have been removed.
 """
-GetOneRequest.__doc__ = """Attributes:
-    name:
-        The name of the value to fetch.
+GetOneResponse.__doc__ = """Attributes:
+    value:
+        The requested value.
 """
 WatchRequest.__doc__ = """Attributes:
     send_finished_runs:
@@ -100,19 +101,18 @@ WatchRequest.__doc__ = """Attributes:
         message will be sent with the set values. Otherwise, missing
         values will cause an immediate error.  Defaults to 'false'
 """
-WatchResponse.__doc__ = """Attributes:
-    runs:
-        The current state of some of the runs.
-    values:
-        The values that have changed.  The first received message will
-        contain the current state of all the watched values.
-        Subsequent messages will only contain the values that changed.
-    removed_values:
-        The values that have been removed.
+GetOneRequest.__doc__ = """Attributes:
+    name:
+        The name of the value to fetch.
 """
-GetOneResponse.__doc__ = """Attributes:
-    value:
-        The requested value.
+GetRequest.__doc__ = """Attributes:
+    names:
+        The names of the values you wish to fetch.
+    allow_missing:
+        Whether to allow missing values.  If set, names that are not
+        present in the store will simply be omitted from the response.
+        Otherwise, missing values will cause an error to be returned.
+        Defaults to 'false'
 """
 RemoveRequest.__doc__ = """Attributes:
     names:
@@ -123,10 +123,6 @@ RemoveRequest.__doc__ = """Attributes:
         will still be removed. Otherwise, missing values will cause an
         error to be returned (in which case nothing will be removed).
         Defaults to 'false'
-"""
-GetResponse.__doc__ = """Attributes:
-    values:
-        The requested values.
 """
 StoreRequest.__doc__ = """Attributes:
     values:
@@ -141,5 +137,9 @@ StoreRequest.__doc__ = """Attributes:
         `PERSIST_ACROSS_RESTARTS`.  Using any other value will cause
         the call to fail with `INVALID_ARGUMENT`  Note that calling
         remove() will remove the value regardless of this setting.
+"""
+GetResponse.__doc__ = """Attributes:
+    values:
+        The requested values.
 """
 # @@protoc_insertion_point(module_scope)

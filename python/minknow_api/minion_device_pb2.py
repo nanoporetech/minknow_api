@@ -74,21 +74,11 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   _MINIONDEVICESERVICE._serialized_start=3663
   _MINIONDEVICESERVICE._serialized_end=4042
 GetSettingsRequest.__doc__ = """Request for MinionDeviceService.get_settings"""
-TemperatureRange.__doc__ = """Temperature range.
+GetSettingsResponse.__doc__ = """Response for MinionDeviceService.get_settings
 
 Attributes:
-    min:
-        The minimum temperature in degrees Celsius.  If temperature
-        control is enabled, the device will attempt to keep its
-        temperature at or above this value.  Must be less than or
-        equal to max.  When soft temperature control is enabled, this
-        value is not used.
-    max:
-        The maximum temperature in degrees Celsius.  If temperature
-        control is enabled, the device will attempt to keep its
-        temperature at or below this value.  Must be less than or
-        equal to min.  When soft temperature control is enabled, this
-        is used as the target temperature, and ``min`` is not used.
+    settings:
+        MinION device settings
 """
 ChangeSettingsRequest.__doc__ = """Attributes:
     settings:
@@ -97,12 +87,6 @@ ChangeSettingsRequest.__doc__ = """Attributes:
         The default channel configuration.  This provides the default
         configuration to apply to any channels not listed in
         settings.channel_config.
-"""
-GetSettingsResponse.__doc__ = """Response for MinionDeviceService.get_settings
-
-Attributes:
-    settings:
-        MinION device settings
 """
 MinionDeviceSettings.__doc__ = """Describes the MinION device settings.  Both unset structures and
 *_KEEP values in enums indicate "no change". When changing settings,
@@ -174,8 +158,8 @@ Attributes:
         will be returned.
     overcurrent_limit:
         Whether to enable detection of excessive current.  The ADC
-        output of a channel that trips the overcurrent depends on what
-        track and hold gain has been set to.  Default is enabled.
+        output of a channel that trips the over-current depends on
+        what track and hold gain has been set to.  Default is enabled.
     samples_to_reset:
         The the number of integrator resets per sample.  The range of
         possible values is 0 to 255, default is 1
@@ -241,12 +225,12 @@ Attributes:
         Enable soft temperature control.  "Soft" temperature control
         is a more intelligent temperature control algorithm. It works
         on a single target temperature, and dynamically adjusts the
-        fan speed to reach that temperature quickly, and then mainains
-        the target temperature with high precision.  If this is
-        disabled, "hard" temperature control is used instead. This is
-        a naive algorithm that simply turns the fan up when dropping
-        below the minimum temperature and turns it down when going
-        above the maximum temperature.  If
+        fan speed to reach that temperature quickly, and then
+        maintains the target temperature with high precision.  If this
+        is disabled, "hard" temperature control is used instead. This
+        is a naive algorithm that simply turns the fan up when
+        dropping below the minimum temperature and turns it down when
+        going above the maximum temperature.  If
         ``enable_temperature_control`` is false, this setting is
         ignored.  It is recommended that this is enabled.  Default is
         true.
@@ -279,5 +263,21 @@ Attributes:
         sinc_decimation value to 32.
     clock_speed:
         The speed of the high-speed clock.
+"""
+TemperatureRange.__doc__ = """Temperature range.
+
+Attributes:
+    min:
+        The minimum temperature in degrees Celsius.  If temperature
+        control is enabled, the device will attempt to keep its
+        temperature at or above this value.  Must be less than or
+        equal to max.  When soft temperature control is enabled, this
+        value is not used.
+    max:
+        The maximum temperature in degrees Celsius.  If temperature
+        control is enabled, the device will attempt to keep its
+        temperature at or below this value.  Must be less than or
+        equal to min.  When soft temperature control is enabled, this
+        is used as the target temperature, and ``min`` is not used.
 """
 # @@protoc_insertion_point(module_scope)

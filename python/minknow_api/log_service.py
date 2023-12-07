@@ -16,11 +16,20 @@ __all__ = [
     "SendUserMessageResponse",
     "SendPingRequest",
     "SendPingResponse",
+    "CollectPingsRequest",
+    "CollectPingsResponse",
     "Severity",
     "MESSAGE_SEVERITY_TRACE",
     "MESSAGE_SEVERITY_INFO",
     "MESSAGE_SEVERITY_WARNING",
     "MESSAGE_SEVERITY_ERROR",
+    "CollectPingsStage",
+    "PAUSING_PING_SERVICE",
+    "LOOKING_FOR_PING_FILES",
+    "CREATING_ARCHIVE",
+    "ADDING_PING_FILES_TO_ARCHIVE",
+    "RESTARTING_PING_SERVICE",
+    "COMPLETE",
 ]
 
 def run_with_retry(method, message, timeout, unwraps, full_name):
@@ -185,6 +194,8 @@ class LogService(object):
             ping_data (str): The json data to send as a ping.
 
                 note: if this string is not a valid json object, an error will be raised.
+            days_until_expiry (int, optional): Should the ping fail to send, the number of days the ping will be stored
+                before being cleaned up.
 
         Returns:
             minknow_api.log_pb2.SendPingResponse
@@ -210,10 +221,73 @@ class LogService(object):
         else:
             raise ArgumentError("send_ping requires a 'ping_data' argument")
 
+        if "days_until_expiry" in kwargs:
+            unused_args.remove("days_until_expiry")
+            _message.days_until_expiry = kwargs['days_until_expiry']
+
         if len(unused_args) > 0:
             raise ArgumentError("Unexpected keyword arguments to send_ping: '{}'".format(", ".join(unused_args)))
 
         return run_with_retry(self._stub.send_ping,
+                              _message, _timeout,
+                              [],
+                              "minknow_api.log.LogService")
+    def collect_pings(self, _message=None, _timeout=None, **kwargs):
+        """Collect any pings that haven't been sent yet and write them into a file
+        instead of sending them.  Once collected, the pings cannot be collected
+        again and will be cleaned-up at a time determined by their
+        expiry-period/lifetime.
+
+        Since 5.8 and backported to 5.6
+
+        
+
+        Args:
+            _message (minknow_api.log_pb2.CollectPingsRequest, optional): The message to send.
+                This can be passed instead of the keyword arguments.
+            _timeout (float, optional): The call will be cancelled after this number of seconds
+                if it has not been completed.
+                Note that this is the time until the call ends, not the time between returned
+                messages.
+            collected_ping_file (str): Any pings that are queued to be sent will be collected into a zip file
+                and written to this location. This location must be in a folder writable
+                by minknow. If the file name does not end with ".zip", minknow will
+                append ".zip" to the provided file name.
+            include_previously_colleced_pings (bool, optional): Normally previously collected pings are ignored, but by setting this they
+                will be included. Defaults to False.
+
+        Returns:
+            iter of minknow_api.log_pb2.CollectPingsResponse
+
+        Note that the returned messages are actually wrapped in a type that collapses
+        submessages for fields marked with ``[rpc_unwrap]``.
+        """
+        if _message is not None:
+            if isinstance(_message, MessageWrapper):
+                _message = _message._message
+            return run_with_retry(self._stub.collect_pings,
+                                  _message, _timeout,
+                                  [],
+                                  "minknow_api.log.LogService")
+
+        unused_args = set(kwargs.keys())
+
+        _message = CollectPingsRequest()
+
+        if "collected_ping_file" in kwargs:
+            unused_args.remove("collected_ping_file")
+            _message.collected_ping_file = kwargs['collected_ping_file']
+        else:
+            raise ArgumentError("collect_pings requires a 'collected_ping_file' argument")
+
+        if "include_previously_colleced_pings" in kwargs:
+            unused_args.remove("include_previously_colleced_pings")
+            _message.include_previously_colleced_pings = kwargs['include_previously_colleced_pings']
+
+        if len(unused_args) > 0:
+            raise ArgumentError("Unexpected keyword arguments to collect_pings: '{}'".format(", ".join(unused_args)))
+
+        return run_with_retry(self._stub.collect_pings,
                               _message, _timeout,
                               [],
                               "minknow_api.log.LogService")

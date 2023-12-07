@@ -9,10 +9,10 @@ class RunUntilServiceStub(object):
     """Overview
     ========
 
-    This service allows a user to set certain criteria (Target Run-Until Critera), which indicate
+    This service allows a user to set certain criteria (Target Run-Until Criteria), which indicate
     the conditions under which the experiment should be stopped or paused.  For example, the user
     can specify that the experiment should be stopped after a certain time has elapsed, or paused
-    when the number of avaiable pores drops below a certain level.  This functionality is referred
+    when the number of available pores drops below a certain level.  This functionality is referred
     to as "Run-Until", since it allows the user to specify that an experiment should "run until"
     some condition has been fulfilled.
 
@@ -44,10 +44,6 @@ class RunUntilServiceStub(object):
 
     The user may update these criteria as the experiment progresses by calling
     `write_target_criteria()` with the new criteria.
-
-    The user can determine progress towards these criteria by receiving message from
-    `stream_progress()`, which supplies updates of the current values of the Run-Until
-    Criteria.
 
     The user can also obtain updates from the Run-Until Script by calling
     `stream_updates()`.  The Run-Until Script may send "estimated time remaining"
@@ -107,19 +103,6 @@ class RunUntilServiceStub(object):
     criteria specified are not support by the script, the script reports an error via
     `write_updates()`.
 
-    The script receives experiment progress updates.  Updates for the "standard" Run-Until Criteria
-    are transmitted by MinKNOW over `stream_progress()`.  The "standard" Run-Until Criteria values
-    that MinKNOW transmits over `stream_progress()` are supplied as a convenience for Run-Until
-    Scripts; the same data is also available through other separate MinKNOW APIs.
-
-    A custom Run-Until Script can also determine additional custom Run-Until Criteria values using
-    any suitable method (e.g. reading another MinKNOW API).  Updates for custom Run-Until Criteria
-    can be transmitted to the user using the  the `write_custom_progress()` call. (Values for
-    "standard" Run-Until Criteria may not be transmitted from the script using the
-    `write_custom_progress()` call; the `write_custom_progress()` call will fail with an error if an
-    attempt is made to transmit such values.  The "standard" Run-Until Criteria can be obtained
-    using `get_standard_criteria()`.)
-
     Finally, the Run-Until Script can perform actions and send updates to the user using the
     `write_updates()` interface.  Actions include pausing, resuming and stopping the
     acquisition.  Updates include estimated time remaining.
@@ -127,7 +110,7 @@ class RunUntilServiceStub(object):
     Update History
     ==============
 
-    MinKNOW stores an "merged" history of updates that are receieved on the `write_updates()`
+    MinKNOW stores an "merged" history of updates that are received on the `write_updates()`
     interface.  The history is calculated as MinKNOW receives updates on the `write_updates()`
     stream as follows:
 
@@ -160,11 +143,6 @@ class RunUntilServiceStub(object):
         Args:
             channel: A grpc.Channel.
         """
-        self.get_standard_criteria = channel.unary_unary(
-                '/minknow_api.run_until.RunUntilService/get_standard_criteria',
-                request_serializer=minknow__api_dot_run__until__pb2.GetStandardCriteriaRequest.SerializeToString,
-                response_deserializer=minknow__api_dot_run__until__pb2.GetStandardCriteriaResponse.FromString,
-                )
         self.write_target_criteria = channel.unary_unary(
                 '/minknow_api.run_until.RunUntilService/write_target_criteria',
                 request_serializer=minknow__api_dot_run__until__pb2.WriteTargetCriteriaRequest.SerializeToString,
@@ -174,16 +152,6 @@ class RunUntilServiceStub(object):
                 '/minknow_api.run_until.RunUntilService/stream_target_criteria',
                 request_serializer=minknow__api_dot_run__until__pb2.StreamTargetCriteriaRequest.SerializeToString,
                 response_deserializer=minknow__api_dot_run__until__pb2.StreamTargetCriteriaResponse.FromString,
-                )
-        self.write_custom_progress = channel.unary_unary(
-                '/minknow_api.run_until.RunUntilService/write_custom_progress',
-                request_serializer=minknow__api_dot_run__until__pb2.WriteCustomProgressRequest.SerializeToString,
-                response_deserializer=minknow__api_dot_run__until__pb2.WriteCustomProgressResponse.FromString,
-                )
-        self.stream_progress = channel.unary_stream(
-                '/minknow_api.run_until.RunUntilService/stream_progress',
-                request_serializer=minknow__api_dot_run__until__pb2.StreamProgressRequest.SerializeToString,
-                response_deserializer=minknow__api_dot_run__until__pb2.StreamProgressResponse.FromString,
                 )
         self.write_updates = channel.unary_unary(
                 '/minknow_api.run_until.RunUntilService/write_updates',
@@ -201,10 +169,10 @@ class RunUntilServiceServicer(object):
     """Overview
     ========
 
-    This service allows a user to set certain criteria (Target Run-Until Critera), which indicate
+    This service allows a user to set certain criteria (Target Run-Until Criteria), which indicate
     the conditions under which the experiment should be stopped or paused.  For example, the user
     can specify that the experiment should be stopped after a certain time has elapsed, or paused
-    when the number of avaiable pores drops below a certain level.  This functionality is referred
+    when the number of available pores drops below a certain level.  This functionality is referred
     to as "Run-Until", since it allows the user to specify that an experiment should "run until"
     some condition has been fulfilled.
 
@@ -236,10 +204,6 @@ class RunUntilServiceServicer(object):
 
     The user may update these criteria as the experiment progresses by calling
     `write_target_criteria()` with the new criteria.
-
-    The user can determine progress towards these criteria by receiving message from
-    `stream_progress()`, which supplies updates of the current values of the Run-Until
-    Criteria.
 
     The user can also obtain updates from the Run-Until Script by calling
     `stream_updates()`.  The Run-Until Script may send "estimated time remaining"
@@ -299,19 +263,6 @@ class RunUntilServiceServicer(object):
     criteria specified are not support by the script, the script reports an error via
     `write_updates()`.
 
-    The script receives experiment progress updates.  Updates for the "standard" Run-Until Criteria
-    are transmitted by MinKNOW over `stream_progress()`.  The "standard" Run-Until Criteria values
-    that MinKNOW transmits over `stream_progress()` are supplied as a convenience for Run-Until
-    Scripts; the same data is also available through other separate MinKNOW APIs.
-
-    A custom Run-Until Script can also determine additional custom Run-Until Criteria values using
-    any suitable method (e.g. reading another MinKNOW API).  Updates for custom Run-Until Criteria
-    can be transmitted to the user using the  the `write_custom_progress()` call. (Values for
-    "standard" Run-Until Criteria may not be transmitted from the script using the
-    `write_custom_progress()` call; the `write_custom_progress()` call will fail with an error if an
-    attempt is made to transmit such values.  The "standard" Run-Until Criteria can be obtained
-    using `get_standard_criteria()`.)
-
     Finally, the Run-Until Script can perform actions and send updates to the user using the
     `write_updates()` interface.  Actions include pausing, resuming and stopping the
     acquisition.  Updates include estimated time remaining.
@@ -319,7 +270,7 @@ class RunUntilServiceServicer(object):
     Update History
     ==============
 
-    MinKNOW stores an "merged" history of updates that are receieved on the `write_updates()`
+    MinKNOW stores an "merged" history of updates that are received on the `write_updates()`
     interface.  The history is calculated as MinKNOW receives updates on the `write_updates()`
     stream as follows:
 
@@ -346,18 +297,6 @@ class RunUntilServiceServicer(object):
 
     """
 
-    def get_standard_criteria(self, request, context):
-        """Get the standard Run-Until Criteria
-
-        Updates for these criteria will be provided by MinKNOW
-
-        NOTE: this will be removed in release 5.8
-        call currently not implemented
-        """
-        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
-
     def write_target_criteria(self, request, context):
         """Write target run-until criteria
 
@@ -375,38 +314,6 @@ class RunUntilServiceServicer(object):
 
         When an update is received, it specifies the new target criteria, which should replace all
         existing criteria.
-        """
-        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
-
-    def write_custom_progress(self, request, context):
-        """Send a Custom Run-Until Progress update
-
-        Updates written here are forwarded on to `stream_progress()`.  The Run-Until Script can use
-        this to supply updates on "custom" Run-Until Criteria
-
-        NOTE: this will be removed in release 5.8
-        call currently not implemented
-        """
-        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
-
-    def stream_progress(self, request, context):
-        """Obtain Run-Until Progress updates
-
-        The Run-Until Script can use this data to determine progress towards the Run-Until endpoints.
-        The user can use this data to visualise progress towards the Run-Until endpoints.
-
-        This data may come from MinKNOW itself (for standard run-until criteria), or may come from
-        a call to `write_custom_progress` (for custom run-until criteria)
-
-        Note that streaming of progress updates for standard run-until has not yet been implemented
-        in MinKNOW.
-
-        NOTE: this will be removed in release 5.8
-        call currently not implemented
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -439,11 +346,6 @@ class RunUntilServiceServicer(object):
 
 def add_RunUntilServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
-            'get_standard_criteria': grpc.unary_unary_rpc_method_handler(
-                    servicer.get_standard_criteria,
-                    request_deserializer=minknow__api_dot_run__until__pb2.GetStandardCriteriaRequest.FromString,
-                    response_serializer=minknow__api_dot_run__until__pb2.GetStandardCriteriaResponse.SerializeToString,
-            ),
             'write_target_criteria': grpc.unary_unary_rpc_method_handler(
                     servicer.write_target_criteria,
                     request_deserializer=minknow__api_dot_run__until__pb2.WriteTargetCriteriaRequest.FromString,
@@ -453,16 +355,6 @@ def add_RunUntilServiceServicer_to_server(servicer, server):
                     servicer.stream_target_criteria,
                     request_deserializer=minknow__api_dot_run__until__pb2.StreamTargetCriteriaRequest.FromString,
                     response_serializer=minknow__api_dot_run__until__pb2.StreamTargetCriteriaResponse.SerializeToString,
-            ),
-            'write_custom_progress': grpc.unary_unary_rpc_method_handler(
-                    servicer.write_custom_progress,
-                    request_deserializer=minknow__api_dot_run__until__pb2.WriteCustomProgressRequest.FromString,
-                    response_serializer=minknow__api_dot_run__until__pb2.WriteCustomProgressResponse.SerializeToString,
-            ),
-            'stream_progress': grpc.unary_stream_rpc_method_handler(
-                    servicer.stream_progress,
-                    request_deserializer=minknow__api_dot_run__until__pb2.StreamProgressRequest.FromString,
-                    response_serializer=minknow__api_dot_run__until__pb2.StreamProgressResponse.SerializeToString,
             ),
             'write_updates': grpc.unary_unary_rpc_method_handler(
                     servicer.write_updates,
@@ -485,10 +377,10 @@ class RunUntilService(object):
     """Overview
     ========
 
-    This service allows a user to set certain criteria (Target Run-Until Critera), which indicate
+    This service allows a user to set certain criteria (Target Run-Until Criteria), which indicate
     the conditions under which the experiment should be stopped or paused.  For example, the user
     can specify that the experiment should be stopped after a certain time has elapsed, or paused
-    when the number of avaiable pores drops below a certain level.  This functionality is referred
+    when the number of available pores drops below a certain level.  This functionality is referred
     to as "Run-Until", since it allows the user to specify that an experiment should "run until"
     some condition has been fulfilled.
 
@@ -520,10 +412,6 @@ class RunUntilService(object):
 
     The user may update these criteria as the experiment progresses by calling
     `write_target_criteria()` with the new criteria.
-
-    The user can determine progress towards these criteria by receiving message from
-    `stream_progress()`, which supplies updates of the current values of the Run-Until
-    Criteria.
 
     The user can also obtain updates from the Run-Until Script by calling
     `stream_updates()`.  The Run-Until Script may send "estimated time remaining"
@@ -583,19 +471,6 @@ class RunUntilService(object):
     criteria specified are not support by the script, the script reports an error via
     `write_updates()`.
 
-    The script receives experiment progress updates.  Updates for the "standard" Run-Until Criteria
-    are transmitted by MinKNOW over `stream_progress()`.  The "standard" Run-Until Criteria values
-    that MinKNOW transmits over `stream_progress()` are supplied as a convenience for Run-Until
-    Scripts; the same data is also available through other separate MinKNOW APIs.
-
-    A custom Run-Until Script can also determine additional custom Run-Until Criteria values using
-    any suitable method (e.g. reading another MinKNOW API).  Updates for custom Run-Until Criteria
-    can be transmitted to the user using the  the `write_custom_progress()` call. (Values for
-    "standard" Run-Until Criteria may not be transmitted from the script using the
-    `write_custom_progress()` call; the `write_custom_progress()` call will fail with an error if an
-    attempt is made to transmit such values.  The "standard" Run-Until Criteria can be obtained
-    using `get_standard_criteria()`.)
-
     Finally, the Run-Until Script can perform actions and send updates to the user using the
     `write_updates()` interface.  Actions include pausing, resuming and stopping the
     acquisition.  Updates include estimated time remaining.
@@ -603,7 +478,7 @@ class RunUntilService(object):
     Update History
     ==============
 
-    MinKNOW stores an "merged" history of updates that are receieved on the `write_updates()`
+    MinKNOW stores an "merged" history of updates that are received on the `write_updates()`
     interface.  The history is calculated as MinKNOW receives updates on the `write_updates()`
     stream as follows:
 
@@ -629,23 +504,6 @@ class RunUntilService(object):
 
 
     """
-
-    @staticmethod
-    def get_standard_criteria(request,
-            target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            insecure=False,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/minknow_api.run_until.RunUntilService/get_standard_criteria',
-            minknow__api_dot_run__until__pb2.GetStandardCriteriaRequest.SerializeToString,
-            minknow__api_dot_run__until__pb2.GetStandardCriteriaResponse.FromString,
-            options, channel_credentials,
-            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
     def write_target_criteria(request,
@@ -678,40 +536,6 @@ class RunUntilService(object):
         return grpc.experimental.unary_stream(request, target, '/minknow_api.run_until.RunUntilService/stream_target_criteria',
             minknow__api_dot_run__until__pb2.StreamTargetCriteriaRequest.SerializeToString,
             minknow__api_dot_run__until__pb2.StreamTargetCriteriaResponse.FromString,
-            options, channel_credentials,
-            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
-
-    @staticmethod
-    def write_custom_progress(request,
-            target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            insecure=False,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/minknow_api.run_until.RunUntilService/write_custom_progress',
-            minknow__api_dot_run__until__pb2.WriteCustomProgressRequest.SerializeToString,
-            minknow__api_dot_run__until__pb2.WriteCustomProgressResponse.FromString,
-            options, channel_credentials,
-            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
-
-    @staticmethod
-    def stream_progress(request,
-            target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            insecure=False,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
-        return grpc.experimental.unary_stream(request, target, '/minknow_api.run_until.RunUntilService/stream_progress',
-            minknow__api_dot_run__until__pb2.StreamProgressRequest.SerializeToString,
-            minknow__api_dot_run__until__pb2.StreamProgressResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 

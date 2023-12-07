@@ -11,16 +11,10 @@ import sys
 __all__ = [
     "RunUntilService",
     "CriteriaValues",
-    "GetStandardCriteriaRequest",
-    "GetStandardCriteriaResponse",
     "WriteTargetCriteriaRequest",
     "WriteTargetCriteriaResponse",
     "StreamTargetCriteriaRequest",
     "StreamTargetCriteriaResponse",
-    "WriteCustomProgressRequest",
-    "WriteCustomProgressResponse",
-    "StreamProgressRequest",
-    "StreamProgressResponse",
     "EstimatedTimeRemainingUpdate",
     "ActionUpdate",
     "ScriptUpdate",
@@ -56,10 +50,10 @@ class RunUntilService(object):
     """Overview
     ========
 
-    This service allows a user to set certain criteria (Target Run-Until Critera), which indicate
+    This service allows a user to set certain criteria (Target Run-Until Criteria), which indicate
     the conditions under which the experiment should be stopped or paused.  For example, the user
     can specify that the experiment should be stopped after a certain time has elapsed, or paused
-    when the number of avaiable pores drops below a certain level.  This functionality is referred
+    when the number of available pores drops below a certain level.  This functionality is referred
     to as "Run-Until", since it allows the user to specify that an experiment should "run until"
     some condition has been fulfilled.
 
@@ -91,10 +85,6 @@ class RunUntilService(object):
 
     The user may update these criteria as the experiment progresses by calling
     `write_target_criteria()` with the new criteria.
-
-    The user can determine progress towards these criteria by receiving message from
-    `stream_progress()`, which supplies updates of the current values of the Run-Until
-    Criteria.
 
     The user can also obtain updates from the Run-Until Script by calling
     `stream_updates()`.  The Run-Until Script may send "estimated time remaining"
@@ -154,19 +144,6 @@ class RunUntilService(object):
     criteria specified are not support by the script, the script reports an error via
     `write_updates()`.
 
-    The script receives experiment progress updates.  Updates for the "standard" Run-Until Criteria
-    are transmitted by MinKNOW over `stream_progress()`.  The "standard" Run-Until Criteria values
-    that MinKNOW transmits over `stream_progress()` are supplied as a convenience for Run-Until
-    Scripts; the same data is also available through other separate MinKNOW APIs.
-
-    A custom Run-Until Script can also determine additional custom Run-Until Criteria values using
-    any suitable method (e.g. reading another MinKNOW API).  Updates for custom Run-Until Criteria
-    can be transmitted to the user using the  the `write_custom_progress()` call. (Values for
-    "standard" Run-Until Criteria may not be transmitted from the script using the
-    `write_custom_progress()` call; the `write_custom_progress()` call will fail with an error if an
-    attempt is made to transmit such values.  The "standard" Run-Until Criteria can be obtained
-    using `get_standard_criteria()`.)
-
     Finally, the Run-Until Script can perform actions and send updates to the user using the
     `write_updates()` interface.  Actions include pausing, resuming and stopping the
     acquisition.  Updates include estimated time remaining.
@@ -174,7 +151,7 @@ class RunUntilService(object):
     Update History
     ==============
 
-    MinKNOW stores an "merged" history of updates that are receieved on the `write_updates()`
+    MinKNOW stores an "merged" history of updates that are received on the `write_updates()`
     interface.  The history is calculated as MinKNOW receives updates on the `write_updates()`
     stream as follows:
 
@@ -200,47 +177,6 @@ class RunUntilService(object):
     def __init__(self, channel):
         self._stub = RunUntilServiceStub(channel)
         self._pb = run_until_pb2
-    def get_standard_criteria(self, _message=None, _timeout=None, **kwargs):
-        """Get the standard Run-Until Criteria
-
-        Updates for these criteria will be provided by MinKNOW
-
-        NOTE: this will be removed in release 5.8
-        call currently not implemented
-
-        
-
-        Args:
-            _message (minknow_api.run_until_pb2.GetStandardCriteriaRequest, optional): The message to send.
-                This can be passed instead of the keyword arguments.
-            _timeout (float, optional): The call will be cancelled after this number of seconds
-                if it has not been completed.
-
-        Returns:
-            minknow_api.run_until_pb2.GetStandardCriteriaResponse
-
-        Note that the returned messages are actually wrapped in a type that collapses
-        submessages for fields marked with ``[rpc_unwrap]``.
-        """
-        if _message is not None:
-            if isinstance(_message, MessageWrapper):
-                _message = _message._message
-            return run_with_retry(self._stub.get_standard_criteria,
-                                  _message, _timeout,
-                                  [],
-                                  "minknow_api.run_until.RunUntilService")
-
-        unused_args = set(kwargs.keys())
-
-        _message = GetStandardCriteriaRequest()
-
-        if len(unused_args) > 0:
-            raise ArgumentError("Unexpected keyword arguments to get_standard_criteria: '{}'".format(", ".join(unused_args)))
-
-        return run_with_retry(self._stub.get_standard_criteria,
-                              _message, _timeout,
-                              [],
-                              "minknow_api.run_until.RunUntilService")
     def write_target_criteria(self, _message=None, _timeout=None, **kwargs):
         """Write target run-until criteria
 
@@ -344,126 +280,6 @@ class RunUntilService(object):
             raise ArgumentError("Unexpected keyword arguments to stream_target_criteria: '{}'".format(", ".join(unused_args)))
 
         return run_with_retry(self._stub.stream_target_criteria,
-                              _message, _timeout,
-                              [],
-                              "minknow_api.run_until.RunUntilService")
-    def write_custom_progress(self, _message=None, _timeout=None, **kwargs):
-        """Send a Custom Run-Until Progress update
-
-        Updates written here are forwarded on to `stream_progress()`.  The Run-Until Script can use
-        this to supply updates on "custom" Run-Until Criteria
-
-        NOTE: this will be removed in release 5.8
-        call currently not implemented
-
-        
-
-        Note this API is experimental - it may be changed, revised or removed in future minor versions.
-
-        Args:
-            _message (minknow_api.run_until_pb2.WriteCustomProgressRequest, optional): The message to send.
-                This can be passed instead of the keyword arguments.
-            _timeout (float, optional): The call will be cancelled after this number of seconds
-                if it has not been completed.
-            acquisition_run_id (str): The acquisition this Run-Until progress update relates to
-            criteria_values (minknow_api.run_until_pb2.CriteriaValues, optional): The current Run-Until criteria state
-
-                A Run-Until progress update need not contain updates for all criteria. 
-                It must not contain updates for "standard" criteria
-
-        Returns:
-            minknow_api.run_until_pb2.WriteCustomProgressResponse
-
-        Note that the returned messages are actually wrapped in a type that collapses
-        submessages for fields marked with ``[rpc_unwrap]``.
-        """
-        print("Warning: Method RunUntilService.write_custom_progress is experimental and may be changed, revised or removed in future minor versions.", file=sys.stderr)
-        if _message is not None:
-            if isinstance(_message, MessageWrapper):
-                _message = _message._message
-            return run_with_retry(self._stub.write_custom_progress,
-                                  _message, _timeout,
-                                  [],
-                                  "minknow_api.run_until.RunUntilService")
-
-        unused_args = set(kwargs.keys())
-
-        _message = WriteCustomProgressRequest()
-
-        if "acquisition_run_id" in kwargs:
-            unused_args.remove("acquisition_run_id")
-            _message.acquisition_run_id = kwargs['acquisition_run_id']
-        else:
-            raise ArgumentError("write_custom_progress requires a 'acquisition_run_id' argument")
-
-        if "criteria_values" in kwargs:
-            unused_args.remove("criteria_values")
-            _message.criteria_values.CopyFrom(kwargs['criteria_values'])
-
-        if len(unused_args) > 0:
-            raise ArgumentError("Unexpected keyword arguments to write_custom_progress: '{}'".format(", ".join(unused_args)))
-
-        return run_with_retry(self._stub.write_custom_progress,
-                              _message, _timeout,
-                              [],
-                              "minknow_api.run_until.RunUntilService")
-    def stream_progress(self, _message=None, _timeout=None, **kwargs):
-        """Obtain Run-Until Progress updates
-
-        The Run-Until Script can use this data to determine progress towards the Run-Until endpoints.
-        The user can use this data to visualise progress towards the Run-Until endpoints.
-
-        This data may come from MinKNOW itself (for standard run-until criteria), or may come from
-        a call to `write_custom_progress` (for custom run-until criteria)
-
-        Note that streaming of progress updates for standard run-until has not yet been implemented
-        in MinKNOW.
-
-        NOTE: this will be removed in release 5.8
-        call currently not implemented
-
-        
-
-        Note this API is experimental - it may be changed, revised or removed in future minor versions.
-
-        Args:
-            _message (minknow_api.run_until_pb2.StreamProgressRequest, optional): The message to send.
-                This can be passed instead of the keyword arguments.
-            _timeout (float, optional): The call will be cancelled after this number of seconds
-                if it has not been completed.
-                Note that this is the time until the call ends, not the time between returned
-                messages.
-            acquisition_run_id (str): The acquisition to obtain the Run-Until progress updates for
-
-        Returns:
-            iter of minknow_api.run_until_pb2.StreamProgressResponse
-
-        Note that the returned messages are actually wrapped in a type that collapses
-        submessages for fields marked with ``[rpc_unwrap]``.
-        """
-        print("Warning: Method RunUntilService.stream_progress is experimental and may be changed, revised or removed in future minor versions.", file=sys.stderr)
-        if _message is not None:
-            if isinstance(_message, MessageWrapper):
-                _message = _message._message
-            return run_with_retry(self._stub.stream_progress,
-                                  _message, _timeout,
-                                  [],
-                                  "minknow_api.run_until.RunUntilService")
-
-        unused_args = set(kwargs.keys())
-
-        _message = StreamProgressRequest()
-
-        if "acquisition_run_id" in kwargs:
-            unused_args.remove("acquisition_run_id")
-            _message.acquisition_run_id = kwargs['acquisition_run_id']
-        else:
-            raise ArgumentError("stream_progress requires a 'acquisition_run_id' argument")
-
-        if len(unused_args) > 0:
-            raise ArgumentError("Unexpected keyword arguments to stream_progress: '{}'".format(", ".join(unused_args)))
-
-        return run_with_retry(self._stub.stream_progress,
                               _message, _timeout,
                               [],
                               "minknow_api.run_until.RunUntilService")

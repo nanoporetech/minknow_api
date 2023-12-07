@@ -12,6 +12,7 @@ __all__ = [
     "ProtocolService",
     "BarcodeUserData",
     "KitInfo",
+    "PassengerInfo",
     "ProtocolRunUserInfo",
     "OffloadLocationInfo",
     "StartProtocolRequest",
@@ -148,6 +149,13 @@ class ProtocolService(object):
                 These can be updated during the acquisition using the Run-Until API.
 
                 Since 5.3
+            passenger_info (minknow_api.protocol_pb2.PassengerInfo, optional): Extra info taken as bytes, that will be output to a file in the output location
+
+                The filename in the output location will be in the format:
+                passenger_info_{run_id}.{extension}
+
+                If the size of this argument exceeds 2MB in size, then the call will fail
+                with INVALID_ARGUMENT
 
         Returns:
             minknow_api.protocol_pb2.StartProtocolResponse
@@ -188,6 +196,10 @@ class ProtocolService(object):
         if "target_run_until_criteria" in kwargs:
             unused_args.remove("target_run_until_criteria")
             _message.target_run_until_criteria.CopyFrom(kwargs['target_run_until_criteria'])
+
+        if "passenger_info" in kwargs:
+            unused_args.remove("passenger_info")
+            _message.passenger_info.CopyFrom(kwargs['passenger_info'])
 
         if len(unused_args) > 0:
             raise ArgumentError("Unexpected keyword arguments to start_protocol: '{}'".format(", ".join(unused_args)))
@@ -729,7 +741,7 @@ class ProtocolService(object):
                               [],
                               "minknow_api.protocol.ProtocolService")
     def set_context_info(self, _message=None, _timeout=None, **kwargs):
-        """Store context tags as arbitary string-to-string map
+        """Store context tags as arbitrary string-to-string map
 
         Since 1.11
 
@@ -1075,6 +1087,13 @@ class ProtocolService(object):
 
                 Since 5.3
             settings (minknow_api.protocol_pb2.BeginProtocolRequest.SettingsEntry, optional): Any settings changed from the defaults specified in the protocol's .toml file.
+            passenger_info (minknow_api.protocol_pb2.PassengerInfo, optional): Extra info taken as bytes, that will be output to a file in the output location
+
+                The filename in the output location will be in the format:
+                passenger_info_{run_id}.{extension}
+
+                If the size of this argument exceeds 2MB in size, then the call will fail
+                with INVALID_ARGUMENT
 
         Returns:
             minknow_api.protocol_pb2.BeginProtocolResponse
@@ -1128,6 +1147,10 @@ class ProtocolService(object):
             unused_args.remove("settings")
             for key, value in kwargs['settings'].items():
                 _message.settings[key].CopyFrom(value)
+
+        if "passenger_info" in kwargs:
+            unused_args.remove("passenger_info")
+            _message.passenger_info.CopyFrom(kwargs['passenger_info'])
 
         if len(unused_args) > 0:
             raise ArgumentError("Unexpected keyword arguments to begin_protocol: '{}'".format(", ".join(unused_args)))
@@ -1187,7 +1210,7 @@ class ProtocolService(object):
     def associate_post_processing_analysis_for_protocol(self, _message=None, _timeout=None, **kwargs):
         """Associated a post processing analysis process, and schedule it to run once the protocol is complete.
 
-        If the protocol is already complete, the post proecssing analysis is executed immediately.
+        If the protocol is already complete, the post processing analysis is executed immediately.
 
         Since 4.4
 

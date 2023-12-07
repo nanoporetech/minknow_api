@@ -108,7 +108,7 @@ service DataService {
     // Call this to force re-evaluating the channel states. This will make sure the next
     // channel state evaluated will be 'unclassified_following_reset'. If the analyser is behind,
     // and older data will come for evaluation, it will result in changing the state to 'pending_manual_reset'.
-    // So tipically, after a resetting the channel states, the user would see in the bulk file
+    // So typically, after a resetting the channel states, the user would see in the bulk file
     // 'unclassified_following_reset', 'pending_manual_reset', 'pending_manual_reset', until the relevant data
     // comes through to the analyser and it will start outputting the normal channel states again.
     // If the analyser is not behind, the user should ideally see just the 'unclassified_following_reset' state.

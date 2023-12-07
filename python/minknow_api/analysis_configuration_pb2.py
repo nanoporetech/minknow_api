@@ -11,11 +11,12 @@ from google.protobuf import symbol_database as _symbol_database
 _sym_db = _symbol_database.Default()
 
 
+from google.protobuf import duration_pb2 as google_dot_protobuf_dot_duration__pb2
 from google.protobuf import wrappers_pb2 as google_dot_protobuf_dot_wrappers__pb2
 from minknow_api import rpc_options_pb2 as minknow__api_dot_rpc__options__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n(minknow_api/analysis_configuration.proto\x12\"minknow_api.analysis_configuration\x1a\x1egoogle/protobuf/wrappers.proto\x1a\x1dminknow_api/rpc_options.proto\"\xca\x01\n\x0e\x45ventDetection\x12\x13\n\x0bwindow_size\x18\x03 \x01(\r\x12\x11\n\tthreshold\x18\x05 \x01(\x01\x12\x13\n\x0bpeak_height\x18\t \x01(\x01\x12:\n\x14\x65vents_to_base_ratio\x18\x10 \x01(\x0b\x32\x1c.google.protobuf.DoubleValue\x12\x1c\n\x14\x62reak_on_mux_changes\x18\x11 \x01(\x08\x12!\n\x19max_mux_change_back_shift\x18\x12 \x01(\r\"\xf0\x04\n\x13ReadDetectionParams\x12W\n\x04mode\x18\x01 \x01(\x0e\x32I.minknow_api.analysis_configuration.ReadDetectionParams.ReadDetectionMode\x12\x1a\n\x12minimum_delta_mean\x18\x02 \x01(\x01\x12\x11\n\tlook_back\x18\x03 \x01(\r\x12>\n\x18\x62reak_reads_after_events\x18\x04 \x01(\x0b\x32\x1c.google.protobuf.UInt32Value\x12?\n\x19\x62reak_reads_after_seconds\x18\x05 \x01(\x0b\x32\x1c.google.protobuf.DoubleValue\x12\"\n\x1a\x62reak_reads_on_mux_changes\x18\x06 \x01(\x08\x12\x33\n\ropen_pore_min\x18\x07 \x01(\x0b\x32\x1c.google.protobuf.DoubleValue\x12\x33\n\ropen_pore_max\x18\x08 \x01(\x0b\x32\x1c.google.protobuf.DoubleValue\x12\x37\n\x11open_pore_default\x18\t \x01(\x0b\x32\x1c.google.protobuf.DoubleValue\x12@\n\x1aopen_pore_seconds_required\x18\n \x01(\x0b\x32\x1c.google.protobuf.DoubleValue\"G\n\x11ReadDetectionMode\x12\x08\n\x04none\x10\x00\x12\x0e\n\ntransition\x10\x01\x12\x0c\n\x08lookback\x10\x02\x12\n\n\x06minmax\x10\x03\"q\n\x0bReadFilters\x12\x17\n\x0fread_length_min\x18\x01 \x01(\r\x12\x17\n\x0fread_length_max\x18\x02 \x01(\r\x12\x17\n\x0f\x65vent_count_min\x18\x03 \x01(\r\x12\x17\n\x0f\x65vent_count_max\x18\x04 \x01(\r\"\xeb\x05\n\x18ReadClassificationParams\x12Z\n\rscheme_module\x18\x01 \x01(\x0e\x32\x43.minknow_api.analysis_configuration.ReadClassificationParams.Scheme\x12\x35\n\x0fmax_sample_size\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.UInt64Value\x12 \n\x18selected_classifications\x18\x03 \x03(\t\x12!\n\x19open_pore_classifications\x18\x06 \x03(\t\x12;\n\x15open_pore_ewma_weight\x18\x07 \x01(\x0b\x32\x1c.google.protobuf.DoubleValue\x12J\n$open_pore_ignore_after_reset_seconds\x18\x08 \x01(\x0b\x32\x1c.google.protobuf.DoubleValue\x12\x1f\n\x17\x63lassification_strategy\x18\x04 \x01(\t\x12[\n\nparameters\x18\x05 \x01(\x0b\x32G.minknow_api.analysis_configuration.ReadClassificationParams.Parameters\x12P\n*selected_classifications_fraction_required\x18\t \x01(\x0b\x32\x1c.google.protobuf.DoubleValue\x12N\n(selected_classifications_chunks_required\x18\n \x01(\x0b\x32\x1c.google.protobuf.UInt32Value\x1a.\n\nParameters\x12 \n\x18rules_in_execution_order\x18\x02 \x03(\t\"\x1e\n\x06Scheme\x12\x08\n\x04none\x10\x00\x12\n\n\x06parsed\x10\x01\"\xf2\x07\n\rChannelStates\x12\x46\n\x05group\x18\x02 \x01(\x0b\x32\x37.minknow_api.analysis_configuration.ChannelStates.Group\x12\x13\n\x0b\x64\x65scription\x18\x05 \x01(\t\x12\x46\n\x05logic\x18\x03 \x01(\x0b\x32\x37.minknow_api.analysis_configuration.ChannelStates.Logic\x12\x46\n\x05style\x18\x04 \x01(\x0b\x32\x37.minknow_api.analysis_configuration.ChannelStates.Style\x1a\xaa\x04\n\x05Logic\x12\x10\n\x08\x63riteria\x18\x01 \x01(\t\x12\x0c\n\x04rank\x18\x03 \x01(\x05\x12\x0f\n\x07pattern\x18\x04 \x01(\t\x12\x16\n\x0e\x63lassification\x18\x05 \x01(\t\x12N\n\x06ranges\x18\x06 \x01(\x0b\x32>.minknow_api.analysis_configuration.ChannelStates.Logic.Ranges\x12T\n\tbehaviour\x18\x07 \x01(\x0b\x32\x41.minknow_api.analysis_configuration.ChannelStates.Logic.Behaviour\x1a\xa4\x01\n\tBehaviour\x12\x1b\n\x13reset_on_mux_change\x18\x01 \x01(\x05\x12\x1c\n\x14reset_on_well_change\x18\x02 \x01(\x05\x12\r\n\x05latch\x18\x03 \x01(\x05\x12%\n\x1dreset_on_effective_mux_change\x18\x04 \x01(\x05\x12&\n\x1ereset_on_effective_well_change\x18\x05 \x01(\x05\x1a\x8a\x01\n\x06Ranges\x12S\n\x05range\x18\x01 \x01(\x0b\x32\x44.minknow_api.analysis_configuration.ChannelStates.Logic.Ranges.Range\x1a+\n\x05Range\x12\x10\n\x08lower_pa\x18\x01 \x01(\x05\x12\x10\n\x08upper_pa\x18\x02 \x01(\x05\x1aS\n\x05Style\x12+\n\x05order\x18\x01 \x01(\x0b\x32\x1c.google.protobuf.UInt32Value\x12\r\n\x05label\x18\x02 \x01(\t\x12\x0e\n\x06\x63olour\x18\x03 \x01(\t\x1ar\n\x05Group\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x46\n\x05style\x18\x02 \x01(\x0b\x32\x37.minknow_api.analysis_configuration.ChannelStates.Style\x12\x13\n\x0b\x64\x65scription\x18\x03 \x01(\t\"!\n\x1fGetAnalysisConfigurationRequest\"\x91\x03\n\x11ReadScalingParams\x12\x1a\n\x12quantile_locations\x18\x03 \x03(\x02\x12\x1e\n\x16quantile_weights_shift\x18\x01 \x03(\x02\x12\x1e\n\x16quantile_weights_scale\x18\x02 \x03(\x02\x12\x16\n\x0etracking_alpha\x18\x04 \x01(\x02\x12$\n\x1c\x61lpha_number_estimates_decay\x18\x05 \x01(\x02\x12\x18\n\x10quantile_maxdiff\x18\n \x01(\x02\x12\x1c\n\x14trust_limit_fraction\x18\x06 \x01(\x02\x12\x16\n\x0e\x64iff_threshold\x18\x07 \x01(\x02\x12\x1a\n\x12\x65mission_threshold\x18\x08 \x01(\x02\x12\x17\n\x0f\x64\x61\x63s_breakpoint\x18\t \x01(\x02\x12 \n\x18\x63onductance_factor_scale\x18\x0b \x01(\x02\x12 \n\x18\x63onductance_factor_shift\x18\x0c \x01(\x02\x12\x19\n\x11q90_q10_to_normal\x18\r \x01(\x02\"\xac\x04\n\x15\x41nalysisConfiguration\x12K\n\x0f\x65vent_detection\x18\x01 \x01(\x0b\x32\x32.minknow_api.analysis_configuration.EventDetection\x12O\n\x0eread_detection\x18\x02 \x01(\x0b\x32\x37.minknow_api.analysis_configuration.ReadDetectionParams\x12Y\n\x13read_classification\x18\x04 \x01(\x0b\x32<.minknow_api.analysis_configuration.ReadClassificationParams\x12\x64\n\x0e\x63hannel_states\x18\x07 \x03(\x0b\x32L.minknow_api.analysis_configuration.AnalysisConfiguration.ChannelStatesEntry\x12K\n\x0cread_scaling\x18\x08 \x01(\x0b\x32\x35.minknow_api.analysis_configuration.ReadScalingParams\x1ag\n\x12\x43hannelStatesEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12@\n\x05value\x18\x02 \x01(\x0b\x32\x31.minknow_api.analysis_configuration.ChannelStates:\x02\x38\x01\"\"\n SetAnalysisConfigurationResponse\"#\n!ResetAnalysisConfigurationRequest\"$\n\"ResetAnalysisConfigurationResponse\"6\n\x1eSetAnalysisEnabledStateRequest\x12\x14\n\x06\x65nable\x18\x01 \x01(\x08\x42\x04\x88\xb5\x18\x01\"!\n\x1fSetAnalysisEnabledStateResponse\"\x1d\n\x1bGetChannelStatesDescRequest\"\x99\x04\n\x1cGetChannelStatesDescResponse\x12V\n\x06groups\x18\x01 \x03(\x0b\x32\x46.minknow_api.analysis_configuration.GetChannelStatesDescResponse.Group\x1a;\n\x05Style\x12\r\n\x05label\x18\x01 \x01(\t\x12\x13\n\x0b\x64\x65scription\x18\x02 \x01(\t\x12\x0e\n\x06\x63olour\x18\x03 \x01(\t\x1a\x95\x01\n\x0c\x43hannelState\x12\n\n\x02id\x18\x01 \x01(\r\x12\x0c\n\x04name\x18\x02 \x01(\t\x12U\n\x05style\x18\x03 \x01(\x0b\x32\x46.minknow_api.analysis_configuration.GetChannelStatesDescResponse.Style\x12\x14\n\x0cglobal_order\x18\x04 \x01(\r\x1a\xcb\x01\n\x05Group\x12\x0c\n\x04name\x18\x01 \x01(\t\x12U\n\x05style\x18\x02 \x01(\x0b\x32\x46.minknow_api.analysis_configuration.GetChannelStatesDescResponse.Style\x12]\n\x06states\x18\x03 \x03(\x0b\x32M.minknow_api.analysis_configuration.GetChannelStatesDescResponse.ChannelState\"\x13\n\x11GetSummaryRequest\"K\n\x12GetSummaryResponse\x12\x18\n\x10\x61nalysis_enabled\x18\x01 \x01(\x08\x12\x1b\n\x13\x62\x61secalling_enabled\x18\x02 \x01(\x08\"\x82\x03\n\x16\x42\x61rcodingConfiguration\x12\x16\n\x0e\x62\x61rcoding_kits\x18\x01 \x03(\t\x12\x15\n\rtrim_barcodes\x18\x02 \x01(\x08\x12\"\n\x1arequire_barcodes_both_ends\x18\x03 \x01(\x08\x12\"\n\x1a\x64\x65tect_mid_strand_barcodes\x18\x04 \x01(\x08\x12.\n\tmin_score\x18\x05 \x01(\x0b\x32\x1b.google.protobuf.FloatValue\x12\x33\n\x0emin_score_rear\x18\x06 \x01(\x0b\x32\x1b.google.protobuf.FloatValue\x12\x32\n\rmin_score_mid\x18\x07 \x01(\x0b\x32\x1b.google.protobuf.FloatValue\x12\x33\n\x0emin_score_mask\x18\x08 \x01(\x0b\x32\x1b.google.protobuf.FloatValue\x12#\n\x1bignore_unspecified_barcodes\x18\t \x01(\x08\"\xae\x01\n\x16\x41lignmentConfiguration\x12\x17\n\x0freference_files\x18\x01 \x03(\t\x12\x10\n\x08\x62\x65\x64_file\x18\x02 \x01(\t\x12\x35\n\x10minimum_coverage\x18\x03 \x01(\x0b\x32\x1b.google.protobuf.FloatValue\x12\x32\n*aggregate_statistics_for_multiple_bed_hits\x18\x04 \x01(\x08\"\xcc\x01\n\x11LampConfiguration\x12\x10\n\x08lamp_kit\x18\x01 \x01(\t\x12\x37\n\x12min_score_barcodes\x18\x02 \x01(\x0b\x32\x1b.google.protobuf.FloatValue\x12\x34\n\x0fmin_score_masks\x18\x03 \x01(\x0b\x32\x1b.google.protobuf.FloatValue\x12\x36\n\x11min_score_targets\x18\x04 \x01(\x0b\x32\x1b.google.protobuf.FloatValue\"\xfa\x08\n\x17\x42\x61secallerConfiguration\x12\x0e\n\x06\x65nable\x18\x02 \x01(\x08\x12\x17\n\x0f\x63onfig_filename\x18\x01 \x01(\t\x12\x14\n\x0c\x61lign_filter\x18\n \x01(\x08\x12\x61\n\x0eread_filtering\x18\x03 \x01(\x0b\x32I.minknow_api.analysis_configuration.BasecallerConfiguration.ReadFiltering\x12[\n\x17\x62\x61rcoding_configuration\x18\x04 \x01(\x0b\x32:.minknow_api.analysis_configuration.BarcodingConfiguration\x12\x65\n\x10target_filtering\x18\x05 \x01(\x0b\x32K.minknow_api.analysis_configuration.BasecallerConfiguration.TargetFiltering\x12[\n\x17\x61lignment_configuration\x18\x06 \x01(\x0b\x32:.minknow_api.analysis_configuration.AlignmentConfiguration\x12Q\n\x12lamp_configuration\x18\x07 \x01(\x0b\x32\x35.minknow_api.analysis_configuration.LampConfiguration\x12\x1d\n\x15\x65nable_read_splitting\x18\x08 \x01(\x08\x12=\n\x18min_score_read_splitting\x18\t \x01(\x0b\x32\x1b.google.protobuf.FloatValue\x1a\xc2\x02\n\rReadFiltering\x12\x30\n\nmin_qscore\x18\x01 \x01(\x0b\x32\x1c.google.protobuf.DoubleValue\x12\x31\n\x0bmin_samples\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.UInt64Value\x12\x31\n\x0bmax_samples\x18\x03 \x01(\x0b\x32\x1c.google.protobuf.UInt64Value\x12/\n\tmin_bases\x18\x04 \x01(\x0b\x32\x1c.google.protobuf.UInt64Value\x12/\n\tmax_bases\x18\x05 \x01(\x0b\x32\x1c.google.protobuf.UInt64Value\x12\x37\n\x11max_failed_chunks\x18\x06 \x01(\x0b\x32\x1c.google.protobuf.UInt64Value\x1a\xa5\x01\n\x0fTargetFiltering\x12\x30\n\nmin_qscore\x18\x01 \x01(\x0b\x32\x1c.google.protobuf.DoubleValue\x12/\n\tmin_bases\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.UInt64Value\x12/\n\tmax_bases\x18\x03 \x01(\x0b\x32\x1c.google.protobuf.UInt64Value\"w\n!SetBasecallerConfigurationRequest\x12R\n\x07\x63onfigs\x18\x01 \x01(\x0b\x32;.minknow_api.analysis_configuration.BasecallerConfigurationB\x04\x90\xb5\x18\x01\"$\n\"SetBasecallerConfigurationResponse\"#\n!GetBasecallerConfigurationRequest\"!\n\x1fGetPoreTypeConfigurationRequest\"\xab\x05\n\x15PoreTypeConfiguration\x12\x1a\n\x10global_pore_type\x18\x01 \x01(\tH\x00\x12~\n\x17\x63hannel_well_pore_types\x18\x02 \x01(\x0b\x32[.minknow_api.analysis_configuration.PoreTypeConfiguration.ChannelWellPoreTypeConfigurationsH\x00\x1a,\n\x0b\x43hannelWell\x12\x0f\n\x07\x63hannel\x18\x01 \x01(\r\x12\x0c\n\x04well\x18\x02 \x01(\r\x1a\xb3\x03\n!ChannelWellPoreTypeConfigurations\x12~\n\npore_types\x18\x01 \x03(\x0b\x32j.minknow_api.analysis_configuration.PoreTypeConfiguration.ChannelWellPoreTypeConfigurations.PoreTypesEntry\x1an\n\x0f\x43hannelWellList\x12[\n\x0c\x63hannel_well\x18\x01 \x03(\x0b\x32\x45.minknow_api.analysis_configuration.PoreTypeConfiguration.ChannelWell\x1a\x9d\x01\n\x0ePoreTypesEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12z\n\x05value\x18\x02 \x01(\x0b\x32k.minknow_api.analysis_configuration.PoreTypeConfiguration.ChannelWellPoreTypeConfigurations.ChannelWellList:\x02\x38\x01\x42\x12\n\x10pore_type_config\"\"\n SetPoreTypeConfigurationResponse\"\xda$\n\x13WriterConfiguration\x12\x62\n\nread_fast5\x18\x02 \x01(\x0b\x32N.minknow_api.analysis_configuration.WriterConfiguration.ReadFast5Configuration\x12\x62\n\nread_fastq\x18\x03 \x01(\x0b\x32N.minknow_api.analysis_configuration.WriterConfiguration.ReadFastqConfiguration\x12^\n\x08read_bam\x18\x08 \x01(\x0b\x32L.minknow_api.analysis_configuration.WriterConfiguration.ReadBamConfiguration\x12`\n\tread_pod5\x18\n \x01(\x0b\x32M.minknow_api.analysis_configuration.WriterConfiguration.ReadPod5Configuration\x12h\n\rread_protobuf\x18\x04 \x01(\x0b\x32Q.minknow_api.analysis_configuration.WriterConfiguration.ReadProtobufConfiguration\x12r\n\x12sequencing_summary\x18\x05 \x01(\x0b\x32V.minknow_api.analysis_configuration.WriterConfiguration.SequencingSummaryConfiguration\x12W\n\x04\x62ulk\x18\x06 \x01(\x0b\x32I.minknow_api.analysis_configuration.WriterConfiguration.BulkConfiguration\x12[\n\x06report\x18\x07 \x01(\x0b\x32K.minknow_api.analysis_configuration.WriterConfiguration.ReportConfiguration\x12\x45\n\x0cread_filters\x18\t \x01(\x0b\x32/.minknow_api.analysis_configuration.ReadFilters\x1a\xff\x03\n\x14\x43hannelConfiguration\x12\x16\n\x0c\x61ll_channels\x18\x01 \x01(\x08H\x00\x12u\n\x11specific_channels\x18\x02 \x01(\x0b\x32X.minknow_api.analysis_configuration.WriterConfiguration.ChannelConfiguration.ChannelListH\x00\x12t\n\x0e\x63hannel_ranges\x18\x03 \x01(\x0b\x32Z.minknow_api.analysis_configuration.WriterConfiguration.ChannelConfiguration.ChannelRangesH\x00\x1a\x1f\n\x0b\x43hannelList\x12\x10\n\x08\x63hannels\x18\x01 \x03(\x05\x1a\xb4\x01\n\rChannelRanges\x12w\n\x06ranges\x18\x01 \x03(\x0b\x32g.minknow_api.analysis_configuration.WriterConfiguration.ChannelConfiguration.ChannelRanges.ChannelRange\x1a*\n\x0c\x43hannelRange\x12\r\n\x05start\x18\x01 \x01(\x05\x12\x0b\n\x03\x65nd\x18\x02 \x01(\x05\x42\n\n\x08\x63hannels\x1a\xeb\x06\n\x16ReadFast5Configuration\x12\x19\n\x11\x63ompression_level\x18\x01 \x01(\x05\x12\x61\n\x10\x63ompression_type\x18\x0e \x01(\x0e\x32G.minknow_api.analysis_configuration.WriterConfiguration.CompressionType\x12Y\n\x03raw\x18\x02 \x01(\x0b\x32L.minknow_api.analysis_configuration.WriterConfiguration.ChannelConfiguration\x12[\n\x05\x66\x61stq\x18\x03 \x01(\x0b\x32L.minknow_api.analysis_configuration.WriterConfiguration.ChannelConfiguration\x12\x61\n\x0btrace_table\x18\x0b \x01(\x0b\x32L.minknow_api.analysis_configuration.WriterConfiguration.ChannelConfiguration\x12`\n\nmove_table\x18\x0c \x01(\x0b\x32L.minknow_api.analysis_configuration.WriterConfiguration.ChannelConfiguration\x12i\n\x13modifications_table\x18\r \x01(\x0b\x32L.minknow_api.analysis_configuration.WriterConfiguration.ChannelConfiguration\x12$\n\x1c\x64isable_writing_passed_reads\x18\x05 \x01(\x08\x12$\n\x1c\x64isable_writing_failed_reads\x18\x06 \x01(\x08\x12+\n#disable_writing_force_skipped_reads\x18\x07 \x01(\x08\x12\x14\n\x0c\x66ile_pattern\x18\x08 \x01(\t\x12\x1c\n\x14\x66\x61stq_header_pattern\x18\t \x01(\t\x12\x15\n\x0b\x62\x61tch_count\x18\n \x01(\rH\x00\x12\x19\n\x0f\x62\x61ses_per_batch\x18\x0f \x01(\x04H\x00\x42\x0c\n\nbatch_info\x1a\xf9\x01\n\x16ReadFastqConfiguration\x12\\\n\x06\x65nable\x18\x01 \x01(\x0b\x32L.minknow_api.analysis_configuration.WriterConfiguration.ChannelConfiguration\x12\x14\n\x0c\x66ile_pattern\x18\x02 \x01(\t\x12\x16\n\x0eheader_pattern\x18\x03 \x01(\t\x12\x15\n\x0b\x62\x61tch_count\x18\x04 \x01(\rH\x00\x12\x19\n\x0f\x62\x61ses_per_batch\x18\x06 \x01(\x04H\x00\x12\x13\n\x0b\x63ompression\x18\x05 \x01(\x08\x42\x0c\n\nbatch_info\x1a\xf7\x01\n\x14ReadBamConfiguration\x12\\\n\x06\x65nable\x18\x01 \x01(\x0b\x32L.minknow_api.analysis_configuration.WriterConfiguration.ChannelConfiguration\x12\x14\n\x0c\x66ile_pattern\x18\x02 \x01(\t\x12\x15\n\x0b\x62\x61tch_count\x18\x03 \x01(\rH\x00\x12\x19\n\x0f\x62\x61ses_per_batch\x18\x05 \x01(\x04H\x00\x12+\n#disable_writing_multiple_alignments\x18\x04 \x01(\x08\x42\x0c\n\nbatch_info\x1a\xc4\x02\n\x15ReadPod5Configuration\x12\\\n\x06\x65nable\x18\x01 \x01(\x0b\x32L.minknow_api.analysis_configuration.WriterConfiguration.ChannelConfiguration\x12\x14\n\x0c\x66ile_pattern\x18\x02 \x01(\t\x12\x15\n\x0b\x62\x61tch_count\x18\x03 \x01(\rH\x00\x12\x19\n\x0f\x62\x61ses_per_batch\x18\x07 \x01(\x04H\x00\x12$\n\x1c\x64isable_writing_passed_reads\x18\x04 \x01(\x08\x12$\n\x1c\x64isable_writing_failed_reads\x18\x05 \x01(\x08\x12+\n#disable_writing_force_skipped_reads\x18\x06 \x01(\x08\x42\x0c\n\nbatch_info\x1a\xcf\x01\n\x19ReadProtobufConfiguration\x12\\\n\x06\x65nable\x18\x01 \x01(\x0b\x32L.minknow_api.analysis_configuration.WriterConfiguration.ChannelConfiguration\x12\x14\n\x0c\x66ile_pattern\x18\x02 \x01(\t\x12\x15\n\x0b\x62\x61tch_count\x18\x03 \x01(\rH\x00\x12\x19\n\x0f\x62\x61ses_per_batch\x18\x04 \x01(\x04H\x00\x42\x0c\n\nbatch_info\x1a\x94\x01\n\x1eSequencingSummaryConfiguration\x12\\\n\x06\x65nable\x18\x01 \x01(\x0b\x32L.minknow_api.analysis_configuration.WriterConfiguration.ChannelConfiguration\x12\x14\n\x0c\x66ile_pattern\x18\x02 \x01(\t\x1a\xd7\x05\n\x11\x42ulkConfiguration\x12\x19\n\x11\x63ompression_level\x18\x02 \x01(\x05\x12\x61\n\x10\x63ompression_type\x18\r \x01(\x0e\x32G.minknow_api.analysis_configuration.WriterConfiguration.CompressionType\x12\x14\n\x0c\x66ile_pattern\x18\x0e \x01(\t\x12Y\n\x03raw\x18\x03 \x01(\x0b\x32L.minknow_api.analysis_configuration.WriterConfiguration.ChannelConfiguration\x12\\\n\x06\x65vents\x18\x04 \x01(\x0b\x32L.minknow_api.analysis_configuration.WriterConfiguration.ChannelConfiguration\x12[\n\x05reads\x18\x05 \x01(\x0b\x32L.minknow_api.analysis_configuration.WriterConfiguration.ChannelConfiguration\x12_\n\tmultiplex\x18\x06 \x01(\x0b\x32L.minknow_api.analysis_configuration.WriterConfiguration.ChannelConfiguration\x12\x64\n\x0e\x63hannel_states\x18\x07 \x01(\x0b\x32L.minknow_api.analysis_configuration.WriterConfiguration.ChannelConfiguration\x12\x17\n\x0f\x64\x65vice_metadata\x18\x0b \x01(\x08\x12\x17\n\x0f\x64\x65vice_commands\x18\x0c \x01(\x08\x12\x1f\n\x17\x64ynamic_analysis_config\x18\x0f \x01(\x08\x1a\x99\x03\n\x13ReportConfiguration\x12\x1f\n\x17pdf_report_file_pattern\x18\x01 \x01(\t\x12 \n\x18json_report_file_pattern\x18\x02 \x01(\t\x12 \n\x18html_report_file_pattern\x18\t \x01(\t\x12$\n\x1cmarkdown_report_file_pattern\x18\x08 \x01(\t\x12%\n\x1d\x64uty_time_report_file_pattern\x18\x03 \x01(\t\x12&\n\x1ethroughput_report_file_pattern\x18\x04 \x01(\t\x12)\n!final_summary_report_file_pattern\x18\x05 \x01(\t\x12-\n%barcode_alignment_report_file_pattern\x18\x06 \x01(\t\x12(\n sample_sheet_report_file_pattern\x18\n \x01(\t\x12$\n\x1c\x63ustom_report_suffix_pattern\x18\x07 \x01(\t\"R\n\x0f\x43ompressionType\x12\x16\n\x12\x44\x65\x66\x61ultCompression\x10\x00\x12\x13\n\x0fZlibCompression\x10\x01\x12\x12\n\x0eVbzCompression\x10\x02\" \n\x1eSetWriterConfigurationResponse\"\x1f\n\x1dGetWriterConfigurationRequest\"\x1f\n\x1dGetReadClassificationsRequest\"\xd7\x01\n\x1eGetReadClassificationsResponse\x12y\n\x14read_classifications\x18\x01 \x03(\x0b\x32[.minknow_api.analysis_configuration.GetReadClassificationsResponse.ReadClassificationsEntry\x1a:\n\x18ReadClassificationsEntry\x12\x0b\n\x03key\x18\x01 \x01(\x05\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\xfc\x02\n\x1c\x44ynamicAnalysisConfiguration\x12o\n\x13read_scale_tracking\x18\x01 \x01(\x0b\x32R.minknow_api.analysis_configuration.DynamicAnalysisConfiguration.ReadScaleTracking\x1a\xea\x01\n\x11ReadScaleTracking\x12 \n\x18\x63onductance_scan_voltage\x18\x01 \x01(\x02\x12\x82\x01\n\x13\x63hannel_conductance\x18\x02 \x03(\x0b\x32\x65.minknow_api.analysis_configuration.DynamicAnalysisConfiguration.ReadScaleTracking.ChannelConductance\x1a.\n\x12\x43hannelConductance\x12\x18\n\x10well_conductance\x18\x01 \x03(\x02\"(\n&GetDynamicAnalysisConfigurationRequest\")\n\'SetDynamicAnalysisConfigurationResponse2\xac\x15\n\x1c\x41nalysisConfigurationService\x12\xa1\x01\n\x1aget_analysis_configuration\x12\x43.minknow_api.analysis_configuration.GetAnalysisConfigurationRequest\x1a\x39.minknow_api.analysis_configuration.AnalysisConfiguration\"\x03\x90\x02\x01\x12\xa2\x01\n\x1aset_analysis_configuration\x12\x39.minknow_api.analysis_configuration.AnalysisConfiguration\x1a\x44.minknow_api.analysis_configuration.SetAnalysisConfigurationResponse\"\x03\x90\x02\x02\x12\xb2\x01\n\x1creset_analysis_configuration\x12\x45.minknow_api.analysis_configuration.ResetAnalysisConfigurationRequest\x1a\x46.minknow_api.analysis_configuration.ResetAnalysisConfigurationResponse\"\x03\x90\x02\x02\x12\xaa\x01\n\x1aset_analysis_enabled_state\x12\x42.minknow_api.analysis_configuration.SetAnalysisEnabledStateRequest\x1a\x43.minknow_api.analysis_configuration.SetAnalysisEnabledStateResponse\"\x03\x90\x02\x02\x12\xa1\x01\n\x17get_channel_states_desc\x12?.minknow_api.analysis_configuration.GetChannelStatesDescRequest\x1a@.minknow_api.analysis_configuration.GetChannelStatesDescResponse\"\x03\x90\x02\x01\x12\x81\x01\n\x0bget_summary\x12\x35.minknow_api.analysis_configuration.GetSummaryRequest\x1a\x36.minknow_api.analysis_configuration.GetSummaryResponse\"\x03\x90\x02\x01\x12\xb2\x01\n\x1cset_basecaller_configuration\x12\x45.minknow_api.analysis_configuration.SetBasecallerConfigurationRequest\x1a\x46.minknow_api.analysis_configuration.SetBasecallerConfigurationResponse\"\x03\x90\x02\x02\x12\xb6\x01\n preload_basecaller_configuration\x12\x45.minknow_api.analysis_configuration.SetBasecallerConfigurationRequest\x1a\x46.minknow_api.analysis_configuration.SetBasecallerConfigurationResponse\"\x03\x90\x02\x02\x12\xa7\x01\n\x1cget_basecaller_configuration\x12\x45.minknow_api.analysis_configuration.GetBasecallerConfigurationRequest\x1a;.minknow_api.analysis_configuration.BasecallerConfiguration\"\x03\x90\x02\x01\x12\xa2\x01\n\x1bget_pore_type_configuration\x12\x43.minknow_api.analysis_configuration.GetPoreTypeConfigurationRequest\x1a\x39.minknow_api.analysis_configuration.PoreTypeConfiguration\"\x03\x90\x02\x01\x12\xa3\x01\n\x1bset_pore_type_configuration\x12\x39.minknow_api.analysis_configuration.PoreTypeConfiguration\x1a\x44.minknow_api.analysis_configuration.SetPoreTypeConfigurationResponse\"\x03\x90\x02\x02\x12\x9c\x01\n\x18set_writer_configuration\x12\x37.minknow_api.analysis_configuration.WriterConfiguration\x1a\x42.minknow_api.analysis_configuration.SetWriterConfigurationResponse\"\x03\x90\x02\x02\x12\x9b\x01\n\x18get_writer_configuration\x12\x41.minknow_api.analysis_configuration.GetWriterConfigurationRequest\x1a\x37.minknow_api.analysis_configuration.WriterConfiguration\"\x03\x90\x02\x01\x12\xa6\x01\n\x18get_read_classifications\x12\x41.minknow_api.analysis_configuration.GetReadClassificationsRequest\x1a\x42.minknow_api.analysis_configuration.GetReadClassificationsResponse\"\x03\x90\x02\x01\x12\xb7\x01\n\"get_dynamic_analysis_configuration\x12J.minknow_api.analysis_configuration.GetDynamicAnalysisConfigurationRequest\x1a@.minknow_api.analysis_configuration.DynamicAnalysisConfiguration\"\x03\x90\x02\x01\x12\xb5\x01\n\"set_dynamic_analysis_configuration\x12@.minknow_api.analysis_configuration.DynamicAnalysisConfiguration\x1aK.minknow_api.analysis_configuration.SetDynamicAnalysisConfigurationResponse\"\x00\x42&\n\x1c\x63om.nanoporetech.minknow_api\xa2\x02\x05MKAPIb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n(minknow_api/analysis_configuration.proto\x12\"minknow_api.analysis_configuration\x1a\x1egoogle/protobuf/duration.proto\x1a\x1egoogle/protobuf/wrappers.proto\x1a\x1dminknow_api/rpc_options.proto\"\xca\x01\n\x0e\x45ventDetection\x12\x13\n\x0bwindow_size\x18\x03 \x01(\r\x12\x11\n\tthreshold\x18\x05 \x01(\x01\x12\x13\n\x0bpeak_height\x18\t \x01(\x01\x12:\n\x14\x65vents_to_base_ratio\x18\x10 \x01(\x0b\x32\x1c.google.protobuf.DoubleValue\x12\x1c\n\x14\x62reak_on_mux_changes\x18\x11 \x01(\x08\x12!\n\x19max_mux_change_back_shift\x18\x12 \x01(\r\"\xf0\x04\n\x13ReadDetectionParams\x12W\n\x04mode\x18\x01 \x01(\x0e\x32I.minknow_api.analysis_configuration.ReadDetectionParams.ReadDetectionMode\x12\x1a\n\x12minimum_delta_mean\x18\x02 \x01(\x01\x12\x11\n\tlook_back\x18\x03 \x01(\r\x12>\n\x18\x62reak_reads_after_events\x18\x04 \x01(\x0b\x32\x1c.google.protobuf.UInt32Value\x12?\n\x19\x62reak_reads_after_seconds\x18\x05 \x01(\x0b\x32\x1c.google.protobuf.DoubleValue\x12\"\n\x1a\x62reak_reads_on_mux_changes\x18\x06 \x01(\x08\x12\x33\n\ropen_pore_min\x18\x07 \x01(\x0b\x32\x1c.google.protobuf.DoubleValue\x12\x33\n\ropen_pore_max\x18\x08 \x01(\x0b\x32\x1c.google.protobuf.DoubleValue\x12\x37\n\x11open_pore_default\x18\t \x01(\x0b\x32\x1c.google.protobuf.DoubleValue\x12@\n\x1aopen_pore_seconds_required\x18\n \x01(\x0b\x32\x1c.google.protobuf.DoubleValue\"G\n\x11ReadDetectionMode\x12\x08\n\x04none\x10\x00\x12\x0e\n\ntransition\x10\x01\x12\x0c\n\x08lookback\x10\x02\x12\n\n\x06minmax\x10\x03\"q\n\x0bReadFilters\x12\x17\n\x0fread_length_min\x18\x01 \x01(\r\x12\x17\n\x0fread_length_max\x18\x02 \x01(\r\x12\x17\n\x0f\x65vent_count_min\x18\x03 \x01(\r\x12\x17\n\x0f\x65vent_count_max\x18\x04 \x01(\r\"\xeb\x05\n\x18ReadClassificationParams\x12Z\n\rscheme_module\x18\x01 \x01(\x0e\x32\x43.minknow_api.analysis_configuration.ReadClassificationParams.Scheme\x12\x35\n\x0fmax_sample_size\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.UInt64Value\x12 \n\x18selected_classifications\x18\x03 \x03(\t\x12!\n\x19open_pore_classifications\x18\x06 \x03(\t\x12;\n\x15open_pore_ewma_weight\x18\x07 \x01(\x0b\x32\x1c.google.protobuf.DoubleValue\x12J\n$open_pore_ignore_after_reset_seconds\x18\x08 \x01(\x0b\x32\x1c.google.protobuf.DoubleValue\x12\x1f\n\x17\x63lassification_strategy\x18\x04 \x01(\t\x12[\n\nparameters\x18\x05 \x01(\x0b\x32G.minknow_api.analysis_configuration.ReadClassificationParams.Parameters\x12P\n*selected_classifications_fraction_required\x18\t \x01(\x0b\x32\x1c.google.protobuf.DoubleValue\x12N\n(selected_classifications_chunks_required\x18\n \x01(\x0b\x32\x1c.google.protobuf.UInt32Value\x1a.\n\nParameters\x12 \n\x18rules_in_execution_order\x18\x02 \x03(\t\"\x1e\n\x06Scheme\x12\x08\n\x04none\x10\x00\x12\n\n\x06parsed\x10\x01\"\xf2\x07\n\rChannelStates\x12\x46\n\x05group\x18\x02 \x01(\x0b\x32\x37.minknow_api.analysis_configuration.ChannelStates.Group\x12\x13\n\x0b\x64\x65scription\x18\x05 \x01(\t\x12\x46\n\x05logic\x18\x03 \x01(\x0b\x32\x37.minknow_api.analysis_configuration.ChannelStates.Logic\x12\x46\n\x05style\x18\x04 \x01(\x0b\x32\x37.minknow_api.analysis_configuration.ChannelStates.Style\x1a\xaa\x04\n\x05Logic\x12\x10\n\x08\x63riteria\x18\x01 \x01(\t\x12\x0c\n\x04rank\x18\x03 \x01(\x05\x12\x0f\n\x07pattern\x18\x04 \x01(\t\x12\x16\n\x0e\x63lassification\x18\x05 \x01(\t\x12N\n\x06ranges\x18\x06 \x01(\x0b\x32>.minknow_api.analysis_configuration.ChannelStates.Logic.Ranges\x12T\n\tbehaviour\x18\x07 \x01(\x0b\x32\x41.minknow_api.analysis_configuration.ChannelStates.Logic.Behaviour\x1a\xa4\x01\n\tBehaviour\x12\x1b\n\x13reset_on_mux_change\x18\x01 \x01(\x05\x12\x1c\n\x14reset_on_well_change\x18\x02 \x01(\x05\x12\r\n\x05latch\x18\x03 \x01(\x05\x12%\n\x1dreset_on_effective_mux_change\x18\x04 \x01(\x05\x12&\n\x1ereset_on_effective_well_change\x18\x05 \x01(\x05\x1a\x8a\x01\n\x06Ranges\x12S\n\x05range\x18\x01 \x01(\x0b\x32\x44.minknow_api.analysis_configuration.ChannelStates.Logic.Ranges.Range\x1a+\n\x05Range\x12\x10\n\x08lower_pa\x18\x01 \x01(\x05\x12\x10\n\x08upper_pa\x18\x02 \x01(\x05\x1aS\n\x05Style\x12+\n\x05order\x18\x01 \x01(\x0b\x32\x1c.google.protobuf.UInt32Value\x12\r\n\x05label\x18\x02 \x01(\t\x12\x0e\n\x06\x63olour\x18\x03 \x01(\t\x1ar\n\x05Group\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x46\n\x05style\x18\x02 \x01(\x0b\x32\x37.minknow_api.analysis_configuration.ChannelStates.Style\x12\x13\n\x0b\x64\x65scription\x18\x03 \x01(\t\"!\n\x1fGetAnalysisConfigurationRequest\"\x91\x03\n\x11ReadScalingParams\x12\x1a\n\x12quantile_locations\x18\x03 \x03(\x02\x12\x1e\n\x16quantile_weights_shift\x18\x01 \x03(\x02\x12\x1e\n\x16quantile_weights_scale\x18\x02 \x03(\x02\x12\x16\n\x0etracking_alpha\x18\x04 \x01(\x02\x12$\n\x1c\x61lpha_number_estimates_decay\x18\x05 \x01(\x02\x12\x18\n\x10quantile_maxdiff\x18\n \x01(\x02\x12\x1c\n\x14trust_limit_fraction\x18\x06 \x01(\x02\x12\x16\n\x0e\x64iff_threshold\x18\x07 \x01(\x02\x12\x1a\n\x12\x65mission_threshold\x18\x08 \x01(\x02\x12\x17\n\x0f\x64\x61\x63s_breakpoint\x18\t \x01(\x02\x12 \n\x18\x63onductance_factor_scale\x18\x0b \x01(\x02\x12 \n\x18\x63onductance_factor_shift\x18\x0c \x01(\x02\x12\x19\n\x11q90_q10_to_normal\x18\r \x01(\x02\"\xac\x04\n\x15\x41nalysisConfiguration\x12K\n\x0f\x65vent_detection\x18\x01 \x01(\x0b\x32\x32.minknow_api.analysis_configuration.EventDetection\x12O\n\x0eread_detection\x18\x02 \x01(\x0b\x32\x37.minknow_api.analysis_configuration.ReadDetectionParams\x12Y\n\x13read_classification\x18\x04 \x01(\x0b\x32<.minknow_api.analysis_configuration.ReadClassificationParams\x12\x64\n\x0e\x63hannel_states\x18\x07 \x03(\x0b\x32L.minknow_api.analysis_configuration.AnalysisConfiguration.ChannelStatesEntry\x12K\n\x0cread_scaling\x18\x08 \x01(\x0b\x32\x35.minknow_api.analysis_configuration.ReadScalingParams\x1ag\n\x12\x43hannelStatesEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12@\n\x05value\x18\x02 \x01(\x0b\x32\x31.minknow_api.analysis_configuration.ChannelStates:\x02\x38\x01\"\"\n SetAnalysisConfigurationResponse\"#\n!ResetAnalysisConfigurationRequest\"$\n\"ResetAnalysisConfigurationResponse\"6\n\x1eSetAnalysisEnabledStateRequest\x12\x14\n\x06\x65nable\x18\x01 \x01(\x08\x42\x04\x88\xb5\x18\x01\"!\n\x1fSetAnalysisEnabledStateResponse\"\x1d\n\x1bGetChannelStatesDescRequest\"\x99\x04\n\x1cGetChannelStatesDescResponse\x12V\n\x06groups\x18\x01 \x03(\x0b\x32\x46.minknow_api.analysis_configuration.GetChannelStatesDescResponse.Group\x1a;\n\x05Style\x12\r\n\x05label\x18\x01 \x01(\t\x12\x13\n\x0b\x64\x65scription\x18\x02 \x01(\t\x12\x0e\n\x06\x63olour\x18\x03 \x01(\t\x1a\x95\x01\n\x0c\x43hannelState\x12\n\n\x02id\x18\x01 \x01(\r\x12\x0c\n\x04name\x18\x02 \x01(\t\x12U\n\x05style\x18\x03 \x01(\x0b\x32\x46.minknow_api.analysis_configuration.GetChannelStatesDescResponse.Style\x12\x14\n\x0cglobal_order\x18\x04 \x01(\r\x1a\xcb\x01\n\x05Group\x12\x0c\n\x04name\x18\x01 \x01(\t\x12U\n\x05style\x18\x02 \x01(\x0b\x32\x46.minknow_api.analysis_configuration.GetChannelStatesDescResponse.Style\x12]\n\x06states\x18\x03 \x03(\x0b\x32M.minknow_api.analysis_configuration.GetChannelStatesDescResponse.ChannelState\"\x13\n\x11GetSummaryRequest\"K\n\x12GetSummaryResponse\x12\x18\n\x10\x61nalysis_enabled\x18\x01 \x01(\x08\x12\x1b\n\x13\x62\x61secalling_enabled\x18\x02 \x01(\x08\"\x82\x03\n\x16\x42\x61rcodingConfiguration\x12\x16\n\x0e\x62\x61rcoding_kits\x18\x01 \x03(\t\x12\x15\n\rtrim_barcodes\x18\x02 \x01(\x08\x12\"\n\x1arequire_barcodes_both_ends\x18\x03 \x01(\x08\x12\"\n\x1a\x64\x65tect_mid_strand_barcodes\x18\x04 \x01(\x08\x12.\n\tmin_score\x18\x05 \x01(\x0b\x32\x1b.google.protobuf.FloatValue\x12\x33\n\x0emin_score_rear\x18\x06 \x01(\x0b\x32\x1b.google.protobuf.FloatValue\x12\x32\n\rmin_score_mid\x18\x07 \x01(\x0b\x32\x1b.google.protobuf.FloatValue\x12\x33\n\x0emin_score_mask\x18\x08 \x01(\x0b\x32\x1b.google.protobuf.FloatValue\x12#\n\x1bignore_unspecified_barcodes\x18\t \x01(\x08\"\xae\x01\n\x16\x41lignmentConfiguration\x12\x17\n\x0freference_files\x18\x01 \x03(\t\x12\x10\n\x08\x62\x65\x64_file\x18\x02 \x01(\t\x12\x35\n\x10minimum_coverage\x18\x03 \x01(\x0b\x32\x1b.google.protobuf.FloatValue\x12\x32\n*aggregate_statistics_for_multiple_bed_hits\x18\x04 \x01(\x08\"\xcc\x01\n\x11LampConfiguration\x12\x10\n\x08lamp_kit\x18\x01 \x01(\t\x12\x37\n\x12min_score_barcodes\x18\x02 \x01(\x0b\x32\x1b.google.protobuf.FloatValue\x12\x34\n\x0fmin_score_masks\x18\x03 \x01(\x0b\x32\x1b.google.protobuf.FloatValue\x12\x36\n\x11min_score_targets\x18\x04 \x01(\x0b\x32\x1b.google.protobuf.FloatValue\"\xb3\t\n\x17\x42\x61secallerConfiguration\x12\x0e\n\x06\x65nable\x18\x02 \x01(\x08\x12\x17\n\x0f\x63onfig_filename\x18\x01 \x01(\t\x12\x14\n\x0c\x61lign_filter\x18\n \x01(\x08\x12\x61\n\x0eread_filtering\x18\x03 \x01(\x0b\x32I.minknow_api.analysis_configuration.BasecallerConfiguration.ReadFiltering\x12[\n\x17\x62\x61rcoding_configuration\x18\x04 \x01(\x0b\x32:.minknow_api.analysis_configuration.BarcodingConfiguration\x12\x65\n\x10target_filtering\x18\x05 \x01(\x0b\x32K.minknow_api.analysis_configuration.BasecallerConfiguration.TargetFiltering\x12[\n\x17\x61lignment_configuration\x18\x06 \x01(\x0b\x32:.minknow_api.analysis_configuration.AlignmentConfiguration\x12Q\n\x12lamp_configuration\x18\x07 \x01(\x0b\x32\x35.minknow_api.analysis_configuration.LampConfiguration\x12\x1d\n\x15\x65nable_read_splitting\x18\x08 \x01(\x08\x12=\n\x18min_score_read_splitting\x18\t \x01(\x0b\x32\x1b.google.protobuf.FloatValue\x1a\xfb\x02\n\rReadFiltering\x12\x30\n\nmin_qscore\x18\x01 \x01(\x0b\x32\x1c.google.protobuf.DoubleValue\x12\x31\n\x0bmin_samples\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.UInt64Value\x12\x31\n\x0bmax_samples\x18\x03 \x01(\x0b\x32\x1c.google.protobuf.UInt64Value\x12/\n\tmin_bases\x18\x04 \x01(\x0b\x32\x1c.google.protobuf.UInt64Value\x12/\n\tmax_bases\x18\x05 \x01(\x0b\x32\x1c.google.protobuf.UInt64Value\x12\x37\n\x11max_failed_chunks\x18\x06 \x01(\x0b\x32\x1c.google.protobuf.UInt64Value\x12\x37\n\x11min_duplex_qscore\x18\x07 \x01(\x0b\x32\x1c.google.protobuf.DoubleValue\x1a\xa5\x01\n\x0fTargetFiltering\x12\x30\n\nmin_qscore\x18\x01 \x01(\x0b\x32\x1c.google.protobuf.DoubleValue\x12/\n\tmin_bases\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.UInt64Value\x12/\n\tmax_bases\x18\x03 \x01(\x0b\x32\x1c.google.protobuf.UInt64Value\"w\n!SetBasecallerConfigurationRequest\x12R\n\x07\x63onfigs\x18\x01 \x01(\x0b\x32;.minknow_api.analysis_configuration.BasecallerConfigurationB\x04\x90\xb5\x18\x01\"$\n\"SetBasecallerConfigurationResponse\"#\n!GetBasecallerConfigurationRequest\"!\n\x1fGetPoreTypeConfigurationRequest\"\xab\x05\n\x15PoreTypeConfiguration\x12\x1a\n\x10global_pore_type\x18\x01 \x01(\tH\x00\x12~\n\x17\x63hannel_well_pore_types\x18\x02 \x01(\x0b\x32[.minknow_api.analysis_configuration.PoreTypeConfiguration.ChannelWellPoreTypeConfigurationsH\x00\x1a,\n\x0b\x43hannelWell\x12\x0f\n\x07\x63hannel\x18\x01 \x01(\r\x12\x0c\n\x04well\x18\x02 \x01(\r\x1a\xb3\x03\n!ChannelWellPoreTypeConfigurations\x12~\n\npore_types\x18\x01 \x03(\x0b\x32j.minknow_api.analysis_configuration.PoreTypeConfiguration.ChannelWellPoreTypeConfigurations.PoreTypesEntry\x1an\n\x0f\x43hannelWellList\x12[\n\x0c\x63hannel_well\x18\x01 \x03(\x0b\x32\x45.minknow_api.analysis_configuration.PoreTypeConfiguration.ChannelWell\x1a\x9d\x01\n\x0ePoreTypesEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12z\n\x05value\x18\x02 \x01(\x0b\x32k.minknow_api.analysis_configuration.PoreTypeConfiguration.ChannelWellPoreTypeConfigurations.ChannelWellList:\x02\x38\x01\x42\x12\n\x10pore_type_config\"\"\n SetPoreTypeConfigurationResponse\"\xdc%\n\x13WriterConfiguration\x12\x62\n\nread_fast5\x18\x02 \x01(\x0b\x32N.minknow_api.analysis_configuration.WriterConfiguration.ReadFast5Configuration\x12\x62\n\nread_fastq\x18\x03 \x01(\x0b\x32N.minknow_api.analysis_configuration.WriterConfiguration.ReadFastqConfiguration\x12^\n\x08read_bam\x18\x08 \x01(\x0b\x32L.minknow_api.analysis_configuration.WriterConfiguration.ReadBamConfiguration\x12`\n\tread_pod5\x18\n \x01(\x0b\x32M.minknow_api.analysis_configuration.WriterConfiguration.ReadPod5Configuration\x12r\n\x12sequencing_summary\x18\x05 \x01(\x0b\x32V.minknow_api.analysis_configuration.WriterConfiguration.SequencingSummaryConfiguration\x12W\n\x04\x62ulk\x18\x06 \x01(\x0b\x32I.minknow_api.analysis_configuration.WriterConfiguration.BulkConfiguration\x12[\n\x06report\x18\x07 \x01(\x0b\x32K.minknow_api.analysis_configuration.WriterConfiguration.ReportConfiguration\x12\x45\n\x0cread_filters\x18\t \x01(\x0b\x32/.minknow_api.analysis_configuration.ReadFilters\x1a\xff\x03\n\x14\x43hannelConfiguration\x12\x16\n\x0c\x61ll_channels\x18\x01 \x01(\x08H\x00\x12u\n\x11specific_channels\x18\x02 \x01(\x0b\x32X.minknow_api.analysis_configuration.WriterConfiguration.ChannelConfiguration.ChannelListH\x00\x12t\n\x0e\x63hannel_ranges\x18\x03 \x01(\x0b\x32Z.minknow_api.analysis_configuration.WriterConfiguration.ChannelConfiguration.ChannelRangesH\x00\x1a\x1f\n\x0b\x43hannelList\x12\x10\n\x08\x63hannels\x18\x01 \x03(\x05\x1a\xb4\x01\n\rChannelRanges\x12w\n\x06ranges\x18\x01 \x03(\x0b\x32g.minknow_api.analysis_configuration.WriterConfiguration.ChannelConfiguration.ChannelRanges.ChannelRange\x1a*\n\x0c\x43hannelRange\x12\r\n\x05start\x18\x01 \x01(\x05\x12\x0b\n\x03\x65nd\x18\x02 \x01(\x05\x42\n\n\x08\x63hannels\x1a\x9e\x07\n\x16ReadFast5Configuration\x12\x19\n\x11\x63ompression_level\x18\x01 \x01(\x05\x12\x61\n\x10\x63ompression_type\x18\x0e \x01(\x0e\x32G.minknow_api.analysis_configuration.WriterConfiguration.CompressionType\x12Y\n\x03raw\x18\x02 \x01(\x0b\x32L.minknow_api.analysis_configuration.WriterConfiguration.ChannelConfiguration\x12[\n\x05\x66\x61stq\x18\x03 \x01(\x0b\x32L.minknow_api.analysis_configuration.WriterConfiguration.ChannelConfiguration\x12\x61\n\x0btrace_table\x18\x0b \x01(\x0b\x32L.minknow_api.analysis_configuration.WriterConfiguration.ChannelConfiguration\x12`\n\nmove_table\x18\x0c \x01(\x0b\x32L.minknow_api.analysis_configuration.WriterConfiguration.ChannelConfiguration\x12i\n\x13modifications_table\x18\r \x01(\x0b\x32L.minknow_api.analysis_configuration.WriterConfiguration.ChannelConfiguration\x12$\n\x1c\x64isable_writing_passed_reads\x18\x05 \x01(\x08\x12$\n\x1c\x64isable_writing_failed_reads\x18\x06 \x01(\x08\x12+\n#disable_writing_force_skipped_reads\x18\x07 \x01(\x08\x12\x14\n\x0c\x66ile_pattern\x18\x08 \x01(\t\x12\x1c\n\x14\x66\x61stq_header_pattern\x18\t \x01(\t\x12\x15\n\x0b\x62\x61tch_count\x18\n \x01(\rH\x00\x12\x19\n\x0f\x62\x61ses_per_batch\x18\x0f \x01(\x04H\x00\x12\x31\n\x0e\x62\x61tch_duration\x18\x10 \x01(\x0b\x32\x19.google.protobuf.DurationB\x0c\n\nbatch_info\x1a\xa5\x03\n\x16ReadFastqConfiguration\x12\\\n\x06\x65nable\x18\x01 \x01(\x0b\x32L.minknow_api.analysis_configuration.WriterConfiguration.ChannelConfiguration\x12\x14\n\x0c\x66ile_pattern\x18\x02 \x01(\t\x12\x16\n\x0eheader_pattern\x18\x03 \x01(\t\x12\x15\n\x0b\x62\x61tch_count\x18\x04 \x01(\rH\x00\x12\x19\n\x0f\x62\x61ses_per_batch\x18\x06 \x01(\x04H\x00\x12\x13\n\x0b\x63ompression\x18\x05 \x01(\x08\x12$\n\x1c\x64isable_writing_passed_reads\x18\x07 \x01(\x08\x12$\n\x1c\x64isable_writing_failed_reads\x18\x08 \x01(\x08\x12+\n#disable_writing_force_skipped_reads\x18\t \x01(\x08\x12\x31\n\x0e\x62\x61tch_duration\x18\n \x01(\x0b\x32\x19.google.protobuf.DurationB\x0c\n\nbatch_info\x1a\xa3\x03\n\x14ReadBamConfiguration\x12\\\n\x06\x65nable\x18\x01 \x01(\x0b\x32L.minknow_api.analysis_configuration.WriterConfiguration.ChannelConfiguration\x12\x14\n\x0c\x66ile_pattern\x18\x02 \x01(\t\x12\x15\n\x0b\x62\x61tch_count\x18\x03 \x01(\rH\x00\x12\x19\n\x0f\x62\x61ses_per_batch\x18\x05 \x01(\x04H\x00\x12+\n#disable_writing_multiple_alignments\x18\x04 \x01(\x08\x12$\n\x1c\x64isable_writing_passed_reads\x18\x06 \x01(\x08\x12$\n\x1c\x64isable_writing_failed_reads\x18\x07 \x01(\x08\x12+\n#disable_writing_force_skipped_reads\x18\x08 \x01(\x08\x12\x31\n\x0e\x62\x61tch_duration\x18\t \x01(\x0b\x32\x19.google.protobuf.DurationB\x0c\n\nbatch_info\x1a\xf7\x02\n\x15ReadPod5Configuration\x12\\\n\x06\x65nable\x18\x01 \x01(\x0b\x32L.minknow_api.analysis_configuration.WriterConfiguration.ChannelConfiguration\x12\x14\n\x0c\x66ile_pattern\x18\x02 \x01(\t\x12\x15\n\x0b\x62\x61tch_count\x18\x03 \x01(\rH\x00\x12\x19\n\x0f\x62\x61ses_per_batch\x18\x07 \x01(\x04H\x00\x12$\n\x1c\x64isable_writing_passed_reads\x18\x04 \x01(\x08\x12$\n\x1c\x64isable_writing_failed_reads\x18\x05 \x01(\x08\x12+\n#disable_writing_force_skipped_reads\x18\x06 \x01(\x08\x12\x31\n\x0e\x62\x61tch_duration\x18\x08 \x01(\x0b\x32\x19.google.protobuf.DurationB\x0c\n\nbatch_info\x1a\x94\x01\n\x1eSequencingSummaryConfiguration\x12\\\n\x06\x65nable\x18\x01 \x01(\x0b\x32L.minknow_api.analysis_configuration.WriterConfiguration.ChannelConfiguration\x12\x14\n\x0c\x66ile_pattern\x18\x02 \x01(\t\x1a\xd7\x05\n\x11\x42ulkConfiguration\x12\x19\n\x11\x63ompression_level\x18\x02 \x01(\x05\x12\x61\n\x10\x63ompression_type\x18\r \x01(\x0e\x32G.minknow_api.analysis_configuration.WriterConfiguration.CompressionType\x12\x14\n\x0c\x66ile_pattern\x18\x0e \x01(\t\x12Y\n\x03raw\x18\x03 \x01(\x0b\x32L.minknow_api.analysis_configuration.WriterConfiguration.ChannelConfiguration\x12\\\n\x06\x65vents\x18\x04 \x01(\x0b\x32L.minknow_api.analysis_configuration.WriterConfiguration.ChannelConfiguration\x12[\n\x05reads\x18\x05 \x01(\x0b\x32L.minknow_api.analysis_configuration.WriterConfiguration.ChannelConfiguration\x12_\n\tmultiplex\x18\x06 \x01(\x0b\x32L.minknow_api.analysis_configuration.WriterConfiguration.ChannelConfiguration\x12\x64\n\x0e\x63hannel_states\x18\x07 \x01(\x0b\x32L.minknow_api.analysis_configuration.WriterConfiguration.ChannelConfiguration\x12\x17\n\x0f\x64\x65vice_metadata\x18\x0b \x01(\x08\x12\x17\n\x0f\x64\x65vice_commands\x18\x0c \x01(\x08\x12\x1f\n\x17\x64ynamic_analysis_config\x18\x0f \x01(\x08\x1a\x99\x03\n\x13ReportConfiguration\x12\x1f\n\x17pdf_report_file_pattern\x18\x01 \x01(\t\x12 \n\x18json_report_file_pattern\x18\x02 \x01(\t\x12 \n\x18html_report_file_pattern\x18\t \x01(\t\x12$\n\x1cmarkdown_report_file_pattern\x18\x08 \x01(\t\x12%\n\x1d\x64uty_time_report_file_pattern\x18\x03 \x01(\t\x12&\n\x1ethroughput_report_file_pattern\x18\x04 \x01(\t\x12)\n!final_summary_report_file_pattern\x18\x05 \x01(\t\x12-\n%barcode_alignment_report_file_pattern\x18\x06 \x01(\t\x12(\n sample_sheet_report_file_pattern\x18\n \x01(\t\x12$\n\x1c\x63ustom_report_suffix_pattern\x18\x07 \x01(\t\"R\n\x0f\x43ompressionType\x12\x16\n\x12\x44\x65\x66\x61ultCompression\x10\x00\x12\x13\n\x0fZlibCompression\x10\x01\x12\x12\n\x0eVbzCompression\x10\x02\" \n\x1eSetWriterConfigurationResponse\"\x1f\n\x1dGetWriterConfigurationRequest\"\x1f\n\x1dGetReadClassificationsRequest\"\xd7\x01\n\x1eGetReadClassificationsResponse\x12y\n\x14read_classifications\x18\x01 \x03(\x0b\x32[.minknow_api.analysis_configuration.GetReadClassificationsResponse.ReadClassificationsEntry\x1a:\n\x18ReadClassificationsEntry\x12\x0b\n\x03key\x18\x01 \x01(\x05\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\xfc\x02\n\x1c\x44ynamicAnalysisConfiguration\x12o\n\x13read_scale_tracking\x18\x01 \x01(\x0b\x32R.minknow_api.analysis_configuration.DynamicAnalysisConfiguration.ReadScaleTracking\x1a\xea\x01\n\x11ReadScaleTracking\x12 \n\x18\x63onductance_scan_voltage\x18\x01 \x01(\x02\x12\x82\x01\n\x13\x63hannel_conductance\x18\x02 \x03(\x0b\x32\x65.minknow_api.analysis_configuration.DynamicAnalysisConfiguration.ReadScaleTracking.ChannelConductance\x1a.\n\x12\x43hannelConductance\x12\x18\n\x10well_conductance\x18\x01 \x03(\x02\"(\n&GetDynamicAnalysisConfigurationRequest\")\n\'SetDynamicAnalysisConfigurationResponse2\xac\x15\n\x1c\x41nalysisConfigurationService\x12\xa1\x01\n\x1aget_analysis_configuration\x12\x43.minknow_api.analysis_configuration.GetAnalysisConfigurationRequest\x1a\x39.minknow_api.analysis_configuration.AnalysisConfiguration\"\x03\x90\x02\x01\x12\xa2\x01\n\x1aset_analysis_configuration\x12\x39.minknow_api.analysis_configuration.AnalysisConfiguration\x1a\x44.minknow_api.analysis_configuration.SetAnalysisConfigurationResponse\"\x03\x90\x02\x02\x12\xb2\x01\n\x1creset_analysis_configuration\x12\x45.minknow_api.analysis_configuration.ResetAnalysisConfigurationRequest\x1a\x46.minknow_api.analysis_configuration.ResetAnalysisConfigurationResponse\"\x03\x90\x02\x02\x12\xaa\x01\n\x1aset_analysis_enabled_state\x12\x42.minknow_api.analysis_configuration.SetAnalysisEnabledStateRequest\x1a\x43.minknow_api.analysis_configuration.SetAnalysisEnabledStateResponse\"\x03\x90\x02\x02\x12\xa1\x01\n\x17get_channel_states_desc\x12?.minknow_api.analysis_configuration.GetChannelStatesDescRequest\x1a@.minknow_api.analysis_configuration.GetChannelStatesDescResponse\"\x03\x90\x02\x01\x12\x81\x01\n\x0bget_summary\x12\x35.minknow_api.analysis_configuration.GetSummaryRequest\x1a\x36.minknow_api.analysis_configuration.GetSummaryResponse\"\x03\x90\x02\x01\x12\xb2\x01\n\x1cset_basecaller_configuration\x12\x45.minknow_api.analysis_configuration.SetBasecallerConfigurationRequest\x1a\x46.minknow_api.analysis_configuration.SetBasecallerConfigurationResponse\"\x03\x90\x02\x02\x12\xb6\x01\n preload_basecaller_configuration\x12\x45.minknow_api.analysis_configuration.SetBasecallerConfigurationRequest\x1a\x46.minknow_api.analysis_configuration.SetBasecallerConfigurationResponse\"\x03\x90\x02\x02\x12\xa7\x01\n\x1cget_basecaller_configuration\x12\x45.minknow_api.analysis_configuration.GetBasecallerConfigurationRequest\x1a;.minknow_api.analysis_configuration.BasecallerConfiguration\"\x03\x90\x02\x01\x12\xa2\x01\n\x1bget_pore_type_configuration\x12\x43.minknow_api.analysis_configuration.GetPoreTypeConfigurationRequest\x1a\x39.minknow_api.analysis_configuration.PoreTypeConfiguration\"\x03\x90\x02\x01\x12\xa3\x01\n\x1bset_pore_type_configuration\x12\x39.minknow_api.analysis_configuration.PoreTypeConfiguration\x1a\x44.minknow_api.analysis_configuration.SetPoreTypeConfigurationResponse\"\x03\x90\x02\x02\x12\x9c\x01\n\x18set_writer_configuration\x12\x37.minknow_api.analysis_configuration.WriterConfiguration\x1a\x42.minknow_api.analysis_configuration.SetWriterConfigurationResponse\"\x03\x90\x02\x02\x12\x9b\x01\n\x18get_writer_configuration\x12\x41.minknow_api.analysis_configuration.GetWriterConfigurationRequest\x1a\x37.minknow_api.analysis_configuration.WriterConfiguration\"\x03\x90\x02\x01\x12\xa6\x01\n\x18get_read_classifications\x12\x41.minknow_api.analysis_configuration.GetReadClassificationsRequest\x1a\x42.minknow_api.analysis_configuration.GetReadClassificationsResponse\"\x03\x90\x02\x01\x12\xb7\x01\n\"get_dynamic_analysis_configuration\x12J.minknow_api.analysis_configuration.GetDynamicAnalysisConfigurationRequest\x1a@.minknow_api.analysis_configuration.DynamicAnalysisConfiguration\"\x03\x90\x02\x01\x12\xb5\x01\n\"set_dynamic_analysis_configuration\x12@.minknow_api.analysis_configuration.DynamicAnalysisConfiguration\x1aK.minknow_api.analysis_configuration.SetDynamicAnalysisConfigurationResponse\"\x00\x42&\n\x1c\x63om.nanoporetech.minknow_api\xa2\x02\x05MKAPIb\x06proto3')
 
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, globals())
 _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'minknow_api.analysis_configuration_pb2', globals())
@@ -63,248 +64,163 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   _ANALYSISCONFIGURATIONSERVICE.methods_by_name['get_read_classifications']._serialized_options = b'\220\002\001'
   _ANALYSISCONFIGURATIONSERVICE.methods_by_name['get_dynamic_analysis_configuration']._options = None
   _ANALYSISCONFIGURATIONSERVICE.methods_by_name['get_dynamic_analysis_configuration']._serialized_options = b'\220\002\001'
-  _EVENTDETECTION._serialized_start=144
-  _EVENTDETECTION._serialized_end=346
-  _READDETECTIONPARAMS._serialized_start=349
-  _READDETECTIONPARAMS._serialized_end=973
-  _READDETECTIONPARAMS_READDETECTIONMODE._serialized_start=902
-  _READDETECTIONPARAMS_READDETECTIONMODE._serialized_end=973
-  _READFILTERS._serialized_start=975
-  _READFILTERS._serialized_end=1088
-  _READCLASSIFICATIONPARAMS._serialized_start=1091
-  _READCLASSIFICATIONPARAMS._serialized_end=1838
-  _READCLASSIFICATIONPARAMS_PARAMETERS._serialized_start=1760
-  _READCLASSIFICATIONPARAMS_PARAMETERS._serialized_end=1806
-  _READCLASSIFICATIONPARAMS_SCHEME._serialized_start=1808
-  _READCLASSIFICATIONPARAMS_SCHEME._serialized_end=1838
-  _CHANNELSTATES._serialized_start=1841
-  _CHANNELSTATES._serialized_end=2851
-  _CHANNELSTATES_LOGIC._serialized_start=2096
-  _CHANNELSTATES_LOGIC._serialized_end=2650
-  _CHANNELSTATES_LOGIC_BEHAVIOUR._serialized_start=2345
-  _CHANNELSTATES_LOGIC_BEHAVIOUR._serialized_end=2509
-  _CHANNELSTATES_LOGIC_RANGES._serialized_start=2512
-  _CHANNELSTATES_LOGIC_RANGES._serialized_end=2650
-  _CHANNELSTATES_LOGIC_RANGES_RANGE._serialized_start=2607
-  _CHANNELSTATES_LOGIC_RANGES_RANGE._serialized_end=2650
-  _CHANNELSTATES_STYLE._serialized_start=2652
-  _CHANNELSTATES_STYLE._serialized_end=2735
-  _CHANNELSTATES_GROUP._serialized_start=2737
-  _CHANNELSTATES_GROUP._serialized_end=2851
-  _GETANALYSISCONFIGURATIONREQUEST._serialized_start=2853
-  _GETANALYSISCONFIGURATIONREQUEST._serialized_end=2886
-  _READSCALINGPARAMS._serialized_start=2889
-  _READSCALINGPARAMS._serialized_end=3290
-  _ANALYSISCONFIGURATION._serialized_start=3293
-  _ANALYSISCONFIGURATION._serialized_end=3849
-  _ANALYSISCONFIGURATION_CHANNELSTATESENTRY._serialized_start=3746
-  _ANALYSISCONFIGURATION_CHANNELSTATESENTRY._serialized_end=3849
-  _SETANALYSISCONFIGURATIONRESPONSE._serialized_start=3851
-  _SETANALYSISCONFIGURATIONRESPONSE._serialized_end=3885
-  _RESETANALYSISCONFIGURATIONREQUEST._serialized_start=3887
-  _RESETANALYSISCONFIGURATIONREQUEST._serialized_end=3922
-  _RESETANALYSISCONFIGURATIONRESPONSE._serialized_start=3924
-  _RESETANALYSISCONFIGURATIONRESPONSE._serialized_end=3960
-  _SETANALYSISENABLEDSTATEREQUEST._serialized_start=3962
-  _SETANALYSISENABLEDSTATEREQUEST._serialized_end=4016
-  _SETANALYSISENABLEDSTATERESPONSE._serialized_start=4018
-  _SETANALYSISENABLEDSTATERESPONSE._serialized_end=4051
-  _GETCHANNELSTATESDESCREQUEST._serialized_start=4053
-  _GETCHANNELSTATESDESCREQUEST._serialized_end=4082
-  _GETCHANNELSTATESDESCRESPONSE._serialized_start=4085
-  _GETCHANNELSTATESDESCRESPONSE._serialized_end=4622
-  _GETCHANNELSTATESDESCRESPONSE_STYLE._serialized_start=4205
-  _GETCHANNELSTATESDESCRESPONSE_STYLE._serialized_end=4264
-  _GETCHANNELSTATESDESCRESPONSE_CHANNELSTATE._serialized_start=4267
-  _GETCHANNELSTATESDESCRESPONSE_CHANNELSTATE._serialized_end=4416
-  _GETCHANNELSTATESDESCRESPONSE_GROUP._serialized_start=4419
-  _GETCHANNELSTATESDESCRESPONSE_GROUP._serialized_end=4622
-  _GETSUMMARYREQUEST._serialized_start=4624
-  _GETSUMMARYREQUEST._serialized_end=4643
-  _GETSUMMARYRESPONSE._serialized_start=4645
-  _GETSUMMARYRESPONSE._serialized_end=4720
-  _BARCODINGCONFIGURATION._serialized_start=4723
-  _BARCODINGCONFIGURATION._serialized_end=5109
-  _ALIGNMENTCONFIGURATION._serialized_start=5112
-  _ALIGNMENTCONFIGURATION._serialized_end=5286
-  _LAMPCONFIGURATION._serialized_start=5289
-  _LAMPCONFIGURATION._serialized_end=5493
-  _BASECALLERCONFIGURATION._serialized_start=5496
-  _BASECALLERCONFIGURATION._serialized_end=6642
-  _BASECALLERCONFIGURATION_READFILTERING._serialized_start=6152
-  _BASECALLERCONFIGURATION_READFILTERING._serialized_end=6474
-  _BASECALLERCONFIGURATION_TARGETFILTERING._serialized_start=6477
-  _BASECALLERCONFIGURATION_TARGETFILTERING._serialized_end=6642
-  _SETBASECALLERCONFIGURATIONREQUEST._serialized_start=6644
-  _SETBASECALLERCONFIGURATIONREQUEST._serialized_end=6763
-  _SETBASECALLERCONFIGURATIONRESPONSE._serialized_start=6765
-  _SETBASECALLERCONFIGURATIONRESPONSE._serialized_end=6801
-  _GETBASECALLERCONFIGURATIONREQUEST._serialized_start=6803
-  _GETBASECALLERCONFIGURATIONREQUEST._serialized_end=6838
-  _GETPORETYPECONFIGURATIONREQUEST._serialized_start=6840
-  _GETPORETYPECONFIGURATIONREQUEST._serialized_end=6873
-  _PORETYPECONFIGURATION._serialized_start=6876
-  _PORETYPECONFIGURATION._serialized_end=7559
-  _PORETYPECONFIGURATION_CHANNELWELL._serialized_start=7057
-  _PORETYPECONFIGURATION_CHANNELWELL._serialized_end=7101
-  _PORETYPECONFIGURATION_CHANNELWELLPORETYPECONFIGURATIONS._serialized_start=7104
-  _PORETYPECONFIGURATION_CHANNELWELLPORETYPECONFIGURATIONS._serialized_end=7539
-  _PORETYPECONFIGURATION_CHANNELWELLPORETYPECONFIGURATIONS_CHANNELWELLLIST._serialized_start=7269
-  _PORETYPECONFIGURATION_CHANNELWELLPORETYPECONFIGURATIONS_CHANNELWELLLIST._serialized_end=7379
-  _PORETYPECONFIGURATION_CHANNELWELLPORETYPECONFIGURATIONS_PORETYPESENTRY._serialized_start=7382
-  _PORETYPECONFIGURATION_CHANNELWELLPORETYPECONFIGURATIONS_PORETYPESENTRY._serialized_end=7539
-  _SETPORETYPECONFIGURATIONRESPONSE._serialized_start=7561
-  _SETPORETYPECONFIGURATIONRESPONSE._serialized_end=7595
-  _WRITERCONFIGURATION._serialized_start=7598
-  _WRITERCONFIGURATION._serialized_end=12296
-  _WRITERCONFIGURATION_CHANNELCONFIGURATION._serialized_start=8491
-  _WRITERCONFIGURATION_CHANNELCONFIGURATION._serialized_end=9002
-  _WRITERCONFIGURATION_CHANNELCONFIGURATION_CHANNELLIST._serialized_start=8776
-  _WRITERCONFIGURATION_CHANNELCONFIGURATION_CHANNELLIST._serialized_end=8807
-  _WRITERCONFIGURATION_CHANNELCONFIGURATION_CHANNELRANGES._serialized_start=8810
-  _WRITERCONFIGURATION_CHANNELCONFIGURATION_CHANNELRANGES._serialized_end=8990
-  _WRITERCONFIGURATION_CHANNELCONFIGURATION_CHANNELRANGES_CHANNELRANGE._serialized_start=8948
-  _WRITERCONFIGURATION_CHANNELCONFIGURATION_CHANNELRANGES_CHANNELRANGE._serialized_end=8990
-  _WRITERCONFIGURATION_READFAST5CONFIGURATION._serialized_start=9005
-  _WRITERCONFIGURATION_READFAST5CONFIGURATION._serialized_end=9880
-  _WRITERCONFIGURATION_READFASTQCONFIGURATION._serialized_start=9883
-  _WRITERCONFIGURATION_READFASTQCONFIGURATION._serialized_end=10132
-  _WRITERCONFIGURATION_READBAMCONFIGURATION._serialized_start=10135
-  _WRITERCONFIGURATION_READBAMCONFIGURATION._serialized_end=10382
-  _WRITERCONFIGURATION_READPOD5CONFIGURATION._serialized_start=10385
-  _WRITERCONFIGURATION_READPOD5CONFIGURATION._serialized_end=10709
-  _WRITERCONFIGURATION_READPROTOBUFCONFIGURATION._serialized_start=10712
-  _WRITERCONFIGURATION_READPROTOBUFCONFIGURATION._serialized_end=10919
-  _WRITERCONFIGURATION_SEQUENCINGSUMMARYCONFIGURATION._serialized_start=10922
-  _WRITERCONFIGURATION_SEQUENCINGSUMMARYCONFIGURATION._serialized_end=11070
-  _WRITERCONFIGURATION_BULKCONFIGURATION._serialized_start=11073
-  _WRITERCONFIGURATION_BULKCONFIGURATION._serialized_end=11800
-  _WRITERCONFIGURATION_REPORTCONFIGURATION._serialized_start=11803
-  _WRITERCONFIGURATION_REPORTCONFIGURATION._serialized_end=12212
-  _WRITERCONFIGURATION_COMPRESSIONTYPE._serialized_start=12214
-  _WRITERCONFIGURATION_COMPRESSIONTYPE._serialized_end=12296
-  _SETWRITERCONFIGURATIONRESPONSE._serialized_start=12298
-  _SETWRITERCONFIGURATIONRESPONSE._serialized_end=12330
-  _GETWRITERCONFIGURATIONREQUEST._serialized_start=12332
-  _GETWRITERCONFIGURATIONREQUEST._serialized_end=12363
-  _GETREADCLASSIFICATIONSREQUEST._serialized_start=12365
-  _GETREADCLASSIFICATIONSREQUEST._serialized_end=12396
-  _GETREADCLASSIFICATIONSRESPONSE._serialized_start=12399
-  _GETREADCLASSIFICATIONSRESPONSE._serialized_end=12614
-  _GETREADCLASSIFICATIONSRESPONSE_READCLASSIFICATIONSENTRY._serialized_start=12556
-  _GETREADCLASSIFICATIONSRESPONSE_READCLASSIFICATIONSENTRY._serialized_end=12614
-  _DYNAMICANALYSISCONFIGURATION._serialized_start=12617
-  _DYNAMICANALYSISCONFIGURATION._serialized_end=12997
-  _DYNAMICANALYSISCONFIGURATION_READSCALETRACKING._serialized_start=12763
-  _DYNAMICANALYSISCONFIGURATION_READSCALETRACKING._serialized_end=12997
-  _DYNAMICANALYSISCONFIGURATION_READSCALETRACKING_CHANNELCONDUCTANCE._serialized_start=12951
-  _DYNAMICANALYSISCONFIGURATION_READSCALETRACKING_CHANNELCONDUCTANCE._serialized_end=12997
-  _GETDYNAMICANALYSISCONFIGURATIONREQUEST._serialized_start=12999
-  _GETDYNAMICANALYSISCONFIGURATIONREQUEST._serialized_end=13039
-  _SETDYNAMICANALYSISCONFIGURATIONRESPONSE._serialized_start=13041
-  _SETDYNAMICANALYSISCONFIGURATIONRESPONSE._serialized_end=13082
-  _ANALYSISCONFIGURATIONSERVICE._serialized_start=13085
-  _ANALYSISCONFIGURATIONSERVICE._serialized_end=15817
-GetChannelStatesDescResponse.Group.__doc__ = """Attributes:
-    name:
-        The name of the group.
-    style:
-        How to render the group in a graphical user interface.  Note
-        that the style may be missing from some groups (such as the
-        ones that are built in to MinKNOW).
-    states:
-        The channel states contained in the group.  The groups are
-        ordered according to the "order" attribute of the channel
-        state style in the channel states configuration.
+  _EVENTDETECTION._serialized_start=176
+  _EVENTDETECTION._serialized_end=378
+  _READDETECTIONPARAMS._serialized_start=381
+  _READDETECTIONPARAMS._serialized_end=1005
+  _READDETECTIONPARAMS_READDETECTIONMODE._serialized_start=934
+  _READDETECTIONPARAMS_READDETECTIONMODE._serialized_end=1005
+  _READFILTERS._serialized_start=1007
+  _READFILTERS._serialized_end=1120
+  _READCLASSIFICATIONPARAMS._serialized_start=1123
+  _READCLASSIFICATIONPARAMS._serialized_end=1870
+  _READCLASSIFICATIONPARAMS_PARAMETERS._serialized_start=1792
+  _READCLASSIFICATIONPARAMS_PARAMETERS._serialized_end=1838
+  _READCLASSIFICATIONPARAMS_SCHEME._serialized_start=1840
+  _READCLASSIFICATIONPARAMS_SCHEME._serialized_end=1870
+  _CHANNELSTATES._serialized_start=1873
+  _CHANNELSTATES._serialized_end=2883
+  _CHANNELSTATES_LOGIC._serialized_start=2128
+  _CHANNELSTATES_LOGIC._serialized_end=2682
+  _CHANNELSTATES_LOGIC_BEHAVIOUR._serialized_start=2377
+  _CHANNELSTATES_LOGIC_BEHAVIOUR._serialized_end=2541
+  _CHANNELSTATES_LOGIC_RANGES._serialized_start=2544
+  _CHANNELSTATES_LOGIC_RANGES._serialized_end=2682
+  _CHANNELSTATES_LOGIC_RANGES_RANGE._serialized_start=2639
+  _CHANNELSTATES_LOGIC_RANGES_RANGE._serialized_end=2682
+  _CHANNELSTATES_STYLE._serialized_start=2684
+  _CHANNELSTATES_STYLE._serialized_end=2767
+  _CHANNELSTATES_GROUP._serialized_start=2769
+  _CHANNELSTATES_GROUP._serialized_end=2883
+  _GETANALYSISCONFIGURATIONREQUEST._serialized_start=2885
+  _GETANALYSISCONFIGURATIONREQUEST._serialized_end=2918
+  _READSCALINGPARAMS._serialized_start=2921
+  _READSCALINGPARAMS._serialized_end=3322
+  _ANALYSISCONFIGURATION._serialized_start=3325
+  _ANALYSISCONFIGURATION._serialized_end=3881
+  _ANALYSISCONFIGURATION_CHANNELSTATESENTRY._serialized_start=3778
+  _ANALYSISCONFIGURATION_CHANNELSTATESENTRY._serialized_end=3881
+  _SETANALYSISCONFIGURATIONRESPONSE._serialized_start=3883
+  _SETANALYSISCONFIGURATIONRESPONSE._serialized_end=3917
+  _RESETANALYSISCONFIGURATIONREQUEST._serialized_start=3919
+  _RESETANALYSISCONFIGURATIONREQUEST._serialized_end=3954
+  _RESETANALYSISCONFIGURATIONRESPONSE._serialized_start=3956
+  _RESETANALYSISCONFIGURATIONRESPONSE._serialized_end=3992
+  _SETANALYSISENABLEDSTATEREQUEST._serialized_start=3994
+  _SETANALYSISENABLEDSTATEREQUEST._serialized_end=4048
+  _SETANALYSISENABLEDSTATERESPONSE._serialized_start=4050
+  _SETANALYSISENABLEDSTATERESPONSE._serialized_end=4083
+  _GETCHANNELSTATESDESCREQUEST._serialized_start=4085
+  _GETCHANNELSTATESDESCREQUEST._serialized_end=4114
+  _GETCHANNELSTATESDESCRESPONSE._serialized_start=4117
+  _GETCHANNELSTATESDESCRESPONSE._serialized_end=4654
+  _GETCHANNELSTATESDESCRESPONSE_STYLE._serialized_start=4237
+  _GETCHANNELSTATESDESCRESPONSE_STYLE._serialized_end=4296
+  _GETCHANNELSTATESDESCRESPONSE_CHANNELSTATE._serialized_start=4299
+  _GETCHANNELSTATESDESCRESPONSE_CHANNELSTATE._serialized_end=4448
+  _GETCHANNELSTATESDESCRESPONSE_GROUP._serialized_start=4451
+  _GETCHANNELSTATESDESCRESPONSE_GROUP._serialized_end=4654
+  _GETSUMMARYREQUEST._serialized_start=4656
+  _GETSUMMARYREQUEST._serialized_end=4675
+  _GETSUMMARYRESPONSE._serialized_start=4677
+  _GETSUMMARYRESPONSE._serialized_end=4752
+  _BARCODINGCONFIGURATION._serialized_start=4755
+  _BARCODINGCONFIGURATION._serialized_end=5141
+  _ALIGNMENTCONFIGURATION._serialized_start=5144
+  _ALIGNMENTCONFIGURATION._serialized_end=5318
+  _LAMPCONFIGURATION._serialized_start=5321
+  _LAMPCONFIGURATION._serialized_end=5525
+  _BASECALLERCONFIGURATION._serialized_start=5528
+  _BASECALLERCONFIGURATION._serialized_end=6731
+  _BASECALLERCONFIGURATION_READFILTERING._serialized_start=6184
+  _BASECALLERCONFIGURATION_READFILTERING._serialized_end=6563
+  _BASECALLERCONFIGURATION_TARGETFILTERING._serialized_start=6566
+  _BASECALLERCONFIGURATION_TARGETFILTERING._serialized_end=6731
+  _SETBASECALLERCONFIGURATIONREQUEST._serialized_start=6733
+  _SETBASECALLERCONFIGURATIONREQUEST._serialized_end=6852
+  _SETBASECALLERCONFIGURATIONRESPONSE._serialized_start=6854
+  _SETBASECALLERCONFIGURATIONRESPONSE._serialized_end=6890
+  _GETBASECALLERCONFIGURATIONREQUEST._serialized_start=6892
+  _GETBASECALLERCONFIGURATIONREQUEST._serialized_end=6927
+  _GETPORETYPECONFIGURATIONREQUEST._serialized_start=6929
+  _GETPORETYPECONFIGURATIONREQUEST._serialized_end=6962
+  _PORETYPECONFIGURATION._serialized_start=6965
+  _PORETYPECONFIGURATION._serialized_end=7648
+  _PORETYPECONFIGURATION_CHANNELWELL._serialized_start=7146
+  _PORETYPECONFIGURATION_CHANNELWELL._serialized_end=7190
+  _PORETYPECONFIGURATION_CHANNELWELLPORETYPECONFIGURATIONS._serialized_start=7193
+  _PORETYPECONFIGURATION_CHANNELWELLPORETYPECONFIGURATIONS._serialized_end=7628
+  _PORETYPECONFIGURATION_CHANNELWELLPORETYPECONFIGURATIONS_CHANNELWELLLIST._serialized_start=7358
+  _PORETYPECONFIGURATION_CHANNELWELLPORETYPECONFIGURATIONS_CHANNELWELLLIST._serialized_end=7468
+  _PORETYPECONFIGURATION_CHANNELWELLPORETYPECONFIGURATIONS_PORETYPESENTRY._serialized_start=7471
+  _PORETYPECONFIGURATION_CHANNELWELLPORETYPECONFIGURATIONS_PORETYPESENTRY._serialized_end=7628
+  _SETPORETYPECONFIGURATIONRESPONSE._serialized_start=7650
+  _SETPORETYPECONFIGURATIONRESPONSE._serialized_end=7684
+  _WRITERCONFIGURATION._serialized_start=7687
+  _WRITERCONFIGURATION._serialized_end=12515
+  _WRITERCONFIGURATION_CHANNELCONFIGURATION._serialized_start=8474
+  _WRITERCONFIGURATION_CHANNELCONFIGURATION._serialized_end=8985
+  _WRITERCONFIGURATION_CHANNELCONFIGURATION_CHANNELLIST._serialized_start=8759
+  _WRITERCONFIGURATION_CHANNELCONFIGURATION_CHANNELLIST._serialized_end=8790
+  _WRITERCONFIGURATION_CHANNELCONFIGURATION_CHANNELRANGES._serialized_start=8793
+  _WRITERCONFIGURATION_CHANNELCONFIGURATION_CHANNELRANGES._serialized_end=8973
+  _WRITERCONFIGURATION_CHANNELCONFIGURATION_CHANNELRANGES_CHANNELRANGE._serialized_start=8931
+  _WRITERCONFIGURATION_CHANNELCONFIGURATION_CHANNELRANGES_CHANNELRANGE._serialized_end=8973
+  _WRITERCONFIGURATION_READFAST5CONFIGURATION._serialized_start=8988
+  _WRITERCONFIGURATION_READFAST5CONFIGURATION._serialized_end=9914
+  _WRITERCONFIGURATION_READFASTQCONFIGURATION._serialized_start=9917
+  _WRITERCONFIGURATION_READFASTQCONFIGURATION._serialized_end=10338
+  _WRITERCONFIGURATION_READBAMCONFIGURATION._serialized_start=10341
+  _WRITERCONFIGURATION_READBAMCONFIGURATION._serialized_end=10760
+  _WRITERCONFIGURATION_READPOD5CONFIGURATION._serialized_start=10763
+  _WRITERCONFIGURATION_READPOD5CONFIGURATION._serialized_end=11138
+  _WRITERCONFIGURATION_SEQUENCINGSUMMARYCONFIGURATION._serialized_start=11141
+  _WRITERCONFIGURATION_SEQUENCINGSUMMARYCONFIGURATION._serialized_end=11289
+  _WRITERCONFIGURATION_BULKCONFIGURATION._serialized_start=11292
+  _WRITERCONFIGURATION_BULKCONFIGURATION._serialized_end=12019
+  _WRITERCONFIGURATION_REPORTCONFIGURATION._serialized_start=12022
+  _WRITERCONFIGURATION_REPORTCONFIGURATION._serialized_end=12431
+  _WRITERCONFIGURATION_COMPRESSIONTYPE._serialized_start=12433
+  _WRITERCONFIGURATION_COMPRESSIONTYPE._serialized_end=12515
+  _SETWRITERCONFIGURATIONRESPONSE._serialized_start=12517
+  _SETWRITERCONFIGURATIONRESPONSE._serialized_end=12549
+  _GETWRITERCONFIGURATIONREQUEST._serialized_start=12551
+  _GETWRITERCONFIGURATIONREQUEST._serialized_end=12582
+  _GETREADCLASSIFICATIONSREQUEST._serialized_start=12584
+  _GETREADCLASSIFICATIONSREQUEST._serialized_end=12615
+  _GETREADCLASSIFICATIONSRESPONSE._serialized_start=12618
+  _GETREADCLASSIFICATIONSRESPONSE._serialized_end=12833
+  _GETREADCLASSIFICATIONSRESPONSE_READCLASSIFICATIONSENTRY._serialized_start=12775
+  _GETREADCLASSIFICATIONSRESPONSE_READCLASSIFICATIONSENTRY._serialized_end=12833
+  _DYNAMICANALYSISCONFIGURATION._serialized_start=12836
+  _DYNAMICANALYSISCONFIGURATION._serialized_end=13216
+  _DYNAMICANALYSISCONFIGURATION_READSCALETRACKING._serialized_start=12982
+  _DYNAMICANALYSISCONFIGURATION_READSCALETRACKING._serialized_end=13216
+  _DYNAMICANALYSISCONFIGURATION_READSCALETRACKING_CHANNELCONDUCTANCE._serialized_start=13170
+  _DYNAMICANALYSISCONFIGURATION_READSCALETRACKING_CHANNELCONDUCTANCE._serialized_end=13216
+  _GETDYNAMICANALYSISCONFIGURATIONREQUEST._serialized_start=13218
+  _GETDYNAMICANALYSISCONFIGURATIONREQUEST._serialized_end=13258
+  _SETDYNAMICANALYSISCONFIGURATIONRESPONSE._serialized_start=13260
+  _SETDYNAMICANALYSISCONFIGURATIONRESPONSE._serialized_end=13301
+  _ANALYSISCONFIGURATIONSERVICE._serialized_start=13304
+  _ANALYSISCONFIGURATIONSERVICE._serialized_end=16036
+ReadClassificationParams.Parameters.__doc__ = """Attributes:
+    rules_in_execution_order:
+        An execution rule has the following format:  "pore =
+        (median,gt,185)&(median,lt,260)&(median_sd,lt,40)"  "median"
+        and "median_sd" are apart of a small subset of variable values
+        describing a read or read chunk, that are exposed to execution
+        rules. The full list of variable values and their descriptions
+        are documented here:
+        https://minknow.git.oxfordnanolabs.local/minknow-
+        core/analysis/reads.html  "gt" and "lt" describe how data can
+        be compared: gt: greater than lt: less than eq: equal ne: not
+        equal  Constant values like "185" or "260" can also be
+        specified. These can be real numbers also.  Note that
+        variables dont always have to be on the left and const values
+        on the right. The following sub rules are also valid:
+        (200,lt,median_sd) (median_before,gt,median) (5,lt,10)
 """
-ReadScalingParams.__doc__ = """Since 5.3  Quantile Information:
-
-Attributes:
-    quantile_locations:
-        Position of quantiles in scaling data to use when computing
-        scale parameters.
-    quantile_weights_shift:
-        If present, must be the same length as quantile_locations.
-        Represents the coefficients that shall be multiplied with
-        measured quantiles to give a predicted_shift
-    quantile_weights_scale:
-        If present, must be the same length as quantile_locations.
-        Represents the coefficients that shall be multiplied with
-        measured quantiles to give a predicted_scale
-    tracking_alpha:
-        Alpha value to use in ewma calculation for scale and shift
-        tracking. 1 updates instantly. 0 does not update.
-    alpha_number_estimates_decay:
-        Alpha decay value to use. Higher values cause a more rapid
-        decay in greater trust of earlier numbers.
-    quantile_maxdiff:
-        Maximum difference in event quantiles which will be added into
-        trackers.  This is used to filter away cases where pore signal
-        is included in the read and thus cannot be trusted.
-    trust_limit_fraction:
-        Maximum fraction change between one tracked value and the next
-        which will be trusted. Higher values are not trusted.
-    diff_threshold:
-        The minimum difference between an event and the next to
-        include it in the subsampling
-    emission_threshold:
-        After how many cumulative pA is a new event emitted in the
-        subsampling
-    dacs_breakpoint:
-        Cumulative pA sum required to compute scaling. Any events
-        after this sum are not considered in scaling.
-    conductance_factor_scale:
-        Scale factor applied to conductance to produce a basic scale
-        estimate, also combined with q90_q10_to_normal.
-    conductance_factor_shift:
-        Scale factor applied to conductance to produce a basic shift
-        estimate.
-"""
-GetChannelStatesDescResponse.ChannelState.__doc__ = """Attributes:
-    id:
-        The numeric identifier of the state.  This is what is reported
-        in any other APIs that return a channel state ID.
-    name:
-        The internal name of the state.  This is what is reported in
-        any other APIs that return a channel state name.
-    style:
-        How to render the channel state in a graphical user interface.
-        Note that the style may be missing from some channel states
-        (such as the ones that are built in to MinKNOW).
-    global_order:
-        An order ranking for the channel states when they are
-        ungrouped.  This can be used to order the channel states after
-        merging the groups.
-"""
-GetChannelStatesDescResponse.Style.__doc__ = """Attributes:
-    label:
-        The human-readable name to display when rendering this channel
-        state or group.
-    description:
-        A sentence describing the meaning of the channel state or
-        group.  This can be used as a tooltip, for example.
-    colour:
-        The colour to use when rendering this channel state or group.
-        This is a six-digit hex string describing an RGB colour (eg:
-        "ff00ff" for purple).
-"""
-AnalysisConfiguration.__doc__ = """Attributes:
-    read_scaling:
-        Add read scale tracking to the pipeline. If this message is
-        unspecified, read scaling is not enabled.
-"""
-ChannelStates.Group.__doc__ = """ TODO: group styling and description should not be defined here, as
-this allows channel states to declare themselves as being part of the
-same group but specify different styling and descriptions."""
-GetSummaryResponse.__doc__ = """Attributes:
-    analysis_enabled:
-        Whether any analysis is enabled.  If this is false, everything
-        else will be false as well.
-    basecalling_enabled:
-        Whether basecalling is enabled.
-"""
-ChannelStates.Logic.Ranges.__doc__ = """Dont really like this way of doing it, but it has to match the old
-way..."""
 WriterConfiguration.ReportConfiguration.__doc__ = """Control settings for the report writer
 
 Attributes:
@@ -381,10 +297,191 @@ Attributes:
         - "custom_report{suffix}.txt"  See file pattern attributes
         above.
 """
-WriterConfiguration.ChannelConfiguration.ChannelList.__doc__ = """Attributes:
-    channels:
-        List of channel names (one based) which should be enabled for
-        writing.
+BarcodingConfiguration.__doc__ = """Since 3.5
+
+Attributes:
+    barcoding_kits:
+        The barcoding kits in use One entry per kit If no barcoding
+        kits are supplied, barcoding is disabled.
+    trim_barcodes:
+        Whether Guppy should trim barcodes If not specified, this
+        value defaults to false (not triming barcodes) If barcoding is
+        not enabled (e.g., because no barcoding kits are specified),
+        this parameter has no effect.
+    require_barcodes_both_ends:
+        Barcode is only classified if a barcode above `min_score` is
+        present at both ends of the basecalled read.
+    detect_mid_strand_barcodes:
+        Search for barcodes through the entire length of the read.  If
+        a barcode is found in the middle of a read the read is marked
+        as unclassified.
+    min_score:
+        Minimum alignment score to consider a valid barcode.  Maximum
+        value is 100, defaults to 60.
+    min_score_rear:
+        Minimum score to consider a valid barcode (overrides min_score
+        for rear barcodes).  Maximum value is 100, defaults to
+        min_score if not specified.
+    min_score_mid:
+        Minimum score to consider a valid mid barcode (only valid if
+        detect_mid_strand_barcodes is specified).  Maximum value is
+        100, defaults to 60.
+    min_score_mask:
+        The minimum score required for the barcode mask to be
+        detected.  Maximum value is 100, defaults to 40.
+    ignore_unspecified_barcodes:
+        If set, barcodes that aren't in barcode user data list will be
+        ignored  Since 5.6
+"""
+GetSummaryResponse.__doc__ = """Attributes:
+    analysis_enabled:
+        Whether any analysis is enabled.  If this is false, everything
+        else will be false as well.
+    basecalling_enabled:
+        Whether basecalling is enabled.
+"""
+DynamicAnalysisConfiguration.ReadScaleTracking.ChannelConductance.__doc__ = """Attributes:
+    well_conductance:
+        Per well conductance values.
+"""
+PoreTypeConfiguration.__doc__ = """The pore type configuration  The ways of specifying a configuration
+are as follows: - global_pore_type: all wells have a pore type of
+global_pore_type. - channel_well_pore_types: channels are allowed
+different values per channel/well   (allows a subset of channels to be
+set).
+
+Attributes:
+    global_pore_type:
+        Set all channel/wells to one pore type.
+    channel_well_pore_types:
+        Set channel/wells to different pore types.  Pore types can be
+        created without being used by adding an empty entry.
+"""
+GetChannelStatesDescResponse.ChannelState.__doc__ = """Attributes:
+    id:
+        The numeric identifier of the state.  This is what is reported
+        in any other APIs that return a channel state ID.
+    name:
+        The internal name of the state.  This is what is reported in
+        any other APIs that return a channel state name.
+    style:
+        How to render the channel state in a graphical user interface.
+        Note that the style may be missing from some channel states
+        (such as the ones that are built in to MinKNOW).
+    global_order:
+        An order ranking for the channel states when they are
+        ungrouped.  This can be used to order the channel states after
+        merging the groups.
+"""
+WriterConfiguration.ReadFast5Configuration.__doc__ = """Attributes:
+    compression_level:
+        Control the level of compression applied to read data.  0:
+        No compression will be applied to data. 1-9: Passed to zlib
+        compression, 1 is the fastest      compression, 9 is the
+        smallest possible output.
+    compression_type:
+        Control the type of compression applied to the read data.  By
+        default the vbz compressor is used (except in the single read
+        case).
+    raw:
+        Raw data, stored with calibration data, and read attributes.
+        Stored under /Raw/Reads_*/Signal
+    fastq:
+        Fastq data, stored as a string.  Stored under
+        /Analyses/Basecall_1D_*/BaseCalled_(template|complement)/Fastq
+    trace_table:
+        Trace table received from Guppy  Stored under
+        /Analyses/Basecall_1D_*/BaseCalled_template/Trace
+    move_table:
+        Move table received from Guppy  Stored under
+        /Analyses/Basecall_1D_*/BaseCalled_template/Move
+    modifications_table:
+        Base modification probability table  Store under
+        /Analyses/Basecall_1D_*/BaseCalled_template/ModBaseProbs
+    disable_writing_passed_reads:
+        Prevent reads which have successfully basecalled being written
+        to fast5.
+    disable_writing_failed_reads:
+        Prevent reads which have failed basecalling being written to
+        fast5.
+    disable_writing_force_skipped_reads:
+        disable writing reads which have been force skipped by the
+        basecaller.
+    file_pattern:
+        The pattern used to find a fast5 files name.  default: fast5{b
+        asecall_status}/{flow_cell_id}_{run_id}_{batch_number}.fast5
+        Where each {xxx} section is replaced with an attribute from
+        the minknow state when the file is written.  See file pattern
+        attributes above.
+    fastq_header_pattern:
+        The pattern used to find a fastq header.  default: {read_id}
+        runid={run_id} read={read_number} ch={channel_name}
+        start_time={read_start_time} Where each {xxx} section is
+        replaced with an attribute from the minknow state when the
+        fastq is generated.
+    batch_count:
+        How many reads are placed in each batch (after batch_count
+        reads {batch_number} is increased in the pattern).
+    bases_per_batch:
+        Number of estimated bases within a batch before it rotates to
+        a new batch
+    batch_duration:
+        The batch duration, for time-based batching  If time-based
+        batching is enabled then, in addition to completing batches
+        when the `batch_count` or `bases_per_batch` target (above) is
+        reached, batches will also be completed when: - At least one
+        read has been written to the batch, AND - `batch_duration` has
+        elapsed since the last batch was completed (or since the start
+        of the acquisition, for the first batch)  If this field is not
+        set, then the default time-based batching configuration will
+        be used.  If this field is set to zero or a negative value,
+        then time-based batching will be disabled.  Since 5.6
+"""
+EventDetection.__doc__ = """Attributes:
+    window_size:
+        The window size that the tstats are calculated from
+    threshold:
+        The peak detection must be above this threshold at a minimum
+        for it to be detected as an event.
+    peak_height:
+        When analysing the tstat peaks, if the jump between one value
+        and another is higher than than 'peak_height', then it will
+        "arm" the peak detector and move onto the next phase.  And
+        what goes up must come down. Once it has detected a peak going
+        up, it will also have to go down by 'peak_height' in order for
+        the peak to be classified as a found event
+    events_to_base_ratio:
+        Conversion factor used to convert from events to bases.  This
+        is used to estimate bases for various rpc feeds from minknow.
+    break_on_mux_changes:
+        Whether to break events on mux changes.  This will eliminate
+        "mux_uncertain" events and reads. Note that this will cause
+        starting or stopping unblocking to break events as well (even
+        though the mux does not normally change in this case).
+    max_mux_change_back_shift:
+        Control the number of samples MinKNOW will shift mux changes
+        back by in order to align mux changes with event boundaries.
+        When break on mux changes is enabled its possible that mux
+        changes recorded from the device and signal deltas caused by
+        the config changes will not align exactly (the signal delta
+        happen prior to the mux change due to the recorded sample
+        indicating the command is fully applied). Setting this value
+        to > 0 will allow minknow to record the mux change as active
+        up to this number of samples _before_ the device recorded the
+        change as active. Mux changes are never shifted forwards.  A
+        value of 0 will disable shifting of mux changes.
+"""
+ChannelStates.Logic.Ranges.__doc__ = """Dont really like this way of doing it, but it has to match the old
+way..."""
+WriterConfiguration.SequencingSummaryConfiguration.__doc__ = """Attributes:
+    enable:
+        Should a sequencing summary file be generated
+    file_pattern:
+        The pattern used to find a summary files name.  default:
+        sequencing_summary_{flow_cell_id}_{short_run_id}.txt Where
+        each {xxx} section is replaced with an attribute from the
+        minknow state when the file is written.  See file pattern
+        attributes above.
 """
 AlignmentConfiguration.__doc__ = """Since 4.0
 
@@ -411,6 +508,221 @@ Attributes:
         - as each hit will be counted for every bed hit.  Note: this
         option has no effect in offline basecalling.
 """
+WriterConfiguration.ChannelConfiguration.ChannelRanges.__doc__ = """Attributes:
+    ranges:
+        List of start/end paired channel numbers which should be
+        enabled for writing.  All channels in inclusive ranges should
+        be enabled.
+"""
+BasecallerConfiguration.__doc__ = """Since 3.0
+
+Attributes:
+    enable:
+        Choose if guppy is enabled or disabled.  If set to false then
+        no basecalling will take place, and the rest of the config is
+        ignored.
+    config_filename:
+        The Guppy cfg file with all the settings.  Filename can be
+        absolute, or a basename (eg dna_r9.4_450bps.cfg) which guppy
+        should locate (see guppy application config entry:
+        "data_path")
+    align_filter:
+        Enable or disable pass/fail filtering based on alignment.
+        When enabled, reads which do not align to any references will
+        be marked as "failed", and written to the folder specified in
+        MinKNOW configuration for failed reads.    The setting applies
+        to both regular read filtering and target filtering; if it is
+        enabled, then a read will not be marked as a target read if it
+        does not align to a reference.  Default setting is false, i.e.
+        disabled.  Since 5.4
+    read_filtering:
+        Control how read filtering is applied to output of basecaller.
+        These settings determine whether a read is marked as "passed"
+        or "failed".  Reads are written to different folders based on
+        the result of this filtering.  Those folders are specified in
+        MinKNOW configuration.  If no filtering parameters are
+        provided then reads will not be filtered.
+    barcoding_configuration:
+        Control the barcoding configuration. If no barcoding
+        configuration is supplied, barcoding is disabled.  Since 3.5
+    target_filtering:
+        Control how target filtering is applied to output of
+        basecaller. Reads which pass these filtering criteria will be
+        marked as "target" reads, and will be written to a separate
+        folder; this  folder is specified in MinKNOW configuration.
+        Reads which do  not pass these criteria will have the regular
+        read filtering applied to them, as specified by the `read-
+        filtering` settings above.  If no filtering parameters are
+        provided then reads will not be target-filtered.  Since 3.7
+    alignment_configuration:
+        Alignment configuration parameters. If no configuration is
+        specified alignment is disabled.  Since 4.0
+    lamp_configuration:
+        Lamp configuration parameters. If no configuration is
+        specified lamp is disabled.  Since 4.1
+    enable_read_splitting:
+        Enable read splitting in guppy.  Since 4.5
+    min_score_read_splitting:
+        Override score to use for guppy read splitting. If not
+        specified a default value is used from guppy.  Since 4.5
+"""
+WriterConfiguration.__doc__ = """Configuration for the output writers for MinKNOWs analysis pipeline.
+Each writer has its own section in this message, where individual data
+elements can be enabled or disabled.  File pattern attributes
+----------------------- Writers have a 'file_pattern' field which
+controls where individual files will be written to. The pattern is
+expanded for each individual read, and then the read placed in the
+required file. The tokens used to expand depend on the file type:
+Read centric files (fastq, (multi-)fast5, protobuf):  -
+read_classification:  The classification applied to the completed read
+(eg. strand).  - batch_number:         The batch number of this read,
+evaluated based on the destination file.  - read_id:
+Unique read id for each read, formatted as a hash.  - read_number:
+The read number (unique per channel, incrementing number assigned to
+each read by MinKNOW).  - channel_name:         The name of the
+channel which produced the read.  - read_start_time:      Read start
+time formatted in rfc3339 format.  - basecall_status:      Basecalling
+output status (derived from WriterDefaults section in analysis
+config).  - pore_type:            Type of pore (as specified by
+#set_pore_type_configuration).  General attributes:  - daq_start_time:
+Data acquisition start time formatted as YYYYMMDD_hhmm.  -
+protocol_start_time:  Time the current protocol was started.  -
+run_id:               Acquisition run id formatted as hash.  -
+short_run_id:         Shortened version of acquisition run id
+formatted as hash.  - protocol_run_id:      Protocol run id formatted
+as hash.  - short_protocol_run_id: Shortened protocol run id formatted
+as hash.  - asic_id:              Integer id assigned to the asic in
+the connected flow cell.  - flow_cell_id:         Flow cell integer as
+read from eeprom.  - machine_id:           Name of the machine
+(hostname or machine identifier depending on the sequencer type).  -
+device_id:            Name of the connected sequencing device (eg.
+MN12345).  - sample_id:            Sample id entered by the user when
+starting a protocol.  - version_string:       Version string of the
+running MinKNOW instance  - protocol_group_id:    Protocol group
+entered by user when starting a protocol.  - protocol_purpose:
+Prupose of protocol (see protocol.set_protocol_purpose())
+
+Attributes:
+    read_fast5:
+        Configuration for the fast5 writer.  If not specified, no
+        multi fast5 outputs are generated.
+    read_fastq:
+        Configuration for the fastq writer.  If not specified, no
+        fastq outputs are generated.
+    read_bam:
+        Configuration for the BAM writer.  If not specified, no BAM
+        outputs are generated.
+    read_pod5:
+        Configuration for the POD5 writer.  If not specified no POD5
+        outputs are generated.
+    sequencing_summary:
+        Configuration for Sequencing Summary file  If not specified,
+        no summary file is generated.
+    bulk:
+        Configuration for the bulk writer.  If not specified, a basic
+        bulk output is generated.
+    report:
+        Configuration for the report writer  If
+        acquisition.StartRequest.generate_report is set for the
+        acquisition period, and empty paths (or no report config) are
+        supplied for reports default paths are used.
+    read_filters:
+        Parameters for filtering reads for writing.  If not present,
+        then no filtering will be applied, so no reads will be
+        excluded.
+"""
+ReadScalingParams.__doc__ = """Since 5.3  Quantile Information:
+
+Attributes:
+    quantile_locations:
+        Position of quantiles in scaling data to use when computing
+        scale parameters.
+    quantile_weights_shift:
+        If present, must be the same length as quantile_locations.
+        Represents the coefficients that shall be multiplied with
+        measured quantiles to give a predicted_shift
+    quantile_weights_scale:
+        If present, must be the same length as quantile_locations.
+        Represents the coefficients that shall be multiplied with
+        measured quantiles to give a predicted_scale
+    tracking_alpha:
+        Alpha value to use in ewma calculation for scale and shift
+        tracking. 1 updates instantly. 0 does not update.
+    alpha_number_estimates_decay:
+        Alpha decay value to use. Higher values cause a more rapid
+        decay in greater trust of earlier numbers.
+    quantile_maxdiff:
+        Maximum difference in event quantiles which will be added into
+        trackers.  This is used to filter away cases where pore signal
+        is included in the read and thus cannot be trusted.
+    trust_limit_fraction:
+        Maximum fraction change between one tracked value and the next
+        which will be trusted. Higher values are not trusted.
+    diff_threshold:
+        The minimum difference between an event and the next to
+        include it in the subsampling
+    emission_threshold:
+        After how many cumulative pA is a new event emitted in the
+        subsampling
+    dacs_breakpoint:
+        Cumulative pA sum required to compute scaling. Any events
+        after this sum are not considered in scaling.
+    conductance_factor_scale:
+        Scale factor applied to conductance to produce a basic scale
+        estimate, also combined with q90_q10_to_normal.
+    conductance_factor_shift:
+        Scale factor applied to conductance to produce a basic shift
+        estimate.
+"""
+BasecallerConfiguration.ReadFiltering.__doc__ = """Attributes:
+    min_duplex_qscore:
+        Since 5.8
+"""
+PoreTypeConfiguration.ChannelWell.__doc__ = """Attributes:
+    channel:
+        Channel number to control pore type for.  Must be less than
+        channel count for the current platform
+    well:
+        Well to control pore type for.  Wells outside the available
+        wells on the flowcell are ignored.
+"""
+WriterConfiguration.ChannelConfiguration.__doc__ = """Used to control which channels for a specific data type emit data
+
+Attributes:
+    channels:
+        Control the way channels are enabled for this data type.
+"""
+ReadDetectionParams.__doc__ = """Attributes:
+    open_pore_min:
+        The minimum level which is considered open pore (this value is
+        relative to open_pore_default or the tracked open_pore
+        section, if tracking is being used.)  This value must be <=
+        0.0 if tracking is being used.
+    open_pore_max:
+        The maximum level which is considered open pore (this value is
+        relative to open_pore_default or the tracked open_pore
+        section, if tracking is being used.)  This value must be >=
+        0.0 if tracking is being used.
+    open_pore_default:
+        The default value to use for open pore, either when tracking
+        isn't being used, or when open pore tracking has no value
+        currently.
+    open_pore_seconds_required:
+        Minimum number of seconds events must lie within the range of
+        open pore in order to allow a read to break.
+"""
+LampConfiguration.__doc__ = """Since 4.1
+
+Attributes:
+    lamp_kit:
+        Set the lamp kit being used.
+    min_score_barcodes:
+        Optionally specify a min score to detect a valid lamp barcode.
+    min_score_masks:
+        Optionally set the minimimum valid score for a lamp mask.
+    min_score_targets:
+        Optionally specify a minimum score for lamp targets.
+"""
 ChannelStates.Logic.__doc__ = """Attributes:
     rank:
         Specifies the order in which channel state criteria will be
@@ -432,12 +744,6 @@ ChannelStates.Logic.__doc__ = """Attributes:
         core/analysis/channel-states.html
     ranges:
         Range is [lower_pa, upper_pa)
-"""
-DynamicAnalysisConfiguration.ReadScaleTracking.__doc__ = """Attributes:
-    conductance_scan_voltage:
-        Set the voltage the most recent conductance scan occured at.
-    channel_conductance:
-        Per channel/well conductance values
 """
 ReadClassificationParams.__doc__ = """Attributes:
     max_sample_size:
@@ -497,334 +803,28 @@ ReadClassificationParams.__doc__ = """Attributes:
         strategy and will be ignored for other classification
         strategies.
 """
-WriterConfiguration.ReadFast5Configuration.__doc__ = """Attributes:
-    compression_level:
-        Control the level of compression applied to read data.  0:
-        No compression will be applied to data. 1-9: Passed to zlib
-        compression, 1 is the fastest      compression, 9 is the
-        smallest possible output.
-    compression_type:
-        Control the type of compression applied to the read data.  By
-        default the vbz compressor is used (except in the single read
-        case).
-    raw:
-        Raw data, stored with calibration data, and read attributes.
-        Stored under /Raw/Reads_*/Signal
-    fastq:
-        Fastq data, stored as a string.  Stored under
-        /Analyses/Basecall_1D_*/BaseCalled_(template|complement)/Fastq
-    trace_table:
-        Trace table received from Guppy  Stored under
-        /Analyses/Basecall_1D_*/BaseCalled_template/Trace
-    move_table:
-        Move table received from Guppy  Stored under
-        /Analyses/Basecall_1D_*/BaseCalled_template/Move
-    modifications_table:
-        Base modification probability table  Store under
-        /Analyses/Basecall_1D_*/BaseCalled_template/ModBaseProbs
-    disable_writing_passed_reads:
-        Prevent reads which have successfully basecalled being written
-        to fast5.
-    disable_writing_failed_reads:
-        Prevent reads which have failed basecalling being written to
-        fast5.
-    disable_writing_force_skipped_reads:
-        disable writing reads which have been force skipped by the
-        basecaller.
-    file_pattern:
-        The pattern used to find a fast5 files name.  default: fast5{b
-        asecall_status}/{flow_cell_id}_{run_id}_{batch_number}.fast5
-        Where each {xxx} section is replaced with an attribute from
-        the minknow state when the file is written.  See file pattern
-        attributes above.
-    fastq_header_pattern:
-        The pattern used to find a fastq header.  default: {read_id}
-        runid={run_id} read={read_number} ch={channel_name}
-        start_time={read_start_time} Where each {xxx} section is
-        replaced with an attribute from the minknow state when the
-        fastq is generated.
-    batch_count:
-        How many reads are placed in each batch (after batch_count
-        reads {batch_number} is increased in the pattern).
-    bases_per_batch:
-        Number of estimated bases within a batch before it rotates to
-        a new batch
+DynamicAnalysisConfiguration.ReadScaleTracking.__doc__ = """Attributes:
+    conductance_scan_voltage:
+        Set the voltage the most recent conductance scan occured at.
+    channel_conductance:
+        Per channel/well conductance values
 """
-BarcodingConfiguration.__doc__ = """Since 3.5
-
-Attributes:
-    barcoding_kits:
-        The barcoding kits in use One entry per kit If no barcoding
-        kits are supplied, barcoding is disabled.
-    trim_barcodes:
-        Whether Guppy should trim barcodes If not specified, this
-        value defaults to false (not triming barcodes) If barcoding is
-        not enabled (e.g., because no barcoding kits are specified),
-        this parameter has no effect.
-    require_barcodes_both_ends:
-        Barcode is only classified if a barcode above `min_score` is
-        present at both ends of the basecalled read.
-    detect_mid_strand_barcodes:
-        Search for barcodes through the entire length of the read.  If
-        a barcode is found in the middle of a read the read is marked
-        as unclassified.
-    min_score:
-        Minimum alignment score to consider a valid barcode.  Maximum
-        value is 100, defaults to 60.
-    min_score_rear:
-        Minimum score to consider a valid barcode (overrides min_score
-        for rear barcodes).  Maximum value is 100, defaults to
-        min_score if not specified.
-    min_score_mid:
-        Minimum score to consider a valid mid barcode (only valid if
-        detect_mid_strand_barcodes is specified).  Maximum value is
-        100, defaults to 60.
-    min_score_mask:
-        The minimum score required for the barcode mask to be
-        detected.  Maximum value is 100, defaults to 40.
-    ignore_unspecified_barcodes:
-        If set, barcodes that aren't in barcode user data list will be
-        ignored  Since 5.6
-"""
-WriterConfiguration.SequencingSummaryConfiguration.__doc__ = """Attributes:
-    enable:
-        Should a sequencing summary file be generated
-    file_pattern:
-        The pattern used to find a summary files name.  default:
-        sequencing_summary_{flow_cell_id}_{short_run_id}.txt Where
-        each {xxx} section is replaced with an attribute from the
-        minknow state when the file is written.  See file pattern
-        attributes above.
-"""
-ReadFilters.__doc__ = """Parameters for filtering out reads from being written.  The tests are
-combined using a logical AND: if any given test fails, the read will
-not be written. Only reads that pass all (non-zero) tests will be
-written out.  Currently, it is only possible to filter on read length.
-This can be given in samples or MinKNOW events.
-
-Attributes:
-    read_length_min:
-        Only write reads that contain at least this many samples.  The
-        default zero value will not exclude any reads.
-    read_length_max:
-        Only write reads that contain at most this many samples.  If
-        set to zero (the default), this test is not applied (as though
-        it had been set to a value longer than any possible read).
-    event_count_min:
-        Only write reads that contain at least this many MinKNOW
-        events.  The default zero value will not exclude any reads.
-    event_count_max:
-        Only write reads that contain at most this many MinKNOW
-        events.  If set to zero (the default), this test is not
-        applied (as though it had been set to a value longer than any
-        possible read).
-"""
-BasecallerConfiguration.TargetFiltering.__doc__ = """Since 3.7"""
-PoreTypeConfiguration.ChannelWell.__doc__ = """Attributes:
-    channel:
-        Channel number to control pore type for.  Must be less than
-        channel count for the current platform
-    well:
-        Well to control pore type for.  Wells outside the available
-        wells on the flowcell are ignored.
-"""
-WriterConfiguration.ChannelConfiguration.__doc__ = """Used to control which channels for a specific data type emit data
-
-Attributes:
+WriterConfiguration.ChannelConfiguration.ChannelList.__doc__ = """Attributes:
     channels:
-        Control the way channels are enabled for this data type.
+        List of channel names (one based) which should be enabled for
+        writing.
 """
-LampConfiguration.__doc__ = """Since 4.1
-
-Attributes:
-    lamp_kit:
-        Set the lamp kit being used.
-    min_score_barcodes:
-        Optionally specify a min score to detect a valid lamp barcode.
-    min_score_masks:
-        Optionally set the minimimum valid score for a lamp mask.
-    min_score_targets:
-        Optionally specify a minimum score for lamp targets.
-"""
-WriterConfiguration.ReadPod5Configuration.__doc__ = """Attributes:
-    enable:
-        Control if a POD5 file should be generated per channel.
-    file_pattern:
-        The pattern used to find a POD5 files name.  default: pod5{bas
-        ecall_status}/{flow_cell_id}_{run_id}_{batch_number}.pod5
-        Where each {xxx} section is replaced with an attribute from
-        the minknow state when the file is written.  See file pattern
-        attributes above.
-    batch_count:
-        How many reads are placed in each batch (after batch_count
-        reads {batch_number} is increased in the pattern).
-    bases_per_batch:
-        Number of estimated bases within a batch before it rotates to
-        a new batch
-    disable_writing_passed_reads:
-        Prevent reads which have successfully basecalled being written
-        to pod5.
-    disable_writing_failed_reads:
-        Prevent reads which have failed basecalling being written to
-        pod5.
-    disable_writing_force_skipped_reads:
-        disable writing reads which have been force skipped by the
-        basecaller.
-"""
-ChannelStates.Logic.Behaviour.__doc__ = """Attributes:
-    reset_on_mux_change:
-        TODO: MinKNOW 5: replace int32 with bool for these options
-        these are ints but act like bools
-    latch:
-        If the latch value is set to true, then when the criteria for
-        this channel state is active, then the latch will keep it
-        active until the channel state is reset.
-    reset_on_effective_mux_change:
-        An 'effective mux change' is any mux change apart from the one
-        triggered with the purpose of disconnecting a channel (turning
-        a channel off). For example, if a channel is in pore, and the
-        user changes the channel configuration to 'disconnected', that
-        mux change will not be an effective mux change. Any other mux
-        change is considered an 'effective mux change'. So if a
-        channel saturates, the mux change to disconnected is an
-        effective mux change. Similarly, a change from disconnected to
-        a pore is an effective mux change.  Use this reset mode to
-        make the channel state persist on non-effective mux changes.
-        For example, if a channel state is in 'multiple' and the user
-        triggers a channel configuration change to 'disconnected', the
-        state will remain in multiple if it has this option on. The
-        multiple state will be reset at all other mux changes (i.e.
-        effective mux changes).
-    reset_on_effective_well_change:
-        An 'effective well change' is any well change apart from the
-        one triggered with the purpose of disconnecting a channel
-        (turning a channel off). For example, if a channel is in
-        well_1, and the user changes the channel configuration to
-        'unblock_1', that change will not be an effective well change.
-        A change to disconnected is also not considered an effective
-        well change.  Use this reset mode to make the channel state
-        persist on non-effective well changes. For example, if a
-        channel state is in 'multiple' and the user triggers a channel
-        configuration change to 'disconnected', the state will remain
-        in multiple if it has this option on. The multiple state will
-        be reset then when the mux is set to a different setting.
-"""
-WriterConfiguration.ReadProtobufConfiguration.__doc__ = """Attributes:
-    enable:
-        Control if a protobuf file should be generated per channel.
-    file_pattern:
-        The pattern used to find a protobuf files name.  default: pbre
-        ad{basecall_status}/{batch_number}/{flow_cell_id}_{run_id}_ch_
-        {channel_name}_read_{read_number}.pbread Where each {xxx}
-        section is replaced with an attribute from the minknow state
-        when the file is written.  See file pattern attributes above.
-    batch_count:
-        How many reads are placed in each batch (after batch_count
-        reads {batch_number} is increased in the pattern).
-    bases_per_batch:
-        Number of estimated bases within a batch before it rotates to
-        a new batch
-"""
-ReadDetectionParams.__doc__ = """Attributes:
-    open_pore_min:
-        The minimum level which is considered open pore (this value is
-        relative to open_pore_default or the tracked open_pore
-        section, if tracking is being used.)  This value must be <=
-        0.0 if tracking is being used.
-    open_pore_max:
-        The maximum level which is considered open pore (this value is
-        relative to open_pore_default or the tracked open_pore
-        section, if tracking is being used.)  This value must be >=
-        0.0 if tracking is being used.
-    open_pore_default:
-        The default value to use for open pore, either when tracking
-        isn't being used, or when open pore tracking has no value
-        currently.
-    open_pore_seconds_required:
-        Minimum number of seconds events must lie within the range of
-        open pore in order to allow a read to break.
-"""
-WriterConfiguration.ReadBamConfiguration.__doc__ = """Attributes:
-    enable:
-        Control if a BAM file should be generated per channel.
-    file_pattern:
-        The pattern used to find a BAM files name.  default: bam{basec
-        all_status}/{flow_cell_id}_{run_id}_{batch_number}.bam Where
-        each {xxx} section is replaced with an attribute from the
-        minknow state when the file is written.  See file pattern
-        attributes above.
-    batch_count:
-        How many reads are placed in each batch (after batch_count
-        reads {batch_number} is increased in the pattern).
-    bases_per_batch:
-        Number of estimated bases within a batch before it rotates to
-        a new batch
-    disable_writing_multiple_alignments:
-        If true minknow will only write the primary alignment for each
-        read.
-"""
-ReadClassificationParams.Parameters.__doc__ = """Attributes:
-    rules_in_execution_order:
-        An execution rule has the following format:  "pore =
-        (median,gt,185)&(median,lt,260)&(median_sd,lt,40)"  "median"
-        and "median_sd" are apart of a small subset of variable values
-        describing a read or read chunk, that are exposed to execution
-        rules. The full list of variable values and their descriptions
-        are documented here:
-        https://minknow.git.oxfordnanolabs.local/minknow-
-        core/analysis/reads.html  "gt" and "lt" describe how data can
-        be compared: gt: greater than lt: less than eq: equal ne: not
-        equal  Constant values like "185" or "260" can also be
-        specified. These can be real numbers also.  Note that
-        variables dont always have to be on the left and const values
-        on the right. The following sub rules are also valid:
-        (200,lt,median_sd) (median_before,gt,median) (5,lt,10)
-"""
-PoreTypeConfiguration.ChannelWellPoreTypeConfigurations.__doc__ = """Attributes:
-    pore_types:
-        Map with pore type as key, mapped to the list of wells to set
-        for.  It is undefined what will happen if one call sets the
-        pore type of a channel and well to two pore types.
-"""
-EventDetection.__doc__ = """Attributes:
-    window_size:
-        The window size that the tstats are calculated from
-    threshold:
-        The peak detection must be above this threshold at a minimum
-        for it to be detected as an event.
-    peak_height:
-        When analysing the tstat peaks, if the jump between one value
-        and another is higher than than 'peak_height', then it will
-        "arm" the peak detector and move onto the next phase.  And
-        what goes up must come down. Once it has detected a peak going
-        up, it will also have to go down by 'peak_height' in order for
-        the peak to be classified as a found event
-    events_to_base_ratio:
-        Conversion factor used to convert from events to bases.  This
-        is used to estimate bases for various rpc feeds from minknow.
-    break_on_mux_changes:
-        Whether to break events on mux changes.  This will eliminate
-        "mux_uncertain" events and reads. Note that this will cause
-        starting or stopping unblocking to break events as well (even
-        though the mux does not normally change in this case).
-    max_mux_change_back_shift:
-        Control the number of samples MinKNOW will shift mux changes
-        back by in order to align mux changes with event boundaries.
-        When break on mux changes is enabled its possible that mux
-        changes recorded from the device and signal deltas caused by
-        the config changes will not align exactly (the signal delta
-        happen prior to the mux change due to the recorded sample
-        indicating the command is fully applied). Setting this value
-        to > 0 will allow minknow to record the mux change as active
-        up to this number of samples _before_ the device recorded the
-        change as active. Mux changes are never shifted forwards.  A
-        value of 0 will disable shifting of mux changes.
-"""
-WriterConfiguration.ChannelConfiguration.ChannelRanges.__doc__ = """Attributes:
-    ranges:
-        List of start/end paired channel numbers which should be
-        enabled for writing.  All channels in inclusive ranges should
-        be enabled.
+GetChannelStatesDescResponse.Style.__doc__ = """Attributes:
+    label:
+        The human-readable name to display when rendering this channel
+        state or group.
+    description:
+        A sentence describing the meaning of the channel state or
+        group.  This can be used as a tooltip, for example.
+    colour:
+        The colour to use when rendering this channel state or group.
+        This is a six-digit hex string describing an RGB colour (eg:
+        "ff00ff" for purple).
 """
 WriterConfiguration.BulkConfiguration.__doc__ = """Control settings for the bulk writer
 
@@ -868,146 +868,108 @@ Attributes:
         Dynamic analysis configuration  Stored with the frame config
         took effect in /Meta/User/DynamicAnalysisConfiguration
 """
-DynamicAnalysisConfiguration.__doc__ = """Attributes:
-    read_scale_tracking:
-        Parameters for read scale tracking:
+PoreTypeConfiguration.ChannelWellPoreTypeConfigurations.__doc__ = """Attributes:
+    pore_types:
+        Map with pore type as key, mapped to the list of wells to set
+        for.  It is undefined what will happen if one call sets the
+        pore type of a channel and well to two pore types.
 """
-BasecallerConfiguration.__doc__ = """Since 3.0
-
-Attributes:
+WriterConfiguration.ReadPod5Configuration.__doc__ = """Attributes:
     enable:
-        Choose if guppy is enabled or disabled.  If set to false then
-        no basecalling will take place, and the rest of the config is
-        ignored.
-    config_filename:
-        The Guppy cfg file with all the settings.  Filename can be
-        absolute, or a basename (eg dna_r9.4_450bps.cfg) which guppy
-        should locate (see guppy application config entry:
-        "data_path")
-    align_filter:
-        Enable or disable pass/fail filtering based on alignment.
-        When enabled, reads which do not align to any references will
-        be marked as "failed", and written to the folder specified in
-        MinKNOW configuration for failed reads.    The setting applies
-        to both regular read filtering and target filtering; if it is
-        enabled, then a read will not be marked as a target read if it
-        does not align to a reference.  Default setting is false, i.e.
-        disabled.  Since 5.4
-    read_filtering:
-        Control how read filtering is applied to output of basecaller.
-        These settings determine whether a read is marked as "passed"
-        or "failed".  Reads are written to different folders based on
-        the result of this filtering.  Those folders are specified in
-        MinKNOW configuration.  If no filtering parameters are
-        provided then reads will not be filtered.
-    barcoding_configuration:
-        Control the barcoding configuration. If no barcoding
-        configuration is supplied, barcoding is disabled.  Since 3.5
-    target_filtering:
-        Control how target filtering is applied to output of
-        basecaller. Reads which pass these filtering criteria will be
-        marked as "target" reads, and will be written to a separate
-        folder; this  folder is specified in MinKNOW configuration.
-        Reads which do  not pass these criteria will have the regular
-        read filtering applied to them, as specified by the `read-
-        filtering` settings above.  If no filtering parameters are
-        provided then reads will not be target-filtered.  Since 3.7
-    alignment_configuration:
-        Alignment configuration parameters. If no configuration is
-        specified alignment is disabled.  Since 4.0
-    lamp_configuration:
-        Lamp configuration parameters. If no configuration is
-        specified lamp is disabled.  Since 4.1
-    enable_read_splitting:
-        Enable read splitting in guppy.  Since 4.5
-    min_score_read_splitting:
-        Override score to use for guppy read splitting. If not
-        specified a default value is used from guppy.  Since 4.5
+        Control if a POD5 file should be generated per channel.
+    file_pattern:
+        The pattern used to find a POD5 files name.  default: pod5{bas
+        ecall_status}/{flow_cell_id}_{run_id}_{batch_number}.pod5
+        Where each {xxx} section is replaced with an attribute from
+        the minknow state when the file is written.  See file pattern
+        attributes above.
+    batch_count:
+        How many reads are placed in each batch (after batch_count
+        reads {batch_number} is increased in the pattern).
+    bases_per_batch:
+        Number of estimated bases within a batch before it rotates to
+        a new batch
+    disable_writing_passed_reads:
+        Prevent reads which have successfully basecalled being written
+        to pod5.
+    disable_writing_failed_reads:
+        Prevent reads which have failed basecalling being written to
+        pod5.
+    disable_writing_force_skipped_reads:
+        disable writing reads which have been force skipped by the
+        basecaller.
+    batch_duration:
+        The batch duration, for time-based batching  If time-based
+        batching is enabled then, in addition to completing batches
+        when the `batch_count` or `bases_per_batch` target (above) is
+        reached, batches will also be completed when: - At least one
+        read has been written to the batch, AND - `batch_duration` has
+        elapsed since the last batch was completed (or since the start
+        of the acquisition, for the first batch)  If this field is not
+        set, then the default time-based batching configuration will
+        be used.  If this field is set to zero or a negative value,
+        then time-based batching will be disabled.  Since 5.6
 """
-DynamicAnalysisConfiguration.ReadScaleTracking.ChannelConductance.__doc__ = """Attributes:
-    well_conductance:
-        Per well conductance values.
-"""
-WriterConfiguration.__doc__ = """Configuration for the output writers for MinKNOWs analysis pipeline.
-Each writer has its own section in this message, where individual data
-elements can be enabled or disabled.  File pattern attributes
------------------------ Writers have a 'file_pattern' field which
-controls where individual files will be written to. The pattern is
-expanded for each individual read, and then the read placed in the
-required file. The tokens used to expand depend on the file type:
-Read centric files (fastq, (multi-)fast5, protobuf):  -
-read_classification:  The classification applied to the completed read
-(eg. strand).  - batch_number:         The batch number of this read,
-evaluated based on the destination file.  - read_id:
-Unique read id for each read, formatted as a hash.  - read_number:
-The read number (unique per channel, incrementing number assigned to
-each read by MinKNOW).  - channel_name:         The name of the
-channel which produced the read.  - read_start_time:      Read start
-time formatted in rfc3339 format.  - basecall_status:      Basecalling
-output status (derived from WriterDefaults section in analysis
-config).  - pore_type:            Type of pore (as specified by
-#set_pore_type_configuration).  General attributes:  - daq_start_time:
-Data acquisition start time formatted as YYYYMMDD_hhmm.  -
-protocol_start_time:  Time the current protocol was started.  -
-run_id:               Acquisition run id formatted as hash.  -
-short_run_id:         Shortened version of acquisition run id
-formatted as hash.  - protocol_run_id:      Protocol run id formatted
-as hash.  - short_protocol_run_id: Shortened protocol run id formatted
-as hash.  - asic_id:              Integer id assigned to the asic in
-the connected flow cell.  - flow_cell_id:         Flow cell integer as
-read from eeprom.  - machine_id:           Name of the machine
-(hostname or machine identifier depending on the sequencer type).  -
-device_id:            Name of the connected sequencing device (eg.
-MN12345).  - sample_id:            Sample id entered by the user when
-starting a protocol.  - version_string:       Version string of the
-running MinKNOW instance  - protocol_group_id:    Protocol group
-entered by user when starting a protocol.  - protocol_purpose:
-Prupose of protocol (see protocol.set_protocol_purpose())
+ReadFilters.__doc__ = """Parameters for filtering out reads from being written.  The tests are
+combined using a logical AND: if any given test fails, the read will
+not be written. Only reads that pass all (non-zero) tests will be
+written out.  Currently, it is only possible to filter on read length.
+This can be given in samples or MinKNOW events.
 
 Attributes:
-    read_fast5:
-        Configuration for the fast5 writer.  If not specified, no
-        multi fast5 outputs are generated.
-    read_fastq:
-        Configuration for the fastq writer.  If not specified, no
-        fastq outputs are generated.
-    read_bam:
-        Configuration for the BAM writer.  If not specified, no BAM
-        outputs are generated.
-    read_pod5:
-        Configuration for the POD5 writer.  If not specified no POD5
-        outputs are generated.
-    read_protobuf:
-        Configuration for the protobuf writer.  If not specified, no
-        protobuf outputs are generated.
-    sequencing_summary:
-        Configuration for Sequencing Summary file  If not specified,
-        no summary file is generated.
-    bulk:
-        Configuration for the bulk writer.  If not specified, a basic
-        bulk output is generated.
-    report:
-        Configuration for the report writer  If
-        acquisition.StartRequest.generate_report is set for the
-        acquisition period, and empty paths (or no report config) are
-        supplied for reports default paths are used.
-    read_filters:
-        Parameters for filtering reads for writing.  If not present,
-        then no filtering will be applied, so no reads will be
-        excluded.
+    read_length_min:
+        Only write reads that contain at least this many samples.  The
+        default zero value will not exclude any reads.
+    read_length_max:
+        Only write reads that contain at most this many samples.  If
+        set to zero (the default), this test is not applied (as though
+        it had been set to a value longer than any possible read).
+    event_count_min:
+        Only write reads that contain at least this many MinKNOW
+        events.  The default zero value will not exclude any reads.
+    event_count_max:
+        Only write reads that contain at most this many MinKNOW
+        events.  If set to zero (the default), this test is not
+        applied (as though it had been set to a value longer than any
+        possible read).
 """
-PoreTypeConfiguration.__doc__ = """The pore type configuration  The ways of specifying a configuration
-are as follows: - global_pore_type: all wells have a pore type of
-global_pore_type. - channel_well_pore_types: channels are allowed
-different values per channel/well   (allows a subset of channels to be
-set).
-
-Attributes:
-    global_pore_type:
-        Set all channel/wells to one pore type.
-    channel_well_pore_types:
-        Set channel/wells to different pore types.  Pore types can be
-        created without being used by adding an empty entry.
+ChannelStates.Logic.Behaviour.__doc__ = """Attributes:
+    reset_on_mux_change:
+        TODO: MinKNOW 5: replace int32 with bool for these options
+        these are ints but act like bools
+    latch:
+        If the latch value is set to true, then when the criteria for
+        this channel state is active, then the latch will keep it
+        active until the channel state is reset.
+    reset_on_effective_mux_change:
+        An 'effective mux change' is any mux change apart from the one
+        triggered with the purpose of disconnecting a channel (turning
+        a channel off). For example, if a channel is in pore, and the
+        user changes the channel configuration to 'disconnected', that
+        mux change will not be an effective mux change. Any other mux
+        change is considered an 'effective mux change'. So if a
+        channel saturates, the mux change to disconnected is an
+        effective mux change. Similarly, a change from disconnected to
+        a pore is an effective mux change.  Use this reset mode to
+        make the channel state persist on non-effective mux changes.
+        For example, if a channel state is in 'multiple' and the user
+        triggers a channel configuration change to 'disconnected', the
+        state will remain in multiple if it has this option on. The
+        multiple state will be reset at all other mux changes (i.e.
+        effective mux changes).
+    reset_on_effective_well_change:
+        An 'effective well change' is any well change apart from the
+        one triggered with the purpose of disconnecting a channel
+        (turning a channel off). For example, if a channel is in
+        well_1, and the user changes the channel configuration to
+        'unblock_1', that change will not be an effective well change.
+        A change to disconnected is also not considered an effective
+        well change.  Use this reset mode to make the channel state
+        persist on non-effective well changes. For example, if a
+        channel state is in 'multiple' and the user triggers a channel
+        configuration change to 'disconnected', the state will remain
+        in multiple if it has this option on. The multiple state will
+        be reset then when the mux is set to a different setting.
 """
 GetChannelStatesDescResponse.__doc__ = """Attributes:
     groups:
@@ -1015,6 +977,50 @@ GetChannelStatesDescResponse.__doc__ = """Attributes:
         according to the "order" attribute of the group style in the
         channel states configuration.
 """
+DynamicAnalysisConfiguration.__doc__ = """Attributes:
+    read_scale_tracking:
+        Parameters for read scale tracking:
+"""
+WriterConfiguration.ReadBamConfiguration.__doc__ = """Attributes:
+    enable:
+        Control if a BAM file should be generated per channel.
+    file_pattern:
+        The pattern used to find a BAM files name.  default: bam{basec
+        all_status}/{flow_cell_id}_{run_id}_{batch_number}.bam Where
+        each {xxx} section is replaced with an attribute from the
+        minknow state when the file is written.  See file pattern
+        attributes above.
+    batch_count:
+        How many reads are placed in each batch (after batch_count
+        reads {batch_number} is increased in the pattern).
+    bases_per_batch:
+        Number of estimated bases within a batch before it rotates to
+        a new batch
+    disable_writing_multiple_alignments:
+        If true minknow will only write the primary alignment for each
+        read.
+    disable_writing_passed_reads:
+        Since 5.8 Prevent reads which have successfully basecalled
+        being written to bam.
+    disable_writing_failed_reads:
+        Prevent reads which have failed basecalling being written to
+        bam.
+    disable_writing_force_skipped_reads:
+        disable writing reads which have been force skipped by the
+        basecaller.
+    batch_duration:
+        The batch duration, for time-based batching  If time-based
+        batching is enabled then, in addition to completing batches
+        when the `batch_count` or `bases_per_batch` target (above) is
+        reached, batches will also be completed when: - At least one
+        read has been written to the batch, AND - `batch_duration` has
+        elapsed since the last batch was completed (or since the start
+        of the acquisition, for the first batch)  If this field is not
+        set, then the default time-based batching configuration will
+        be used.  If this field is set to zero or a negative value,
+        then time-based batching will be disabled.  Since 5.6
+"""
+BasecallerConfiguration.TargetFiltering.__doc__ = """Since 3.7"""
 WriterConfiguration.ReadFastqConfiguration.__doc__ = """Attributes:
     enable:
         Control if a fastq file should be generated per channel.
@@ -1038,5 +1044,45 @@ WriterConfiguration.ReadFastqConfiguration.__doc__ = """Attributes:
         a new batch
     compression:
         Compress fastq files with gzip compression. default: false
+    disable_writing_passed_reads:
+        Since 5.8 Prevent reads which have successfully basecalled
+        being written to fastq.
+    disable_writing_failed_reads:
+        Prevent reads which have failed basecalling being written to
+        fastq.
+    disable_writing_force_skipped_reads:
+        disable writing reads which have been force skipped by the
+        basecaller.
+    batch_duration:
+        The batch duration, for time-based batching  If time-based
+        batching is enabled then, in addition to completing batches
+        when the `batch_count` or `bases_per_batch` target (above) is
+        reached, batches will also be completed when: - At least one
+        read has been written to the batch, AND - `batch_duration` has
+        elapsed since the last batch was completed (or since the start
+        of the acquisition, for the first batch)  If this field is not
+        set, then the default time-based batching configuration will
+        be used.  If this field is set to zero or a negative value,
+        then time-based batching will be disabled.  Since 5.6
+"""
+GetChannelStatesDescResponse.Group.__doc__ = """Attributes:
+    name:
+        The name of the group.
+    style:
+        How to render the group in a graphical user interface.  Note
+        that the style may be missing from some groups (such as the
+        ones that are built in to MinKNOW).
+    states:
+        The channel states contained in the group.  The groups are
+        ordered according to the "order" attribute of the channel
+        state style in the channel states configuration.
+"""
+ChannelStates.Group.__doc__ = """ TODO: group styling and description should not be defined here, as
+this allows channel states to declare themselves as being part of the
+same group but specify different styling and descriptions."""
+AnalysisConfiguration.__doc__ = """Attributes:
+    read_scaling:
+        Add read scale tracking to the pipeline. If this message is
+        unspecified, read scaling is not enabled.
 """
 # @@protoc_insertion_point(module_scope)

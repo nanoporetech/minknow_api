@@ -49,6 +49,21 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   _PROTOCOLSETTING_UNIT._serialized_end=2081
   _PROTOCOLSETTING_VISIBILITY._serialized_start=2083
   _PROTOCOLSETTING_VISIBILITY._serialized_end=2146
+ProtocolIdentifierComponents.__doc__ = """Attributes:
+    location:
+        If not specified, will default to "ANY"
+    experiment_type:
+        one of "custom", "sequencing", "control", "ctc", "platform qc"
+        or "flowcell_plugin"
+    name:
+        Name (or path) of the protocol, without the .toml extension
+        eg: "sequencing/sequencing_MIN106_DNA" this is relative to the
+        system or user protocol directory
+    flow_cell_product_code:
+        eg: "FLO-MIN106"
+    kit:
+        eg: "SQK-RPB004"
+"""
 ProtocolSetting.__doc__ = """Attributes:
     identifier:
         Identifier is the unique primary-key for referring to
@@ -92,20 +107,5 @@ ProtocolSetting.__doc__ = """Attributes:
         no dependencies are specified.
     choices:
         when unit is CHOICE, this defines the acceptable choices.
-"""
-ProtocolIdentifierComponents.__doc__ = """Attributes:
-    location:
-        If not specified, will default to "ANY"
-    experiment_type:
-        one of "custom", "sequencing", "control", "ctc", "platform qc"
-        or "flowcell_plugin"
-    name:
-        Name (or path) of the protocol, without the .toml extension
-        eg: "sequencing/sequencing_MIN106_DNA" this is relative to the
-        system or user protocol directory
-    flow_cell_product_code:
-        eg: "FLO-MIN106"
-    kit:
-        eg: "SQK-RPB004"
 """
 # @@protoc_insertion_point(module_scope)

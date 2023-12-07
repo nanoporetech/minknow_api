@@ -283,7 +283,7 @@ class ProtocolServiceServicer(object):
         raise NotImplementedError('Method not implemented!')
 
     def set_context_info(self, request, context):
-        """Store context tags as arbitary string-to-string map
+        """Store context tags as arbitrary string-to-string map
 
         Since 1.11
         """
@@ -373,7 +373,7 @@ class ProtocolServiceServicer(object):
     def associate_post_processing_analysis_for_protocol(self, request, context):
         """Associated a post processing analysis process, and schedule it to run once the protocol is complete.
 
-        If the protocol is already complete, the post proecssing analysis is executed immediately.
+        If the protocol is already complete, the post processing analysis is executed immediately.
 
         Since 4.4
         """

@@ -105,6 +105,19 @@ service StatisticsService {
         option idempotency_level = NO_SIDE_EFFECTS;
     }
 
+    // A histogram of q scores
+    //
+    // If the experiment is in-progress, then the latest histogram is streamed on a regular basis
+    // If the experiment is complete, then the final histogram is returned
+    //
+    // Note that basecalling must be enabled in order for q-score values to be calculated; as such
+    // the call will fail with `FAILED_PRECONDITION` if basecalling is not enabled
+    //
+    // Since 5.8
+    rpc stream_q_score_histogram (StreamQScoreHistogramRequest) returns (stream StreamQScoreHistogramResponse) {
+        option idempotency_level = NO_SIDE_EFFECTS;
+    }
+
     // Returns the qscore over time metric represented as datasets (i.e. boxplots).
     //
     // These metrics apply to all the successfully called reads.
@@ -166,12 +179,38 @@ service StatisticsService {
 // Note also that the maximum valid start and end value may not be known if data collection is still
 // ongoing -- for example, the maximum valid time for time series data.  If this is the case, then
 // the maximum valid value will be determined when the experiment ends, and values in use will be
-// adjusted acordingly.
+// adjusted accordingly.
 //
 message DataSelection {
     int64 start = 1;
     uint64 step = 2;
     int64 end = 3;
+}
+
+// Specify a desired data selection, using floating point values
+//
+// The actual data selection used may differ from the desired one.  They are adjusted in the
+// following sequence:
+//
+//  1. The selection is set equal to the desired selection
+//  2. Any selection value that is not set is adjusted to its default value:
+//      - `start` and `step` will be set to the minimum valid value
+//      - `end` will be set to the maximum valid value
+//  3. Values which are outside of the valid range are clamped to the nearest valid value:
+//      - Values less than minimum valid value will be set equal to the minimum valid value
+//      - Values greater than the maximum valid value will be set equal to the maximum valid value
+//  4. Finally, all values are 'rounded' to a nearby valid value
+//      - `start` and `step` will be rounded down to the first valid value less than or equal to
+//        their current values
+//      - `end` will be rounded up to the first valid value that is greater than or equal to its
+//        current value
+//      - This means that the range that is specified after rounding includes the range that was
+//        specified prior to rounding
+//
+message FloatDataSelection {
+    optional float start = 1;
+    optional float step = 2;
+    optional float end = 3;
 }
 
 message StreamDutyTimeRequest {
@@ -446,6 +485,131 @@ message GetReadLengthTypesResponse {
 
     // Array of the types of bucket for which a histogram is currently available
     repeated ReadLengthType available_types = 1;
+}
+
+enum QScoreHistogramBucketValueType {
+    // Histogram buckets contain the total number of reads with q-scores that fall within the
+    // histogram bucket range
+    QScore_ReadCounts = 0;
+
+    // Histogram buckets contain the total number of basecalled bases contained within reads
+    // that have an average q-score that falls within the histogram bucket range
+    //
+    // Note that all bases for a given read are added to the bucket that corresponds to the average
+    // q-score for that read -- bases are not added to buckets depending on their individual
+    // q-scores
+    //
+    QScore_BasecalledBases = 1;
+}
+
+message QScoreHistogramKey {
+    enum ReadType {
+        // If duplex basecalling is not enabled, equivalent to `Simplex`
+        // If duplex basecalling is enabled, the sum of `Simplex` and `Duplex`
+        All = 0;
+    
+        // All simplex data
+        //
+        // When duplex basecalling is enabled, this contains reads/bases from both:
+        // - Simplex reads
+        // - Template and complement reads (which are subsequently combined into duplex reads)
+        //
+        Simplex = 1;
+    
+        // Duplex data
+        // Only available if duplex basecalling is enabled
+        Duplex = 2;
+    };
+
+    ReadType read_type = 1;
+}
+
+message StreamQScoreHistogramRequest {
+    // The `acquisition_run_id` of the acquisition to obtain data for
+    //
+    // If this is set to the `acquisition_run_id` of an acquisition which is in-progress, then
+    // updates containing the latest histogram data for that acquisition will be streamed regularly
+    // until that acquisition finishes (see `poll_time_seconds` below)
+    //
+    // Otherwise, if this is set to the `acquisition_run_id` of an acquisition which is finished,
+    // and for which final histogram data is available, then the final histogram data for that
+    // acquisition will be returned.  Final histogram data is available until it is cleared.
+    //
+    // Otherwise, if this parameter is not set, or is set to a value which is neither the
+    // `acquisition_run_id` of an acquisition which is in-progress, nor the `acquisition_run_id` of
+    // an acquisition for which final histogram data is available, then this call will fail with the
+    // status `INVALID_ARGUMENT`.
+    //
+    string acquisition_run_id = 1 [(rpc_required) = true];
+
+    // How often to return new histogram data, in seconds
+    //
+    // If not specified, or set to `0`, then the poll time will be set to 60 seconds
+    //
+    // If data is being returned for an acquisition which is in progress, then one update will be
+    // sent when the call is first performed, then subsequently every `poll_time` after that, and
+    // then finally once again when the acquisition finishes.
+    //
+    // Otherwise, if final histogram data is being returned for an acquisition that has already
+    // finished, this parameter has no effect.  The final histogram data will be returned, and the
+    // call will complete.
+    //
+    uint32 poll_time_seconds = 2;
+
+    // The desired q score range which histograms should cover.
+    FloatDataSelection data_selection = 3;
+
+    // What data to accumulate in the histogram buckets
+    //
+    // See `QScoreHistogramBucketValueType` for further information about the available options.
+    //
+    QScoreHistogramBucketValueType bucket_value_type = 4;
+}
+
+message StreamQScoreHistogramResponse {
+    // The data accumulated in the histogram buckets
+    //
+    // See `QScoreHistogramBucketValueType` for further information about the possible options.
+    //
+    QScoreHistogramBucketValueType bucket_value_type = 1;
+
+    message BucketRange {
+        // The range covered by a bucket
+        //
+        // The range [start, end) is half open (i.e. the start value is included, the end value is
+        // not).
+        float start = 1;
+        float end = 2;
+    }
+
+    // The range covered by each bucket in the histogram data
+    repeated BucketRange bucket_ranges = 2;
+
+    // The range covered by non-empty buckets in the source data
+    BucketRange source_data_range = 3;
+
+    message QScoreHistogramData {
+        // The filtering parameters which contributed to this bucket.
+        repeated QScoreHistogramKey filtering = 1;
+
+        // Counts for each histogram bucket
+        //
+        // Units and type of accumulated values are as specified in `bucket_value_type`
+        // The range covered by each bucket is as in `bucket_ranges`
+        //
+        repeated uint64 bucket_values = 2;
+
+        // The modal q score, calculated using the `bucket_value_type`
+        float modal_q_score = 3;
+    }
+
+    // The histogram data
+    //
+    // If duplex basecalling is not enabled, then Simplex histogram data will be returned
+    // If duplex basecalling is enabled, then Simplex, Duplex and "All" (i.e. overall) histogram
+    // data will be returned
+    //
+    repeated QScoreHistogramData histogram_data = 4;
 }
 
 message AcquisitionOutputKey {
