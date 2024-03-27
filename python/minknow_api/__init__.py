@@ -86,7 +86,7 @@ import sys
 import threading
 import warnings
 from datetime import datetime, timedelta
-from typing import Any, Dict, Optional, Tuple
+from typing import Any, Dict, Optional, Tuple, Union
 
 import grpc
 import pyrfc3339
@@ -268,7 +268,7 @@ class ProtocolTokenCredentials(grpc.AuthMetadataPlugin):
 
 
 def get_protocol_token_credentials(
-    environ: Dict[str, str] = os.environ
+    environ: Union[Dict[str, str], os._Environ] = os.environ
 ) -> Optional[grpc.ChannelCredentials]:
     """If running as a protocol in MinKNOW, get the protocol token used to authenticate
     to MinKNOW.
@@ -335,7 +335,9 @@ def get_developer_api_token_credentials(
     )
 
 
-def read_ssl_certificate(environ: Dict[str, str] = os.environ) -> bytes:
+def read_ssl_certificate(
+    environ: Union[Dict[str, str], os._Environ] = os.environ
+) -> bytes:
     """Get the CA certificate that should be used to verify a TLS connection to MinKNOW.
 
     If the ``MINKNOW_TRUSTED_CA`` environment variable is set to the path to an
@@ -407,7 +409,7 @@ def _is_localhost(host: str) -> bool:
 
 
 def _try_client_cert_from_env_vars(
-    environ: Dict[str, str] = os.environ
+    environ: Union[Dict[str, str], os._Environ] = os.environ
 ) -> Tuple[Optional[bytes], Optional[bytes]]:
     cert_chain_path = environ.get("MINKNOW_API_CLIENT_CERTIFICATE_CHAIN")
     cert_key_path = environ.get("MINKNOW_API_CLIENT_KEY")
@@ -453,7 +455,7 @@ def load_grpc_credentials(
     client_certificate_chain: Optional[bytes] = None,
     client_private_key: Optional[bytes] = None,
     _warning_stacklevel: int = 0,
-    environ: Dict[str, str] = os.environ,
+    environ: Union[Dict[str, str], os._Environ] = os.environ,
 ) -> grpc.ChannelCredentials:
     """Load gRPC credentials.
 
@@ -470,6 +472,8 @@ def load_grpc_credentials(
             MinKNOW installation directory.
         client_private_key: The (PEM-encoded) private key for the first certificate in
             `client_cert_chain`.
+        environ: Optional dictionary containing global environment variables, if not provided
+            then os.environ is used.
 
     This is the same as `grpc_credentials`, but does not cache the result. You should
     probably be using that function instead.
@@ -545,7 +549,7 @@ def grpc_credentials(
     client_certificate_chain: Optional[bytes] = None,
     client_private_key: Optional[bytes] = None,
     _warning_stacklevel: int = 0,
-    environ: Dict[str, str] = os.environ,
+    environ: Union[Dict[str, str], os._Environ] = os.environ,
 ) -> grpc.ChannelCredentials:
     """Get a grpc.ChannelCredentials object for connecting to secure versions of MinKNOW"s gRPC
     services.
@@ -563,6 +567,8 @@ def grpc_credentials(
             MinKNOW installation directory.
         client_private_key: The (PEM-encoded) private key for the first certificate in
             `client_cert_chain`.
+        environ: Optional dictionary containing global environment variables, if not provided
+            then os.environ is used.
 
     Use like:
 
@@ -642,6 +648,8 @@ class Connection(object):
         client_private_key: The (PEM-encoded) private key for the first certificate
             in `client_cert_chain`. Note: if `credentials` is provided, this
             parameter is ignored.
+        environ: Optional dictionary containing global environment variables, if not provided
+            then os.environ is used.
 
     If no port is provided, the MINKNOW_RPC_PORT environment variable will be used
     (MinKNOW sets this when running protocol scripts, for example). If this environment
@@ -685,7 +693,7 @@ class Connection(object):
         developer_api_token: Optional[str] = None,
         client_certificate_chain: Optional[bytes] = None,
         client_private_key: Optional[bytes] = None,
-        environ: Dict[str, str] = os.environ,
+        environ: Union[Dict[str, str], os._Environ] = os.environ,
     ):
         import time
         import grpc

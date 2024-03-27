@@ -445,10 +445,14 @@ class AnalysisConfigurationService(object):
             enable_read_splitting (bool, optional): Enable read splitting in guppy.
 
                 Since 4.5
+
+                Note: Since 5.9 this option has no effect, the basecaller is responsible for deciding when read splitting should be enabled.
             min_score_read_splitting (google.protobuf.wrappers_pb2.FloatValue, optional): Override score to use for guppy read splitting. If not specified a default value
                 is used from guppy.
 
                 Since 4.5
+
+                Note: Since 5.9 this option has no effect, the basecaller is responsible for deciding read splitting score.
 
         Returns:
             minknow_api.analysis_configuration_pb2.SetBasecallerConfigurationResponse
@@ -587,10 +591,14 @@ class AnalysisConfigurationService(object):
             enable_read_splitting (bool, optional): Enable read splitting in guppy.
 
                 Since 4.5
+
+                Note: Since 5.9 this option has no effect, the basecaller is responsible for deciding when read splitting should be enabled.
             min_score_read_splitting (google.protobuf.wrappers_pb2.FloatValue, optional): Override score to use for guppy read splitting. If not specified a default value
                 is used from guppy.
 
                 Since 4.5
+
+                Note: Since 5.9 this option has no effect, the basecaller is responsible for deciding read splitting score.
 
         Returns:
             minknow_api.analysis_configuration_pb2.SetBasecallerConfigurationResponse

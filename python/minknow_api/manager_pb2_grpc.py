@@ -20,6 +20,11 @@ class ManagerServiceStub(object):
                 request_serializer=minknow__api_dot_manager__pb2.DescribeHostRequest.SerializeToString,
                 response_deserializer=minknow__api_dot_manager__pb2.DescribeHostResponse.FromString,
                 )
+        self.get_basecaller_features = channel.unary_unary(
+                '/minknow_api.manager.ManagerService/get_basecaller_features',
+                request_serializer=minknow__api_dot_manager__pb2.GetBasecallerFeaturesRequest.SerializeToString,
+                response_deserializer=minknow__api_dot_manager__pb2.GetBasecallerFeaturesResponse.FromString,
+                )
         self.flow_cell_positions = channel.unary_stream(
                 '/minknow_api.manager.ManagerService/flow_cell_positions',
                 request_serializer=minknow__api_dot_manager__pb2.FlowCellPositionsRequest.SerializeToString,
@@ -176,6 +181,15 @@ class ManagerServiceServicer(object):
         This RPC can be called without providing any authentication tokens.
 
         Since 3.6
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def get_basecaller_features(self, request, context):
+        """Get features from the basecaller, for whether the server can support live basecalling with adaptive sampling
+
+        Since 5.9
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -576,6 +590,11 @@ def add_ManagerServiceServicer_to_server(servicer, server):
                     request_deserializer=minknow__api_dot_manager__pb2.DescribeHostRequest.FromString,
                     response_serializer=minknow__api_dot_manager__pb2.DescribeHostResponse.SerializeToString,
             ),
+            'get_basecaller_features': grpc.unary_unary_rpc_method_handler(
+                    servicer.get_basecaller_features,
+                    request_deserializer=minknow__api_dot_manager__pb2.GetBasecallerFeaturesRequest.FromString,
+                    response_serializer=minknow__api_dot_manager__pb2.GetBasecallerFeaturesResponse.SerializeToString,
+            ),
             'flow_cell_positions': grpc.unary_stream_rpc_method_handler(
                     servicer.flow_cell_positions,
                     request_deserializer=minknow__api_dot_manager__pb2.FlowCellPositionsRequest.FromString,
@@ -745,6 +764,23 @@ class ManagerService(object):
         return grpc.experimental.unary_unary(request, target, '/minknow_api.manager.ManagerService/describe_host',
             minknow__api_dot_manager__pb2.DescribeHostRequest.SerializeToString,
             minknow__api_dot_manager__pb2.DescribeHostResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def get_basecaller_features(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/minknow_api.manager.ManagerService/get_basecaller_features',
+            minknow__api_dot_manager__pb2.GetBasecallerFeaturesRequest.SerializeToString,
+            minknow__api_dot_manager__pb2.GetBasecallerFeaturesResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 

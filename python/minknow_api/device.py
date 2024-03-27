@@ -24,6 +24,7 @@ class DeviceType(Enum):
     MINION_MK1C = minknow_api.device_service.GetDeviceInfoResponse.MINION_MK1C
     TRAXION = minknow_api.device_service.GetDeviceInfoResponse.TRAXION
     P2_SOLO = minknow_api.device_service.GetDeviceInfoResponse.P2_SOLO
+    MINION_MK1D = minknow_api.device_service.GetDeviceInfoResponse.MINION_MK1D
 
     def is_minion_like(self):
         """Whether the device acts like a MinION.
@@ -36,6 +37,7 @@ class DeviceType(Enum):
             DeviceType.GRIDION,
             DeviceType.MINION_MK1C,
             DeviceType.TRAXION,
+            DeviceType.MINION_MK1D,
         ]
 
     def is_promethion_like(self):

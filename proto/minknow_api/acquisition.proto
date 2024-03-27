@@ -405,6 +405,7 @@ enum AcquisitionState {
 
 enum AcquisitionStopReason {
     // The acquisition has not yet stopped.
+    // Or the stop reason is unknown
     STOPPED_NOT_SET = 0;
 
     // The user called the stop rpc.

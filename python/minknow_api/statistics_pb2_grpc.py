@@ -64,6 +64,11 @@ class StatisticsServiceStub(object):
                 request_serializer=minknow__api_dot_statistics__pb2.StreamQScoreHistogramRequest.SerializeToString,
                 response_deserializer=minknow__api_dot_statistics__pb2.StreamQScoreHistogramResponse.FromString,
                 )
+        self.stream_q_accuracy_histogram = channel.unary_stream(
+                '/minknow_api.statistics.StatisticsService/stream_q_accuracy_histogram',
+                request_serializer=minknow__api_dot_statistics__pb2.StreamQAccuracyHistogramRequest.SerializeToString,
+                response_deserializer=minknow__api_dot_statistics__pb2.StreamQAccuracyHistogramResponse.FromString,
+                )
         self.stream_basecall_boxplots = channel.unary_stream(
                 '/minknow_api.statistics.StatisticsService/stream_basecall_boxplots',
                 request_serializer=minknow__api_dot_statistics__pb2.StreamBoxplotRequest.SerializeToString,
@@ -203,6 +208,24 @@ class StatisticsServiceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def stream_q_accuracy_histogram(self, request, context):
+        """A histogram of q accuracies
+
+        QAccuracy gives a log scale for the alignment accuracy of a particular read provided
+        by the basecaller
+
+        If the experiment is in-progress, then the latest histogram is streamed on a regular basis
+        If the experiment is complete, then the final histogram is returned
+
+        Note that basecalling must be enabled in order for q-score values to be calculated; as such
+        the call will fail with `FAILED_PRECONDITION` if basecalling is not enabled
+
+        Since 5.9
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
     def stream_basecall_boxplots(self, request, context):
         """Returns the qscore over time metric represented as datasets (i.e. boxplots).
 
@@ -279,6 +302,11 @@ def add_StatisticsServiceServicer_to_server(servicer, server):
                     servicer.stream_q_score_histogram,
                     request_deserializer=minknow__api_dot_statistics__pb2.StreamQScoreHistogramRequest.FromString,
                     response_serializer=minknow__api_dot_statistics__pb2.StreamQScoreHistogramResponse.SerializeToString,
+            ),
+            'stream_q_accuracy_histogram': grpc.unary_stream_rpc_method_handler(
+                    servicer.stream_q_accuracy_histogram,
+                    request_deserializer=minknow__api_dot_statistics__pb2.StreamQAccuracyHistogramRequest.FromString,
+                    response_serializer=minknow__api_dot_statistics__pb2.StreamQAccuracyHistogramResponse.SerializeToString,
             ),
             'stream_basecall_boxplots': grpc.unary_stream_rpc_method_handler(
                     servicer.stream_basecall_boxplots,
@@ -462,6 +490,23 @@ class StatisticsService(object):
         return grpc.experimental.unary_stream(request, target, '/minknow_api.statistics.StatisticsService/stream_q_score_histogram',
             minknow__api_dot_statistics__pb2.StreamQScoreHistogramRequest.SerializeToString,
             minknow__api_dot_statistics__pb2.StreamQScoreHistogramResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def stream_q_accuracy_histogram(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_stream(request, target, '/minknow_api.statistics.StatisticsService/stream_q_accuracy_histogram',
+            minknow__api_dot_statistics__pb2.StreamQAccuracyHistogramRequest.SerializeToString,
+            minknow__api_dot_statistics__pb2.StreamQAccuracyHistogramResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 

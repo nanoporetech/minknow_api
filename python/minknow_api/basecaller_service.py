@@ -26,6 +26,8 @@ __all__ = [
     "RunInfo",
     "GetInfoRequest",
     "GetInfoResponse",
+    "ClearInfoRequest",
+    "ClearInfoResponse",
     "WatchRequest",
     "WatchResponse",
     "MakeAlignmentIndexRequest",
@@ -165,8 +167,12 @@ class Basecaller(object):
             barcoding_configuration (minknow_api.analysis_configuration_pb2.BarcodingConfiguration, optional): Options to control barcoding performed once basecalling reads is complete.
             alignment_configuration (minknow_api.analysis_configuration_pb2.AlignmentConfiguration, optional): Options to control alignment performed once basecalling reads is complete.
             enable_read_splitting (bool, optional): Enable read splitting in guppy
+
+                Note: Since 5.9 this option has no effect, the basecaller is responsible for deciding when read splitting should be enabled.
             min_score_read_splitting (google.protobuf.wrappers_pb2.FloatValue, optional): Override score to use for guppy read splitting. If not specified a default value
                 is used from guppy.
+
+                Note: Since 5.9 this option has no effect, the basecaller is responsible for deciding when read splitting should be enabled.
 
         Returns:
             minknow_api.basecaller_pb2.StartBasecallingResponse
@@ -578,6 +584,61 @@ class Basecaller(object):
             raise ArgumentError("Unexpected keyword arguments to get_info: '{}'".format(", ".join(unused_args)))
 
         return run_with_retry(self._stub.get_info,
+                              _message, _timeout,
+                              [],
+                              "minknow_api.basecaller.Basecaller")
+    def clear_info(self, _message=None, _timeout=None, **kwargs):
+        """Clears run info data for each analysis specified
+
+        Run info data is the data returned by `get_info()`.
+
+        Also clears any persistence data that has been written to disk for those analyses -- this
+        data will not be available after a restart.
+
+        Run info will not be cleared for analyses which are still in-progress. If an invalid or
+        in-progress analysis id is specified, that analysis id is ignored.
+
+        Does NOT clear results from analyses (e.g. bam files, reports, etc.)
+
+        Since 5.9
+
+        This RPC is idempotent. It may change the state of the system, but if the requested
+        change has already happened, it will not fail because of this, make any additional
+        changes or return a different value.
+
+        Args:
+            _message (minknow_api.basecaller_pb2.ClearInfoRequest, optional): The message to send.
+                This can be passed instead of the keyword arguments.
+            _timeout (float, optional): The call will be cancelled after this number of seconds
+                if it has not been completed.
+            ids (str, optional): 
+
+        Returns:
+            minknow_api.basecaller_pb2.ClearInfoResponse
+
+        Note that the returned messages are actually wrapped in a type that collapses
+        submessages for fields marked with ``[rpc_unwrap]``.
+        """
+        if _message is not None:
+            if isinstance(_message, MessageWrapper):
+                _message = _message._message
+            return run_with_retry(self._stub.clear_info,
+                                  _message, _timeout,
+                                  [],
+                                  "minknow_api.basecaller.Basecaller")
+
+        unused_args = set(kwargs.keys())
+
+        _message = ClearInfoRequest()
+
+        if "ids" in kwargs:
+            unused_args.remove("ids")
+            _message.ids.extend(kwargs['ids'])
+
+        if len(unused_args) > 0:
+            raise ArgumentError("Unexpected keyword arguments to clear_info: '{}'".format(", ".join(unused_args)))
+
+        return run_with_retry(self._stub.clear_info,
                               _message, _timeout,
                               [],
                               "minknow_api.basecaller.Basecaller")

@@ -277,6 +277,9 @@ message BarcodeUserData {
 
     // Sample type grouping for the barcode.
     SampleType type = 4;
+
+    // Extra context per barcode
+    map<string, string> passenger_info  = 6;
 }
 
 message KitInfo {
@@ -285,17 +288,6 @@ message KitInfo {
 
     // The expansion barcoding kits that the protocol supports e.g. "EXP-NBD104"
     repeated string barcode_expansion_kits = 2;
-}
-
-message PassengerInfo {
-    enum Extension {
-        TXT = 0;
-        CSV = 1;
-        JSON = 2;
-    }
-    
-    bytes passenger_info = 1;
-    Extension file_extension = 2;
 }
 
 message ProtocolRunUserInfo {
@@ -374,15 +366,6 @@ message StartProtocolRequest {
     //
     // Since 5.3
     acquisition.TargetRunUntilCriteria target_run_until_criteria = 5;
-
-    // Extra info taken as bytes, that will be output to a file in the output location
-    //
-    // The filename in the output location will be in the format:
-    // passenger_info_{run_id}.{extension}
-    //
-    // If the size of this argument exceeds 2MB in size, then the call will fail
-    // with INVALID_ARGUMENT
-    PassengerInfo passenger_info = 6;
 }
 
 message StartProtocolResponse {
@@ -537,7 +520,7 @@ enum ProtocolState {
 
     // Enums 20-120 are "reserved" for any new script exit codes we may want to forward
 
-    // The protocol has reported and error during calibration
+    // The protocol has reported an error during calibration
     PROTOCOL_FINISHED_WITH_ERROR_CALIBRATION = 20;              // Exit with code 20
 
     // Setting basecall settings failed (Bad config etc)
@@ -548,6 +531,15 @@ enum ProtocolState {
 
     // The protocol was terminated due to insufficient disk space
     PROTOCOL_FINISHED_WITH_ERROR_NO_DISK_SPACE = 23;            // Exit with code 23
+    
+    // The protocol was terminated due to a high temperature issue
+    // Since 5.9
+    PROTOCOL_FINISHED_WITH_ERROR_TEMPERATURE_HIGH = 25;         // Exit with code 25
+
+    // The protocol was terminated due to an issue with
+    // communications with the basecaller
+    // Since 5.9
+    PROTOCOL_FINISHED_WITH_ERROR_BASECALLER_COMMUNICATION = 26; // Exit with code 26
 }
 
 enum ProtocolPhase {
@@ -759,8 +751,24 @@ message ProtocolRunInfo {
 
     // Output location for protocol data (eg. reads).
     //
+    // If data offload is being used, this is the offload source directory.  Any files written to
+    // this location will be output alongside the rest of the experiment data
+    //
     // Since 1.16.
     string output_path = 11;
+
+    // Output location to report to the user
+    //
+    // This is the location at which files will eventually be written.
+    //
+    // This path will be present, but empty, when writing to user-specified offload locations, as
+    // there isn't a "local output path" when offload is used.
+    //
+    // For backwards compatibility, if this this field is not present, then `output_path` can be
+    // reported to the user instead.
+    //
+    // Since 5.9
+    optional string reported_output_path = 24;
 
     // Indicates the current state of the protocol run.
     ProtocolState state = 4;
@@ -1046,15 +1054,6 @@ message BeginProtocolRequest {
 
     // Any settings changed from the defaults specified in the protocol's .toml file.
     map<string, protocol_settings.ProtocolSetting.ProtocolSettingValue> settings = 4;
-
-    // Extra info taken as bytes, that will be output to a file in the output location
-    //
-    // The filename in the output location will be in the format:
-    // passenger_info_{run_id}.{extension}
-    //
-    // If the size of this argument exceeds 2MB in size, then the call will fail
-    // with INVALID_ARGUMENT
-    PassengerInfo passenger_info = 7;
 }
 
 message BeginProtocolResponse {

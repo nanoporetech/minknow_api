@@ -56,6 +56,11 @@ class BasecallerStub(object):
                 request_serializer=minknow__api_dot_basecaller__pb2.GetInfoRequest.SerializeToString,
                 response_deserializer=minknow__api_dot_basecaller__pb2.GetInfoResponse.FromString,
                 )
+        self.clear_info = channel.unary_unary(
+                '/minknow_api.basecaller.Basecaller/clear_info',
+                request_serializer=minknow__api_dot_basecaller__pb2.ClearInfoRequest.SerializeToString,
+                response_deserializer=minknow__api_dot_basecaller__pb2.ClearInfoResponse.FromString,
+                )
         self.watch = channel.unary_stream(
                 '/minknow_api.basecaller.Basecaller/watch',
                 request_serializer=minknow__api_dot_basecaller__pb2.WatchRequest.SerializeToString,
@@ -159,6 +164,26 @@ class BasecallerServicer(object):
         """Gets information about one or more basecalling operations.
 
         Since 3.5
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def clear_info(self, request, context):
+        """Clears run info data for each analysis specified
+
+        Run info data is the data returned by `get_info()`.
+
+        Also clears any persistence data that has been written to disk for those analyses -- this
+        data will not be available after a restart.
+
+        Run info will not be cleared for analyses which are still in-progress. If an invalid or
+        in-progress analysis id is specified, that analysis id is ignored.
+
+        Does NOT clear results from analyses (e.g. bam files, reports, etc.)
+
+        Since 5.9
+
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -268,6 +293,11 @@ def add_BasecallerServicer_to_server(servicer, server):
                     servicer.get_info,
                     request_deserializer=minknow__api_dot_basecaller__pb2.GetInfoRequest.FromString,
                     response_serializer=minknow__api_dot_basecaller__pb2.GetInfoResponse.SerializeToString,
+            ),
+            'clear_info': grpc.unary_unary_rpc_method_handler(
+                    servicer.clear_info,
+                    request_deserializer=minknow__api_dot_basecaller__pb2.ClearInfoRequest.FromString,
+                    response_serializer=minknow__api_dot_basecaller__pb2.ClearInfoResponse.SerializeToString,
             ),
             'watch': grpc.unary_stream_rpc_method_handler(
                     servicer.watch,
@@ -432,6 +462,23 @@ class Basecaller(object):
         return grpc.experimental.unary_stream(request, target, '/minknow_api.basecaller.Basecaller/get_info',
             minknow__api_dot_basecaller__pb2.GetInfoRequest.SerializeToString,
             minknow__api_dot_basecaller__pb2.GetInfoResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def clear_info(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/minknow_api.basecaller.Basecaller/clear_info',
+            minknow__api_dot_basecaller__pb2.ClearInfoRequest.SerializeToString,
+            minknow__api_dot_basecaller__pb2.ClearInfoResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 

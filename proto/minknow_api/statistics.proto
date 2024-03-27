@@ -118,6 +118,22 @@ service StatisticsService {
         option idempotency_level = NO_SIDE_EFFECTS;
     }
 
+    // A histogram of q accuracies
+    //
+    // QAccuracy gives a log scale for the alignment accuracy of a particular read provided
+    // by the basecaller
+    //
+    // If the experiment is in-progress, then the latest histogram is streamed on a regular basis
+    // If the experiment is complete, then the final histogram is returned
+    //
+    // Note that basecalling must be enabled in order for q-score values to be calculated; as such
+    // the call will fail with `FAILED_PRECONDITION` if basecalling is not enabled
+    //
+    // Since 5.9
+    rpc stream_q_accuracy_histogram(StreamQAccuracyHistogramRequest) returns (stream StreamQAccuracyHistogramResponse) {
+        option idempotency_level = NO_SIDE_EFFECTS;
+    }
+
     // Returns the qscore over time metric represented as datasets (i.e. boxplots).
     //
     // These metrics apply to all the successfully called reads.
@@ -522,6 +538,15 @@ message QScoreHistogramKey {
     };
 
     ReadType read_type = 1;
+    
+    enum BasecallStatus {
+        Any = 0;
+        Skipped = 1;
+        Failed = 2;
+        Passed = 3;
+    }
+
+    BasecallStatus call_status = 2;
 }
 
 message StreamQScoreHistogramRequest {
@@ -610,6 +635,141 @@ message StreamQScoreHistogramResponse {
     // data will be returned
     //
     repeated QScoreHistogramData histogram_data = 4;
+}
+
+
+enum QAccuracyHistogramBucketValueType {
+    // Histogram buckets contain the total number of reads with q-accuracy that fall within the
+    // histogram bucket range
+    QAccuracy_ReadCounts = 0;
+
+    // Histogram buckets contain the total number of basecalled bases contained within reads
+    // that have an average q-accuracy that falls within the histogram bucket range
+    //
+    // Note that all bases for a given read are added to the bucket that corresponds to the average
+    // q-accuracy for that read -- bases are not added to buckets depending on their individual
+    // q-accuracy
+    //
+    QAccuracy_BasecalledBases = 1;
+}
+
+message QAccuracyHistogramKey {
+    enum ReadType {
+        // If duplex basecalling is not enabled, equivalent to `Simplex`
+        // If duplex basecalling is enabled, the sum of `Simplex` and `Duplex`
+        All = 0;
+    
+        // All simplex data
+        //
+        // When duplex basecalling is enabled, this contains reads/bases from both:
+        // - Simplex reads
+        // - Template and complement reads (which are subsequently combined into duplex reads)
+        //
+        Simplex = 1;
+    
+        // Duplex data
+        // Only available if duplex basecalling is enabled
+        Duplex = 2;
+    };
+
+    ReadType read_type = 1;
+
+    enum BasecallStatus {
+        Any = 0;
+        Skipped = 1;
+        Failed = 2;
+        Passed = 3;
+    }
+
+    BasecallStatus call_status = 2;
+}
+
+message StreamQAccuracyHistogramRequest {
+    // The `acquisition_run_id` of the acquisition to obtain data for
+    //
+    // If this is set to the `acquisition_run_id` of an acquisition which is in-progress, then
+    // updates containing the latest histogram data for that acquisition will be streamed regularly
+    // until that acquisition finishes (see `poll_time_seconds` below)
+    //
+    // Otherwise, if this is set to the `acquisition_run_id` of an acquisition which is finished,
+    // and for which final histogram data is available, then the final histogram data for that
+    // acquisition will be returned.  Final histogram data is available until it is cleared.
+    //
+    // Otherwise, if this parameter is not set, or is set to a value which is neither the
+    // `acquisition_run_id` of an acquisition which is in-progress, nor the `acquisition_run_id` of
+    // an acquisition for which final histogram data is available, then this call will fail with the
+    // status `INVALID_ARGUMENT`.
+    //
+    string acquisition_run_id = 1 [(rpc_required) = true];
+
+    // How often to return new histogram data, in seconds
+    //
+    // If not specified, or set to `0`, then the poll time will be set to 60 seconds
+    //
+    // If data is being returned for an acquisition which is in progress, then one update will be
+    // sent when the call is first performed, then subsequently every `poll_time` after that, and
+    // then finally once again when the acquisition finishes.
+    //
+    // Otherwise, if final histogram data is being returned for an acquisition that has already
+    // finished, this parameter has no effect.  The final histogram data will be returned, and the
+    // call will complete.
+    //
+    uint32 poll_time_seconds = 2;
+
+    // The desired q accuracy range which histograms should cover.
+    FloatDataSelection data_selection = 3;
+
+    // What data to accumulate in the histogram buckets
+    //
+    // See `QAccuracyHistogramBucketValueType` for further information about the available options.
+    //
+    QAccuracyHistogramBucketValueType bucket_value_type = 4;
+}
+
+message StreamQAccuracyHistogramResponse {
+    // The data accumulated in the histogram buckets
+    //
+    // See `QAccuracyHistogramBucketValueType` for further information about the possible options.
+    //
+    QAccuracyHistogramBucketValueType bucket_value_type = 1;
+
+    message BucketRange {
+        // The range covered by a bucket
+        //
+        // The range [start, end) is half open (i.e. the start value is included, the end value is
+        // not).
+        float start = 1;
+        float end = 2;
+    }
+
+    // The range covered by each bucket in the histogram data
+    repeated BucketRange bucket_ranges = 2;
+
+    // The range covered by non-empty buckets in the source data
+    BucketRange source_data_range = 3;
+
+    message QAccuracyHistogramData {
+        // The filtering parameters which contributed to this bucket.
+        repeated QAccuracyHistogramKey filtering = 1;
+
+        // Counts for each histogram bucket
+        //
+        // Units and type of accumulated values are as specified in `bucket_value_type`
+        // The range covered by each bucket is as in `bucket_ranges`
+        //
+        repeated uint64 bucket_values = 2;
+
+        // The modal q accuracy, calculated using the `bucket_value_type`
+        float modal_q_accuracy = 3;
+    }
+
+    // The histogram data
+    //
+    // If duplex basecalling is not enabled, then Simplex histogram data will be returned
+    // If duplex basecalling is enabled, then Simplex, Duplex and "All" (i.e. overall) histogram
+    // data will be returned
+    //
+    repeated QAccuracyHistogramData histogram_data = 4;
 }
 
 message AcquisitionOutputKey {

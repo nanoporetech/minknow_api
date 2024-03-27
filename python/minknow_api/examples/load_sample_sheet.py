@@ -36,39 +36,25 @@ ParsedData = Mapping[str, Any]
 # The value is the information read from the sample sheet
 ParsedDataDict = MutableMapping[Optional[str], ParsedData]
 
+KNOWN_FIELDNAMES = {
+    "flow_cell_id",
+    "position_id",
+    "sample_id",
+    "experiment_id",
+    "alias",
+    "type",
+    "barcode",
+    "internal_barcode",
+    "external_barcode",
+    "rapid_barcode",
+    "fip_barcode",
+}
+
 
 # Check that only expected fieldnames are present in sample sheet
-def check_fieldnames(
-    fieldnames: Sequence[str], exception_on_unknown_field: bool
-) -> None:
+def check_fieldnames(fieldnames: Sequence[str]) -> None:
     if not fieldnames:
         raise SampleSheetParseError("No columns in sample sheet")
-
-    valid_fieldnames = {
-        "flow_cell_id",
-        "position_id",
-        "sample_id",
-        "experiment_id",
-        "alias",
-        "type",
-        "barcode",
-        "internal_barcode",
-        "external_barcode",
-        "rapid_barcode",
-        "fip_barcode",
-    }
-
-    unrecognised_fieldnames = [
-        name for name in fieldnames if name not in valid_fieldnames
-    ]
-    if unrecognised_fieldnames:
-        message = "Unrecognised columns in sample sheet: " + ", ".join(
-            "'{}'".format(name) for name in unrecognised_fieldnames
-        )
-        if exception_on_unknown_field:
-            raise SampleSheetParseError(message)
-        else:
-            print(message)
 
     # Check that all fieldnames are unique
     if len(set(fieldnames)) < len(fieldnames):
@@ -197,6 +183,12 @@ def to_sample_type(type_str: Optional[str], line_num: int) -> Optional[int]:
         )
 
 
+# "passenger info" are fields of extra context per barcode. We treat any unknown fields
+# in barcode related rows as passenger info
+def extract_passenger_info(record: Record) -> Mapping[str, str]:
+    return {k: v for k, v in record.items() if k not in KNOWN_FIELDNAMES}
+
+
 # The per-barcode information
 BarcodeInfo = NamedTuple(
     "BarcodeInfo",
@@ -206,6 +198,7 @@ BarcodeInfo = NamedTuple(
         ("lamp_barcode_id", Optional[str]),
         ("alias", str),
         ("type", Optional[int]),
+        ("passenger_info", Mapping[str, str]),
     ],
 )
 
@@ -329,6 +322,8 @@ def parse_record(parsed_data: ParsedDataDict, record: Record, line_num: int):
                 "Line {}: Duplicate alias: '{}'".format(line_num, record["alias"])
             )
 
+    passenger_info = extract_passenger_info(record)
+
     data["barcode_info"][barcode_key] = BarcodeInfo(
         barcode_name=barcode_name,
         barcode_name_internal=barcode_name_internal,
@@ -336,6 +331,7 @@ def parse_record(parsed_data: ParsedDataDict, record: Record, line_num: int):
         # We know the alias exists because we checked in `check_fieldnames`
         alias=record["alias"],
         type=to_sample_type(record.get("type"), line_num),
+        passenger_info=passenger_info,
     )
 
 
@@ -352,6 +348,8 @@ def make_barcode_user_data(barcode_info: BarcodeInfo) -> BarcodeUserData:
         barcode_user_data.alias = barcode_info.alias
     if barcode_info.type:
         barcode_user_data.type = barcode_info.type
+    if barcode_info.passenger_info:
+        barcode_user_data.passenger_info.update(barcode_info.passenger_info)
     return barcode_user_data
 
 
@@ -390,17 +388,14 @@ def convert_parsed_data(parsed_data_dict: ParsedDataDict):
 
 
 # filename csv file name to load
-def load_sample_sheet_csv(filename, exception_on_unknown_field=True):
+def load_sample_sheet_csv(filename):
     # Dictionary containing information per hardware position
     parsed_data_dict = {}
 
     with open(filename, newline="") as csvfile:
         reader = csv.DictReader(csvfile)
 
-        check_fieldnames(
-            fieldnames=reader.fieldnames,
-            exception_on_unknown_field=exception_on_unknown_field,
-        )
+        check_fieldnames(fieldnames=reader.fieldnames)
 
         for record in reader:
             parse_record(parsed_data_dict, record, reader.line_num)

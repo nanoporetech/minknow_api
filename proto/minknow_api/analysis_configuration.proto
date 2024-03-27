@@ -6,6 +6,7 @@ option java_package = "com.nanoporetech.minknow_api";
 option objc_class_prefix = "MKAPI";
 
 import "google/protobuf/duration.proto";
+import "google/protobuf/empty.proto";
 import "google/protobuf/wrappers.proto";
 import "minknow_api/rpc_options.proto";
 
@@ -171,7 +172,6 @@ service AnalysisConfigurationService {
         option idempotency_level = NO_SIDE_EFFECTS;
     }
 
-
     // Get the dynamic analysis configuration - this configuration can be changed during acquisition periods,
     // and is reset at the start of acquisition.
     rpc get_dynamic_analysis_configuration (GetDynamicAnalysisConfigurationRequest) returns (DynamicAnalysisConfiguration) {
@@ -187,6 +187,13 @@ service AnalysisConfigurationService {
 }
 
 message EventDetection {
+    enum DetectionType {
+        MULTITTEST = 0; // Default and older style detector.
+        DMEAN = 1; // New, faster detector.
+    }
+
+    DetectionType type = 19;
+
     // The window size that the tstats are calculated from
     uint32 window_size = 3;
 
@@ -200,6 +207,8 @@ message EventDetection {
     // And what goes up must come down.
     // Once it has detected a peak going up, it will also have to go down by 'peak_height'
     // in order for the peak to be classified as a found event
+    //
+    // Note: only used for MULTITTEST detector.
     double peak_height = 9;
 
     // Conversion factor used to convert from events to bases.
@@ -212,6 +221,8 @@ message EventDetection {
     // This will eliminate "mux_uncertain" events and reads. Note that this will cause starting or
     // stopping unblocking to break events as well (even though the mux does not normally change in
     // this case).
+    //
+    // Note: no longer used.
     bool break_on_mux_changes = 17;
 
     // Control the number of samples MinKNOW will shift mux changes back by in order to align mux changes
@@ -224,6 +235,8 @@ message EventDetection {
     // recorded the change as active. Mux changes are never shifted forwards.
     //
     // A value of 0 will disable shifting of mux changes.
+    //
+    // Note: no longer used.
     uint32 max_mux_change_back_shift = 18;
 }
 
@@ -840,12 +853,16 @@ message BasecallerConfiguration
     // Enable read splitting in guppy.
     //
     // Since 4.5
+    //
+    // Note: Since 5.9 this option has no effect, the basecaller is responsible for deciding when read splitting should be enabled.
     bool enable_read_splitting = 8;
 
     // Override score to use for guppy read splitting. If not specified a default value
     // is used from guppy.
     //
     // Since 4.5
+    //
+    // Note: Since 5.9 this option has no effect, the basecaller is responsible for deciding read splitting score.
     google.protobuf.FloatValue min_score_read_splitting = 9;
 }
 
@@ -1054,6 +1071,10 @@ message WriterConfiguration {
 
             // Number of estimated bases within a batch before it rotates to a new batch
             uint64 bases_per_batch = 15;
+
+            // Do not perform batching based on output
+            // (time-based batching is still performed, if specified)
+            google.protobuf.Empty no_output_based_batching = 17;
         }
 
         // The batch duration, for time-based batching
@@ -1099,6 +1120,10 @@ message WriterConfiguration {
 
             // Number of estimated bases within a batch before it rotates to a new batch
             uint64 bases_per_batch = 6;
+
+            // Do not perform batching based on output
+            // (time-based batching is still performed, if specified)
+            google.protobuf.Empty no_output_based_batching = 11;
         }
 
         // Compress fastq files with gzip compression.
@@ -1149,6 +1174,10 @@ message WriterConfiguration {
 
             // Number of estimated bases within a batch before it rotates to a new batch
             uint64 bases_per_batch = 5;
+
+            // Do not perform batching based on output
+            // (time-based batching is still performed, if specified)
+            google.protobuf.Empty no_output_based_batching = 10;
         }
 
         // If true minknow will only write the primary alignment for each read.
@@ -1198,6 +1227,10 @@ message WriterConfiguration {
 
             // Number of estimated bases within a batch before it rotates to a new batch
             uint64 bases_per_batch = 7;
+            
+            // Do not perform batching based on output
+            // (time-based batching is still performed, if specified)
+            google.protobuf.Empty no_output_based_batching = 9;
         }
 
         // Prevent reads which have successfully basecalled being written to pod5.

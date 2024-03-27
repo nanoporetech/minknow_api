@@ -383,6 +383,7 @@ message GetDeviceInfoResponse {
         MINION_MK1C = 4;
         TRAXION = 5;
         P2_SOLO = 6;
+        MINION_MK1D = 7;
     }
 
     // A unique identifier for the device.

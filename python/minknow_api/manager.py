@@ -16,7 +16,7 @@ import datetime
 import logging
 import os
 import warnings
-from typing import Iterator, Optional, NamedTuple, Sequence
+from typing import Dict, Iterator, Optional, NamedTuple, Sequence, Union
 
 import grpc
 from google.protobuf import timestamp_pb2
@@ -312,11 +312,12 @@ class Manager(ServiceBase):
         credentials: Optional[grpc.ChannelCredentials] = None,
         client_certificate_chain: Optional[bytes] = None,
         client_private_key: Optional[bytes] = None,
+        environ: Union[Dict[str, str], os._Environ] = os.environ,
     ):
         if port is None:
             if (
                 client_certificate_chain is not None
-                or "MINKNOW_API_CLIENT_CERTIFICATE_CHAIN" in os.environ
+                or "MINKNOW_API_CLIENT_CERTIFICATE_CHAIN" in environ
             ):
                 # client certificates won't work on 9502
                 port = 9501
@@ -342,6 +343,7 @@ class Manager(ServiceBase):
                 client_certificate_chain=client_certificate_chain,
                 client_private_key=client_private_key,
                 _warning_stacklevel=1,
+                environ=environ,
             )
         super(Manager, self).__init__(
             minknow_api.manager_service.ManagerService,

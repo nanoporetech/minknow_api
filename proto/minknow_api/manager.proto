@@ -20,6 +20,13 @@ service ManagerService {
     rpc describe_host (DescribeHostRequest) returns (DescribeHostResponse) {
         option idempotency_level = NO_SIDE_EFFECTS;
     }
+    
+    // Get features from the basecaller, for whether the server can support live basecalling with adaptive sampling
+    //
+    // Since 5.9
+    rpc get_basecaller_features (GetBasecallerFeaturesRequest) returns (GetBasecallerFeaturesResponse) {
+        option idempotency_level = NO_SIDE_EFFECTS;
+    }
 
     // List all known positions where flow cells can be inserted.
     //
@@ -451,6 +458,17 @@ message DescribeHostResponse {
      //
      // 
      BasecallingAvailability can_basecall = 6;
+}
+
+message GetBasecallerFeaturesRequest {}
+
+message GetBasecallerFeaturesResponse {
+    // Is live basecalling with adaptive sampling
+    // recommended on this hardware
+    // Currently not recommended for Apple or Mk1C
+    //
+    // Since 5.9
+    bool is_live_basecalling_with_adaptive_sampling_recommended = 1;
 }
 
 enum SimpleProtocolState {

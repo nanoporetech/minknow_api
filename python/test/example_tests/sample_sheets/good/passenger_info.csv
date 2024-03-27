@@ -1,0 +1,3 @@
+flow_cell_id,barcode,alias,type,operator,species
+FC001,barcode01,alias01,test_sample,smooth,
+FC001,barcode02,alias02,positive_control,,alien

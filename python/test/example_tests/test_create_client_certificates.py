@@ -1,3 +1,4 @@
+import datetime
 import logging
 import subprocess
 import sys
@@ -5,6 +6,7 @@ import tempfile
 from pathlib import Path
 
 import grpc
+from cryptography import x509
 from minknow_api import manager_service, instance_pb2
 from mock_server import Server, load_test_ca
 
@@ -85,6 +87,42 @@ def test_client_certs_accepted_by_grpc_self_signed():
             client_cert_chain=client_cert,
             root_certs=client_cert,
         )
+
+
+def test_client_certs_days_valid():
+    """The days-valid option must alter certificate expiry."""
+
+    with tempfile.TemporaryDirectory() as client_certs_dir:
+        client_certs_dir = Path(client_certs_dir)
+        subprocess.run(
+            [
+                sys.executable,
+                str(create_client_certs),
+                str(client_certs_dir / "client"),
+                "--common-name=test client",
+                "--no-key-pass",
+                "--days-valid=1",
+            ],
+            check=True,
+        )
+
+        client_cert_path = client_certs_dir / "client_cert.pem"
+        client_key_path = client_certs_dir / "client_key.pem"
+        assert client_cert_path.exists()
+        assert client_key_path.exists()
+        client_cert = client_cert_path.read_bytes()
+
+        do_certs_test(
+            client_key=client_key_path.read_bytes(),
+            client_cert_chain=client_cert,
+            root_certs=client_cert,
+        )
+
+        # Check that it's valid for just one day (With 10 second tolerance)
+        actual_expiry = x509.load_pem_x509_certificate(client_cert).not_valid_after
+        expected_expiry = datetime.datetime.utcnow() + datetime.timedelta(days=1)
+
+        assert abs(actual_expiry.timestamp() - expected_expiry.timestamp()) < 10
 
 
 def test_client_certs_accepted_by_grpc_with_ca():

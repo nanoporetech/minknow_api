@@ -202,6 +202,7 @@ def main():
     parser.add_argument(
         "--days-valid",
         default=365,
+        type=int,
         help="The number of days the certificate will be valid for",
     )
     parser.add_argument(

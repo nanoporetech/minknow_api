@@ -203,10 +203,41 @@ class TestLoadSampleSheet(unittest.TestCase):
             ],
         )
 
+    def test_passenger_info(self):
+        sample_sheet = load_sample_sheet_csv(
+            sample_sheet_csv_path("good", "passenger_info")
+        )
+        SampleType = BarcodeUserData.SampleType
+
+        self.compare_sample_sheet(
+            sample_sheet,
+            [
+                ParsedSampleSheetEntry(
+                    flow_cell_id="FC001",
+                    position_id=None,
+                    sample_id=None,
+                    experiment_id=None,
+                    barcode_info=[
+                        BarcodeUserData(
+                            barcode_name="barcode01",
+                            alias="alias01",
+                            type=SampleType.test_sample,
+                            passenger_info={"operator": "smooth", "species": ""},
+                        ),
+                        BarcodeUserData(
+                            barcode_name="barcode02",
+                            alias="alias02",
+                            type=SampleType.positive_control,
+                            passenger_info={"species": "alien", "operator": ""},
+                        ),
+                    ],
+                )
+            ],
+        )
+
     def test_bad_column_names(self):
         expected_messages = {
             "no_columns": "No columns in sample sheet",
-            "invalid_columns": "Unrecognised columns in sample sheet: 'a', 'b'",
             "duplicate_columns": "Duplicate columns in sample sheet: 'sample_id'",
             "no_position_information": "Invalid position information in sample sheet. Must have exactly one of 'flow_cell_id' and 'position_id'",
             "both_position_information": "Invalid position information in sample sheet. Must have exactly one of 'flow_cell_id' and 'position_id'",
@@ -226,20 +257,8 @@ class TestLoadSampleSheet(unittest.TestCase):
                 msg="Test file: " + filename,
             ):
                 load_sample_sheet_csv(
-                    sample_sheet_csv_path("bad_column_names", filename),
-                    exception_on_unknown_field=True,
+                    sample_sheet_csv_path("bad_column_names", filename)
                 )
-
-            if filename != "invalid_columns":
-                with self.assertRaisesRegex(
-                    SampleSheetParseError,
-                    "^" + re.escape(message) + "$",
-                    msg="Test file: " + filename,
-                ):
-                    load_sample_sheet_csv(
-                        sample_sheet_csv_path("bad_column_names", filename),
-                        exception_on_unknown_field=False,
-                    )
 
     def test_bad_records(self):
         expected_messages = {
@@ -262,15 +281,6 @@ class TestLoadSampleSheet(unittest.TestCase):
                 msg="Test file: " + filename,
             ):
                 load_sample_sheet_csv(sample_sheet_csv_path("bad_records", filename))
-
-    def test_no_error_on_unknown_fields(self):
-        sample_sheet = load_sample_sheet_csv(
-            sample_sheet_csv_path("bad_column_names", "invalid_columns"),
-            exception_on_unknown_field=False,
-        )
-
-        # Should have an empty sample sheet, since no entries
-        self.assertFalse(sample_sheet)
 
 
 if __name__ == "__main__":

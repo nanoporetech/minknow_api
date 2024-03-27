@@ -12,6 +12,8 @@ __all__ = [
     "ManagerService",
     "DescribeHostRequest",
     "DescribeHostResponse",
+    "GetBasecallerFeaturesRequest",
+    "GetBasecallerFeaturesResponse",
     "FlowCellPosition",
     "FlowCellPositionsRequest",
     "FlowCellPositionsResponse",
@@ -152,6 +154,46 @@ class ManagerService(object):
             raise ArgumentError("Unexpected keyword arguments to describe_host: '{}'".format(", ".join(unused_args)))
 
         return run_with_retry(self._stub.describe_host,
+                              _message, _timeout,
+                              [],
+                              "minknow_api.manager.ManagerService")
+    def get_basecaller_features(self, _message=None, _timeout=None, **kwargs):
+        """Get features from the basecaller, for whether the server can support live basecalling with adaptive sampling
+
+        Since 5.9
+
+        This RPC has no side effects. Calling it will have no effect on the state of the
+        system. It is safe to call repeatedly, or to retry on failure, although there is no
+        guarantee it will return the same information each time.
+
+        Args:
+            _message (minknow_api.manager_pb2.GetBasecallerFeaturesRequest, optional): The message to send.
+                This can be passed instead of the keyword arguments.
+            _timeout (float, optional): The call will be cancelled after this number of seconds
+                if it has not been completed.
+
+        Returns:
+            minknow_api.manager_pb2.GetBasecallerFeaturesResponse
+
+        Note that the returned messages are actually wrapped in a type that collapses
+        submessages for fields marked with ``[rpc_unwrap]``.
+        """
+        if _message is not None:
+            if isinstance(_message, MessageWrapper):
+                _message = _message._message
+            return run_with_retry(self._stub.get_basecaller_features,
+                                  _message, _timeout,
+                                  [],
+                                  "minknow_api.manager.ManagerService")
+
+        unused_args = set(kwargs.keys())
+
+        _message = GetBasecallerFeaturesRequest()
+
+        if len(unused_args) > 0:
+            raise ArgumentError("Unexpected keyword arguments to get_basecaller_features: '{}'".format(", ".join(unused_args)))
+
+        return run_with_retry(self._stub.get_basecaller_features,
                               _message, _timeout,
                               [],
                               "minknow_api.manager.ManagerService")

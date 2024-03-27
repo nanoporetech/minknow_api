@@ -63,6 +63,25 @@ service Basecaller {
         option idempotency_level = NO_SIDE_EFFECTS;
     }
 
+    
+    // Clears run info data for each analysis specified
+    //
+    // Run info data is the data returned by `get_info()`.
+    //
+    // Also clears any persistence data that has been written to disk for those analyses -- this
+    // data will not be available after a restart.
+    //
+    // Run info will not be cleared for analyses which are still in-progress. If an invalid or
+    // in-progress analysis id is specified, that analysis id is ignored.
+    //
+    // Does NOT clear results from analyses (e.g. bam files, reports, etc.)
+    //
+    // Since 5.9
+    //
+    rpc clear_info(ClearInfoRequest) returns (ClearInfoResponse) {
+        option idempotency_level = IDEMPOTENT;
+    }
+
     // Monitors basecalls, returning messages when basecalls are started, stopped or receive
     // progress updates.
     //
@@ -183,10 +202,14 @@ message StartBasecallingRequest {
     analysis_configuration.AlignmentConfiguration alignment_configuration = 11;
 
     // Enable read splitting in guppy
+    //
+    // Note: Since 5.9 this option has no effect, the basecaller is responsible for deciding when read splitting should be enabled.
     bool enable_read_splitting = 13;
 
     // Override score to use for guppy read splitting. If not specified a default value
     // is used from guppy.
+    //
+    // Note: Since 5.9 this option has no effect, the basecaller is responsible for deciding when read splitting should be enabled.
     google.protobuf.FloatValue min_score_read_splitting = 14;
 }
 
@@ -419,6 +442,14 @@ message GetInfoRequest {
 message GetInfoResponse {
     // Information about the requested runs.
     repeated RunInfo runs = 1;
+}
+
+message ClearInfoRequest {
+    repeated string ids = 1;
+}
+
+message ClearInfoResponse {
+
 }
 
 message WatchRequest {
