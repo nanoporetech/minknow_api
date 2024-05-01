@@ -253,6 +253,91 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   _globals['_GENERATERUNREPORTRESPONSE']._serialized_end=8802
   _globals['_PROTOCOLSERVICE']._serialized_start=9834
   _globals['_PROTOCOLSERVICE']._serialized_end=12947
+PlatformQcResult.__doc__ = """Attributes:
+    flow_cell_id:
+        The flow cell id that the pqc was performed for
+    passed:
+        Whether the flow cell passed the platform qc check
+    total_pore_count:
+        Total number of pores that were found on the flow cell, across
+        all muxes.
+"""
+ProtocolRunUserInfo.__doc__ = """Attributes:
+    protocol_group_id:
+        The group which the experiment should be held in.  note: This
+        value could be unset if a user did not specify a group_id when
+        starting the protocol.
+    sample_id:
+        sample_id created by the user
+    barcode_user_info:
+        User supplied info for barcodes
+    user_specified_flow_cell_id:
+        user_specified_flow_cell_id created by the user
+    user_specified_product_code:
+        user_specified_product_code created by the user
+    kit_info:
+        Kit information the user requested
+"""
+BeginProtocolResponse.__doc__ = """Attributes:
+    run_id:
+        UUID generated when the protocol is started, to uniquely
+        represent this protocol instance
+"""
+BeginProtocolRequest.__doc__ = """Attributes:
+    identifier:
+        Specify the protocol with a string containing all the
+        protocol's identifying components, eg:
+        "sequencing/sequencing_MIN106_DNA:FLO-MIN106:SQK-RPB004"
+    components:
+        Specify the protocol providing the identifying components
+        individually, all components are optional. Exactly one
+        protocol should match the given components otherwise and error
+        will be returned
+    user_info:
+        User info options for the protocol
+    offload_location_info:
+        Information about data offload locations to use to store data
+        Since 5.0.
+    target_run_until_criteria:
+        Initial Target Run-Until Criteria to use when starting an
+        acquisition for this protocol. These can be updated during the
+        acquisition using the Run-Until API.  Since 5.3
+    settings:
+        Any settings changed from the defaults specified in the
+        protocol's .toml file.
+"""
+AssociatePostProcessingAnalysisResponse.__doc__ = """Attributes:
+    id:
+        Id of the basecaller.proto post processing task that was
+        triggered, if the post processing analysis was executed
+        immediately (protocol was finished).
+"""
+ProtocolPhaseManagementRequest.__doc__ = """Attributes:
+    set_capabilities:
+        Update the set of capabilities (messages that will be
+        responded to by the protocol).
+    phase:
+        Update the protocol phase.  Leave empty (ie: PHASE_UNKNOWN) to
+        keep the previous phase.
+"""
+RequestOrigin.MinKNOW.__doc__ = """A request from minknow will usually come in the form of something
+ending naturally, or an error occurring where minknow has to take
+action
+
+Attributes:
+    cause:
+        Optional further details on the cause of the request
+"""
+SetPlatformQcResultRequest.__doc__ = """Attributes:
+    protocol_run_id:
+        The protocol_run_id that was given when the pqc run was
+        started
+"""
+BeginPlatformQcResponse.__doc__ = """Attributes:
+    run_id:
+        UUID generated when the protocol is started, to uniquely
+        represent this protocol instance
+"""
 KitInfo.__doc__ = """Attributes:
     sequencing_kit:
         The sequencing kit used to select the protocol e.g. "SQK-
@@ -260,6 +345,47 @@ KitInfo.__doc__ = """Attributes:
     barcode_expansion_kits:
         The expansion barcoding kits that the protocol supports e.g.
         "EXP-NBD104"
+"""
+RequestOrigin.User.__doc__ = """'User' based changes will typically come from calls made by the UI
+such as 'stop_protocol'
+
+Attributes:
+    identity:
+        If available then provide any identity information MinKNOW
+        has about the client that made the RPC request
+"""
+ProtocolPhaseManagementRequest.Capabilities.__doc__ = """Attributes:
+    can_pause:
+        Indicate that the protocol will respond to pause and resume
+        requests.
+    can_trigger_mux_scan:
+        Indicate that the protocol will respond to mux scan requests.
+"""
+OffloadLocationInfo.__doc__ = """Attributes:
+    offload_location_ids:
+        Data offload locations to use to store protocol data,
+        specified using their `location_id`.  Valid `location_id`s can
+        be retrieved using
+        mooneye.offload_manager.list_offload_locations()  If any
+        `offload_location_ids` are specified, then:   - Data is not
+        stored locally   - `offload_location_path` must NOT be set (or
+        must be set to an empty value)      - The
+        `offload_location_ids` indicate that data should be offloaded,
+        rather than        stored locally; the `offload_location_path`
+        is used to set a local storage location.      - If both are
+        set, an error is returned  This requires a running instance of
+        Mooneye  Since 5.0.
+    offload_location_path:
+        Local, e.g., internal / external drive, paths to where the
+        protocol output will be stored.  This setting overrides the
+        default output locations (as set through configuration files
+        and/or the instance service).  If `offload_location_path` is
+        set to a non-empty value, then:  -  `offload_location_ids`
+        MUST be empty      - The `offload_location_ids` indicate that
+        data should be offloaded, rather than        stored locally;
+        the `offload_location_path` is used to set a local storage
+        location.      - If both are set, an error is returned  This
+        does not require a running instance of Mooneye  Since 5.0
 """
 GenerateRunReportResponse.__doc__ = """Attributes:
     protocol_run_id:
@@ -279,57 +405,44 @@ GenerateRunReportResponse.__doc__ = """Attributes:
         input data remain  after this message (excluding of this
         message).
 """
-ListProtocolsRequest.__doc__ = """Attributes:
-    force_reload:
-        If this is false, then will try to use the cached value of the
-        protocol list where possible (still subject to changes in flow
-        cell). If this is true, then will force a reload of the
-        protocol list  Defaults to false
+BarcodeUserData.__doc__ = """Attributes:
+    barcode_name:
+        Barcode name the user data applies to, eg: "barcode02".   Acts
+        as the external barcode name `barcode_name_internal` is  also
+        set for dual barcoding   Acts as the rapid barcode name in
+        lampore barcoding if `lamp_barcode_id` is set
+    barcode_name_internal:
+        The internal barcode name if using dual barcode
+    lamp_barcode_id:
+        Lamp barcode id the user data applies to, eg: "FIP04"
+    alias:
+        User defined string alias for the barcode.
+    type:
+        Sample type grouping for the barcode.
+    passenger_info:
+        Extra context per barcode
 """
-ExternalOffload.__doc__ = """Attributes:
-    offload_ids:
-        The `id`s associated with active external data offloads
-        associated with the protocol The offload status can be queried
-        using `mooneye.offload_manager.watch_offloads()``
+RequestOrigin.ProtocolPhaseManagement.__doc__ = """The protocol script/bream is mainly responsible for making changes via
+protocol_phase_management"""
+StopProtocolRequest.__doc__ = """Attributes:
+    data_action_on_stop:
+        Specify how any running acquisition should be handled when
+        stopping the protocol.  Protocol state will enter
+        PROTOCOL_WAITING_FOR_ACQUISITION whilst any running
+        acquisition is finished.  If a script ends on its own any
+        analysis that was started is stopped, and it is allowed to
+        catchup. If the caller wants to end catchup they can call
+        stop_protocol to end catchup.  Since 1.15
 """
-GetVersionInfoResponse.__doc__ = """From instance.proto  Since 5.6
-
-Attributes:
-    minknow:
-        What minknow version is installed. Split into major, minor and
-        patch versions Also includes the full version as a string,
-        which contain the major, minor and patch numbers as well as if
-        the version is pre-release version (-pre), whether it is a
-        release candidate (-rc#) or whether it is a variant version
-        (i.e. for conferences) (-variant). For non-release builds it
-        also  includes the hash of the commit it is based on, and
-        whether the working copy is different from that has (-dirty)
-    bream:
-        The version of Bream that is installed.  An invalid
-        installation will cause this to return "0.0.0".  Prior to 5.0,
-        this field was called "protocols".  Since 5.0
-    distribution_version:
-        Describes the distribution that this MinKNOW installation is
-        part of, usually this will be the Metapackage version
-        number/identity, this will be "unknown" if the distribution-
-        version hasn't been set. This information is also communicated
-        in the Manager's DaemonMessage in daemon.proto
-    distribution_status:
-        Indicates if the MinKNOW distribution including components
-        such as Bream are stable, unstable or have been modified.
-    protocol_configuration:
-        The version of the protocol configuration files that is
-        installed.  An invalid installation will cause this to return
-        "0.0.0".  Prior to 5.0, this field was called "configuration".
-        Since 5.0
-    installation_type:
-        The installation type of MinKNOW.  The installation type may
-        affect the available features, or the update process.  Since
-        4.1
-    guppy_build_version:
-        Version of guppy MinKNOW was packaged against.  Since 5.0
-    guppy_connected_version:
-        Version of guppy MinKNOW running with.  Since 5.0
+FilteringInfo.__doc__ = """Attributes:
+    pqc_filter:
+        Filter by runs that have platform QC results  Just
+        initialising this message is enough to filter out runs with
+        platform QC results from ones that don't  Further filtering on
+        the platform QC results can be applied by using the fields
+        within PlatformQcFilter
+    protocol_group_id:
+        Filter runs by a specific protocol_group_id
 """
 GenerateRunReportRequest.__doc__ = """Attributes:
     protocol_run_id:
@@ -339,22 +452,34 @@ GenerateRunReportRequest.__doc__ = """Attributes:
         This input data is represented as the data seen in
         report_data.proto
 """
-ListProtocolGroupIdsResponse.__doc__ = """Attributes:
-    protocol_group_ids:
-        A list of protocol group ids used in any protocol started on
-        this instance of minknow.  deprecated and replaced by string
-        protocol_group_id in message ProtocolGroupIdInfo  string data
-        is guaranteed to be ordered by most recent start time, since
-        5.6
-    protocol_group_ids_info:
-        A list of the most recent start time for each protocol group
-        id on this instance of minknow.  guaranteed to be ordered by
-        most recent start time since 5.6
-"""
-BeginPlatformQcResponse.__doc__ = """Attributes:
+GetRunInfoRequest.__doc__ = """Attributes:
     run_id:
-        UUID generated when the protocol is started, to uniquely
-        represent this protocol instance
+        The protocol run to get information about.
+"""
+StartProtocolRequest.__doc__ = """Attributes:
+    identifier:
+        The identifier of the protocol, as provided by
+        list_protocols().
+    args:
+        The arguments to pass to the protocol.
+    user_info:
+        User input describing the protocol.
+    offload_location_info:
+        Information about data offload locations to use to store data
+        Since 5.0.
+    target_run_until_criteria:
+        Initial Target Run-Until Criteria to use when starting an
+        acquisition for this protocol. These can be updated during the
+        acquisition using the Run-Until API.  Since 5.3
+"""
+ProtocolPhaseManagementResponse.__doc__ = """Attributes:
+    action:
+        Requests that the protocol changes phase.  The client should
+        never receive an action type (other than possibly ACTION_NONE)
+        that it has not explicitly opted into via the
+        `ProtocolPhaseManagementRequest.set_capabilities` field.  If
+        this is set to ACTION_NONE, the message should be ignored
+        (this is for future compatibility).
 """
 ProtocolRunInfo.__doc__ = """Attributes:
     run_id:
@@ -445,22 +570,9 @@ ProtocolRunInfo.__doc__ = """Attributes:
     software_versions:
         For storing version numbers to output to run report  Since 5.6
 """
-RequestOrigin.User.__doc__ = """'User' based changes will typically come from calls made by the UI
-such as 'stop_protocol'
-
-Attributes:
-    identity:
-        If available then provide any identity information MinKNOW
-        has about the client that made the RPC request
-"""
-ProtocolPhaseManagementResponse.__doc__ = """Attributes:
-    action:
-        Requests that the protocol changes phase.  The client should
-        never receive an action type (other than possibly ACTION_NONE)
-        that it has not explicitly opted into via the
-        `ProtocolPhaseManagementRequest.set_capabilities` field.  If
-        this is set to ACTION_NONE, the message should be ignored
-        (this is for future compatibility).
+AssociatePostProcessingAnalysisRequest.__doc__ = """Attributes:
+    run_id:
+        Protocol id to associate analysis with:
 """
 Epi2meWorkflowReference.__doc__ = """Attributes:
     id:
@@ -469,148 +581,6 @@ Epi2meWorkflowReference.__doc__ = """Attributes:
     url:
         URL that links to the workflow report. Syntax for a local
         workflow: file:// otherwise: http(s)://
-"""
-BeginProtocolResponse.__doc__ = """Attributes:
-    run_id:
-        UUID generated when the protocol is started, to uniquely
-        represent this protocol instance
-"""
-ProtocolGroupIdInfo.__doc__ = """timestamp for the last activity for experiment ordering since 5.6
-
-Attributes:
-    start_time:
-        Most recent start time for the protocol group id
-"""
-StartProtocolRequest.__doc__ = """Attributes:
-    identifier:
-        The identifier of the protocol, as provided by
-        list_protocols().
-    args:
-        The arguments to pass to the protocol.
-    user_info:
-        User input describing the protocol.
-    offload_location_info:
-        Information about data offload locations to use to store data
-        Since 5.0.
-    target_run_until_criteria:
-        Initial Target Run-Until Criteria to use when starting an
-        acquisition for this protocol. These can be updated during the
-        acquisition using the Run-Until API.  Since 5.3
-"""
-PlatformQcResult.__doc__ = """Attributes:
-    flow_cell_id:
-        The flow cell id that the pqc was performed for
-    passed:
-        Whether the flow cell passed the platform qc check
-    total_pore_count:
-        Total number of pores that were found on the flow cell, across
-        all muxes.
-"""
-AssociatePostProcessingAnalysisRequest.__doc__ = """Attributes:
-    run_id:
-        Protocol id to associate analysis with:
-"""
-AssociatedPostProcessingAnalysis.__doc__ = """Attributes:
-    started_id:
-        Id of analysis if this has been triggered (otherwise empty).
-    start_request:
-        Start request for analysis
-"""
-ProtocolRunUserInfo.__doc__ = """Attributes:
-    protocol_group_id:
-        The group which the experiment should be held in.  note: This
-        value could be unset if a user did not specify a group_id when
-        starting the protocol.
-    sample_id:
-        sample_id created by the user
-    barcode_user_info:
-        User supplied info for barcodes
-    user_specified_flow_cell_id:
-        user_specified_flow_cell_id created by the user
-    user_specified_product_code:
-        user_specified_product_code created by the user
-    kit_info:
-        Kit information the user requested
-"""
-BarcodeUserData.__doc__ = """Attributes:
-    barcode_name:
-        Barcode name the user data applies to, eg: "barcode02".   Acts
-        as the external barcode name `barcode_name_internal` is  also
-        set for dual barcoding   Acts as the rapid barcode name in
-        lampore barcoding if `lamp_barcode_id` is set
-    barcode_name_internal:
-        The internal barcode name if using dual barcode
-    lamp_barcode_id:
-        Lamp barcode id the user data applies to, eg: "FIP04"
-    alias:
-        User defined string alias for the barcode.
-    type:
-        Sample type grouping for the barcode.
-    passenger_info:
-        Extra context per barcode
-"""
-StopProtocolRequest.__doc__ = """Attributes:
-    data_action_on_stop:
-        Specify how any running acquisition should be handled when
-        stopping the protocol.  Protocol state will enter
-        PROTOCOL_WAITING_FOR_ACQUISITION whilst any running
-        acquisition is finished.  If a script ends on its own any
-        analysis that was started is stopped, and it is allowed to
-        catchup. If the caller wants to end catchup they can call
-        stop_protocol to end catchup.  Since 1.15
-"""
-RequestOrigin.RunUntil.__doc__ = """A request made by the run until script due to certain criteria being
-met
-
-Attributes:
-    criteria:
-        What criteria caused the state change
-"""
-RequestOrigin.ProtocolPhaseManagement.__doc__ = """The protocol script/bream is mainly responsible for making changes via
-protocol_phase_management"""
-AssociatePostProcessingAnalysisResponse.__doc__ = """Attributes:
-    id:
-        Id of the basecaller.proto post processing task that was
-        triggered, if the post processing analysis was executed
-        immediately (protocol was finished).
-"""
-StartProtocolResponse.__doc__ = """Attributes:
-    run_id:
-        UUID generated when the protocol is started, to uniquely
-        represent this protocol instance
-"""
-OffloadLocationInfo.__doc__ = """Attributes:
-    offload_location_ids:
-        Data offload locations to use to store protocol data,
-        specified using their `location_id`.  Valid `location_id`s can
-        be retrieved using
-        mooneye.offload_manager.list_offload_locations()  If any
-        `offload_location_ids` are specified, then:   - Data is not
-        stored locally   - `offload_location_path` must NOT be set (or
-        must be set to an empty value)      - The
-        `offload_location_ids` indicate that data should be offloaded,
-        rather than        stored locally; the `offload_location_path`
-        is used to set a local storage location.      - If both are
-        set, an error is returned  This requires a running instance of
-        Mooneye  Since 5.0.
-    offload_location_path:
-        Local, e.g., internal / external drive, paths to where the
-        protocol output will be stored.  This setting overrides the
-        default output locations (as set through configuration files
-        and/or the instance service).  If `offload_location_path` is
-        set to a non-empty value, then:  -  `offload_location_ids`
-        MUST be empty      - The `offload_location_ids` indicate that
-        data should be offloaded, rather than        stored locally;
-        the `offload_location_path` is used to set a local storage
-        location.      - If both are set, an error is returned  This
-        does not require a running instance of Mooneye  Since 5.0
-"""
-ProtocolPhaseManagementRequest.Capabilities.__doc__ = """Attributes:
-    can_pause:
-        Indicate that the protocol will respond to pause and resume
-        requests.
-    can_trigger_mux_scan:
-        Indicate that the protocol will respond to mux scan requests.
 """
 WaitForFinishedRequest.__doc__ = """Attributes:
     run_id:
@@ -626,67 +596,97 @@ WaitForFinishedRequest.__doc__ = """Attributes:
         response returns.  By default the timeout will wait forever.
         Since 1.15
 """
-ProtocolPhaseManagementRequest.__doc__ = """Attributes:
-    set_capabilities:
-        Update the set of capabilities (messages that will be
-        responded to by the protocol).
-    phase:
-        Update the protocol phase.  Leave empty (ie: PHASE_UNKNOWN) to
-        keep the previous phase.
-"""
-GetRunInfoRequest.__doc__ = """Attributes:
-    run_id:
-        The protocol run to get information about.
-"""
-SetPlatformQcResultRequest.__doc__ = """Attributes:
-    protocol_run_id:
-        The protocol_run_id that was given when the pqc run was
-        started
-"""
-RequestOrigin.MinKNOW.__doc__ = """A request from minknow will usually come in the form of something
-ending naturally, or an error occurring where minknow has to take
-action
+RequestOrigin.RunUntil.__doc__ = """A request made by the run until script due to certain criteria being
+met
 
 Attributes:
-    cause:
-        Optional further details on the cause of the request
+    criteria:
+        What criteria caused the state change
+"""
+ExternalOffload.__doc__ = """Attributes:
+    offload_ids:
+        The `id`s associated with active external data offloads
+        associated with the protocol The offload status can be queried
+        using `mooneye.offload_manager.watch_offloads()``
+"""
+AssociatedPostProcessingAnalysis.__doc__ = """Attributes:
+    started_id:
+        Id of analysis if this has been triggered (otherwise empty).
+    start_request:
+        Start request for analysis
+"""
+ListProtocolGroupIdsResponse.__doc__ = """Attributes:
+    protocol_group_ids:
+        A list of protocol group ids used in any protocol started on
+        this instance of minknow.  deprecated and replaced by string
+        protocol_group_id in message ProtocolGroupIdInfo  string data
+        is guaranteed to be ordered by most recent start time, since
+        5.6
+    protocol_group_ids_info:
+        A list of the most recent start time for each protocol group
+        id on this instance of minknow.  guaranteed to be ordered by
+        most recent start time since 5.6
 """
 BeginHardwareCheckResponse.__doc__ = """Attributes:
     run_id:
         UUID generated when the protocol is started, to uniquely
         represent this protocol instance
 """
-FilteringInfo.__doc__ = """Attributes:
-    pqc_filter:
-        Filter by runs that have platform QC results  Just
-        initialising this message is enough to filter out runs with
-        platform QC results from ones that don't  Further filtering on
-        the platform QC results can be applied by using the fields
-        within PlatformQcFilter
-    protocol_group_id:
-        Filter runs by a specific protocol_group_id
+ProtocolGroupIdInfo.__doc__ = """timestamp for the last activity for experiment ordering since 5.6
+
+Attributes:
+    start_time:
+        Most recent start time for the protocol group id
 """
-BeginProtocolRequest.__doc__ = """Attributes:
-    identifier:
-        Specify the protocol with a string containing all the
-        protocol's identifying components, eg:
-        "sequencing/sequencing_MIN106_DNA:FLO-MIN106:SQK-RPB004"
-    components:
-        Specify the protocol providing the identifying components
-        individually, all components are optional. Exactly one
-        protocol should match the given components otherwise and error
-        will be returned
-    user_info:
-        User info options for the protocol
-    offload_location_info:
-        Information about data offload locations to use to store data
-        Since 5.0.
-    target_run_until_criteria:
-        Initial Target Run-Until Criteria to use when starting an
-        acquisition for this protocol. These can be updated during the
-        acquisition using the Run-Until API.  Since 5.3
-    settings:
-        Any settings changed from the defaults specified in the
-        protocol's .toml file.
+GetVersionInfoResponse.__doc__ = """From instance.proto  Since 5.6
+
+Attributes:
+    minknow:
+        What minknow version is installed. Split into major, minor and
+        patch versions Also includes the full version as a string,
+        which contain the major, minor and patch numbers as well as if
+        the version is pre-release version (-pre), whether it is a
+        release candidate (-rc#) or whether it is a variant version
+        (i.e. for conferences) (-variant). For non-release builds it
+        also  includes the hash of the commit it is based on, and
+        whether the working copy is different from that has (-dirty)
+    bream:
+        The version of Bream that is installed.  An invalid
+        installation will cause this to return "0.0.0".  Prior to 5.0,
+        this field was called "protocols".  Since 5.0
+    distribution_version:
+        Describes the distribution that this MinKNOW installation is
+        part of, usually this will be the Metapackage version
+        number/identity, this will be "unknown" if the distribution-
+        version hasn't been set. This information is also communicated
+        in the Manager's DaemonMessage in daemon.proto
+    distribution_status:
+        Indicates if the MinKNOW distribution including components
+        such as Bream are stable, unstable or have been modified.
+    protocol_configuration:
+        The version of the protocol configuration files that is
+        installed.  An invalid installation will cause this to return
+        "0.0.0".  Prior to 5.0, this field was called "configuration".
+        Since 5.0
+    installation_type:
+        The installation type of MinKNOW.  The installation type may
+        affect the available features, or the update process.  Since
+        4.1
+    guppy_build_version:
+        Version of guppy MinKNOW was packaged against.  Since 5.0
+    guppy_connected_version:
+        Version of guppy MinKNOW running with.  Since 5.0
+"""
+StartProtocolResponse.__doc__ = """Attributes:
+    run_id:
+        UUID generated when the protocol is started, to uniquely
+        represent this protocol instance
+"""
+ListProtocolsRequest.__doc__ = """Attributes:
+    force_reload:
+        If this is false, then will try to use the cached value of the
+        protocol list where possible (still subject to changes in flow
+        cell). If this is true, then will force a reload of the
+        protocol list  Defaults to false
 """
 # @@protoc_insertion_point(module_scope)

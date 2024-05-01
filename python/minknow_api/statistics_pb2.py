@@ -198,157 +198,10 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   _globals['_BOXPLOTRESPONSE_BOXPLOTDATASET']._serialized_end=7785
   _globals['_STATISTICSSERVICE']._serialized_start=8260
   _globals['_STATISTICSSERVICE']._serialized_end=9978
-StreamWriterOutputRequest.__doc__ = """Attributes:
-    acquisition_run_id:
-        The acquisition id of the experiment.
-    data_selection:
-        The desired data selection.  The units for all values are
-        `seconds since the start of the experiment`.
-"""
-StreamBiasVoltagesRequest.__doc__ = """Attributes:
-    acquisition_run_id:
-        The acquisition id of the experiment.
-"""
-StreamAcquisitionOutputResponse.FilteredSnapshots.__doc__ = """Attributes:
-    filtering:
-        The filtering parameters which contributed to this bucket.
-"""
-ReadLengthN50Response.__doc__ = """Attributes:
-    n50_data:
-        The N50 return data
-"""
-StreamReadLengthHistogramResponse.__doc__ = """Attributes:
-    read_length_type:
-        The data source for the histograms  Also specifies the units
-        for `data_selection` and `n50`  See `ReadLengthType` for
-        further information about the possible options.
-    bucket_ranges:
-        The range covered by each bucket in the histogram data
-    source_data_end:
-        The right hand edge of the last source bucket which contains
-        data  Measured across all source data, after excluding the
-        reads specified by `discard_outlier_percent` in the stream
-        request.
-    bucket_value_type:
-        The data accumulated in the read length histogram buckets  See
-        `BucketValueType` for further information about the possible
-        options.
-    histogram_data:
-        The histogram data
-"""
-ReadLengthHistogramSplit.__doc__ = """Attributes:
-    read_end_reason:
-        Split returned data by read_end_reason
-"""
-StreamQAccuracyHistogramRequest.__doc__ = """Attributes:
-    acquisition_run_id:
-        The `acquisition_run_id` of the acquisition to obtain data for
-        If this is set to the `acquisition_run_id` of an acquisition
-        which is in-progress, then updates containing the latest
-        histogram data for that acquisition will be streamed regularly
-        until that acquisition finishes (see `poll_time_seconds`
-        below)  Otherwise, if this is set to the `acquisition_run_id`
-        of an acquisition which is finished, and for which final
-        histogram data is available, then the final histogram data for
-        that acquisition will be returned.  Final histogram data is
-        available until it is cleared.  Otherwise, if this parameter
-        is not set, or is set to a value which is neither the
-        `acquisition_run_id` of an acquisition which is in-progress,
-        nor the `acquisition_run_id` of an acquisition for which final
-        histogram data is available, then this call will fail with the
-        status `INVALID_ARGUMENT`.
-    poll_time_seconds:
-        How often to return new histogram data, in seconds  If not
-        specified, or set to `0`, then the poll time will be set to 60
-        seconds  If data is being returned for an acquisition which is
-        in progress, then one update will be sent when the call is
-        first performed, then subsequently every `poll_time` after
-        that, and then finally once again when the acquisition
-        finishes.  Otherwise, if final histogram data is being
-        returned for an acquisition that has already finished, this
-        parameter has no effect.  The final histogram data will be
-        returned, and the call will complete.
-    data_selection:
-        The desired q accuracy range which histograms should cover.
-    bucket_value_type:
-        What data to accumulate in the histogram buckets  See
-        `QAccuracyHistogramBucketValueType` for further information
-        about the available options.
-"""
-StreamQAccuracyHistogramResponse.__doc__ = """Attributes:
-    bucket_value_type:
-        The data accumulated in the histogram buckets  See
-        `QAccuracyHistogramBucketValueType` for further information
-        about the possible options.
-    bucket_ranges:
-        The range covered by each bucket in the histogram data
-    source_data_range:
-        The range covered by non-empty buckets in the source data
-    histogram_data:
-        The histogram data  If duplex basecalling is not enabled, then
-        Simplex histogram data will be returned If duplex basecalling
-        is enabled, then Simplex, Duplex and "All" (i.e. overall)
-        histogram data will be returned
-"""
-StreamDutyTimeResponse.__doc__ = """Attributes:
-    bucket_ranges:
-        The range covered by each entry in state_times
-    channel_states:
-        Map between channel state names, and a list of bucketed duty
-        time data
-"""
-WriterOutputSnapshot.__doc__ = """A snapshot of writer data.
-
-Attributes:
-    seconds:
-        The time the snapshot was collected, in seconds.  Represents
-        the number of seconds since the start of the experiment Will
-        usually stream in minute chunks, so will first see 60, then
-        120 etc
-    writer_output:
-        The writer data for this bucket.
-"""
-StreamDutyTimeRequest.__doc__ = """Attributes:
-    acquisition_run_id:
-        The acquisition id of the experiment.
-    data_selection:
-        The desired data selection.  The units for all values are
-        `seconds since the start of the experiment`.
-"""
-AcquisitionOutputSnapshot.__doc__ = """A snapshot of acquisition output data, for a given set of filtering
-criteria.
-
-Attributes:
-    seconds:
-        The time the snapshot was collected, in seconds.  Represents
-        the number of seconds since the start of the experiment Will
-        usually stream in minute chunks, so will first see 60, then
-        120 etc
-    yield_summary:
-        The yield summary data.
-"""
-StreamEncounteredAcquisitionOutputKeysRequest.__doc__ = """Attributes:
-    acquisition_run_id:
-        The acquisition id of the experiment.
-"""
-TemperaturePacket.Range.__doc__ = """Represents a range of values."""
-AcquisitionOutputSplit.__doc__ = """Attributes:
-    barcode_name:
-        Split data for every individual barcode.
-    alignment_reference:
-        Split data for each individual alignment reference.
-        References are defined in alignment references.
-    alignment_bed_file_region:
-        Split data for each target region.  Target regions are defined
-        in bed files.
-    lamp_barcode_id:
-        Split data for each lamp barcode id.  Lamp barcodes are
-        defined by the active lamp kit.
-    lamp_target_id:
-        Split data for each lamp targets id.  Lamp targets are defined
-        by the active lamp kit.
-    read_end_reason:
-        Split returned data by read_end_reason
+StreamQScoreHistogramResponse.BucketRange.__doc__ = """Attributes:
+    start:
+        The range covered by a bucket  The range [start, end) is half
+        open (i.e. the start value is included, the end value is not).
 """
 ReadLengthN50Response.ReadN50Data.__doc__ = """Attributes:
     estimated_n50:
@@ -356,68 +209,6 @@ ReadLengthN50Response.ReadN50Data.__doc__ = """Attributes:
     basecalled_n50:
         The basecalled N50 value  If the acquisition did/does not have
         live basecalling enabled, this will be 0.0
-"""
-StreamQAccuracyHistogramResponse.QAccuracyHistogramData.__doc__ = """Attributes:
-    filtering:
-        The filtering parameters which contributed to this bucket.
-    bucket_values:
-        Counts for each histogram bucket  Units and type of
-        accumulated values are as specified in `bucket_value_type` The
-        range covered by each bucket is as in `bucket_ranges`
-    modal_q_accuracy:
-        The modal q accuracy, calculated using the `bucket_value_type`
-"""
-StreamTemperatureRequest.__doc__ = """Attributes:
-    period_seconds:
-        How often temperature updates should be sent Defaults to a
-        period of 1 second, if not specified, or set to 0
-    acquisition_run_id:
-        The acquisition id of the experiment.
-    data_selection:
-        The desired data selection.  The units for all values are
-        `seconds since the start of the experiment`.
-"""
-TemperaturePacket.__doc__ = """Attributes:
-    target_temperature:
-        The range is based on the requested target temperature and
-        tolerance.  For example, if the target temperature is 35, and
-        the tolerance is 1 then target temperatures will return as
-        34(min) and 36(max).
-"""
-StreamQScoreHistogramRequest.__doc__ = """Attributes:
-    acquisition_run_id:
-        The `acquisition_run_id` of the acquisition to obtain data for
-        If this is set to the `acquisition_run_id` of an acquisition
-        which is in-progress, then updates containing the latest
-        histogram data for that acquisition will be streamed regularly
-        until that acquisition finishes (see `poll_time_seconds`
-        below)  Otherwise, if this is set to the `acquisition_run_id`
-        of an acquisition which is finished, and for which final
-        histogram data is available, then the final histogram data for
-        that acquisition will be returned.  Final histogram data is
-        available until it is cleared.  Otherwise, if this parameter
-        is not set, or is set to a value which is neither the
-        `acquisition_run_id` of an acquisition which is in-progress,
-        nor the `acquisition_run_id` of an acquisition for which final
-        histogram data is available, then this call will fail with the
-        status `INVALID_ARGUMENT`.
-    poll_time_seconds:
-        How often to return new histogram data, in seconds  If not
-        specified, or set to `0`, then the poll time will be set to 60
-        seconds  If data is being returned for an acquisition which is
-        in progress, then one update will be sent when the call is
-        first performed, then subsequently every `poll_time` after
-        that, and then finally once again when the acquisition
-        finishes.  Otherwise, if final histogram data is being
-        returned for an acquisition that has already finished, this
-        parameter has no effect.  The final histogram data will be
-        returned, and the call will complete.
-    data_selection:
-        The desired q score range which histograms should cover.
-    bucket_value_type:
-        What data to accumulate in the histogram buckets  See
-        `QScoreHistogramBucketValueType` for further information about
-        the available options.
 """
 TemperaturePacket.PromethIONTemperature.__doc__ = """Packet of temperatures appropriate for a PromethION.
 
@@ -428,54 +219,10 @@ Attributes:
         Mean of 12 pixel-blocks temperatures measured with sensors in
         the ASIC.
 """
-StreamAcquisitionOutputResponse.__doc__ = """Attributes:
-    snapshots:
-        Snapshots split by requested filtering parameters.
-"""
-BoxplotResponse.BoxplotDataset.__doc__ = """Attributes:
-    min:
-        Minimum value for any point in the dataset.
-    q25:
-        25th quartile value for all points in the dataset.
-    q50:
-        50th quartile or median value for all points in the dataset.
-    q75:
-        75th quartile value for all points in the dataset.
-    max:
-        Maximum value for any point in the dataset.
-    count:
-        Number of items in this box plot's stats.
-    lower_full_width_half_maximum:
-        Estimated lower value where there is half the data compared to
-        the mode. provides some estimate on the sharpness of the mode
-        peak.
-    mode:
-        Estimated mode for the dataset.
-    upper_full_width_half_maximum:
-        Estimated upper value where there is half the data compared to
-        the mode. provides some estimate on the sharpness of the mode
-        peak.
-"""
-StreamQScoreHistogramResponse.QScoreHistogramData.__doc__ = """Attributes:
-    filtering:
-        The filtering parameters which contributed to this bucket.
-    bucket_values:
-        Counts for each histogram bucket  Units and type of
-        accumulated values are as specified in `bucket_value_type` The
-        range covered by each bucket is as in `bucket_ranges`
-    modal_q_score:
-        The modal q score, calculated using the `bucket_value_type`
-"""
-StreamAcquisitionOutputRequest.__doc__ = """Attributes:
-    acquisition_run_id:
-        The acquisition id of the experiment.
-    data_selection:
-        The desired data selection.  The units for all values are
-        `seconds since the start of the experiment`.
-    filtering:
-        Define filtering parameters for streamed data.
-    split:
-        Define how results are split for returned data.
+GetReadLengthTypesResponse.__doc__ = """Attributes:
+    available_types:
+        Array of the types of bucket for which a histogram is
+        currently available
 """
 StreamReadLengthHistogramRequest.__doc__ = """Attributes:
     acquisition_run_id:
@@ -540,122 +287,6 @@ StreamReadLengthHistogramRequest.__doc__ = """Attributes:
     split:
         Define how results are split for returned data.
 """
-GetReadLengthTypesRequest.__doc__ = """Attributes:
-    acquisition_run_id:
-        The acquisition id of the experiment.
-"""
-ReadLengthN50Request.__doc__ = """Attributes:
-    acquisition_run_id:
-        The `acquisition_run_id` of the acquisition to obtain data for
-"""
-DataSelection.__doc__ = """Specify a desired data selection.  Units for values are as specified
-in the corresponding Request  The actual data selection used may
-differ from the desired one.  They are adjusted in the following
-sequence:   1. All values are set equal to the corresponding desired
-value.  2. Negative `start` or `end` values are fixed up by adding the
-current maximum value to the     specified value      - Negative start
-and end values are only supported for certain requests; typically they
-are        supported for time-series data      - If, after adding the
-current bucket count, the `start` value is still negative, then the
-start value is adjusted to `0`      - If, after adding the current
-bucket count, the `end` value is still negative, or is zero,
-then the data selection is empty      - If data collection is still
-ongoing, then the current bucket count may change between rpc
-calls as more data is collected.  3. Values which are not set, or
-which are set at `0`, are then adjusted to a default value:      -
-`start` and `step` will be set to the minimum valid value      - `end`
-will be set to the maximum valid value  4. Values which are outside of
-the valid range are clamped to the nearest valid value:      - Values
-less than minimum valid value will be set equal to the minimum valid
-value      - Values greater than the maximum valid value will be set
-equal to the maximum valid value  5. Finally, all values are 'rounded'
-to a nearby valid value      - `start` and `step` will be rounded down
-to the first valid value less than or equal to        their current
-values      - `end` will be rounded up to the first valid value that
-is greater than or equal to its        current value      - This means
-that the range that is specified after rounding includes the range
-that was        specified prior to rounding  If (`end` - `start`) is
-not an exact integer multiple of `step`, then the final bucket will
-cover a smaller range than that specified by `step`.  Note also that
-the maximum valid start and end value may not be known if data
-collection is still ongoing -- for example, the maximum valid time for
-time series data.  If this is the case, then the maximum valid value
-will be determined when the experiment ends, and values in use will be
-adjusted accordingly."""
-ReadLengthHistogramKey.__doc__ = """Attributes:
-    read_end_reason:
-        Only return data for the given ReadEndReason.  Special values:
-        - Specify `ReadEndReason::All` to return data for all read end
-        reasons  If unspecified all read end reasons are returned.
-"""
-StreamDutyTimeResponse.ChannelStateData.__doc__ = """Attributes:
-    state_times:
-        How much time (in samples) spent in this channel state, for
-        each bucket
-"""
-StreamQScoreHistogramResponse.__doc__ = """Attributes:
-    bucket_value_type:
-        The data accumulated in the histogram buckets  See
-        `QScoreHistogramBucketValueType` for further information about
-        the possible options.
-    bucket_ranges:
-        The range covered by each bucket in the histogram data
-    source_data_range:
-        The range covered by non-empty buckets in the source data
-    histogram_data:
-        The histogram data  If duplex basecalling is not enabled, then
-        Simplex histogram data will be returned If duplex basecalling
-        is enabled, then Simplex, Duplex and "All" (i.e. overall)
-        histogram data will be returned
-"""
-StreamReadLengthHistogramResponse.ReadLengthHistogramData.__doc__ = """Attributes:
-    filtering:
-        The filtering parameters which contributed to this bucket.
-    bucket_values:
-        Counts for each histogram bucket  Units are as specified in
-        `read_length_type` The range covered by each bucket is as in
-        `bucket_ranges` The type of data accumulated in each bucket is
-        given by `bucket_value_type`
-    n50:
-        The N50 value for the read length data for the selected
-        `read_length_type` and `read_end_reasons`.  Units are as
-        specified by `read_length_type`.  Measured across all source
-        data, after excluding the reads specified by
-        `discard_outlier_percent` in the stream request.
-"""
-StreamReadLengthHistogramResponse.BucketRange.__doc__ = """Attributes:
-    start:
-        The range covered by a bucket Units are as set in
-        `read_length_type`, above  The range [start, end) is half open
-        (i.e. the start value is included, the end value is not).
-"""
-FloatDataSelection.__doc__ = """Specify a desired data selection, using floating point values  The
-actual data selection used may differ from the desired one.  They are
-adjusted in the following sequence:   1. The selection is set equal to
-the desired selection  2. Any selection value that is not set is
-adjusted to its default value:      - `start` and `step` will be set
-to the minimum valid value      - `end` will be set to the maximum
-valid value  3. Values which are outside of the valid range are
-clamped to the nearest valid value:      - Values less than minimum
-valid value will be set equal to the minimum valid value      - Values
-greater than the maximum valid value will be set equal to the maximum
-valid value  4. Finally, all values are 'rounded' to a nearby valid
-value      - `start` and `step` will be rounded down to the first
-valid value less than or equal to        their current values      -
-`end` will be rounded up to the first valid value that is greater than
-or equal to its        current value      - This means that the range
-that is specified after rounding includes the range that was
-specified prior to rounding"""
-GetReadLengthTypesResponse.__doc__ = """Attributes:
-    available_types:
-        Array of the types of bucket for which a histogram is
-        currently available
-"""
-StreamQScoreHistogramResponse.BucketRange.__doc__ = """Attributes:
-    start:
-        The range covered by a bucket  The range [start, end) is half
-        open (i.e. the start value is included, the end value is not).
-"""
 AcquisitionOutputKey.__doc__ = """Attributes:
     barcode_name:
         Only return data for the given barcode.  Special values:   -
@@ -697,6 +328,46 @@ AcquisitionOutputKey.__doc__ = """Attributes:
         - Specify `ReadEndReason::All` to return data for all read end
         reasons  If unspecified all read end reasons are returned.
 """
+AcquisitionOutputSplit.__doc__ = """Attributes:
+    barcode_name:
+        Split data for every individual barcode.
+    alignment_reference:
+        Split data for each individual alignment reference.
+        References are defined in alignment references.
+    alignment_bed_file_region:
+        Split data for each target region.  Target regions are defined
+        in bed files.
+    lamp_barcode_id:
+        Split data for each lamp barcode id.  Lamp barcodes are
+        defined by the active lamp kit.
+    lamp_target_id:
+        Split data for each lamp targets id.  Lamp targets are defined
+        by the active lamp kit.
+    read_end_reason:
+        Split returned data by read_end_reason
+"""
+StreamQScoreHistogramResponse.__doc__ = """Attributes:
+    bucket_value_type:
+        The data accumulated in the histogram buckets  See
+        `QScoreHistogramBucketValueType` for further information about
+        the possible options.
+    bucket_ranges:
+        The range covered by each bucket in the histogram data
+    source_data_range:
+        The range covered by non-empty buckets in the source data
+    histogram_data:
+        The histogram data  If duplex basecalling is not enabled, then
+        Simplex histogram data will be returned If duplex basecalling
+        is enabled, then Simplex, Duplex and "All" (i.e. overall)
+        histogram data will be returned
+"""
+TemperaturePacket.__doc__ = """Attributes:
+    target_temperature:
+        The range is based on the requested target temperature and
+        tolerance.  For example, if the target temperature is 35, and
+        the tolerance is 1 then target temperatures will return as
+        34(min) and 36(max).
+"""
 BoxplotResponse.__doc__ = """Attributes:
     datasets:
         Result boxplots are stored in this array. This is an overview
@@ -704,10 +375,103 @@ BoxplotResponse.__doc__ = """Attributes:
         This includes ALL the basecalled stats from MinKNOW, not just
         updates since previous calls!
 """
-StreamQAccuracyHistogramResponse.BucketRange.__doc__ = """Attributes:
-    start:
-        The range covered by a bucket  The range [start, end) is half
-        open (i.e. the start value is included, the end value is not).
+StreamDutyTimeResponse.__doc__ = """Attributes:
+    bucket_ranges:
+        The range covered by each entry in state_times
+    channel_states:
+        Map between channel state names, and a list of bucketed duty
+        time data
+"""
+StreamQAccuracyHistogramResponse.QAccuracyHistogramData.__doc__ = """Attributes:
+    filtering:
+        The filtering parameters which contributed to this bucket.
+    bucket_values:
+        Counts for each histogram bucket  Units and type of
+        accumulated values are as specified in `bucket_value_type` The
+        range covered by each bucket is as in `bucket_ranges`
+    modal_q_accuracy:
+        The modal q accuracy, calculated using the `bucket_value_type`
+"""
+GetReadLengthTypesRequest.__doc__ = """Attributes:
+    acquisition_run_id:
+        The acquisition id of the experiment.
+"""
+StreamReadLengthHistogramResponse.ReadLengthHistogramData.__doc__ = """Attributes:
+    filtering:
+        The filtering parameters which contributed to this bucket.
+    bucket_values:
+        Counts for each histogram bucket  Units are as specified in
+        `read_length_type` The range covered by each bucket is as in
+        `bucket_ranges` The type of data accumulated in each bucket is
+        given by `bucket_value_type`
+    n50:
+        The N50 value for the read length data for the selected
+        `read_length_type` and `read_end_reasons`.  Units are as
+        specified by `read_length_type`.  Measured across all source
+        data, after excluding the reads specified by
+        `discard_outlier_percent` in the stream request.
+"""
+ReadLengthN50Response.__doc__ = """Attributes:
+    n50_data:
+        The N50 return data
+"""
+FloatDataSelection.__doc__ = """Specify a desired data selection, using floating point values  The
+actual data selection used may differ from the desired one.  They are
+adjusted in the following sequence:   1. The selection is set equal to
+the desired selection  2. Any selection value that is not set is
+adjusted to its default value:      - `start` and `step` will be set
+to the minimum valid value      - `end` will be set to the maximum
+valid value  3. Values which are outside of the valid range are
+clamped to the nearest valid value:      - Values less than minimum
+valid value will be set equal to the minimum valid value      - Values
+greater than the maximum valid value will be set equal to the maximum
+valid value  4. Finally, all values are 'rounded' to a nearby valid
+value      - `start` and `step` will be rounded down to the first
+valid value less than or equal to        their current values      -
+`end` will be rounded up to the first valid value that is greater than
+or equal to its        current value      - This means that the range
+that is specified after rounding includes the range that was
+specified prior to rounding"""
+DataSelection.__doc__ = """Specify a desired data selection.  Units for values are as specified
+in the corresponding Request  The actual data selection used may
+differ from the desired one.  They are adjusted in the following
+sequence:   1. All values are set equal to the corresponding desired
+value.  2. Negative `start` or `end` values are fixed up by adding the
+current maximum value to the     specified value      - Negative start
+and end values are only supported for certain requests; typically they
+are        supported for time-series data      - If, after adding the
+current bucket count, the `start` value is still negative, then the
+start value is adjusted to `0`      - If, after adding the current
+bucket count, the `end` value is still negative, or is zero,
+then the data selection is empty      - If data collection is still
+ongoing, then the current bucket count may change between rpc
+calls as more data is collected.  3. Values which are not set, or
+which are set at `0`, are then adjusted to a default value:      -
+`start` and `step` will be set to the minimum valid value      - `end`
+will be set to the maximum valid value  4. Values which are outside of
+the valid range are clamped to the nearest valid value:      - Values
+less than minimum valid value will be set equal to the minimum valid
+value      - Values greater than the maximum valid value will be set
+equal to the maximum valid value  5. Finally, all values are 'rounded'
+to a nearby valid value      - `start` and `step` will be rounded down
+to the first valid value less than or equal to        their current
+values      - `end` will be rounded up to the first valid value that
+is greater than or equal to its        current value      - This means
+that the range that is specified after rounding includes the range
+that was        specified prior to rounding  If (`end` - `start`) is
+not an exact integer multiple of `step`, then the final bucket will
+cover a smaller range than that specified by `step`.  Note also that
+the maximum valid start and end value may not be known if data
+collection is still ongoing -- for example, the maximum valid time for
+time series data.  If this is the case, then the maximum valid value
+will be determined when the experiment ends, and values in use will be
+adjusted accordingly."""
+StreamWriterOutputRequest.__doc__ = """Attributes:
+    acquisition_run_id:
+        The acquisition id of the experiment.
+    data_selection:
+        The desired data selection.  The units for all values are
+        `seconds since the start of the experiment`.
 """
 TemperaturePacket.MinIONTemperature.__doc__ = """Packet of temperatures appropriate for a MinION.
 
@@ -717,11 +481,79 @@ Attributes:
     heatsink_temperature:
         Temperature as measured by the probe in the minion heatsink.
 """
-StreamDutyTimeResponse.BucketRange.__doc__ = """Attributes:
+ReadLengthN50Request.__doc__ = """Attributes:
+    acquisition_run_id:
+        The `acquisition_run_id` of the acquisition to obtain data for
+"""
+StreamDutyTimeRequest.__doc__ = """Attributes:
+    acquisition_run_id:
+        The acquisition id of the experiment.
+    data_selection:
+        The desired data selection.  The units for all values are
+        `seconds since the start of the experiment`.
+"""
+StreamQAccuracyHistogramResponse.__doc__ = """Attributes:
+    bucket_value_type:
+        The data accumulated in the histogram buckets  See
+        `QAccuracyHistogramBucketValueType` for further information
+        about the possible options.
+    bucket_ranges:
+        The range covered by each bucket in the histogram data
+    source_data_range:
+        The range covered by non-empty buckets in the source data
+    histogram_data:
+        The histogram data  If duplex basecalling is not enabled, then
+        Simplex histogram data will be returned If duplex basecalling
+        is enabled, then Simplex, Duplex and "All" (i.e. overall)
+        histogram data will be returned
+"""
+StreamQAccuracyHistogramResponse.BucketRange.__doc__ = """Attributes:
     start:
-        The range covered by a bucket Values are in seconds  The range
-        [start, end) is half open (i.e. the start value is included,
-        the end value is not).
+        The range covered by a bucket  The range [start, end) is half
+        open (i.e. the start value is included, the end value is not).
+"""
+StreamDutyTimeResponse.ChannelStateData.__doc__ = """Attributes:
+    state_times:
+        How much time (in samples) spent in this channel state, for
+        each bucket
+"""
+ReadLengthHistogramSplit.__doc__ = """Attributes:
+    read_end_reason:
+        Split returned data by read_end_reason
+"""
+StreamAcquisitionOutputResponse.__doc__ = """Attributes:
+    snapshots:
+        Snapshots split by requested filtering parameters.
+"""
+StreamAcquisitionOutputRequest.__doc__ = """Attributes:
+    acquisition_run_id:
+        The acquisition id of the experiment.
+    data_selection:
+        The desired data selection.  The units for all values are
+        `seconds since the start of the experiment`.
+    filtering:
+        Define filtering parameters for streamed data.
+    split:
+        Define how results are split for returned data.
+"""
+StreamEncounteredAcquisitionOutputKeysRequest.__doc__ = """Attributes:
+    acquisition_run_id:
+        The acquisition id of the experiment.
+"""
+WriterOutputSnapshot.__doc__ = """A snapshot of writer data.
+
+Attributes:
+    seconds:
+        The time the snapshot was collected, in seconds.  Represents
+        the number of seconds since the start of the experiment Will
+        usually stream in minute chunks, so will first see 60, then
+        120 etc
+    writer_output:
+        The writer data for this bucket.
+"""
+StreamBiasVoltagesRequest.__doc__ = """Attributes:
+    acquisition_run_id:
+        The acquisition id of the experiment.
 """
 StreamBoxplotRequest.__doc__ = """Attributes:
     acquisition_run_id:
@@ -751,5 +583,173 @@ StreamBoxplotRequest.__doc__ = """Attributes:
         stats update rate in MinKNOW - please see
         basecalled_stats_refresh_rate_seconds in the configs (set to 1
         second in MinKNOW 3.2).  If unspecified, defaults to 1 minute.
+"""
+StreamTemperatureRequest.__doc__ = """Attributes:
+    period_seconds:
+        How often temperature updates should be sent Defaults to a
+        period of 1 second, if not specified, or set to 0
+    acquisition_run_id:
+        The acquisition id of the experiment.
+    data_selection:
+        The desired data selection.  The units for all values are
+        `seconds since the start of the experiment`.
+"""
+StreamDutyTimeResponse.BucketRange.__doc__ = """Attributes:
+    start:
+        The range covered by a bucket Values are in seconds  The range
+        [start, end) is half open (i.e. the start value is included,
+        the end value is not).
+"""
+BoxplotResponse.BoxplotDataset.__doc__ = """Attributes:
+    min:
+        Minimum value for any point in the dataset.
+    q25:
+        25th quartile value for all points in the dataset.
+    q50:
+        50th quartile or median value for all points in the dataset.
+    q75:
+        75th quartile value for all points in the dataset.
+    max:
+        Maximum value for any point in the dataset.
+    count:
+        Number of items in this box plot's stats.
+    lower_full_width_half_maximum:
+        Estimated lower value where there is half the data compared to
+        the mode. provides some estimate on the sharpness of the mode
+        peak.
+    mode:
+        Estimated mode for the dataset.
+    upper_full_width_half_maximum:
+        Estimated upper value where there is half the data compared to
+        the mode. provides some estimate on the sharpness of the mode
+        peak.
+"""
+ReadLengthHistogramKey.__doc__ = """Attributes:
+    read_end_reason:
+        Only return data for the given ReadEndReason.  Special values:
+        - Specify `ReadEndReason::All` to return data for all read end
+        reasons  If unspecified all read end reasons are returned.
+"""
+StreamReadLengthHistogramResponse.BucketRange.__doc__ = """Attributes:
+    start:
+        The range covered by a bucket Units are as set in
+        `read_length_type`, above  The range [start, end) is half open
+        (i.e. the start value is included, the end value is not).
+"""
+StreamReadLengthHistogramResponse.__doc__ = """Attributes:
+    read_length_type:
+        The data source for the histograms  Also specifies the units
+        for `data_selection` and `n50`  See `ReadLengthType` for
+        further information about the possible options.
+    bucket_ranges:
+        The range covered by each bucket in the histogram data
+    source_data_end:
+        The right hand edge of the last source bucket which contains
+        data  Measured across all source data, after excluding the
+        reads specified by `discard_outlier_percent` in the stream
+        request.
+    bucket_value_type:
+        The data accumulated in the read length histogram buckets  See
+        `BucketValueType` for further information about the possible
+        options.
+    histogram_data:
+        The histogram data
+"""
+StreamQScoreHistogramResponse.QScoreHistogramData.__doc__ = """Attributes:
+    filtering:
+        The filtering parameters which contributed to this bucket.
+    bucket_values:
+        Counts for each histogram bucket  Units and type of
+        accumulated values are as specified in `bucket_value_type` The
+        range covered by each bucket is as in `bucket_ranges`
+    modal_q_score:
+        The modal q score, calculated using the `bucket_value_type`
+"""
+StreamAcquisitionOutputResponse.FilteredSnapshots.__doc__ = """Attributes:
+    filtering:
+        The filtering parameters which contributed to this bucket.
+"""
+StreamQAccuracyHistogramRequest.__doc__ = """Attributes:
+    acquisition_run_id:
+        The `acquisition_run_id` of the acquisition to obtain data for
+        If this is set to the `acquisition_run_id` of an acquisition
+        which is in-progress, then updates containing the latest
+        histogram data for that acquisition will be streamed regularly
+        until that acquisition finishes (see `poll_time_seconds`
+        below)  Otherwise, if this is set to the `acquisition_run_id`
+        of an acquisition which is finished, and for which final
+        histogram data is available, then the final histogram data for
+        that acquisition will be returned.  Final histogram data is
+        available until it is cleared.  Otherwise, if this parameter
+        is not set, or is set to a value which is neither the
+        `acquisition_run_id` of an acquisition which is in-progress,
+        nor the `acquisition_run_id` of an acquisition for which final
+        histogram data is available, then this call will fail with the
+        status `INVALID_ARGUMENT`.
+    poll_time_seconds:
+        How often to return new histogram data, in seconds  If not
+        specified, or set to `0`, then the poll time will be set to 60
+        seconds  If data is being returned for an acquisition which is
+        in progress, then one update will be sent when the call is
+        first performed, then subsequently every `poll_time` after
+        that, and then finally once again when the acquisition
+        finishes.  Otherwise, if final histogram data is being
+        returned for an acquisition that has already finished, this
+        parameter has no effect.  The final histogram data will be
+        returned, and the call will complete.
+    data_selection:
+        The desired q accuracy range which histograms should cover.
+    bucket_value_type:
+        What data to accumulate in the histogram buckets  See
+        `QAccuracyHistogramBucketValueType` for further information
+        about the available options.
+"""
+TemperaturePacket.Range.__doc__ = """Represents a range of values."""
+AcquisitionOutputSnapshot.__doc__ = """A snapshot of acquisition output data, for a given set of filtering
+criteria.
+
+Attributes:
+    seconds:
+        The time the snapshot was collected, in seconds.  Represents
+        the number of seconds since the start of the experiment Will
+        usually stream in minute chunks, so will first see 60, then
+        120 etc
+    yield_summary:
+        The yield summary data.
+"""
+StreamQScoreHistogramRequest.__doc__ = """Attributes:
+    acquisition_run_id:
+        The `acquisition_run_id` of the acquisition to obtain data for
+        If this is set to the `acquisition_run_id` of an acquisition
+        which is in-progress, then updates containing the latest
+        histogram data for that acquisition will be streamed regularly
+        until that acquisition finishes (see `poll_time_seconds`
+        below)  Otherwise, if this is set to the `acquisition_run_id`
+        of an acquisition which is finished, and for which final
+        histogram data is available, then the final histogram data for
+        that acquisition will be returned.  Final histogram data is
+        available until it is cleared.  Otherwise, if this parameter
+        is not set, or is set to a value which is neither the
+        `acquisition_run_id` of an acquisition which is in-progress,
+        nor the `acquisition_run_id` of an acquisition for which final
+        histogram data is available, then this call will fail with the
+        status `INVALID_ARGUMENT`.
+    poll_time_seconds:
+        How often to return new histogram data, in seconds  If not
+        specified, or set to `0`, then the poll time will be set to 60
+        seconds  If data is being returned for an acquisition which is
+        in progress, then one update will be sent when the call is
+        first performed, then subsequently every `poll_time` after
+        that, and then finally once again when the acquisition
+        finishes.  Otherwise, if final histogram data is being
+        returned for an acquisition that has already finished, this
+        parameter has no effect.  The final histogram data will be
+        returned, and the call will complete.
+    data_selection:
+        The desired q score range which histograms should cover.
+    bucket_value_type:
+        What data to accumulate in the histogram buckets  See
+        `QScoreHistogramBucketValueType` for further information about
+        the available options.
 """
 # @@protoc_insertion_point(module_scope)

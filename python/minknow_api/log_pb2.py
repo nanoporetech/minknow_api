@@ -62,25 +62,6 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   _globals['_COLLECTPINGSRESPONSE']._serialized_end=966
   _globals['_LOGSERVICE']._serialized_start=1269
   _globals['_LOGSERVICE']._serialized_end=1665
-GetUserMessagesRequest.__doc__ = """Attributes:
-    include_old_messages:
-        If set, any messages which have already been sent to listeners
-        will be sent to the new stream again, before new messages are
-        sent.  If not specified - the default will not send messages
-        that were sent previously.  note: there is a limit on how many
-        messages are recorded for replay.
-"""
-CollectPingsRequest.__doc__ = """Attributes:
-    collected_ping_file:
-        Any pings that are queued to be sent will be collected into a
-        zip file and written to this location. This location must be
-        in a folder writable by minknow. If the file name does not end
-        with ".zip", minknow will append ".zip" to the provided file
-        name.
-    include_previously_colleced_pings:
-        Normally previously collected pings are ignored, but by
-        setting this they will be included. Defaults to False.
-"""
 SendPingRequest.__doc__ = """Since 5.0
 
 Attributes:
@@ -103,6 +84,25 @@ SendUserMessageRequest.__doc__ = """Attributes:
     extra_data:
         Any extra data associated with the user message, as a map from
         key to data.
+"""
+GetUserMessagesRequest.__doc__ = """Attributes:
+    include_old_messages:
+        If set, any messages which have already been sent to listeners
+        will be sent to the new stream again, before new messages are
+        sent.  If not specified - the default will not send messages
+        that were sent previously.  note: there is a limit on how many
+        messages are recorded for replay.
+"""
+CollectPingsRequest.__doc__ = """Attributes:
+    collected_ping_file:
+        Any pings that are queued to be sent will be collected into a
+        zip file and written to this location. This location must be
+        in a folder writable by minknow. If the file name does not end
+        with ".zip", minknow will append ".zip" to the provided file
+        name.
+    include_previously_colleced_pings:
+        Normally previously collected pings are ignored, but by
+        setting this they will be included. Defaults to False.
 """
 UserMessage.__doc__ = """Attributes:
     time:

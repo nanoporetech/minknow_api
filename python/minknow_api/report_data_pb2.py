@@ -42,8 +42,6 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   _globals['_HOST']._serialized_end=1862
   _globals['_REPORTDATA']._serialized_start=1865
   _globals['_REPORTDATA']._serialized_end=2181
-Host.__doc__ = """This is a subset of the information available from the describe_host()
-call"""
 AcquistionReportData.__doc__ = """This is spelt incorrectly (should be AcquisitionReportData)
 
 Attributes:
@@ -73,4 +71,6 @@ Attributes:
     report_data_generation_time:
         The time at which the report data was generated (UTC)
 """
+Host.__doc__ = """This is a subset of the information available from the describe_host()
+call"""
 # @@protoc_insertion_point(module_scope)

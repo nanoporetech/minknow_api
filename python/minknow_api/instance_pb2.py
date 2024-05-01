@@ -97,6 +97,15 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   _globals['_STREAMINSTANCEACTIVITYRESPONSE_FLOWCELLHEALTH_CHANNELSTATEPERCENTAGESENTRY']._serialized_end=2682
   _globals['_INSTANCESERVICE']._serialized_start=2701
   _globals['_INSTANCESERVICE']._serialized_end=3857
+OutputDirectories.__doc__ = """Attributes:
+    output:
+        The base output directory. Anything that is output to files is
+        branched from this directory.
+    log:
+        Directory where logs will be stored.
+    reads:
+        Base directory where reads will be outputted.
+"""
 N50.__doc__ = """Attributes:
     n50:
         N50 data, in basecalled bases  This value is only streamed for
@@ -139,6 +148,20 @@ StreamInstanceActivityResponse.__doc__ = """Attributes:
 GetMachineIdResponse.__doc__ = """Attributes:
     machine_id:
         The machine_id MinKNOW uses for this host.
+"""
+BasecallSpeed.__doc__ = """Attributes:
+    mean_basecall_speed:
+        Mean basecall speed, in bases per second.  This value is only
+        streamed for acquisitions where basecalling is enabled.  The
+        value reported here is the value stored in last completed
+        basecall boxplot bucket Each boxplot bucket covers a duration
+        of `boxplot_time_coverage_in_minutes`
+"""
+StreamDiskSpaceInfoRequest.__doc__ = """Attributes:
+    period:
+        Disk space information will be streamed with this value
+        determining the period in seconds between updates. A period of
+        0 is invalid
 """
 DeviceInfo.__doc__ = """Attributes:
     device_state:
@@ -193,23 +216,6 @@ Attributes:
     guppy_connected_version:
         Version of guppy MinKNOW running with.  Since 5.0
 """
-BasecallSpeed.__doc__ = """Attributes:
-    mean_basecall_speed:
-        Mean basecall speed, in bases per second.  This value is only
-        streamed for acquisitions where basecalling is enabled.  The
-        value reported here is the value stored in last completed
-        basecall boxplot bucket Each boxplot bucket covers a duration
-        of `boxplot_time_coverage_in_minutes`
-"""
-OutputDirectories.__doc__ = """Attributes:
-    output:
-        The base output directory. Anything that is output to files is
-        branched from this directory.
-    log:
-        Directory where logs will be stored.
-    reads:
-        Base directory where reads will be outputted.
-"""
 FilesystemDiskSpaceInfo.__doc__ = """disk-usage information for one file-system
 
 Attributes:
@@ -241,11 +247,5 @@ Attributes:
     file_types_stored:
         A list of what types of file MinKNOW stores on this file-
         system, eg: reads, logs, intermediate-files, etc.
-"""
-StreamDiskSpaceInfoRequest.__doc__ = """Attributes:
-    period:
-        Disk space information will be streamed with this value
-        determining the period in seconds between updates. A period of
-        0 is invalid
 """
 # @@protoc_insertion_point(module_scope)

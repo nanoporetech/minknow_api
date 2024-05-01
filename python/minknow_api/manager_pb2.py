@@ -261,23 +261,118 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   _globals['_SETFEATURESRESPONSE']._serialized_end=11506
   _globals['_MANAGERSERVICE']._serialized_start=11889
   _globals['_MANAGERSERVICE']._serialized_end=15918
-CreateDirectoryResponse.__doc__ = """Attributes:
-    path:
-        The path to the created directory.
+GetFlowCellTypesResponse.__doc__ = """Response message for `ManagerService.get_flow_cell_types`.
+
+Attributes:
+    types:
+        The flow cell types.
+"""
+GetFlowCellTypesResponse.Info.__doc__ = """Information about a flow cell type.
+
+Attributes:
+    product_code:
+        The product code for the flow cell type.  This is the user-
+        visible name for the flow cell type. It is the name used to
+        order flow cells, and is also displayed on the packaging.
+        While most product codes are 10 characters, be aware that
+        longer product codes can exist and have been used in the past.
+        Example: "FLO-MIN106".
+    connector_type:
+        The connector type of this flow cell type.  This determines
+        which flow cell positions it is possible to insert this flow
+        cell into. The connector type for a given flow cell position
+        can be determined using
+        `minknow_api.device.DeviceService.get_device_state`.  This
+        will never be ``FCCON_NOT_SET``.
+    cannot_live_basecall:
+        Indicates that live basecalling is not possible on the flow
+        cell.  Note that almost all flow cell types can be basecalled
+        on: that is why this indicates a negative (saving some bytes
+        on the wire by allowing the common case of basecalling being
+        possible to be omitted entirely).
+"""
+CreateDeveloperApiTokenResponse.__doc__ = """Attributes:
+    id:
+        Unique ID assigned to the token for identification purposes.
+        Not valid as an authentication token.
+    token:
+        Created token, available to be used with minknow API's
+        immediately.
 """
 GetLampKitInfoResponse.__doc__ = """Attributes:
     lamp_kits:
         Lamp kit names
 """
-GetSequencingKitsResponse.__doc__ = """Response message for `ManagerService.get_sequencing_kits`.
+FlowCellPosition.RpcPorts.__doc__ = """Attributes:
+    secure:
+        A port providing the standard gRPC protocol over TLS
+    secure_grpc_web:
+        A port providing the gRPC-Web protocol over TLS
+"""
+GetAlignmentReferenceInformationResponse.__doc__ = """Attributes:
+    estimated_load_time_seconds:
+        Estimated load time of the reference in seconds.
+    estimated_reference_size_bases:
+        Estimated size of the reference file in bases.
+    recommended_live_usage:
+        Does the reference file fit within the recommended live usage
+        memory size?  This uses an estimate of how much memory a
+        reference may use when running in guppy and compares to the
+        amount of memory in the sequencer. It does not account for
+        whether the reference will run in real time.
+"""
+RemoveSimulatedDeviceRequest.__doc__ = """Attributes:
+    name:
+        The name of the simulated device to be removed
+"""
+FindProtocolsResponse.Protocol.__doc__ = """Attributes:
+    identifier:
+        An identifying string for protocol, of the form:
+        LOCATION:relative/path/to/protocol  The identifier uniquely
+        identifies the protocol.
+    requires_flow_cell_product_code:
+        Whether the protocol requires a flow cell product code in
+        order to start.
+    requires_sequencing_kit:
+        Whether the protocol requires a sequencing kit in order to
+        start.
+"""
+ResetPositionRequest.__doc__ = """Attributes:
+    positions:
+        The names of positions to restart.
+    force:
+        Force the software to be restarted even when it appears to be
+        in a healthy state (ie: STATE_RUNNING).
+"""
+AssociationDeviceCodeRequest.__doc__ = """Offline association is now the default workflow  The following are
+therefore reserved/deprecated
 
 Attributes:
-    kits:
-        The known sequencing kits.
-    barcoding_expansion_kits:
-        The possible barcoding expansion kits.  These are kits that
-        can be used in combination with certain sequencing kits to add
-        (or extend) barcoding functionality.
+    position_name:
+        The flow cell position to get the association code/key for.
+        If this is omitted, the code/key for the sequencing device as
+        a whole is returned.  Note that this cannot be omitted if
+        MinKNOW is installed on a PC (as opposed to a sequencing
+        device). It should be omitted if (and only if) the data
+        returned from `describe_host` has its ``needs_association``
+        field set to true.  Passing a integrated flow cell position
+        will return the code/key for the whole sequencing device.
+"""
+CreateDirectoryResponse.__doc__ = """Attributes:
+    path:
+        The path to the created directory.
+"""
+FlowCellPositionsResponse.__doc__ = """Attributes:
+    total_count:
+        How many positions are available in total.  This is the same
+        in every message returned from a single call, and allows the
+        caller to easily see how many further positions might be in
+        subsequent messages.
+    positions:
+        Known flow cell positions.  Note that not all positions listed
+        here are necessarily available. In particular, integrated flow
+        cell positions (eg: on GridIONs or PromethIONs) will always be
+        listed.
 """
 DescribeHostResponse.__doc__ = """Attributes:
     product_code:
@@ -332,201 +427,6 @@ DescribeHostResponse.__doc__ = """Attributes:
     can_basecall:
         Whether the device can currently provide basecalling
 """
-CreateDeveloperApiTokenResponse.__doc__ = """Attributes:
-    id:
-        Unique ID assigned to the token for identification purposes.
-        Not valid as an authentication token.
-    token:
-        Created token, available to be used with minknow API's
-        immediately.
-"""
-FeatureList.__doc__ = """Attributes:
-    feature_flags:
-        feature_flags is a special value  If false, turns off all
-        other feature flags If true, allows individual flags to be
-        enabled and disabled
-"""
-GetBarcodeKeysResponse.__doc__ = """Attributes:
-    barcode_keys:
-        Returned barcode keys.
-    lamp_keys:
-        Returned lamp barcode ids.
-    combined_keys:
-        Combined barcode and lamp keys.  Returned keys are joined
-        strings of all requested barcode kits, giving the caller a
-        unique string to identify each barcode pair.  eg. if both a
-        lamp kit + barcode kit are specified, NxM barcode keys are
-        returned:  - barcode01_lamp01  - barcode01_lamp02  -
-        barcode01_lamp03  - barcode02_lamp01  - barcode02_lamp02  -
-        barcode02_lamp03
-"""
-GetAlignmentReferenceInformationRequest.__doc__ = """Attributes:
-    path:
-        The full path of the alignment reference.  Should be a .fasta,
-        or .mmi file.
-"""
-FlowCellPosition.RpcPorts.__doc__ = """Attributes:
-    secure:
-        A port providing the standard gRPC protocol over TLS
-    secure_grpc_web:
-        A port providing the gRPC-Web protocol over TLS
-"""
-AssociationDeviceCodeRequest.__doc__ = """Offline association is now the default workflow  The following are
-therefore reserved/deprecated
-
-Attributes:
-    position_name:
-        The flow cell position to get the association code/key for.
-        If this is omitted, the code/key for the sequencing device as
-        a whole is returned.  Note that this cannot be omitted if
-        MinKNOW is installed on a PC (as opposed to a sequencing
-        device). It should be omitted if (and only if) the data
-        returned from `describe_host` has its ``needs_association``
-        field set to true.  Passing a integrated flow cell position
-        will return the code/key for the whole sequencing device.
-"""
-ListSettingsForProtocolResponse.__doc__ = """Attributes:
-    protocol_settings:
-        Any protocol settings not covered by the above structures, for
-        example those required for custom-scripts.
-"""
-ListSettingsForProtocolRequest.__doc__ = """Attributes:
-    identifier:
-        specify the protocol with a string containing all the
-        protocol's identifying components, eg:
-        "sequencing/sequencing_MIN106_DNA:FLO-MIN106:SQK-RPB004"
-    components:
-        specify the protocol providing the identifying components
-        individually. All components are optional, if more than one
-        protocol matches given strings, information about the first
-        will be returned.
-    flow_cell_connector:
-        The flow-cell connector type identifies the type of hardware
-        and is used to identify the correct protocol. The flow-cell
-        connector types applicable to the device are listed by the
-        get_flow_cell_types rpc in this service and the
-        get_device_state rpc in the device service.
-"""
-FindProtocolsResponse.Protocol.__doc__ = """Attributes:
-    identifier:
-        An identifying string for protocol, of the form:
-        LOCATION:relative/path/to/protocol  The identifier uniquely
-        identifies the protocol.
-    requires_flow_cell_product_code:
-        Whether the protocol requires a flow cell product code in
-        order to start.
-    requires_sequencing_kit:
-        Whether the protocol requires a sequencing kit in order to
-        start.
-"""
-CreateDeveloperApiTokenRequest.__doc__ = """Attributes:
-    name:
-        User facing name describing the token.
-    expiry:
-        Optional expiry time for the token.
-"""
-RevokeDeveloperApiTokenRequest.__doc__ = """Attributes:
-    id:
-        The id passed back from [CreateDeveloperApiTokenRequest] or
-        [DeveloperApiToken].
-"""
-ListSettingsForProtocolResponse.RunOptions.__doc__ = """Run options
-
-Attributes:
-    active_channel_selection:
-         bool
-    mux_scan_period:
-         in hours
-"""
-GetAlignmentReferenceInformationResponse.__doc__ = """Attributes:
-    estimated_load_time_seconds:
-        Estimated load time of the reference in seconds.
-    estimated_reference_size_bases:
-        Estimated size of the reference file in bases.
-    recommended_live_usage:
-        Does the reference file fit within the recommended live usage
-        memory size?  This uses an estimate of how much memory a
-        reference may use when running in guppy and compares to the
-        amount of memory in the sequencer. It does not account for
-        whether the reference will run in real time.
-"""
-AddSimulatedDeviceRequest.__doc__ = """Attributes:
-    name:
-        The name of the position, this must be unique and the correct
-        format:  For MinION Mk1B and Mk1C: "MS" followed by five
-        digits, eg: "MS12345". For GridION: "GS" followed by five
-        digits, eg: "GS12345". For P2 Solo: "P2S_" followed by five
-        digits, and then "-A" or "-B" eg: "P2S_12345-A".  PromethION
-        and P2 Solo position-names have no format restriction, but
-        must be unique. It is strongly recommended to follow standard
-        naming conventions:  For PromethION: start with "1A" and then
-        increase the number and/or the letter as you add more
-        positions. For P2 Solo: use "P2S_00000-A" and "P2S_00000-B"
-        (these fit the format of real P2 Solo devices, but do not
-        correspond to any real device).  Future versions might
-        constrain PromethION and P2 Solo device names. Using the above
-        suggestions should ensure that your code will continue to
-        work.  Note that MinKNOW Core 5.5 and earlier required the P2
-        Solo device name to be "P2S" followed by four digits. This is
-        no longer recommended.
-    type:
-        The type of the simulated device to create.  If left at
-        default (AUTO), then a sensible default device type is
-        selected.
-"""
-GetFlowCellTypesResponse.__doc__ = """Response message for `ManagerService.get_flow_cell_types`.
-
-Attributes:
-    types:
-        The flow cell types.
-"""
-FlowCellPosition.Location.__doc__ = """Attributes:
-    x:
-        The column (counting from 0, left-to-right) of the flow cell
-        position on the sequencing unit when viewed from above/in
-        front.
-    y:
-        The row (counting from 0, top-to-bottom) of the flow cell
-        position on the sequencing unit when viewed from above/in
-        front.
-"""
-BasecallerApiResponse.__doc__ = """Attributes:
-    secure:
-        The port to use to access the minknow_api.basecaller API using
-        the standard gRPC protocol over TLS
-    secure_grpc_web:
-        The port to use to access the minknow_api.basecaller API using
-        the gRPC-Web protocol over TLS
-"""
-CreateDirectoryRequest.__doc__ = """Attributes:
-    parent_path:
-        The path at which to create the directory.  This must exist,
-        be a directory, and be within the protocol output directory.
-        This can be determined via calls to
-        list_protocol_output_dir_files().
-    name:
-        The name of the directory to create.  This must be a single
-        path component (ie: it cannot contain '/' or '\'). There may
-        be other restrictions on valid characters, depending on the
-        operating system.
-"""
-LocalAuthenticationTokenPathResponse.__doc__ = """Attributes:
-    path:
-        The full path of the local authentication token
-"""
-ListSettingsForProtocolResponse.Output.__doc__ = """Output
-
-Attributes:
-    read_filtering_min_duplex_qscore:
-        Since 5.8
-"""
-AssociationDeviceCodeResponse.__doc__ = """Attributes:
-    code:
-        The code required to associate the device with an account.  If
-        the request had `offline` set, this code is suitable for use
-        in the customer portal offline association page. Otherwise, it
-        is suitable for the online association APIs.
-"""
 WatchFlowCellPositionsResponse.__doc__ = """Each flow cell position will first be listed in `additions`. After
 that, it may appear in `changes` in zero or more messages. Then, it
 may appear in `removals` once, after which it will either never appear
@@ -553,60 +453,27 @@ Attributes:
         never removed (if they become unavailable, this will be noted
         in the `changes` field).
 """
-StreamDiskSpaceInfoRequest.__doc__ = """Attributes:
-    period:
-        Disk space information will be streamed with this value
-        determining the period in seconds between updates. A period of
-        0 is invalid
+GetBasecallerFeaturesResponse.__doc__ = """Attributes:
+    is_live_basecalling_with_adaptive_sampling_recommended:
+        Is live basecalling with adaptive sampling recommended on this
+        hardware Currently not recommended for Apple or Mk1C  Since
+        5.9
 """
-GetGuppyInfoResponse.__doc__ = """Attributes:
-    port:
-        The port Guppy is listening on.
-    ipc_path:
-        The path to an ipc file Guppy is using. Use "ipc://<ipc_path>"
-        for a guppy connection string.
-    version:
-        The Guppy server version.
+ApplyOfflineAssociationUnlockCodeRequest.__doc__ = """Attributes:
+    position_name:
+        The flow cell position to unlock.  This should be set (or not
+        set) to match the corresponding call to
+        `offline_association_device_code`.
+    unlock_code:
+        The unlock code provided by the user.  This the code given by
+        the customer support portal when the corresponding device code
+        is entered into the device association page.
 """
-GetFlowCellTypesResponse.Info.__doc__ = """Information about a flow cell type.
-
-Attributes:
-    product_code:
-        The product code for the flow cell type.  This is the user-
-        visible name for the flow cell type. It is the name used to
-        order flow cells, and is also displayed on the packaging.
-        While most product codes are 10 characters, be aware that
-        longer product codes can exist and have been used in the past.
-        Example: "FLO-MIN106".
-    connector_type:
-        The connector type of this flow cell type.  This determines
-        which flow cell positions it is possible to insert this flow
-        cell into. The connector type for a given flow cell position
-        can be determined using
-        `minknow_api.device.DeviceService.get_device_state`.  This
-        will never be ``FCCON_NOT_SET``.
-    cannot_live_basecall:
-        Indicates that live basecalling is not possible on the flow
-        cell.  Note that almost all flow cell types can be basecalled
-        on: that is why this indicates a negative (saving some bytes
-        on the wire by allowing the common case of basecalling being
-        possible to be omitted entirely).
-"""
-FindProtocolsResponse.__doc__ = """Attributes:
-    protocols:
-        Protocols available for starting.
-"""
-FlowCellPositionsResponse.__doc__ = """Attributes:
-    total_count:
-        How many positions are available in total.  This is the same
-        in every message returned from a single call, and allows the
-        caller to easily see how many further positions might be in
-        subsequent messages.
-    positions:
-        Known flow cell positions.  Note that not all positions listed
-        here are necessarily available. In particular, integrated flow
-        cell positions (eg: on GridIONs or PromethIONs) will always be
-        listed.
+FeatureList.__doc__ = """Attributes:
+    feature_flags:
+        feature_flags is a special value  If false, turns off all
+        other feature flags If true, allows individual flags to be
+        enabled and disabled
 """
 GetSequencingKitsResponse.Kit.__doc__ = """Information about a sequencing kit.
 
@@ -652,21 +519,174 @@ Attributes:
     pcr_free:
         The kit can be used without a PCR step.
 """
-GetFlowCellTypesRequest.__doc__ = """Request message for `ManagerService.get_flow_cell_types`."""
-ApplyOfflineAssociationUnlockCodeRequest.__doc__ = """Attributes:
-    position_name:
-        The flow cell position to unlock.  This should be set (or not
-        set) to match the corresponding call to
-        `offline_association_device_code`.
-    unlock_code:
-        The unlock code provided by the user.  This the code given by
-        the customer support portal when the corresponding device code
-        is entered into the device association page.
-"""
 ApplyOfflineAssociationUnlockCodeResponse.__doc__ = """Attributes:
     associated:
         True if the association was successful (the unlock_code was
         accepted), false otherwise.
+"""
+FindProtocolsRequest.__doc__ = """Attributes:
+    flow_cell_product_code:
+        Find protocols that are compatible with this flow cell product
+        code.  Set to empty string to find protocols matching all flow
+        cell product codes.
+    sequencing_kit:
+        Limit to protocols that are compatible with this sequencing
+        kit.  Set to empty string to find protocols matching all kits.
+    experiment_type:
+        Limit response to certain protocol types.
+"""
+GetBarcodeKeysResponse.__doc__ = """Attributes:
+    barcode_keys:
+        Returned barcode keys.
+    lamp_keys:
+        Returned lamp barcode ids.
+    combined_keys:
+        Combined barcode and lamp keys.  Returned keys are joined
+        strings of all requested barcode kits, giving the caller a
+        unique string to identify each barcode pair.  eg. if both a
+        lamp kit + barcode kit are specified, NxM barcode keys are
+        returned:  - barcode01_lamp01  - barcode01_lamp02  -
+        barcode01_lamp03  - barcode02_lamp01  - barcode02_lamp02  -
+        barcode02_lamp03
+"""
+ListProtocolOutputDirFilesRequest.__doc__ = """Attributes:
+    path:
+        Specify the root path to list files from. If the path is left
+        empty, then the base protocol output directory will be used.
+        Note that the path specified HAS to be a descendant of the
+        protocol output directory, otherwise a INVALID_ARGUMENT error
+        will be returned  If the path is left empty, and the path
+        specified in the user config doesn't exist, then the NOT_FOUND
+        error code will be returned
+"""
+FilesystemDiskSpaceInfo.__doc__ = """disk-usage information for one file-system
+
+Attributes:
+    filesystem_id:
+        The name of the file-system
+    bytes_available:
+        How much space is left on the file-system
+    bytes_capacity:
+        The total capacity of the file-system when empty.
+    what:
+        A list of what MinKNOW stores on this file-system, eg: reads,
+        logs, intermediate-files
+    bytes_to_stop_cleanly:
+        MinKNOW needs this much space to stop experiments. If
+        bytes_available goes below this number, data could be lost!
+    bytes_when_alert_issued:
+        The amount of space left on the file-system when
+        recommend_alert was set true.
+    recommend_alert:
+        MinKNOW recommends that you alert someone about the disk-usage
+    recommend_stop:
+        MinKNOW recommends that you stop experiments due to disk-usage
+        concerns
+    bytes_per_second:
+        Rate of change in bytes_available (per second) +'ve numbers
+        indicate that bytes_available is decreasing and space is being
+        used A value of 0 can indicate that this has not applicable or
+        not available.
+    file_types_stored:
+        A list of what types of file MinKNOW stores on this file-
+        system, eg: reads, logs, intermediate-files, etc.
+"""
+ListProtocolOutputDirFilesResponse.__doc__ = """Attributes:
+    directories:
+        List of sub-directories in the directory specified
+    files:
+        List of files in the directory specified
+    current_listed_path:
+        The absolute directory that is being listed within this
+        response
+"""
+AddSimulatedDeviceRequest.__doc__ = """Attributes:
+    name:
+        The name of the position, this must be unique and the correct
+        format:  For MinION Mk1B and Mk1C: "MS" followed by five
+        digits, eg: "MS12345". For GridION: "GS" followed by five
+        digits, eg: "GS12345". For P2 Solo: "P2S_" followed by five
+        digits, and then "-A" or "-B" eg: "P2S_12345-A".  PromethION
+        and P2 Solo position-names have no format restriction, but
+        must be unique. It is strongly recommended to follow standard
+        naming conventions:  For PromethION: start with "1A" and then
+        increase the number and/or the letter as you add more
+        positions. For P2 Solo: use "P2S_00000-A" and "P2S_00000-B"
+        (these fit the format of real P2 Solo devices, but do not
+        correspond to any real device).  Future versions might
+        constrain PromethION and P2 Solo device names. Using the above
+        suggestions should ensure that your code will continue to
+        work.  Note that MinKNOW Core 5.5 and earlier required the P2
+        Solo device name to be "P2S" followed by four digits. This is
+        no longer recommended.
+    type:
+        The type of the simulated device to create.  If left at
+        default (AUTO), then a sensible default device type is
+        selected.
+"""
+ListSettingsForProtocolResponse.RunOptions.__doc__ = """Run options
+
+Attributes:
+    active_channel_selection:
+         bool
+    mux_scan_period:
+         in hours
+"""
+GetBarcodeKitInfoResponse.__doc__ = """Attributes:
+    barcode_kit_info:
+        Map of barcode kit name to barcode kit info
+"""
+GetAlignmentReferenceInformationRequest.__doc__ = """Attributes:
+    path:
+        The full path of the alignment reference.  Should be a .fasta,
+        or .mmi file.
+"""
+GetBarcodeKeysRequest.__doc__ = """Attributes:
+    barcode_kit_names:
+        Names of barcode kits to obtain barcode names for  Fails with
+        INVALID_ARGUMENT if any of the requested `barcode_kit_names`
+        are unavailable
+    lamp_kit_name:
+        Name of lamp kit to obtain barcode names for.  Fails with
+        INVALID_ARGUMENT if the requested `lamp_kit_name` is
+        unavailable.
+"""
+ListSettingsForProtocolResponse.__doc__ = """Attributes:
+    protocol_settings:
+        Any protocol settings not covered by the above structures, for
+        example those required for custom-scripts.
+"""
+AssociationDeviceCodeResponse.__doc__ = """Attributes:
+    code:
+        The code required to associate the device with an account.  If
+        the request had `offline` set, this code is suitable for use
+        in the customer portal offline association page. Otherwise, it
+        is suitable for the online association APIs.
+"""
+GetFlowCellTypesRequest.__doc__ = """Request message for `ManagerService.get_flow_cell_types`."""
+LocalAuthenticationTokenPathResponse.__doc__ = """Attributes:
+    path:
+        The full path of the local authentication token
+"""
+CreateDirectoryRequest.__doc__ = """Attributes:
+    parent_path:
+        The path at which to create the directory.  This must exist,
+        be a directory, and be within the protocol output directory.
+        This can be determined via calls to
+        list_protocol_output_dir_files().
+    name:
+        The name of the directory to create.  This must be a single
+        path component (ie: it cannot contain '/' or '\'). There may
+        be other restrictions on valid characters, depending on the
+        operating system.
+"""
+BasecallerApiResponse.__doc__ = """Attributes:
+    secure:
+        The port to use to access the minknow_api.basecaller API using
+        the standard gRPC protocol over TLS
+    secure_grpc_web:
+        The port to use to access the minknow_api.basecaller API using
+        the gRPC-Web protocol over TLS
 """
 FlowCellPosition.__doc__ = """Attributes:
     name:
@@ -734,24 +754,6 @@ FlowCellPosition.__doc__ = """Attributes:
         the same as the `name` field.  For a P2 Solo, this will be the
         name of the P2 Solo unit.  Since 5.3
 """
-GetBarcodeKitInfoResponse.__doc__ = """Attributes:
-    barcode_kit_info:
-        Map of barcode kit name to barcode kit info
-"""
-ListProtocolOutputDirFilesRequest.__doc__ = """Attributes:
-    path:
-        Specify the root path to list files from. If the path is left
-        empty, then the base protocol output directory will be used.
-        Note that the path specified HAS to be a descendant of the
-        protocol output directory, otherwise a INVALID_ARGUMENT error
-        will be returned  If the path is left empty, and the path
-        specified in the user config doesn't exist, then the NOT_FOUND
-        error code will be returned
-"""
-Feature.__doc__ = """Attributes:
-    enabled:
-        Enable or disable the feature
-"""
 ListDeveloperApiTokensResponse.DeveloperApiToken.__doc__ = """Attributes:
     id:
         Unique ID assigned to the token.
@@ -760,26 +762,6 @@ ListDeveloperApiTokensResponse.DeveloperApiToken.__doc__ = """Attributes:
         across tokens).
     expiry:
         Optional expiry of the token.
-"""
-RemoveSimulatedDeviceRequest.__doc__ = """Attributes:
-    name:
-        The name of the simulated device to be removed
-"""
-ListProtocolOutputDirFilesResponse.__doc__ = """Attributes:
-    directories:
-        List of sub-directories in the directory specified
-    files:
-        List of files in the directory specified
-    current_listed_path:
-        The absolute directory that is being listed within this
-        response
-"""
-ResetPositionRequest.__doc__ = """Attributes:
-    positions:
-        The names of positions to restart.
-    force:
-        Force the software to be restarted even when it appears to be
-        in a healthy state (ie: STATE_RUNNING).
 """
 GetSequencingKitsRequest.__doc__ = """Request message for `ManagerService.get_sequencing_kits`.
 
@@ -795,16 +777,18 @@ Attributes:
         kits will claim to be barcoding capable (or compatible with
         any barcoding expansion kits).
 """
-FindProtocolsRequest.__doc__ = """Attributes:
-    flow_cell_product_code:
-        Find protocols that are compatible with this flow cell product
-        code.  Set to empty string to find protocols matching all flow
-        cell product codes.
-    sequencing_kit:
-        Limit to protocols that are compatible with this sequencing
-        kit.  Set to empty string to find protocols matching all kits.
-    experiment_type:
-        Limit response to certain protocol types.
+Feature.__doc__ = """Attributes:
+    enabled:
+        Enable or disable the feature
+"""
+GetGuppyInfoResponse.__doc__ = """Attributes:
+    port:
+        The port Guppy is listening on.
+    ipc_path:
+        The path to an ipc file Guppy is using. Use "ipc://<ipc_path>"
+        for a guppy connection string.
+    version:
+        The Guppy server version.
 """
 GetSequencingKitsResponse.BarcodingExpansionKit.__doc__ = """Information about a barcoding expansion kit.  In the future, this may
 include compatibility information for dual barcoding, for example.
@@ -817,52 +801,68 @@ Attributes:
         product codes are 10 characters, be aware that longer product
         codes can exist.  Example: "EXP-NBD104".
 """
-FilesystemDiskSpaceInfo.__doc__ = """disk-usage information for one file-system
+RevokeDeveloperApiTokenRequest.__doc__ = """Attributes:
+    id:
+        The id passed back from [CreateDeveloperApiTokenRequest] or
+        [DeveloperApiToken].
+"""
+ListSettingsForProtocolResponse.Output.__doc__ = """Output
 
 Attributes:
-    filesystem_id:
-        The name of the file-system
-    bytes_available:
-        How much space is left on the file-system
-    bytes_capacity:
-        The total capacity of the file-system when empty.
-    what:
-        A list of what MinKNOW stores on this file-system, eg: reads,
-        logs, intermediate-files
-    bytes_to_stop_cleanly:
-        MinKNOW needs this much space to stop experiments. If
-        bytes_available goes below this number, data could be lost!
-    bytes_when_alert_issued:
-        The amount of space left on the file-system when
-        recommend_alert was set true.
-    recommend_alert:
-        MinKNOW recommends that you alert someone about the disk-usage
-    recommend_stop:
-        MinKNOW recommends that you stop experiments due to disk-usage
-        concerns
-    bytes_per_second:
-        Rate of change in bytes_available (per second) +'ve numbers
-        indicate that bytes_available is decreasing and space is being
-        used A value of 0 can indicate that this has not applicable or
-        not available.
-    file_types_stored:
-        A list of what types of file MinKNOW stores on this file-
-        system, eg: reads, logs, intermediate-files, etc.
+    read_filtering_min_duplex_qscore:
+        Since 5.8
 """
-GetBasecallerFeaturesResponse.__doc__ = """Attributes:
-    is_live_basecalling_with_adaptive_sampling_recommended:
-        Is live basecalling with adaptive sampling recommended on this
-        hardware Currently not recommended for Apple or Mk1C  Since
-        5.9
+StreamDiskSpaceInfoRequest.__doc__ = """Attributes:
+    period:
+        Disk space information will be streamed with this value
+        determining the period in seconds between updates. A period of
+        0 is invalid
 """
-GetBarcodeKeysRequest.__doc__ = """Attributes:
-    barcode_kit_names:
-        Names of barcode kits to obtain barcode names for  Fails with
-        INVALID_ARGUMENT if any of the requested `barcode_kit_names`
-        are unavailable
-    lamp_kit_name:
-        Name of lamp kit to obtain barcode names for.  Fails with
-        INVALID_ARGUMENT if the requested `lamp_kit_name` is
-        unavailable.
+CreateDeveloperApiTokenRequest.__doc__ = """Attributes:
+    name:
+        User facing name describing the token.
+    expiry:
+        Optional expiry time for the token.
+"""
+ListSettingsForProtocolRequest.__doc__ = """Attributes:
+    identifier:
+        specify the protocol with a string containing all the
+        protocol's identifying components, eg:
+        "sequencing/sequencing_MIN106_DNA:FLO-MIN106:SQK-RPB004"
+    components:
+        specify the protocol providing the identifying components
+        individually. All components are optional, if more than one
+        protocol matches given strings, information about the first
+        will be returned.
+    flow_cell_connector:
+        The flow-cell connector type identifies the type of hardware
+        and is used to identify the correct protocol. The flow-cell
+        connector types applicable to the device are listed by the
+        get_flow_cell_types rpc in this service and the
+        get_device_state rpc in the device service.
+"""
+FindProtocolsResponse.__doc__ = """Attributes:
+    protocols:
+        Protocols available for starting.
+"""
+FlowCellPosition.Location.__doc__ = """Attributes:
+    x:
+        The column (counting from 0, left-to-right) of the flow cell
+        position on the sequencing unit when viewed from above/in
+        front.
+    y:
+        The row (counting from 0, top-to-bottom) of the flow cell
+        position on the sequencing unit when viewed from above/in
+        front.
+"""
+GetSequencingKitsResponse.__doc__ = """Response message for `ManagerService.get_sequencing_kits`.
+
+Attributes:
+    kits:
+        The known sequencing kits.
+    barcoding_expansion_kits:
+        The possible barcoding expansion kits.  These are kits that
+        can be used in combination with certain sequencing kits to add
+        (or extend) barcoding functionality.
 """
 # @@protoc_insertion_point(module_scope)

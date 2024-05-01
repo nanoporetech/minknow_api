@@ -197,7 +197,8 @@ def test_basic_start_protocol():
             # Invalid position argument
             assert (
                 run_start_protocol_example(
-                    server.port, ["--kit", TEST_KIT_NAME, "--position", "NotAPosition"]
+                    server.port,
+                    ["--kit", TEST_KIT_NAME, "--position", "NotAPosition"],
                 )[0]
                 == 1
             )
@@ -206,7 +207,12 @@ def test_basic_start_protocol():
             assert (
                 run_start_protocol_example(
                     server.port,
-                    ["--kit", TEST_KIT_NAME, "--flow-cell-id", "NotAFlowCellId"],
+                    [
+                        "--kit",
+                        TEST_KIT_NAME,
+                        "--flow-cell-id",
+                        "NotAFlowCellId",
+                    ],
                 )[0]
                 == 1
             )
@@ -215,7 +221,12 @@ def test_basic_start_protocol():
             assert (
                 run_start_protocol_example(
                     server.port,
-                    ["--kit", TEST_KIT_NAME, "--sample-sheet", "NotASampleSheet"],
+                    [
+                        "--kit",
+                        TEST_KIT_NAME,
+                        "--sample-sheet",
+                        "NotASampleSheet",
+                    ],
                 )[0]
                 == 1
             )
@@ -744,6 +755,8 @@ def test_output_start_protocol():
                         "--fastq",
                         "--fastq-reads-per-file",
                         "5000",
+                        "--fastq-batch-duration",
+                        "3600",
                     ],
                 )[0]
                 == 0
@@ -760,6 +773,7 @@ def test_output_start_protocol():
                 "--fastq_data",
                 "compress",
                 "--fastq_reads_per_file=5000",
+                "--fastq_batch_duration=3600",
                 "--bam=off",
                 "--active_channel_selection=on",
                 "--mux_scan_period=1.5",
@@ -777,6 +791,8 @@ def test_output_start_protocol():
                         "--fast5",
                         "--fast5-reads-per-file",
                         "501",
+                        "--fast5-batch-duration",
+                        "3600",
                     ],
                 )[0]
                 == 0
@@ -794,6 +810,7 @@ def test_output_start_protocol():
                 "raw",
                 "vbz_compress",
                 "--fast5_reads_per_file=501",
+                "--fast5_batch_duration=3600",
                 "--pod5=off",
                 "--fastq=off",
                 "--bam=off",
@@ -813,6 +830,8 @@ def test_output_start_protocol():
                         "--pod5",
                         "--pod5-reads-per-file",
                         "502",
+                        "--pod5-batch-duration",
+                        "3600",
                     ],
                 )[0]
                 == 0
@@ -826,6 +845,7 @@ def test_output_start_protocol():
                 "--fast5=off",
                 "--pod5=on",
                 "--pod5_reads_per_file=502",
+                "--pod5_batch_duration=3600",
                 "--fastq=off",
                 "--bam=off",
                 "--active_channel_selection=on",
@@ -842,6 +862,10 @@ def test_output_start_protocol():
                         TEST_KIT_NAME,
                         "--position=MN00000",
                         "--bam",
+                        "--bam-reads-per-file",
+                        "503",
+                        "--bam-batch-duration",
+                        "3600",
                     ],
                 )[0]
                 == 0
@@ -856,6 +880,8 @@ def test_output_start_protocol():
                 "--pod5=off",
                 "--fastq=off",
                 "--bam=on",
+                "--bam_reads_per_file=503",
+                "--bam_batch_duration=3600",
                 "--active_channel_selection=on",
                 "--mux_scan_period=1.5",
             ]

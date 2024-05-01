@@ -149,6 +149,18 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   _globals['_APPENDMUXSCANRESULTRESPONSE']._serialized_end=6619
   _globals['_ACQUISITIONSERVICE']._serialized_start=7677
   _globals['_ACQUISITIONSERVICE']._serialized_end=9169
+MuxScanMetadata.__doc__ = """Provides information about how mux scans are configured.  This
+primarily information to help present mux scan results to the user
+(see `MuxScanResult`).
+
+Attributes:
+    auto_mux_scan_period_hours:
+        How frequently automatic scans are scheduled to occur.
+    category_groups:
+        Presentation information for categories.  Describes the
+        preferred way to present mux scan categories to users. Groups
+        should be presented in the order of this list.
+"""
 StopRequest.__doc__ = """Attributes:
     wait_until_ready:
         Defaults to false If false will return as soon as minknow
@@ -174,51 +186,48 @@ StopRequest.__doc__ = """Attributes:
         configuration options for further details.  This option has no
         effect on PromethIONs.  Since 1.15.2
 """
-ChannelStateInfo.__doc__ = """Attributes:
-    groups:
-        The groups of channel states.  The groups are ordered
-        according to the "order" attribute of the group style in the
-        channel states configuration.
-"""
-MuxScanResult.__doc__ = """A report of the states of channel muxes (wells) across the flow cell.
-Every channel mux (well) is assigned to a specific category describing
-its state (for example, is it expected to produce good results, and if
-not why not?). This is a report of how many channel muxes are in each
-category.
+BreamInfo.__doc__ = """Information provided by Bream.  Note that this is provided by the
+protocol, and some protocols may choose not to provide this.
 
 Attributes:
-    counts:
-        How many channel muxes are in each category.  The sum of all
-        the values in this map should be the number of channels
-        multiplied by the number of muxes on each channel (eg:
-        512x4=2048 on a MinION Mk1B without a flongle adapter).  eg.
-        'sequencing': 1500
-    mux_scan_timestamp:
-        When this mux scan result was added (Seconds since the start
-        of the acquisition).
+    mux_scan_metadata:
+        Presentation information for mux scan results.
+    mux_scan_results:
+        Mux scan results.
+    target_translocation_speed:
+        The ideal translocation speed range.  This can be used to
+        provide context for speed graphs (see the statistics RPCs),
+        showing what range is considered "good".
+    target_q_score:
+        The ideal quality (Q) score range.  This can be used to
+        provide context for q-score graphs (see the statistics RPCs),
+        showing what range is considered "good".
+    target_temperature:
+        The ideal temperature range.  This can be used to provide
+        context for temperature (see the statistics RPCs), showing
+        what range is considered "good".  Note that a protocol may
+        request a different temperature range than this (eg: it might
+        request a tighter range, or it may adjust the temperature it
+        is requesting throughout the run). This intended only to
+        provide context when presenting data to users.
 """
-AcquisitionYieldSummary.TotalsPerDuplexCategory.__doc__ = """Note: If duplex isn't enabled, all reads and basecalls will be classed
-as 'simplex' and the 'duplex' fields will be 0."""
-MuxScanMetadata.CategoryGroup.__doc__ = """Attributes:
+GetProgressResponse.__doc__ = """Attributes:
+    raw_per_channel:
+        The amount of raw data (per channel) that has been acquired
+        and processed.
+"""
+MuxScanMetadata.Category.__doc__ = """A category that a channel mux can be assigned.
+
+Attributes:
     name:
-        The name of the group.
+        Name of the category.  This is the value that will be in the
+        `MuxScanResult.counts` field.  The user should not be shown
+        this. Instead, `style.label` should be displayed.
     style:
-        How to render the group in a graphical user interface.
-    category:
-        The categories contained in the group.  Within this group,
-        categories should be presented in the order of this list.
-"""
-GetAcquisitionRunInfoRequest.__doc__ = """Attributes:
-    run_id:
-        The acquisition period to get information about.
-"""
-GetProgressResponse.RawPerChannel.__doc__ = """Attributes:
-    acquired:
-        Number of samples (per channel) acquired from the device.
-    processed:
-        Number of samples (per channel) passed to the analysis
-        pipeline for processing.  This can be compared to acquired to
-        see how far behind the analysis is lagging.
+        How to render the category in a graphical user interface.
+    global_order:
+        An order ranking for the category when displaying them without
+        using groups.
 """
 AcquisitionConfigSummary.__doc__ = """This field has been removed Since 5.8
 
@@ -272,6 +281,109 @@ Attributes:
         Sample rate for the acquisition.  Since 3.3
     channel_count:
         Channel count used in the acquisition.  Since 3.3
+"""
+ChannelStateInfo.ChannelState.__doc__ = """Attributes:
+    id:
+        The numeric identifier of the state.  This is what is reported
+        in any other APIs that return a channel state ID.
+    name:
+        The internal name of the state.  This is what is reported in
+        any other APIs that return a channel state name.
+    style:
+        How to render the channel state in a graphical user interface.
+        Note that the style may be missing from some channel states
+        (such as the ones that are built in to MinKNOW).
+    global_order:
+        An order ranking for the channel states when they are
+        ungrouped.  This can be used to order the channel states after
+        merging the groups.
+"""
+ChannelStateInfo.Group.__doc__ = """Attributes:
+    name:
+        The name of the group.
+    style:
+        How to render the group in a graphical user interface.  Note
+        that the style may be missing from some groups (such as the
+        ones that are built in to MinKNOW).
+    states:
+        The channel states contained in the group.  The groups are
+        ordered according to the "order" attribute of the channel
+        state style in the channel states configuration.
+"""
+ChannelStateInfo.__doc__ = """Attributes:
+    groups:
+        The groups of channel states.  The groups are ordered
+        according to the "order" attribute of the group style in the
+        channel states configuration.
+"""
+ChannelStateInfo.Style.__doc__ = """Attributes:
+    label:
+        The human-readable name to display when rendering this channel
+        state or group.
+    description:
+        A sentence describing the meaning of the channel state or
+        group.  This can be used as a tooltip, for example.
+    colour:
+        The colour to use when rendering this channel state or group.
+        This is a six-digit hex string describing an RGB colour (eg:
+        "ff00ff" for purple).
+"""
+MuxScanResult.__doc__ = """A report of the states of channel muxes (wells) across the flow cell.
+Every channel mux (well) is assigned to a specific category describing
+its state (for example, is it expected to produce good results, and if
+not why not?). This is a report of how many channel muxes are in each
+category.
+
+Attributes:
+    counts:
+        How many channel muxes are in each category.  The sum of all
+        the values in this map should be the number of channels
+        multiplied by the number of muxes on each channel (eg:
+        512x4=2048 on a MinION Mk1B without a flongle adapter).  eg.
+        'sequencing': 1500
+    mux_scan_timestamp:
+        When this mux scan result was added (Seconds since the start
+        of the acquisition).
+"""
+MuxScanMetadata.Style.__doc__ = """Presentation information for a category or group.
+
+Attributes:
+    label:
+        The human-readable name to display when rendering this
+        category or group.
+    description:
+        A sentence describing the meaning of the category or group.
+        This can be used as a tooltip, for example.
+    colour:
+        The colour to use when rendering this category or group.  This
+        is a six-digit hex string describing an RGB colour (eg:
+        "ff0000" for red).
+"""
+BreamInfo.Range.__doc__ = """Represents a range of values."""
+SetBreamInfoRequest.__doc__ = """Attributes:
+    info:
+        The information to set.  Note that, other than treating the
+        top-level fields independently (see the other flags on this
+        request), MinKNOW Core will not do anything special to the
+        data. In particular, the caller must fill in the
+        `mux_scan_timestamp` field in `MuxScanResult` messages.
+    overwrite_unset_fields:
+        If any `BreamInfo` fields were set in a previous call, but are
+        unset in the `info` field of this call, then use the old value
+        for them.  For example, to just update the mux_scan_metadata
+        field, use a BreamInfo object with only the
+        `mux_scan_metadata` field set, and leave this as False. To
+        clear the entire BreamInfo structure, leave `info` empty and
+        set this to True.
+"""
+MuxScanMetadata.CategoryGroup.__doc__ = """Attributes:
+    name:
+        The name of the group.
+    style:
+        How to render the group in a graphical user interface.
+    category:
+        The categories contained in the group.  Within this group,
+        categories should be presented in the order of this list.
 """
 StartRequest.__doc__ = """ Protobuf messages for input/output of RPC calls
 
@@ -346,6 +458,8 @@ Attributes:
         Start request that will be used to trigger analysis, used to
         union over all the different types of analysis possible.
 """
+AcquisitionYieldSummary.TotalsPerDuplexCategory.__doc__ = """Note: If duplex isn't enabled, all reads and basecalls will be classed
+as 'simplex' and the 'duplex' fields will be 0."""
 AcquisitionWriterSummary.__doc__ = """Attributes:
     bytes_to_write_produced:
         Number of bytes which minknow needs to write in order to
@@ -357,6 +471,64 @@ AcquisitionWriterSummary.__doc__ = """Attributes:
     bytes_to_write_completed:
         Number of bytes which minknow has written to final location.
 """
+StartResponse.__doc__ = """Attributes:
+    run_id:
+        Globally-unique identifier generated when the acquisition is
+        started.  This is guaranteed to unique, including aross
+        sequencing devices.
+"""
+AcquisitionRunInfo.__doc__ = """Attributes:
+    run_id:
+        The unique identifier assigned to this acquisition run.  This
+        is guaranteed to be made of ASCII characters, and at most 40
+        characters. It is globally unique across all acquisitions on
+        all MinKNOW instances.
+    startup_state:
+        Current startup task (or STARTUP_UNKNOWN if not starting up).
+    startup_state_estimated_end:
+        Estimated time for current startup state to end.  In some
+        cases this field is left unset, to indicate no estimation.
+    startup_state_estimated_percent_complete:
+        Estimate startup state completion percent (0 - 1).  In some
+        cases this field is left at 0, indicating no estimation.
+    state:
+        Indicates the current state of the acquisition.
+    finishing_state:
+        If the experiment is finishing, an extra piece of state
+        describing the current finishing state.
+    stop_reason:
+        The reason the acquisition period was ended.
+    start_time:
+        When the acquisition period was started (UTC).
+    data_read_start_time:
+        When MinKNOW began acquiring data (UTC).  Unset if the
+        acquisition is still starting up.
+    data_read_end_time:
+        When the MinKNOW stopped acquiring data (UTC).  Unset if the
+        acquisition is still acquiring.
+    end_time:
+        When the acquisition terminated (UTC).  Unset if the
+        acquisition period is still running.
+    yield_summary:
+        Summary of acquisition yields.  Since 1.12
+    config_summary:
+        Summary of the configuration settings for a run.  Since 1.14
+    writer_summary:
+        Summary of writer yields.  Since 4.0
+    bream_info:
+        Set information provided by the Bream toolkit.
+    target_run_until_criteria:
+        Target Run-Until Critiera, used to determine when the
+        acquisition should be paused or stopped.  Since 5.3
+"""
+GetProgressResponse.RawPerChannel.__doc__ = """Attributes:
+    acquired:
+        Number of samples (per channel) acquired from the device.
+    processed:
+        Number of samples (per channel) passed to the analysis
+        pipeline for processing.  This can be compared to acquired to
+        see how far behind the analysis is lagging.
+"""
 SetSignalReaderRequest.__doc__ = """Attributes:
     reader:
         The type of signal reader to use
@@ -365,6 +537,10 @@ SetSignalReaderRequest.__doc__ = """Attributes:
         setting the reader to hdf5
     hdf_mode:
          Defaults to UNSPECIFIED, since this setting is optional
+"""
+GetAcquisitionRunInfoRequest.__doc__ = """Attributes:
+    run_id:
+        The acquisition period to get information about.
 """
 AcquisitionYieldSummary.__doc__ = """Attributes:
     read_count:
@@ -433,180 +609,4 @@ AcquisitionYieldSummary.__doc__ = """Attributes:
         bases, if "alignment_matches" is 2500, then
         "alignment_coverage" will be 0.5  Since 4.3
 """
-ChannelStateInfo.Style.__doc__ = """Attributes:
-    label:
-        The human-readable name to display when rendering this channel
-        state or group.
-    description:
-        A sentence describing the meaning of the channel state or
-        group.  This can be used as a tooltip, for example.
-    colour:
-        The colour to use when rendering this channel state or group.
-        This is a six-digit hex string describing an RGB colour (eg:
-        "ff00ff" for purple).
-"""
-AcquisitionRunInfo.__doc__ = """Attributes:
-    run_id:
-        The unique identifier assigned to this acquisition run.  This
-        is guaranteed to be made of ASCII characters, and at most 40
-        characters. It is globally unique across all acquisitions on
-        all MinKNOW instances.
-    startup_state:
-        Current startup task (or STARTUP_UNKNOWN if not starting up).
-    startup_state_estimated_end:
-        Estimated time for current startup state to end.  In some
-        cases this field is left unset, to indicate no estimation.
-    startup_state_estimated_percent_complete:
-        Estimate startup state completion percent (0 - 1).  In some
-        cases this field is left at 0, indicating no estimation.
-    state:
-        Indicates the current state of the acquisition.
-    finishing_state:
-        If the experiment is finishing, an extra piece of state
-        describing the current finishing state.
-    stop_reason:
-        The reason the acquisition period was ended.
-    start_time:
-        When the acquisition period was started (UTC).
-    data_read_start_time:
-        When MinKNOW began acquiring data (UTC).  Unset if the
-        acquisition is still starting up.
-    data_read_end_time:
-        When the MinKNOW stopped acquiring data (UTC).  Unset if the
-        acquisition is still acquiring.
-    end_time:
-        When the acquisition terminated (UTC).  Unset if the
-        acquisition period is still running.
-    yield_summary:
-        Summary of acquisition yields.  Since 1.12
-    config_summary:
-        Summary of the configuration settings for a run.  Since 1.14
-    writer_summary:
-        Summary of writer yields.  Since 4.0
-    bream_info:
-        Set information provided by the Bream toolkit.
-    target_run_until_criteria:
-        Target Run-Until Critiera, used to determine when the
-        acquisition should be paused or stopped.  Since 5.3
-"""
-SetBreamInfoRequest.__doc__ = """Attributes:
-    info:
-        The information to set.  Note that, other than treating the
-        top-level fields independently (see the other flags on this
-        request), MinKNOW Core will not do anything special to the
-        data. In particular, the caller must fill in the
-        `mux_scan_timestamp` field in `MuxScanResult` messages.
-    overwrite_unset_fields:
-        If any `BreamInfo` fields were set in a previous call, but are
-        unset in the `info` field of this call, then use the old value
-        for them.  For example, to just update the mux_scan_metadata
-        field, use a BreamInfo object with only the
-        `mux_scan_metadata` field set, and leave this as False. To
-        clear the entire BreamInfo structure, leave `info` empty and
-        set this to True.
-"""
-MuxScanMetadata.Style.__doc__ = """Presentation information for a category or group.
-
-Attributes:
-    label:
-        The human-readable name to display when rendering this
-        category or group.
-    description:
-        A sentence describing the meaning of the category or group.
-        This can be used as a tooltip, for example.
-    colour:
-        The colour to use when rendering this category or group.  This
-        is a six-digit hex string describing an RGB colour (eg:
-        "ff0000" for red).
-"""
-GetProgressResponse.__doc__ = """Attributes:
-    raw_per_channel:
-        The amount of raw data (per channel) that has been acquired
-        and processed.
-"""
-StartResponse.__doc__ = """Attributes:
-    run_id:
-        Globally-unique identifier generated when the acquisition is
-        started.  This is guaranteed to unique, including aross
-        sequencing devices.
-"""
-ChannelStateInfo.Group.__doc__ = """Attributes:
-    name:
-        The name of the group.
-    style:
-        How to render the group in a graphical user interface.  Note
-        that the style may be missing from some groups (such as the
-        ones that are built in to MinKNOW).
-    states:
-        The channel states contained in the group.  The groups are
-        ordered according to the "order" attribute of the channel
-        state style in the channel states configuration.
-"""
-MuxScanMetadata.Category.__doc__ = """A category that a channel mux can be assigned.
-
-Attributes:
-    name:
-        Name of the category.  This is the value that will be in the
-        `MuxScanResult.counts` field.  The user should not be shown
-        this. Instead, `style.label` should be displayed.
-    style:
-        How to render the category in a graphical user interface.
-    global_order:
-        An order ranking for the category when displaying them without
-        using groups.
-"""
-ChannelStateInfo.ChannelState.__doc__ = """Attributes:
-    id:
-        The numeric identifier of the state.  This is what is reported
-        in any other APIs that return a channel state ID.
-    name:
-        The internal name of the state.  This is what is reported in
-        any other APIs that return a channel state name.
-    style:
-        How to render the channel state in a graphical user interface.
-        Note that the style may be missing from some channel states
-        (such as the ones that are built in to MinKNOW).
-    global_order:
-        An order ranking for the channel states when they are
-        ungrouped.  This can be used to order the channel states after
-        merging the groups.
-"""
-MuxScanMetadata.__doc__ = """Provides information about how mux scans are configured.  This
-primarily information to help present mux scan results to the user
-(see `MuxScanResult`).
-
-Attributes:
-    auto_mux_scan_period_hours:
-        How frequently automatic scans are scheduled to occur.
-    category_groups:
-        Presentation information for categories.  Describes the
-        preferred way to present mux scan categories to users. Groups
-        should be presented in the order of this list.
-"""
-BreamInfo.__doc__ = """Information provided by Bream.  Note that this is provided by the
-protocol, and some protocols may choose not to provide this.
-
-Attributes:
-    mux_scan_metadata:
-        Presentation information for mux scan results.
-    mux_scan_results:
-        Mux scan results.
-    target_translocation_speed:
-        The ideal translocation speed range.  This can be used to
-        provide context for speed graphs (see the statistics RPCs),
-        showing what range is considered "good".
-    target_q_score:
-        The ideal quality (Q) score range.  This can be used to
-        provide context for q-score graphs (see the statistics RPCs),
-        showing what range is considered "good".
-    target_temperature:
-        The ideal temperature range.  This can be used to provide
-        context for temperature (see the statistics RPCs), showing
-        what range is considered "good".  Note that a protocol may
-        request a different temperature range than this (eg: it might
-        request a tighter range, or it may adjust the temperature it
-        is requesting throughout the run). This intended only to
-        provide context when presenting data to users.
-"""
-BreamInfo.Range.__doc__ = """Represents a range of values."""
 # @@protoc_insertion_point(module_scope)

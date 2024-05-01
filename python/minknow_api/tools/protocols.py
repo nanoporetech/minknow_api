@@ -160,7 +160,7 @@ AlignmentArgs = collections.namedtuple("AlignmentArgs", ["reference_files", "bed
 BasecallingArgs = collections.namedtuple(
     "BasecallingArgs", ["config", "barcoding", "alignment"]
 )
-OutputArgs = collections.namedtuple("OutputArgs", ["reads_per_file"])
+OutputArgs = collections.namedtuple("OutputArgs", ["reads_per_file", "batch_duration"])
 
 
 @dataclasses.dataclass
@@ -341,8 +341,6 @@ def make_protocol_arguments(
         if read_until.last_channel:
             read_until_args.append("last_channel={}".format(read_until.last_channel))
 
-        # --read_until filter_type='enrich' reference_files=['/data/my-alignment-file'] bed_file='/data/bed_file.bed' first_channel=1 last_channel=512
-        print(read_until_args)
         protocol_args.extend(["--read_until"] + read_until_args)
 
     protocol_args.append("--fast5=" + on_off(fast5_arguments))
@@ -350,30 +348,48 @@ def make_protocol_arguments(
         protocol_args.extend(
             ["--fast5_data", "trace_table", "fastq", "raw", "vbz_compress"]
         )
-        protocol_args.append(
-            "--fast5_reads_per_file={}".format(fast5_arguments.reads_per_file)
-        )
+        if fast5_arguments.reads_per_file is not None:
+            protocol_args.append(
+                "--fast5_reads_per_file={}".format(fast5_arguments.reads_per_file)
+            )
+        if fast5_arguments.batch_duration is not None:
+            protocol_args.append(
+                "--fast5_batch_duration={}".format(fast5_arguments.batch_duration)
+            )
 
     protocol_args.append("--pod5=" + on_off(pod5_arguments))
     if pod5_arguments:
-        protocol_args.append(
-            "--pod5_reads_per_file={}".format(pod5_arguments.reads_per_file)
-        )
+        if pod5_arguments.reads_per_file is not None:
+            protocol_args.append(
+                "--pod5_reads_per_file={}".format(pod5_arguments.reads_per_file)
+            )
+        if pod5_arguments.batch_duration is not None:
+            protocol_args.append(
+                "--pod5_batch_duration={}".format(pod5_arguments.batch_duration)
+            )
 
     protocol_args.append("--fastq=" + on_off(fastq_arguments))
     if fastq_arguments:
         protocol_args.extend(["--fastq_data", "compress"])
-        protocol_args.append(
-            "--fastq_reads_per_file={}".format(fastq_arguments.reads_per_file)
-        )
+        if fastq_arguments.reads_per_file is not None:
+            protocol_args.append(
+                "--fastq_reads_per_file={}".format(fastq_arguments.reads_per_file)
+            )
+        if fastq_arguments.batch_duration is not None:
+            protocol_args.append(
+                "--fastq_batch_duration={}".format(fastq_arguments.batch_duration)
+            )
 
     protocol_args.append("--bam=" + on_off(bam_arguments))
     if bam_arguments:
-        if bam_arguments.reads_per_file != 4000:
-            raise Exception("Unable to change reads per file for BAM.")
-        """protocol_args.append(
-            "--bam_reads_per_file={}".format(bam_arguments.reads_per_file)
-        )"""
+        if bam_arguments.reads_per_file is not None:
+            protocol_args.append(
+                "--bam_reads_per_file={}".format(bam_arguments.reads_per_file)
+            )
+        if bam_arguments.batch_duration is not None:
+            protocol_args.append(
+                "--bam_batch_duration={}".format(bam_arguments.batch_duration)
+            )
 
     if not is_flongle:
         protocol_args.append(

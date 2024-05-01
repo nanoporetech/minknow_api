@@ -74,6 +74,25 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   _globals['_WATCHRESPONSE_VALUESENTRY']._serialized_end=314
   _globals['_KEYSTORESERVICE']._serialized_start=1061
   _globals['_KEYSTORESERVICE']._serialized_end=1510
+GetRequest.__doc__ = """Attributes:
+    names:
+        The names of the values you wish to fetch.
+    allow_missing:
+        Whether to allow missing values.  If set, names that are not
+        present in the store will simply be omitted from the response.
+        Otherwise, missing values will cause an error to be returned.
+        Defaults to 'false'
+"""
+RemoveRequest.__doc__ = """Attributes:
+    names:
+        The names of the values you wish to remove.
+    allow_missing:
+        Whether to allow missing values.  If set, names that are not
+        present in the store will be ignored, but any present values
+        will still be removed. Otherwise, missing values will cause an
+        error to be returned (in which case nothing will be removed).
+        Defaults to 'false'
+"""
 GetOneResponse.__doc__ = """Attributes:
     value:
         The requested value.
@@ -92,32 +111,9 @@ WatchRequest.__doc__ = """Attributes:
         message will be sent with the set values. Otherwise, missing
         values will cause an immediate error.  Defaults to 'false'
 """
-RemoveRequest.__doc__ = """Attributes:
-    names:
-        The names of the values you wish to remove.
-    allow_missing:
-        Whether to allow missing values.  If set, names that are not
-        present in the store will be ignored, but any present values
-        will still be removed. Otherwise, missing values will cause an
-        error to be returned (in which case nothing will be removed).
-        Defaults to 'false'
-"""
 GetOneRequest.__doc__ = """Attributes:
     name:
         The name of the value to fetch.
-"""
-GetRequest.__doc__ = """Attributes:
-    names:
-        The names of the values you wish to fetch.
-    allow_missing:
-        Whether to allow missing values.  If set, names that are not
-        present in the store will simply be omitted from the response.
-        Otherwise, missing values will cause an error to be returned.
-        Defaults to 'false'
-"""
-GetResponse.__doc__ = """Attributes:
-    values:
-        The requested values.
 """
 StoreRequest.__doc__ = """Attributes:
     values:
@@ -142,5 +138,9 @@ WatchResponse.__doc__ = """Attributes:
         Subsequent messages will only contain the values that changed.
     removed_values:
         The values that have been removed.
+"""
+GetResponse.__doc__ = """Attributes:
+    values:
+        The requested values.
 """
 # @@protoc_insertion_point(module_scope)
