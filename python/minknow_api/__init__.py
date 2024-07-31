@@ -32,6 +32,10 @@ acquisition
 analysis_configuration
     Configure data acquisition. See `analysis_configuration_service.AnalysisConfigurationService`
     for a description of the available methods.
+analysis_workflows
+    Provides a way to manage anaylsis workflows that are ran after (or potentially during)
+    a protocol run. See `analysis_workflows_service.AnalysisWorkflowsService` for a description of
+    the available methods.
 data
     Stream acquisition data. Note that this is for data directly produced during acquisition, rather
     than statistics about acquired data. See `data_service.DataService` for a description of the
@@ -85,7 +89,7 @@ import os
 import sys
 import threading
 import warnings
-from datetime import datetime, timedelta
+import datetime
 from typing import Any, Dict, Optional, Tuple, Union
 
 import grpc
@@ -116,6 +120,7 @@ except ImportError:
 _services = {
     "acquisition": ["AcquisitionService"],
     "analysis_configuration": ["AnalysisConfigurationService"],
+    "analysis_workflows": ["AnalysisWorkflowsService"],
     "data": ["DataService"],
     "device": ["DeviceService"],
     "instance": ["InstanceService"],
@@ -211,7 +216,7 @@ class LocalAuthTokenCredentials(grpc.AuthMetadataPlugin):
                     # actually expires
                     self.expires_at = pyrfc3339.parse(
                         token_json["expires"]
-                    ) - timedelta(seconds=120)
+                    ) - datetime.timedelta(seconds=120)
                     logger.debug(
                         "Found local auth token %s[...], expires at %s",
                         self.token[:8],
@@ -225,7 +230,10 @@ class LocalAuthTokenCredentials(grpc.AuthMetadataPlugin):
     def __call__(self, context, callback):
         metadata = None
         if self.token:
-            now = datetime.utcnow().replace(tzinfo=pytz.UTC)
+            try:
+                now = datetime.datetime.now(datetime.UTC)
+            except AttributeError:
+                now = datetime.datetime.utcnow().replace(tzinfo=pytz.UTC)
             if now >= self.expires_at:
                 self._refresh_local_token()
 

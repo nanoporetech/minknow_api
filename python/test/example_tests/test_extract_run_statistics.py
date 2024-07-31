@@ -41,8 +41,6 @@ TEST_ACQUISITION_OUTPUT_STATS = [
                 filtering=[
                     statistics_pb2.AcquisitionOutputKey(
                         barcode_name="barcode1234",
-                        lamp_barcode_id="unclassified",
-                        lamp_target_id="unclassified",
                         alignment_reference="unaligned",
                     )
                 ],
@@ -174,9 +172,9 @@ def test_basic_run_statistics():
             # Everything in place - should generate a valid report
             protocol_servicer.protocol_runs = [TEST_PROTOCOL_WITH_ACQUISTIIONS]
             acquisition_servicer.acquisition_runs = [TEST_ACQUISITION]
-            statistics_servicer.acquisition_outputs_per_run[
-                TEST_ACQUISITION.run_id
-            ] = TEST_ACQUISITION_OUTPUT_STATS
+            statistics_servicer.acquisition_outputs_per_run[TEST_ACQUISITION.run_id] = (
+                TEST_ACQUISITION_OUTPUT_STATS
+            )
             with tempfile.TemporaryDirectory() as output_dir:
                 run_extract_run_statistics_example(
                     server.port, ["--position=MN00000", "--output-dir", output_dir]
@@ -187,8 +185,8 @@ def test_basic_run_statistics():
                     Acquisition report
                     ==================
 
-                    Output snapshots for barcode: barcode1234, lamp_barcode_id: unclassified, lamp_target_id: unclassified, alignment_reference: unaligned
-                    --------------------------------------------------------------------------------------------------------------------------------------
+                    Output snapshots for barcode: barcode1234, alignment_reference: unaligned
+                    -------------------------------------------------------------------------
 
                     Timestamp(s)\tPassed Called reads\tFailed Reads\tBasecalled samples
                     60\t600\t0\t0

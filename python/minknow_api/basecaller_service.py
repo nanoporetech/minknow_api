@@ -166,11 +166,11 @@ class Basecaller(object):
                 basecalled. If True, subdirectories of those directories will also be searched recursively.
             barcoding_configuration (minknow_api.analysis_configuration_pb2.BarcodingConfiguration, optional): Options to control barcoding performed once basecalling reads is complete.
             alignment_configuration (minknow_api.analysis_configuration_pb2.AlignmentConfiguration, optional): Options to control alignment performed once basecalling reads is complete.
-            enable_read_splitting (bool, optional): Enable read splitting in guppy
+            enable_read_splitting (bool, optional): Enable read splitting in the basecaller
 
                 Note: Since 5.9 this option has no effect, the basecaller is responsible for deciding when read splitting should be enabled.
-            min_score_read_splitting (google.protobuf.wrappers_pb2.FloatValue, optional): Override score to use for guppy read splitting. If not specified a default value
-                is used from guppy.
+            min_score_read_splitting (google.protobuf.wrappers_pb2.FloatValue, optional): Override score to use for the basecaller read splitting. If not specified a default value
+                is used from the basecaller.
 
                 Note: Since 5.9 this option has no effect, the basecaller is responsible for deciding when read splitting should be enabled.
 
@@ -268,11 +268,14 @@ class Basecaller(object):
 
                 Reads will be sorted into subdirectories based on the sequencing run they came from.
             compress_fastq (bool, optional): Enable gzip compression of output FASTQ files.
+
+                DEPRECATED: This option does not have any effect - the offline barcoding no longer has the ability to compress fastq output.
             recursive (bool, optional): Recursively find fast5 files to basecall in the `input_reads_directories`.
 
                 If False, only the fast5 files directly in one of the `input_reads_directories` will be
                 basecalled. If True, subdirectories of those directories will also be searched recursively.
             barcoding_configuration (minknow_api.analysis_configuration_pb2.BarcodingConfiguration, optional): Options to control barcoding performed once basecalling reads is complete.
+            output_format (minknow_api.basecaller_pb2.StartBarcodingRequest.OutputFormat, optional): The type of file format to use for the output, default is BAM.
 
         Returns:
             minknow_api.basecaller_pb2.StartBarcodingResponse
@@ -315,6 +318,10 @@ class Basecaller(object):
         if "barcoding_configuration" in kwargs:
             unused_args.remove("barcoding_configuration")
             _message.barcoding_configuration.CopyFrom(kwargs['barcoding_configuration'])
+
+        if "output_format" in kwargs:
+            unused_args.remove("output_format")
+            _message.output_format = kwargs['output_format']
 
         if len(unused_args) > 0:
             raise ArgumentError("Unexpected keyword arguments to start_barcoding: '{}'".format(", ".join(unused_args)))

@@ -4,12 +4,17 @@ Example script to start a protocol
 Example usage might be:
 
 python ./python/minknow_api/examples/start_protocol.py \
-    --host localhost --position X1 \                        # Select which host + position will run a script
-    --sample-id "my_sample" --experiment-group "my_group" \ # Set sample id + experiment group
-    --experiment-duration 24 \                              # Set the run time of the experiment
-    --kit SQK-LSK109 \                                      # Specify which kit is being run
-    --basecalling \                                         # Enable basecalling
-    --fastq --bam                                           # Choose fastq + bam output options
+    --host localhost --position X1 \
+    --sample-id "my_sample" --experiment-group "my_group" \
+    --experiment-duration 24 \
+    --kit SQK-LSK109 \
+    --basecalling \
+    --fastq --bam
+
+This will start a protocol on position X1 of the local machine, with the sample ID set
+to "my_sample" and the run placed in the experiment group "my_group". It will be set to
+run for 24 hours. It will assume the sample was prepared using the SQK-LSK109 kit.
+Basecalling will be enabled, producing FASTQ and BAM output files.
 
 """  # noqa W605
 
@@ -645,10 +650,6 @@ def main():
                 args.barcode_kits,
                 args.trim_barcodes,
                 args.barcodes_both_ends,
-                args.detect_mid_strand_barcodes,
-                args.min_score,
-                args.min_score_rear,
-                args.min_score_mid,
             )
 
         if args.alignment_reference:

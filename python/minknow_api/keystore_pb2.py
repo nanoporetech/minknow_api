@@ -74,15 +74,6 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   _globals['_WATCHRESPONSE_VALUESENTRY']._serialized_end=314
   _globals['_KEYSTORESERVICE']._serialized_start=1061
   _globals['_KEYSTORESERVICE']._serialized_end=1510
-GetRequest.__doc__ = """Attributes:
-    names:
-        The names of the values you wish to fetch.
-    allow_missing:
-        Whether to allow missing values.  If set, names that are not
-        present in the store will simply be omitted from the response.
-        Otherwise, missing values will cause an error to be returned.
-        Defaults to 'false'
-"""
 RemoveRequest.__doc__ = """Attributes:
     names:
         The names of the values you wish to remove.
@@ -96,6 +87,15 @@ RemoveRequest.__doc__ = """Attributes:
 GetOneResponse.__doc__ = """Attributes:
     value:
         The requested value.
+"""
+GetRequest.__doc__ = """Attributes:
+    names:
+        The names of the values you wish to fetch.
+    allow_missing:
+        Whether to allow missing values.  If set, names that are not
+        present in the store will simply be omitted from the response.
+        Otherwise, missing values will cause an error to be returned.
+        Defaults to 'false'
 """
 WatchRequest.__doc__ = """Attributes:
     send_finished_runs:
@@ -111,9 +111,19 @@ WatchRequest.__doc__ = """Attributes:
         message will be sent with the set values. Otherwise, missing
         values will cause an immediate error.  Defaults to 'false'
 """
-GetOneRequest.__doc__ = """Attributes:
-    name:
-        The name of the value to fetch.
+GetResponse.__doc__ = """Attributes:
+    values:
+        The requested values.
+"""
+WatchResponse.__doc__ = """Attributes:
+    runs:
+        The current state of some of the runs.
+    values:
+        The values that have changed.  The first received message will
+        contain the current state of all the watched values.
+        Subsequent messages will only contain the values that changed.
+    removed_values:
+        The values that have been removed.
 """
 StoreRequest.__doc__ = """Attributes:
     values:
@@ -129,18 +139,8 @@ StoreRequest.__doc__ = """Attributes:
         the call to fail with `INVALID_ARGUMENT`  Note that calling
         remove() will remove the value regardless of this setting.
 """
-WatchResponse.__doc__ = """Attributes:
-    runs:
-        The current state of some of the runs.
-    values:
-        The values that have changed.  The first received message will
-        contain the current state of all the watched values.
-        Subsequent messages will only contain the values that changed.
-    removed_values:
-        The values that have been removed.
-"""
-GetResponse.__doc__ = """Attributes:
-    values:
-        The requested values.
+GetOneRequest.__doc__ = """Attributes:
+    name:
+        The name of the value to fetch.
 """
 # @@protoc_insertion_point(module_scope)

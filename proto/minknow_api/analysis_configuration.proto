@@ -311,6 +311,12 @@ message ReadFilters {
     // If set to zero (the default), this test is not applied (as though it had been set to a value
     // longer than any possible read).
     uint32 event_count_max = 4;
+
+    // Control whether reads unblocked using from `DataService::get_live_reads()` should be filtered.
+    //
+    // When set to true, reads which are unblocked by `get_live_reads` are filtered and therefore not basecalled.
+    // When set to false, reads that are unblocked by `get_live_reads` will not be filtered and therefore will be basecalled.
+    bool skip_rejected_reads = 5;
 }
 
 message ReadClassificationParams {
@@ -406,6 +412,25 @@ message ReadClassificationParams {
     // for other classification strategies.
     //
     google.protobuf.UInt32Value selected_classifications_chunks_required = 10;
+
+    // this parameter controls whether (or not)  we merge data for all selected classifications into a single
+    // data point before deciding whether to output a read.
+    // For instance, if 2 classifications are selected and classification A is 20% of the read, and classification B
+    // is 20% of the read then:
+    // When merge_selected_classifications is set to true, the overall selected classification proportion would amount
+    // to 40% of the read and that value would used when deciding whether or not to output the read.
+    // When merge_selected_classifications is set to false, each selected classification would be considered
+    // separately at the decision stage. Defaults to false.
+    // Note that when multiple classifications are selected by the user and the threshold criteria are met, then the
+    // most recent classification (of all selected classifications) will be used as the read overall classification.
+    //
+    google.protobuf.BoolValue merge_selected_classifications = 11;
+
+    // Limit on how long a read may be in seconds before minknow forces the selected decision and either
+    // selects or vetoes the complete read.
+    //
+    // If unspecified a default value is used.
+    google.protobuf.UInt64Value max_read_length_before_selected_decision_seconds = 12;
 }
 
 message ChannelStates {
@@ -670,7 +695,7 @@ message BarcodingConfiguration
     // If no barcoding kits are supplied, barcoding is disabled.
     repeated string barcoding_kits = 1;
 
-    // Whether Guppy should trim barcodes
+    // Whether the basecaller should trim barcodes
     // If not specified, this value defaults to false (not triming barcodes)
     // If barcoding is not enabled (e.g., because no barcoding kits are specified),
     // this parameter has no effect.
@@ -679,31 +704,18 @@ message BarcodingConfiguration
     // Barcode is only classified if a barcode above `min_score` is present at both ends of the basecalled read.
     bool require_barcodes_both_ends = 3;
 
-    // Search for barcodes through the entire length of the read.
-    //
-    // If a barcode is found in the middle of a read the read is marked as unclassified.
-    bool detect_mid_strand_barcodes = 4;
 
-    // Minimum alignment score to consider a valid barcode.
-    //
-    // Maximum value is 100, defaults to 60.
-    google.protobuf.FloatValue min_score = 5;
-
-    // Minimum score to consider a valid barcode (overrides min_score for rear barcodes).
-    //
-    // Maximum value is 100, defaults to min_score if not specified.
-    google.protobuf.FloatValue min_score_rear = 6;
-
-    // Minimum score to consider a valid mid barcode (only valid if detect_mid_strand_barcodes is specified).
-    //
-    // Maximum value is 100, defaults to 60.
-    google.protobuf.FloatValue min_score_mid = 7;
-
-    // The minimum score required for the barcode mask to be detected.
-    //
-    // Maximum value is 100, defaults to 40. 
-    google.protobuf.FloatValue min_score_mask = 8;
-        
+    reserved "detect_mid_strand_barcodes";
+    reserved 4;
+    reserved "min_score";
+    reserved 5;
+    reserved "min_score_rear";
+    reserved 6;
+    reserved "min_score_mid";
+    reserved 7;
+    reserved "min_score_mask";
+    reserved 8;
+    
     // If set, barcodes that aren't in barcode user data list will be ignored
     //
     // Since 5.6
@@ -716,7 +728,7 @@ message AlignmentConfiguration
 {
     // Provide an index to align reads against once basecalled.
     //
-    // Any acceptable reference format to guppy can be passed here:
+    // Any acceptable reference format to the basecaller can be passed here:
     //   - fasta reference file
     //   - minimap index file
     repeated string reference_files = 1;
@@ -726,7 +738,7 @@ message AlignmentConfiguration
     // Note: alignment_index must be provided for this argument to be valid.
     string bed_file = 2;
 
-    // Minimum coverage for guppy to accept an alignment.
+    // Minimum coverage for the basecaller to accept an alignment.
     //
     // If not specified a default value is used.
     //
@@ -748,6 +760,8 @@ message AlignmentConfiguration
 }
 
 // Since 4.1
+//
+// DEPRECATED 6.0: Lamp support has been removed and all of these options will be ignored.
 message LampConfiguration
 {
     // Set the lamp kit being used.
@@ -785,15 +799,15 @@ message BasecallerConfiguration
         google.protobuf.UInt64Value max_bases = 3;
     }
 
-    // Choose if guppy is enabled or disabled.
+    // Choose if the basecaller is enabled or disabled.
     //
     // If set to false then no basecalling will take place, and the rest of the config is ignored.
     bool enable = 2;
 
-    // The Guppy cfg file with all the settings.
+    // The basecaller cfg file with all the settings.
     //
     // Filename can be absolute, or a basename (eg dna_r9.4_450bps.cfg)
-    // which guppy should locate (see guppy application config entry: "data_path")
+    // which the basecaller should locate (see basecaller application config entry: "data_path")
     string config_filename = 1;
 
     // Enable or disable pass/fail filtering based on alignment.  When enabled, reads which
@@ -848,17 +862,19 @@ message BasecallerConfiguration
     // If no configuration is specified lamp is disabled.
     //
     // Since 4.1
+    //
+    // DEPRECATED 6.0: Lamp support has been removed and this option will be ignored.
     LampConfiguration lamp_configuration = 7;
 
-    // Enable read splitting in guppy.
+    // Enable read splitting in the basecaller.
     //
     // Since 4.5
     //
     // Note: Since 5.9 this option has no effect, the basecaller is responsible for deciding when read splitting should be enabled.
     bool enable_read_splitting = 8;
 
-    // Override score to use for guppy read splitting. If not specified a default value
-    // is used from guppy.
+    // Override score to use for the basecaller read splitting. If not specified a default value
+    // is used from the basecaller.
     //
     // Since 4.5
     //
@@ -873,7 +889,13 @@ message SetBasecallerConfigurationRequest
 
 message SetBasecallerConfigurationResponse{}
 
-message GetBasecallerConfigurationRequest{}
+message GetBasecallerConfigurationRequest
+{
+    // The unique identifier assigned to this acquisition run.
+    // 
+    // Since 6.0
+    string run_id = 1;
+}
 
 message GetPoreTypeConfigurationRequest {}
 
@@ -940,7 +962,6 @@ message SetPoreTypeConfigurationResponse {}
 //  - read_classification:  The classification applied to the completed read (eg. strand).
 //  - batch_number:         The batch number of this read, evaluated based on the destination file.
 //  - read_id:              Unique read id for each read, formatted as a hash.
-//  - read_number:          The read number (unique per channel, incrementing number assigned to each read by MinKNOW).
 //  - channel_name:         The name of the channel which produced the read.
 //  - read_start_time:      Read start time formatted in rfc3339 format.
 //  - basecall_status:      Basecalling output status (derived from WriterDefaults section in analysis config).
@@ -1026,12 +1047,12 @@ message WriterConfiguration {
         // Stored under /Analyses/Basecall_1D_*/BaseCalled_(template|complement)/Fastq
         ChannelConfiguration fastq = 3;
 
-        // Trace table received from Guppy
+        // Trace table received from the basecaller
         //
         // Stored under /Analyses/Basecall_1D_*/BaseCalled_template/Trace
         ChannelConfiguration trace_table = 11;
 
-        // Move table received from Guppy
+        // Move table received from the basecaller
         //
         // Stored under /Analyses/Basecall_1D_*/BaseCalled_template/Move
         ChannelConfiguration move_table = 12;
@@ -1059,7 +1080,7 @@ message WriterConfiguration {
 
         // The pattern used to find a fastq header.
         //
-        // default: {read_id} runid={run_id} read={read_number} ch={channel_name} start_time={read_start_time}
+        // default: {read_id} runid={run_id} ch={channel_name} start_time={read_start_time}
         // Where each {xxx} section is replaced with an attribute from the minknow state
         // when the fastq is generated.
         string fastq_header_pattern = 9;
@@ -1108,7 +1129,7 @@ message WriterConfiguration {
 
         // The pattern used to find a fastq header.
         //
-        // default: {read_id} runid={run_id} read={read_number} ch={channel_name} start_time={read_start_time}
+        // default: {read_id} runid={run_id} ch={channel_name} start_time={read_start_time}
         // Where each {xxx} section is replaced with an attribute from the minknow state
         // when the fastq is generated.
         string header_pattern = 3;
@@ -1489,7 +1510,12 @@ message WriterConfiguration {
 message SetWriterConfigurationResponse {
 }
 
-message GetWriterConfigurationRequest {
+message GetWriterConfigurationRequest
+{
+    // The unique identifier assigned to this acquisition run.
+    // 
+    // Since 6.0
+    string run_id = 1;
 }
 
 message GetReadClassificationsRequest {}

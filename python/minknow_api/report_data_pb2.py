@@ -58,6 +58,8 @@ Attributes:
     basecaller_config:
         Information about the basecaller configuration  Since 5.9
 """
+Host.__doc__ = """This is a subset of the information available from the describe_host()
+call"""
 ReportData.__doc__ = """This field has been removed  Since 5.6
 
 Attributes:
@@ -71,6 +73,4 @@ Attributes:
     report_data_generation_time:
         The time at which the report data was generated (UTC)
 """
-Host.__doc__ = """This is a subset of the information available from the describe_host()
-call"""
 # @@protoc_insertion_point(module_scope)

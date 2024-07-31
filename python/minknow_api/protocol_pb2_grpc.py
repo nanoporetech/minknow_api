@@ -119,6 +119,11 @@ class ProtocolServiceStub(object):
                 request_serializer=minknow__api_dot_protocol__pb2.SetPlatformQcResultRequest.SerializeToString,
                 response_deserializer=minknow__api_dot_protocol__pb2.SetPlatformQcResultResponse.FromString,
                 )
+        self.set_hardware_check_result = channel.unary_unary(
+                '/minknow_api.protocol.ProtocolService/set_hardware_check_result',
+                request_serializer=minknow__api_dot_protocol__pb2.SetHardwareCheckResultRequest.SerializeToString,
+                response_deserializer=minknow__api_dot_protocol__pb2.SetHardwareCheckResultResponse.FromString,
+                )
         self.associate_post_processing_analysis_for_protocol = channel.unary_unary(
                 '/minknow_api.protocol.ProtocolService/associate_post_processing_analysis_for_protocol',
                 request_serializer=minknow__api_dot_protocol__pb2.AssociatePostProcessingAnalysisRequest.SerializeToString,
@@ -370,6 +375,32 @@ class ProtocolServiceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def set_hardware_check_result(self, request, context):
+        """Set the hardware check result
+
+        Should be called to set the status to `Started` at the start of any hardware check script
+        Should be called again to set the final status when a hardware check script finishes
+
+        If a script finishes, and the hardware check status is `Started`, then MinKNOW will set the
+        status to `Failed: ScriptError`.  (The hardware check script should have updated the status
+        when the hardware check finished; failure to do so indicates that the script failed).
+
+        The call will fail with `INVALID_ARGUMENT` if:
+        - HardwareCheckStatus is NOT `Failed`, and `HardwareCheckFailureReason` is NOT `NoError`
+        - HardwareCheckStatus is `Failed` and `HardwareCheckFailureReason` is `NoError`
+        - HardwareCheckStatus is not a valid value (None, Started, Succeeded or Failed)
+        - The supplied `protocol_run_id` does not correspond to an existing protocol
+
+        The call will fail with `FAILED_PRECONDITION` if:
+        - The supplied `protocol_run_id` does not correspond to an in-progress protocol
+        - Hardware check status are not moved through in order:
+        None -> Started -> Succeeded/Failed
+
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
     def associate_post_processing_analysis_for_protocol(self, request, context):
         """Associated a post processing analysis process, and schedule it to run once the protocol is complete.
 
@@ -532,6 +563,11 @@ def add_ProtocolServiceServicer_to_server(servicer, server):
                     servicer.set_platform_qc_result,
                     request_deserializer=minknow__api_dot_protocol__pb2.SetPlatformQcResultRequest.FromString,
                     response_serializer=minknow__api_dot_protocol__pb2.SetPlatformQcResultResponse.SerializeToString,
+            ),
+            'set_hardware_check_result': grpc.unary_unary_rpc_method_handler(
+                    servicer.set_hardware_check_result,
+                    request_deserializer=minknow__api_dot_protocol__pb2.SetHardwareCheckResultRequest.FromString,
+                    response_serializer=minknow__api_dot_protocol__pb2.SetHardwareCheckResultResponse.SerializeToString,
             ),
             'associate_post_processing_analysis_for_protocol': grpc.unary_unary_rpc_method_handler(
                     servicer.associate_post_processing_analysis_for_protocol,
@@ -917,6 +953,23 @@ class ProtocolService(object):
         return grpc.experimental.unary_unary(request, target, '/minknow_api.protocol.ProtocolService/set_platform_qc_result',
             minknow__api_dot_protocol__pb2.SetPlatformQcResultRequest.SerializeToString,
             minknow__api_dot_protocol__pb2.SetPlatformQcResultResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def set_hardware_check_result(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/minknow_api.protocol.ProtocolService/set_hardware_check_result',
+            minknow__api_dot_protocol__pb2.SetHardwareCheckResultRequest.SerializeToString,
+            minknow__api_dot_protocol__pb2.SetHardwareCheckResultResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 

@@ -8,6 +8,7 @@ function from the data service. This RPC works by:
 
 # TODO: Explanation of data flow in this RPC
 """
+
 import logging
 import random
 import time
@@ -42,7 +43,6 @@ class DataServicer(minknow_api.data_pb2_grpc.DataServiceServicer):
             sample_number = 0
             defaults = dict(
                 id=str(uuid4()),
-                number=random.randint(1, 10000),
                 start_sample=sample_number,
                 chunk_start_sample=sample_number,
                 chunk_length=sample_length,
@@ -174,7 +174,7 @@ class TestBidirectionalRPC(unittest.TestCase):
                     minknow_api.data_pb2.GetLiveReadsRequest.Action(
                         action_id=str(uuid4()),
                         channel=key,
-                        number=r.number,
+                        id=r.id,
                         unblock=minknow_api.data_pb2.GetLiveReadsRequest.UnblockAction(
                             duration=1,
                         ),

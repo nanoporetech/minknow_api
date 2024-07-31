@@ -73,7 +73,7 @@ service ManagerService {
         option idempotency_level = NO_SIDE_EFFECTS;
     }
 
-    // Get information about Guppy, including the port to connect to it on.
+    // Get information about the basecaller, including the port to connect to it on.
     //
     // Since 4.1
     rpc get_guppy_info (GetGuppyInfoRequest) returns (GetGuppyInfoResponse) {
@@ -85,7 +85,7 @@ service ManagerService {
     // - Protocols version (i.e. Bream-4 version)
     // - Configuration version (i.e. Wanda version)
     // - Distribution version
-    // - Guppy version
+    // - Basecaller version
     //
     // This RPC can be called without providing any authentication tokens.
     //
@@ -167,6 +167,8 @@ service ManagerService {
     // Get info about all available lamp kits
     //
     // Since 4.1
+    //
+    // DEPRECATED 6.0: Lamp support has been removed and this response will always be empty.
     rpc get_lamp_kit_info(GetLampKitInfoRequest) returns (GetLampKitInfoResponse) {
         option idempotency_level = NO_SIDE_EFFECTS;
     }
@@ -358,6 +360,12 @@ service ManagerService {
         option (experimental) = true;
     }
 
+    // Forcibly halt and restart any MinKNOW-related device administration services, such as Mooneye.
+    // 
+    // Since 6.0
+    rpc restart_device_admin_service(RestartDeviceAdminRequest) returns (RestartDeviceAdminResponse) {
+        option idempotency_level = IDEMPOTENT;
+    }
 }
 
 message DescribeHostRequest {
@@ -453,11 +461,29 @@ message DescribeHostResponse {
         // 
         // This may be due to a runtime issue and attempts are being made to recover
         BASECALLING_UNAVAILABLE_ATTEMPTING_RECOVERY = 3;
-     };
-     // Whether the device can currently provide basecalling
-     //
-     // 
-     BasecallingAvailability can_basecall = 6;
+    };
+
+    // Whether the device can currently provide basecalling
+    BasecallingAvailability can_basecall = 6;
+
+    // Details about the hardware on which basecalling may be run.
+    message BasecallerSubstrate {
+        // If false, this indicates that CPU basecalling is selected.
+        // In this case, the 'gpus' field should be omitted or empty.
+        bool is_gpu = 1;
+
+        // Provides human-readable strings describing the GPUs available for use by the basecaller.
+        // Note that even if 'is_gpu' is true, this may be empty if no further details are available.
+        // This field being empty _does not_ imply that CPU basecalling is in use.
+        repeated string gpus = 2;
+    }
+
+    // Information about the hardware being used right now by the basecaller.
+    BasecallerSubstrate current_basecalling_hardware = 7;
+
+    // If more than one possible basecalling hardware selection can be made, this field provides the details of those options.
+    // Typically this will be a list of 'unused' GPUs.
+    repeated BasecallerSubstrate available_basecalling_hardware = 8;
 }
 
 message GetBasecallerFeaturesRequest {}
@@ -559,6 +585,7 @@ message FlowCellPosition {
         // Since 4.4
         STATE_NEEDS_ASSOCIATION = 6;
     };
+
     // The state of the flow cell position.
     //
     // If the state is not `STATE_RUNNING` or `STATE_INITIALISING`, the flow cell position can be
@@ -644,6 +671,42 @@ message FlowCellPosition {
     //
     // Since 5.3
     string parent_name = 12;
+
+    // Firmware is updating on the device and it should not be unplugged.
+    //
+    // If the state is INITIALISING, this flag may be set to true to indicate that the device's
+    // persistent memory is being reprogrammed with new firmware. When this is the case, the device
+    // should not be unplugged, as there is a small chance this will cause the device to be rendered
+    // ununsable.
+    //
+    // It is not set for devices that do not come with firmware pre-loaded and have to have it
+    // loaded every time they are plugged in (like the MinION Mk1B), as unplugging these devices
+    // during firmware loading is fine.
+    bool firmware_is_updating = 13;
+
+    // Indicates the progress_percent field is being used. See that field for more information.
+    bool has_progress = 14;
+
+    // Indicates progress through the current state.
+    //
+    // This is currently only used for long-running INITIALISING states, such as when firmware is
+    // being updated. If it is being used, has_progress will be true (which indicates it is
+    // sensible to display a progress bar even if progress_percent is currently 0).
+    //
+    // This field will always have values between 0 and 100 (inclusive), and the value will increase
+    // over time. It is intended for displaying a progress bar or similar.
+    uint32 progress_percent = 15;
+
+    // Indicates roughly how much time is remaining in this state.
+    //
+    // If has_progress is true and this is non-zero, it will contain an estimate of how much time is
+    // left in this state. Currently it is only used for long-running INITIALISING states.
+    //
+    // If no ETA can be calculated, this will be zero.
+    //
+    // Note that it is always an estimate - it is recommended to round larger values, like "about 2
+    // minutes remaining".
+    uint32 progress_eta_seconds = 16;
 }
 
 message FlowCellPositionsRequest {
@@ -721,15 +784,15 @@ message GetGuppyInfoRequest {}
 
 message GetGuppyInfoResponse {
     oneof connection_type {
-        // The port Guppy is listening on.
+        // The port the basecaller is listening on.
         uint32 port = 1;
 
-        // The path to an ipc file Guppy is using.
-        // Use "ipc://<ipc_path>" for a guppy connection string.
+        // The path to an ipc file the basecaller is using.
+        // Use "ipc://<ipc_path>" for a basecaller connection string.
         string ipc_path = 3;
     }
 
-    // The Guppy server version.
+    // The basecaller server version.
     string version = 2;
 }
 
@@ -838,6 +901,7 @@ message GetBarcodeKitInfoRequest{}
 
 message GetBarcodeKitInfoResponse{
     message BarcodeKitInfo{
+        // DEPRECATED 6.0: Dual barcoding support has been removed and this value will always false.
         bool is_dual = 2;
         bool is_both_ends = 3;
     }
@@ -846,8 +910,10 @@ message GetBarcodeKitInfoResponse{
     map<string, BarcodeKitInfo> barcode_kit_info = 1;
 }
 
-message GetLampKitInfoRequest{}
+// DEPRECATED 6.0: Lamp support has been removed.
+message GetLampKitInfoRequest{}    //
 
+// DEPRECATED 6.0: Lamp support has been removed and this response will always be empty.
 message GetLampKitInfoResponse{
     // Lamp kit names
     repeated string lamp_kits = 2;
@@ -864,6 +930,8 @@ message GetBarcodeKeysRequest{
     // Name of lamp kit to obtain barcode names for.
     //
     // Fails with INVALID_ARGUMENT if the requested `lamp_kit_name` is unavailable.
+    //
+    // DEPRECATED 6.0: Lamp support has been removed and this option will be ignored.
     string lamp_kit_name = 2;
 }
 
@@ -872,6 +940,8 @@ message GetBarcodeKeysResponse {
     repeated string barcode_keys = 1;
 
     // Returned lamp barcode ids.
+    //
+    // DEPRECATED 6.0: Lamp support has been removed and this value will always be empty.
     repeated string lamp_keys = 2;
 
     // Combined barcode and lamp keys.
@@ -886,6 +956,9 @@ message GetBarcodeKeysResponse {
     //  - barcode02_lamp01
     //  - barcode02_lamp02
     //  - barcode02_lamp03
+    //
+    // DEPRECATED 6.0: Lamp support has been removed and this value will always be the same
+    // as barcode_keys.
     repeated string combined_keys = 3;
 }
 
@@ -972,6 +1045,8 @@ message GetSequencingKitsResponse {
         bool includes_barcoding = 3;
 
         // Whether the kit can be used for LamPORE diagnostics.
+        //
+        // DEPRECATED 6.0: Lamp support has been removed and this value will always be false.
         bool lamp_kit = 16;
 
         // Whether there is a "control" protocol available for this kit.
@@ -1094,10 +1169,22 @@ message GetAlignmentReferenceInformationResponse {
 
     // Does the reference file fit within the recommended live usage memory size?
     //
-    // This uses an estimate of how much memory a reference may use when running in guppy
+    // This uses an estimate of how much memory a reference may use when running in the basecaller
     // and compares to the amount of memory in the sequencer. It does not account for
     // whether the reference will run in real time.
     bool recommended_live_usage = 3;
+
+    // True if adaptive sampling is recommended
+    // based on reference file size in bases, and device type
+    //
+    // Since 6.0
+    bool recommended_adaptive_sampling_usage = 4;
+
+    // The maximum limit for adaptive sampling number of bases
+    // based on device type
+    //
+    // Since 6.0
+    uint64 max_recommended_adaptive_sampling_bases = 5;
 }
 
 message AssociationDeviceCodeRequest {
@@ -1281,12 +1368,6 @@ message ListSettingsForProtocolResponse {
         protocol_settings.ProtocolSetting basecall_model = 4;
         protocol_settings.ProtocolSetting trim_barcodes_enabled = 5;
         protocol_settings.ProtocolSetting require_barcodes_both_ends = 6;
-        protocol_settings.ProtocolSetting detect_mid_strand_barcodes = 7;
-        protocol_settings.ProtocolSetting override_mid_barcoding_score = 8;
-        protocol_settings.ProtocolSetting override_rear_barcoding_score = 9;
-        protocol_settings.ProtocolSetting min_barcoding_score = 10;
-        protocol_settings.ProtocolSetting min_barcoding_score_rear = 11;
-        protocol_settings.ProtocolSetting min_barcoding_score_mid = 12;
         protocol_settings.ProtocolSetting alignment_enabled = 13;
         protocol_settings.ProtocolSetting alignment_ref_file = 14;
         protocol_settings.ProtocolSetting alignment_bed_file_enabled = 15;
@@ -1380,4 +1461,10 @@ message SetFeaturesRequest {
 
 message SetFeaturesResponse {
     
+}
+
+message RestartDeviceAdminRequest {
+}
+
+message RestartDeviceAdminResponse {
 }

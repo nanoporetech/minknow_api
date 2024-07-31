@@ -150,10 +150,6 @@ BarcodingArgs = collections.namedtuple(
         "kits",
         "trim_barcodes",
         "barcodes_both_ends",
-        "detect_mid_strand_barcodes",
-        "min_score",
-        "min_score_rear",
-        "min_score_mid",
     ],
 )
 AlignmentArgs = collections.namedtuple("AlignmentArgs", ["reference_files", "bed_file"])
@@ -257,7 +253,7 @@ def make_protocol_arguments(
         protocol_args.append("--base_calling=on")
 
         if basecalling.config:
-            protocol_args.append("--guppy_filename=" + basecalling.config)
+            protocol_args.append("--basecaller_filename=" + basecalling.config)
 
         if basecalling.barcoding:
             barcoding_args = []
@@ -279,31 +275,6 @@ def make_protocol_arguments(
                 barcoding_args.append(
                     "require_barcodes_both_ends="
                     + on_off(basecalling.barcoding.barcodes_both_ends)
-                )
-
-            if basecalling.barcoding.detect_mid_strand_barcodes:
-                # detect_mid_strand_barcodes=on/off
-                barcoding_args.append(
-                    "detect_mid_strand_barcodes="
-                    + on_off(basecalling.barcoding.detect_mid_strand_barcodes)
-                )
-
-            if basecalling.barcoding.min_score:
-                # min_score=66
-                barcoding_args.append(
-                    "min_score={}".format(basecalling.barcoding.min_score)
-                )
-
-            if basecalling.barcoding.min_score_rear:
-                # min_score_rear=66
-                barcoding_args.append(
-                    "min_score_rear={}".format(basecalling.barcoding.min_score_rear)
-                )
-
-            if basecalling.barcoding.min_score_mid:
-                # min_score_mid=66
-                barcoding_args.append(
-                    "min_score_mid={}".format(basecalling.barcoding.min_score_mid)
                 )
 
             protocol_args.extend(["--barcoding"] + barcoding_args)
@@ -398,7 +369,8 @@ def make_protocol_arguments(
         if not disable_active_channel_selection:
             protocol_args.append("--mux_scan_period={}".format(mux_scan_period))
 
-    protocol_args.extend(args)
+    if args:
+        protocol_args.extend(args)
 
     return protocol_args
 

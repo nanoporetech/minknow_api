@@ -180,15 +180,19 @@ message GetVersionInfoResponse {
     // Since 4.1
     InstallationType installation_type = 6;
 
-    // Version of guppy MinKNOW was packaged against.
+    // Version of the basecaller MinKNOW was packaged against.
     //
     // Since 5.0
-    string guppy_build_version = 7;
+    // This field has been updated since 6.0
+    reserved 7; // guppy_build_version
+    string basecaller_build_version = 9;
 
-    // Version of guppy MinKNOW running with.
+    // Version of the basecaller MinKNOW is running with.
     //
     // Since 5.0
-    string guppy_connected_version = 8;
+    // This field has been updated since 6.0
+    reserved 8; // guppy_connected_version
+    string basecaller_connected_version = 10;
 }
 
 message GetOutputDirectoriesRequest {

@@ -34,28 +34,21 @@ def dump_statistics_for_acquisition(connection, acquisition_run_id, output_dir):
 
     def format_filter_group(filter_group):
         """Find a descriptive string for `filter_group`."""
-        return (
-            "barcode: %s, lamp_barcode_id: %s, lamp_target_id: %s, alignment_reference: %s"
-            % (
-                filter_group.barcode_name,
-                filter_group.lamp_barcode_id,
-                filter_group.lamp_target_id,
-                filter_group.alignment_reference,
-            )
+        return "barcode: %s, alignment_reference: %s" % (
+            filter_group.barcode_name,
+            filter_group.alignment_reference,
         )
 
     # Invoke the API to get a stream of acquisition output results:
     #
     # Request snapshots each hour, and ensure data is split on
-    # alignment reference, barcode name, and lamp target/barcode.
+    # alignment reference and barcode name.
     stream = connection.statistics.stream_acquisition_output(
         acquisition_run_id=acquisition_run_id,
         data_selection=minknow_api.statistics_pb2.DataSelection(step=60 * 60),
         split=minknow_api.statistics_pb2.AcquisitionOutputSplit(
             alignment_reference=True,
             barcode_name=True,
-            lamp_barcode_id=True,
-            lamp_target_id=True,
         ),
     )
 

@@ -816,6 +816,8 @@ message AcquisitionOutputKey {
     //   - Specify "classified" for all data which has a lamp barcode.
     //
     // If unspecified all lamp barcodes are returned.
+    //
+    // DEPRECATED 6.0: Lamp support has been removed and this option will always be ignored.
     string lamp_barcode_id = 4;
 
     // Only return data for the given lamp target.
@@ -826,9 +828,11 @@ message AcquisitionOutputKey {
     // Using barcode terms here as lamp is part of barcoding pipeline
     //
     // If unspecified all lamp target are returned.
+    //
+    // DEPRECATED 6.0: Lamp support has been removed and this option will always be ignored.
     string lamp_target_id = 5;
 
-    // The barcode alias corresponding to the `barcode_name` and `lamp_barcode_id`
+    // The barcode alias corresponding to the `barcode_name`
     string barcode_alias = 6;
 
     // Only return data for the given ReadEndReason.
@@ -857,11 +861,15 @@ message AcquisitionOutputSplit {
     // Split data for each lamp barcode id.
     //
     // Lamp barcodes are defined by the active lamp kit.
+    //
+    // DEPRECATED 6.0: Lamp support has been removed and this option will always be ignored.
     bool lamp_barcode_id = 4;
 
     // Split data for each lamp targets id.
     //
     // Lamp targets are defined by the active lamp kit.
+    //
+    // DEPRECATED 6.0: Lamp support has been removed and this option will always be ignored.
     bool lamp_target_id = 5;
 
     // Split returned data by read_end_reason

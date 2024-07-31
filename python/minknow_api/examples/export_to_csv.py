@@ -135,9 +135,9 @@ def main():
             experiment_information = {}
 
             experiment_information["Experiment ID"] = proto_run_info.protocol_id
-            experiment_information[
-                "Flow-Cell ID"
-            ] = proto_run_info.flow_cell.flow_cell_id
+            experiment_information["Flow-Cell ID"] = (
+                proto_run_info.flow_cell.flow_cell_id
+            )
             experiment_information["Sample ID"] = proto_run_info.user_info.sample_id
 
             end_time = proto_run_info.end_time.ToDatetime()

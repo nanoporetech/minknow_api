@@ -172,7 +172,7 @@ service DataService {
     //
     // GetLiveReadsRequest stream:
     //      Sent by the user, provides MinKNOW with actions to take on current reads, actions
-    //      taken are sumarised and sent back to the user in the GetLiveReadsResponse stream.
+    //      taken are summarised and sent back to the user in the GetLiveReadsResponse stream.
     // GetLiveReadsResponse stream:
     //      Sent to the user, contains a stream of ongoing sequencing information, sent as
     //      regularly as possible, with information on reads in progress, and feedback on actions
@@ -190,6 +190,12 @@ service DataService {
     //
     rpc get_live_reads(stream GetLiveReadsRequest) returns (stream GetLiveReadsResponse) {
         option idempotency_level = NO_SIDE_EFFECTS;
+    }
+
+    // Record information about adaptive-sampling for telemetry. This is optional
+    // and will not change how adaptive sampling works.
+    rpc record_adaptive_sampling_information(RecordAdaptiveSamplingInformationRequest) returns (RecordAdaptiveSamplingInformationResponse) {
+        option idempotency_level = IDEMPOTENT;
     }
 
     // Collects statistics about read (chunk) lengths and signal, split by channel, channel
@@ -534,8 +540,9 @@ message GetLiveReadsRequest {
         // If the read requested is no longer in progress, the action fails.
         oneof read {
             string id = 3;
-            uint32 number = 4;
         }
+        // removed since 6.0
+        reserved 4;
 
         oneof action {
             // Unblock a read and skip further data from this read.
@@ -566,6 +573,9 @@ message GetLiveReadsRequest {
         // Maximum read length MinKNOW will attempt to unblock
         // reads beyond this length will not be unblocked when Action's request,
         // instead minknow will skip any further data from the read.
+        // NOTE that read length metrics are tracked from the receipt of the first StreamSetup message,
+        // so reads from the first batch sent could be longer than the `max_unblock_read_length_xxx`
+        // values unless the first StreamSetup is sent close to the experiment start time.
         oneof max_unblock_read_length {
             // Maximum read length MinKNOW will attempt to unblock (in samples).
             //
@@ -605,16 +615,16 @@ message GetLiveReadsRequest {
     }
 }
 
+// NOTE that the read metrics below are tracked from the receipt of the first StreamSetup message.
+// It is advised that the first StreamSetup be sent close to the experiment start time for 
+// maximum accuracy.
 message GetLiveReadsResponse {
     message ReadData {
         // The id of this read, this id is unique for every read ever produced.
         string id = 1;
 
-        // The minknow assigned number of this read
-        //
-        // Read numbers always increment throughout the experiment, and are unique per channel -
-        // however they are not necessarily contiguous.
-        uint32 number = 2;
+        // removed since 6.0
+        reserved 2;
 
         // Absolute start point of this read
         uint64 start_sample = 3;
@@ -693,6 +703,27 @@ message ResetChannelStatesRequest
 
 message ResetChannelStatesResponse
 {}
+
+message RecordAdaptiveSamplingInformationRequest {
+    enum Objective {
+        OTHER = 0;
+        BARCODE_BALANCE = 1;
+        ENRICH = 2;
+        DEPLETE = 3;
+    }
+
+    oneof information {
+        // The reason for applying the adaptive sampling technique. This must be recorded during
+        // the acquisition period in which adaptive sampling is applied.
+        Objective objective = 1;
+
+        // The reason why the adaptive sampling script ended. This string will be truncated to
+        // 80 characters.
+        string end_reason = 2;
+    }
+}
+
+message RecordAdaptiveSamplingInformationResponse {}
 
 message GetReadStatisticsRequest {
   // List of channels required, indexed from 1.

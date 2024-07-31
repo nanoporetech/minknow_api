@@ -393,13 +393,13 @@ class AnalysisConfigurationService(object):
                 This can be passed instead of the keyword arguments.
             _timeout (float, optional): The call will be cancelled after this number of seconds
                 if it has not been completed.
-            enable (bool, optional): Choose if guppy is enabled or disabled.
+            enable (bool, optional): Choose if the basecaller is enabled or disabled.
 
                 If set to false then no basecalling will take place, and the rest of the config is ignored.
-            config_filename (str, optional): The Guppy cfg file with all the settings.
+            config_filename (str, optional): The basecaller cfg file with all the settings.
 
                 Filename can be absolute, or a basename (eg dna_r9.4_450bps.cfg)
-                which guppy should locate (see guppy application config entry: "data_path")
+                which the basecaller should locate (see basecaller application config entry: "data_path")
             align_filter (bool, optional): Enable or disable pass/fail filtering based on alignment.  When enabled, reads which
                 do not align to any references will be marked as "failed", and written to the folder
                 specified in MinKNOW configuration for failed reads.  
@@ -442,13 +442,15 @@ class AnalysisConfigurationService(object):
                 If no configuration is specified lamp is disabled.
 
                 Since 4.1
-            enable_read_splitting (bool, optional): Enable read splitting in guppy.
+
+                DEPRECATED 6.0: Lamp support has been removed and this option will be ignored.
+            enable_read_splitting (bool, optional): Enable read splitting in the basecaller.
 
                 Since 4.5
 
                 Note: Since 5.9 this option has no effect, the basecaller is responsible for deciding when read splitting should be enabled.
-            min_score_read_splitting (google.protobuf.wrappers_pb2.FloatValue, optional): Override score to use for guppy read splitting. If not specified a default value
-                is used from guppy.
+            min_score_read_splitting (google.protobuf.wrappers_pb2.FloatValue, optional): Override score to use for the basecaller read splitting. If not specified a default value
+                is used from the basecaller.
 
                 Since 4.5
 
@@ -539,13 +541,13 @@ class AnalysisConfigurationService(object):
                 This can be passed instead of the keyword arguments.
             _timeout (float, optional): The call will be cancelled after this number of seconds
                 if it has not been completed.
-            enable (bool, optional): Choose if guppy is enabled or disabled.
+            enable (bool, optional): Choose if the basecaller is enabled or disabled.
 
                 If set to false then no basecalling will take place, and the rest of the config is ignored.
-            config_filename (str, optional): The Guppy cfg file with all the settings.
+            config_filename (str, optional): The basecaller cfg file with all the settings.
 
                 Filename can be absolute, or a basename (eg dna_r9.4_450bps.cfg)
-                which guppy should locate (see guppy application config entry: "data_path")
+                which the basecaller should locate (see basecaller application config entry: "data_path")
             align_filter (bool, optional): Enable or disable pass/fail filtering based on alignment.  When enabled, reads which
                 do not align to any references will be marked as "failed", and written to the folder
                 specified in MinKNOW configuration for failed reads.  
@@ -588,13 +590,15 @@ class AnalysisConfigurationService(object):
                 If no configuration is specified lamp is disabled.
 
                 Since 4.1
-            enable_read_splitting (bool, optional): Enable read splitting in guppy.
+
+                DEPRECATED 6.0: Lamp support has been removed and this option will be ignored.
+            enable_read_splitting (bool, optional): Enable read splitting in the basecaller.
 
                 Since 4.5
 
                 Note: Since 5.9 this option has no effect, the basecaller is responsible for deciding when read splitting should be enabled.
-            min_score_read_splitting (google.protobuf.wrappers_pb2.FloatValue, optional): Override score to use for guppy read splitting. If not specified a default value
-                is used from guppy.
+            min_score_read_splitting (google.protobuf.wrappers_pb2.FloatValue, optional): Override score to use for the basecaller read splitting. If not specified a default value
+                is used from the basecaller.
 
                 Since 4.5
 
@@ -679,6 +683,9 @@ class AnalysisConfigurationService(object):
                 This can be passed instead of the keyword arguments.
             _timeout (float, optional): The call will be cancelled after this number of seconds
                 if it has not been completed.
+            run_id (str, optional): The unique identifier assigned to this acquisition run.
+
+                Since 6.0
 
         Returns:
             minknow_api.analysis_configuration_pb2.BasecallerConfiguration
@@ -697,6 +704,10 @@ class AnalysisConfigurationService(object):
         unused_args = set(kwargs.keys())
 
         _message = GetBasecallerConfigurationRequest()
+
+        if "run_id" in kwargs:
+            unused_args.remove("run_id")
+            _message.run_id = kwargs['run_id']
 
         if len(unused_args) > 0:
             raise ArgumentError("Unexpected keyword arguments to get_basecaller_configuration: '{}'".format(", ".join(unused_args)))
@@ -941,6 +952,9 @@ class AnalysisConfigurationService(object):
                 This can be passed instead of the keyword arguments.
             _timeout (float, optional): The call will be cancelled after this number of seconds
                 if it has not been completed.
+            run_id (str, optional): The unique identifier assigned to this acquisition run.
+
+                Since 6.0
 
         Returns:
             minknow_api.analysis_configuration_pb2.WriterConfiguration
@@ -959,6 +973,10 @@ class AnalysisConfigurationService(object):
         unused_args = set(kwargs.keys())
 
         _message = GetWriterConfigurationRequest()
+
+        if "run_id" in kwargs:
+            unused_args.remove("run_id")
+            _message.run_id = kwargs['run_id']
 
         if len(unused_args) > 0:
             raise ArgumentError("Unexpected keyword arguments to get_writer_configuration: '{}'".format(", ".join(unused_args)))

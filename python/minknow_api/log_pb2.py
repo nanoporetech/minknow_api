@@ -62,16 +62,6 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   _globals['_COLLECTPINGSRESPONSE']._serialized_end=966
   _globals['_LOGSERVICE']._serialized_start=1269
   _globals['_LOGSERVICE']._serialized_end=1665
-SendPingRequest.__doc__ = """Since 5.0
-
-Attributes:
-    ping_data:
-        The json data to send as a ping.  note: if this string is not
-        a valid json object, an error will be raised.
-    days_until_expiry:
-        Should the ping fail to send, the number of days the ping will
-        be stored before being cleaned up.
-"""
 SendUserMessageRequest.__doc__ = """Attributes:
     severity:
         The severity of the message to send  note: TRACE messages
@@ -84,6 +74,16 @@ SendUserMessageRequest.__doc__ = """Attributes:
     extra_data:
         Any extra data associated with the user message, as a map from
         key to data.
+"""
+SendPingRequest.__doc__ = """Since 5.0
+
+Attributes:
+    ping_data:
+        The json data to send as a ping.  note: if this string is not
+        a valid json object, an error will be raised.
+    days_until_expiry:
+        Should the ping fail to send, the number of days the ping will
+        be stored before being cleaned up.
 """
 GetUserMessagesRequest.__doc__ = """Attributes:
     include_old_messages:

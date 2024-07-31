@@ -665,6 +665,9 @@ message AcquisitionConfigSummary {
     bool basecalling_enabled = 1;
     // Basecalling configuration filename (if basecalling enabled)
     string basecalling_config_filename = 16;
+    // Basecalling model version (empty if basecalling not enabled)
+    // Since 6.0
+    string basecalling_model_version = 24;
     // Was the experiment a duplex basecalling experiment (false if basecalling is disabled)
     bool duplex_enabled = 23;
 
@@ -682,8 +685,12 @@ message AcquisitionConfigSummary {
 
 
     // Is lamp enabled for the run
+    //
+    // DEPRECATED 6.0: Lamp support has been removed and this value will always be false.
     bool lamp_enabled = 15;
     // The LAMP kit used (if LAMP enabled)
+    //
+    // DEPRECATED 6.0: Lamp support has been removed and this value will always be empty.
     string lamp_kit = 20;
 
     // Root directory reads were written to for the run.
@@ -877,6 +884,11 @@ message AcquisitionRunInfo {
     // If the experiment is finishing, an extra piece of state
     // describing the current finishing state.
     FinishingState finishing_state = 10;
+
+    // Progress through the current finishing state, ranges from 0 - 1.
+    //
+    // This will increase from 0 -> 1 for each individual finishing state, then reset.
+    float finishing_state_percent_complete = 17;
 
     // The reason the acquisition period was ended.
     AcquisitionStopReason stop_reason = 3;

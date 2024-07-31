@@ -14,6 +14,7 @@ __all__ = [
     "KitInfo",
     "ProtocolRunUserInfo",
     "OffloadLocationInfo",
+    "AnalysisWorkflowRequest",
     "StartProtocolRequest",
     "StartProtocolResponse",
     "StopProtocolRequest",
@@ -33,8 +34,10 @@ __all__ = [
     "Epi2meWorkflowReference",
     "AssociatedPostProcessingAnalysis",
     "PlatformQcResult",
+    "HardwareCheckResult",
     "ExternalOffload",
     "GetVersionInfoResponse",
+    "AnalysisWorkflowInfo",
     "ProtocolRunInfo",
     "FilteringInfo",
     "ListProtocolRunsRequest",
@@ -63,6 +66,8 @@ __all__ = [
     "BeginProtocolResponse",
     "SetPlatformQcResultRequest",
     "SetPlatformQcResultResponse",
+    "SetHardwareCheckResultRequest",
+    "SetHardwareCheckResultResponse",
     "AssociatePostProcessingAnalysisRequest",
     "AssociatePostProcessingAnalysisResponse",
     "ClearProtocolHistoryDataRequest",
@@ -88,6 +93,8 @@ __all__ = [
     "PROTOCOL_FINISHED_WITH_ERROR_NO_DISK_SPACE",
     "PROTOCOL_FINISHED_WITH_ERROR_TEMPERATURE_HIGH",
     "PROTOCOL_FINISHED_WITH_ERROR_BASECALLER_COMMUNICATION",
+    "PROTOCOL_FINISHED_WITH_NO_FLOWCELL_FOR_ACQUISITION",
+    "PROTOCOL_FINISHED_WITH_ERROR_BASECALLER_UNAVAILABLE",
     "ProtocolPhase",
     "PHASE_UNKNOWN",
     "PHASE_INITIALISING",
@@ -150,6 +157,7 @@ class ProtocolService(object):
                 These can be updated during the acquisition using the Run-Until API.
 
                 Since 5.3
+            analysis_workflow_request (minknow_api.protocol_pb2.AnalysisWorkflowRequest, optional): Workflow request that should be started when the protocol is started
 
         Returns:
             minknow_api.protocol_pb2.StartProtocolResponse
@@ -190,6 +198,10 @@ class ProtocolService(object):
         if "target_run_until_criteria" in kwargs:
             unused_args.remove("target_run_until_criteria")
             _message.target_run_until_criteria.CopyFrom(kwargs['target_run_until_criteria'])
+
+        if "analysis_workflow_request" in kwargs:
+            unused_args.remove("analysis_workflow_request")
+            _message.analysis_workflow_request.CopyFrom(kwargs['analysis_workflow_request'])
 
         if len(unused_args) > 0:
             raise ArgumentError("Unexpected keyword arguments to start_protocol: '{}'".format(", ".join(unused_args)))
@@ -1077,6 +1089,7 @@ class ProtocolService(object):
 
                 Since 5.3
             settings (minknow_api.protocol_pb2.BeginProtocolRequest.SettingsEntry, optional): Any settings changed from the defaults specified in the protocol's .toml file.
+            analysis_workflow_request (minknow_api.protocol_pb2.AnalysisWorkflowRequest, optional): Workflow request that should be started when the protocol is started
 
         Returns:
             minknow_api.protocol_pb2.BeginProtocolResponse
@@ -1131,6 +1144,10 @@ class ProtocolService(object):
             for key, value in kwargs['settings'].items():
                 _message.settings[key].CopyFrom(value)
 
+        if "analysis_workflow_request" in kwargs:
+            unused_args.remove("analysis_workflow_request")
+            _message.analysis_workflow_request.CopyFrom(kwargs['analysis_workflow_request'])
+
         if len(unused_args) > 0:
             raise ArgumentError("Unexpected keyword arguments to begin_protocol: '{}'".format(", ".join(unused_args)))
 
@@ -1183,6 +1200,72 @@ class ProtocolService(object):
             raise ArgumentError("Unexpected keyword arguments to set_platform_qc_result: '{}'".format(", ".join(unused_args)))
 
         return run_with_retry(self._stub.set_platform_qc_result,
+                              _message, _timeout,
+                              [],
+                              "minknow_api.protocol.ProtocolService")
+    def set_hardware_check_result(self, _message=None, _timeout=None, **kwargs):
+        """Set the hardware check result
+
+        Should be called to set the status to `Started` at the start of any hardware check script
+        Should be called again to set the final status when a hardware check script finishes
+
+        If a script finishes, and the hardware check status is `Started`, then MinKNOW will set the
+        status to `Failed: ScriptError`.  (The hardware check script should have updated the status
+        when the hardware check finished; failure to do so indicates that the script failed).
+
+        The call will fail with `INVALID_ARGUMENT` if:
+        - HardwareCheckStatus is NOT `Failed`, and `HardwareCheckFailureReason` is NOT `NoError`
+        - HardwareCheckStatus is `Failed` and `HardwareCheckFailureReason` is `NoError`
+        - HardwareCheckStatus is not a valid value (None, Started, Succeeded or Failed)
+        - The supplied `protocol_run_id` does not correspond to an existing protocol
+
+        The call will fail with `FAILED_PRECONDITION` if:
+        - The supplied `protocol_run_id` does not correspond to an in-progress protocol
+        - Hardware check status are not moved through in order:
+             None -> Started -> Succeeded/Failed
+
+        This RPC is idempotent. It may change the state of the system, but if the requested
+        change has already happened, it will not fail because of this, make any additional
+        changes or return a different value.
+
+        Args:
+            _message (minknow_api.protocol_pb2.SetHardwareCheckResultRequest, optional): The message to send.
+                This can be passed instead of the keyword arguments.
+            _timeout (float, optional): The call will be cancelled after this number of seconds
+                if it has not been completed.
+            protocol_run_id (str, optional): The protocol_run_id that was given when the hardware check run was started
+            result (minknow_api.protocol_pb2.HardwareCheckResult, optional): 
+
+        Returns:
+            minknow_api.protocol_pb2.SetHardwareCheckResultResponse
+
+        Note that the returned messages are actually wrapped in a type that collapses
+        submessages for fields marked with ``[rpc_unwrap]``.
+        """
+        if _message is not None:
+            if isinstance(_message, MessageWrapper):
+                _message = _message._message
+            return run_with_retry(self._stub.set_hardware_check_result,
+                                  _message, _timeout,
+                                  [],
+                                  "minknow_api.protocol.ProtocolService")
+
+        unused_args = set(kwargs.keys())
+
+        _message = SetHardwareCheckResultRequest()
+
+        if "protocol_run_id" in kwargs:
+            unused_args.remove("protocol_run_id")
+            _message.protocol_run_id = kwargs['protocol_run_id']
+
+        if "result" in kwargs:
+            unused_args.remove("result")
+            _message.result.CopyFrom(kwargs['result'])
+
+        if len(unused_args) > 0:
+            raise ArgumentError("Unexpected keyword arguments to set_hardware_check_result: '{}'".format(", ".join(unused_args)))
+
+        return run_with_retry(self._stub.set_hardware_check_result,
                               _message, _timeout,
                               [],
                               "minknow_api.protocol.ProtocolService")

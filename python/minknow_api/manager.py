@@ -352,6 +352,12 @@ class Manager(ServiceBase):
             credentials=credentials,  # saved as self.credentials
         )
 
+        self.analysis_workflows = (
+            minknow_api.analysis_workflows_service.AnalysisWorkflowsService(
+                self.channel
+            )
+        )
+
         version_info = self.rpc.get_version_info()
         self.bream_version = version_info.bream
         self.config_version = version_info.protocol_configuration
@@ -361,7 +367,7 @@ class Manager(ServiceBase):
             version_info.minknow.minor,
             version_info.minknow.patch,
         )
-        self.guppy_version = version_info.guppy_connected_version
+        self.guppy_version = version_info.basecaller_connected_version
         self.version = version_info.distribution_version
         DistributionStatus = (
             minknow_api.instance_pb2.GetVersionInfoResponse.DistributionStatus

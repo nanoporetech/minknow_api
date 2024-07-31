@@ -42,13 +42,13 @@ class MessageWrapper(object):
         return str(self._message)
 
     def __eq__(self, other):
-        if type(other) == MessageWrapper:
+        if isinstance(other, MessageWrapper):
             return self._message == other._message
         else:
             return self._message == other
 
     def __ne__(self, other):
-        if type(other) == MessageWrapper:
+        if isinstance(other, MessageWrapper):
             return self._message != other._message
         else:
             return self._message != other

@@ -4,11 +4,12 @@ Example script to wait for a protocol to finish, and perform user-specified acti
 Example usage might be:
 
 python ./python/minknow_api/examples/run_after_protocol.py \
-    --host localhost --position X1 \                        # Select which host + position will run a script
-    --run-id "my_run" \                                     # Specify the protocol run
-    --script-to-run "my_script.sh"                          # Specify a script to run after the protocol has finished
-                                                            # If no script is specified, then the status of the protocol will be
-                                                            # displayed before finishing.
+    --host localhost --position X1 \
+    --run-id "my_run" \
+    --script-to-run "my_script.sh"
+
+This will run ``my_script.sh`` after the run ``my_run`` has finished on position X1 of
+the local machine.
 
 """  # noqa W605
 

@@ -384,6 +384,7 @@ message GetDeviceInfoResponse {
         TRAXION = 5;
         P2_SOLO = 6;
         MINION_MK1D = 7;
+        P2_INTEGRATED = 8;
     }
 
     // A unique identifier for the device.
@@ -632,6 +633,31 @@ message GetFlowCellInfoResponse {
     // set by calls to register_flow_cell_barcodes() on this flow cell.
     // Since 5.6
     repeated uint32 barcodes = 18;
+
+    // The partner the flow cell was produced for.
+    //
+    // Some partner companies have flow cells produced specifically for them. If
+    // so, it will be indicated by this field. Most flow cells will have this
+    // either unset or set to "ONT".
+    //
+    // If this field is set, it will be exactly three characters.
+    //
+    // Since 6.0
+    string flow_cell_partner = 19;
+
+    // True if the flow cell is a Configuration Test Cell (CTC).
+    //
+    // Note that this is currently set if and only if the cell's 
+    // product ID starts with 'CTC'.
+    // Detection of CTCs constructed from repurposed standard flow cells
+    // will be implemented later.
+    //
+    // False negatives are to be expected- that is, for all cases where
+    // this field is 'true', the flow cell is definitely a CTC.
+    // In cases where it is 'false', the flow cell _may_ be a CTC.
+    //
+    // Since 6.0
+    bool is_ctc = 20;
 }
 
 message StreamFlowCellInfoRequest {}
@@ -932,6 +958,14 @@ message GetTemperatureResponse
     //
     // Since 1.15
     google.protobuf.FloatValue target_temperature = 3;
+    
+    // Starting temperature value
+    //
+    // Since 6.0
+    oneof starting_temperature {
+        google.protobuf.FloatValue minion_starting_temperature = 4;
+        google.protobuf.FloatValue promethion_starting_temperature = 5;
+    }
 }
 
 message StreamTemperatureRequest {

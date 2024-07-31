@@ -72,6 +72,8 @@ __all__ = [
     "GetFeaturesResponse",
     "SetFeaturesRequest",
     "SetFeaturesResponse",
+    "RestartDeviceAdminRequest",
+    "RestartDeviceAdminResponse",
     "SimpleProtocolState",
     "NO_PROTOCOL_STATE",
     "PROTOCOL_RUNNING",
@@ -390,7 +392,7 @@ class ManagerService(object):
                               [],
                               "minknow_api.manager.ManagerService")
     def get_guppy_info(self, _message=None, _timeout=None, **kwargs):
-        """Get information about Guppy, including the port to connect to it on.
+        """Get information about the basecaller, including the port to connect to it on.
 
         Since 4.1
 
@@ -435,7 +437,7 @@ class ManagerService(object):
         - Protocols version (i.e. Bream-4 version)
         - Configuration version (i.e. Wanda version)
         - Distribution version
-        - Guppy version
+        - Basecaller version
 
         This RPC can be called without providing any authentication tokens.
 
@@ -788,6 +790,8 @@ class ManagerService(object):
 
         Since 4.1
 
+        DEPRECATED 6.0: Lamp support has been removed and this response will always be empty.
+
         This RPC has no side effects. Calling it will have no effect on the state of the
         system. It is safe to call repeatedly, or to retry on failure, although there is no
         guarantee it will return the same information each time.
@@ -843,6 +847,8 @@ class ManagerService(object):
             lamp_kit_name (str, optional): Name of lamp kit to obtain barcode names for.
 
                 Fails with INVALID_ARGUMENT if the requested `lamp_kit_name` is unavailable.
+
+                DEPRECATED 6.0: Lamp support has been removed and this option will be ignored.
 
         Returns:
             minknow_api.manager_pb2.GetBarcodeKeysResponse
@@ -1716,6 +1722,46 @@ class ManagerService(object):
             raise ArgumentError("Unexpected keyword arguments to set_features: '{}'".format(", ".join(unused_args)))
 
         return run_with_retry(self._stub.set_features,
+                              _message, _timeout,
+                              [],
+                              "minknow_api.manager.ManagerService")
+    def restart_device_admin_service(self, _message=None, _timeout=None, **kwargs):
+        """Forcibly halt and restart any MinKNOW-related device administration services, such as Mooneye.
+
+        Since 6.0
+
+        This RPC is idempotent. It may change the state of the system, but if the requested
+        change has already happened, it will not fail because of this, make any additional
+        changes or return a different value.
+
+        Args:
+            _message (minknow_api.manager_pb2.RestartDeviceAdminRequest, optional): The message to send.
+                This can be passed instead of the keyword arguments.
+            _timeout (float, optional): The call will be cancelled after this number of seconds
+                if it has not been completed.
+
+        Returns:
+            minknow_api.manager_pb2.RestartDeviceAdminResponse
+
+        Note that the returned messages are actually wrapped in a type that collapses
+        submessages for fields marked with ``[rpc_unwrap]``.
+        """
+        if _message is not None:
+            if isinstance(_message, MessageWrapper):
+                _message = _message._message
+            return run_with_retry(self._stub.restart_device_admin_service,
+                                  _message, _timeout,
+                                  [],
+                                  "minknow_api.manager.ManagerService")
+
+        unused_args = set(kwargs.keys())
+
+        _message = RestartDeviceAdminRequest()
+
+        if len(unused_args) > 0:
+            raise ArgumentError("Unexpected keyword arguments to restart_device_admin_service: '{}'".format(", ".join(unused_args)))
+
+        return run_with_retry(self._stub.restart_device_admin_service,
                               _message, _timeout,
                               [],
                               "minknow_api.manager.ManagerService")

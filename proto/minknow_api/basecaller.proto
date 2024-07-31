@@ -8,6 +8,7 @@ option objc_class_prefix = "MKAPI";
 import "google/protobuf/timestamp.proto";
 import "google/protobuf/wrappers.proto";
 import "minknow_api/analysis_configuration.proto";
+import "minknow_api/analysis_workflows.proto";
 import "minknow_api/protocol_settings.proto";
 import "minknow_api/rpc_options.proto";
 
@@ -201,13 +202,13 @@ message StartBasecallingRequest {
     // Options to control alignment performed once basecalling reads is complete.
     analysis_configuration.AlignmentConfiguration alignment_configuration = 11;
 
-    // Enable read splitting in guppy
+    // Enable read splitting in the basecaller
     //
     // Note: Since 5.9 this option has no effect, the basecaller is responsible for deciding when read splitting should be enabled.
     bool enable_read_splitting = 13;
 
-    // Override score to use for guppy read splitting. If not specified a default value
-    // is used from guppy.
+    // Override score to use for the basecaller read splitting. If not specified a default value
+    // is used from the basecaller.
     //
     // Note: Since 5.9 this option has no effect, the basecaller is responsible for deciding when read splitting should be enabled.
     google.protobuf.FloatValue min_score_read_splitting = 14;
@@ -235,6 +236,8 @@ message StartBarcodingRequest {
     string output_reads_directory = 2;
 
     // Enable gzip compression of output FASTQ files.
+    //
+    // DEPRECATED: This option does not have any effect - the offline barcoding no longer has the ability to compress fastq output.
     bool compress_fastq = 4;
 
     // Recursively find fast5 files to basecall in the `input_reads_directories`.
@@ -246,6 +249,13 @@ message StartBarcodingRequest {
     // Options to control barcoding performed once basecalling reads is complete.
     analysis_configuration.BarcodingConfiguration barcoding_configuration = 10;
 
+    enum OutputFormat {
+        BAM = 0;
+        FASTQ = 1;
+    }
+
+    // The type of file format to use for the output, default is BAM.
+    OutputFormat output_format = 12;
 }
 
 message StartBarcodingResponse {
@@ -313,6 +323,9 @@ message StartRequest {
         basecaller.StartBarcodingRequest start_barcoding_request = 3;
         basecaller.StartAlignmentRequest start_alignment_request = 4;
         basecaller.StartPostProcessingProtocolRequest start_post_processing_protocol_request = 5;
+
+        // Since 5.8
+        analysis_workflows.ProxyRequest proxy_request = 6;
     }
 }
 

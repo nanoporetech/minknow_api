@@ -54,6 +54,11 @@ class DataServiceStub(object):
                 request_serializer=minknow__api_dot_data__pb2.GetLiveReadsRequest.SerializeToString,
                 response_deserializer=minknow__api_dot_data__pb2.GetLiveReadsResponse.FromString,
                 )
+        self.record_adaptive_sampling_information = channel.unary_unary(
+                '/minknow_api.data.DataService/record_adaptive_sampling_information',
+                request_serializer=minknow__api_dot_data__pb2.RecordAdaptiveSamplingInformationRequest.SerializeToString,
+                response_deserializer=minknow__api_dot_data__pb2.RecordAdaptiveSamplingInformationResponse.FromString,
+                )
         self.get_read_statistics = channel.unary_unary(
                 '/minknow_api.data.DataService/get_read_statistics',
                 request_serializer=minknow__api_dot_data__pb2.GetReadStatisticsRequest.SerializeToString,
@@ -249,7 +254,7 @@ class DataServiceServicer(object):
 
         GetLiveReadsRequest stream:
         Sent by the user, provides MinKNOW with actions to take on current reads, actions
-        taken are sumarised and sent back to the user in the GetLiveReadsResponse stream.
+        taken are summarised and sent back to the user in the GetLiveReadsResponse stream.
         GetLiveReadsResponse stream:
         Sent to the user, contains a stream of ongoing sequencing information, sent as
         regularly as possible, with information on reads in progress, and feedback on actions
@@ -265,6 +270,14 @@ class DataServiceServicer(object):
         The maximum read chunk size - changing the size read chunks are processed in minknow:
         analysis_conf/read_detection.break_reads_after_seconds
 
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def record_adaptive_sampling_information(self, request, context):
+        """Record information about adaptive-sampling for telemetry. This is optional
+        and will not change how adaptive sampling works.
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -328,6 +341,11 @@ def add_DataServiceServicer_to_server(servicer, server):
                     servicer.get_live_reads,
                     request_deserializer=minknow__api_dot_data__pb2.GetLiveReadsRequest.FromString,
                     response_serializer=minknow__api_dot_data__pb2.GetLiveReadsResponse.SerializeToString,
+            ),
+            'record_adaptive_sampling_information': grpc.unary_unary_rpc_method_handler(
+                    servicer.record_adaptive_sampling_information,
+                    request_deserializer=minknow__api_dot_data__pb2.RecordAdaptiveSamplingInformationRequest.FromString,
+                    response_serializer=minknow__api_dot_data__pb2.RecordAdaptiveSamplingInformationResponse.SerializeToString,
             ),
             'get_read_statistics': grpc.unary_unary_rpc_method_handler(
                     servicer.get_read_statistics,
@@ -482,6 +500,23 @@ class DataService(object):
         return grpc.experimental.stream_stream(request_iterator, target, '/minknow_api.data.DataService/get_live_reads',
             minknow__api_dot_data__pb2.GetLiveReadsRequest.SerializeToString,
             minknow__api_dot_data__pb2.GetLiveReadsResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def record_adaptive_sampling_information(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/minknow_api.data.DataService/record_adaptive_sampling_information',
+            minknow__api_dot_data__pb2.RecordAdaptiveSamplingInformationRequest.SerializeToString,
+            minknow__api_dot_data__pb2.RecordAdaptiveSamplingInformationResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 

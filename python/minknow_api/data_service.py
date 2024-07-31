@@ -22,6 +22,8 @@ __all__ = [
     "GetLiveReadsResponse",
     "ResetChannelStatesRequest",
     "ResetChannelStatesResponse",
+    "RecordAdaptiveSamplingInformationRequest",
+    "RecordAdaptiveSamplingInformationResponse",
     "GetReadStatisticsRequest",
     "GetReadStatisticsResponse",
     "LockChannelStatesRequest",
@@ -623,7 +625,7 @@ class DataService(object):
 
         GetLiveReadsRequest stream:
              Sent by the user, provides MinKNOW with actions to take on current reads, actions
-             taken are sumarised and sent back to the user in the GetLiveReadsResponse stream.
+             taken are summarised and sent back to the user in the GetLiveReadsResponse stream.
         GetLiveReadsResponse stream:
              Sent to the user, contains a stream of ongoing sequencing information, sent as
              regularly as possible, with information on reads in progress, and feedback on actions
@@ -654,6 +656,66 @@ class DataService(object):
         submessages for fields marked with ``[rpc_unwrap]``.
         """
         return self._stub.get_live_reads(iterator)
+    def record_adaptive_sampling_information(self, _message=None, _timeout=None, **kwargs):
+        """Record information about adaptive-sampling for telemetry. This is optional
+        and will not change how adaptive sampling works.
+
+        This RPC is idempotent. It may change the state of the system, but if the requested
+        change has already happened, it will not fail because of this, make any additional
+        changes or return a different value.
+
+        Args:
+            _message (minknow_api.data_pb2.RecordAdaptiveSamplingInformationRequest, optional): The message to send.
+                This can be passed instead of the keyword arguments.
+            _timeout (float, optional): The call will be cancelled after this number of seconds
+                if it has not been completed.
+            objective (minknow_api.data_pb2.RecordAdaptiveSamplingInformationRequest.Objective, optional): The reason for applying the adaptive sampling technique. This must be recorded during
+                the acquisition period in which adaptive sampling is applied.
+            end_reason (str, optional): The reason why the adaptive sampling script ended. This string will be truncated to
+                80 characters.
+
+        Returns:
+            minknow_api.data_pb2.RecordAdaptiveSamplingInformationResponse
+
+        Note that the returned messages are actually wrapped in a type that collapses
+        submessages for fields marked with ``[rpc_unwrap]``.
+        """
+        if _message is not None:
+            if isinstance(_message, MessageWrapper):
+                _message = _message._message
+            return run_with_retry(self._stub.record_adaptive_sampling_information,
+                                  _message, _timeout,
+                                  [],
+                                  "minknow_api.data.DataService")
+
+        unused_args = set(kwargs.keys())
+
+        # check oneof group 'information'
+        oneof_fields = set([
+            "objective",
+            "end_reason",
+        ])
+
+        if len(unused_args & oneof_fields) > 1:
+            raise ArgumentError("record_adaptive_sampling_information given multiple conflicting arguments: '{}'".format(", ".join(unused_args & oneof_fields)))
+
+        _message = RecordAdaptiveSamplingInformationRequest()
+
+        if "objective" in kwargs:
+            unused_args.remove("objective")
+            _message.objective = kwargs['objective']
+
+        if "end_reason" in kwargs:
+            unused_args.remove("end_reason")
+            _message.end_reason = kwargs['end_reason']
+
+        if len(unused_args) > 0:
+            raise ArgumentError("Unexpected keyword arguments to record_adaptive_sampling_information: '{}'".format(", ".join(unused_args)))
+
+        return run_with_retry(self._stub.record_adaptive_sampling_information,
+                              _message, _timeout,
+                              [],
+                              "minknow_api.data.DataService")
     def get_read_statistics(self, _message=None, _timeout=None, **kwargs):
         """Collects statistics about read (chunk) lengths and signal, split by channel, channel
         configuration and read (chunk) classification.

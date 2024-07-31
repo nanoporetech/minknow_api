@@ -170,6 +170,11 @@ class ManagerServiceStub(object):
                 request_serializer=minknow__api_dot_manager__pb2.SetFeaturesRequest.SerializeToString,
                 response_deserializer=minknow__api_dot_manager__pb2.SetFeaturesResponse.FromString,
                 )
+        self.restart_device_admin_service = channel.unary_unary(
+                '/minknow_api.manager.ManagerService/restart_device_admin_service',
+                request_serializer=minknow__api_dot_manager__pb2.RestartDeviceAdminRequest.SerializeToString,
+                response_deserializer=minknow__api_dot_manager__pb2.RestartDeviceAdminResponse.FromString,
+                )
 
 
 class ManagerServiceServicer(object):
@@ -251,7 +256,7 @@ class ManagerServiceServicer(object):
         raise NotImplementedError('Method not implemented!')
 
     def get_guppy_info(self, request, context):
-        """Get information about Guppy, including the port to connect to it on.
+        """Get information about the basecaller, including the port to connect to it on.
 
         Since 4.1
         """
@@ -265,7 +270,7 @@ class ManagerServiceServicer(object):
         - Protocols version (i.e. Bream-4 version)
         - Configuration version (i.e. Wanda version)
         - Distribution version
-        - Guppy version
+        - Basecaller version
 
         This RPC can be called without providing any authentication tokens.
 
@@ -361,6 +366,8 @@ class ManagerServiceServicer(object):
         """Get info about all available lamp kits
 
         Since 4.1
+
+        DEPRECATED 6.0: Lamp support has been removed and this response will always be empty.
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -582,6 +589,15 @@ class ManagerServiceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def restart_device_admin_service(self, request, context):
+        """Forcibly halt and restart any MinKNOW-related device administration services, such as Mooneye.
+
+        Since 6.0
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_ManagerServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -739,6 +755,11 @@ def add_ManagerServiceServicer_to_server(servicer, server):
                     servicer.set_features,
                     request_deserializer=minknow__api_dot_manager__pb2.SetFeaturesRequest.FromString,
                     response_serializer=minknow__api_dot_manager__pb2.SetFeaturesResponse.SerializeToString,
+            ),
+            'restart_device_admin_service': grpc.unary_unary_rpc_method_handler(
+                    servicer.restart_device_admin_service,
+                    request_deserializer=minknow__api_dot_manager__pb2.RestartDeviceAdminRequest.FromString,
+                    response_serializer=minknow__api_dot_manager__pb2.RestartDeviceAdminResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -1274,5 +1295,22 @@ class ManagerService(object):
         return grpc.experimental.unary_unary(request, target, '/minknow_api.manager.ManagerService/set_features',
             minknow__api_dot_manager__pb2.SetFeaturesRequest.SerializeToString,
             minknow__api_dot_manager__pb2.SetFeaturesResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def restart_device_admin_service(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/minknow_api.manager.ManagerService/restart_device_admin_service',
+            minknow__api_dot_manager__pb2.RestartDeviceAdminRequest.SerializeToString,
+            minknow__api_dot_manager__pb2.RestartDeviceAdminResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

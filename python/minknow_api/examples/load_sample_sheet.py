@@ -46,8 +46,6 @@ KNOWN_FIELDNAMES = {
     "barcode",
     "internal_barcode",
     "external_barcode",
-    "rapid_barcode",
-    "fip_barcode",
 }
 
 
@@ -80,7 +78,6 @@ def check_fieldnames(fieldnames: Sequence[str]) -> None:
     # Should have at most one of the following sets:
     # { 'barcode' },
     # { 'internal_barcode', 'external_barcode' },
-    # { 'rapid_barcode', 'fip_barcode' }
     #
     # If any of the above sets of barcode columns names are present:
     #   - An `alias` column must be present
@@ -96,13 +93,10 @@ def check_fieldnames(fieldnames: Sequence[str]) -> None:
         "barcode",
         "internal_barcode",
         "external_barcode",
-        "rapid_barcode",
-        "fip_barcode",
     }
     barcoding_column_name_sets = [
         {"barcode"},
         {"internal_barcode", "external_barcode"},
-        {"rapid_barcode", "fip_barcode"},
     ]
     for barcoding_column_name_set in barcoding_column_name_sets:
         if any(name in fieldnames for name in barcoding_column_name_set):
@@ -195,7 +189,6 @@ BarcodeInfo = NamedTuple(
     [
         ("barcode_name", str),
         ("barcode_name_internal", str),
-        ("lamp_barcode_id", Optional[str]),
         ("alias", str),
         ("type", Optional[int]),
         ("passenger_info", Mapping[str, str]),
@@ -255,7 +248,6 @@ def parse_record(parsed_data: ParsedDataDict, record: Record, line_num: int):
 
         barcode_name = record["barcode"]
         barcode_name_internal = None
-        lamp_barcode_id = None
         barcode_key = barcode_name
 
     elif ("internal_barcode" in record) and ("external_barcode" in record):
@@ -279,31 +271,7 @@ def parse_record(parsed_data: ParsedDataDict, record: Record, line_num: int):
 
         barcode_name = external_barcode
         barcode_name_internal = internal_barcode
-        lamp_barcode_id = None
         barcode_key = (external_barcode, internal_barcode)
-
-    elif ("rapid_barcode" in record) and ("fip_barcode" in record):
-        rapid_barcode = record["rapid_barcode"]
-        fip_barcode = record["fip_barcode"]
-
-        if not re.match(r"barcode(\d{2})", rapid_barcode):
-            raise SampleSheetParseError(
-                "Line {}: Bad 'rapid_barcode' name '{}'; ".format(
-                    line_num, rapid_barcode
-                )
-                + "expected a name like 'barcode01'"
-            )
-
-        if not re.match(r"FIP(\d{2})", fip_barcode):
-            raise SampleSheetParseError(
-                "Line {}: Bad 'fip_barcode' name '{}'; ".format(line_num, fip_barcode)
-                + "expected a name like 'FIP01'"
-            )
-
-        barcode_name = rapid_barcode
-        barcode_name_internal = None
-        lamp_barcode_id = fip_barcode
-        barcode_key = (barcode_name, lamp_barcode_id)
     else:
         # No barcode data
         # Nothing more to do for this line
@@ -327,7 +295,6 @@ def parse_record(parsed_data: ParsedDataDict, record: Record, line_num: int):
     data["barcode_info"][barcode_key] = BarcodeInfo(
         barcode_name=barcode_name,
         barcode_name_internal=barcode_name_internal,
-        lamp_barcode_id=lamp_barcode_id,
         # We know the alias exists because we checked in `check_fieldnames`
         alias=record["alias"],
         type=to_sample_type(record.get("type"), line_num),
@@ -342,8 +309,6 @@ def make_barcode_user_data(barcode_info: BarcodeInfo) -> BarcodeUserData:
         barcode_user_data.barcode_name = barcode_info.barcode_name
     if barcode_info.barcode_name_internal:
         barcode_user_data.barcode_name_internal = barcode_info.barcode_name_internal
-    if barcode_info.lamp_barcode_id:
-        barcode_user_data.lamp_barcode_id = barcode_info.lamp_barcode_id
     if barcode_info.alias:
         barcode_user_data.alias = barcode_info.alias
     if barcode_info.type:

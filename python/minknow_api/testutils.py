@@ -9,6 +9,7 @@ minknow_api's own example code.
 Consider taking inspiration from python/test/mock_server.py in the minknow_api source
 repository instead.
 """
+
 import inspect
 import logging
 import warnings

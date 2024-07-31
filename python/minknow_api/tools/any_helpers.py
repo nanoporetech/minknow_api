@@ -1,6 +1,5 @@
 """Tools for packing/unpacking `google.protobuf.Any` messages"""
 
-
 from google.protobuf import (
     any_pb2,
     timestamp_pb2,

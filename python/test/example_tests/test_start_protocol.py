@@ -467,7 +467,7 @@ def test_basecalling_start_protocol():
             assert protocol.identifier == TEST_PROTOCOL_IDENTIFIER
             assert protocol.args == [
                 "--base_calling=on",
-                "--guppy_filename=%s" % TEST_BASECLL_MODEL_OTHER,
+                "--basecaller_filename=%s" % TEST_BASECLL_MODEL_OTHER,
                 "--fast5=off",
                 "--pod5=off",
                 "--fastq=off",
@@ -582,10 +582,6 @@ def test_barcoding_start_protocol():
                 "barcoding_kits=['foo-barcodes',]",
                 "trim_barcodes=on",
                 "require_barcodes_both_ends=on",
-                "detect_mid_strand_barcodes=on",
-                "min_score=5.0",
-                "min_score_rear=6.0",
-                "min_score_mid=7.0",
                 "--fast5=off",
                 "--pod5=off",
                 "--fastq=off",
@@ -959,10 +955,6 @@ def test_sample_sheet_start_protocol():
                 "barcoding_kits=['foo-barcodes',]",
                 "trim_barcodes=on",
                 "require_barcodes_both_ends=on",
-                "detect_mid_strand_barcodes=on",
-                "min_score=5.0",
-                "min_score_rear=6.0",
-                "min_score_mid=7.0",
                 "--fast5=off",
                 "--pod5=off",
                 "--fastq=off",
@@ -978,7 +970,7 @@ def test_sample_sheet_start_protocol():
             ]
 
             def barcode_user_info_key(el):
-                return el.barcode_name, el.lamp_barcode_id
+                return el.barcode_name
 
             actual_barcode_user_info = sorted(
                 actual_barcode_user_info, key=barcode_user_info_key
@@ -1043,10 +1035,6 @@ def test_sample_sheet_start_protocol():
                 "barcoding_kits=['foo-barcodes',]",
                 "trim_barcodes=on",
                 "require_barcodes_both_ends=on",
-                "detect_mid_strand_barcodes=on",
-                "min_score=5.0",
-                "min_score_rear=6.0",
-                "min_score_mid=7.0",
                 "--fast5=off",
                 "--pod5=off",
                 "--fastq=off",
@@ -1062,7 +1050,7 @@ def test_sample_sheet_start_protocol():
             ]
 
             def barcode_user_info_key(el):
-                return el.barcode_name, el.lamp_barcode_id
+                return el.barcode_name
 
             actual_barcode_user_info = sorted(
                 actual_barcode_user_info, key=barcode_user_info_key

@@ -34,9 +34,9 @@ class TestLoadSampleSheet(unittest.TestCase):
             return el.flow_cell_id, el.position_id
 
         def sort_barcode_info(el):
-            return el.barcode_name, el.lamp_barcode_id
+            return el.barcode_name
 
-        for (actual_entry, expected_entry) in zip(
+        for actual_entry, expected_entry in zip(
             sorted(actual, key=sort_entries), sorted(expected, key=sort_entries)
         ):
             self.assertEqual(actual_entry.flow_cell_id, expected_entry.flow_cell_id)
@@ -145,35 +145,6 @@ class TestLoadSampleSheet(unittest.TestCase):
             ],
         )
 
-    def test_lampore_barcoding(self):
-        sample_sheet = load_sample_sheet_csv(
-            sample_sheet_csv_path("good", "lampore_barcoding")
-        )
-
-        self.compare_sample_sheet(
-            sample_sheet,
-            [
-                ParsedSampleSheetEntry(
-                    flow_cell_id="FC001",
-                    position_id=None,
-                    sample_id=None,
-                    experiment_id=None,
-                    barcode_info=[
-                        BarcodeUserData(
-                            barcode_name="barcode01",
-                            lamp_barcode_id="FIP01",
-                            alias="alias01",
-                        ),
-                        BarcodeUserData(
-                            barcode_name="barcode02",
-                            lamp_barcode_id="FIP01",
-                            alias="alias02",
-                        ),
-                    ],
-                ),
-            ],
-        )
-
     def test_multiple_positions(self):
         sample_sheet = load_sample_sheet_csv(
             sample_sheet_csv_path("good", "multiple_positions")
@@ -241,7 +212,7 @@ class TestLoadSampleSheet(unittest.TestCase):
             "duplicate_columns": "Duplicate columns in sample sheet: 'sample_id'",
             "no_position_information": "Invalid position information in sample sheet. Must have exactly one of 'flow_cell_id' and 'position_id'",
             "both_position_information": "Invalid position information in sample sheet. Must have exactly one of 'flow_cell_id' and 'position_id'",
-            "conflicting_barcoding_columns": "Conflicting barcode column names: 'barcode', 'rapid_barcode', 'fip_barcode'",
+            "conflicting_barcoding_columns": "Conflicting barcode column names: 'barcode', 'internal_barcode', 'external_barcode'",
             "missing_barcoding_column": "Missing barcoding column names: 'external_barcode'",
             "barcoding_no_alias": "Missing 'alias' column",
             "alias_no_barcoding": "'alias' column supplied, but no other barcode information in sample sheet",
@@ -268,8 +239,6 @@ class TestLoadSampleSheet(unittest.TestCase):
             "barcode": "Line 2: Bad 'barcode' name 'bad'; expected a name like 'barcode01'",
             "internal_barcode": "Line 2: Bad 'internal_barcode' name 'bad'; expected a name like 'internal01'",
             "external_barcode": "Line 2: Bad 'external_barcode' name 'bad'; expected a name like 'external01'",
-            "rapid_barcode": "Line 2: Bad 'rapid_barcode' name 'bad'; expected a name like 'barcode01'",
-            "fip_barcode": "Line 2: Bad 'fip_barcode' name 'bad'; expected a name like 'FIP01'",
             "duplicate_barcode": "Line 3: Duplicate barcode: 'barcode01'",
             "duplicate_alias": "Line 3: Duplicate alias: 'alias'",
         }
