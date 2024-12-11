@@ -68,7 +68,7 @@ message AcquistionReportData {
     //
     // Since 5.9
     analysis_configuration.WriterConfiguration writer_config = 12;
-    
+
     // Information about the basecaller configuration
     //
     // Since 5.9

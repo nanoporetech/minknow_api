@@ -150,6 +150,6 @@ python manage_simulated_devices.py --prom --add 1A 2B
 python manage_simulated_devices.py --p2 --add P2S_000000-A
 
 # Add multiple simulated P2 positions
-python manage_simulated_devices.py --p2 --add P2S_000000-A P2S_000000-B 
+python manage_simulated_devices.py --p2 --add P2S_000000-A P2S_000000-B
 
 ```

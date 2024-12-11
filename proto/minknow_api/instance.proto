@@ -18,7 +18,7 @@ service InstanceService {
         option idempotency_level = NO_SIDE_EFFECTS;
     }
 
-    // Returns various directory locations where minknow is outputting data. The paths are absolute paths, 
+    // Returns various directory locations where minknow is outputting data. The paths are absolute paths,
     // local to the machine where minknow is installed
     //
     // the `output` base directory can be changed internally
@@ -93,7 +93,7 @@ service InstanceService {
     // web socket transport).
     //
     // Use this request to find information about the current device, flow cell, protocol and acquisition state.
-    // 
+    //
     // Since 3.2
     rpc stream_instance_activity(StreamInstanceActivityRequest) returns (stream StreamInstanceActivityResponse) {
         option idempotency_level = NO_SIDE_EFFECTS;
@@ -101,7 +101,7 @@ service InstanceService {
 }
 
 message GetVersionInfoRequest {
-    
+
 }
 
 message GetVersionInfoResponse {
@@ -114,8 +114,8 @@ message GetVersionInfoResponse {
 
     // What minknow version is installed. Split into major, minor and patch versions
     // Also includes the full version as a string, which contain the major, minor and patch numbers
-    // as well as if the version is pre-release version (-pre), whether it is a release candidate (-rc#)
-    // or whether it is a variant version (i.e. for conferences) (-variant). For non-release builds it also 
+    // as well as if the version is pre-release version (~pre), whether it is a release candidate (~rc#)
+    // or whether it is a variant version (i.e. for conferences) (-variant). For non-release builds it also
     // includes the hash of the commit it is based on, and whether the working copy is different from that has (-dirty)
     MinknowVersion minknow = 1;
 
@@ -315,7 +315,7 @@ message N50 {
     //
     // The latest value is sent once per minute
     float n50 = 1;
-    
+
     // N50 data, in estimated bases
     //
     // The latest value is sent once per minute
@@ -357,7 +357,7 @@ message StreamInstanceActivityResponse {
         FlowCellHealth flow_cell_health = 5;
 
         // Acquisition yield information. Describes information such as number of reads,
-        // what number of those reads have passed or failed basecalling etc. Rate 
+        // what number of those reads have passed or failed basecalling etc. Rate
         // limited to 1 second per update
         acquisition.AcquisitionYieldSummary yield_summary = 6;
 

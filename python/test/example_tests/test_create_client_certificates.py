@@ -8,6 +8,7 @@ from pathlib import Path
 import grpc
 from cryptography import x509
 from minknow_api import manager_service, instance_pb2
+from minknow_api.tools.compatibility_helpers import datetime_utc_now
 from mock_server import Server, load_test_ca
 
 create_client_certs = (
@@ -119,8 +120,8 @@ def test_client_certs_days_valid():
         )
 
         # Check that it's valid for just one day (With 10 second tolerance)
-        actual_expiry = x509.load_pem_x509_certificate(client_cert).not_valid_after
-        expected_expiry = datetime.datetime.utcnow() + datetime.timedelta(days=1)
+        actual_expiry = x509.load_pem_x509_certificate(client_cert).not_valid_after_utc
+        expected_expiry = datetime_utc_now() + datetime.timedelta(days=1)
 
         assert abs(actual_expiry.timestamp() - expected_expiry.timestamp()) < 10
 

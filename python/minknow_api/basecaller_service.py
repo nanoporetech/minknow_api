@@ -91,6 +91,8 @@ class Basecaller(object):
 
         Since 3.5
 
+        DEPRECATED: This rpc is no longer supported and does not return any results.
+
         This RPC has no side effects. Calling it will have no effect on the state of the
         system. It is safe to call repeatedly, or to retry on failure, although there is no
         guarantee it will return the same information each time.
@@ -166,6 +168,9 @@ class Basecaller(object):
                 basecalled. If True, subdirectories of those directories will also be searched recursively.
             barcoding_configuration (minknow_api.analysis_configuration_pb2.BarcodingConfiguration, optional): Options to control barcoding performed once basecalling reads is complete.
             alignment_configuration (minknow_api.analysis_configuration_pb2.AlignmentConfiguration, optional): Options to control alignment performed once basecalling reads is complete.
+            min_qscore (float, optional): Minimum Q-Score for a read to be passed by the basecaller.
+
+                Since 6.1.
             enable_read_splitting (bool, optional): Enable read splitting in the basecaller
 
                 Note: Since 5.9 this option has no effect, the basecaller is responsible for deciding when read splitting should be enabled.
@@ -231,6 +236,10 @@ class Basecaller(object):
         if "alignment_configuration" in kwargs:
             unused_args.remove("alignment_configuration")
             _message.alignment_configuration.CopyFrom(kwargs['alignment_configuration'])
+
+        if "min_qscore" in kwargs:
+            unused_args.remove("min_qscore")
+            _message.min_qscore = kwargs['min_qscore']
 
         if "enable_read_splitting" in kwargs:
             unused_args.remove("enable_read_splitting")

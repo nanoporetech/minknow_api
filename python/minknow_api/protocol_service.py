@@ -31,6 +31,7 @@ __all__ = [
     "WaitForFinishedRequest",
     "GetRunInfoRequest",
     "RequestOrigin",
+    "ProtocolPhaseSnapshot",
     "Epi2meWorkflowReference",
     "AssociatedPostProcessingAnalysis",
     "PlatformQcResult",
@@ -105,6 +106,7 @@ __all__ = [
     "PHASE_PAUSING",
     "PHASE_BAD_TEMPERATURE_AUTOMATIC_PAUSE",
     "PHASE_RESUMING",
+    "PHASE_COMPLETED",
     "Action",
     "ACTION_NONE",
     "ACTION_PAUSE",
@@ -158,6 +160,8 @@ class ProtocolService(object):
 
                 Since 5.3
             analysis_workflow_request (minknow_api.protocol_pb2.AnalysisWorkflowRequest, optional): Workflow request that should be started when the protocol is started
+
+                EXPERIMENTAL: This field may change or be removed between minor versions without warning
 
         Returns:
             minknow_api.protocol_pb2.StartProtocolResponse
@@ -1090,6 +1094,9 @@ class ProtocolService(object):
                 Since 5.3
             settings (minknow_api.protocol_pb2.BeginProtocolRequest.SettingsEntry, optional): Any settings changed from the defaults specified in the protocol's .toml file.
             analysis_workflow_request (minknow_api.protocol_pb2.AnalysisWorkflowRequest, optional): Workflow request that should be started when the protocol is started
+            simulation_source (str, optional): Simulation source for playback device data, either an hdf file or directory for use with arrow playback files.
+
+                Since 6.2
 
         Returns:
             minknow_api.protocol_pb2.BeginProtocolResponse
@@ -1147,6 +1154,10 @@ class ProtocolService(object):
         if "analysis_workflow_request" in kwargs:
             unused_args.remove("analysis_workflow_request")
             _message.analysis_workflow_request.CopyFrom(kwargs['analysis_workflow_request'])
+
+        if "simulation_source" in kwargs:
+            unused_args.remove("simulation_source")
+            _message.simulation_source = kwargs['simulation_source']
 
         if len(unused_args) > 0:
             raise ArgumentError("Unexpected keyword arguments to begin_protocol: '{}'".format(", ".join(unused_args)))

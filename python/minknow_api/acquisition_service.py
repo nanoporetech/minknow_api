@@ -36,6 +36,8 @@ __all__ = [
     "WatchCurrentAcquisitionRunRequest",
     "SetSignalReaderRequest",
     "SetSignalReaderResponse",
+    "GetSignalReaderRequest",
+    "GetSignalReaderResponse",
     "SetBreamInfoRequest",
     "SetBreamInfoResponse",
     "AppendMuxScanResultResponse",
@@ -58,6 +60,7 @@ __all__ = [
     "ACQUISITION_RUNNING",
     "ACQUISITION_FINISHING",
     "ACQUISITION_COMPLETED",
+    "ACQUISITION_PAUSED",
     "AcquisitionStopReason",
     "STOPPED_NOT_SET",
     "STOPPED_USER_REQUESTED",
@@ -693,6 +696,46 @@ class AcquisitionService(object):
             raise ArgumentError("Unexpected keyword arguments to set_signal_reader: '{}'".format(", ".join(unused_args)))
 
         return run_with_retry(self._stub.set_signal_reader,
+                              _message, _timeout,
+                              [],
+                              "minknow_api.acquisition.AcquisitionService")
+    def get_signal_reader(self, _message=None, _timeout=None, **kwargs):
+        """Find the signal reader in use. This may have been configured by MinKNOW prior to a protocol being begun.
+
+        Since 6.2
+
+        This RPC is idempotent. It may change the state of the system, but if the requested
+        change has already happened, it will not fail because of this, make any additional
+        changes or return a different value.
+
+        Args:
+            _message (minknow_api.acquisition_pb2.GetSignalReaderRequest, optional): The message to send.
+                This can be passed instead of the keyword arguments.
+            _timeout (float, optional): The call will be cancelled after this number of seconds
+                if it has not been completed.
+
+        Returns:
+            minknow_api.acquisition_pb2.GetSignalReaderResponse
+
+        Note that the returned messages are actually wrapped in a type that collapses
+        submessages for fields marked with ``[rpc_unwrap]``.
+        """
+        if _message is not None:
+            if isinstance(_message, MessageWrapper):
+                _message = _message._message
+            return run_with_retry(self._stub.get_signal_reader,
+                                  _message, _timeout,
+                                  [],
+                                  "minknow_api.acquisition.AcquisitionService")
+
+        unused_args = set(kwargs.keys())
+
+        _message = GetSignalReaderRequest()
+
+        if len(unused_args) > 0:
+            raise ArgumentError("Unexpected keyword arguments to get_signal_reader: '{}'".format(", ".join(unused_args)))
+
+        return run_with_retry(self._stub.get_signal_reader,
                               _message, _timeout,
                               [],
                               "minknow_api.acquisition.AcquisitionService")

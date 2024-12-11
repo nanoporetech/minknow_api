@@ -2,6 +2,7 @@
 
 import collections
 import dataclasses
+from pathlib import Path
 import logging
 from typing import Optional, List, Sequence
 
@@ -10,6 +11,7 @@ import grpc
 from .. import Connection
 from minknow_api import protocol_pb2, run_until_pb2, acquisition_pb2
 from minknow_api.protocol_pb2 import BarcodeUserData
+from minknow_api.protocol_pb2 import AnalysisWorkflowRequest
 from minknow_api.tools.any_helpers import make_float_any, make_uint64_any
 
 LOGGER = logging.getLogger(__name__)
@@ -19,6 +21,7 @@ def find_protocol(
     device_connection: Connection,
     product_code: str,
     kit: str,
+    config_name: Optional[str],
     basecalling: bool = False,
     basecall_config: Optional[str] = None,
     barcoding: bool = False,
@@ -36,6 +39,7 @@ def find_protocol(
         device_connection (:obj:`Connection`):  As returned by minknow.manager.FlowCellPosition().connect().
         product_code (:obj:`str`):              The flow-cell type, as in flow_cell_info.product_code.
         kit (:obj:`str`):                       The kit to be sequenced. eg: "SQK-LSK108".
+        config_name (:obj:`str`):               Optional name of a config to select.
         basecalling (bool):                     True if base-calling is required
         basecall_config (:obj:`str):            The base-calling model that the protocol should support. If absent,
                                                 the protocol default will be used (if specified)
@@ -68,6 +72,15 @@ def find_protocol(
 
         # the tags provide a way to filter the experiments
         tags = protocol.tags
+
+        # ...with the correct name...
+        if config_name is not None and protocol.name != config_name:
+            LOGGER.debug(
+                "Protocol is not named correctly %s, not %s",
+                protocol.name,
+                config_name,
+            )
+            continue
 
         # want a sequencing experiment...
         if experiment_type and tags["experiment type"].string_value != experiment_type:
@@ -218,6 +231,7 @@ def make_protocol_arguments(
     bam_arguments: OutputArgs = None,
     disable_active_channel_selection: bool = False,
     mux_scan_period: float = 1.5,
+    simulation_path: Optional[Path] = None,
     args: Optional[List[str]] = None,
     is_flongle: bool = False,
 ) -> List[str]:
@@ -234,6 +248,7 @@ def make_protocol_arguments(
         bam_arguments(:obj:`OutputArgs`):       Control bam file generation.
         disable_active_channel_selection(bool): Disable active channel selection
         mux_scan_period(float):                 Period of time between mux scans in hours.
+        simulation_path(:obj:`Path`):           An optional fast5 bulk path to use for simulated playback.
         args(:obj:`list`):                      Extra arguments to pass to protocol.
         is_flongle(bool):                       Specify if the flow cell to be sequenced on is a flongle.
 
@@ -369,6 +384,13 @@ def make_protocol_arguments(
         if not disable_active_channel_selection:
             protocol_args.append("--mux_scan_period={}".format(mux_scan_period))
 
+    if simulation_path:
+        if not simulation_path.exists():
+            raise Exception(
+                f"Non-existent path '{simulation_path}' passed for simulation."
+            )
+        protocol_args.extend(["--simulation", str(simulation_path)])
+
     if args:
         protocol_args.extend(args)
 
@@ -427,6 +449,7 @@ def start_protocol(
     barcode_info: Optional[Sequence[BarcodeUserData]],
     stop_criteria: Optional[CriteriaValues] = None,
     experiment_duration: Optional[float] = None,
+    analysis_workflow_request: Optional[AnalysisWorkflowRequest] = None,
     *args,
     **kwargs,
 ) -> str:
@@ -439,6 +462,8 @@ def start_protocol(
         experiment_group(str):                  Experiment group of protocol to start.
         barcode_info(Sequence[:obj:`BarcodeUserData`]):
                 Barcode user data (sample type and alias)
+        analysis_workflow_request: Optional[AnalysisWorkflowRequest]:
+                Analysis workflow request message
         stop_criteria(::obj::`TargetCriteria`): When to stop the acquisition
         experiment_duration(float):             Length of the experiment in hours.
         *args: Additional arguments forwarded to {make_protocol_arguments}
@@ -472,11 +497,17 @@ def start_protocol(
         experiment_duration=experiment_duration,
     )
 
+    # Only pass analysis_workflow_request to start_protocol() if the user explicitly supplied it
+    additional_params = {}
+    if analysis_workflow_request is not None:
+        additional_params["analysis_workflow_request"] = analysis_workflow_request
+
     result = device_connection.protocol.start_protocol(
         identifier=identifier,
         args=protocol_arguments,
         user_info=user_info,
         target_run_until_criteria=target_run_until_criteria,
+        **additional_params,
     )
 
     return result.run_id

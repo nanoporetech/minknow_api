@@ -62,19 +62,6 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   _globals['_COLLECTPINGSRESPONSE']._serialized_end=966
   _globals['_LOGSERVICE']._serialized_start=1269
   _globals['_LOGSERVICE']._serialized_end=1665
-SendUserMessageRequest.__doc__ = """Attributes:
-    severity:
-        The severity of the message to send  note: TRACE messages
-        cannot be sent using this interface (will throw an error).
-    identifier:
-        A short unique textual identifier for the message Used to
-        identify the message for translation purposes
-    user_message:
-        The user message to send to any listeners.
-    extra_data:
-        Any extra data associated with the user message, as a map from
-        key to data.
-"""
 SendPingRequest.__doc__ = """Since 5.0
 
 Attributes:
@@ -84,6 +71,20 @@ Attributes:
     days_until_expiry:
         Should the ping fail to send, the number of days the ping will
         be stored before being cleaned up.
+"""
+UserMessage.__doc__ = """Attributes:
+    time:
+        Timestamp for when the log message was emitted
+    severity:
+        The severity of the message
+    identifier:
+        A short unique textual identifier for the message Used to
+        identify the message for translation purposes
+    user_message:
+        A long user readable description of the message
+    extra_data:
+        Any extra data associated with the user message, as a map from
+        key to data.
 """
 GetUserMessagesRequest.__doc__ = """Attributes:
     include_old_messages:
@@ -104,16 +105,15 @@ CollectPingsRequest.__doc__ = """Attributes:
         Normally previously collected pings are ignored, but by
         setting this they will be included. Defaults to False.
 """
-UserMessage.__doc__ = """Attributes:
-    time:
-        Timestamp for when the log message was emitted
+SendUserMessageRequest.__doc__ = """Attributes:
     severity:
-        The severity of the message
+        The severity of the message to send  note: TRACE messages
+        cannot be sent using this interface (will throw an error).
     identifier:
         A short unique textual identifier for the message Used to
         identify the message for translation purposes
     user_message:
-        A long user readable description of the message
+        The user message to send to any listeners.
     extra_data:
         Any extra data associated with the user message, as a map from
         key to data.

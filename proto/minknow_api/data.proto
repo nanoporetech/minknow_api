@@ -356,8 +356,8 @@ message GetSignalBytesRequest {
     bool calibrated_data = 7;
 
     // When this value is set to true, then an empty message will be sent back
-    // to the client to indicate that the backend has acknowleged the request,
-    // and that any calls made that will affect the signal after that initial 
+    // to the client to indicate that the backend has acknowledged the request,
+    // and that any calls made that will affect the signal after that initial
     // response will be reflected in the next messages
     bool return_when_listening = 8;
 }
@@ -384,7 +384,7 @@ message GetSignalBytesResponse {
         //
         // Returning the data in this format allows it to be efficiently processed in dynamic
         // languages that can pass the data straight down to a native runtime. For example, in
-        // Python, this data can be intepreted directly into a numpy array using numpy.fromstring().
+        // Python, this data can be interpreted directly into a numpy array using numpy.fromstring().
         //
         // Calibrated data is in picoamps. Uncalibrated data is the raw values output by the
         // device's ADC (analogue-digital converter).
@@ -580,13 +580,13 @@ message GetLiveReadsRequest {
             // Maximum read length MinKNOW will attempt to unblock (in samples).
             //
             // A value of 0 will cause minknow to unblock reads of any length.
-            // 
+            //
             uint64 max_unblock_read_length_samples = 5;
 
             // Maximum read length MinKNOW will attempt to unblock (in seconds).
             //
             // A value of 0.0 will cause minknow to unblock reads of any length.
-            // 
+            //
             double max_unblock_read_length_seconds = 6;
         }
 
@@ -616,7 +616,7 @@ message GetLiveReadsRequest {
 }
 
 // NOTE that the read metrics below are tracked from the receipt of the first StreamSetup message.
-// It is advised that the first StreamSetup be sent close to the experiment start time for 
+// It is advised that the first StreamSetup be sent close to the experiment start time for
 // maximum accuracy.
 message GetLiveReadsResponse {
     message ReadData {
@@ -649,7 +649,7 @@ message GetLiveReadsResponse {
         bytes raw_data = 7;
 
         // The median of the read previous to this read.
-        // intended to allow querying of the approximate level of this read, comapred to the last.
+        // intended to allow querying of the approximate level of this read, compared to the last.
         //
         // For example, a user could try to verify this is a strand be ensuring the median of the
         // current read is lower than the median_before level.
@@ -791,7 +791,7 @@ message GetReadStatisticsResponse {
       //
       // Computed as median(median[...])
       double median = 2;
-      
+
       // Aggregated range value from all classified reads.
       //
       // Computed as median(q90[...] - q10[...])

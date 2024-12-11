@@ -33,7 +33,7 @@ analysis_configuration
     Configure data acquisition. See `analysis_configuration_service.AnalysisConfigurationService`
     for a description of the available methods.
 analysis_workflows
-    Provides a way to manage anaylsis workflows that are ran after (or potentially during)
+    Provides a way to manage analysis workflows that are ran after (or potentially during)
     a protocol run. See `analysis_workflows_service.AnalysisWorkflowsService` for a description of
     the available methods.
 data
@@ -45,9 +45,12 @@ device
     settings in a device-independent way, so it can be used on PromethIONs as easily as on MinIONs.
     See `device_service.DeviceService` for a description of the available methods.
 keystore
-    A service for storing and retreiving arbitrary data on the instance. This can be used to
+    A service for storing and retrieving arbitrary data on the instance. This can be used to
     communicate with other users of the API. See `keystore_service.DeviceService` for a description
     of the available methods.
+hardware_check
+    A service for starting hardware checks and retrieving the data.
+    See `hardware_check_service.HardwareCheckService` for a description of the available methods.
 instance
     Get information about the instance of MinKNOW you are connected to (eg: software version). See
     `instance_service.InstanceService` for a description of the available methods.
@@ -57,6 +60,10 @@ log
 minion_device
     MinION-specific device interface. This exposes low-level settings for MinIONs and similar
     devices (eg: GridIONs). See `minion_device_service.MinionDeviceService` for a
+    description of the available methods.
+pebble_device
+    Pebble-specific device interface. This exposes low-level settings for Pebble.
+    See `pebble_device_service.PebbleDeviceService` for a
     description of the available methods.
 protocol
     Control protocol scripts. See `protocol_service.ProtocolService` for a description of the
@@ -70,7 +77,7 @@ run_until
     available methods.
 statistics
     Get statistics about an acquisition period. Statistics can be streamed live during acquisition,
-    or retreived afterwards. See `statistics_service.StatisticsService` for a description of the
+    or retrieved afterwards. See `statistics_service.StatisticsService` for a description of the
     available methods.
 
 Helpers
@@ -99,6 +106,7 @@ import pytz
 from . import data, manager
 
 from minknow_api.manager import get_local_authentication_token_file
+from minknow_api.tools.compatibility_helpers import read_binary_resource
 
 # Try and import from minknow_api_production package
 try:
@@ -123,18 +131,19 @@ _services = {
     "analysis_workflows": ["AnalysisWorkflowsService"],
     "data": ["DataService"],
     "device": ["DeviceService"],
+    "hardware_check": ["HardwareCheckService"],
     "instance": ["InstanceService"],
     "keystore": ["KeyStoreService"],
     "log": ["LogService"],
     "minion_device": ["MinionDeviceService"],
+    "pebble_device": ["PebbleDeviceService"],
     "production": ["ProductionService"],
     "promethion_device": ["PromethionDeviceService"],
     "protocol": ["ProtocolService"],
     "run_until": ["RunUntilService"],
     "statistics": ["StatisticsService"],
-    "traxion_device": ["TraxionDeviceService"],
 }
-_optional_services = ["production", "traxion_device"]
+_optional_services = ["production"]
 
 
 #
@@ -366,14 +375,7 @@ def read_ssl_certificate(
             environ.get("MINKNOW_TRUSTED_CA"),
         )
 
-    try:
-        # python 3.7+
-        import importlib.resources as importlib_resources
-    except ImportError:
-        # python 3.5/3.6
-        import importlib_resources
-    # using the syntax that works with python 3.7
-    return importlib_resources.read_binary("minknow_api", "ca.crt")
+    return read_binary_resource("minknow_api", "ca.crt")
 
 
 def _is_localhost(host: str) -> bool:
@@ -520,7 +522,7 @@ def load_grpc_credentials(
     if not call_creds:
         local_token_override = environ.get("MINKNOW_API_USE_LOCAL_TOKEN")
         if local_token_override is None:
-            # (allow host==None for backwards compatiblity)
+            # (allow host==None for backwards compatibility)
             try_local_token = host is None or _is_localhost(host)
         elif local_token_override.lower() in ("", "0", "no"):
             try_local_token = False

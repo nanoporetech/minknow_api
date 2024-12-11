@@ -20,7 +20,7 @@ service ManagerService {
     rpc describe_host (DescribeHostRequest) returns (DescribeHostResponse) {
         option idempotency_level = NO_SIDE_EFFECTS;
     }
-    
+
     // Get features from the basecaller, for whether the server can support live basecalling with adaptive sampling
     //
     // Since 5.9
@@ -265,36 +265,18 @@ service ManagerService {
 
     // Get the device code/key for association.
     //
-    // This can be used to either get the code that the user must enter into the customer support
-    // portal to associate the device with their account, or the key used for online association.
-    //
-    // Errors:
-    //     INVALID_ARGUMENT: The requested flow cell position does not exist.
-    //
-    // Since 4.4
+    // DEPRECATED since 6.2 device association is no-longer required. This RPC will return UNIMPLEMENTED.
     rpc association_device_code(AssociationDeviceCodeRequest) returns (AssociationDeviceCodeResponse) {
         option idempotency_level = NO_SIDE_EFFECTS;
+        option deprecated = true;
     }
 
     // Apply the unlock code for offline association.
     //
-    // This is the code that the user receives from the customer support portal after entering the
-    // device code for this device (see `offline_association_device_code`).
-    //
-    // This is only required if either `describe_host` indicates that the device as a whole needs
-    // association, or `flow_cell_positions` indicates that a particular positions needs it.
-    //
-    // Errors:
-    //     INVALID_ARGUMENT: The requested flow cell position does not exist, or no unlock code
-    //         was provided.
-    //
-    // Note that you will need to check the result to see if the association was successful. Calling
-    // this on an already-associated device with a valid unlock code will succeed, but have no
-    // effect.
-    //
-    // Since 4.4
+    // DEPRECATED since 6.2 device association is no-longer required. This RPC will return UNIMPLEMENTED.
     rpc apply_offline_association_unlock_code(ApplyOfflineAssociationUnlockCodeRequest) returns (ApplyOfflineAssociationUnlockCodeResponse) {
         option idempotency_level = IDEMPOTENT;
+        option deprecated = true;
     }
 
     // List all developer API tokens.
@@ -361,10 +343,20 @@ service ManagerService {
     }
 
     // Forcibly halt and restart any MinKNOW-related device administration services, such as Mooneye.
-    // 
+    //
     // Since 6.0
     rpc restart_device_admin_service(RestartDeviceAdminRequest) returns (RestartDeviceAdminResponse) {
         option idempotency_level = IDEMPOTENT;
+    }
+
+    // Checks the validity of a BED file against a corresponding index or genome file
+    //
+    // Errors:
+    //   INVALID_ARGUMENT if the bed_file_path or index_file_path is empty
+    //
+    // Since 6.1
+    rpc check_bed_file(CheckBedFileRequest) returns (CheckBedFileResponse) {
+        option idempotency_level = NO_SIDE_EFFECTS;
     }
 }
 
@@ -417,7 +409,7 @@ message DescribeHostResponse {
     // This is the name the host system believes it has on the network. This can be useful if an IP
     // address was used to connect to the RPC system.
     //
-    // For customer computers, this is the only available identfying information for the system.
+    // For customer computers, this is the only available identifying information for the system.
     string network_name = 4;
 
     // This device has not been associated with an account.
@@ -432,6 +424,7 @@ message DescribeHostResponse {
     // ``STATE_NEEDS_ASSOCIATION`` - see the `flow_cell_positions` RPC).
     //
     // Since 4.4
+    // DEPRECATED since 6.2 device association is no-longer required, this will always be false.
     bool needs_association = 16;
 
     // Whether the device can sequence while offline.
@@ -443,11 +436,19 @@ message DescribeHostResponse {
     // Since 4.4
     bool can_sequence_offline = 5;
 
+    // Whether or not the host system can connect to a USB sequencer.
+    //
+    // This is true on all systems except iOS where it is true if and only if the driver that is
+    // shipped with the app has been enabled in system settings.
+    //
+    // Since 6.1
+    bool can_connect_to_usb_device = 17;
+
     enum BasecallingAvailability {
         // Basecalling is available and the underlying services are up and running
         BASECALLING_AVAILABLE = 0;
         // Basecalling is unavailable
-        // 
+        //
         // This may be due to failing to start or has failed to recover after being restarted
         BASECALLING_UNAVAILABLE = 1;
         // Basecalling is unavailable due to bad configuration of the underlying service
@@ -458,7 +459,7 @@ message DescribeHostResponse {
         BASECALLING_UNAVAILABLE_BAD_CONFIGURATION = 2;
         // Basecalling is temporarily unavailable and the system is attempting to restart
         // the underlying service
-        // 
+        //
         // This may be due to a runtime issue and attempts are being made to recover
         BASECALLING_UNAVAILABLE_ATTEMPTING_RECOVERY = 3;
     };
@@ -580,10 +581,17 @@ message FlowCellPosition {
         //
         // See also `DescribeHostResponse.needs_association`. If the `describe_host` RPC result has
         // `needs_association` set to false, this position is a pluggable device (likely a MinION
-        // Mk1B) that individually requires assocation.
+        // Mk1B) that individually requires association.
         //
         // Since 4.4
+        // DEPRECATED: since 6.2 device or host association is not required or supported.
         STATE_NEEDS_ASSOCIATION = 6;
+        // The USB connection speed is too low for the device to operate correctly
+        //
+        // Ensure that the device is plugged in to a suitable USB port, using the recommended cable
+        //
+        // Since 6.1
+        STATE_USB_SPEED_TOO_LOW = 7;
     };
 
     // The state of the flow cell position.
@@ -629,10 +637,6 @@ message FlowCellPosition {
     //
     // Integrated positions are always listed, even if (due to some hardware error) they can't be
     // found. They are never in STATE_HARDWARE_REMOVED, and they always report a location.
-    //
-    // Additionally, integrated positions cannot be associated independently - if they are in
-    // STATE_NEEDS_ASSOCIATION, then the host as a whole needs associating. Likewise, either all
-    // integrated positions can run offline, or none of them can.
     //
     // Since 4.4
     bool is_integrated = 7;
@@ -1098,9 +1102,9 @@ message GetSequencingKitsResponse {
 }
 
 enum SimulatedDeviceType {
+    reserved 2;
     SIMULATED_AUTO = 0;
     SIMULATED_MINION = 1;
-    SIMULATED_TRAXION = 2;
     SIMULATED_PROMETHION = 3;
     SIMULATED_P2 = 4;
 }
@@ -1187,6 +1191,7 @@ message GetAlignmentReferenceInformationResponse {
     uint64 max_recommended_adaptive_sampling_bases = 5;
 }
 
+// DEPRECATED: since 6.2 device association is no-longer required.
 message AssociationDeviceCodeRequest {
     // The flow cell position to get the association code/key for.
     //
@@ -1207,6 +1212,7 @@ message AssociationDeviceCodeRequest {
     reserved 2;
 }
 
+// DEPRECATED: since 6.2 device association is no-longer required.
 message AssociationDeviceCodeResponse {
     // The code required to associate the device with an account.
     //
@@ -1215,6 +1221,7 @@ message AssociationDeviceCodeResponse {
     string code = 1;
 }
 
+// DEPRECATED: since 6.2 device association is no-longer required.
 message ApplyOfflineAssociationUnlockCodeRequest {
     // The flow cell position to unlock.
     //
@@ -1229,6 +1236,7 @@ message ApplyOfflineAssociationUnlockCodeRequest {
     string unlock_code = 2;
 }
 
+// DEPRECATED: since 6.2 device association is no-longer required.
 message ApplyOfflineAssociationUnlockCodeResponse {
     // True if the association was successful (the unlock_code was accepted), false otherwise.
     bool associated = 1;
@@ -1399,7 +1407,7 @@ message ListSettingsForProtocolResponse {
         protocol_settings.ProtocolSetting bulk_file_raw_enabled = 21;
         protocol_settings.ProtocolSetting bulk_file_events_enabled = 22;
         protocol_settings.ProtocolSetting bulk_file_read_table_enabled = 23;
-        
+
         // Since 5.8
         protocol_settings.ProtocolSetting read_filtering_min_duplex_qscore = 24;
     }
@@ -1422,7 +1430,7 @@ message Feature {
 }
 
 message FeatureList {
-    // feature_flags is a special value 
+    // feature_flags is a special value
     // If false, turns off all other feature flags
     // If true, allows individual flags to be enabled and disabled
     Feature feature_flags = 3;
@@ -1432,7 +1440,7 @@ message FeatureList {
 }
 
 message GetFeaturesRequest {
-    
+
 }
 
 message GetFeaturesResponse {
@@ -1460,11 +1468,32 @@ message SetFeaturesRequest {
 }
 
 message SetFeaturesResponse {
-    
+
 }
 
 message RestartDeviceAdminRequest {
 }
 
 message RestartDeviceAdminResponse {
+}
+
+message CheckBedFileRequest  {
+    // The path to the BED file to validate
+    string bed_file_path = 1;
+
+    // The path to the index file that the BED file should validate against
+    //
+    // Can be a .fasta, .fai or .mmi file
+    string index_file_path = 2;
+
+    // Strictly conforms to the BED file specification and allows both tabs and spaces
+    // to be used as delimiters between columns
+    bool strict = 3;
+
+    // Check strand values are allowed
+    bool stranded = 4;
+}
+
+message CheckBedFileResponse {
+    bool passed = 1;
 }

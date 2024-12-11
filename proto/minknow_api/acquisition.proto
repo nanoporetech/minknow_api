@@ -107,6 +107,13 @@ service AcquisitionService {
         option idempotency_level = IDEMPOTENT;
     }
 
+    // Find the signal reader in use. This may have been configured by MinKNOW prior to a protocol being begun.
+    //
+    // Since 6.2
+    rpc get_signal_reader (GetSignalReaderRequest) returns (GetSignalReaderResponse) {
+        option idempotency_level = IDEMPOTENT;
+    }
+
     // Set the bream information for the current acquisition.
     //
     // This should only be called by the protocol. It will only affect the last acquisition that was
@@ -401,6 +408,10 @@ enum AcquisitionState {
     // The acquisition period finished on its own and
     // did not report an error.
     ACQUISITION_COMPLETED = 3;
+
+    // The acquisition period is paused.
+    // that is, no data transfer occurring.
+    ACQUISITION_PAUSED = 4;
 }
 
 enum AcquisitionStopReason {
@@ -452,10 +463,10 @@ enum StartupState {
     // Setting up data writers for outputting reads/files.
     STARTUP_INITIALISING_DATA_WRITERS = 5;
 
-    // Initialsing storage for in flight reads.
+    // Initialising storage for in flight reads.
     STARTUP_INITIALISING_INTERMEDIATE_DATA_STORAGE = 6;
 
-    // Initialsing storage for run statistics.
+    // Initialising storage for run statistics.
     STARTUP_INITIALISING_STATISTICS = 7;
 }
 
@@ -530,7 +541,7 @@ message AcquisitionYieldSummary
     // As above, but counted in bases rather than basecalls.
     TotalsPerDuplexCategory basecalled_pass_bases_split = 24;
     TotalsPerDuplexCategory basecalled_fail_bases_split = 25;
-    
+
     // Number of raw samples which have been called.
     int64 basecalled_samples = 6;
 
@@ -709,7 +720,7 @@ message AcquisitionConfigSummary {
     bool fastq_reads_enabled = 5;
     // Determine if pod5 reads were enabled for the run.
     bool pod5_reads_enabled = 22;
-    
+
     // This field has been removed
     // Since 5.8
     reserved 6;
@@ -929,7 +940,7 @@ message AcquisitionRunInfo {
     // Set information provided by the Bream toolkit.
     BreamInfo bream_info = 15;
 
-    // Target Run-Until Critiera, used to determine when the acquisition should be paused
+    // Target Run-Until Criteria, used to determine when the acquisition should be paused
     // or stopped.
     //
     // Since 5.3
@@ -954,7 +965,10 @@ message SetSignalReaderRequest {
 
     // Available signal reader types
     enum SignalReaderType {
+        option allow_alias = true;
+
         HDF5 = 0; // Default value
+        PLAYBACK = 0; // Renamed default value - playback can handle non-hdf file formats too.
         DEVICE = 1;
     }
 
@@ -976,6 +990,20 @@ message SetSignalReaderRequest {
 }
 
 message SetSignalReaderResponse {}
+
+message GetSignalReaderRequest {}
+message GetSignalReaderResponse {
+    // The type of signal reader to use
+    SetSignalReaderRequest.SignalReaderType reader = 1 [(rpc_required) = true];
+
+    // The following is only set if the signal reader is a playback source.
+    string playback_source = 2;
+
+    SetSignalReaderRequest.SourceFileMode playback_mode = 3;
+
+    float sample_rate_scale_factor = 4;
+}
+
 
 message SetBreamInfoRequest {
     // The information to set.

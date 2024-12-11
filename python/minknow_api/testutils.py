@@ -53,7 +53,7 @@ def find_test_certs_dir(extra_stack_frames_up=0):
             new_cert_root = cert_root.parent
             logging.info("%s %s", new_cert_root, cert_root)
             if new_cert_root == cert_root:
-                raise Exception("Failed to find test certficates directory")
+                raise Exception("Failed to find test certificates directory")
             cert_root = new_cert_root
 
         found_test_certs_dir = certs_dir

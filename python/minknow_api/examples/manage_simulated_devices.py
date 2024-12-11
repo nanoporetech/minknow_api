@@ -65,7 +65,7 @@ def parse_arguments():
         "--prom",
         "-p",
         action="store_true",
-        help="Add a simulated PromethION flow cell. If adding a simulated PromethION flow cell and providing a name, please ensure the name follows the LN naming convention, where L is an uppercase letter and N is a sigle digit number.",
+        help="Add a simulated PromethION flow cell. If adding a simulated PromethION flow cell and providing a name, please ensure the name follows the LN naming convention, where L is an uppercase letter and N is a single digit number.",
     )
     device_group.add_argument(
         "--p2",
@@ -86,7 +86,7 @@ def parse_arguments():
         "-a",
         nargs="*",
         default=None,
-        help='Add specified simulated devices to MinKnow. BY default this device is a MinION, but this can be changed using the "--prom " or "--p2" flags. Optionally specify device names, which should be passed as a space seperated list, for example `--add MS00000 MS00001`.\n Names must be in certain formats for each type created - MSXXXXX for MinION and LN for PromethION, where L is an uppercase letter and N is a sigle digit number eg: "1A". For P2, please use either "P2S_" followed by five digits, and then "-A" or "-B" eg: "P2S_000000-A" or "P2S_000000-B".',
+        help='Add specified simulated devices to MinKnow. BY default this device is a MinION, but this can be changed using the "--prom " or "--p2" flags. Optionally specify device names, which should be passed as a space separated list, for example `--add MS00000 MS00001`.\n Names must be in certain formats for each type created - MSXXXXX for MinION and LN for PromethION, where L is an uppercase letter and N is a single digit number eg: "1A". For P2, please use either "P2S_" followed by five digits, and then "-A" or "-B" eg: "P2S_000000-A" or "P2S_000000-B".',
     )
     action_group.add_argument(
         "--remove",
@@ -171,7 +171,7 @@ def main():
 
     if (args.prom or args.p2) and args.add is None:
         print(
-            "You have specified a device type but not passed --add. Listing availiable devices..."
+            "You have specified a device type but not passed --add. Listing available devices..."
         )
     # Try and connect to the minknow-core manager passing the host, port and developer-api token.  If the Python code
     # can't connect it will throw, catch the exception and exit with an error message.
@@ -209,7 +209,7 @@ def main():
                     )
                 )
                 sys.exit(1)
-                # patterns  andd  tests
+                # patterns  and  tests
         else:
             device_type = minknow_api.manager_pb2.SimulatedDeviceType.SIMULATED_MINION
             pattern = "MS{:05}"

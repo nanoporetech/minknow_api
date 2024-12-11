@@ -22,10 +22,10 @@ class DeviceType(Enum):
     PROMETHION = minknow_api.device_service.GetDeviceInfoResponse.PROMETHION
     GRIDION = minknow_api.device_service.GetDeviceInfoResponse.GRIDION
     MINION_MK1C = minknow_api.device_service.GetDeviceInfoResponse.MINION_MK1C
-    TRAXION = minknow_api.device_service.GetDeviceInfoResponse.TRAXION
     P2_SOLO = minknow_api.device_service.GetDeviceInfoResponse.P2_SOLO
     MINION_MK1D = minknow_api.device_service.GetDeviceInfoResponse.MINION_MK1D
     P2_INTEGRATED = minknow_api.device_service.GetDeviceInfoResponse.P2_INTEGRATED
+    PEBBLE = minknow_api.device_service.GetDeviceInfoResponse.PEBBLE
 
     def is_minion_like(self):
         """Whether the device acts like a MinION.
@@ -37,7 +37,6 @@ class DeviceType(Enum):
             DeviceType.MINION,
             DeviceType.GRIDION,
             DeviceType.MINION_MK1C,
-            DeviceType.TRAXION,
             DeviceType.MINION_MK1D,
         ]
 
@@ -52,6 +51,14 @@ class DeviceType(Enum):
             DeviceType.P2_SOLO,
             DeviceType.P2_INTEGRATED,
         ]
+
+    def is_pebble_like(self):
+        """Whether the device acts like a Pebble.
+
+        Among other things, this means it can be used with the ``pebble`` RPC service (see
+        `minknow_api.pebble_service`).
+        """
+        return self in [DeviceType.PEBBLE]
 
 
 def get_device_type(connection):

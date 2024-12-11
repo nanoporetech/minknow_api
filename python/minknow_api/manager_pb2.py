@@ -19,7 +19,7 @@ from minknow_api import protocol_settings_pb2 as minknow__api_dot_protocol__sett
 from google.protobuf import timestamp_pb2 as google_dot_protobuf_dot_timestamp__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x19minknow_api/manager.proto\x12\x13minknow_api.manager\x1a\x1dminknow_api/rpc_options.proto\x1a\x18minknow_api/device.proto\x1a\x1aminknow_api/instance.proto\x1a#minknow_api/protocol_settings.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\x15\n\x13\x44\x65scribeHostRequest\"\xae\x05\n\x14\x44\x65scribeHostResponse\x12\x14\n\x0cproduct_code\x18\x01 \x01(\t\x12\x13\n\x0b\x64\x65scription\x18\x02 \x01(\t\x12\x0e\n\x06serial\x18\x03 \x01(\t\x12\x14\n\x0cnetwork_name\x18\x04 \x01(\t\x12\x19\n\x11needs_association\x18\x10 \x01(\x08\x12\x1c\n\x14\x63\x61n_sequence_offline\x18\x05 \x01(\x08\x12W\n\x0c\x63\x61n_basecall\x18\x06 \x01(\x0e\x32\x41.minknow_api.manager.DescribeHostResponse.BasecallingAvailability\x12\x63\n\x1c\x63urrent_basecalling_hardware\x18\x07 \x01(\x0b\x32=.minknow_api.manager.DescribeHostResponse.BasecallerSubstrate\x12\x65\n\x1e\x61vailable_basecalling_hardware\x18\x08 \x03(\x0b\x32=.minknow_api.manager.DescribeHostResponse.BasecallerSubstrate\x1a\x33\n\x13\x42\x61secallerSubstrate\x12\x0e\n\x06is_gpu\x18\x01 \x01(\x08\x12\x0c\n\x04gpus\x18\x02 \x03(\t\"\xb1\x01\n\x17\x42\x61secallingAvailability\x12\x19\n\x15\x42\x41SECALLING_AVAILABLE\x10\x00\x12\x1b\n\x17\x42\x41SECALLING_UNAVAILABLE\x10\x01\x12-\n)BASECALLING_UNAVAILABLE_BAD_CONFIGURATION\x10\x02\x12/\n+BASECALLING_UNAVAILABLE_ATTEMPTING_RECOVERY\x10\x03\"\x1e\n\x1cGetBasecallerFeaturesRequest\"_\n\x1dGetBasecallerFeaturesResponse\x12>\n6is_live_basecalling_with_adaptive_sampling_recommended\x18\x01 \x01(\x08\"\xdf\x07\n\x10\x46lowCellPosition\x12\x0c\n\x04name\x18\x01 \x01(\t\x12@\n\x08location\x18\x02 \x01(\x0b\x32..minknow_api.manager.FlowCellPosition.Location\x12:\n\x05state\x18\x03 \x01(\x0e\x32+.minknow_api.manager.FlowCellPosition.State\x12\x41\n\trpc_ports\x18\x04 \x01(\x0b\x32..minknow_api.manager.FlowCellPosition.RpcPorts\x12\x12\n\nerror_info\x18\x05 \x01(\t\x12X\n\x15shared_hardware_group\x18\x06 \x01(\x0b\x32\x39.minknow_api.manager.FlowCellPosition.SharedHardwareGroup\x12\x15\n\ris_integrated\x18\x07 \x01(\x08\x12\x1c\n\x14\x63\x61n_sequence_offline\x18\x08 \x01(\x08\x12@\n\x0eprotocol_state\x18\t \x01(\x0e\x32(.minknow_api.manager.SimpleProtocolState\x12\x14\n\x0cis_simulated\x18\n \x01(\x08\x12I\n\x0b\x64\x65vice_type\x18\x0b \x01(\x0e\x32\x34.minknow_api.device.GetDeviceInfoResponse.DeviceType\x12\x13\n\x0bparent_name\x18\x0c \x01(\t\x12\x1c\n\x14\x66irmware_is_updating\x18\r \x01(\x08\x12\x14\n\x0chas_progress\x18\x0e \x01(\x08\x12\x18\n\x10progress_percent\x18\x0f \x01(\r\x12\x1c\n\x14progress_eta_seconds\x18\x10 \x01(\r\x1a \n\x08Location\x12\t\n\x01x\x18\x01 \x01(\x05\x12\t\n\x01y\x18\x02 \x01(\x05\x1a\x33\n\x08RpcPorts\x12\x0e\n\x06secure\x18\x01 \x01(\r\x12\x17\n\x0fsecure_grpc_web\x18\x03 \x01(\r\x1a\'\n\x13SharedHardwareGroup\x12\x10\n\x08group_id\x18\x01 \x01(\r\"\xb4\x01\n\x05State\x12\x16\n\x12STATE_INITIALISING\x10\x00\x12\x11\n\rSTATE_RUNNING\x10\x01\x12\x13\n\x0fSTATE_RESETTING\x10\x02\x12\x1a\n\x16STATE_HARDWARE_REMOVED\x10\x03\x12\x18\n\x14STATE_HARDWARE_ERROR\x10\x04\x12\x18\n\x14STATE_SOFTWARE_ERROR\x10\x05\x12\x1b\n\x17STATE_NEEDS_ASSOCIATION\x10\x06\"\x1a\n\x18\x46lowCellPositionsRequest\"j\n\x19\x46lowCellPositionsResponse\x12\x13\n\x0btotal_count\x18\x01 \x01(\x05\x12\x38\n\tpositions\x18\x02 \x03(\x0b\x32%.minknow_api.manager.FlowCellPosition\"\x1f\n\x1dWatchFlowCellPositionsRequest\"\xa4\x01\n\x1eWatchFlowCellPositionsResponse\x12\x38\n\tadditions\x18\x01 \x03(\x0b\x32%.minknow_api.manager.FlowCellPosition\x12\x36\n\x07\x63hanges\x18\x02 \x03(\x0b\x32%.minknow_api.manager.FlowCellPosition\x12\x10\n\x08removals\x18\x03 \x03(\t\"8\n\x14ResetPositionRequest\x12\x11\n\tpositions\x18\x03 \x03(\t\x12\r\n\x05\x66orce\x18\x02 \x01(\x08\"\x17\n\x15ResetPositionResponse\"\x16\n\x14\x42\x61secallerApiRequest\"@\n\x15\x42\x61secallerApiResponse\x12\x0e\n\x06secure\x18\x01 \x01(\r\x12\x17\n\x0fsecure_grpc_web\x18\x03 \x01(\r\"\x15\n\x13GetGuppyInfoRequest\"^\n\x14GetGuppyInfoResponse\x12\x0e\n\x04port\x18\x01 \x01(\rH\x00\x12\x12\n\x08ipc_path\x18\x03 \x01(\tH\x00\x12\x0f\n\x07version\x18\x02 \x01(\tB\x11\n\x0f\x63onnection_type\"\x17\n\x15GetVersionInfoRequest\"1\n!ListProtocolOutputDirFilesRequest\x12\x0c\n\x04path\x18\x01 \x01(\t\"\xf8\x01\n\"ListProtocolOutputDirFilesResponse\x12Z\n\x0b\x64irectories\x18\x01 \x03(\x0b\x32\x45.minknow_api.manager.ListProtocolOutputDirFilesResponse.DirectoryInfo\x12\r\n\x05\x66iles\x18\x02 \x03(\t\x12\x1b\n\x13\x63urrent_listed_path\x18\x03 \x01(\t\x1aJ\n\rDirectoryInfo\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x17\n\x0f\x64irectory_count\x18\x02 \x01(\x05\x12\x12\n\nfile_count\x18\x03 \x01(\x05\";\n\x16\x43reateDirectoryRequest\x12\x13\n\x0bparent_path\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\"\'\n\x17\x43reateDirectoryResponse\x12\x0c\n\x04path\x18\x01 \x01(\t\"\x87\x02\n\x17\x46ilesystemDiskSpaceInfo\x12\x15\n\rfilesystem_id\x18\x01 \x01(\t\x12\x17\n\x0f\x62ytes_available\x18\x02 \x01(\x04\x12\x16\n\x0e\x62ytes_capacity\x18\x03 \x01(\x04\x12\x19\n\x11\x66ile_types_stored\x18\x04 \x03(\t\x12\x1d\n\x15\x62ytes_to_stop_cleanly\x18\x05 \x01(\x04\x12\x1f\n\x17\x62ytes_when_alert_issued\x18\x06 \x01(\x04\x12\x17\n\x0frecommend_alert\x18\x07 \x01(\x08\x12\x16\n\x0erecommend_stop\x18\x08 \x01(\x08\x12\x18\n\x10\x62ytes_per_second\x18\t \x01(\x03\"\x19\n\x17GetDiskSpaceInfoRequest\",\n\x1aStreamDiskSpaceInfoRequest\x12\x0e\n\x06period\x18\x01 \x01(\r\"l\n\x18GetDiskSpaceInfoResponse\x12P\n\x1a\x66ilesystem_disk_space_info\x18\x01 \x03(\x0b\x32,.minknow_api.manager.FilesystemDiskSpaceInfo\"\x1a\n\x18GetBarcodeKitInfoRequest\"\xa8\x02\n\x19GetBarcodeKitInfoResponse\x12\\\n\x10\x62\x61rcode_kit_info\x18\x01 \x03(\x0b\x32\x42.minknow_api.manager.GetBarcodeKitInfoResponse.BarcodeKitInfoEntry\x1a\x37\n\x0e\x42\x61rcodeKitInfo\x12\x0f\n\x07is_dual\x18\x02 \x01(\x08\x12\x14\n\x0cis_both_ends\x18\x03 \x01(\x08\x1at\n\x13\x42\x61rcodeKitInfoEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12L\n\x05value\x18\x02 \x01(\x0b\x32=.minknow_api.manager.GetBarcodeKitInfoResponse.BarcodeKitInfo:\x02\x38\x01\"\x17\n\x15GetLampKitInfoRequest\"+\n\x16GetLampKitInfoResponse\x12\x11\n\tlamp_kits\x18\x02 \x03(\t\"I\n\x15GetBarcodeKeysRequest\x12\x19\n\x11\x62\x61rcode_kit_names\x18\x01 \x03(\t\x12\x15\n\rlamp_kit_name\x18\x02 \x01(\t\"X\n\x16GetBarcodeKeysResponse\x12\x14\n\x0c\x62\x61rcode_keys\x18\x01 \x03(\t\x12\x11\n\tlamp_keys\x18\x02 \x03(\t\x12\x15\n\rcombined_keys\x18\x03 \x03(\t\"\x19\n\x17GetFlowCellTypesRequest\"\xdc\x01\n\x18GetFlowCellTypesResponse\x12\x41\n\x05types\x18\x01 \x03(\x0b\x32\x32.minknow_api.manager.GetFlowCellTypesResponse.Info\x1a}\n\x04Info\x12\x14\n\x0cproduct_code\x18\x01 \x01(\t\x12\x41\n\x0e\x63onnector_type\x18\x02 \x01(\x0e\x32).minknow_api.device.FlowCellConnectorType\x12\x1c\n\x14\x63\x61nnot_live_basecall\x18\x03 \x01(\x08\":\n\x18GetSequencingKitsRequest\x12\x1e\n\x16\x66low_cell_product_code\x18\x01 \x01(\t\"\xf2\x03\n\x19GetSequencingKitsResponse\x12@\n\x04kits\x18\x01 \x03(\x0b\x32\x32.minknow_api.manager.GetSequencingKitsResponse.Kit\x12\x66\n\x18\x62\x61rcoding_expansion_kits\x18\x02 \x03(\x0b\x32\x44.minknow_api.manager.GetSequencingKitsResponse.BarcodingExpansionKit\x1a\xfb\x01\n\x03Kit\x12\x14\n\x0cproduct_code\x18\x01 \x01(\t\x12 \n\x18\x62\x61rcoding_expansion_kits\x18\x02 \x03(\x05\x12\x1a\n\x12includes_barcoding\x18\x03 \x01(\x08\x12\x10\n\x08lamp_kit\x18\x10 \x01(\x08\x12\x1c\n\x14has_control_protocol\x18\x04 \x01(\x08\x12\x1e\n\x16no_sequencing_protocol\x18\x11 \x01(\x08\x12\x17\n\x0f\x66requently_used\x18\x12 \x01(\x08\x12\x0b\n\x03\x64na\x18\x05 \x01(\x08\x12\x0b\n\x03rna\x18\x06 \x01(\x08\x12\x0b\n\x03pcr\x18\x07 \x01(\x08\x12\x10\n\x08pcr_free\x18\x08 \x01(\x08\x1a-\n\x15\x42\x61rcodingExpansionKit\x12\x14\n\x0cproduct_code\x18\x01 \x01(\t\"m\n\x19\x41\x64\x64SimulatedDeviceRequest\x12\x12\n\x04name\x18\x01 \x01(\tB\x04\x88\xb5\x18\x01\x12<\n\x04type\x18\x02 \x01(\x0e\x32(.minknow_api.manager.SimulatedDeviceTypeB\x04\x88\xb5\x18\x01\"\x1c\n\x1a\x41\x64\x64SimulatedDeviceResponse\"2\n\x1cRemoveSimulatedDeviceRequest\x12\x12\n\x04name\x18\x01 \x01(\tB\x04\x88\xb5\x18\x01\"\x1f\n\x1dRemoveSimulatedDeviceResponse\"%\n#LocalAuthenticationTokenPathRequest\"4\n$LocalAuthenticationTokenPathResponse\x12\x0c\n\x04path\x18\x01 \x01(\t\"7\n\'GetAlignmentReferenceInformationRequest\x12\x0c\n\x04path\x18\x01 \x01(\t\"\xf5\x01\n(GetAlignmentReferenceInformationResponse\x12#\n\x1b\x65stimated_load_time_seconds\x18\x01 \x01(\x02\x12&\n\x1e\x65stimated_reference_size_bases\x18\x02 \x01(\x04\x12\x1e\n\x16recommended_live_usage\x18\x03 \x01(\x08\x12+\n#recommended_adaptive_sampling_usage\x18\x04 \x01(\x08\x12/\n\'max_recommended_adaptive_sampling_bases\x18\x05 \x01(\x04\"D\n\x1c\x41ssociationDeviceCodeRequest\x12\x15\n\rposition_name\x18\x01 \x01(\tJ\x04\x08\x02\x10\x03R\x07offline\"-\n\x1d\x41ssociationDeviceCodeResponse\x12\x0c\n\x04\x63ode\x18\x01 \x01(\t\"V\n(ApplyOfflineAssociationUnlockCodeRequest\x12\x15\n\rposition_name\x18\x01 \x01(\t\x12\x13\n\x0bunlock_code\x18\x02 \x01(\t\"?\n)ApplyOfflineAssociationUnlockCodeResponse\x12\x12\n\nassociated\x18\x01 \x01(\x08\"\x1f\n\x1dListDeveloperApiTokensRequest\"\xd2\x01\n\x1eListDeveloperApiTokensResponse\x12U\n\x06tokens\x18\x01 \x03(\x0b\x32\x45.minknow_api.manager.ListDeveloperApiTokensResponse.DeveloperApiToken\x1aY\n\x11\x44\x65veloperApiToken\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12*\n\x06\x65xpiry\x18\x03 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\"Z\n\x1e\x43reateDeveloperApiTokenRequest\x12\x0c\n\x04name\x18\x02 \x01(\t\x12*\n\x06\x65xpiry\x18\x03 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\"<\n\x1f\x43reateDeveloperApiTokenResponse\x12\n\n\x02id\x18\x01 \x01(\t\x12\r\n\x05token\x18\x02 \x01(\t\",\n\x1eRevokeDeveloperApiTokenRequest\x12\n\n\x02id\x18\x01 \x01(\t\"\"\n RevokeDeveloperApiTokensResponse\"\x8c\x01\n\x14\x46indProtocolsRequest\x12\x1e\n\x16\x66low_cell_product_code\x18\x01 \x01(\t\x12\x16\n\x0esequencing_kit\x18\x02 \x01(\t\x12<\n\x0f\x65xperiment_type\x18\x03 \x01(\x0e\x32#.minknow_api.manager.ExperimentType\"\xc9\x01\n\x15\x46indProtocolsResponse\x12\x46\n\tprotocols\x18\x01 \x03(\x0b\x32\x33.minknow_api.manager.FindProtocolsResponse.Protocol\x1ah\n\x08Protocol\x12\x12\n\nidentifier\x18\x01 \x01(\t\x12\'\n\x1frequires_flow_cell_product_code\x18\x02 \x01(\x08\x12\x1f\n\x17requires_sequencing_kit\x18\x03 \x01(\x08\"\xee\x01\n\x1eListSettingsForProtocolRequest\x12\x14\n\nidentifier\x18\x01 \x01(\tH\x00\x12Q\n\ncomponents\x18\x02 \x01(\x0b\x32;.minknow_api.protocol_settings.ProtocolIdentifierComponentsH\x00\x12L\n\x13\x66low_cell_connector\x18\x03 \x01(\x0e\x32).minknow_api.device.FlowCellConnectorTypeB\x04\x88\xb5\x18\x01\x42\x15\n\x13protocol_identifier\"\x8c\x1f\n\x1fListSettingsForProtocolResponse\x12M\n\x08protocol\x18\x01 \x01(\x0b\x32;.minknow_api.protocol_settings.ProtocolIdentifierComponents\x12T\n\x0brun_options\x18\x02 \x01(\x0b\x32?.minknow_api.manager.ListSettingsForProtocolResponse.RunOptions\x12U\n\x0b\x62\x61secalling\x18\x03 \x01(\x0b\x32@.minknow_api.manager.ListSettingsForProtocolResponse.Basecalling\x12K\n\x06output\x18\x04 \x01(\x0b\x32;.minknow_api.manager.ListSettingsForProtocolResponse.Output\x12I\n\x11protocol_settings\x18\x05 \x03(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x1a\xd5\x06\n\nRunOptions\x12\x42\n\nrun_length\x18\x01 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12\x44\n\x0c\x62ias_voltage\x18\x02 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12J\n\x12read_until_enabled\x18\x03 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12K\n\x13read_until_ref_file\x18\x04 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12K\n\x13read_until_channels\x18\x05 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12S\n\x1bread_until_bed_file_enabled\x18\x06 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12K\n\x13read_until_bed_file\x18\x07 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12M\n\x15read_until_enrichment\x18\x08 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12P\n\x18\x61\x63tive_channel_selection\x18\t \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12G\n\x0fmux_scan_period\x18\n \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12K\n\x13group_change_period\x18\x0b \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x1a\x8f\x06\n\x0b\x42\x61secalling\x12K\n\x13\x62\x61secalling_enabled\x18\x01 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12I\n\x11\x62\x61rcoding_enabled\x18\x02 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12\x46\n\x0e\x62\x61rcoding_kits\x18\x03 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12\x46\n\x0e\x62\x61secall_model\x18\x04 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12M\n\x15trim_barcodes_enabled\x18\x05 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12R\n\x1arequire_barcodes_both_ends\x18\x06 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12I\n\x11\x61lignment_enabled\x18\r \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12J\n\x12\x61lignment_ref_file\x18\x0e \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12R\n\x1a\x61lignment_bed_file_enabled\x18\x0f \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12J\n\x12\x61lignment_bed_file\x18\x10 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x1a\xea\x0e\n\x06Output\x12G\n\x0foutput_location\x18\x01 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12\x46\n\x0e\x66\x61st_q_enabled\x18\x02 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12M\n\x15\x66\x61st_q_reads_per_file\x18\x03 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12O\n\x17\x66\x61st_q_data_compression\x18\x04 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12\x46\n\x0e\x66\x61st_5_enabled\x18\x05 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12M\n\x15\x66\x61st_5_reads_per_file\x18\x06 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12O\n\x17\x66\x61st_5_data_trace_table\x18\x07 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12N\n\x16\x66\x61st_5_data_move_table\x18\x08 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12J\n\x12\x66\x61st_5_data_fast_q\x18\t \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12G\n\x0f\x66\x61st_5_data_raw\x18\n \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12O\n\x17\x66\x61st_5_data_compression\x18\x0b \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12\x43\n\x0b\x62\x61m_enabled\x18\x0c \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12N\n\x16read_filtering_enabled\x18\r \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12Q\n\x19read_filtering_min_qscore\x18\x0e \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12V\n\x1eread_filtering_min_read_length\x18\x0f \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12V\n\x1eread_filtering_max_read_length\x18\x10 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12I\n\x11\x62ulk_file_enabled\x18\x11 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12\x45\n\rbulk_file_raw\x18\x12 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12H\n\x10\x62ulk_file_events\x18\x13 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12L\n\x14\x62ulk_file_read_table\x18\x14 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12M\n\x15\x62ulk_file_raw_enabled\x18\x15 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12P\n\x18\x62ulk_file_events_enabled\x18\x16 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12T\n\x1c\x62ulk_file_read_table_enabled\x18\x17 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12X\n read_filtering_min_duplex_qscore\x18\x18 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\"\x1a\n\x07\x46\x65\x61ture\x12\x0f\n\x07\x65nabled\x18\x01 \x01(\x08\"\xe5\x01\n\x0b\x46\x65\x61tureList\x12\x33\n\rfeature_flags\x18\x03 \x01(\x0b\x32\x1c.minknow_api.manager.Feature\x12\x34\n\x0e\x65nrich_deplete\x18\x01 \x01(\x0b\x32\x1c.minknow_api.manager.Feature\x12\x37\n\x11\x62\x61rcode_balancing\x18\x02 \x01(\x0b\x32\x1c.minknow_api.manager.Feature\x12\x32\n\x0c\x64\x61ta_offload\x18\x04 \x01(\x0b\x32\x1c.minknow_api.manager.Feature\"\x14\n\x12GetFeaturesRequest\"\xde\x01\n\x13GetFeaturesResponse\x12=\n\x05state\x18\x01 \x01(\x0e\x32..minknow_api.manager.GetFeaturesResponse.State\x12\x32\n\x08\x66\x65\x61tures\x18\x02 \x01(\x0b\x32 .minknow_api.manager.FeatureList\"T\n\x05State\x12\x0b\n\x07UNKNOWN\x10\x00\x12\x0b\n\x07NO_FILE\x10\x01\x12\x1b\n\x17\x45RROR_LOADING_FROM_FILE\x10\x02\x12\x14\n\x10LOADED_FROM_FILE\x10\x03\"H\n\x12SetFeaturesRequest\x12\x32\n\x08\x66\x65\x61tures\x18\x01 \x01(\x0b\x32 .minknow_api.manager.FeatureList\"\x15\n\x13SetFeaturesResponse\"\x1b\n\x19RestartDeviceAdminRequest\"\x1c\n\x1aRestartDeviceAdminResponse*\x88\x01\n\x13SimpleProtocolState\x12\x15\n\x11NO_PROTOCOL_STATE\x10\x00\x12\x14\n\x10PROTOCOL_RUNNING\x10\x01\x12\"\n\x1ePROTOCOL_FINISHED_SUCCESSFULLY\x10\x02\x12 \n\x1cPROTOCOL_FINISHED_WITH_ERROR\x10\x03*\x82\x01\n\x13SimulatedDeviceType\x12\x12\n\x0eSIMULATED_AUTO\x10\x00\x12\x14\n\x10SIMULATED_MINION\x10\x01\x12\x15\n\x11SIMULATED_TRAXION\x10\x02\x12\x18\n\x14SIMULATED_PROMETHION\x10\x03\x12\x10\n\x0cSIMULATED_P2\x10\x04*j\n\x0e\x45xperimentType\x12\x0e\n\nSEQUENCING\x10\x00\x12\x0b\n\x07\x43ONTROL\x10\x01\x12\n\n\x06\x43USTOM\x10\x02\x12\x15\n\x11\x41LL_EXCEPT_HIDDEN\x10\x03\x12\x18\n\x14\x41LL_INCLUDING_HIDDEN\x10\x04\x32\xc4 \n\x0eManagerService\x12i\n\rdescribe_host\x12(.minknow_api.manager.DescribeHostRequest\x1a).minknow_api.manager.DescribeHostResponse\"\x03\x90\x02\x01\x12\x85\x01\n\x17get_basecaller_features\x12\x31.minknow_api.manager.GetBasecallerFeaturesRequest\x1a\x32.minknow_api.manager.GetBasecallerFeaturesResponse\"\x03\x90\x02\x01\x12{\n\x13\x66low_cell_positions\x12-.minknow_api.manager.FlowCellPositionsRequest\x1a..minknow_api.manager.FlowCellPositionsResponse\"\x03\x90\x02\x01\x30\x01\x12\x8b\x01\n\x19watch_flow_cell_positions\x12\x32.minknow_api.manager.WatchFlowCellPositionsRequest\x1a\x33.minknow_api.manager.WatchFlowCellPositionsResponse\"\x03\x90\x02\x01\x30\x01\x12i\n\x0ereset_position\x12).minknow_api.manager.ResetPositionRequest\x1a*.minknow_api.manager.ResetPositionResponse\"\x00\x12l\n\x0e\x62\x61secaller_api\x12).minknow_api.manager.BasecallerApiRequest\x1a*.minknow_api.manager.BasecallerApiResponse\"\x03\x90\x02\x01\x12j\n\x0eget_guppy_info\x12(.minknow_api.manager.GetGuppyInfoRequest\x1a).minknow_api.manager.GetGuppyInfoResponse\"\x03\x90\x02\x01\x12q\n\x10get_version_info\x12*.minknow_api.manager.GetVersionInfoRequest\x1a,.minknow_api.instance.GetVersionInfoResponse\"\x03\x90\x02\x01\x12\x98\x01\n\x1elist_protocol_output_dir_files\x12\x36.minknow_api.manager.ListProtocolOutputDirFilesRequest\x1a\x37.minknow_api.manager.ListProtocolOutputDirFilesResponse\"\x03\x90\x02\x01\x30\x01\x12r\n\x10\x63reate_directory\x12+.minknow_api.manager.CreateDirectoryRequest\x1a,.minknow_api.manager.CreateDirectoryResponse\"\x03\x90\x02\x02\x12w\n\x13get_disk_space_info\x12,.minknow_api.manager.GetDiskSpaceInfoRequest\x1a-.minknow_api.manager.GetDiskSpaceInfoResponse\"\x03\x90\x02\x01\x12\x88\x01\n\x1eget_default_output_directories\x12\x38.minknow_api.instance.GetDefaultOutputDirectoriesRequest\x1a\'.minknow_api.instance.OutputDirectories\"\x03\x90\x02\x01\x12\x7f\n\x16stream_disk_space_info\x12/.minknow_api.manager.StreamDiskSpaceInfoRequest\x1a-.minknow_api.manager.GetDiskSpaceInfoResponse\"\x03\x90\x02\x01\x30\x01\x12z\n\x14get_barcode_kit_info\x12-.minknow_api.manager.GetBarcodeKitInfoRequest\x1a..minknow_api.manager.GetBarcodeKitInfoResponse\"\x03\x90\x02\x01\x12q\n\x11get_lamp_kit_info\x12*.minknow_api.manager.GetLampKitInfoRequest\x1a+.minknow_api.manager.GetLampKitInfoResponse\"\x03\x90\x02\x01\x12p\n\x10get_barcode_keys\x12*.minknow_api.manager.GetBarcodeKeysRequest\x1a+.minknow_api.manager.GetBarcodeKeysResponse\"\x03\x90\x02\x01\x12{\n\x13get_flow_cell_types\x12,.minknow_api.manager.GetFlowCellTypesRequest\x1a-.minknow_api.manager.GetFlowCellTypesResponse\"\x07\x90\x02\x01\x98\xb5\x18\x01\x12}\n\x13get_sequencing_kits\x12-.minknow_api.manager.GetSequencingKitsRequest\x1a..minknow_api.manager.GetSequencingKitsResponse\"\x07\x90\x02\x01\x98\xb5\x18\x01\x12y\n\x14\x61\x64\x64_simulated_device\x12..minknow_api.manager.AddSimulatedDeviceRequest\x1a/.minknow_api.manager.AddSimulatedDeviceResponse\"\x00\x12\x85\x01\n\x17remove_simulated_device\x12\x31.minknow_api.manager.RemoveSimulatedDeviceRequest\x1a\x32.minknow_api.manager.RemoveSimulatedDeviceResponse\"\x03\x90\x02\x02\x12\x9b\x01\n\x1flocal_authentication_token_path\x12\x38.minknow_api.manager.LocalAuthenticationTokenPathRequest\x1a\x39.minknow_api.manager.LocalAuthenticationTokenPathResponse\"\x03\x90\x02\x01\x12\xa7\x01\n#get_alignment_reference_information\x12<.minknow_api.manager.GetAlignmentReferenceInformationRequest\x1a=.minknow_api.manager.GetAlignmentReferenceInformationResponse\"\x03\x90\x02\x01\x12\x85\x01\n\x17\x61ssociation_device_code\x12\x31.minknow_api.manager.AssociationDeviceCodeRequest\x1a\x32.minknow_api.manager.AssociationDeviceCodeResponse\"\x03\x90\x02\x01\x12\xab\x01\n%apply_offline_association_unlock_code\x12=.minknow_api.manager.ApplyOfflineAssociationUnlockCodeRequest\x1a>.minknow_api.manager.ApplyOfflineAssociationUnlockCodeResponse\"\x03\x90\x02\x02\x12\x8c\x01\n\x19list_developer_api_tokens\x12\x32.minknow_api.manager.ListDeveloperApiTokensRequest\x1a\x33.minknow_api.manager.ListDeveloperApiTokensResponse\"\x06\x88\x02\x01\x90\x02\x02\x12\x8c\x01\n\x1a\x63reate_developer_api_token\x12\x33.minknow_api.manager.CreateDeveloperApiTokenRequest\x1a\x34.minknow_api.manager.CreateDeveloperApiTokenResponse\"\x03\x88\x02\x01\x12\x8d\x01\n\x1arevoke_developer_api_token\x12\x33.minknow_api.manager.RevokeDeveloperApiTokenRequest\x1a\x35.minknow_api.manager.RevokeDeveloperApiTokensResponse\"\x03\x88\x02\x01\x12m\n\x0e\x66ind_protocols\x12).minknow_api.manager.FindProtocolsRequest\x1a*.minknow_api.manager.FindProtocolsResponse\"\x04\x98\xb5\x18\x01\x12\x90\x01\n\x1alist_settings_for_protocol\x12\x33.minknow_api.manager.ListSettingsForProtocolRequest\x1a\x34.minknow_api.manager.ListSettingsForProtocolResponse\"\x07\x90\x02\x01\x98\xb5\x18\x01\x12j\n\x0cget_features\x12\'.minknow_api.manager.GetFeaturesRequest\x1a(.minknow_api.manager.GetFeaturesResponse\"\x07\x90\x02\x01\x98\xb5\x18\x01\x12g\n\x0cset_features\x12\'.minknow_api.manager.SetFeaturesRequest\x1a(.minknow_api.manager.SetFeaturesResponse\"\x04\x98\xb5\x18\x01\x12\x84\x01\n\x1crestart_device_admin_service\x12..minknow_api.manager.RestartDeviceAdminRequest\x1a/.minknow_api.manager.RestartDeviceAdminResponse\"\x03\x90\x02\x02\x42&\n\x1c\x63om.nanoporetech.minknow_api\xa2\x02\x05MKAPIb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x19minknow_api/manager.proto\x12\x13minknow_api.manager\x1a\x1dminknow_api/rpc_options.proto\x1a\x18minknow_api/device.proto\x1a\x1aminknow_api/instance.proto\x1a#minknow_api/protocol_settings.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\x15\n\x13\x44\x65scribeHostRequest\"\xd1\x05\n\x14\x44\x65scribeHostResponse\x12\x14\n\x0cproduct_code\x18\x01 \x01(\t\x12\x13\n\x0b\x64\x65scription\x18\x02 \x01(\t\x12\x0e\n\x06serial\x18\x03 \x01(\t\x12\x14\n\x0cnetwork_name\x18\x04 \x01(\t\x12\x19\n\x11needs_association\x18\x10 \x01(\x08\x12\x1c\n\x14\x63\x61n_sequence_offline\x18\x05 \x01(\x08\x12!\n\x19\x63\x61n_connect_to_usb_device\x18\x11 \x01(\x08\x12W\n\x0c\x63\x61n_basecall\x18\x06 \x01(\x0e\x32\x41.minknow_api.manager.DescribeHostResponse.BasecallingAvailability\x12\x63\n\x1c\x63urrent_basecalling_hardware\x18\x07 \x01(\x0b\x32=.minknow_api.manager.DescribeHostResponse.BasecallerSubstrate\x12\x65\n\x1e\x61vailable_basecalling_hardware\x18\x08 \x03(\x0b\x32=.minknow_api.manager.DescribeHostResponse.BasecallerSubstrate\x1a\x33\n\x13\x42\x61secallerSubstrate\x12\x0e\n\x06is_gpu\x18\x01 \x01(\x08\x12\x0c\n\x04gpus\x18\x02 \x03(\t\"\xb1\x01\n\x17\x42\x61secallingAvailability\x12\x19\n\x15\x42\x41SECALLING_AVAILABLE\x10\x00\x12\x1b\n\x17\x42\x41SECALLING_UNAVAILABLE\x10\x01\x12-\n)BASECALLING_UNAVAILABLE_BAD_CONFIGURATION\x10\x02\x12/\n+BASECALLING_UNAVAILABLE_ATTEMPTING_RECOVERY\x10\x03\"\x1e\n\x1cGetBasecallerFeaturesRequest\"_\n\x1dGetBasecallerFeaturesResponse\x12>\n6is_live_basecalling_with_adaptive_sampling_recommended\x18\x01 \x01(\x08\"\xfc\x07\n\x10\x46lowCellPosition\x12\x0c\n\x04name\x18\x01 \x01(\t\x12@\n\x08location\x18\x02 \x01(\x0b\x32..minknow_api.manager.FlowCellPosition.Location\x12:\n\x05state\x18\x03 \x01(\x0e\x32+.minknow_api.manager.FlowCellPosition.State\x12\x41\n\trpc_ports\x18\x04 \x01(\x0b\x32..minknow_api.manager.FlowCellPosition.RpcPorts\x12\x12\n\nerror_info\x18\x05 \x01(\t\x12X\n\x15shared_hardware_group\x18\x06 \x01(\x0b\x32\x39.minknow_api.manager.FlowCellPosition.SharedHardwareGroup\x12\x15\n\ris_integrated\x18\x07 \x01(\x08\x12\x1c\n\x14\x63\x61n_sequence_offline\x18\x08 \x01(\x08\x12@\n\x0eprotocol_state\x18\t \x01(\x0e\x32(.minknow_api.manager.SimpleProtocolState\x12\x14\n\x0cis_simulated\x18\n \x01(\x08\x12I\n\x0b\x64\x65vice_type\x18\x0b \x01(\x0e\x32\x34.minknow_api.device.GetDeviceInfoResponse.DeviceType\x12\x13\n\x0bparent_name\x18\x0c \x01(\t\x12\x1c\n\x14\x66irmware_is_updating\x18\r \x01(\x08\x12\x14\n\x0chas_progress\x18\x0e \x01(\x08\x12\x18\n\x10progress_percent\x18\x0f \x01(\r\x12\x1c\n\x14progress_eta_seconds\x18\x10 \x01(\r\x1a \n\x08Location\x12\t\n\x01x\x18\x01 \x01(\x05\x12\t\n\x01y\x18\x02 \x01(\x05\x1a\x33\n\x08RpcPorts\x12\x0e\n\x06secure\x18\x01 \x01(\r\x12\x17\n\x0fsecure_grpc_web\x18\x03 \x01(\r\x1a\'\n\x13SharedHardwareGroup\x12\x10\n\x08group_id\x18\x01 \x01(\r\"\xd1\x01\n\x05State\x12\x16\n\x12STATE_INITIALISING\x10\x00\x12\x11\n\rSTATE_RUNNING\x10\x01\x12\x13\n\x0fSTATE_RESETTING\x10\x02\x12\x1a\n\x16STATE_HARDWARE_REMOVED\x10\x03\x12\x18\n\x14STATE_HARDWARE_ERROR\x10\x04\x12\x18\n\x14STATE_SOFTWARE_ERROR\x10\x05\x12\x1b\n\x17STATE_NEEDS_ASSOCIATION\x10\x06\x12\x1b\n\x17STATE_USB_SPEED_TOO_LOW\x10\x07\"\x1a\n\x18\x46lowCellPositionsRequest\"j\n\x19\x46lowCellPositionsResponse\x12\x13\n\x0btotal_count\x18\x01 \x01(\x05\x12\x38\n\tpositions\x18\x02 \x03(\x0b\x32%.minknow_api.manager.FlowCellPosition\"\x1f\n\x1dWatchFlowCellPositionsRequest\"\xa4\x01\n\x1eWatchFlowCellPositionsResponse\x12\x38\n\tadditions\x18\x01 \x03(\x0b\x32%.minknow_api.manager.FlowCellPosition\x12\x36\n\x07\x63hanges\x18\x02 \x03(\x0b\x32%.minknow_api.manager.FlowCellPosition\x12\x10\n\x08removals\x18\x03 \x03(\t\"8\n\x14ResetPositionRequest\x12\x11\n\tpositions\x18\x03 \x03(\t\x12\r\n\x05\x66orce\x18\x02 \x01(\x08\"\x17\n\x15ResetPositionResponse\"\x16\n\x14\x42\x61secallerApiRequest\"@\n\x15\x42\x61secallerApiResponse\x12\x0e\n\x06secure\x18\x01 \x01(\r\x12\x17\n\x0fsecure_grpc_web\x18\x03 \x01(\r\"\x15\n\x13GetGuppyInfoRequest\"^\n\x14GetGuppyInfoResponse\x12\x0e\n\x04port\x18\x01 \x01(\rH\x00\x12\x12\n\x08ipc_path\x18\x03 \x01(\tH\x00\x12\x0f\n\x07version\x18\x02 \x01(\tB\x11\n\x0f\x63onnection_type\"\x17\n\x15GetVersionInfoRequest\"1\n!ListProtocolOutputDirFilesRequest\x12\x0c\n\x04path\x18\x01 \x01(\t\"\xf8\x01\n\"ListProtocolOutputDirFilesResponse\x12Z\n\x0b\x64irectories\x18\x01 \x03(\x0b\x32\x45.minknow_api.manager.ListProtocolOutputDirFilesResponse.DirectoryInfo\x12\r\n\x05\x66iles\x18\x02 \x03(\t\x12\x1b\n\x13\x63urrent_listed_path\x18\x03 \x01(\t\x1aJ\n\rDirectoryInfo\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x17\n\x0f\x64irectory_count\x18\x02 \x01(\x05\x12\x12\n\nfile_count\x18\x03 \x01(\x05\";\n\x16\x43reateDirectoryRequest\x12\x13\n\x0bparent_path\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\"\'\n\x17\x43reateDirectoryResponse\x12\x0c\n\x04path\x18\x01 \x01(\t\"\x87\x02\n\x17\x46ilesystemDiskSpaceInfo\x12\x15\n\rfilesystem_id\x18\x01 \x01(\t\x12\x17\n\x0f\x62ytes_available\x18\x02 \x01(\x04\x12\x16\n\x0e\x62ytes_capacity\x18\x03 \x01(\x04\x12\x19\n\x11\x66ile_types_stored\x18\x04 \x03(\t\x12\x1d\n\x15\x62ytes_to_stop_cleanly\x18\x05 \x01(\x04\x12\x1f\n\x17\x62ytes_when_alert_issued\x18\x06 \x01(\x04\x12\x17\n\x0frecommend_alert\x18\x07 \x01(\x08\x12\x16\n\x0erecommend_stop\x18\x08 \x01(\x08\x12\x18\n\x10\x62ytes_per_second\x18\t \x01(\x03\"\x19\n\x17GetDiskSpaceInfoRequest\",\n\x1aStreamDiskSpaceInfoRequest\x12\x0e\n\x06period\x18\x01 \x01(\r\"l\n\x18GetDiskSpaceInfoResponse\x12P\n\x1a\x66ilesystem_disk_space_info\x18\x01 \x03(\x0b\x32,.minknow_api.manager.FilesystemDiskSpaceInfo\"\x1a\n\x18GetBarcodeKitInfoRequest\"\xa8\x02\n\x19GetBarcodeKitInfoResponse\x12\\\n\x10\x62\x61rcode_kit_info\x18\x01 \x03(\x0b\x32\x42.minknow_api.manager.GetBarcodeKitInfoResponse.BarcodeKitInfoEntry\x1a\x37\n\x0e\x42\x61rcodeKitInfo\x12\x0f\n\x07is_dual\x18\x02 \x01(\x08\x12\x14\n\x0cis_both_ends\x18\x03 \x01(\x08\x1at\n\x13\x42\x61rcodeKitInfoEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12L\n\x05value\x18\x02 \x01(\x0b\x32=.minknow_api.manager.GetBarcodeKitInfoResponse.BarcodeKitInfo:\x02\x38\x01\"\x17\n\x15GetLampKitInfoRequest\"+\n\x16GetLampKitInfoResponse\x12\x11\n\tlamp_kits\x18\x02 \x03(\t\"I\n\x15GetBarcodeKeysRequest\x12\x19\n\x11\x62\x61rcode_kit_names\x18\x01 \x03(\t\x12\x15\n\rlamp_kit_name\x18\x02 \x01(\t\"X\n\x16GetBarcodeKeysResponse\x12\x14\n\x0c\x62\x61rcode_keys\x18\x01 \x03(\t\x12\x11\n\tlamp_keys\x18\x02 \x03(\t\x12\x15\n\rcombined_keys\x18\x03 \x03(\t\"\x19\n\x17GetFlowCellTypesRequest\"\xdc\x01\n\x18GetFlowCellTypesResponse\x12\x41\n\x05types\x18\x01 \x03(\x0b\x32\x32.minknow_api.manager.GetFlowCellTypesResponse.Info\x1a}\n\x04Info\x12\x14\n\x0cproduct_code\x18\x01 \x01(\t\x12\x41\n\x0e\x63onnector_type\x18\x02 \x01(\x0e\x32).minknow_api.device.FlowCellConnectorType\x12\x1c\n\x14\x63\x61nnot_live_basecall\x18\x03 \x01(\x08\":\n\x18GetSequencingKitsRequest\x12\x1e\n\x16\x66low_cell_product_code\x18\x01 \x01(\t\"\xf2\x03\n\x19GetSequencingKitsResponse\x12@\n\x04kits\x18\x01 \x03(\x0b\x32\x32.minknow_api.manager.GetSequencingKitsResponse.Kit\x12\x66\n\x18\x62\x61rcoding_expansion_kits\x18\x02 \x03(\x0b\x32\x44.minknow_api.manager.GetSequencingKitsResponse.BarcodingExpansionKit\x1a\xfb\x01\n\x03Kit\x12\x14\n\x0cproduct_code\x18\x01 \x01(\t\x12 \n\x18\x62\x61rcoding_expansion_kits\x18\x02 \x03(\x05\x12\x1a\n\x12includes_barcoding\x18\x03 \x01(\x08\x12\x10\n\x08lamp_kit\x18\x10 \x01(\x08\x12\x1c\n\x14has_control_protocol\x18\x04 \x01(\x08\x12\x1e\n\x16no_sequencing_protocol\x18\x11 \x01(\x08\x12\x17\n\x0f\x66requently_used\x18\x12 \x01(\x08\x12\x0b\n\x03\x64na\x18\x05 \x01(\x08\x12\x0b\n\x03rna\x18\x06 \x01(\x08\x12\x0b\n\x03pcr\x18\x07 \x01(\x08\x12\x10\n\x08pcr_free\x18\x08 \x01(\x08\x1a-\n\x15\x42\x61rcodingExpansionKit\x12\x14\n\x0cproduct_code\x18\x01 \x01(\t\"m\n\x19\x41\x64\x64SimulatedDeviceRequest\x12\x12\n\x04name\x18\x01 \x01(\tB\x04\x88\xb5\x18\x01\x12<\n\x04type\x18\x02 \x01(\x0e\x32(.minknow_api.manager.SimulatedDeviceTypeB\x04\x88\xb5\x18\x01\"\x1c\n\x1a\x41\x64\x64SimulatedDeviceResponse\"2\n\x1cRemoveSimulatedDeviceRequest\x12\x12\n\x04name\x18\x01 \x01(\tB\x04\x88\xb5\x18\x01\"\x1f\n\x1dRemoveSimulatedDeviceResponse\"%\n#LocalAuthenticationTokenPathRequest\"4\n$LocalAuthenticationTokenPathResponse\x12\x0c\n\x04path\x18\x01 \x01(\t\"7\n\'GetAlignmentReferenceInformationRequest\x12\x0c\n\x04path\x18\x01 \x01(\t\"\xf5\x01\n(GetAlignmentReferenceInformationResponse\x12#\n\x1b\x65stimated_load_time_seconds\x18\x01 \x01(\x02\x12&\n\x1e\x65stimated_reference_size_bases\x18\x02 \x01(\x04\x12\x1e\n\x16recommended_live_usage\x18\x03 \x01(\x08\x12+\n#recommended_adaptive_sampling_usage\x18\x04 \x01(\x08\x12/\n\'max_recommended_adaptive_sampling_bases\x18\x05 \x01(\x04\"D\n\x1c\x41ssociationDeviceCodeRequest\x12\x15\n\rposition_name\x18\x01 \x01(\tJ\x04\x08\x02\x10\x03R\x07offline\"-\n\x1d\x41ssociationDeviceCodeResponse\x12\x0c\n\x04\x63ode\x18\x01 \x01(\t\"V\n(ApplyOfflineAssociationUnlockCodeRequest\x12\x15\n\rposition_name\x18\x01 \x01(\t\x12\x13\n\x0bunlock_code\x18\x02 \x01(\t\"?\n)ApplyOfflineAssociationUnlockCodeResponse\x12\x12\n\nassociated\x18\x01 \x01(\x08\"\x1f\n\x1dListDeveloperApiTokensRequest\"\xd2\x01\n\x1eListDeveloperApiTokensResponse\x12U\n\x06tokens\x18\x01 \x03(\x0b\x32\x45.minknow_api.manager.ListDeveloperApiTokensResponse.DeveloperApiToken\x1aY\n\x11\x44\x65veloperApiToken\x12\n\n\x02id\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12*\n\x06\x65xpiry\x18\x03 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\"Z\n\x1e\x43reateDeveloperApiTokenRequest\x12\x0c\n\x04name\x18\x02 \x01(\t\x12*\n\x06\x65xpiry\x18\x03 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\"<\n\x1f\x43reateDeveloperApiTokenResponse\x12\n\n\x02id\x18\x01 \x01(\t\x12\r\n\x05token\x18\x02 \x01(\t\",\n\x1eRevokeDeveloperApiTokenRequest\x12\n\n\x02id\x18\x01 \x01(\t\"\"\n RevokeDeveloperApiTokensResponse\"\x8c\x01\n\x14\x46indProtocolsRequest\x12\x1e\n\x16\x66low_cell_product_code\x18\x01 \x01(\t\x12\x16\n\x0esequencing_kit\x18\x02 \x01(\t\x12<\n\x0f\x65xperiment_type\x18\x03 \x01(\x0e\x32#.minknow_api.manager.ExperimentType\"\xc9\x01\n\x15\x46indProtocolsResponse\x12\x46\n\tprotocols\x18\x01 \x03(\x0b\x32\x33.minknow_api.manager.FindProtocolsResponse.Protocol\x1ah\n\x08Protocol\x12\x12\n\nidentifier\x18\x01 \x01(\t\x12\'\n\x1frequires_flow_cell_product_code\x18\x02 \x01(\x08\x12\x1f\n\x17requires_sequencing_kit\x18\x03 \x01(\x08\"\xee\x01\n\x1eListSettingsForProtocolRequest\x12\x14\n\nidentifier\x18\x01 \x01(\tH\x00\x12Q\n\ncomponents\x18\x02 \x01(\x0b\x32;.minknow_api.protocol_settings.ProtocolIdentifierComponentsH\x00\x12L\n\x13\x66low_cell_connector\x18\x03 \x01(\x0e\x32).minknow_api.device.FlowCellConnectorTypeB\x04\x88\xb5\x18\x01\x42\x15\n\x13protocol_identifier\"\x8c\x1f\n\x1fListSettingsForProtocolResponse\x12M\n\x08protocol\x18\x01 \x01(\x0b\x32;.minknow_api.protocol_settings.ProtocolIdentifierComponents\x12T\n\x0brun_options\x18\x02 \x01(\x0b\x32?.minknow_api.manager.ListSettingsForProtocolResponse.RunOptions\x12U\n\x0b\x62\x61secalling\x18\x03 \x01(\x0b\x32@.minknow_api.manager.ListSettingsForProtocolResponse.Basecalling\x12K\n\x06output\x18\x04 \x01(\x0b\x32;.minknow_api.manager.ListSettingsForProtocolResponse.Output\x12I\n\x11protocol_settings\x18\x05 \x03(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x1a\xd5\x06\n\nRunOptions\x12\x42\n\nrun_length\x18\x01 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12\x44\n\x0c\x62ias_voltage\x18\x02 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12J\n\x12read_until_enabled\x18\x03 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12K\n\x13read_until_ref_file\x18\x04 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12K\n\x13read_until_channels\x18\x05 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12S\n\x1bread_until_bed_file_enabled\x18\x06 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12K\n\x13read_until_bed_file\x18\x07 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12M\n\x15read_until_enrichment\x18\x08 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12P\n\x18\x61\x63tive_channel_selection\x18\t \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12G\n\x0fmux_scan_period\x18\n \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12K\n\x13group_change_period\x18\x0b \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x1a\x8f\x06\n\x0b\x42\x61secalling\x12K\n\x13\x62\x61secalling_enabled\x18\x01 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12I\n\x11\x62\x61rcoding_enabled\x18\x02 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12\x46\n\x0e\x62\x61rcoding_kits\x18\x03 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12\x46\n\x0e\x62\x61secall_model\x18\x04 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12M\n\x15trim_barcodes_enabled\x18\x05 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12R\n\x1arequire_barcodes_both_ends\x18\x06 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12I\n\x11\x61lignment_enabled\x18\r \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12J\n\x12\x61lignment_ref_file\x18\x0e \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12R\n\x1a\x61lignment_bed_file_enabled\x18\x0f \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12J\n\x12\x61lignment_bed_file\x18\x10 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x1a\xea\x0e\n\x06Output\x12G\n\x0foutput_location\x18\x01 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12\x46\n\x0e\x66\x61st_q_enabled\x18\x02 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12M\n\x15\x66\x61st_q_reads_per_file\x18\x03 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12O\n\x17\x66\x61st_q_data_compression\x18\x04 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12\x46\n\x0e\x66\x61st_5_enabled\x18\x05 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12M\n\x15\x66\x61st_5_reads_per_file\x18\x06 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12O\n\x17\x66\x61st_5_data_trace_table\x18\x07 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12N\n\x16\x66\x61st_5_data_move_table\x18\x08 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12J\n\x12\x66\x61st_5_data_fast_q\x18\t \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12G\n\x0f\x66\x61st_5_data_raw\x18\n \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12O\n\x17\x66\x61st_5_data_compression\x18\x0b \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12\x43\n\x0b\x62\x61m_enabled\x18\x0c \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12N\n\x16read_filtering_enabled\x18\r \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12Q\n\x19read_filtering_min_qscore\x18\x0e \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12V\n\x1eread_filtering_min_read_length\x18\x0f \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12V\n\x1eread_filtering_max_read_length\x18\x10 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12I\n\x11\x62ulk_file_enabled\x18\x11 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12\x45\n\rbulk_file_raw\x18\x12 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12H\n\x10\x62ulk_file_events\x18\x13 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12L\n\x14\x62ulk_file_read_table\x18\x14 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12M\n\x15\x62ulk_file_raw_enabled\x18\x15 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12P\n\x18\x62ulk_file_events_enabled\x18\x16 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12T\n\x1c\x62ulk_file_read_table_enabled\x18\x17 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\x12X\n read_filtering_min_duplex_qscore\x18\x18 \x01(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\"\x1a\n\x07\x46\x65\x61ture\x12\x0f\n\x07\x65nabled\x18\x01 \x01(\x08\"\xe5\x01\n\x0b\x46\x65\x61tureList\x12\x33\n\rfeature_flags\x18\x03 \x01(\x0b\x32\x1c.minknow_api.manager.Feature\x12\x34\n\x0e\x65nrich_deplete\x18\x01 \x01(\x0b\x32\x1c.minknow_api.manager.Feature\x12\x37\n\x11\x62\x61rcode_balancing\x18\x02 \x01(\x0b\x32\x1c.minknow_api.manager.Feature\x12\x32\n\x0c\x64\x61ta_offload\x18\x04 \x01(\x0b\x32\x1c.minknow_api.manager.Feature\"\x14\n\x12GetFeaturesRequest\"\xde\x01\n\x13GetFeaturesResponse\x12=\n\x05state\x18\x01 \x01(\x0e\x32..minknow_api.manager.GetFeaturesResponse.State\x12\x32\n\x08\x66\x65\x61tures\x18\x02 \x01(\x0b\x32 .minknow_api.manager.FeatureList\"T\n\x05State\x12\x0b\n\x07UNKNOWN\x10\x00\x12\x0b\n\x07NO_FILE\x10\x01\x12\x1b\n\x17\x45RROR_LOADING_FROM_FILE\x10\x02\x12\x14\n\x10LOADED_FROM_FILE\x10\x03\"H\n\x12SetFeaturesRequest\x12\x32\n\x08\x66\x65\x61tures\x18\x01 \x01(\x0b\x32 .minknow_api.manager.FeatureList\"\x15\n\x13SetFeaturesResponse\"\x1b\n\x19RestartDeviceAdminRequest\"\x1c\n\x1aRestartDeviceAdminResponse\"g\n\x13\x43heckBedFileRequest\x12\x15\n\rbed_file_path\x18\x01 \x01(\t\x12\x17\n\x0findex_file_path\x18\x02 \x01(\t\x12\x0e\n\x06strict\x18\x03 \x01(\x08\x12\x10\n\x08stranded\x18\x04 \x01(\x08\"&\n\x14\x43heckBedFileResponse\x12\x0e\n\x06passed\x18\x01 \x01(\x08*\x88\x01\n\x13SimpleProtocolState\x12\x15\n\x11NO_PROTOCOL_STATE\x10\x00\x12\x14\n\x10PROTOCOL_RUNNING\x10\x01\x12\"\n\x1ePROTOCOL_FINISHED_SUCCESSFULLY\x10\x02\x12 \n\x1cPROTOCOL_FINISHED_WITH_ERROR\x10\x03*q\n\x13SimulatedDeviceType\x12\x12\n\x0eSIMULATED_AUTO\x10\x00\x12\x14\n\x10SIMULATED_MINION\x10\x01\x12\x18\n\x14SIMULATED_PROMETHION\x10\x03\x12\x10\n\x0cSIMULATED_P2\x10\x04\"\x04\x08\x02\x10\x02*j\n\x0e\x45xperimentType\x12\x0e\n\nSEQUENCING\x10\x00\x12\x0b\n\x07\x43ONTROL\x10\x01\x12\n\n\x06\x43USTOM\x10\x02\x12\x15\n\x11\x41LL_EXCEPT_HIDDEN\x10\x03\x12\x18\n\x14\x41LL_INCLUDING_HIDDEN\x10\x04\x32\xb6!\n\x0eManagerService\x12i\n\rdescribe_host\x12(.minknow_api.manager.DescribeHostRequest\x1a).minknow_api.manager.DescribeHostResponse\"\x03\x90\x02\x01\x12\x85\x01\n\x17get_basecaller_features\x12\x31.minknow_api.manager.GetBasecallerFeaturesRequest\x1a\x32.minknow_api.manager.GetBasecallerFeaturesResponse\"\x03\x90\x02\x01\x12{\n\x13\x66low_cell_positions\x12-.minknow_api.manager.FlowCellPositionsRequest\x1a..minknow_api.manager.FlowCellPositionsResponse\"\x03\x90\x02\x01\x30\x01\x12\x8b\x01\n\x19watch_flow_cell_positions\x12\x32.minknow_api.manager.WatchFlowCellPositionsRequest\x1a\x33.minknow_api.manager.WatchFlowCellPositionsResponse\"\x03\x90\x02\x01\x30\x01\x12i\n\x0ereset_position\x12).minknow_api.manager.ResetPositionRequest\x1a*.minknow_api.manager.ResetPositionResponse\"\x00\x12l\n\x0e\x62\x61secaller_api\x12).minknow_api.manager.BasecallerApiRequest\x1a*.minknow_api.manager.BasecallerApiResponse\"\x03\x90\x02\x01\x12j\n\x0eget_guppy_info\x12(.minknow_api.manager.GetGuppyInfoRequest\x1a).minknow_api.manager.GetGuppyInfoResponse\"\x03\x90\x02\x01\x12q\n\x10get_version_info\x12*.minknow_api.manager.GetVersionInfoRequest\x1a,.minknow_api.instance.GetVersionInfoResponse\"\x03\x90\x02\x01\x12\x98\x01\n\x1elist_protocol_output_dir_files\x12\x36.minknow_api.manager.ListProtocolOutputDirFilesRequest\x1a\x37.minknow_api.manager.ListProtocolOutputDirFilesResponse\"\x03\x90\x02\x01\x30\x01\x12r\n\x10\x63reate_directory\x12+.minknow_api.manager.CreateDirectoryRequest\x1a,.minknow_api.manager.CreateDirectoryResponse\"\x03\x90\x02\x02\x12w\n\x13get_disk_space_info\x12,.minknow_api.manager.GetDiskSpaceInfoRequest\x1a-.minknow_api.manager.GetDiskSpaceInfoResponse\"\x03\x90\x02\x01\x12\x88\x01\n\x1eget_default_output_directories\x12\x38.minknow_api.instance.GetDefaultOutputDirectoriesRequest\x1a\'.minknow_api.instance.OutputDirectories\"\x03\x90\x02\x01\x12\x7f\n\x16stream_disk_space_info\x12/.minknow_api.manager.StreamDiskSpaceInfoRequest\x1a-.minknow_api.manager.GetDiskSpaceInfoResponse\"\x03\x90\x02\x01\x30\x01\x12z\n\x14get_barcode_kit_info\x12-.minknow_api.manager.GetBarcodeKitInfoRequest\x1a..minknow_api.manager.GetBarcodeKitInfoResponse\"\x03\x90\x02\x01\x12q\n\x11get_lamp_kit_info\x12*.minknow_api.manager.GetLampKitInfoRequest\x1a+.minknow_api.manager.GetLampKitInfoResponse\"\x03\x90\x02\x01\x12p\n\x10get_barcode_keys\x12*.minknow_api.manager.GetBarcodeKeysRequest\x1a+.minknow_api.manager.GetBarcodeKeysResponse\"\x03\x90\x02\x01\x12{\n\x13get_flow_cell_types\x12,.minknow_api.manager.GetFlowCellTypesRequest\x1a-.minknow_api.manager.GetFlowCellTypesResponse\"\x07\x90\x02\x01\x98\xb5\x18\x01\x12}\n\x13get_sequencing_kits\x12-.minknow_api.manager.GetSequencingKitsRequest\x1a..minknow_api.manager.GetSequencingKitsResponse\"\x07\x90\x02\x01\x98\xb5\x18\x01\x12y\n\x14\x61\x64\x64_simulated_device\x12..minknow_api.manager.AddSimulatedDeviceRequest\x1a/.minknow_api.manager.AddSimulatedDeviceResponse\"\x00\x12\x85\x01\n\x17remove_simulated_device\x12\x31.minknow_api.manager.RemoveSimulatedDeviceRequest\x1a\x32.minknow_api.manager.RemoveSimulatedDeviceResponse\"\x03\x90\x02\x02\x12\x9b\x01\n\x1flocal_authentication_token_path\x12\x38.minknow_api.manager.LocalAuthenticationTokenPathRequest\x1a\x39.minknow_api.manager.LocalAuthenticationTokenPathResponse\"\x03\x90\x02\x01\x12\xa7\x01\n#get_alignment_reference_information\x12<.minknow_api.manager.GetAlignmentReferenceInformationRequest\x1a=.minknow_api.manager.GetAlignmentReferenceInformationResponse\"\x03\x90\x02\x01\x12\x88\x01\n\x17\x61ssociation_device_code\x12\x31.minknow_api.manager.AssociationDeviceCodeRequest\x1a\x32.minknow_api.manager.AssociationDeviceCodeResponse\"\x06\x88\x02\x01\x90\x02\x01\x12\xae\x01\n%apply_offline_association_unlock_code\x12=.minknow_api.manager.ApplyOfflineAssociationUnlockCodeRequest\x1a>.minknow_api.manager.ApplyOfflineAssociationUnlockCodeResponse\"\x06\x88\x02\x01\x90\x02\x02\x12\x8c\x01\n\x19list_developer_api_tokens\x12\x32.minknow_api.manager.ListDeveloperApiTokensRequest\x1a\x33.minknow_api.manager.ListDeveloperApiTokensResponse\"\x06\x88\x02\x01\x90\x02\x02\x12\x8c\x01\n\x1a\x63reate_developer_api_token\x12\x33.minknow_api.manager.CreateDeveloperApiTokenRequest\x1a\x34.minknow_api.manager.CreateDeveloperApiTokenResponse\"\x03\x88\x02\x01\x12\x8d\x01\n\x1arevoke_developer_api_token\x12\x33.minknow_api.manager.RevokeDeveloperApiTokenRequest\x1a\x35.minknow_api.manager.RevokeDeveloperApiTokensResponse\"\x03\x88\x02\x01\x12m\n\x0e\x66ind_protocols\x12).minknow_api.manager.FindProtocolsRequest\x1a*.minknow_api.manager.FindProtocolsResponse\"\x04\x98\xb5\x18\x01\x12\x90\x01\n\x1alist_settings_for_protocol\x12\x33.minknow_api.manager.ListSettingsForProtocolRequest\x1a\x34.minknow_api.manager.ListSettingsForProtocolResponse\"\x07\x90\x02\x01\x98\xb5\x18\x01\x12j\n\x0cget_features\x12\'.minknow_api.manager.GetFeaturesRequest\x1a(.minknow_api.manager.GetFeaturesResponse\"\x07\x90\x02\x01\x98\xb5\x18\x01\x12g\n\x0cset_features\x12\'.minknow_api.manager.SetFeaturesRequest\x1a(.minknow_api.manager.SetFeaturesResponse\"\x04\x98\xb5\x18\x01\x12\x84\x01\n\x1crestart_device_admin_service\x12..minknow_api.manager.RestartDeviceAdminRequest\x1a/.minknow_api.manager.RestartDeviceAdminResponse\"\x03\x90\x02\x02\x12j\n\x0e\x63heck_bed_file\x12(.minknow_api.manager.CheckBedFileRequest\x1a).minknow_api.manager.CheckBedFileResponse\"\x03\x90\x02\x01\x42&\n\x1c\x63om.nanoporetech.minknow_api\xa2\x02\x05MKAPIb\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -78,9 +78,9 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   _globals['_MANAGERSERVICE'].methods_by_name['get_alignment_reference_information']._options = None
   _globals['_MANAGERSERVICE'].methods_by_name['get_alignment_reference_information']._serialized_options = b'\220\002\001'
   _globals['_MANAGERSERVICE'].methods_by_name['association_device_code']._options = None
-  _globals['_MANAGERSERVICE'].methods_by_name['association_device_code']._serialized_options = b'\220\002\001'
+  _globals['_MANAGERSERVICE'].methods_by_name['association_device_code']._serialized_options = b'\210\002\001\220\002\001'
   _globals['_MANAGERSERVICE'].methods_by_name['apply_offline_association_unlock_code']._options = None
-  _globals['_MANAGERSERVICE'].methods_by_name['apply_offline_association_unlock_code']._serialized_options = b'\220\002\002'
+  _globals['_MANAGERSERVICE'].methods_by_name['apply_offline_association_unlock_code']._serialized_options = b'\210\002\001\220\002\002'
   _globals['_MANAGERSERVICE'].methods_by_name['list_developer_api_tokens']._options = None
   _globals['_MANAGERSERVICE'].methods_by_name['list_developer_api_tokens']._serialized_options = b'\210\002\001\220\002\002'
   _globals['_MANAGERSERVICE'].methods_by_name['create_developer_api_token']._options = None
@@ -97,200 +97,235 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   _globals['_MANAGERSERVICE'].methods_by_name['set_features']._serialized_options = b'\230\265\030\001'
   _globals['_MANAGERSERVICE'].methods_by_name['restart_device_admin_service']._options = None
   _globals['_MANAGERSERVICE'].methods_by_name['restart_device_admin_service']._serialized_options = b'\220\002\002'
-  _globals['_SIMPLEPROTOCOLSTATE']._serialized_start=11530
-  _globals['_SIMPLEPROTOCOLSTATE']._serialized_end=11666
-  _globals['_SIMULATEDDEVICETYPE']._serialized_start=11669
-  _globals['_SIMULATEDDEVICETYPE']._serialized_end=11799
-  _globals['_EXPERIMENTTYPE']._serialized_start=11801
-  _globals['_EXPERIMENTTYPE']._serialized_end=11907
+  _globals['_MANAGERSERVICE'].methods_by_name['check_bed_file']._options = None
+  _globals['_MANAGERSERVICE'].methods_by_name['check_bed_file']._serialized_options = b'\220\002\001'
+  _globals['_SIMPLEPROTOCOLSTATE']._serialized_start=11739
+  _globals['_SIMPLEPROTOCOLSTATE']._serialized_end=11875
+  _globals['_SIMULATEDDEVICETYPE']._serialized_start=11877
+  _globals['_SIMULATEDDEVICETYPE']._serialized_end=11990
+  _globals['_EXPERIMENTTYPE']._serialized_start=11992
+  _globals['_EXPERIMENTTYPE']._serialized_end=12098
   _globals['_DESCRIBEHOSTREQUEST']._serialized_start=205
   _globals['_DESCRIBEHOSTREQUEST']._serialized_end=226
   _globals['_DESCRIBEHOSTRESPONSE']._serialized_start=229
-  _globals['_DESCRIBEHOSTRESPONSE']._serialized_end=915
-  _globals['_DESCRIBEHOSTRESPONSE_BASECALLERSUBSTRATE']._serialized_start=684
-  _globals['_DESCRIBEHOSTRESPONSE_BASECALLERSUBSTRATE']._serialized_end=735
-  _globals['_DESCRIBEHOSTRESPONSE_BASECALLINGAVAILABILITY']._serialized_start=738
-  _globals['_DESCRIBEHOSTRESPONSE_BASECALLINGAVAILABILITY']._serialized_end=915
-  _globals['_GETBASECALLERFEATURESREQUEST']._serialized_start=917
-  _globals['_GETBASECALLERFEATURESREQUEST']._serialized_end=947
-  _globals['_GETBASECALLERFEATURESRESPONSE']._serialized_start=949
-  _globals['_GETBASECALLERFEATURESRESPONSE']._serialized_end=1044
-  _globals['_FLOWCELLPOSITION']._serialized_start=1047
-  _globals['_FLOWCELLPOSITION']._serialized_end=2038
-  _globals['_FLOWCELLPOSITION_LOCATION']._serialized_start=1729
-  _globals['_FLOWCELLPOSITION_LOCATION']._serialized_end=1761
-  _globals['_FLOWCELLPOSITION_RPCPORTS']._serialized_start=1763
-  _globals['_FLOWCELLPOSITION_RPCPORTS']._serialized_end=1814
-  _globals['_FLOWCELLPOSITION_SHAREDHARDWAREGROUP']._serialized_start=1816
-  _globals['_FLOWCELLPOSITION_SHAREDHARDWAREGROUP']._serialized_end=1855
-  _globals['_FLOWCELLPOSITION_STATE']._serialized_start=1858
-  _globals['_FLOWCELLPOSITION_STATE']._serialized_end=2038
-  _globals['_FLOWCELLPOSITIONSREQUEST']._serialized_start=2040
-  _globals['_FLOWCELLPOSITIONSREQUEST']._serialized_end=2066
-  _globals['_FLOWCELLPOSITIONSRESPONSE']._serialized_start=2068
-  _globals['_FLOWCELLPOSITIONSRESPONSE']._serialized_end=2174
-  _globals['_WATCHFLOWCELLPOSITIONSREQUEST']._serialized_start=2176
-  _globals['_WATCHFLOWCELLPOSITIONSREQUEST']._serialized_end=2207
-  _globals['_WATCHFLOWCELLPOSITIONSRESPONSE']._serialized_start=2210
-  _globals['_WATCHFLOWCELLPOSITIONSRESPONSE']._serialized_end=2374
-  _globals['_RESETPOSITIONREQUEST']._serialized_start=2376
-  _globals['_RESETPOSITIONREQUEST']._serialized_end=2432
-  _globals['_RESETPOSITIONRESPONSE']._serialized_start=2434
-  _globals['_RESETPOSITIONRESPONSE']._serialized_end=2457
-  _globals['_BASECALLERAPIREQUEST']._serialized_start=2459
-  _globals['_BASECALLERAPIREQUEST']._serialized_end=2481
-  _globals['_BASECALLERAPIRESPONSE']._serialized_start=2483
-  _globals['_BASECALLERAPIRESPONSE']._serialized_end=2547
-  _globals['_GETGUPPYINFOREQUEST']._serialized_start=2549
-  _globals['_GETGUPPYINFOREQUEST']._serialized_end=2570
-  _globals['_GETGUPPYINFORESPONSE']._serialized_start=2572
-  _globals['_GETGUPPYINFORESPONSE']._serialized_end=2666
-  _globals['_GETVERSIONINFOREQUEST']._serialized_start=2668
-  _globals['_GETVERSIONINFOREQUEST']._serialized_end=2691
-  _globals['_LISTPROTOCOLOUTPUTDIRFILESREQUEST']._serialized_start=2693
-  _globals['_LISTPROTOCOLOUTPUTDIRFILESREQUEST']._serialized_end=2742
-  _globals['_LISTPROTOCOLOUTPUTDIRFILESRESPONSE']._serialized_start=2745
-  _globals['_LISTPROTOCOLOUTPUTDIRFILESRESPONSE']._serialized_end=2993
-  _globals['_LISTPROTOCOLOUTPUTDIRFILESRESPONSE_DIRECTORYINFO']._serialized_start=2919
-  _globals['_LISTPROTOCOLOUTPUTDIRFILESRESPONSE_DIRECTORYINFO']._serialized_end=2993
-  _globals['_CREATEDIRECTORYREQUEST']._serialized_start=2995
-  _globals['_CREATEDIRECTORYREQUEST']._serialized_end=3054
-  _globals['_CREATEDIRECTORYRESPONSE']._serialized_start=3056
-  _globals['_CREATEDIRECTORYRESPONSE']._serialized_end=3095
-  _globals['_FILESYSTEMDISKSPACEINFO']._serialized_start=3098
-  _globals['_FILESYSTEMDISKSPACEINFO']._serialized_end=3361
-  _globals['_GETDISKSPACEINFOREQUEST']._serialized_start=3363
-  _globals['_GETDISKSPACEINFOREQUEST']._serialized_end=3388
-  _globals['_STREAMDISKSPACEINFOREQUEST']._serialized_start=3390
-  _globals['_STREAMDISKSPACEINFOREQUEST']._serialized_end=3434
-  _globals['_GETDISKSPACEINFORESPONSE']._serialized_start=3436
-  _globals['_GETDISKSPACEINFORESPONSE']._serialized_end=3544
-  _globals['_GETBARCODEKITINFOREQUEST']._serialized_start=3546
-  _globals['_GETBARCODEKITINFOREQUEST']._serialized_end=3572
-  _globals['_GETBARCODEKITINFORESPONSE']._serialized_start=3575
-  _globals['_GETBARCODEKITINFORESPONSE']._serialized_end=3871
-  _globals['_GETBARCODEKITINFORESPONSE_BARCODEKITINFO']._serialized_start=3698
-  _globals['_GETBARCODEKITINFORESPONSE_BARCODEKITINFO']._serialized_end=3753
-  _globals['_GETBARCODEKITINFORESPONSE_BARCODEKITINFOENTRY']._serialized_start=3755
-  _globals['_GETBARCODEKITINFORESPONSE_BARCODEKITINFOENTRY']._serialized_end=3871
-  _globals['_GETLAMPKITINFOREQUEST']._serialized_start=3873
-  _globals['_GETLAMPKITINFOREQUEST']._serialized_end=3896
-  _globals['_GETLAMPKITINFORESPONSE']._serialized_start=3898
-  _globals['_GETLAMPKITINFORESPONSE']._serialized_end=3941
-  _globals['_GETBARCODEKEYSREQUEST']._serialized_start=3943
-  _globals['_GETBARCODEKEYSREQUEST']._serialized_end=4016
-  _globals['_GETBARCODEKEYSRESPONSE']._serialized_start=4018
-  _globals['_GETBARCODEKEYSRESPONSE']._serialized_end=4106
-  _globals['_GETFLOWCELLTYPESREQUEST']._serialized_start=4108
-  _globals['_GETFLOWCELLTYPESREQUEST']._serialized_end=4133
-  _globals['_GETFLOWCELLTYPESRESPONSE']._serialized_start=4136
-  _globals['_GETFLOWCELLTYPESRESPONSE']._serialized_end=4356
-  _globals['_GETFLOWCELLTYPESRESPONSE_INFO']._serialized_start=4231
-  _globals['_GETFLOWCELLTYPESRESPONSE_INFO']._serialized_end=4356
-  _globals['_GETSEQUENCINGKITSREQUEST']._serialized_start=4358
-  _globals['_GETSEQUENCINGKITSREQUEST']._serialized_end=4416
-  _globals['_GETSEQUENCINGKITSRESPONSE']._serialized_start=4419
-  _globals['_GETSEQUENCINGKITSRESPONSE']._serialized_end=4917
-  _globals['_GETSEQUENCINGKITSRESPONSE_KIT']._serialized_start=4619
-  _globals['_GETSEQUENCINGKITSRESPONSE_KIT']._serialized_end=4870
-  _globals['_GETSEQUENCINGKITSRESPONSE_BARCODINGEXPANSIONKIT']._serialized_start=4872
-  _globals['_GETSEQUENCINGKITSRESPONSE_BARCODINGEXPANSIONKIT']._serialized_end=4917
-  _globals['_ADDSIMULATEDDEVICEREQUEST']._serialized_start=4919
-  _globals['_ADDSIMULATEDDEVICEREQUEST']._serialized_end=5028
-  _globals['_ADDSIMULATEDDEVICERESPONSE']._serialized_start=5030
-  _globals['_ADDSIMULATEDDEVICERESPONSE']._serialized_end=5058
-  _globals['_REMOVESIMULATEDDEVICEREQUEST']._serialized_start=5060
-  _globals['_REMOVESIMULATEDDEVICEREQUEST']._serialized_end=5110
-  _globals['_REMOVESIMULATEDDEVICERESPONSE']._serialized_start=5112
-  _globals['_REMOVESIMULATEDDEVICERESPONSE']._serialized_end=5143
-  _globals['_LOCALAUTHENTICATIONTOKENPATHREQUEST']._serialized_start=5145
-  _globals['_LOCALAUTHENTICATIONTOKENPATHREQUEST']._serialized_end=5182
-  _globals['_LOCALAUTHENTICATIONTOKENPATHRESPONSE']._serialized_start=5184
-  _globals['_LOCALAUTHENTICATIONTOKENPATHRESPONSE']._serialized_end=5236
-  _globals['_GETALIGNMENTREFERENCEINFORMATIONREQUEST']._serialized_start=5238
-  _globals['_GETALIGNMENTREFERENCEINFORMATIONREQUEST']._serialized_end=5293
-  _globals['_GETALIGNMENTREFERENCEINFORMATIONRESPONSE']._serialized_start=5296
-  _globals['_GETALIGNMENTREFERENCEINFORMATIONRESPONSE']._serialized_end=5541
-  _globals['_ASSOCIATIONDEVICECODEREQUEST']._serialized_start=5543
-  _globals['_ASSOCIATIONDEVICECODEREQUEST']._serialized_end=5611
-  _globals['_ASSOCIATIONDEVICECODERESPONSE']._serialized_start=5613
-  _globals['_ASSOCIATIONDEVICECODERESPONSE']._serialized_end=5658
-  _globals['_APPLYOFFLINEASSOCIATIONUNLOCKCODEREQUEST']._serialized_start=5660
-  _globals['_APPLYOFFLINEASSOCIATIONUNLOCKCODEREQUEST']._serialized_end=5746
-  _globals['_APPLYOFFLINEASSOCIATIONUNLOCKCODERESPONSE']._serialized_start=5748
-  _globals['_APPLYOFFLINEASSOCIATIONUNLOCKCODERESPONSE']._serialized_end=5811
-  _globals['_LISTDEVELOPERAPITOKENSREQUEST']._serialized_start=5813
-  _globals['_LISTDEVELOPERAPITOKENSREQUEST']._serialized_end=5844
-  _globals['_LISTDEVELOPERAPITOKENSRESPONSE']._serialized_start=5847
-  _globals['_LISTDEVELOPERAPITOKENSRESPONSE']._serialized_end=6057
-  _globals['_LISTDEVELOPERAPITOKENSRESPONSE_DEVELOPERAPITOKEN']._serialized_start=5968
-  _globals['_LISTDEVELOPERAPITOKENSRESPONSE_DEVELOPERAPITOKEN']._serialized_end=6057
-  _globals['_CREATEDEVELOPERAPITOKENREQUEST']._serialized_start=6059
-  _globals['_CREATEDEVELOPERAPITOKENREQUEST']._serialized_end=6149
-  _globals['_CREATEDEVELOPERAPITOKENRESPONSE']._serialized_start=6151
-  _globals['_CREATEDEVELOPERAPITOKENRESPONSE']._serialized_end=6211
-  _globals['_REVOKEDEVELOPERAPITOKENREQUEST']._serialized_start=6213
-  _globals['_REVOKEDEVELOPERAPITOKENREQUEST']._serialized_end=6257
-  _globals['_REVOKEDEVELOPERAPITOKENSRESPONSE']._serialized_start=6259
-  _globals['_REVOKEDEVELOPERAPITOKENSRESPONSE']._serialized_end=6293
-  _globals['_FINDPROTOCOLSREQUEST']._serialized_start=6296
-  _globals['_FINDPROTOCOLSREQUEST']._serialized_end=6436
-  _globals['_FINDPROTOCOLSRESPONSE']._serialized_start=6439
-  _globals['_FINDPROTOCOLSRESPONSE']._serialized_end=6640
-  _globals['_FINDPROTOCOLSRESPONSE_PROTOCOL']._serialized_start=6536
-  _globals['_FINDPROTOCOLSRESPONSE_PROTOCOL']._serialized_end=6640
-  _globals['_LISTSETTINGSFORPROTOCOLREQUEST']._serialized_start=6643
-  _globals['_LISTSETTINGSFORPROTOCOLREQUEST']._serialized_end=6881
-  _globals['_LISTSETTINGSFORPROTOCOLRESPONSE']._serialized_start=6884
-  _globals['_LISTSETTINGSFORPROTOCOLRESPONSE']._serialized_end=10864
-  _globals['_LISTSETTINGSFORPROTOCOLRESPONSE_RUNOPTIONS']._serialized_start=7324
-  _globals['_LISTSETTINGSFORPROTOCOLRESPONSE_RUNOPTIONS']._serialized_end=8177
-  _globals['_LISTSETTINGSFORPROTOCOLRESPONSE_BASECALLING']._serialized_start=8180
-  _globals['_LISTSETTINGSFORPROTOCOLRESPONSE_BASECALLING']._serialized_end=8963
-  _globals['_LISTSETTINGSFORPROTOCOLRESPONSE_OUTPUT']._serialized_start=8966
-  _globals['_LISTSETTINGSFORPROTOCOLRESPONSE_OUTPUT']._serialized_end=10864
-  _globals['_FEATURE']._serialized_start=10866
-  _globals['_FEATURE']._serialized_end=10892
-  _globals['_FEATURELIST']._serialized_start=10895
-  _globals['_FEATURELIST']._serialized_end=11124
-  _globals['_GETFEATURESREQUEST']._serialized_start=11126
-  _globals['_GETFEATURESREQUEST']._serialized_end=11146
-  _globals['_GETFEATURESRESPONSE']._serialized_start=11149
-  _globals['_GETFEATURESRESPONSE']._serialized_end=11371
-  _globals['_GETFEATURESRESPONSE_STATE']._serialized_start=11287
-  _globals['_GETFEATURESRESPONSE_STATE']._serialized_end=11371
-  _globals['_SETFEATURESREQUEST']._serialized_start=11373
-  _globals['_SETFEATURESREQUEST']._serialized_end=11445
-  _globals['_SETFEATURESRESPONSE']._serialized_start=11447
-  _globals['_SETFEATURESRESPONSE']._serialized_end=11468
-  _globals['_RESTARTDEVICEADMINREQUEST']._serialized_start=11470
-  _globals['_RESTARTDEVICEADMINREQUEST']._serialized_end=11497
-  _globals['_RESTARTDEVICEADMINRESPONSE']._serialized_start=11499
-  _globals['_RESTARTDEVICEADMINRESPONSE']._serialized_end=11527
-  _globals['_MANAGERSERVICE']._serialized_start=11910
-  _globals['_MANAGERSERVICE']._serialized_end=16074
-FindProtocolsRequest.__doc__ = """Attributes:
-    flow_cell_product_code:
-        Find protocols that are compatible with this flow cell product
-        code.  Set to empty string to find protocols matching all flow
-        cell product codes.
-    sequencing_kit:
-        Limit to protocols that are compatible with this sequencing
-        kit.  Set to empty string to find protocols matching all kits.
-    experiment_type:
-        Limit response to certain protocol types.
+  _globals['_DESCRIBEHOSTRESPONSE']._serialized_end=950
+  _globals['_DESCRIBEHOSTRESPONSE_BASECALLERSUBSTRATE']._serialized_start=719
+  _globals['_DESCRIBEHOSTRESPONSE_BASECALLERSUBSTRATE']._serialized_end=770
+  _globals['_DESCRIBEHOSTRESPONSE_BASECALLINGAVAILABILITY']._serialized_start=773
+  _globals['_DESCRIBEHOSTRESPONSE_BASECALLINGAVAILABILITY']._serialized_end=950
+  _globals['_GETBASECALLERFEATURESREQUEST']._serialized_start=952
+  _globals['_GETBASECALLERFEATURESREQUEST']._serialized_end=982
+  _globals['_GETBASECALLERFEATURESRESPONSE']._serialized_start=984
+  _globals['_GETBASECALLERFEATURESRESPONSE']._serialized_end=1079
+  _globals['_FLOWCELLPOSITION']._serialized_start=1082
+  _globals['_FLOWCELLPOSITION']._serialized_end=2102
+  _globals['_FLOWCELLPOSITION_LOCATION']._serialized_start=1764
+  _globals['_FLOWCELLPOSITION_LOCATION']._serialized_end=1796
+  _globals['_FLOWCELLPOSITION_RPCPORTS']._serialized_start=1798
+  _globals['_FLOWCELLPOSITION_RPCPORTS']._serialized_end=1849
+  _globals['_FLOWCELLPOSITION_SHAREDHARDWAREGROUP']._serialized_start=1851
+  _globals['_FLOWCELLPOSITION_SHAREDHARDWAREGROUP']._serialized_end=1890
+  _globals['_FLOWCELLPOSITION_STATE']._serialized_start=1893
+  _globals['_FLOWCELLPOSITION_STATE']._serialized_end=2102
+  _globals['_FLOWCELLPOSITIONSREQUEST']._serialized_start=2104
+  _globals['_FLOWCELLPOSITIONSREQUEST']._serialized_end=2130
+  _globals['_FLOWCELLPOSITIONSRESPONSE']._serialized_start=2132
+  _globals['_FLOWCELLPOSITIONSRESPONSE']._serialized_end=2238
+  _globals['_WATCHFLOWCELLPOSITIONSREQUEST']._serialized_start=2240
+  _globals['_WATCHFLOWCELLPOSITIONSREQUEST']._serialized_end=2271
+  _globals['_WATCHFLOWCELLPOSITIONSRESPONSE']._serialized_start=2274
+  _globals['_WATCHFLOWCELLPOSITIONSRESPONSE']._serialized_end=2438
+  _globals['_RESETPOSITIONREQUEST']._serialized_start=2440
+  _globals['_RESETPOSITIONREQUEST']._serialized_end=2496
+  _globals['_RESETPOSITIONRESPONSE']._serialized_start=2498
+  _globals['_RESETPOSITIONRESPONSE']._serialized_end=2521
+  _globals['_BASECALLERAPIREQUEST']._serialized_start=2523
+  _globals['_BASECALLERAPIREQUEST']._serialized_end=2545
+  _globals['_BASECALLERAPIRESPONSE']._serialized_start=2547
+  _globals['_BASECALLERAPIRESPONSE']._serialized_end=2611
+  _globals['_GETGUPPYINFOREQUEST']._serialized_start=2613
+  _globals['_GETGUPPYINFOREQUEST']._serialized_end=2634
+  _globals['_GETGUPPYINFORESPONSE']._serialized_start=2636
+  _globals['_GETGUPPYINFORESPONSE']._serialized_end=2730
+  _globals['_GETVERSIONINFOREQUEST']._serialized_start=2732
+  _globals['_GETVERSIONINFOREQUEST']._serialized_end=2755
+  _globals['_LISTPROTOCOLOUTPUTDIRFILESREQUEST']._serialized_start=2757
+  _globals['_LISTPROTOCOLOUTPUTDIRFILESREQUEST']._serialized_end=2806
+  _globals['_LISTPROTOCOLOUTPUTDIRFILESRESPONSE']._serialized_start=2809
+  _globals['_LISTPROTOCOLOUTPUTDIRFILESRESPONSE']._serialized_end=3057
+  _globals['_LISTPROTOCOLOUTPUTDIRFILESRESPONSE_DIRECTORYINFO']._serialized_start=2983
+  _globals['_LISTPROTOCOLOUTPUTDIRFILESRESPONSE_DIRECTORYINFO']._serialized_end=3057
+  _globals['_CREATEDIRECTORYREQUEST']._serialized_start=3059
+  _globals['_CREATEDIRECTORYREQUEST']._serialized_end=3118
+  _globals['_CREATEDIRECTORYRESPONSE']._serialized_start=3120
+  _globals['_CREATEDIRECTORYRESPONSE']._serialized_end=3159
+  _globals['_FILESYSTEMDISKSPACEINFO']._serialized_start=3162
+  _globals['_FILESYSTEMDISKSPACEINFO']._serialized_end=3425
+  _globals['_GETDISKSPACEINFOREQUEST']._serialized_start=3427
+  _globals['_GETDISKSPACEINFOREQUEST']._serialized_end=3452
+  _globals['_STREAMDISKSPACEINFOREQUEST']._serialized_start=3454
+  _globals['_STREAMDISKSPACEINFOREQUEST']._serialized_end=3498
+  _globals['_GETDISKSPACEINFORESPONSE']._serialized_start=3500
+  _globals['_GETDISKSPACEINFORESPONSE']._serialized_end=3608
+  _globals['_GETBARCODEKITINFOREQUEST']._serialized_start=3610
+  _globals['_GETBARCODEKITINFOREQUEST']._serialized_end=3636
+  _globals['_GETBARCODEKITINFORESPONSE']._serialized_start=3639
+  _globals['_GETBARCODEKITINFORESPONSE']._serialized_end=3935
+  _globals['_GETBARCODEKITINFORESPONSE_BARCODEKITINFO']._serialized_start=3762
+  _globals['_GETBARCODEKITINFORESPONSE_BARCODEKITINFO']._serialized_end=3817
+  _globals['_GETBARCODEKITINFORESPONSE_BARCODEKITINFOENTRY']._serialized_start=3819
+  _globals['_GETBARCODEKITINFORESPONSE_BARCODEKITINFOENTRY']._serialized_end=3935
+  _globals['_GETLAMPKITINFOREQUEST']._serialized_start=3937
+  _globals['_GETLAMPKITINFOREQUEST']._serialized_end=3960
+  _globals['_GETLAMPKITINFORESPONSE']._serialized_start=3962
+  _globals['_GETLAMPKITINFORESPONSE']._serialized_end=4005
+  _globals['_GETBARCODEKEYSREQUEST']._serialized_start=4007
+  _globals['_GETBARCODEKEYSREQUEST']._serialized_end=4080
+  _globals['_GETBARCODEKEYSRESPONSE']._serialized_start=4082
+  _globals['_GETBARCODEKEYSRESPONSE']._serialized_end=4170
+  _globals['_GETFLOWCELLTYPESREQUEST']._serialized_start=4172
+  _globals['_GETFLOWCELLTYPESREQUEST']._serialized_end=4197
+  _globals['_GETFLOWCELLTYPESRESPONSE']._serialized_start=4200
+  _globals['_GETFLOWCELLTYPESRESPONSE']._serialized_end=4420
+  _globals['_GETFLOWCELLTYPESRESPONSE_INFO']._serialized_start=4295
+  _globals['_GETFLOWCELLTYPESRESPONSE_INFO']._serialized_end=4420
+  _globals['_GETSEQUENCINGKITSREQUEST']._serialized_start=4422
+  _globals['_GETSEQUENCINGKITSREQUEST']._serialized_end=4480
+  _globals['_GETSEQUENCINGKITSRESPONSE']._serialized_start=4483
+  _globals['_GETSEQUENCINGKITSRESPONSE']._serialized_end=4981
+  _globals['_GETSEQUENCINGKITSRESPONSE_KIT']._serialized_start=4683
+  _globals['_GETSEQUENCINGKITSRESPONSE_KIT']._serialized_end=4934
+  _globals['_GETSEQUENCINGKITSRESPONSE_BARCODINGEXPANSIONKIT']._serialized_start=4936
+  _globals['_GETSEQUENCINGKITSRESPONSE_BARCODINGEXPANSIONKIT']._serialized_end=4981
+  _globals['_ADDSIMULATEDDEVICEREQUEST']._serialized_start=4983
+  _globals['_ADDSIMULATEDDEVICEREQUEST']._serialized_end=5092
+  _globals['_ADDSIMULATEDDEVICERESPONSE']._serialized_start=5094
+  _globals['_ADDSIMULATEDDEVICERESPONSE']._serialized_end=5122
+  _globals['_REMOVESIMULATEDDEVICEREQUEST']._serialized_start=5124
+  _globals['_REMOVESIMULATEDDEVICEREQUEST']._serialized_end=5174
+  _globals['_REMOVESIMULATEDDEVICERESPONSE']._serialized_start=5176
+  _globals['_REMOVESIMULATEDDEVICERESPONSE']._serialized_end=5207
+  _globals['_LOCALAUTHENTICATIONTOKENPATHREQUEST']._serialized_start=5209
+  _globals['_LOCALAUTHENTICATIONTOKENPATHREQUEST']._serialized_end=5246
+  _globals['_LOCALAUTHENTICATIONTOKENPATHRESPONSE']._serialized_start=5248
+  _globals['_LOCALAUTHENTICATIONTOKENPATHRESPONSE']._serialized_end=5300
+  _globals['_GETALIGNMENTREFERENCEINFORMATIONREQUEST']._serialized_start=5302
+  _globals['_GETALIGNMENTREFERENCEINFORMATIONREQUEST']._serialized_end=5357
+  _globals['_GETALIGNMENTREFERENCEINFORMATIONRESPONSE']._serialized_start=5360
+  _globals['_GETALIGNMENTREFERENCEINFORMATIONRESPONSE']._serialized_end=5605
+  _globals['_ASSOCIATIONDEVICECODEREQUEST']._serialized_start=5607
+  _globals['_ASSOCIATIONDEVICECODEREQUEST']._serialized_end=5675
+  _globals['_ASSOCIATIONDEVICECODERESPONSE']._serialized_start=5677
+  _globals['_ASSOCIATIONDEVICECODERESPONSE']._serialized_end=5722
+  _globals['_APPLYOFFLINEASSOCIATIONUNLOCKCODEREQUEST']._serialized_start=5724
+  _globals['_APPLYOFFLINEASSOCIATIONUNLOCKCODEREQUEST']._serialized_end=5810
+  _globals['_APPLYOFFLINEASSOCIATIONUNLOCKCODERESPONSE']._serialized_start=5812
+  _globals['_APPLYOFFLINEASSOCIATIONUNLOCKCODERESPONSE']._serialized_end=5875
+  _globals['_LISTDEVELOPERAPITOKENSREQUEST']._serialized_start=5877
+  _globals['_LISTDEVELOPERAPITOKENSREQUEST']._serialized_end=5908
+  _globals['_LISTDEVELOPERAPITOKENSRESPONSE']._serialized_start=5911
+  _globals['_LISTDEVELOPERAPITOKENSRESPONSE']._serialized_end=6121
+  _globals['_LISTDEVELOPERAPITOKENSRESPONSE_DEVELOPERAPITOKEN']._serialized_start=6032
+  _globals['_LISTDEVELOPERAPITOKENSRESPONSE_DEVELOPERAPITOKEN']._serialized_end=6121
+  _globals['_CREATEDEVELOPERAPITOKENREQUEST']._serialized_start=6123
+  _globals['_CREATEDEVELOPERAPITOKENREQUEST']._serialized_end=6213
+  _globals['_CREATEDEVELOPERAPITOKENRESPONSE']._serialized_start=6215
+  _globals['_CREATEDEVELOPERAPITOKENRESPONSE']._serialized_end=6275
+  _globals['_REVOKEDEVELOPERAPITOKENREQUEST']._serialized_start=6277
+  _globals['_REVOKEDEVELOPERAPITOKENREQUEST']._serialized_end=6321
+  _globals['_REVOKEDEVELOPERAPITOKENSRESPONSE']._serialized_start=6323
+  _globals['_REVOKEDEVELOPERAPITOKENSRESPONSE']._serialized_end=6357
+  _globals['_FINDPROTOCOLSREQUEST']._serialized_start=6360
+  _globals['_FINDPROTOCOLSREQUEST']._serialized_end=6500
+  _globals['_FINDPROTOCOLSRESPONSE']._serialized_start=6503
+  _globals['_FINDPROTOCOLSRESPONSE']._serialized_end=6704
+  _globals['_FINDPROTOCOLSRESPONSE_PROTOCOL']._serialized_start=6600
+  _globals['_FINDPROTOCOLSRESPONSE_PROTOCOL']._serialized_end=6704
+  _globals['_LISTSETTINGSFORPROTOCOLREQUEST']._serialized_start=6707
+  _globals['_LISTSETTINGSFORPROTOCOLREQUEST']._serialized_end=6945
+  _globals['_LISTSETTINGSFORPROTOCOLRESPONSE']._serialized_start=6948
+  _globals['_LISTSETTINGSFORPROTOCOLRESPONSE']._serialized_end=10928
+  _globals['_LISTSETTINGSFORPROTOCOLRESPONSE_RUNOPTIONS']._serialized_start=7388
+  _globals['_LISTSETTINGSFORPROTOCOLRESPONSE_RUNOPTIONS']._serialized_end=8241
+  _globals['_LISTSETTINGSFORPROTOCOLRESPONSE_BASECALLING']._serialized_start=8244
+  _globals['_LISTSETTINGSFORPROTOCOLRESPONSE_BASECALLING']._serialized_end=9027
+  _globals['_LISTSETTINGSFORPROTOCOLRESPONSE_OUTPUT']._serialized_start=9030
+  _globals['_LISTSETTINGSFORPROTOCOLRESPONSE_OUTPUT']._serialized_end=10928
+  _globals['_FEATURE']._serialized_start=10930
+  _globals['_FEATURE']._serialized_end=10956
+  _globals['_FEATURELIST']._serialized_start=10959
+  _globals['_FEATURELIST']._serialized_end=11188
+  _globals['_GETFEATURESREQUEST']._serialized_start=11190
+  _globals['_GETFEATURESREQUEST']._serialized_end=11210
+  _globals['_GETFEATURESRESPONSE']._serialized_start=11213
+  _globals['_GETFEATURESRESPONSE']._serialized_end=11435
+  _globals['_GETFEATURESRESPONSE_STATE']._serialized_start=11351
+  _globals['_GETFEATURESRESPONSE_STATE']._serialized_end=11435
+  _globals['_SETFEATURESREQUEST']._serialized_start=11437
+  _globals['_SETFEATURESREQUEST']._serialized_end=11509
+  _globals['_SETFEATURESRESPONSE']._serialized_start=11511
+  _globals['_SETFEATURESRESPONSE']._serialized_end=11532
+  _globals['_RESTARTDEVICEADMINREQUEST']._serialized_start=11534
+  _globals['_RESTARTDEVICEADMINREQUEST']._serialized_end=11561
+  _globals['_RESTARTDEVICEADMINRESPONSE']._serialized_start=11563
+  _globals['_RESTARTDEVICEADMINRESPONSE']._serialized_end=11591
+  _globals['_CHECKBEDFILEREQUEST']._serialized_start=11593
+  _globals['_CHECKBEDFILEREQUEST']._serialized_end=11696
+  _globals['_CHECKBEDFILERESPONSE']._serialized_start=11698
+  _globals['_CHECKBEDFILERESPONSE']._serialized_end=11736
+  _globals['_MANAGERSERVICE']._serialized_start=12101
+  _globals['_MANAGERSERVICE']._serialized_end=16379
+GetAlignmentReferenceInformationResponse.__doc__ = """Attributes:
+    estimated_load_time_seconds:
+        Estimated load time of the reference in seconds.
+    estimated_reference_size_bases:
+        Estimated size of the reference file in bases.
+    recommended_live_usage:
+        Does the reference file fit within the recommended live usage
+        memory size?  This uses an estimate of how much memory a
+        reference may use when running in the basecaller and compares
+        to the amount of memory in the sequencer. It does not account
+        for whether the reference will run in real time.
+    recommended_adaptive_sampling_usage:
+        True if adaptive sampling is recommended based on reference
+        file size in bases, and device type  Since 6.0
+    max_recommended_adaptive_sampling_bases:
+        The maximum limit for adaptive sampling number of bases based
+        on device type  Since 6.0
 """
-FindProtocolsResponse.Protocol.__doc__ = """Attributes:
-    identifier:
-        An identifying string for protocol, of the form:
-        LOCATION:relative/path/to/protocol  The identifier uniquely
-        identifies the protocol.
-    requires_flow_cell_product_code:
-        Whether the protocol requires a flow cell product code in
-        order to start.
-    requires_sequencing_kit:
-        Whether the protocol requires a sequencing kit in order to
-        start.
+ListSettingsForProtocolResponse.__doc__ = """Attributes:
+    protocol_settings:
+        Any protocol settings not covered by the above structures, for
+        example those required for custom-scripts.
+"""
+GetBarcodeKeysResponse.__doc__ = """Attributes:
+    barcode_keys:
+        Returned barcode keys.
+    lamp_keys:
+        Returned lamp barcode ids.  DEPRECATED 6.0: Lamp support has
+        been removed and this value will always be empty.
+    combined_keys:
+        Combined barcode and lamp keys.  Returned keys are joined
+        strings of all requested barcode kits, giving the caller a
+        unique string to identify each barcode pair.  eg. if both a
+        lamp kit + barcode kit are specified, NxM barcode keys are
+        returned:  - barcode01_lamp01  - barcode01_lamp02  -
+        barcode01_lamp03  - barcode02_lamp01  - barcode02_lamp02  -
+        barcode02_lamp03  DEPRECATED 6.0: Lamp support has been
+        removed and this value will always be the same as
+        barcode_keys.
+"""
+CreateDirectoryRequest.__doc__ = """Attributes:
+    parent_path:
+        The path at which to create the directory.  This must exist,
+        be a directory, and be within the protocol output directory.
+        This can be determined via calls to
+        list_protocol_output_dir_files().
+    name:
+        The name of the directory to create.  This must be a single
+        path component (ie: it cannot contain '/' or '\'). There may
+        be other restrictions on valid characters, depending on the
+        operating system.
 """
 GetFlowCellTypesResponse.Info.__doc__ = """Information about a flow cell type.
 
@@ -316,212 +351,6 @@ Attributes:
         on the wire by allowing the common case of basecalling being
         possible to be omitted entirely).
 """
-ListProtocolOutputDirFilesResponse.__doc__ = """Attributes:
-    directories:
-        List of sub-directories in the directory specified
-    files:
-        List of files in the directory specified
-    current_listed_path:
-        The absolute directory that is being listed within this
-        response
-"""
-GetBarcodeKitInfoResponse.__doc__ = """Attributes:
-    barcode_kit_info:
-        Map of barcode kit name to barcode kit info
-"""
-AssociationDeviceCodeResponse.__doc__ = """Attributes:
-    code:
-        The code required to associate the device with an account.  If
-        the request had `offline` set, this code is suitable for use
-        in the customer portal offline association page. Otherwise, it
-        is suitable for the online association APIs.
-"""
-GetBarcodeKitInfoResponse.BarcodeKitInfo.__doc__ = """Attributes:
-    is_dual:
-        DEPRECATED 6.0: Dual barcoding support has been removed and
-        this value will always false.
-"""
-GetSequencingKitsRequest.__doc__ = """Request message for `ManagerService.get_sequencing_kits`.
-
-Attributes:
-    flow_cell_product_code:
-        The product code of the flow cell that will be used for
-        sequencing.  Only kits compatible with this flow cell type
-        will be returned (currently, this means that there is at least
-        one (sequencing or control) protocol that is compatible with
-        both the kit and this flow cell product code).  This may also
-        affect the returned information about the kit. For example, if
-        it isn't possible to basecall on the flow cell, none of the
-        kits will claim to be barcoding capable (or compatible with
-        any barcoding expansion kits).
-"""
-ListSettingsForProtocolResponse.Output.__doc__ = """Output
-
-Attributes:
-    read_filtering_min_duplex_qscore:
-        Since 5.8
-"""
-ListProtocolOutputDirFilesRequest.__doc__ = """Attributes:
-    path:
-        Specify the root path to list files from. If the path is left
-        empty, then the base protocol output directory will be used.
-        Note that the path specified HAS to be a descendant of the
-        protocol output directory, otherwise a INVALID_ARGUMENT error
-        will be returned  If the path is left empty, and the path
-        specified in the user config doesn't exist, then the NOT_FOUND
-        error code will be returned
-"""
-GetSequencingKitsResponse.Kit.__doc__ = """Information about a sequencing kit.
-
-Attributes:
-    product_code:
-        The product code for the sequencing kit.  This is the user-
-        visible name for the kit. It is the name used to order kits,
-        and is also displayed on the packaging.  While most product
-        codes are 10-15 characters, be aware that longer (or shorter)
-        product codes can exist.  Examples: "SQK-LSK109", "OND-SQK-
-        LP0096S".
-    barcoding_expansion_kits:
-        Compatible barcoding expansion kits.  These are indexes into
-        the GetSequencingKitsResponse.barcoding_expansion_kits list.
-        For example, 0 would indicate the first kit in that list. The
-        values are guaranteed to be unique and valid indexes for that
-        list.
-    includes_barcoding:
-        Whether barcoding support is part of the sequencing kit.  If
-        this is set, barcoding can be done without any expansion kits
-        (and, in fact, barcoding is an integral part of the kit).
-    lamp_kit:
-        Whether the kit can be used for LamPORE diagnostics.
-        DEPRECATED 6.0: Lamp support has been removed and this value
-        will always be false.
-    has_control_protocol:
-        Whether there is a "control" protocol available for this kit.
-    no_sequencing_protocol:
-        Indicates there is no sequencing protocol available for this
-        kit.  This is an unusual situation. If a kit is known about,
-        it should generally have a sequencing protocol associated with
-        it, and it would be strange to have a control protocol
-        available but no sequencing protocol.
-    frequently_used:
-        Indicates that the sequencing kit is one of the most commonly
-        used ones.  This can be used to display such kits first, or
-        otherwise highlight them in some way.
-    dna:
-        The kit can be used with DNA samples.
-    rna:
-        The kit can be used with RNA samples.
-    pcr:
-        The kit can be used with samples that have had PCR applied to
-        them.
-    pcr_free:
-        The kit can be used without a PCR step.
-"""
-ListSettingsForProtocolRequest.__doc__ = """Attributes:
-    identifier:
-        specify the protocol with a string containing all the
-        protocol's identifying components, eg:
-        "sequencing/sequencing_MIN106_DNA:FLO-MIN106:SQK-RPB004"
-    components:
-        specify the protocol providing the identifying components
-        individually. All components are optional, if more than one
-        protocol matches given strings, information about the first
-        will be returned.
-    flow_cell_connector:
-        The flow-cell connector type identifies the type of hardware
-        and is used to identify the correct protocol. The flow-cell
-        connector types applicable to the device are listed by the
-        get_flow_cell_types rpc in this service and the
-        get_device_state rpc in the device service.
-"""
-GetLampKitInfoRequest.__doc__ = """DEPRECATED 6.0: Lamp support has been removed."""
-GetAlignmentReferenceInformationRequest.__doc__ = """Attributes:
-    path:
-        The full path of the alignment reference.  Should be a .fasta,
-        or .mmi file.
-"""
-ApplyOfflineAssociationUnlockCodeRequest.__doc__ = """Attributes:
-    position_name:
-        The flow cell position to unlock.  This should be set (or not
-        set) to match the corresponding call to
-        `offline_association_device_code`.
-    unlock_code:
-        The unlock code provided by the user.  This the code given by
-        the customer support portal when the corresponding device code
-        is entered into the device association page.
-"""
-LocalAuthenticationTokenPathResponse.__doc__ = """Attributes:
-    path:
-        The full path of the local authentication token
-"""
-CreateDeveloperApiTokenResponse.__doc__ = """Attributes:
-    id:
-        Unique ID assigned to the token for identification purposes.
-        Not valid as an authentication token.
-    token:
-        Created token, available to be used with minknow API's
-        immediately.
-"""
-DescribeHostResponse.__doc__ = """Attributes:
-    product_code:
-        The product code for the host, if applicable.  If this is an
-        integrated Oxford Nanopore device, this will be the product
-        code of the device, or the part of the device that runs
-        MinKNOW (eg: several PromethION models have separate product
-        codes for the sequencing unit where the flow cells are
-        inserted and the compute unit - this would be the product code
-        for the compute unit).  Some example product codes:
-        ============  ================= Product Code  Name
-        ============  ================= GRD-X5B001    GridION X5
-        GRD-X5B002    GridION X5 GRD-X5B003    GridION X5 Mk1 MIN-101C
-        MinION Mk1C PRO-PRMC01    PromethION Beta PRO-PRC024
-        PromethION 24 PRO-PRC048    PromethION 48 ONT-314
-        PromethION (Production)  If MinKNOW is running on a machine
-        that is not provided by Oxford Nanopore (ie: their own laptop
-        or desktop machine with a MinION plugged in), this field will
-        be empty.
-    description:
-        A human-readable name for the type of host.  If `product_code`
-        is set, it will be the name of the model of instrument (see
-        the table in the `product_code` field). Otherwise it will be
-        empty.
-    serial:
-        The serial of Nanopore device.  If `product_code` is empty,
-        this will also be empty.  This uniquely identifies the device.
-        See also `network_name`.
-    network_name:
-        The network name of the host.  This is the name the host
-        system believes it has on the network. This can be useful if
-        an IP address was used to connect to the RPC system.  For
-        customer computers, this is the only available identfying
-        information for the system.
-    needs_association:
-        This device has not been associated with an account.
-        Association must be completed before using the device.  Note
-        that this will only ever be set for hosts that also have a
-        `product_code` and `serial`.  If this is true, all positions
-        will report as ``STATE_NEEDS_ASSOCIATION`` until the device is
-        associated. Even if this is false, however, removable
-        sequencing units (eg: the MinION Mk1B) may require their own
-        association (in which case they will individually report as
-        ``STATE_NEEDS_ASSOCIATION`` - see the `flow_cell_positions`
-        RPC).  Since 4.4
-    can_sequence_offline:
-        Whether the device can sequence while offline.  Not all
-        sequencing devices can sequence without an internet
-        connection. This indicates whether it is possible for the
-        integrated sequencing positions. Note that this will only be
-        set if `needs_association` is true.  Since 4.4
-    can_basecall:
-        Whether the device can currently provide basecalling
-    current_basecalling_hardware:
-        Information about the hardware being used right now by the
-        basecaller.
-    available_basecalling_hardware:
-        If more than one possible basecalling hardware selection can
-        be made, this field provides the details of those options.
-        Typically this will be a list of 'unused' GPUs.
-"""
 GetSequencingKitsResponse.__doc__ = """Response message for `ManagerService.get_sequencing_kits`.
 
 Attributes:
@@ -532,136 +361,47 @@ Attributes:
         can be used in combination with certain sequencing kits to add
         (or extend) barcoding functionality.
 """
-FlowCellPosition.Location.__doc__ = """Attributes:
-    x:
-        The column (counting from 0, left-to-right) of the flow cell
-        position on the sequencing unit when viewed from above/in
-        front.
-    y:
-        The row (counting from 0, top-to-bottom) of the flow cell
-        position on the sequencing unit when viewed from above/in
-        front.
-"""
-FilesystemDiskSpaceInfo.__doc__ = """disk-usage information for one file-system
+ApplyOfflineAssociationUnlockCodeRequest.__doc__ = """DEPRECATED: since 6.2 device association is no-longer required.
 
 Attributes:
-    filesystem_id:
-        The name of the file-system
-    bytes_available:
-        How much space is left on the file-system
-    bytes_capacity:
-        The total capacity of the file-system when empty.
-    what:
-        A list of what MinKNOW stores on this file-system, eg: reads,
-        logs, intermediate-files
-    bytes_to_stop_cleanly:
-        MinKNOW needs this much space to stop experiments. If
-        bytes_available goes below this number, data could be lost!
-    bytes_when_alert_issued:
-        The amount of space left on the file-system when
-        recommend_alert was set true.
-    recommend_alert:
-        MinKNOW recommends that you alert someone about the disk-usage
-    recommend_stop:
-        MinKNOW recommends that you stop experiments due to disk-usage
-        concerns
-    bytes_per_second:
-        Rate of change in bytes_available (per second) +'ve numbers
-        indicate that bytes_available is decreasing and space is being
-        used A value of 0 can indicate that this has not applicable or
-        not available.
-    file_types_stored:
-        A list of what types of file MinKNOW stores on this file-
-        system, eg: reads, logs, intermediate-files, etc.
+    position_name:
+        The flow cell position to unlock.  This should be set (or not
+        set) to match the corresponding call to
+        `offline_association_device_code`.
+    unlock_code:
+        The unlock code provided by the user.  This the code given by
+        the customer support portal when the corresponding device code
+        is entered into the device association page.
 """
-AddSimulatedDeviceRequest.__doc__ = """Attributes:
-    name:
-        The name of the position, this must be unique and the correct
-        format:  For MinION Mk1B and Mk1C: "MS" followed by five
-        digits, eg: "MS12345". For GridION: "GS" followed by five
-        digits, eg: "GS12345". For P2 Solo: "P2S_" followed by five
-        digits, and then "-A" or "-B" eg: "P2S_12345-A".  PromethION
-        and P2 Solo position-names have no format restriction, but
-        must be unique. It is strongly recommended to follow standard
-        naming conventions:  For PromethION: start with "1A" and then
-        increase the number and/or the letter as you add more
-        positions. For P2 Solo: use "P2S_00000-A" and "P2S_00000-B"
-        (these fit the format of real P2 Solo devices, but do not
-        correspond to any real device).  Future versions might
-        constrain PromethION and P2 Solo device names. Using the above
-        suggestions should ensure that your code will continue to
-        work.  Note that MinKNOW Core 5.5 and earlier required the P2
-        Solo device name to be "P2S" followed by four digits. This is
-        no longer recommended.
-    type:
-        The type of the simulated device to create.  If left at
-        default (AUTO), then a sensible default device type is
-        selected.
+GetAlignmentReferenceInformationRequest.__doc__ = """Attributes:
+    path:
+        The full path of the alignment reference.  Should be a .fasta,
+        or .mmi file.
 """
-FlowCellPositionsResponse.__doc__ = """Attributes:
-    total_count:
-        How many positions are available in total.  This is the same
-        in every message returned from a single call, and allows the
-        caller to easily see how many further positions might be in
-        subsequent messages.
-    positions:
-        Known flow cell positions.  Note that not all positions listed
-        here are necessarily available. In particular, integrated flow
-        cell positions (eg: on GridIONs or PromethIONs) will always be
-        listed.
-"""
-WatchFlowCellPositionsResponse.__doc__ = """Each flow cell position will first be listed in `additions`. After
-that, it may appear in `changes` in zero or more messages. Then, it
-may appear in `removals` once, after which it will either never appear
-again, or appear in `additions` again (restarting the cycle).  No
-position will ever appear in more than one field in the same response
-message.
-
-Attributes:
-    additions:
-        Flow cell positions that are new (to this call).  Contains
-        flow cell positions that have not been seen before on this
-        call (or have re-appeared after being removed).  Note that a
-        flow cell position being listed here does not mean it is
-        available. In particular, integrated flow cell positions (eg:
-        on GridIONs or PromethIONs) will always be provided, so that
-        they can be positioned appropriately.
-    changes:
-        Flow cell positions that have changed state.  Every flow cell
-        position provided in this list will have previously been
-        provided in `additions`.
-    removals:
-        A flow cell position has been removed.  Note that this can
-        only happen with MinIONs - integrated flow cell positions are
-        never removed (if they become unavailable, this will be noted
-        in the `changes` field).
-"""
-GetBarcodeKeysRequest.__doc__ = """Attributes:
-    barcode_kit_names:
-        Names of barcode kits to obtain barcode names for  Fails with
-        INVALID_ARGUMENT if any of the requested `barcode_kit_names`
-        are unavailable
-    lamp_kit_name:
-        Name of lamp kit to obtain barcode names for.  Fails with
-        INVALID_ARGUMENT if the requested `lamp_kit_name` is
-        unavailable.  DEPRECATED 6.0: Lamp support has been removed
-        and this option will be ignored.
-"""
-ResetPositionRequest.__doc__ = """Attributes:
-    positions:
-        The names of positions to restart.
-    force:
-        Force the software to be restarted even when it appears to be
-        in a healthy state (ie: STATE_RUNNING).
+BasecallerApiResponse.__doc__ = """Attributes:
+    secure:
+        The port to use to access the minknow_api.basecaller API using
+        the standard gRPC protocol over TLS
+    secure_grpc_web:
+        The port to use to access the minknow_api.basecaller API using
+        the gRPC-Web protocol over TLS
 """
 CreateDirectoryResponse.__doc__ = """Attributes:
     path:
         The path to the created directory.
 """
-RevokeDeveloperApiTokenRequest.__doc__ = """Attributes:
-    id:
-        The id passed back from [CreateDeveloperApiTokenRequest] or
-        [DeveloperApiToken].
+ApplyOfflineAssociationUnlockCodeResponse.__doc__ = """DEPRECATED: since 6.2 device association is no-longer required.
+
+Attributes:
+    associated:
+        True if the association was successful (the unlock_code was
+        accepted), false otherwise.
+"""
+FeatureList.__doc__ = """Attributes:
+    feature_flags:
+        feature_flags is a special value If false, turns off all other
+        feature flags If true, allows individual flags to be enabled
+        and disabled
 """
 ListDeveloperApiTokensResponse.DeveloperApiToken.__doc__ = """Attributes:
     id:
@@ -672,77 +412,19 @@ ListDeveloperApiTokensResponse.DeveloperApiToken.__doc__ = """Attributes:
     expiry:
         Optional expiry of the token.
 """
-GetSequencingKitsResponse.BarcodingExpansionKit.__doc__ = """Information about a barcoding expansion kit.  In the future, this may
-include compatibility information for dual barcoding, for example.
-
-Attributes:
-    product_code:
-        The product code for the barcoding expansion kit.  This is the
-        user-visible name for the kit. It is the name used to order
-        kits, and is also displayed on the packaging.  While most
-        product codes are 10 characters, be aware that longer product
-        codes can exist.  Example: "EXP-NBD104".
+RevokeDeveloperApiTokenRequest.__doc__ = """Attributes:
+    id:
+        The id passed back from [CreateDeveloperApiTokenRequest] or
+        [DeveloperApiToken].
 """
-GetBasecallerFeaturesResponse.__doc__ = """Attributes:
-    is_live_basecalling_with_adaptive_sampling_recommended:
-        Is live basecalling with adaptive sampling recommended on this
-        hardware Currently not recommended for Apple or Mk1C  Since
-        5.9
-"""
-ListSettingsForProtocolResponse.__doc__ = """Attributes:
-    protocol_settings:
-        Any protocol settings not covered by the above structures, for
-        example those required for custom-scripts.
-"""
-GetBarcodeKeysResponse.__doc__ = """Attributes:
-    barcode_keys:
-        Returned barcode keys.
-    lamp_keys:
-        Returned lamp barcode ids.  DEPRECATED 6.0: Lamp support has
-        been removed and this value will always be empty.
-    combined_keys:
-        Combined barcode and lamp keys.  Returned keys are joined
-        strings of all requested barcode kits, giving the caller a
-        unique string to identify each barcode pair.  eg. if both a
-        lamp kit + barcode kit are specified, NxM barcode keys are
-        returned:  - barcode01_lamp01  - barcode01_lamp02  -
-        barcode01_lamp03  - barcode02_lamp01  - barcode02_lamp02  -
-        barcode02_lamp03  DEPRECATED 6.0: Lamp support has been
-        removed and this value will always be the same as
-        barcode_keys.
-"""
-FlowCellPosition.RpcPorts.__doc__ = """Attributes:
-    secure:
-        A port providing the standard gRPC protocol over TLS
-    secure_grpc_web:
-        A port providing the gRPC-Web protocol over TLS
-"""
-GetFlowCellTypesRequest.__doc__ = """Request message for `ManagerService.get_flow_cell_types`."""
-ApplyOfflineAssociationUnlockCodeResponse.__doc__ = """Attributes:
-    associated:
-        True if the association was successful (the unlock_code was
-        accepted), false otherwise.
-"""
-BasecallerApiResponse.__doc__ = """Attributes:
-    secure:
-        The port to use to access the minknow_api.basecaller API using
-        the standard gRPC protocol over TLS
-    secure_grpc_web:
-        The port to use to access the minknow_api.basecaller API using
-        the gRPC-Web protocol over TLS
-"""
-DescribeHostResponse.BasecallerSubstrate.__doc__ = """Details about the hardware on which basecalling may be run.
-
-Attributes:
-    is_gpu:
-        If false, this indicates that CPU basecalling is selected. In
-        this case, the 'gpus' field should be omitted or empty.
-    gpus:
-        Provides human-readable strings describing the GPUs available
-        for use by the basecaller. Note that even if 'is_gpu' is true,
-        this may be empty if no further details are available. This
-        field being empty _does not_ imply that CPU basecalling is in
-        use.
+ListProtocolOutputDirFilesResponse.__doc__ = """Attributes:
+    directories:
+        List of sub-directories in the directory specified
+    files:
+        List of files in the directory specified
+    current_listed_path:
+        The absolute directory that is being listed within this
+        response
 """
 FlowCellPosition.__doc__ = """Attributes:
     name:
@@ -785,10 +467,6 @@ FlowCellPosition.__doc__ = """Attributes:
         positions are always listed, even if (due to some hardware
         error) they can't be found. They are never in
         STATE_HARDWARE_REMOVED, and they always report a location.
-        Additionally, integrated positions cannot be associated
-        independently - if they are in STATE_NEEDS_ASSOCIATION, then
-        the host as a whole needs associating. Likewise, either all
-        integrated positions can run offline, or none of them can.
         Since 4.4
     can_sequence_offline:
         Indicates that this position can sequence offline.  For
@@ -841,39 +519,114 @@ FlowCellPosition.__doc__ = """Attributes:
         always an estimate - it is recommended to round larger values,
         like "about 2 minutes remaining".
 """
-FeatureList.__doc__ = """Attributes:
-    feature_flags:
-        feature_flags is a special value  If false, turns off all
-        other feature flags If true, allows individual flags to be
-        enabled and disabled
+AssociationDeviceCodeResponse.__doc__ = """DEPRECATED: since 6.2 device association is no-longer required.
+
+Attributes:
+    code:
+        The code required to associate the device with an account.  If
+        the request had `offline` set, this code is suitable for use
+        in the customer portal offline association page. Otherwise, it
+        is suitable for the online association APIs.
 """
-CreateDeveloperApiTokenRequest.__doc__ = """Attributes:
-    name:
-        User facing name describing the token.
-    expiry:
-        Optional expiry time for the token.
+ListProtocolOutputDirFilesRequest.__doc__ = """Attributes:
+    path:
+        Specify the root path to list files from. If the path is left
+        empty, then the base protocol output directory will be used.
+        Note that the path specified HAS to be a descendant of the
+        protocol output directory, otherwise a INVALID_ARGUMENT error
+        will be returned  If the path is left empty, and the path
+        specified in the user config doesn't exist, then the NOT_FOUND
+        error code will be returned
 """
-GetAlignmentReferenceInformationResponse.__doc__ = """Attributes:
-    estimated_load_time_seconds:
-        Estimated load time of the reference in seconds.
-    estimated_reference_size_bases:
-        Estimated size of the reference file in bases.
-    recommended_live_usage:
-        Does the reference file fit within the recommended live usage
-        memory size?  This uses an estimate of how much memory a
-        reference may use when running in the basecaller and compares
-        to the amount of memory in the sequencer. It does not account
-        for whether the reference will run in real time.
-    recommended_adaptive_sampling_usage:
-        True if adaptive sampling is recommended based on reference
-        file size in bases, and device type  Since 6.0
-    max_recommended_adaptive_sampling_bases:
-        The maximum limit for adaptive sampling number of bases based
-        on device type  Since 6.0
+FlowCellPositionsResponse.__doc__ = """Attributes:
+    total_count:
+        How many positions are available in total.  This is the same
+        in every message returned from a single call, and allows the
+        caller to easily see how many further positions might be in
+        subsequent messages.
+    positions:
+        Known flow cell positions.  Note that not all positions listed
+        here are necessarily available. In particular, integrated flow
+        cell positions (eg: on GridIONs or PromethIONs) will always be
+        listed.
+"""
+LocalAuthenticationTokenPathResponse.__doc__ = """Attributes:
+    path:
+        The full path of the local authentication token
 """
 FindProtocolsResponse.__doc__ = """Attributes:
     protocols:
         Protocols available for starting.
+"""
+ListSettingsForProtocolResponse.Output.__doc__ = """Output
+
+Attributes:
+    read_filtering_min_duplex_qscore:
+        Since 5.8
+"""
+AddSimulatedDeviceRequest.__doc__ = """Attributes:
+    name:
+        The name of the position, this must be unique and the correct
+        format:  For MinION Mk1B and Mk1C: "MS" followed by five
+        digits, eg: "MS12345". For GridION: "GS" followed by five
+        digits, eg: "GS12345". For P2 Solo: "P2S_" followed by five
+        digits, and then "-A" or "-B" eg: "P2S_12345-A".  PromethION
+        and P2 Solo position-names have no format restriction, but
+        must be unique. It is strongly recommended to follow standard
+        naming conventions:  For PromethION: start with "1A" and then
+        increase the number and/or the letter as you add more
+        positions. For P2 Solo: use "P2S_00000-A" and "P2S_00000-B"
+        (these fit the format of real P2 Solo devices, but do not
+        correspond to any real device).  Future versions might
+        constrain PromethION and P2 Solo device names. Using the above
+        suggestions should ensure that your code will continue to
+        work.  Note that MinKNOW Core 5.5 and earlier required the P2
+        Solo device name to be "P2S" followed by four digits. This is
+        no longer recommended.
+    type:
+        The type of the simulated device to create.  If left at
+        default (AUTO), then a sensible default device type is
+        selected.
+"""
+RemoveSimulatedDeviceRequest.__doc__ = """Attributes:
+    name:
+        The name of the simulated device to be removed
+"""
+GetSequencingKitsRequest.__doc__ = """Request message for `ManagerService.get_sequencing_kits`.
+
+Attributes:
+    flow_cell_product_code:
+        The product code of the flow cell that will be used for
+        sequencing.  Only kits compatible with this flow cell type
+        will be returned (currently, this means that there is at least
+        one (sequencing or control) protocol that is compatible with
+        both the kit and this flow cell product code).  This may also
+        affect the returned information about the kit. For example, if
+        it isn't possible to basecall on the flow cell, none of the
+        kits will claim to be barcoding capable (or compatible with
+        any barcoding expansion kits).
+"""
+Feature.__doc__ = """Attributes:
+    enabled:
+        Enable or disable the feature
+"""
+GetLampKitInfoRequest.__doc__ = """DEPRECATED 6.0: Lamp support has been removed."""
+ListSettingsForProtocolRequest.__doc__ = """Attributes:
+    identifier:
+        specify the protocol with a string containing all the
+        protocol's identifying components, eg:
+        "sequencing/sequencing_MIN106_DNA:FLO-MIN106:SQK-RPB004"
+    components:
+        specify the protocol providing the identifying components
+        individually. All components are optional, if more than one
+        protocol matches given strings, information about the first
+        will be returned.
+    flow_cell_connector:
+        The flow-cell connector type identifies the type of hardware
+        and is used to identify the correct protocol. The flow-cell
+        connector types applicable to the device are listed by the
+        get_flow_cell_types rpc in this service and the
+        get_device_state rpc in the device service.
 """
 ListSettingsForProtocolResponse.RunOptions.__doc__ = """Run options
 
@@ -883,9 +636,234 @@ Attributes:
     mux_scan_period:
          in hours
 """
-Feature.__doc__ = """Attributes:
-    enabled:
-        Enable or disable the feature
+FilesystemDiskSpaceInfo.__doc__ = """disk-usage information for one file-system
+
+Attributes:
+    filesystem_id:
+        The name of the file-system
+    bytes_available:
+        How much space is left on the file-system
+    bytes_capacity:
+        The total capacity of the file-system when empty.
+    what:
+        A list of what MinKNOW stores on this file-system, eg: reads,
+        logs, intermediate-files
+    bytes_to_stop_cleanly:
+        MinKNOW needs this much space to stop experiments. If
+        bytes_available goes below this number, data could be lost!
+    bytes_when_alert_issued:
+        The amount of space left on the file-system when
+        recommend_alert was set true.
+    recommend_alert:
+        MinKNOW recommends that you alert someone about the disk-usage
+    recommend_stop:
+        MinKNOW recommends that you stop experiments due to disk-usage
+        concerns
+    bytes_per_second:
+        Rate of change in bytes_available (per second) +'ve numbers
+        indicate that bytes_available is decreasing and space is being
+        used A value of 0 can indicate that this has not applicable or
+        not available.
+    file_types_stored:
+        A list of what types of file MinKNOW stores on this file-
+        system, eg: reads, logs, intermediate-files, etc.
+"""
+GetBasecallerFeaturesResponse.__doc__ = """Attributes:
+    is_live_basecalling_with_adaptive_sampling_recommended:
+        Is live basecalling with adaptive sampling recommended on this
+        hardware Currently not recommended for Apple or Mk1C  Since
+        5.9
+"""
+DescribeHostResponse.__doc__ = """Attributes:
+    product_code:
+        The product code for the host, if applicable.  If this is an
+        integrated Oxford Nanopore device, this will be the product
+        code of the device, or the part of the device that runs
+        MinKNOW (eg: several PromethION models have separate product
+        codes for the sequencing unit where the flow cells are
+        inserted and the compute unit - this would be the product code
+        for the compute unit).  Some example product codes:
+        ============  ================= Product Code  Name
+        ============  ================= GRD-X5B001    GridION X5
+        GRD-X5B002    GridION X5 GRD-X5B003    GridION X5 Mk1 MIN-101C
+        MinION Mk1C PRO-PRMC01    PromethION Beta PRO-PRC024
+        PromethION 24 PRO-PRC048    PromethION 48 ONT-314
+        PromethION (Production)  If MinKNOW is running on a machine
+        that is not provided by Oxford Nanopore (ie: their own laptop
+        or desktop machine with a MinION plugged in), this field will
+        be empty.
+    description:
+        A human-readable name for the type of host.  If `product_code`
+        is set, it will be the name of the model of instrument (see
+        the table in the `product_code` field). Otherwise it will be
+        empty.
+    serial:
+        The serial of Nanopore device.  If `product_code` is empty,
+        this will also be empty.  This uniquely identifies the device.
+        See also `network_name`.
+    network_name:
+        The network name of the host.  This is the name the host
+        system believes it has on the network. This can be useful if
+        an IP address was used to connect to the RPC system.  For
+        customer computers, this is the only available identifying
+        information for the system.
+    needs_association:
+        This device has not been associated with an account.
+        Association must be completed before using the device.  Note
+        that this will only ever be set for hosts that also have a
+        `product_code` and `serial`.  If this is true, all positions
+        will report as ``STATE_NEEDS_ASSOCIATION`` until the device is
+        associated. Even if this is false, however, removable
+        sequencing units (eg: the MinION Mk1B) may require their own
+        association (in which case they will individually report as
+        ``STATE_NEEDS_ASSOCIATION`` - see the `flow_cell_positions`
+        RPC).  Since 4.4 DEPRECATED since 6.2 device association is
+        no-longer required, this will always be false.
+    can_sequence_offline:
+        Whether the device can sequence while offline.  Not all
+        sequencing devices can sequence without an internet
+        connection. This indicates whether it is possible for the
+        integrated sequencing positions. Note that this will only be
+        set if `needs_association` is true.  Since 4.4
+    can_connect_to_usb_device:
+        Whether or not the host system can connect to a USB sequencer.
+        This is true on all systems except iOS where it is true if and
+        only if the driver that is shipped with the app has been
+        enabled in system settings.  Since 6.1
+    can_basecall:
+        Whether the device can currently provide basecalling
+    current_basecalling_hardware:
+        Information about the hardware being used right now by the
+        basecaller.
+    available_basecalling_hardware:
+        If more than one possible basecalling hardware selection can
+        be made, this field provides the details of those options.
+        Typically this will be a list of 'unused' GPUs.
+"""
+GetLampKitInfoResponse.__doc__ = """DEPRECATED 6.0: Lamp support has been removed and this response will
+always be empty.
+
+Attributes:
+    lamp_kits:
+        Lamp kit names
+"""
+GetBarcodeKeysRequest.__doc__ = """Attributes:
+    barcode_kit_names:
+        Names of barcode kits to obtain barcode names for  Fails with
+        INVALID_ARGUMENT if any of the requested `barcode_kit_names`
+        are unavailable
+    lamp_kit_name:
+        Name of lamp kit to obtain barcode names for.  Fails with
+        INVALID_ARGUMENT if the requested `lamp_kit_name` is
+        unavailable.  DEPRECATED 6.0: Lamp support has been removed
+        and this option will be ignored.
+"""
+FlowCellPosition.RpcPorts.__doc__ = """Attributes:
+    secure:
+        A port providing the standard gRPC protocol over TLS
+    secure_grpc_web:
+        A port providing the gRPC-Web protocol over TLS
+"""
+GetFlowCellTypesResponse.__doc__ = """Response message for `ManagerService.get_flow_cell_types`.
+
+Attributes:
+    types:
+        The flow cell types.
+"""
+ResetPositionRequest.__doc__ = """Attributes:
+    positions:
+        The names of positions to restart.
+    force:
+        Force the software to be restarted even when it appears to be
+        in a healthy state (ie: STATE_RUNNING).
+"""
+DescribeHostResponse.BasecallerSubstrate.__doc__ = """Details about the hardware on which basecalling may be run.
+
+Attributes:
+    is_gpu:
+        If false, this indicates that CPU basecalling is selected. In
+        this case, the 'gpus' field should be omitted or empty.
+    gpus:
+        Provides human-readable strings describing the GPUs available
+        for use by the basecaller. Note that even if 'is_gpu' is true,
+        this may be empty if no further details are available. This
+        field being empty _does not_ imply that CPU basecalling is in
+        use.
+"""
+FindProtocolsResponse.Protocol.__doc__ = """Attributes:
+    identifier:
+        An identifying string for protocol, of the form:
+        LOCATION:relative/path/to/protocol  The identifier uniquely
+        identifies the protocol.
+    requires_flow_cell_product_code:
+        Whether the protocol requires a flow cell product code in
+        order to start.
+    requires_sequencing_kit:
+        Whether the protocol requires a sequencing kit in order to
+        start.
+"""
+CheckBedFileRequest.__doc__ = """Attributes:
+    bed_file_path:
+        The path to the BED file to validate
+    index_file_path:
+        The path to the index file that the BED file should validate
+        against  Can be a .fasta, .fai or .mmi file
+    strict:
+        Strictly conforms to the BED file specification and allows
+        both tabs and spaces to be used as delimiters between columns
+    stranded:
+        Check strand values are allowed
+"""
+GetBarcodeKitInfoResponse.BarcodeKitInfo.__doc__ = """Attributes:
+    is_dual:
+        DEPRECATED 6.0: Dual barcoding support has been removed and
+        this value will always false.
+"""
+GetSequencingKitsResponse.BarcodingExpansionKit.__doc__ = """Information about a barcoding expansion kit.  In the future, this may
+include compatibility information for dual barcoding, for example.
+
+Attributes:
+    product_code:
+        The product code for the barcoding expansion kit.  This is the
+        user-visible name for the kit. It is the name used to order
+        kits, and is also displayed on the packaging.  While most
+        product codes are 10 characters, be aware that longer product
+        codes can exist.  Example: "EXP-NBD104".
+"""
+CreateDeveloperApiTokenResponse.__doc__ = """Attributes:
+    id:
+        Unique ID assigned to the token for identification purposes.
+        Not valid as an authentication token.
+    token:
+        Created token, available to be used with minknow API's
+        immediately.
+"""
+CreateDeveloperApiTokenRequest.__doc__ = """Attributes:
+    name:
+        User facing name describing the token.
+    expiry:
+        Optional expiry time for the token.
+"""
+FindProtocolsRequest.__doc__ = """Attributes:
+    flow_cell_product_code:
+        Find protocols that are compatible with this flow cell product
+        code.  Set to empty string to find protocols matching all flow
+        cell product codes.
+    sequencing_kit:
+        Limit to protocols that are compatible with this sequencing
+        kit.  Set to empty string to find protocols matching all kits.
+    experiment_type:
+        Limit response to certain protocol types.
+"""
+FlowCellPosition.Location.__doc__ = """Attributes:
+    x:
+        The column (counting from 0, left-to-right) of the flow cell
+        position on the sequencing unit when viewed from above/in
+        front.
+    y:
+        The row (counting from 0, top-to-bottom) of the flow cell
+        position on the sequencing unit when viewed from above/in
+        front.
 """
 GetGuppyInfoResponse.__doc__ = """Attributes:
     port:
@@ -896,11 +874,51 @@ GetGuppyInfoResponse.__doc__ = """Attributes:
     version:
         The basecaller server version.
 """
-GetFlowCellTypesResponse.__doc__ = """Response message for `ManagerService.get_flow_cell_types`.
+GetSequencingKitsResponse.Kit.__doc__ = """Information about a sequencing kit.
 
 Attributes:
-    types:
-        The flow cell types.
+    product_code:
+        The product code for the sequencing kit.  This is the user-
+        visible name for the kit. It is the name used to order kits,
+        and is also displayed on the packaging.  While most product
+        codes are 10-15 characters, be aware that longer (or shorter)
+        product codes can exist.  Examples: "SQK-LSK109", "OND-SQK-
+        LP0096S".
+    barcoding_expansion_kits:
+        Compatible barcoding expansion kits.  These are indexes into
+        the GetSequencingKitsResponse.barcoding_expansion_kits list.
+        For example, 0 would indicate the first kit in that list. The
+        values are guaranteed to be unique and valid indexes for that
+        list.
+    includes_barcoding:
+        Whether barcoding support is part of the sequencing kit.  If
+        this is set, barcoding can be done without any expansion kits
+        (and, in fact, barcoding is an integral part of the kit).
+    lamp_kit:
+        Whether the kit can be used for LamPORE diagnostics.
+        DEPRECATED 6.0: Lamp support has been removed and this value
+        will always be false.
+    has_control_protocol:
+        Whether there is a "control" protocol available for this kit.
+    no_sequencing_protocol:
+        Indicates there is no sequencing protocol available for this
+        kit.  This is an unusual situation. If a kit is known about,
+        it should generally have a sequencing protocol associated with
+        it, and it would be strange to have a control protocol
+        available but no sequencing protocol.
+    frequently_used:
+        Indicates that the sequencing kit is one of the most commonly
+        used ones.  This can be used to display such kits first, or
+        otherwise highlight them in some way.
+    dna:
+        The kit can be used with DNA samples.
+    rna:
+        The kit can be used with RNA samples.
+    pcr:
+        The kit can be used with samples that have had PCR applied to
+        them.
+    pcr_free:
+        The kit can be used without a PCR step.
 """
 StreamDiskSpaceInfoRequest.__doc__ = """Attributes:
     period:
@@ -908,29 +926,7 @@ StreamDiskSpaceInfoRequest.__doc__ = """Attributes:
         determining the period in seconds between updates. A period of
         0 is invalid
 """
-GetLampKitInfoResponse.__doc__ = """DEPRECATED 6.0: Lamp support has been removed and this response will
-always be empty.
-
-Attributes:
-    lamp_kits:
-        Lamp kit names
-"""
-CreateDirectoryRequest.__doc__ = """Attributes:
-    parent_path:
-        The path at which to create the directory.  This must exist,
-        be a directory, and be within the protocol output directory.
-        This can be determined via calls to
-        list_protocol_output_dir_files().
-    name:
-        The name of the directory to create.  This must be a single
-        path component (ie: it cannot contain '/' or '\'). There may
-        be other restrictions on valid characters, depending on the
-        operating system.
-"""
-RemoveSimulatedDeviceRequest.__doc__ = """Attributes:
-    name:
-        The name of the simulated device to be removed
-"""
+GetFlowCellTypesRequest.__doc__ = """Request message for `ManagerService.get_flow_cell_types`."""
 AssociationDeviceCodeRequest.__doc__ = """Offline association is now the default workflow  The following are
 therefore reserved/deprecated
 
@@ -944,5 +940,35 @@ Attributes:
         returned from `describe_host` has its ``needs_association``
         field set to true.  Passing a integrated flow cell position
         will return the code/key for the whole sequencing device.
+"""
+GetBarcodeKitInfoResponse.__doc__ = """Attributes:
+    barcode_kit_info:
+        Map of barcode kit name to barcode kit info
+"""
+WatchFlowCellPositionsResponse.__doc__ = """Each flow cell position will first be listed in `additions`. After
+that, it may appear in `changes` in zero or more messages. Then, it
+may appear in `removals` once, after which it will either never appear
+again, or appear in `additions` again (restarting the cycle).  No
+position will ever appear in more than one field in the same response
+message.
+
+Attributes:
+    additions:
+        Flow cell positions that are new (to this call).  Contains
+        flow cell positions that have not been seen before on this
+        call (or have re-appeared after being removed).  Note that a
+        flow cell position being listed here does not mean it is
+        available. In particular, integrated flow cell positions (eg:
+        on GridIONs or PromethIONs) will always be provided, so that
+        they can be positioned appropriately.
+    changes:
+        Flow cell positions that have changed state.  Every flow cell
+        position provided in this list will have previously been
+        provided in `additions`.
+    removals:
+        A flow cell position has been removed.  Note that this can
+        only happen with MinIONs - integrated flow cell positions are
+        never removed (if they become unavailable, this will be noted
+        in the `changes` field).
 """
 # @@protoc_insertion_point(module_scope)

@@ -4,14 +4,15 @@ import sys
 from getpass import getpass
 from pathlib import Path
 from typing import Optional, Tuple
+from minknow_api.tools.compatibility_helpers import datetime_utc_now
 
 try:
     from cryptography import x509
     from cryptography.hazmat.primitives import hashes
     from cryptography.hazmat.primitives.asymmetric import rsa
     from cryptography.hazmat.primitives.asymmetric.types import (
-        CERTIFICATE_PRIVATE_KEY_TYPES,
-        PRIVATE_KEY_TYPES,
+        CertificateIssuerPrivateKeyTypes,
+        PrivateKeyTypes,
     )
     from cryptography.x509.oid import ExtendedKeyUsageOID, NameOID
     from cryptography.hazmat.primitives import serialization
@@ -30,7 +31,7 @@ def key_to_pem(
     key: rsa.RSAPrivateKey,
     encryption: serialization.KeySerializationEncryption = serialization.NoEncryption(),
 ) -> bytes:
-    """Convert a key into PEM format, optionaly encrypting it."""
+    """Convert a key into PEM format, optionally encrypting it."""
     return key.private_bytes(
         encoding=serialization.Encoding.PEM,
         format=serialization.PrivateFormat.TraditionalOpenSSL,
@@ -56,9 +57,7 @@ def load_certificate(cert_path: Path) -> x509.Certificate:
         return x509.load_der_x509_certificate(cert_data)
 
 
-def load_private_key(
-    key_path: Path, key_pass_file: Optional[Path]
-) -> PRIVATE_KEY_TYPES:
+def load_private_key(key_path: Path, key_pass_file: Optional[Path]) -> PrivateKeyTypes:
     """Load a PEM encoded private key from disk.
 
     Args:
@@ -93,7 +92,7 @@ def generate_certificate_and_key(
     name: str,
     days_valid: int,
     issuer: Optional[x509.Name] = None,
-    issuer_key: Optional[CERTIFICATE_PRIVATE_KEY_TYPES] = None,
+    issuer_key: Optional[CertificateIssuerPrivateKeyTypes] = None,
 ) -> Tuple[x509.Certificate, rsa.RSAPrivateKey]:
     """Generate a certificate and key pair suitable for use as a client certificate with
     gRPC.
@@ -137,10 +136,8 @@ def generate_certificate_and_key(
         .issuer_name(issuer)
         .public_key(key.public_key())
         .serial_number(x509.random_serial_number())
-        .not_valid_before(datetime.datetime.utcnow())
-        .not_valid_after(
-            datetime.datetime.utcnow() + datetime.timedelta(days=days_valid)
-        )
+        .not_valid_before(datetime_utc_now())
+        .not_valid_after(datetime_utc_now() + datetime.timedelta(days=days_valid))
         .add_extension(
             x509.BasicConstraints(ca=can_sign, path_length=None),
             critical=True,

@@ -1,0 +1,356 @@
+syntax="proto3";
+
+package minknow_api.pebble_device;
+
+option java_package = "com.nanoporetech.minknow_api";
+option objc_class_prefix = "MKAPI";
+
+import "google/protobuf/wrappers.proto";
+import "minknow_api/rpc_options.proto";
+
+// Interface to control Pebble devices.
+// This service should be treated as experimental and subject to change
+service PebbleDeviceService {
+    // Change the settings which apply to the whole device.
+    rpc change_device_settings(ChangeDeviceSettingsRequest) returns (ChangeDeviceSettingsResponse) {
+        option idempotency_level = IDEMPOTENT;
+    }
+
+    // Get the current settings which apply to the whole device.
+    rpc get_device_settings(GetDeviceSettingsRequest) returns (GetDeviceSettingsResponse) {
+        option idempotency_level = NO_SIDE_EFFECTS;
+    }
+
+    // Change the settings which apply to the referenced channels.
+    rpc change_channel_settings(ChangeChannelSettingsRequest) returns (ChangeChannelSettingsResponse) {
+        option idempotency_level = IDEMPOTENT;
+    }
+
+    // Get the channels settings for the requested channel's
+    rpc get_channel_settings(GetChannelSettingsRequest) returns (GetChannelSettingsResponse) {
+        option idempotency_level = NO_SIDE_EFFECTS;
+    }
+
+    // Experimental access for research purposes to modify low level settings
+    // Note: Access will be removed once device integration complete
+    rpc change_research_only_settings(ChangeResearchOnlySettingsRequest) returns (ChangeResearchOnlySettingsResponse) {
+        option (experimental) = true;
+        option idempotency_level = IDEMPOTENT;
+    }
+}
+
+message WaveformSettings {
+    // The waveform data applied to the device (in millivolts)
+    //
+    // INVALID_ARGUMENT will be returned if the length of voltages is greater than 254
+    // INVALID_ARGUMENT will be returned if one of the voltages is outside of [-Vref..Vref]mV
+    repeated double voltages = 1;
+
+    // The number of samples each wavetable entry will be valid for
+    //
+    // Valid value must be between [1..31]
+    // INVALID_ARGUMENT will be returned if not between these values
+    google.protobuf.UInt32Value samples_per_entry = 2;
+}
+
+message TimingEnginePeriods {
+    message TimingState {
+        // The duration spent in each state is 1 more TEclock period than set
+        // in the associated register, so setting 1 results in a delay of 2 clock periods
+        google.protobuf.Int32Value duration = 1;
+
+        // The mask is built up of 7 user settable timing signals
+        // bit 0: INT_RESET
+        // bit 1: CDS_SAMPLE
+        // bit 2: CDS_RESET
+        // bit 3: DIG_ENABLE
+        // bit 4: CDS_SELECT
+        // bit 5: SYNC_MASTER
+        // bit 6: CML_ENABLE
+        google.protobuf.Int32Value mask = 2;
+    }
+
+    // There are 16 timing engine states each broken down in to duration
+    // and timing signal mask. If any of the states are omitted then the defaults will
+    // be used.
+    //
+    // Note: Setting duration of state 4 and 12 has no affect as it
+    // is modified by MinKNOW based on the sample rate. Reading
+    // it will return the chosen duration
+
+    // Zero index based map [0-15] of up to 16 timing engine states
+    map<uint32, TimingState> states = 3;
+
+    // If written true, other fields will be ignored and the hardware will use
+    // default timings. When read will return true if previously set true,
+    // it will not tell you if the timing periods you previously entered
+    // are the same as the default values.
+    google.protobuf.BoolValue use_default_values = 4;
+}
+
+message OverloadProtectionConfig
+{
+    // Set to enable or disable hardware based overload protection (saturation).
+    google.protobuf.BoolValue enabled = 1;
+
+    // Threshold for the number of periods counted over threshold before
+    // disconnection.
+    // Valid value must be between [0..7]
+    // INVALID_ARGUMENT will be returned if not between these values
+    google.protobuf.UInt32Value periods = 2;
+
+    // The minimum adc value that is not a saturation.
+    //
+    // If this value is not specified, the previous value is kept.
+    // Valid value must be between [-2047..2047]
+    // INVALID_ARGUMENT will be returned if not between these values
+    google.protobuf.Int32Value min_adc = 3;
+
+    // The maximum adc value that is not a saturation.
+    //
+    // If this value is not specified, the previous value is kept.
+    // Valid value must be between [-2047..2047]
+    // INVALID_ARGUMENT will be returned if not between these values
+    google.protobuf.Int32Value max_adc = 4;
+}
+
+message DeviceSettings {
+
+    enum RegenCurrentRange {
+        REGEN_RANGE_KEEP = 0;
+        REGEN_RANGE_0_5nA_STEP_0_1nA = 1;
+        REGEN_RANGE_0_667nA_STEP_0_133nA = 2;
+        REGEN_RANGE_1_0nA_STEP_0_2nA = 3;
+        REGEN_RANGE_2_0nA_STEP_0_4nA = 4;
+    }
+
+    enum LowPassFilterValue {
+        LPF_KEEP = 0;
+        LPF_0_us = 1;
+        LPF_696kHz_2_us = 2;
+        LPF_348kHz_4_us = 3;
+        LPF_232kHz_7_us = 4;
+        LPF_174kHz_9_us = 5;
+        LPF_139kHz_11_us = 6;
+        LPF_116kHz_13_us = 7;
+        LPF_99kHz_16_us = 8;
+    };
+
+    // The number of measurements to take each second.
+    //
+    // Possible values are between 1000, and 5000.
+    // If the value is outside of this range, it will be clamped within it
+    //
+    // FAILED_PRECONDITION will be returned if attempting to change during acquisition
+    google.protobuf.Int32Value sample_rate = 1;
+
+    // If the device is capable (see device.get_device_info().temperature_controllable)
+    // then this sets the target temperature to keep the flow-cell at.
+    //
+    // This value must be between the limits specified in the application config,
+    // see: min_user_setpoint_temperature_celsius and max_user_setpoint_temperature_celsius
+    // INVALID_ARGUMENT will be returned if outside these limits
+    google.protobuf.FloatValue temperature_target = 2;
+
+    // The reference voltage Vref
+    //
+    // This value must be within the range of [700..1100](mV) and will be rounded down
+    // to the nearest 50mV.
+    // INVALID_ARGUMENT will be returned if outside these limits
+    google.protobuf.Int32Value reference_voltage = 3;
+
+    // The unblock voltage to apply when a channel is unblocking.
+    //
+    // The acceptable input range depends on Vref
+    // The default Vref of 900mV gives the unblock level a range between [-840..900]mV
+    // INVALID_ARGUMENT will be returned if outside of the limits set depending on Vref
+    google.protobuf.Int32Value unblock_voltage = 4;
+
+    // Determines the range of regen current available for selection
+    //         Range 0.5nA, step 0.1nA
+    //         Range 0.667nA, step 0.133nA
+    //         Range 1.0nA, step 0.2nA (DEFAULT)
+    //         Range 2.0nA, step 0.4nA
+    // INVALID_ARGUMENT will be returned if range option does not exist
+    RegenCurrentRange regen_current_range = 5;
+
+    // Control the regeneration current used when regenerating well's.
+    //
+    // The acceptable value is in pico Amps and depends on the specified
+    // regen_current_range option. Will round down to nearest acceptable
+    // step in value within the range.
+    // INVALID_ARGUMENT will be returned if outside the acceptable range
+    google.protobuf.Int32Value regen_current = 6;
+
+    // Voltage clamp for regeneration circuit (in millivolts)
+    //
+    // The voltage in the regeneration circuit is clamped under this value,
+    // whilst applying the current specified in each quads settings.
+    //
+    // This is a +/- voltage relative to Vref
+    // The polarity is determined by the regen current
+    // With a default Vref of 900mV this gives the regen level a range of [0..840]mV
+    // INVALID_ARGUMENT will be returned if outside the acceptable range
+    google.protobuf.UInt32Value regen_current_voltage_clamp = 7;
+
+    // Settings controlling the device bias voltage
+    oneof bias_voltage_setting {
+        // The value to apply as the bias voltage (in millivolts)
+        //
+        // Valid values are in the range [-Vref..Vref]mv
+        // INVALID_ARGUMENT will be returned if outside this range
+        google.protobuf.DoubleValue bias_voltage = 8;
+
+        // The wavetable settings
+        WaveformSettings bias_voltage_waveform = 9;
+    }
+
+    // Integration capacitor used for controlling the Gain
+    // This size of the capacitance used is based on the provided setting
+    // with a value of [0..31]
+    //
+    // Refer to §2.3.1 of the OG2 ASIC documentation for both the nominal
+    // and measured capacitance that each setting produces.
+    //
+    // This value is applied globally to all QUADs and therefore all channels
+    //
+    // INVALID_ARGUMENT will be returned if outside the range of [0..31]
+    google.protobuf.Int32Value int_capacitor = 10;
+
+    // Low pass filter time constant
+    // This modifies the anti-alias resistor to produce a specific time constant
+    // for the low pass filter.
+    LowPassFilterValue lpf_time_constant = 11;
+
+    // If specified, the device will adopt these timings to set how
+    // long is spent at various stages of the sampling process.
+    // The message includes a way of returning to default timings.
+    //
+    // FAILED_PRECONDITION will be returned if attempting to change during acquisition
+    TimingEnginePeriods timings = 12;
+
+    // Enable ASIC power save.
+    //
+    // Setting to active will save power, but doing so will allow the ASIC to cool down,
+    // and it will take time to heat it up again along with performing a device reset.
+    google.protobuf.BoolValue power_save_active = 13;
+
+    // Settings for the hardware based saturation/overload protection (spike suppression)
+    OverloadProtectionConfig overload_protection = 14;
+
+}
+
+message ChangeDeviceSettingsRequest {
+    DeviceSettings settings = 1 [(rpc_unwrap) = true];
+}
+
+message ChangeDeviceSettingsResponse {
+    // The sampling frequency actually applied to the hardware, as
+    // close as possible to the requested rate.
+    //
+    // Note: only returned if sampling rate was set as part of this call.
+    google.protobuf.Int32Value real_sample_rate = 1;
+}
+
+message GetDeviceSettingsRequest {
+}
+
+message GetDeviceSettingsResponse {
+    DeviceSettings settings = 1 [(rpc_unwrap) = true];
+}
+
+
+message ChannelSettings {
+
+    // Note: Check device.get_flow_cell_info().wells_per_channel to determine
+    //       usable input wells.
+    enum Input {
+        NO_CONNECTION = 0;
+        WELL_1 = 1;
+        WELL_2 = 2;
+        OTHER = 3;
+    }
+
+    enum Mode {
+        INACTIVE = 0;
+        ACTIVE = 1;
+        UNBLOCK = 2;
+        MEMBRANE_SIMULATION = 3;
+        REGEN = 4;
+    }
+
+    // The input to be digitised
+    Input input = 1 [(rpc_required) = true];
+
+    // The channel mode
+    Mode mode = 2 [(rpc_required) = true];
+}
+
+message ChangeChannelSettingsRequest {
+    // 1 based map of up to 400 different channel settings
+    map<uint32, ChannelSettings> channels = 1;
+
+    // If supplied, contains settings applied to every channel before then
+    // applying any specific settings in the per channel settings.
+    ChannelSettings channel_default = 2;
+}
+
+message ChangeChannelSettingsResponse {
+}
+
+message GetChannelSettingsRequest {
+    // The channels (one based) to return data for.
+    repeated uint32 channels = 1 [(rpc_required) = true];
+}
+
+message GetChannelSettingsResponse {
+    // List of all requested pixel settings, in the order requested.
+    repeated ChannelSettings channels = 1;
+}
+
+message ResearchOnlySettings {
+    message AsicRegisterWrite {
+        // Register to write to, value between 0..254
+        uint32 address = 2;
+        // Value to write to the register, value between 0..255
+        // Note: If value over two registers (high and low) then two separate writes required
+        uint32 value = 3;
+        // Delay to add after this write, before the next
+        uint32 delay = 4;
+    }
+
+    message InstrumentRegisterWrite {
+        // Register to write
+        uint32 address = 6;
+        // Value
+        uint32 value = 7;
+        // Delay to add after this write, before the next
+        uint32 delay = 8;
+    }
+
+    // List of ASIC register writes to append
+    // Use at own risk as no validation is performed on the address
+    // or value of the individual writes.
+    //
+    // The number of writes in single request limited to 128
+    // due to internal MinKNOW limitations
+    // INVALID_ARGUMENT will be returned if greater than this limit
+    repeated AsicRegisterWrite asic_writes = 5;
+
+    // List of instrument register writes
+    // Use at own risk as no validation is performed on the address
+    // or value of the individual writes.
+    //
+    // The number of writes in single request limited to 16
+    // due to internal MinKNOW limitations
+    // INVALID_ARGUMENT will be returned if greater than this limit
+    repeated InstrumentRegisterWrite instrument_writes = 9;
+}
+
+message ChangeResearchOnlySettingsRequest {
+    ResearchOnlySettings settings = 1 [(rpc_unwrap) = true];
+}
+
+message ChangeResearchOnlySettingsResponse {
+
+}

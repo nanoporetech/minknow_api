@@ -266,7 +266,7 @@ class DeviceServiceServicer(object):
         raise NotImplementedError('Method not implemented!')
 
     def reset_device_settings(self, request, context):
-        """Reset all settings associate with the current device.
+        """Reset all settings associated with the current device.
 
         This call will initialise all settings to their default state, ie the same as when MinKNOW boots.
         """

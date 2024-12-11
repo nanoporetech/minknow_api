@@ -64,6 +64,11 @@ class AcquisitionServiceStub(object):
                 request_serializer=minknow__api_dot_acquisition__pb2.SetSignalReaderRequest.SerializeToString,
                 response_deserializer=minknow__api_dot_acquisition__pb2.SetSignalReaderResponse.FromString,
                 )
+        self.get_signal_reader = channel.unary_unary(
+                '/minknow_api.acquisition.AcquisitionService/get_signal_reader',
+                request_serializer=minknow__api_dot_acquisition__pb2.GetSignalReaderRequest.SerializeToString,
+                response_deserializer=minknow__api_dot_acquisition__pb2.GetSignalReaderResponse.FromString,
+                )
         self.set_bream_info = channel.unary_unary(
                 '/minknow_api.acquisition.AcquisitionService/set_bream_info',
                 request_serializer=minknow__api_dot_acquisition__pb2.SetBreamInfoRequest.SerializeToString,
@@ -200,6 +205,15 @@ class AcquisitionServiceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def get_signal_reader(self, request, context):
+        """Find the signal reader in use. This may have been configured by MinKNOW prior to a protocol being begun.
+
+        Since 6.2
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
     def set_bream_info(self, request, context):
         """Set the bream information for the current acquisition.
 
@@ -282,6 +296,11 @@ def add_AcquisitionServiceServicer_to_server(servicer, server):
                     servicer.set_signal_reader,
                     request_deserializer=minknow__api_dot_acquisition__pb2.SetSignalReaderRequest.FromString,
                     response_serializer=minknow__api_dot_acquisition__pb2.SetSignalReaderResponse.SerializeToString,
+            ),
+            'get_signal_reader': grpc.unary_unary_rpc_method_handler(
+                    servicer.get_signal_reader,
+                    request_deserializer=minknow__api_dot_acquisition__pb2.GetSignalReaderRequest.FromString,
+                    response_serializer=minknow__api_dot_acquisition__pb2.GetSignalReaderResponse.SerializeToString,
             ),
             'set_bream_info': grpc.unary_unary_rpc_method_handler(
                     servicer.set_bream_info,
@@ -470,6 +489,23 @@ class AcquisitionService(object):
         return grpc.experimental.unary_unary(request, target, '/minknow_api.acquisition.AcquisitionService/set_signal_reader',
             minknow__api_dot_acquisition__pb2.SetSignalReaderRequest.SerializeToString,
             minknow__api_dot_acquisition__pb2.SetSignalReaderResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def get_signal_reader(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/minknow_api.acquisition.AcquisitionService/get_signal_reader',
+            minknow__api_dot_acquisition__pb2.GetSignalReaderRequest.SerializeToString,
+            minknow__api_dot_acquisition__pb2.GetSignalReaderResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 

@@ -268,8 +268,8 @@ class DataService(object):
             include_bias_voltages (bool, optional): Whether to include bias voltage information.
             calibrated_data (bool, optional): Whether the data should be calibrated.
             return_when_listening (bool, optional): When this value is set to true, then an empty message will be sent back
-                to the client to indicate that the backend has acknowleged the request,
-                and that any calls made that will affect the signal after that initial 
+                to the client to indicate that the backend has acknowledged the request,
+                and that any calls made that will affect the signal after that initial
                 response will be reflected in the next messages
 
         Returns:

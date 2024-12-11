@@ -231,9 +231,9 @@ class MinionDeviceService(object):
                 Default is true.
             enable_bias_voltage_lookup (google.protobuf.wrappers_pb2.BoolValue, optional): Use the bias voltage lookup table to set the bias voltage.
 
-                If this is enabled, the bias voltage will be updated every millisecond with each entry in the
-                bias voltage lookup table (see ``bias_voltage_lookup_table``) in turn, cycling through when
-                the end of the table is reached.
+                If this is enabled, the bias voltage will be updated every 1.25ms (ie: at 800Hz) with each
+                entry in the bias voltage lookup table (see ``bias_voltage_lookup_table``) in turn, cycling
+                through when the end of the table is reached.
 
                 This has the effect of producing a bias voltage waveform.
 

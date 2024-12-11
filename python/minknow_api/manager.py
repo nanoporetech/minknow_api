@@ -24,6 +24,7 @@ from google.protobuf import timestamp_pb2
 import minknow_api
 import minknow_api.basecaller_service
 import minknow_api.keystore_service
+import minknow_api.hardware_check_service
 import minknow_api.manager_pb2 as manager_pb2
 import minknow_api.manager_service
 
@@ -130,7 +131,7 @@ class FlowCellPosition(object):
     Attributes:
         description (minknow_api.manager_pb2.FlowCellPosition): The description of
             the flow cell position as returned from a call to ``flow_cell_positions``
-            on the manger.
+            on the manager.
         credentials (grpc.ChannelCredentials): The credentials used for the gRPC
             connection. Can used to connect to other MinKNOW interfaces. Changing this
             will affect future calls to connect().
@@ -283,7 +284,7 @@ class Manager(ServiceBase):
         channel (grpc.Channel): The gRPC channel used for communication.
         core_version (str): The running version of MinKNOW Core.
         core_version_components (tuple): A tuple of three integers describing the major, minor and
-            patch parts of the core version. Useful for version comparisions.
+            patch parts of the core version. Useful for version comparisons.
         credentials (grpc.ChannelCredentials): The credentials used for the gRPC
             connection. Can used to connect to other MinKNOW interfaces. Changing this
             will not affect the connection to the manager, but will affect connections
@@ -378,6 +379,15 @@ class Manager(ServiceBase):
 
     def __repr__(self) -> str:
         return "Manager({!r}, {!r})".format(self.host, self.port)
+
+    def hardware_check(self) -> minknow_api.hardware_check_service.HardwareCheckService:
+        """
+        Find the hardware check service running for this manager.
+
+        Returns:
+            HardwareCheck: The gRPC service for the manager level hardware check.
+        """
+        return minknow_api.hardware_check_service.HardwareCheckService(self.channel)
 
     def keystore(self) -> minknow_api.keystore_service.KeyStoreService:
         """

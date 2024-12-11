@@ -83,6 +83,9 @@ class AnalysisConfigurationService(object):
                 This can be passed instead of the keyword arguments.
             _timeout (float, optional): The call will be cancelled after this number of seconds
                 if it has not been completed.
+            run_id (str, optional): The unique identifier assigned to this acquisition run.
+
+                Since 6.2
 
         Returns:
             minknow_api.analysis_configuration_pb2.AnalysisConfiguration
@@ -101,6 +104,10 @@ class AnalysisConfigurationService(object):
         unused_args = set(kwargs.keys())
 
         _message = GetAnalysisConfigurationRequest()
+
+        if "run_id" in kwargs:
+            unused_args.remove("run_id")
+            _message.run_id = kwargs['run_id']
 
         if len(unused_args) > 0:
             raise ArgumentError("Unexpected keyword arguments to get_analysis_configuration: '{}'".format(", ".join(unused_args)))
@@ -139,7 +146,7 @@ class AnalysisConfigurationService(object):
 
         'including_default_value_fields' is needed because in proto3, primitive values that are default initialised (like a uint32 with value 0)
         will not be sent on the wire, so the value wouldn't appear when converting to json. In practice, most values are wrapper types and this
-        field won't have an affect in wrapper types, but it does affect enum types as the default initailised value is the 0th enum.
+        field won't have an affect in wrapper types, but it does affect enum types as the default initialised value is the 0th enum.
 
         NOTE: if the analysis configuration was set using the new parameters (with the filename for basecalling config files), the old parameters
         from jsn will be ignored. So set_analysis_configuration must be used with either the old protobuf message for the basecaller parameters,
@@ -402,9 +409,9 @@ class AnalysisConfigurationService(object):
                 which the basecaller should locate (see basecaller application config entry: "data_path")
             align_filter (bool, optional): Enable or disable pass/fail filtering based on alignment.  When enabled, reads which
                 do not align to any references will be marked as "failed", and written to the folder
-                specified in MinKNOW configuration for failed reads.  
+                specified in MinKNOW configuration for failed reads.
 
-                The setting applies to both regular read filtering and target filtering; if it is 
+                The setting applies to both regular read filtering and target filtering; if it is
                 enabled, then a read will not be marked as a target read if it does not align to a reference.
 
                 Default setting is false, i.e. disabled.
@@ -424,8 +431,8 @@ class AnalysisConfigurationService(object):
                 Since 3.5
             target_filtering (minknow_api.analysis_configuration_pb2.BasecallerConfiguration.TargetFiltering, optional): Control how target filtering is applied to output of basecaller.
                 Reads which pass these filtering criteria will be marked as
-                "target" reads, and will be written to a separate folder; this 
-                folder is specified in MinKNOW configuration.  Reads which do 
+                "target" reads, and will be written to a separate folder; this
+                folder is specified in MinKNOW configuration.  Reads which do
                 not pass these criteria will have the regular read filtering
                 applied to them, as specified by the `read-filtering` settings
                 above.
@@ -550,9 +557,9 @@ class AnalysisConfigurationService(object):
                 which the basecaller should locate (see basecaller application config entry: "data_path")
             align_filter (bool, optional): Enable or disable pass/fail filtering based on alignment.  When enabled, reads which
                 do not align to any references will be marked as "failed", and written to the folder
-                specified in MinKNOW configuration for failed reads.  
+                specified in MinKNOW configuration for failed reads.
 
-                The setting applies to both regular read filtering and target filtering; if it is 
+                The setting applies to both regular read filtering and target filtering; if it is
                 enabled, then a read will not be marked as a target read if it does not align to a reference.
 
                 Default setting is false, i.e. disabled.
@@ -572,8 +579,8 @@ class AnalysisConfigurationService(object):
                 Since 3.5
             target_filtering (minknow_api.analysis_configuration_pb2.BasecallerConfiguration.TargetFiltering, optional): Control how target filtering is applied to output of basecaller.
                 Reads which pass these filtering criteria will be marked as
-                "target" reads, and will be written to a separate folder; this 
-                folder is specified in MinKNOW configuration.  Reads which do 
+                "target" reads, and will be written to a separate folder; this
+                folder is specified in MinKNOW configuration.  Reads which do
                 not pass these criteria will have the regular read filtering
                 applied to them, as specified by the `read-filtering` settings
                 above.
@@ -1065,7 +1072,7 @@ class AnalysisConfigurationService(object):
                               [],
                               "minknow_api.analysis_configuration.AnalysisConfigurationService")
     def set_dynamic_analysis_configuration(self, _message=None, _timeout=None, **kwargs):
-        """Set the dynamic analysis configuration, used during 
+        """Set the dynamic analysis configuration, used during
 
         This can be changed during an acquisition period, and should be called as new values become appropriate.
         The new analysis parameters will be used after any data already received has been processe.

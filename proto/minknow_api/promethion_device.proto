@@ -66,20 +66,20 @@ message DeviceSettings {
     //
     // Possible values are between 1000, and 10000.
     // If the value is outside of this range, it will be clamped within it
-    // 
+    //
     // This value cannot be changed during acquisition.
     google.protobuf.Int32Value sampling_frequency = 1;
 
     // The value to apply as the ramp voltage (in millivolts)
-    // 
-    // Valid values are in the range -1250mv..1250mv 
+    //
+    // Valid values are in the range -1250mv..1250mv
     google.protobuf.DoubleValue ramp_voltage = 2;
 
     // Settings controlling the device bias voltage
     oneof bias_voltage_setting {
         // The value to apply as the bias voltage (in millivolts)
-        // 
-        // Valid values are in the range -1250mv..1250mv 
+        //
+        // Valid values are in the range -1250mv..1250mv
         double bias_voltage = 3;
 
         // The waveform settings
@@ -207,7 +207,7 @@ message PixelSettings {
         //
         // ALL is not a valid value here (other values are acceptable).
         InputConfig input_well = 1;
-        
+
         // Control which wells are being regenerated (has the specified
         // regeneration current driven to it).
         //
@@ -311,7 +311,7 @@ message PixelSettings {
     LowPassFilter cutoff_frequency = 3;
 
     // Signal gain multiplier, applied to the integrator circuit.
-    GainMultiplier gain_multiplier = 4; 
+    GainMultiplier gain_multiplier = 4;
 
     // Gain capacitor, used in the integrator circuit.
     GainCapacitor gain_capacitor = 5;
@@ -337,7 +337,7 @@ message PixelSettings {
     // and allows users to read regen current via the channel adc value.
     google.protobuf.BoolValue regeneration_current_test_enabled = 11;
 
-    // The bias current for the amplifier - this controls the level of noise of the signal. 
+    // The bias current for the amplifier - this controls the level of noise of the signal.
     // The higher the bias current, the lower the noise, but the bigger the heat and power drawn by
     // the amplifier. If it is set to off, no signal readings can be made.
     BiasCurrent bias_current = 12;

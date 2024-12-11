@@ -1,6 +1,6 @@
-cryptography~=39.0
-grpcio==1.60.0
-grpcio-tools==1.60.0
+cryptography~=42.0
+grpcio==1.60.1
+grpcio-tools==1.60.1
 minknow-api-service-plugin
 pre-commit
 pytest

@@ -16,7 +16,7 @@ from minknow_api import rpc_options_pb2 as minknow__api_dot_rpc__options__pb2
 from google.protobuf import wrappers_pb2 as google_dot_protobuf_dot_wrappers__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x18minknow_api/device.proto\x12\x12minknow_api.device\x1a\x1dminknow_api/rpc_options.proto\x1a\x1egoogle/protobuf/wrappers.proto\":\n\x14\x43hannelConfiguration\x12\x0c\n\x04well\x18\x01 \x01(\r\x12\x14\n\x0ctest_current\x18\x02 \x01(\x08\"S\n\x1cReturnedChannelConfiguration\x12\x0c\n\x04well\x18\x01 \x01(\r\x12\x14\n\x0ctest_current\x18\x02 \x01(\x08\x12\x0f\n\x07unblock\x18\x04 \x01(\x08\"\x16\n\x14GetDeviceInfoRequest\"\xa4\x04\n\x15GetDeviceInfoResponse\x12\x11\n\tdevice_id\x18\x01 \x01(\t\x12I\n\x0b\x64\x65vice_type\x18\x02 \x01(\x0e\x32\x34.minknow_api.device.GetDeviceInfoResponse.DeviceType\x12\x14\n\x0cis_simulated\x18\x03 \x01(\x08\x12\x19\n\x11max_channel_count\x18\x04 \x01(\r\x12\x1d\n\x15max_wells_per_channel\x18\x05 \x01(\r\x12\x1b\n\x13\x63\x61n_set_temperature\x18\x06 \x01(\x08\x12\x14\n\x0c\x64igitisation\x18\x07 \x01(\r\x12T\n\x10\x66irmware_version\x18\n \x03(\x0b\x32:.minknow_api.device.GetDeviceInfoResponse.ComponentVersion\x1aM\n\x10\x43omponentVersion\x12\x11\n\tcomponent\x18\x01 \x01(\t\x12\x0f\n\x07version\x18\x02 \x01(\t\x12\x15\n\rserial_number\x18\x03 \x01(\t\"\x84\x01\n\nDeviceType\x12\n\n\x06MINION\x10\x00\x12\x0b\n\x07GRIDION\x10\x02\x12\x0e\n\nPROMETHION\x10\x03\x12\x0f\n\x0bMINION_MK1C\x10\x04\x12\x0b\n\x07TRAXION\x10\x05\x12\x0b\n\x07P2_SOLO\x10\x06\x12\x0f\n\x0bMINION_MK1D\x10\x07\x12\x11\n\rP2_INTEGRATED\x10\x08\"\x17\n\x15GetDeviceStateRequest\"\xe8\x01\n\x16GetDeviceStateResponse\x12L\n\x0c\x64\x65vice_state\x18\x01 \x01(\x0e\x32\x36.minknow_api.device.GetDeviceStateResponse.DeviceState\x12\x46\n\x13\x66low_cell_connector\x18\x02 \x01(\x0e\x32).minknow_api.device.FlowCellConnectorType\"8\n\x0b\x44\x65viceState\x12\x17\n\x13\x44\x45VICE_DISCONNECTED\x10\x00\x12\x10\n\x0c\x44\x45VICE_READY\x10\x01\"\x1a\n\x18StreamDeviceStateRequest\"\x18\n\x16GetFlowCellInfoRequest\"\xb3\x04\n\x17GetFlowCellInfoResponse\x12\x15\n\rhas_flow_cell\x18\x01 \x01(\x08\x12\x15\n\rchannel_count\x18\x02 \x01(\r\x12\x19\n\x11wells_per_channel\x18\x03 \x01(\r\x12\x14\n\x0c\x66low_cell_id\x18\x04 \x01(\t\x12\x13\n\x0b\x61sic_id_str\x18\r \x01(\t\x12\x14\n\x0cproduct_code\x18\x06 \x01(\t\x12#\n\x1buser_specified_flow_cell_id\x18\x07 \x01(\t\x12#\n\x1buser_specified_product_code\x18\x08 \x01(\t\x12\x13\n\x0bhas_adapter\x18\t \x01(\x08\x12\x12\n\nadapter_id\x18\n \x01(\t\x12\x1c\n\x12temperature_offset\x18\x0b \x01(\x02H\x00\x12\x14\n\x0c\x61sic_version\x18\x0c \x01(\t\x12J\n\x17insertion_script_status\x18\x0e \x01(\x0e\x32).minknow_api.device.InsertionScriptStatus\x12\x11\n\tuse_count\x18\x0f \x01(\r\x12\x17\n\x0fuse_count_limit\x18\x10 \x01(\r\x12\x13\n\x0b\x62\x61rcode_kit\x18\x11 \x01(\t\x12\x10\n\x08\x62\x61rcodes\x18\x12 \x03(\r\x12\x19\n\x11\x66low_cell_partner\x18\x13 \x01(\t\x12\x0e\n\x06is_ctc\x18\x14 \x01(\x08\x42\x1d\n\x1btemperature_offset_nullable\"\x1b\n\x19StreamFlowCellInfoRequest\"5\n!SetUserSpecifiedFlowCellIdRequest\x12\x10\n\x02id\x18\x01 \x01(\tB\x04\x88\xb5\x18\x01\"$\n\"SetUserSpecifiedFlowCellIdResponse\"8\n\"SetUserSpecifiedProductCodeRequest\x12\x12\n\x04\x63ode\x18\x01 \x01(\tB\x04\x88\xb5\x18\x01\"%\n#SetUserSpecifiedProductCodeResponse\"\x1a\n\x18GetChannelsLayoutRequest\"W\n\x19GetChannelsLayoutResponse\x12:\n\x0f\x63hannel_records\x18\x01 \x03(\x0b\x32!.minknow_api.device.ChannelRecord\"\xa4\x01\n\rChannelRecord\x12\n\n\x02id\x18\x01 \x01(\r\x12\x0c\n\x04name\x18\x02 \x01(\t\x12@\n\x0bmux_records\x18\x03 \x03(\x0b\x32+.minknow_api.device.ChannelRecord.MuxRecord\x1a\x37\n\tMuxRecord\x12\n\n\x02id\x18\x01 \x01(\r\x12\x0e\n\x06phys_x\x18\x02 \x01(\r\x12\x0e\n\x06phys_y\x18\x03 \x01(\r\"\x1c\n\x1aResetDeviceSettingsRequest\"\x1d\n\x1bResetDeviceSettingsResponse\"\x80\x01\n\x15SetCalibrationRequest\x12\x1b\n\rfirst_channel\x18\x01 \x01(\rB\x04\x88\xb5\x18\x01\x12\x1a\n\x0clast_channel\x18\x02 \x01(\rB\x04\x88\xb5\x18\x01\x12\x15\n\x07offsets\x18\x03 \x03(\x02\x42\x04\x88\xb5\x18\x01\x12\x17\n\tpa_ranges\x18\x04 \x03(\x02\x42\x04\x88\xb5\x18\x01\"\x18\n\x16SetCalibrationResponse\"\x19\n\x17\x43learCalibrationRequest\"\x1a\n\x18\x43learCalibrationResponse\"P\n\x15GetCalibrationRequest\x12\x1b\n\rfirst_channel\x18\x01 \x01(\rB\x04\x88\xb5\x18\x01\x12\x1a\n\x0clast_channel\x18\x02 \x01(\rB\x04\x88\xb5\x18\x01\"k\n\x16GetCalibrationResponse\x12\x14\n\x0c\x64igitisation\x18\x01 \x01(\r\x12\x0f\n\x07offsets\x18\x02 \x03(\x02\x12\x11\n\tpa_ranges\x18\x03 \x03(\x02\x12\x17\n\x0fhas_calibration\x18\x04 \x01(\x08\"\x93\x03\n\x15SetTemperatureRequest\x12\x13\n\x0btemperature\x18\x01 \x01(\x02\x12\x62\n\x14wait_for_temperature\x18\x02 \x01(\x0b\x32\x44.minknow_api.device.SetTemperatureRequest.WaitForTemperatureSettings\x12j\n\x1csecondary_temperature_limits\x18\x03 \x01(\x0b\x32\x44.minknow_api.device.SetTemperatureRequest.SecondaryTemperatureLimits\x1a]\n\x1aWaitForTemperatureSettings\x12\x0f\n\x07timeout\x18\x01 \x01(\r\x12\x1b\n\x13min_stable_duration\x18\x03 \x01(\r\x12\x11\n\ttolerance\x18\x02 \x01(\x02\x1a\x36\n\x1aSecondaryTemperatureLimits\x12\x0b\n\x03min\x18\x01 \x01(\x02\x12\x0b\n\x03max\x18\x02 \x01(\x02\"\xb4\x02\n\x16SetTemperatureResponse\x12)\n!timed_out_waiting_for_temperature\x18\x01 \x01(\x08\x12O\n\x06result\x18\x02 \x01(\x0e\x32?.minknow_api.device.SetTemperatureResponse.SetTemperatureResult\"\x9d\x01\n\x14SetTemperatureResult\x12\x1a\n\x16TARGET_TEMPERATURE_SET\x10\x00\x12\x17\n\x13REACHED_TEMPERATURE\x10\x01\x12%\n!TIMED_OUT_WAITING_FOR_TEMPERATURE\x10\x02\x12)\n%SECONDARY_TEMPERATURE_LIMITS_EXCEEDED\x10\x03\"\x17\n\x15GetTemperatureRequest\"\xc3\x05\n\x16GetTemperatureResponse\x12N\n\x06minion\x18\x01 \x01(\x0b\x32<.minknow_api.device.GetTemperatureResponse.MinIONTemperatureH\x00\x12V\n\npromethion\x18\x02 \x01(\x0b\x32@.minknow_api.device.GetTemperatureResponse.PromethIONTemperatureH\x00\x12\x37\n\x12target_temperature\x18\x03 \x01(\x0b\x32\x1b.google.protobuf.FloatValue\x12\x42\n\x1bminion_starting_temperature\x18\x04 \x01(\x0b\x32\x1b.google.protobuf.FloatValueH\x01\x12\x46\n\x1fpromethion_starting_temperature\x18\x05 \x01(\x0b\x32\x1b.google.protobuf.FloatValueH\x01\x1a\x85\x01\n\x11MinIONTemperature\x12\x35\n\x10\x61sic_temperature\x18\x01 \x01(\x0b\x32\x1b.google.protobuf.FloatValue\x12\x39\n\x14heatsink_temperature\x18\x02 \x01(\x0b\x32\x1b.google.protobuf.FloatValue\x1a\x8c\x01\n\x15PromethIONTemperature\x12\x39\n\x14\x66lowcell_temperature\x18\x01 \x01(\x0b\x32\x1b.google.protobuf.FloatValue\x12\x38\n\x13\x63hamber_temperature\x18\x02 \x01(\x0b\x32\x1b.google.protobuf.FloatValueB\r\n\x0btemperatureB\x16\n\x14starting_temperature\"2\n\x18StreamTemperatureRequest\x12\x16\n\x0eperiod_seconds\x18\x01 \x01(\r\"q\n\x0eUnblockRequest\x12\x10\n\x08\x63hannels\x18\x01 \x03(\r\x12\x1d\n\x13\x64uration_in_seconds\x18\x02 \x01(\rH\x00\x12\"\n\x18\x64uration_in_milliseconds\x18\x03 \x01(\rH\x00\x42\n\n\x08\x64uration\"\x11\n\x0fUnblockResponse\"\x17\n\x15\x43\x61ncelUnblocksRequest\"4\n\x16\x43\x61ncelUnblocksResponse\x12\x1a\n\x12\x63\x61ncelled_unblocks\x18\x01 \x01(\r\"2\n\x1eGetChannelConfigurationRequest\x12\x10\n\x08\x63hannels\x18\x01 \x03(\r\"s\n\x1fGetChannelConfigurationResponse\x12P\n\x16\x63hannel_configurations\x18\x01 \x03(\x0b\x32\x30.minknow_api.device.ReturnedChannelConfiguration\"\xf7\x01\n\x1eSetChannelConfigurationRequest\x12m\n\x16\x63hannel_configurations\x18\x01 \x03(\x0b\x32M.minknow_api.device.SetChannelConfigurationRequest.ChannelConfigurationsEntry\x1a\x66\n\x1a\x43hannelConfigurationsEntry\x12\x0b\n\x03key\x18\x01 \x01(\r\x12\x37\n\x05value\x18\x02 \x01(\x0b\x32(.minknow_api.device.ChannelConfiguration:\x02\x38\x01\"!\n\x1fSetChannelConfigurationResponse\"r\n!SetChannelConfigurationAllRequest\x12M\n\x15\x63hannel_configuration\x18\x01 \x01(\x0b\x32(.minknow_api.device.ChannelConfigurationB\x04\x90\xb5\x18\x01\"$\n\"SetChannelConfigurationAllResponse\"\xc6\x06\n\x10SaturationConfig\x12\x43\n\nthresholds\x18\x01 \x01(\x0b\x32/.minknow_api.device.SaturationConfig.Thresholds\x12T\n\x13software_saturation\x18\x02 \x01(\x0b\x32\x37.minknow_api.device.SaturationConfig.SoftwareSaturation\x12_\n\x19user_threshold_saturation\x18\x03 \x01(\x0b\x32<.minknow_api.device.SaturationConfig.UserThresholdSaturation\x1a\xfa\x01\n\nThresholds\x12\x37\n\x11general_threshold\x18\x01 \x01(\x0b\x32\x1c.google.protobuf.UInt32Value\x12\x37\n\x11unblock_threshold\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.UInt32Value\x12<\n\x16user_general_threshold\x18\x03 \x01(\x0b\x32\x1c.google.protobuf.UInt32Value\x12<\n\x16user_unblock_threshold\x18\x04 \x01(\x0b\x32\x1c.google.protobuf.UInt32Value\x1a\x93\x01\n\x12SoftwareSaturation\x12\x0f\n\x07\x65nabled\x18\x01 \x01(\x08\x12\x35\n\x10software_min_adc\x18\x02 \x01(\x0b\x32\x1b.google.protobuf.Int32Value\x12\x35\n\x10software_max_adc\x18\x03 \x01(\x0b\x32\x1b.google.protobuf.Int32Value\x1a\xa2\x01\n\x17UserThresholdSaturation\x12\x0f\n\x07\x65nabled\x18\x01 \x01(\x08\x12:\n\x15user_threshold_min_pa\x18\x02 \x01(\x0b\x32\x1b.google.protobuf.FloatValue\x12:\n\x15user_threshold_max_pa\x18\x03 \x01(\x0b\x32\x1b.google.protobuf.FloatValue\"Z\n\x1aSetSaturationConfigRequest\x12<\n\x08settings\x18\x01 \x01(\x0b\x32$.minknow_api.device.SaturationConfigB\x04\x90\xb5\x18\x01\"\x1d\n\x1bSetSaturationConfigResponse\"\x1c\n\x1aGetSaturationConfigRequest\"[\n\x1bGetSaturationConfigResponse\x12<\n\x08settings\x18\x01 \x01(\x0b\x32$.minknow_api.device.SaturationConfigB\x04\x90\xb5\x18\x01\"\x16\n\x14GetSampleRateRequest\",\n\x15GetSampleRateResponse\x12\x13\n\x0bsample_rate\x18\x01 \x01(\r\"1\n\x14SetSampleRateRequest\x12\x19\n\x0bsample_rate\x18\x01 \x01(\rB\x04\x88\xb5\x18\x01\"1\n\x15SetSampleRateResponse\x12\x18\n\x10real_sample_rate\x18\x01 \x01(\r\"\x17\n\x15GetBiasVoltageRequest\".\n\x16GetBiasVoltageResponse\x12\x14\n\x0c\x62ias_voltage\x18\x01 \x01(\x01\"3\n\x15SetBiasVoltageRequest\x12\x1a\n\x0c\x62ias_voltage\x18\x01 \x01(\x01\x42\x04\x88\xb5\x18\x01\"\x18\n\x16SetBiasVoltageResponse\"\x12\n\x10\x44umpStateRequest\"\x13\n\x11\x44umpStateResponse\"\"\n IncrementFlowCellUseCountRequest\"#\n!IncrementFlowCellUseCountResponse\"0\n\x1cSetFlowCellBarcodeKitRequest\x12\x10\n\x02id\x18\x01 \x01(\tB\x04\x88\xb5\x18\x01\"\x1f\n\x1dSetFlowCellBarcodeKitResponse\"3\n\x1fRegisterFlowCellBarcodesRequest\x12\x10\n\x08\x62\x61rcodes\x18\x01 \x03(\r\"\"\n RegisterFlowCellBarcodesResponse*i\n\x15\x46lowCellConnectorType\x12\x11\n\rFCCON_NOT_SET\x10\x00\x12\x14\n\x10\x46\x43\x43ON_PROMETHION\x10\x01\x12\x14\n\x10\x46\x43\x43ON_MINION_MK1\x10\x02\x12\x11\n\rFCCON_FLONGLE\x10\x03*?\n\x15InsertionScriptStatus\x12\x0b\n\x07NOT_RUN\x10\x00\x12\n\n\x06\x46\x41ILED\x10\x01\x12\r\n\tSUCCEEDED\x10\x02*]\n\x0cSelectedWell\x12\r\n\tWELL_NONE\x10\x00\x12\n\n\x06WELL_1\x10\x01\x12\n\n\x06WELL_2\x10\x02\x12\n\n\x06WELL_3\x10\x03\x12\n\n\x06WELL_4\x10\x04\x12\x0e\n\nWELL_OTHER\x10\x05\x32\xcb\x1c\n\rDeviceService\x12k\n\x0fget_device_info\x12(.minknow_api.device.GetDeviceInfoRequest\x1a).minknow_api.device.GetDeviceInfoResponse\"\x03\x90\x02\x01\x12n\n\x10get_device_state\x12).minknow_api.device.GetDeviceStateRequest\x1a*.minknow_api.device.GetDeviceStateResponse\"\x03\x90\x02\x01\x12v\n\x13stream_device_state\x12,.minknow_api.device.StreamDeviceStateRequest\x1a*.minknow_api.device.GetDeviceStateResponse\"\x03\x90\x02\x01\x30\x01\x12r\n\x12get_flow_cell_info\x12*.minknow_api.device.GetFlowCellInfoRequest\x1a+.minknow_api.device.GetFlowCellInfoResponse\"\x03\x90\x02\x01\x12z\n\x15stream_flow_cell_info\x12-.minknow_api.device.StreamFlowCellInfoRequest\x1a+.minknow_api.device.GetFlowCellInfoResponse\"\x03\x90\x02\x01\x30\x01\x12\x95\x01\n\x1fset_user_specified_flow_cell_id\x12\x35.minknow_api.device.SetUserSpecifiedFlowCellIdRequest\x1a\x36.minknow_api.device.SetUserSpecifiedFlowCellIdResponse\"\x03\x90\x02\x02\x12\x97\x01\n\x1fset_user_specified_product_code\x12\x36.minknow_api.device.SetUserSpecifiedProductCodeRequest\x1a\x37.minknow_api.device.SetUserSpecifiedProductCodeResponse\"\x03\x90\x02\x02\x12w\n\x13get_channels_layout\x12,.minknow_api.device.GetChannelsLayoutRequest\x1a-.minknow_api.device.GetChannelsLayoutResponse\"\x03\x90\x02\x01\x12}\n\x15reset_device_settings\x12..minknow_api.device.ResetDeviceSettingsRequest\x1a/.minknow_api.device.ResetDeviceSettingsResponse\"\x03\x90\x02\x02\x12m\n\x0fset_calibration\x12).minknow_api.device.SetCalibrationRequest\x1a*.minknow_api.device.SetCalibrationResponse\"\x03\x90\x02\x02\x12s\n\x11\x63lear_calibration\x12+.minknow_api.device.ClearCalibrationRequest\x1a,.minknow_api.device.ClearCalibrationResponse\"\x03\x90\x02\x02\x12m\n\x0fget_calibration\x12).minknow_api.device.GetCalibrationRequest\x1a*.minknow_api.device.GetCalibrationResponse\"\x03\x90\x02\x01\x12m\n\x0fset_temperature\x12).minknow_api.device.SetTemperatureRequest\x1a*.minknow_api.device.SetTemperatureResponse\"\x03\x90\x02\x02\x12m\n\x0fget_temperature\x12).minknow_api.device.GetTemperatureRequest\x1a*.minknow_api.device.GetTemperatureResponse\"\x03\x90\x02\x01\x12u\n\x12stream_temperature\x12,.minknow_api.device.StreamTemperatureRequest\x1a*.minknow_api.device.GetTemperatureResponse\"\x03\x90\x02\x01\x30\x01\x12T\n\x07unblock\x12\".minknow_api.device.UnblockRequest\x1a#.minknow_api.device.UnblockResponse\"\x00\x12j\n\x0f\x63\x61ncel_unblocks\x12).minknow_api.device.CancelUnblocksRequest\x1a*.minknow_api.device.CancelUnblocksResponse\"\x00\x12\x89\x01\n\x19get_channel_configuration\x12\x32.minknow_api.device.GetChannelConfigurationRequest\x1a\x33.minknow_api.device.GetChannelConfigurationResponse\"\x03\x90\x02\x01\x12\x89\x01\n\x19set_channel_configuration\x12\x32.minknow_api.device.SetChannelConfigurationRequest\x1a\x33.minknow_api.device.SetChannelConfigurationResponse\"\x03\x90\x02\x02\x12\x93\x01\n\x1dset_channel_configuration_all\x12\x35.minknow_api.device.SetChannelConfigurationAllRequest\x1a\x36.minknow_api.device.SetChannelConfigurationAllResponse\"\x03\x90\x02\x02\x12z\n\x15set_saturation_config\x12..minknow_api.device.SetSaturationConfigRequest\x1a/.minknow_api.device.SetSaturationConfigResponse\"\x00\x12}\n\x15get_saturation_config\x12..minknow_api.device.GetSaturationConfigRequest\x1a/.minknow_api.device.GetSaturationConfigResponse\"\x03\x90\x02\x01\x12k\n\x0fget_sample_rate\x12(.minknow_api.device.GetSampleRateRequest\x1a).minknow_api.device.GetSampleRateResponse\"\x03\x90\x02\x01\x12k\n\x0fset_sample_rate\x12(.minknow_api.device.SetSampleRateRequest\x1a).minknow_api.device.SetSampleRateResponse\"\x03\x90\x02\x02\x12n\n\x10get_bias_voltage\x12).minknow_api.device.GetBiasVoltageRequest\x1a*.minknow_api.device.GetBiasVoltageResponse\"\x03\x90\x02\x01\x12n\n\x10set_bias_voltage\x12).minknow_api.device.SetBiasVoltageRequest\x1a*.minknow_api.device.SetBiasVoltageResponse\"\x03\x90\x02\x02\x12[\n\ndump_state\x12$.minknow_api.device.DumpStateRequest\x1a%.minknow_api.device.DumpStateResponse\"\x00\x12\x8e\x01\n\x1dincrement_flow_cell_use_count\x12\x34.minknow_api.device.IncrementFlowCellUseCountRequest\x1a\x35.minknow_api.device.IncrementFlowCellUseCountResponse\"\x00\x12\x82\x01\n\x19set_flow_cell_barcode_kit\x12\x30.minknow_api.device.SetFlowCellBarcodeKitRequest\x1a\x31.minknow_api.device.SetFlowCellBarcodeKitResponse\"\x00\x12\x8a\x01\n\x1bregister_flow_cell_barcodes\x12\x33.minknow_api.device.RegisterFlowCellBarcodesRequest\x1a\x34.minknow_api.device.RegisterFlowCellBarcodesResponse\"\x00\x42&\n\x1c\x63om.nanoporetech.minknow_api\xa2\x02\x05MKAPIb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x18minknow_api/device.proto\x12\x12minknow_api.device\x1a\x1dminknow_api/rpc_options.proto\x1a\x1egoogle/protobuf/wrappers.proto\":\n\x14\x43hannelConfiguration\x12\x0c\n\x04well\x18\x01 \x01(\r\x12\x14\n\x0ctest_current\x18\x02 \x01(\x08\"S\n\x1cReturnedChannelConfiguration\x12\x0c\n\x04well\x18\x01 \x01(\r\x12\x14\n\x0ctest_current\x18\x02 \x01(\x08\x12\x0f\n\x07unblock\x18\x04 \x01(\x08\"\x16\n\x14GetDeviceInfoRequest\"\xa9\x04\n\x15GetDeviceInfoResponse\x12\x11\n\tdevice_id\x18\x01 \x01(\t\x12I\n\x0b\x64\x65vice_type\x18\x02 \x01(\x0e\x32\x34.minknow_api.device.GetDeviceInfoResponse.DeviceType\x12\x14\n\x0cis_simulated\x18\x03 \x01(\x08\x12\x19\n\x11max_channel_count\x18\x04 \x01(\r\x12\x1d\n\x15max_wells_per_channel\x18\x05 \x01(\r\x12\x1b\n\x13\x63\x61n_set_temperature\x18\x06 \x01(\x08\x12\x14\n\x0c\x64igitisation\x18\x07 \x01(\r\x12T\n\x10\x66irmware_version\x18\n \x03(\x0b\x32:.minknow_api.device.GetDeviceInfoResponse.ComponentVersion\x1aM\n\x10\x43omponentVersion\x12\x11\n\tcomponent\x18\x01 \x01(\t\x12\x0f\n\x07version\x18\x02 \x01(\t\x12\x15\n\rserial_number\x18\x03 \x01(\t\"\x89\x01\n\nDeviceType\x12\n\n\x06MINION\x10\x00\x12\x0b\n\x07GRIDION\x10\x02\x12\x0e\n\nPROMETHION\x10\x03\x12\x0f\n\x0bMINION_MK1C\x10\x04\x12\x0b\n\x07P2_SOLO\x10\x06\x12\x0f\n\x0bMINION_MK1D\x10\x07\x12\x11\n\rP2_INTEGRATED\x10\x08\x12\n\n\x06PEBBLE\x10\t\"\x04\x08\x05\x10\x05\"\x17\n\x15GetDeviceStateRequest\"\xe8\x01\n\x16GetDeviceStateResponse\x12L\n\x0c\x64\x65vice_state\x18\x01 \x01(\x0e\x32\x36.minknow_api.device.GetDeviceStateResponse.DeviceState\x12\x46\n\x13\x66low_cell_connector\x18\x02 \x01(\x0e\x32).minknow_api.device.FlowCellConnectorType\"8\n\x0b\x44\x65viceState\x12\x17\n\x13\x44\x45VICE_DISCONNECTED\x10\x00\x12\x10\n\x0c\x44\x45VICE_READY\x10\x01\"\x1a\n\x18StreamDeviceStateRequest\"\x18\n\x16GetFlowCellInfoRequest\"\xdb\x04\n\x17GetFlowCellInfoResponse\x12\x15\n\rhas_flow_cell\x18\x01 \x01(\x08\x12\x15\n\rchannel_count\x18\x02 \x01(\r\x12\x19\n\x11wells_per_channel\x18\x03 \x01(\r\x12\x14\n\x0c\x66low_cell_id\x18\x04 \x01(\t\x12\x13\n\x0b\x61sic_id_str\x18\r \x01(\t\x12\x14\n\x0cproduct_code\x18\x06 \x01(\t\x12#\n\x1buser_specified_flow_cell_id\x18\x07 \x01(\t\x12#\n\x1buser_specified_product_code\x18\x08 \x01(\t\x12\x13\n\x0bhas_adapter\x18\t \x01(\x08\x12\x12\n\nadapter_id\x18\n \x01(\t\x12\x1c\n\x12temperature_offset\x18\x0b \x01(\x02H\x00\x12\x14\n\x0c\x61sic_version\x18\x0c \x01(\t\x12J\n\x17insertion_script_status\x18\x0e \x01(\x0e\x32).minknow_api.device.InsertionScriptStatus\x12\x11\n\tuse_count\x18\x0f \x01(\r\x12\x17\n\x0fuse_count_limit\x18\x10 \x01(\r\x12\x13\n\x0b\x62\x61rcode_kit\x18\x11 \x01(\t\x12\x10\n\x08\x62\x61rcodes\x18\x12 \x03(\r\x12\x19\n\x11\x66low_cell_partner\x18\x13 \x01(\t\x12\x0e\n\x06is_ctc\x18\x14 \x01(\x08\x12&\n\x1eincompatible_flow_cell_partner\x18\x15 \x01(\x08\x42\x1d\n\x1btemperature_offset_nullable\"\x1b\n\x19StreamFlowCellInfoRequest\"5\n!SetUserSpecifiedFlowCellIdRequest\x12\x10\n\x02id\x18\x01 \x01(\tB\x04\x88\xb5\x18\x01\"$\n\"SetUserSpecifiedFlowCellIdResponse\"8\n\"SetUserSpecifiedProductCodeRequest\x12\x12\n\x04\x63ode\x18\x01 \x01(\tB\x04\x88\xb5\x18\x01\"%\n#SetUserSpecifiedProductCodeResponse\"\x1a\n\x18GetChannelsLayoutRequest\"W\n\x19GetChannelsLayoutResponse\x12:\n\x0f\x63hannel_records\x18\x01 \x03(\x0b\x32!.minknow_api.device.ChannelRecord\"\xa4\x01\n\rChannelRecord\x12\n\n\x02id\x18\x01 \x01(\r\x12\x0c\n\x04name\x18\x02 \x01(\t\x12@\n\x0bmux_records\x18\x03 \x03(\x0b\x32+.minknow_api.device.ChannelRecord.MuxRecord\x1a\x37\n\tMuxRecord\x12\n\n\x02id\x18\x01 \x01(\r\x12\x0e\n\x06phys_x\x18\x02 \x01(\r\x12\x0e\n\x06phys_y\x18\x03 \x01(\r\"\x1c\n\x1aResetDeviceSettingsRequest\"\x1d\n\x1bResetDeviceSettingsResponse\"\x80\x01\n\x15SetCalibrationRequest\x12\x1b\n\rfirst_channel\x18\x01 \x01(\rB\x04\x88\xb5\x18\x01\x12\x1a\n\x0clast_channel\x18\x02 \x01(\rB\x04\x88\xb5\x18\x01\x12\x15\n\x07offsets\x18\x03 \x03(\x02\x42\x04\x88\xb5\x18\x01\x12\x17\n\tpa_ranges\x18\x04 \x03(\x02\x42\x04\x88\xb5\x18\x01\"\x18\n\x16SetCalibrationResponse\"\x19\n\x17\x43learCalibrationRequest\"\x1a\n\x18\x43learCalibrationResponse\"P\n\x15GetCalibrationRequest\x12\x1b\n\rfirst_channel\x18\x01 \x01(\rB\x04\x88\xb5\x18\x01\x12\x1a\n\x0clast_channel\x18\x02 \x01(\rB\x04\x88\xb5\x18\x01\"k\n\x16GetCalibrationResponse\x12\x14\n\x0c\x64igitisation\x18\x01 \x01(\r\x12\x0f\n\x07offsets\x18\x02 \x03(\x02\x12\x11\n\tpa_ranges\x18\x03 \x03(\x02\x12\x17\n\x0fhas_calibration\x18\x04 \x01(\x08\"\x93\x03\n\x15SetTemperatureRequest\x12\x13\n\x0btemperature\x18\x01 \x01(\x02\x12\x62\n\x14wait_for_temperature\x18\x02 \x01(\x0b\x32\x44.minknow_api.device.SetTemperatureRequest.WaitForTemperatureSettings\x12j\n\x1csecondary_temperature_limits\x18\x03 \x01(\x0b\x32\x44.minknow_api.device.SetTemperatureRequest.SecondaryTemperatureLimits\x1a]\n\x1aWaitForTemperatureSettings\x12\x0f\n\x07timeout\x18\x01 \x01(\r\x12\x1b\n\x13min_stable_duration\x18\x03 \x01(\r\x12\x11\n\ttolerance\x18\x02 \x01(\x02\x1a\x36\n\x1aSecondaryTemperatureLimits\x12\x0b\n\x03min\x18\x01 \x01(\x02\x12\x0b\n\x03max\x18\x02 \x01(\x02\"\xb4\x02\n\x16SetTemperatureResponse\x12)\n!timed_out_waiting_for_temperature\x18\x01 \x01(\x08\x12O\n\x06result\x18\x02 \x01(\x0e\x32?.minknow_api.device.SetTemperatureResponse.SetTemperatureResult\"\x9d\x01\n\x14SetTemperatureResult\x12\x1a\n\x16TARGET_TEMPERATURE_SET\x10\x00\x12\x17\n\x13REACHED_TEMPERATURE\x10\x01\x12%\n!TIMED_OUT_WAITING_FOR_TEMPERATURE\x10\x02\x12)\n%SECONDARY_TEMPERATURE_LIMITS_EXCEEDED\x10\x03\"\x17\n\x15GetTemperatureRequest\"\x99\x08\n\x16GetTemperatureResponse\x12N\n\x06minion\x18\x01 \x01(\x0b\x32<.minknow_api.device.GetTemperatureResponse.MinIONTemperatureH\x00\x12V\n\npromethion\x18\x02 \x01(\x0b\x32@.minknow_api.device.GetTemperatureResponse.PromethIONTemperatureH\x00\x12N\n\x06pebble\x18\x06 \x01(\x0b\x32<.minknow_api.device.GetTemperatureResponse.PebbleTemperatureH\x00\x12\x37\n\x12target_temperature\x18\x03 \x01(\x0b\x32\x1b.google.protobuf.FloatValue\x12\x42\n\x1bminion_starting_temperature\x18\x04 \x01(\x0b\x32\x1b.google.protobuf.FloatValueH\x01\x12\x46\n\x1fpromethion_starting_temperature\x18\x05 \x01(\x0b\x32\x1b.google.protobuf.FloatValueH\x01\x12\x42\n\x1bpebble_starting_temperature\x18\x07 \x01(\x0b\x32\x1b.google.protobuf.FloatValueH\x01\x1a\x85\x01\n\x11MinIONTemperature\x12\x35\n\x10\x61sic_temperature\x18\x01 \x01(\x0b\x32\x1b.google.protobuf.FloatValue\x12\x39\n\x14heatsink_temperature\x18\x02 \x01(\x0b\x32\x1b.google.protobuf.FloatValue\x1a\x8c\x01\n\x15PromethIONTemperature\x12\x39\n\x14\x66lowcell_temperature\x18\x01 \x01(\x0b\x32\x1b.google.protobuf.FloatValue\x12\x38\n\x13\x63hamber_temperature\x18\x02 \x01(\x0b\x32\x1b.google.protobuf.FloatValue\x1a\xbf\x01\n\x11PebbleTemperature\x12\x35\n\x10\x61sic_temperature\x18\x01 \x01(\x0b\x32\x1b.google.protobuf.FloatValue\x12;\n\x16instrument_temperature\x18\x02 \x01(\x0b\x32\x1b.google.protobuf.FloatValue\x12\x36\n\x11pchip_temperature\x18\x03 \x01(\x0b\x32\x1b.google.protobuf.FloatValueB\r\n\x0btemperatureB\x16\n\x14starting_temperature\"2\n\x18StreamTemperatureRequest\x12\x16\n\x0eperiod_seconds\x18\x01 \x01(\r\"q\n\x0eUnblockRequest\x12\x10\n\x08\x63hannels\x18\x01 \x03(\r\x12\x1d\n\x13\x64uration_in_seconds\x18\x02 \x01(\rH\x00\x12\"\n\x18\x64uration_in_milliseconds\x18\x03 \x01(\rH\x00\x42\n\n\x08\x64uration\"\x11\n\x0fUnblockResponse\"\x17\n\x15\x43\x61ncelUnblocksRequest\"4\n\x16\x43\x61ncelUnblocksResponse\x12\x1a\n\x12\x63\x61ncelled_unblocks\x18\x01 \x01(\r\"2\n\x1eGetChannelConfigurationRequest\x12\x10\n\x08\x63hannels\x18\x01 \x03(\r\"s\n\x1fGetChannelConfigurationResponse\x12P\n\x16\x63hannel_configurations\x18\x01 \x03(\x0b\x32\x30.minknow_api.device.ReturnedChannelConfiguration\"\xf7\x01\n\x1eSetChannelConfigurationRequest\x12m\n\x16\x63hannel_configurations\x18\x01 \x03(\x0b\x32M.minknow_api.device.SetChannelConfigurationRequest.ChannelConfigurationsEntry\x1a\x66\n\x1a\x43hannelConfigurationsEntry\x12\x0b\n\x03key\x18\x01 \x01(\r\x12\x37\n\x05value\x18\x02 \x01(\x0b\x32(.minknow_api.device.ChannelConfiguration:\x02\x38\x01\"!\n\x1fSetChannelConfigurationResponse\"r\n!SetChannelConfigurationAllRequest\x12M\n\x15\x63hannel_configuration\x18\x01 \x01(\x0b\x32(.minknow_api.device.ChannelConfigurationB\x04\x90\xb5\x18\x01\"$\n\"SetChannelConfigurationAllResponse\"\xc6\x06\n\x10SaturationConfig\x12\x43\n\nthresholds\x18\x01 \x01(\x0b\x32/.minknow_api.device.SaturationConfig.Thresholds\x12T\n\x13software_saturation\x18\x02 \x01(\x0b\x32\x37.minknow_api.device.SaturationConfig.SoftwareSaturation\x12_\n\x19user_threshold_saturation\x18\x03 \x01(\x0b\x32<.minknow_api.device.SaturationConfig.UserThresholdSaturation\x1a\xfa\x01\n\nThresholds\x12\x37\n\x11general_threshold\x18\x01 \x01(\x0b\x32\x1c.google.protobuf.UInt32Value\x12\x37\n\x11unblock_threshold\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.UInt32Value\x12<\n\x16user_general_threshold\x18\x03 \x01(\x0b\x32\x1c.google.protobuf.UInt32Value\x12<\n\x16user_unblock_threshold\x18\x04 \x01(\x0b\x32\x1c.google.protobuf.UInt32Value\x1a\x93\x01\n\x12SoftwareSaturation\x12\x0f\n\x07\x65nabled\x18\x01 \x01(\x08\x12\x35\n\x10software_min_adc\x18\x02 \x01(\x0b\x32\x1b.google.protobuf.Int32Value\x12\x35\n\x10software_max_adc\x18\x03 \x01(\x0b\x32\x1b.google.protobuf.Int32Value\x1a\xa2\x01\n\x17UserThresholdSaturation\x12\x0f\n\x07\x65nabled\x18\x01 \x01(\x08\x12:\n\x15user_threshold_min_pa\x18\x02 \x01(\x0b\x32\x1b.google.protobuf.FloatValue\x12:\n\x15user_threshold_max_pa\x18\x03 \x01(\x0b\x32\x1b.google.protobuf.FloatValue\"Z\n\x1aSetSaturationConfigRequest\x12<\n\x08settings\x18\x01 \x01(\x0b\x32$.minknow_api.device.SaturationConfigB\x04\x90\xb5\x18\x01\"\x1d\n\x1bSetSaturationConfigResponse\"\x1c\n\x1aGetSaturationConfigRequest\"[\n\x1bGetSaturationConfigResponse\x12<\n\x08settings\x18\x01 \x01(\x0b\x32$.minknow_api.device.SaturationConfigB\x04\x90\xb5\x18\x01\"\x16\n\x14GetSampleRateRequest\",\n\x15GetSampleRateResponse\x12\x13\n\x0bsample_rate\x18\x01 \x01(\r\"1\n\x14SetSampleRateRequest\x12\x19\n\x0bsample_rate\x18\x01 \x01(\rB\x04\x88\xb5\x18\x01\"1\n\x15SetSampleRateResponse\x12\x18\n\x10real_sample_rate\x18\x01 \x01(\r\"\x17\n\x15GetBiasVoltageRequest\".\n\x16GetBiasVoltageResponse\x12\x14\n\x0c\x62ias_voltage\x18\x01 \x01(\x01\"3\n\x15SetBiasVoltageRequest\x12\x1a\n\x0c\x62ias_voltage\x18\x01 \x01(\x01\x42\x04\x88\xb5\x18\x01\"\x18\n\x16SetBiasVoltageResponse\"\x12\n\x10\x44umpStateRequest\"\x13\n\x11\x44umpStateResponse\"\"\n IncrementFlowCellUseCountRequest\"#\n!IncrementFlowCellUseCountResponse\"0\n\x1cSetFlowCellBarcodeKitRequest\x12\x10\n\x02id\x18\x01 \x01(\tB\x04\x88\xb5\x18\x01\"\x1f\n\x1dSetFlowCellBarcodeKitResponse\"3\n\x1fRegisterFlowCellBarcodesRequest\x12\x10\n\x08\x62\x61rcodes\x18\x01 \x03(\r\"\"\n RegisterFlowCellBarcodesResponse*{\n\x15\x46lowCellConnectorType\x12\x11\n\rFCCON_NOT_SET\x10\x00\x12\x14\n\x10\x46\x43\x43ON_PROMETHION\x10\x01\x12\x14\n\x10\x46\x43\x43ON_MINION_MK1\x10\x02\x12\x11\n\rFCCON_FLONGLE\x10\x03\x12\x10\n\x0c\x46\x43\x43ON_PEBBLE\x10\x04*?\n\x15InsertionScriptStatus\x12\x0b\n\x07NOT_RUN\x10\x00\x12\n\n\x06\x46\x41ILED\x10\x01\x12\r\n\tSUCCEEDED\x10\x02*]\n\x0cSelectedWell\x12\r\n\tWELL_NONE\x10\x00\x12\n\n\x06WELL_1\x10\x01\x12\n\n\x06WELL_2\x10\x02\x12\n\n\x06WELL_3\x10\x03\x12\n\n\x06WELL_4\x10\x04\x12\x0e\n\nWELL_OTHER\x10\x05\x32\xcb\x1c\n\rDeviceService\x12k\n\x0fget_device_info\x12(.minknow_api.device.GetDeviceInfoRequest\x1a).minknow_api.device.GetDeviceInfoResponse\"\x03\x90\x02\x01\x12n\n\x10get_device_state\x12).minknow_api.device.GetDeviceStateRequest\x1a*.minknow_api.device.GetDeviceStateResponse\"\x03\x90\x02\x01\x12v\n\x13stream_device_state\x12,.minknow_api.device.StreamDeviceStateRequest\x1a*.minknow_api.device.GetDeviceStateResponse\"\x03\x90\x02\x01\x30\x01\x12r\n\x12get_flow_cell_info\x12*.minknow_api.device.GetFlowCellInfoRequest\x1a+.minknow_api.device.GetFlowCellInfoResponse\"\x03\x90\x02\x01\x12z\n\x15stream_flow_cell_info\x12-.minknow_api.device.StreamFlowCellInfoRequest\x1a+.minknow_api.device.GetFlowCellInfoResponse\"\x03\x90\x02\x01\x30\x01\x12\x95\x01\n\x1fset_user_specified_flow_cell_id\x12\x35.minknow_api.device.SetUserSpecifiedFlowCellIdRequest\x1a\x36.minknow_api.device.SetUserSpecifiedFlowCellIdResponse\"\x03\x90\x02\x02\x12\x97\x01\n\x1fset_user_specified_product_code\x12\x36.minknow_api.device.SetUserSpecifiedProductCodeRequest\x1a\x37.minknow_api.device.SetUserSpecifiedProductCodeResponse\"\x03\x90\x02\x02\x12w\n\x13get_channels_layout\x12,.minknow_api.device.GetChannelsLayoutRequest\x1a-.minknow_api.device.GetChannelsLayoutResponse\"\x03\x90\x02\x01\x12}\n\x15reset_device_settings\x12..minknow_api.device.ResetDeviceSettingsRequest\x1a/.minknow_api.device.ResetDeviceSettingsResponse\"\x03\x90\x02\x02\x12m\n\x0fset_calibration\x12).minknow_api.device.SetCalibrationRequest\x1a*.minknow_api.device.SetCalibrationResponse\"\x03\x90\x02\x02\x12s\n\x11\x63lear_calibration\x12+.minknow_api.device.ClearCalibrationRequest\x1a,.minknow_api.device.ClearCalibrationResponse\"\x03\x90\x02\x02\x12m\n\x0fget_calibration\x12).minknow_api.device.GetCalibrationRequest\x1a*.minknow_api.device.GetCalibrationResponse\"\x03\x90\x02\x01\x12m\n\x0fset_temperature\x12).minknow_api.device.SetTemperatureRequest\x1a*.minknow_api.device.SetTemperatureResponse\"\x03\x90\x02\x02\x12m\n\x0fget_temperature\x12).minknow_api.device.GetTemperatureRequest\x1a*.minknow_api.device.GetTemperatureResponse\"\x03\x90\x02\x01\x12u\n\x12stream_temperature\x12,.minknow_api.device.StreamTemperatureRequest\x1a*.minknow_api.device.GetTemperatureResponse\"\x03\x90\x02\x01\x30\x01\x12T\n\x07unblock\x12\".minknow_api.device.UnblockRequest\x1a#.minknow_api.device.UnblockResponse\"\x00\x12j\n\x0f\x63\x61ncel_unblocks\x12).minknow_api.device.CancelUnblocksRequest\x1a*.minknow_api.device.CancelUnblocksResponse\"\x00\x12\x89\x01\n\x19get_channel_configuration\x12\x32.minknow_api.device.GetChannelConfigurationRequest\x1a\x33.minknow_api.device.GetChannelConfigurationResponse\"\x03\x90\x02\x01\x12\x89\x01\n\x19set_channel_configuration\x12\x32.minknow_api.device.SetChannelConfigurationRequest\x1a\x33.minknow_api.device.SetChannelConfigurationResponse\"\x03\x90\x02\x02\x12\x93\x01\n\x1dset_channel_configuration_all\x12\x35.minknow_api.device.SetChannelConfigurationAllRequest\x1a\x36.minknow_api.device.SetChannelConfigurationAllResponse\"\x03\x90\x02\x02\x12z\n\x15set_saturation_config\x12..minknow_api.device.SetSaturationConfigRequest\x1a/.minknow_api.device.SetSaturationConfigResponse\"\x00\x12}\n\x15get_saturation_config\x12..minknow_api.device.GetSaturationConfigRequest\x1a/.minknow_api.device.GetSaturationConfigResponse\"\x03\x90\x02\x01\x12k\n\x0fget_sample_rate\x12(.minknow_api.device.GetSampleRateRequest\x1a).minknow_api.device.GetSampleRateResponse\"\x03\x90\x02\x01\x12k\n\x0fset_sample_rate\x12(.minknow_api.device.SetSampleRateRequest\x1a).minknow_api.device.SetSampleRateResponse\"\x03\x90\x02\x02\x12n\n\x10get_bias_voltage\x12).minknow_api.device.GetBiasVoltageRequest\x1a*.minknow_api.device.GetBiasVoltageResponse\"\x03\x90\x02\x01\x12n\n\x10set_bias_voltage\x12).minknow_api.device.SetBiasVoltageRequest\x1a*.minknow_api.device.SetBiasVoltageResponse\"\x03\x90\x02\x02\x12[\n\ndump_state\x12$.minknow_api.device.DumpStateRequest\x1a%.minknow_api.device.DumpStateResponse\"\x00\x12\x8e\x01\n\x1dincrement_flow_cell_use_count\x12\x34.minknow_api.device.IncrementFlowCellUseCountRequest\x1a\x35.minknow_api.device.IncrementFlowCellUseCountResponse\"\x00\x12\x82\x01\n\x19set_flow_cell_barcode_kit\x12\x30.minknow_api.device.SetFlowCellBarcodeKitRequest\x1a\x31.minknow_api.device.SetFlowCellBarcodeKitResponse\"\x00\x12\x8a\x01\n\x1bregister_flow_cell_barcodes\x12\x33.minknow_api.device.RegisterFlowCellBarcodesRequest\x1a\x34.minknow_api.device.RegisterFlowCellBarcodesResponse\"\x00\x42&\n\x1c\x63om.nanoporetech.minknow_api\xa2\x02\x05MKAPIb\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -100,12 +100,12 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   _globals['_DEVICESERVICE'].methods_by_name['get_bias_voltage']._serialized_options = b'\220\002\001'
   _globals['_DEVICESERVICE'].methods_by_name['set_bias_voltage']._options = None
   _globals['_DEVICESERVICE'].methods_by_name['set_bias_voltage']._serialized_options = b'\220\002\002'
-  _globals['_FLOWCELLCONNECTORTYPE']._serialized_start=6700
-  _globals['_FLOWCELLCONNECTORTYPE']._serialized_end=6805
-  _globals['_INSERTIONSCRIPTSTATUS']._serialized_start=6807
-  _globals['_INSERTIONSCRIPTSTATUS']._serialized_end=6870
-  _globals['_SELECTEDWELL']._serialized_start=6872
-  _globals['_SELECTEDWELL']._serialized_end=6965
+  _globals['_FLOWCELLCONNECTORTYPE']._serialized_start=7087
+  _globals['_FLOWCELLCONNECTORTYPE']._serialized_end=7210
+  _globals['_INSERTIONSCRIPTSTATUS']._serialized_start=7212
+  _globals['_INSERTIONSCRIPTSTATUS']._serialized_end=7275
+  _globals['_SELECTEDWELL']._serialized_start=7277
+  _globals['_SELECTEDWELL']._serialized_end=7370
   _globals['_CHANNELCONFIGURATION']._serialized_start=111
   _globals['_CHANNELCONFIGURATION']._serialized_end=169
   _globals['_RETURNEDCHANNELCONFIGURATION']._serialized_start=171
@@ -113,185 +113,239 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   _globals['_GETDEVICEINFOREQUEST']._serialized_start=256
   _globals['_GETDEVICEINFOREQUEST']._serialized_end=278
   _globals['_GETDEVICEINFORESPONSE']._serialized_start=281
-  _globals['_GETDEVICEINFORESPONSE']._serialized_end=829
+  _globals['_GETDEVICEINFORESPONSE']._serialized_end=834
   _globals['_GETDEVICEINFORESPONSE_COMPONENTVERSION']._serialized_start=617
   _globals['_GETDEVICEINFORESPONSE_COMPONENTVERSION']._serialized_end=694
   _globals['_GETDEVICEINFORESPONSE_DEVICETYPE']._serialized_start=697
-  _globals['_GETDEVICEINFORESPONSE_DEVICETYPE']._serialized_end=829
-  _globals['_GETDEVICESTATEREQUEST']._serialized_start=831
-  _globals['_GETDEVICESTATEREQUEST']._serialized_end=854
-  _globals['_GETDEVICESTATERESPONSE']._serialized_start=857
-  _globals['_GETDEVICESTATERESPONSE']._serialized_end=1089
-  _globals['_GETDEVICESTATERESPONSE_DEVICESTATE']._serialized_start=1033
-  _globals['_GETDEVICESTATERESPONSE_DEVICESTATE']._serialized_end=1089
-  _globals['_STREAMDEVICESTATEREQUEST']._serialized_start=1091
-  _globals['_STREAMDEVICESTATEREQUEST']._serialized_end=1117
-  _globals['_GETFLOWCELLINFOREQUEST']._serialized_start=1119
-  _globals['_GETFLOWCELLINFOREQUEST']._serialized_end=1143
-  _globals['_GETFLOWCELLINFORESPONSE']._serialized_start=1146
-  _globals['_GETFLOWCELLINFORESPONSE']._serialized_end=1709
-  _globals['_STREAMFLOWCELLINFOREQUEST']._serialized_start=1711
-  _globals['_STREAMFLOWCELLINFOREQUEST']._serialized_end=1738
-  _globals['_SETUSERSPECIFIEDFLOWCELLIDREQUEST']._serialized_start=1740
-  _globals['_SETUSERSPECIFIEDFLOWCELLIDREQUEST']._serialized_end=1793
-  _globals['_SETUSERSPECIFIEDFLOWCELLIDRESPONSE']._serialized_start=1795
-  _globals['_SETUSERSPECIFIEDFLOWCELLIDRESPONSE']._serialized_end=1831
-  _globals['_SETUSERSPECIFIEDPRODUCTCODEREQUEST']._serialized_start=1833
-  _globals['_SETUSERSPECIFIEDPRODUCTCODEREQUEST']._serialized_end=1889
-  _globals['_SETUSERSPECIFIEDPRODUCTCODERESPONSE']._serialized_start=1891
-  _globals['_SETUSERSPECIFIEDPRODUCTCODERESPONSE']._serialized_end=1928
-  _globals['_GETCHANNELSLAYOUTREQUEST']._serialized_start=1930
-  _globals['_GETCHANNELSLAYOUTREQUEST']._serialized_end=1956
-  _globals['_GETCHANNELSLAYOUTRESPONSE']._serialized_start=1958
-  _globals['_GETCHANNELSLAYOUTRESPONSE']._serialized_end=2045
-  _globals['_CHANNELRECORD']._serialized_start=2048
-  _globals['_CHANNELRECORD']._serialized_end=2212
-  _globals['_CHANNELRECORD_MUXRECORD']._serialized_start=2157
-  _globals['_CHANNELRECORD_MUXRECORD']._serialized_end=2212
-  _globals['_RESETDEVICESETTINGSREQUEST']._serialized_start=2214
-  _globals['_RESETDEVICESETTINGSREQUEST']._serialized_end=2242
-  _globals['_RESETDEVICESETTINGSRESPONSE']._serialized_start=2244
-  _globals['_RESETDEVICESETTINGSRESPONSE']._serialized_end=2273
-  _globals['_SETCALIBRATIONREQUEST']._serialized_start=2276
-  _globals['_SETCALIBRATIONREQUEST']._serialized_end=2404
-  _globals['_SETCALIBRATIONRESPONSE']._serialized_start=2406
-  _globals['_SETCALIBRATIONRESPONSE']._serialized_end=2430
-  _globals['_CLEARCALIBRATIONREQUEST']._serialized_start=2432
-  _globals['_CLEARCALIBRATIONREQUEST']._serialized_end=2457
-  _globals['_CLEARCALIBRATIONRESPONSE']._serialized_start=2459
-  _globals['_CLEARCALIBRATIONRESPONSE']._serialized_end=2485
-  _globals['_GETCALIBRATIONREQUEST']._serialized_start=2487
-  _globals['_GETCALIBRATIONREQUEST']._serialized_end=2567
-  _globals['_GETCALIBRATIONRESPONSE']._serialized_start=2569
-  _globals['_GETCALIBRATIONRESPONSE']._serialized_end=2676
-  _globals['_SETTEMPERATUREREQUEST']._serialized_start=2679
-  _globals['_SETTEMPERATUREREQUEST']._serialized_end=3082
-  _globals['_SETTEMPERATUREREQUEST_WAITFORTEMPERATURESETTINGS']._serialized_start=2933
-  _globals['_SETTEMPERATUREREQUEST_WAITFORTEMPERATURESETTINGS']._serialized_end=3026
-  _globals['_SETTEMPERATUREREQUEST_SECONDARYTEMPERATURELIMITS']._serialized_start=3028
-  _globals['_SETTEMPERATUREREQUEST_SECONDARYTEMPERATURELIMITS']._serialized_end=3082
-  _globals['_SETTEMPERATURERESPONSE']._serialized_start=3085
-  _globals['_SETTEMPERATURERESPONSE']._serialized_end=3393
-  _globals['_SETTEMPERATURERESPONSE_SETTEMPERATURERESULT']._serialized_start=3236
-  _globals['_SETTEMPERATURERESPONSE_SETTEMPERATURERESULT']._serialized_end=3393
-  _globals['_GETTEMPERATUREREQUEST']._serialized_start=3395
-  _globals['_GETTEMPERATUREREQUEST']._serialized_end=3418
-  _globals['_GETTEMPERATURERESPONSE']._serialized_start=3421
-  _globals['_GETTEMPERATURERESPONSE']._serialized_end=4128
-  _globals['_GETTEMPERATURERESPONSE_MINIONTEMPERATURE']._serialized_start=3813
-  _globals['_GETTEMPERATURERESPONSE_MINIONTEMPERATURE']._serialized_end=3946
-  _globals['_GETTEMPERATURERESPONSE_PROMETHIONTEMPERATURE']._serialized_start=3949
-  _globals['_GETTEMPERATURERESPONSE_PROMETHIONTEMPERATURE']._serialized_end=4089
-  _globals['_STREAMTEMPERATUREREQUEST']._serialized_start=4130
-  _globals['_STREAMTEMPERATUREREQUEST']._serialized_end=4180
-  _globals['_UNBLOCKREQUEST']._serialized_start=4182
-  _globals['_UNBLOCKREQUEST']._serialized_end=4295
-  _globals['_UNBLOCKRESPONSE']._serialized_start=4297
-  _globals['_UNBLOCKRESPONSE']._serialized_end=4314
-  _globals['_CANCELUNBLOCKSREQUEST']._serialized_start=4316
-  _globals['_CANCELUNBLOCKSREQUEST']._serialized_end=4339
-  _globals['_CANCELUNBLOCKSRESPONSE']._serialized_start=4341
-  _globals['_CANCELUNBLOCKSRESPONSE']._serialized_end=4393
-  _globals['_GETCHANNELCONFIGURATIONREQUEST']._serialized_start=4395
-  _globals['_GETCHANNELCONFIGURATIONREQUEST']._serialized_end=4445
-  _globals['_GETCHANNELCONFIGURATIONRESPONSE']._serialized_start=4447
-  _globals['_GETCHANNELCONFIGURATIONRESPONSE']._serialized_end=4562
-  _globals['_SETCHANNELCONFIGURATIONREQUEST']._serialized_start=4565
-  _globals['_SETCHANNELCONFIGURATIONREQUEST']._serialized_end=4812
-  _globals['_SETCHANNELCONFIGURATIONREQUEST_CHANNELCONFIGURATIONSENTRY']._serialized_start=4710
-  _globals['_SETCHANNELCONFIGURATIONREQUEST_CHANNELCONFIGURATIONSENTRY']._serialized_end=4812
-  _globals['_SETCHANNELCONFIGURATIONRESPONSE']._serialized_start=4814
-  _globals['_SETCHANNELCONFIGURATIONRESPONSE']._serialized_end=4847
-  _globals['_SETCHANNELCONFIGURATIONALLREQUEST']._serialized_start=4849
-  _globals['_SETCHANNELCONFIGURATIONALLREQUEST']._serialized_end=4963
-  _globals['_SETCHANNELCONFIGURATIONALLRESPONSE']._serialized_start=4965
-  _globals['_SETCHANNELCONFIGURATIONALLRESPONSE']._serialized_end=5001
-  _globals['_SATURATIONCONFIG']._serialized_start=5004
-  _globals['_SATURATIONCONFIG']._serialized_end=5842
-  _globals['_SATURATIONCONFIG_THRESHOLDS']._serialized_start=5277
-  _globals['_SATURATIONCONFIG_THRESHOLDS']._serialized_end=5527
-  _globals['_SATURATIONCONFIG_SOFTWARESATURATION']._serialized_start=5530
-  _globals['_SATURATIONCONFIG_SOFTWARESATURATION']._serialized_end=5677
-  _globals['_SATURATIONCONFIG_USERTHRESHOLDSATURATION']._serialized_start=5680
-  _globals['_SATURATIONCONFIG_USERTHRESHOLDSATURATION']._serialized_end=5842
-  _globals['_SETSATURATIONCONFIGREQUEST']._serialized_start=5844
-  _globals['_SETSATURATIONCONFIGREQUEST']._serialized_end=5934
-  _globals['_SETSATURATIONCONFIGRESPONSE']._serialized_start=5936
-  _globals['_SETSATURATIONCONFIGRESPONSE']._serialized_end=5965
-  _globals['_GETSATURATIONCONFIGREQUEST']._serialized_start=5967
-  _globals['_GETSATURATIONCONFIGREQUEST']._serialized_end=5995
-  _globals['_GETSATURATIONCONFIGRESPONSE']._serialized_start=5997
-  _globals['_GETSATURATIONCONFIGRESPONSE']._serialized_end=6088
-  _globals['_GETSAMPLERATEREQUEST']._serialized_start=6090
-  _globals['_GETSAMPLERATEREQUEST']._serialized_end=6112
-  _globals['_GETSAMPLERATERESPONSE']._serialized_start=6114
-  _globals['_GETSAMPLERATERESPONSE']._serialized_end=6158
-  _globals['_SETSAMPLERATEREQUEST']._serialized_start=6160
-  _globals['_SETSAMPLERATEREQUEST']._serialized_end=6209
-  _globals['_SETSAMPLERATERESPONSE']._serialized_start=6211
-  _globals['_SETSAMPLERATERESPONSE']._serialized_end=6260
-  _globals['_GETBIASVOLTAGEREQUEST']._serialized_start=6262
-  _globals['_GETBIASVOLTAGEREQUEST']._serialized_end=6285
-  _globals['_GETBIASVOLTAGERESPONSE']._serialized_start=6287
-  _globals['_GETBIASVOLTAGERESPONSE']._serialized_end=6333
-  _globals['_SETBIASVOLTAGEREQUEST']._serialized_start=6335
-  _globals['_SETBIASVOLTAGEREQUEST']._serialized_end=6386
-  _globals['_SETBIASVOLTAGERESPONSE']._serialized_start=6388
-  _globals['_SETBIASVOLTAGERESPONSE']._serialized_end=6412
-  _globals['_DUMPSTATEREQUEST']._serialized_start=6414
-  _globals['_DUMPSTATEREQUEST']._serialized_end=6432
-  _globals['_DUMPSTATERESPONSE']._serialized_start=6434
-  _globals['_DUMPSTATERESPONSE']._serialized_end=6453
-  _globals['_INCREMENTFLOWCELLUSECOUNTREQUEST']._serialized_start=6455
-  _globals['_INCREMENTFLOWCELLUSECOUNTREQUEST']._serialized_end=6489
-  _globals['_INCREMENTFLOWCELLUSECOUNTRESPONSE']._serialized_start=6491
-  _globals['_INCREMENTFLOWCELLUSECOUNTRESPONSE']._serialized_end=6526
-  _globals['_SETFLOWCELLBARCODEKITREQUEST']._serialized_start=6528
-  _globals['_SETFLOWCELLBARCODEKITREQUEST']._serialized_end=6576
-  _globals['_SETFLOWCELLBARCODEKITRESPONSE']._serialized_start=6578
-  _globals['_SETFLOWCELLBARCODEKITRESPONSE']._serialized_end=6609
-  _globals['_REGISTERFLOWCELLBARCODESREQUEST']._serialized_start=6611
-  _globals['_REGISTERFLOWCELLBARCODESREQUEST']._serialized_end=6662
-  _globals['_REGISTERFLOWCELLBARCODESRESPONSE']._serialized_start=6664
-  _globals['_REGISTERFLOWCELLBARCODESRESPONSE']._serialized_end=6698
-  _globals['_DEVICESERVICE']._serialized_start=6968
-  _globals['_DEVICESERVICE']._serialized_end=10627
-GetChannelConfigurationRequest.__doc__ = """Attributes:
-    channels:
-        A list of channel names (1-indexed) to specify what channels
-        to get channel configs for  Will return an error if any of the
-        channel names are below 1, or above the channel count value
-        returned from :meth:`get_flow_cell_info`
+  _globals['_GETDEVICEINFORESPONSE_DEVICETYPE']._serialized_end=834
+  _globals['_GETDEVICESTATEREQUEST']._serialized_start=836
+  _globals['_GETDEVICESTATEREQUEST']._serialized_end=859
+  _globals['_GETDEVICESTATERESPONSE']._serialized_start=862
+  _globals['_GETDEVICESTATERESPONSE']._serialized_end=1094
+  _globals['_GETDEVICESTATERESPONSE_DEVICESTATE']._serialized_start=1038
+  _globals['_GETDEVICESTATERESPONSE_DEVICESTATE']._serialized_end=1094
+  _globals['_STREAMDEVICESTATEREQUEST']._serialized_start=1096
+  _globals['_STREAMDEVICESTATEREQUEST']._serialized_end=1122
+  _globals['_GETFLOWCELLINFOREQUEST']._serialized_start=1124
+  _globals['_GETFLOWCELLINFOREQUEST']._serialized_end=1148
+  _globals['_GETFLOWCELLINFORESPONSE']._serialized_start=1151
+  _globals['_GETFLOWCELLINFORESPONSE']._serialized_end=1754
+  _globals['_STREAMFLOWCELLINFOREQUEST']._serialized_start=1756
+  _globals['_STREAMFLOWCELLINFOREQUEST']._serialized_end=1783
+  _globals['_SETUSERSPECIFIEDFLOWCELLIDREQUEST']._serialized_start=1785
+  _globals['_SETUSERSPECIFIEDFLOWCELLIDREQUEST']._serialized_end=1838
+  _globals['_SETUSERSPECIFIEDFLOWCELLIDRESPONSE']._serialized_start=1840
+  _globals['_SETUSERSPECIFIEDFLOWCELLIDRESPONSE']._serialized_end=1876
+  _globals['_SETUSERSPECIFIEDPRODUCTCODEREQUEST']._serialized_start=1878
+  _globals['_SETUSERSPECIFIEDPRODUCTCODEREQUEST']._serialized_end=1934
+  _globals['_SETUSERSPECIFIEDPRODUCTCODERESPONSE']._serialized_start=1936
+  _globals['_SETUSERSPECIFIEDPRODUCTCODERESPONSE']._serialized_end=1973
+  _globals['_GETCHANNELSLAYOUTREQUEST']._serialized_start=1975
+  _globals['_GETCHANNELSLAYOUTREQUEST']._serialized_end=2001
+  _globals['_GETCHANNELSLAYOUTRESPONSE']._serialized_start=2003
+  _globals['_GETCHANNELSLAYOUTRESPONSE']._serialized_end=2090
+  _globals['_CHANNELRECORD']._serialized_start=2093
+  _globals['_CHANNELRECORD']._serialized_end=2257
+  _globals['_CHANNELRECORD_MUXRECORD']._serialized_start=2202
+  _globals['_CHANNELRECORD_MUXRECORD']._serialized_end=2257
+  _globals['_RESETDEVICESETTINGSREQUEST']._serialized_start=2259
+  _globals['_RESETDEVICESETTINGSREQUEST']._serialized_end=2287
+  _globals['_RESETDEVICESETTINGSRESPONSE']._serialized_start=2289
+  _globals['_RESETDEVICESETTINGSRESPONSE']._serialized_end=2318
+  _globals['_SETCALIBRATIONREQUEST']._serialized_start=2321
+  _globals['_SETCALIBRATIONREQUEST']._serialized_end=2449
+  _globals['_SETCALIBRATIONRESPONSE']._serialized_start=2451
+  _globals['_SETCALIBRATIONRESPONSE']._serialized_end=2475
+  _globals['_CLEARCALIBRATIONREQUEST']._serialized_start=2477
+  _globals['_CLEARCALIBRATIONREQUEST']._serialized_end=2502
+  _globals['_CLEARCALIBRATIONRESPONSE']._serialized_start=2504
+  _globals['_CLEARCALIBRATIONRESPONSE']._serialized_end=2530
+  _globals['_GETCALIBRATIONREQUEST']._serialized_start=2532
+  _globals['_GETCALIBRATIONREQUEST']._serialized_end=2612
+  _globals['_GETCALIBRATIONRESPONSE']._serialized_start=2614
+  _globals['_GETCALIBRATIONRESPONSE']._serialized_end=2721
+  _globals['_SETTEMPERATUREREQUEST']._serialized_start=2724
+  _globals['_SETTEMPERATUREREQUEST']._serialized_end=3127
+  _globals['_SETTEMPERATUREREQUEST_WAITFORTEMPERATURESETTINGS']._serialized_start=2978
+  _globals['_SETTEMPERATUREREQUEST_WAITFORTEMPERATURESETTINGS']._serialized_end=3071
+  _globals['_SETTEMPERATUREREQUEST_SECONDARYTEMPERATURELIMITS']._serialized_start=3073
+  _globals['_SETTEMPERATUREREQUEST_SECONDARYTEMPERATURELIMITS']._serialized_end=3127
+  _globals['_SETTEMPERATURERESPONSE']._serialized_start=3130
+  _globals['_SETTEMPERATURERESPONSE']._serialized_end=3438
+  _globals['_SETTEMPERATURERESPONSE_SETTEMPERATURERESULT']._serialized_start=3281
+  _globals['_SETTEMPERATURERESPONSE_SETTEMPERATURERESULT']._serialized_end=3438
+  _globals['_GETTEMPERATUREREQUEST']._serialized_start=3440
+  _globals['_GETTEMPERATUREREQUEST']._serialized_end=3463
+  _globals['_GETTEMPERATURERESPONSE']._serialized_start=3466
+  _globals['_GETTEMPERATURERESPONSE']._serialized_end=4515
+  _globals['_GETTEMPERATURERESPONSE_MINIONTEMPERATURE']._serialized_start=4006
+  _globals['_GETTEMPERATURERESPONSE_MINIONTEMPERATURE']._serialized_end=4139
+  _globals['_GETTEMPERATURERESPONSE_PROMETHIONTEMPERATURE']._serialized_start=4142
+  _globals['_GETTEMPERATURERESPONSE_PROMETHIONTEMPERATURE']._serialized_end=4282
+  _globals['_GETTEMPERATURERESPONSE_PEBBLETEMPERATURE']._serialized_start=4285
+  _globals['_GETTEMPERATURERESPONSE_PEBBLETEMPERATURE']._serialized_end=4476
+  _globals['_STREAMTEMPERATUREREQUEST']._serialized_start=4517
+  _globals['_STREAMTEMPERATUREREQUEST']._serialized_end=4567
+  _globals['_UNBLOCKREQUEST']._serialized_start=4569
+  _globals['_UNBLOCKREQUEST']._serialized_end=4682
+  _globals['_UNBLOCKRESPONSE']._serialized_start=4684
+  _globals['_UNBLOCKRESPONSE']._serialized_end=4701
+  _globals['_CANCELUNBLOCKSREQUEST']._serialized_start=4703
+  _globals['_CANCELUNBLOCKSREQUEST']._serialized_end=4726
+  _globals['_CANCELUNBLOCKSRESPONSE']._serialized_start=4728
+  _globals['_CANCELUNBLOCKSRESPONSE']._serialized_end=4780
+  _globals['_GETCHANNELCONFIGURATIONREQUEST']._serialized_start=4782
+  _globals['_GETCHANNELCONFIGURATIONREQUEST']._serialized_end=4832
+  _globals['_GETCHANNELCONFIGURATIONRESPONSE']._serialized_start=4834
+  _globals['_GETCHANNELCONFIGURATIONRESPONSE']._serialized_end=4949
+  _globals['_SETCHANNELCONFIGURATIONREQUEST']._serialized_start=4952
+  _globals['_SETCHANNELCONFIGURATIONREQUEST']._serialized_end=5199
+  _globals['_SETCHANNELCONFIGURATIONREQUEST_CHANNELCONFIGURATIONSENTRY']._serialized_start=5097
+  _globals['_SETCHANNELCONFIGURATIONREQUEST_CHANNELCONFIGURATIONSENTRY']._serialized_end=5199
+  _globals['_SETCHANNELCONFIGURATIONRESPONSE']._serialized_start=5201
+  _globals['_SETCHANNELCONFIGURATIONRESPONSE']._serialized_end=5234
+  _globals['_SETCHANNELCONFIGURATIONALLREQUEST']._serialized_start=5236
+  _globals['_SETCHANNELCONFIGURATIONALLREQUEST']._serialized_end=5350
+  _globals['_SETCHANNELCONFIGURATIONALLRESPONSE']._serialized_start=5352
+  _globals['_SETCHANNELCONFIGURATIONALLRESPONSE']._serialized_end=5388
+  _globals['_SATURATIONCONFIG']._serialized_start=5391
+  _globals['_SATURATIONCONFIG']._serialized_end=6229
+  _globals['_SATURATIONCONFIG_THRESHOLDS']._serialized_start=5664
+  _globals['_SATURATIONCONFIG_THRESHOLDS']._serialized_end=5914
+  _globals['_SATURATIONCONFIG_SOFTWARESATURATION']._serialized_start=5917
+  _globals['_SATURATIONCONFIG_SOFTWARESATURATION']._serialized_end=6064
+  _globals['_SATURATIONCONFIG_USERTHRESHOLDSATURATION']._serialized_start=6067
+  _globals['_SATURATIONCONFIG_USERTHRESHOLDSATURATION']._serialized_end=6229
+  _globals['_SETSATURATIONCONFIGREQUEST']._serialized_start=6231
+  _globals['_SETSATURATIONCONFIGREQUEST']._serialized_end=6321
+  _globals['_SETSATURATIONCONFIGRESPONSE']._serialized_start=6323
+  _globals['_SETSATURATIONCONFIGRESPONSE']._serialized_end=6352
+  _globals['_GETSATURATIONCONFIGREQUEST']._serialized_start=6354
+  _globals['_GETSATURATIONCONFIGREQUEST']._serialized_end=6382
+  _globals['_GETSATURATIONCONFIGRESPONSE']._serialized_start=6384
+  _globals['_GETSATURATIONCONFIGRESPONSE']._serialized_end=6475
+  _globals['_GETSAMPLERATEREQUEST']._serialized_start=6477
+  _globals['_GETSAMPLERATEREQUEST']._serialized_end=6499
+  _globals['_GETSAMPLERATERESPONSE']._serialized_start=6501
+  _globals['_GETSAMPLERATERESPONSE']._serialized_end=6545
+  _globals['_SETSAMPLERATEREQUEST']._serialized_start=6547
+  _globals['_SETSAMPLERATEREQUEST']._serialized_end=6596
+  _globals['_SETSAMPLERATERESPONSE']._serialized_start=6598
+  _globals['_SETSAMPLERATERESPONSE']._serialized_end=6647
+  _globals['_GETBIASVOLTAGEREQUEST']._serialized_start=6649
+  _globals['_GETBIASVOLTAGEREQUEST']._serialized_end=6672
+  _globals['_GETBIASVOLTAGERESPONSE']._serialized_start=6674
+  _globals['_GETBIASVOLTAGERESPONSE']._serialized_end=6720
+  _globals['_SETBIASVOLTAGEREQUEST']._serialized_start=6722
+  _globals['_SETBIASVOLTAGEREQUEST']._serialized_end=6773
+  _globals['_SETBIASVOLTAGERESPONSE']._serialized_start=6775
+  _globals['_SETBIASVOLTAGERESPONSE']._serialized_end=6799
+  _globals['_DUMPSTATEREQUEST']._serialized_start=6801
+  _globals['_DUMPSTATEREQUEST']._serialized_end=6819
+  _globals['_DUMPSTATERESPONSE']._serialized_start=6821
+  _globals['_DUMPSTATERESPONSE']._serialized_end=6840
+  _globals['_INCREMENTFLOWCELLUSECOUNTREQUEST']._serialized_start=6842
+  _globals['_INCREMENTFLOWCELLUSECOUNTREQUEST']._serialized_end=6876
+  _globals['_INCREMENTFLOWCELLUSECOUNTRESPONSE']._serialized_start=6878
+  _globals['_INCREMENTFLOWCELLUSECOUNTRESPONSE']._serialized_end=6913
+  _globals['_SETFLOWCELLBARCODEKITREQUEST']._serialized_start=6915
+  _globals['_SETFLOWCELLBARCODEKITREQUEST']._serialized_end=6963
+  _globals['_SETFLOWCELLBARCODEKITRESPONSE']._serialized_start=6965
+  _globals['_SETFLOWCELLBARCODEKITRESPONSE']._serialized_end=6996
+  _globals['_REGISTERFLOWCELLBARCODESREQUEST']._serialized_start=6998
+  _globals['_REGISTERFLOWCELLBARCODESREQUEST']._serialized_end=7049
+  _globals['_REGISTERFLOWCELLBARCODESRESPONSE']._serialized_start=7051
+  _globals['_REGISTERFLOWCELLBARCODESRESPONSE']._serialized_end=7085
+  _globals['_DEVICESERVICE']._serialized_start=7373
+  _globals['_DEVICESERVICE']._serialized_end=11032
+SetCalibrationRequest.__doc__ = """Attributes:
+    first_channel:
+        The first channel included in calibration data.  This must
+        always be 1. This is required in order to make sure the client
+        and MinKNOW agree on what data is being provided.
+    last_channel:
+        The last channel included in calibration data.  This must
+        always be the same as the channel count returned by
+        :meth:`get_flow_cell_info`. This is required in order to make
+        sure the client and MinKNOW agree on what data is being
+        provided.
+    offsets:
+        The ADC value adjustment to reach 0pA on each channel.  This
+        is ``-x``, where ``x`` is the (mean) ADC value at 0pA.
+    pa_ranges:
+        The range of possible pA values that can be produced by the
+        device.
 """
-SetChannelConfigurationRequest.__doc__ = """Attributes:
-    channel_configurations:
-        A map between <channel name, config to set>  Will return an
-        error if any of the key values (representing channel names)
-        are below 1, or above the channel count value returned from
-        :meth:`get_flow_cell_info`  The selected well cannot be set to
-        WELL_OTHER, and will error if it tries to do so  DEPRECATED:
-        Note that the type to set may change from 4.0 to enforce the
-        fact that unblock cannot be set through this call
-"""
-StreamTemperatureRequest.__doc__ = """Attributes:
-    period_seconds:
-        How often temperature updates should be sent Defaults to a
-        period of 1 second, if not specified, or set to 0
-    acquisition_run_id:
-        The acquisition id of the experiment.
-    data_selection:
-        The desired data selection.  The units for all values are
-        `seconds since the start of the experiment`.
-"""
-GetTemperatureResponse.PromethIONTemperature.__doc__ = """Packet of temperatures appropriate for a PromethION.
+ReturnedChannelConfiguration.__doc__ = """Describes the configuration of a channel on the device.  Note that
+this is a lossy representation. The device-specific APIs provide more
+precise information. This only describes common configurations, and
+omits anything that doesn't impact the received signal.
 
 Attributes:
-    flowcell_temperature:
-        Temperature as measured by thermistor TH2 on the P-Chip. This
-        is the "primary" temperature
-    chamber_temperature:
-        Mean of 12 pixel-blocks temperatures measured with sensors in
-        the ASIC. This is the "secondary" temperature
+    well:
+        The currently-connected well.  Wells are counted from 1. 0
+        indicates that no well is connected. 5 indicates some non-
+        generic configuration such as ground for a minion or
+        connecting all wells on promethion  Note that MinKNOW can
+        return channel configurations where the well number is larger
+        than the ``max_well_count`` value returned by
+        :meth:`DeviceService.get_device_info`. This indicates that
+        some other connection has been made (for example, PromethIONs
+        can simultaneously connect all wells, and MinIONs can connect
+        to ground).
+    test_current:
+        Whether the test current is connected to the integrator
+        (measurement circuit).  The signal will be a steady test
+        current produced on the device. This can be used for
+        calibration or to test the device integration circuits.
+    unblock:
+        Whether the unblock voltage is connected to the integrator
+        (measurement circuit).  Provides a reverse potential across
+        the connected well. This can be used to drive molecules back
+        out of the well.
+"""
+GetDeviceInfoResponse.__doc__ = """Attributes:
+    device_id:
+        A unique identifier for the device.  This is the identifier of
+        the device MinKNOW was started for. It will only communicate
+        with this device.  Note that simulated device IDs are only
+        unique for this host, not globally.  This value will be set
+        even if the device is not currently connected (assuming
+        MinKNOW was started by the manager service).
+    device_type:
+        The type of the device.
+    is_simulated:
+        Whether the device is simulated.  If this is true, there is no
+        physical device - MinKNOW is simulating it. If it is false,
+        MinKNOW will be acquiring data from a real device.
+    max_channel_count:
+        The maximum number of channels supported by the device.  Each
+        channel provides a signal from the device. For example, a
+        MinION supports up to 512 channels, and so can provide 512
+        simultaneous streams of data.  This value is fixed for a given
+        device type. Note, however, that a flow cell might be attached
+        that has a smaller number of channels.
+    max_wells_per_channel:
+        The maximum number of wells connected to each channel.  A well
+        is a discrete location on the device where sensing can take
+        place. Normally, each well should have a single nanopore in
+        it.  For example, a MinION supports up to 4 wells per channel,
+        allowing for 2048 wells in total. So the value of this for a
+        MinION will be 4.  This value is fixed for a given device
+        type. Note, however, that a flow cell might be attached that
+        has a smaller number of wells on each channel.
+    can_set_temperature:
+        Whether the set_temperature() method can be expected to work.
+        On some systems, not all connected devices have the ability to
+        control their own temperature, as temperature controls are
+        managed in groups. If this field is true, this device can
+        control its own temperature. If it it false, it cannot, and
+        the temperature will be maintained at a pre-determined
+        temperature.
+    digitisation:
+        The range of uncalibrated data values.  This is the number of
+        distinct signal values that can be produced by the device's
+        analog to digital converter (ADC).
 """
 SetSampleRateResponse.__doc__ = """Attributes:
     real_sample_rate:
@@ -305,6 +359,69 @@ SetSampleRateResponse.__doc__ = """Attributes:
         so not all values are possible. e.g. setting 3000 will return
         3012 real sample rate. See 'sampling_frequency' in
         MinionDeviceService for a slightly more in depth explanation
+"""
+GetDeviceStateResponse.__doc__ = """Attributes:
+    device_state:
+        Whether the physical hardware is present.  This is really only
+        relevant to MinIONs, which could be unplugged by the user at
+        any time.
+    flow_cell_connector:
+        Indicates what sort of flow cell can be inserted.  For
+        example, if the user needs to set or override the flow cell
+        product code, this can be used to limit the list of possible
+        flow cell product codes to choose from.  Since 4.1
+"""
+StreamTemperatureRequest.__doc__ = """Attributes:
+    period_seconds:
+        How often temperature updates should be sent Defaults to a
+        period of 1 second, if not specified, or set to 0
+    acquisition_run_id:
+        The acquisition id of the experiment.
+    data_selection:
+        The desired data selection.  The units for all values are
+        `seconds since the start of the experiment`.
+"""
+RegisterFlowCellBarcodesRequest.__doc__ = """Attributes:
+    barcodes:
+        List of unique barcodes that have been used with the flow-cell
+        Where a barcode is represented by an index in the range of 1
+        to 384 only.
+"""
+SetTemperatureRequest.WaitForTemperatureSettings.__doc__ = """Attributes:
+    timeout:
+        Maximum duration (in seconds) to wait for the device to reach
+        temperature.  Not specifying a value will wait for a maximum
+        of 5 minutes.
+    min_stable_duration:
+        Minimum duration (in seconds) that the reported temperature
+        must be continually within the target temperature range,
+        before the device is considered to have reached temperature.
+        A value of zero means that the device will be considered to
+        have reached temperature as soon as the reported temperature
+        is equal to the target temperature.  Not specifying a value is
+        equivalent to specifying a value of zero.  The
+        min_stable_duration must be less than or equal to the timeout
+        duration (if it were greater, then the temperature would never
+        be read as 'stable' before the time-out occurred).  Since 3.4
+    tolerance:
+        Specify an optional tolerance to apply to the wait.  For
+        example, if the target temperature is 35, and the tolerance is
+        1 any temperature in the range 34 - 36 will cause the request
+        to return.  Default is 0.5 degree tolerance.
+"""
+SaturationConfig.__doc__ = """Attributes:
+    thresholds:
+        Settings for saturation count thresholds, this controls how
+        long a saturated value must be over limit before the channel
+        is turned off.  If not specified, the previous thresholds are
+        kept.
+    software_saturation:
+        Settings for software saturation, specified in adc units of
+        the device.  If not specified, the previous thresholds are
+        kept.
+    user_threshold_saturation:
+        Settings for user threshold saturation, specified in pA.  If
+        not specified, the previous thresholds are kept.
 """
 SetTemperatureRequest.__doc__ = """Attributes:
     temperature:
@@ -354,104 +471,11 @@ SetTemperatureRequest.__doc__ = """Attributes:
         the call to `set_temperature()` returns, these limits are no
         longer checked.  Since 5.5
 """
-SaturationConfig.UserThresholdSaturation.__doc__ = """User threshold is specified in pico amps
-
-Attributes:
-    enabled:
-        Set to enable or disable software saturation.
-    user_threshold_min_pa:
-        The minimum pA value that is not a saturation.  If this value
-        is not specified, the previous value is kept.
-    user_threshold_max_pa:
-        The maximum pA value that is not a saturation.  If this value
-        is not specified, the previous value is kept.
-"""
-CancelUnblocksResponse.__doc__ = """Attributes:
-    cancelled_unblocks:
-        The number of unblocks which have been cancelled as part of
-        this request.  Should return the total number of unblock
-        operations which have been cancelled.
-"""
-GetDeviceInfoResponse.__doc__ = """Attributes:
-    device_id:
-        A unique identifier for the device.  This is the identifier of
-        the device MinKNOW was started for. It will only communicate
-        with this device.  Note that simulated device IDs are only
-        unique for this host, not globally.  This value will be set
-        even if the device is not currently connected (assuming
-        MinKNOW was started by the manager service).
-    device_type:
-        The type of the device.
-    is_simulated:
-        Whether the device is simulated.  If this is true, there is no
-        physical device - MinKNOW is simulating it. If it is false,
-        MinKNOW will be acquiring data from a real device.
-    max_channel_count:
-        The maximum number of channels supported by the device.  Each
-        channel provides a signal from the device. For example, a
-        MinION supports up to 512 channels, and so can provide 512
-        simultaneous streams of data.  This value is fixed for a given
-        device type. Note, however, that a flow cell might be attached
-        that has a smaller number of channels.
-    max_wells_per_channel:
-        The maximum number of wells connected to each channel.  A well
-        is a discrete location on the device where sensing can take
-        place. Normally, each well should have a single nanopore in
-        it.  For example, a MinION supports up to 4 wells per channel,
-        allowing for 2048 wells in total. So the value of this for a
-        MinION will be 4.  This value is fixed for a given device
-        type. Note, however, that a flow cell might be attached that
-        has a smaller number of wells on each channel.
-    can_set_temperature:
-        Whether the set_temperature() method can be expected to work.
-        On some systems, not all connected devices have the ability to
-        control their own temperature, as temperature controls are
-        managed in groups. If this field is true, this device can
-        control its own temperature. If it it false, it cannot, and
-        the temperature will be maintained at a pre-determined
-        temperature.
-    digitisation:
-        The range of uncalibrated data values.  This is the number of
-        distinct signal values that can be produced by the device's
-        analog to digital converter (ADC).
-"""
-SaturationConfig.Thresholds.__doc__ = """The thresholds define how many over limit samples are required to
-trigger saturation on the device.  Each packet of frames minknow
-receive is delivered to the saturation check (in approx 64 frame
-chunks), only the first frame of each packet is inspected. The
-thresholds control how many _packets_ must be outside the valid range.
-ie. if general_threshold is set to 10, at least 640 frames are
-required to trigger saturation.  It is also possible to not define the
-value to never trigger saturation in this config.  Note: Setting a
-saturation threshold to 0 will prevent the threshold from triggering.
-
-Attributes:
-    general_threshold:
-        Threshold for software saturation on all non-unblock muxes
-    unblock_threshold:
-        Threshold for software saturation on unblock muxes
-    user_general_threshold:
-        Threshold for user threshold  saturation on all non-unblock
-        muxes
-    user_unblock_threshold:
-        Threshold for user threshold saturation on unblock muxes
-"""
 UnblockRequest.__doc__ = """Attributes:
     channels:
         List of channels indexed from 1.
     duration:
         How long should an unblock last.
-"""
-SetFlowCellBarcodeKitRequest.__doc__ = """Attributes:
-    id:
-        The Barcode Kit ID can be up to 8 characters long
-"""
-SetUserSpecifiedFlowCellIdRequest.__doc__ = """Attributes:
-    id:
-        A unique identifier for the flow cell, which the user can
-        specify.  In the event a flow cell does not have an eeprom,
-        this field can be used by the user to record their
-        flow_cell_id.  Since 1.12
 """
 GetCalibrationResponse.__doc__ = """Attributes:
     digitisation:
@@ -476,61 +500,22 @@ SetTemperatureRequest.SecondaryTemperatureLimits.__doc__ = """Attributes:
     max:
         The maximum permissible "secondary" temperature
 """
-RegisterFlowCellBarcodesRequest.__doc__ = """Attributes:
-    barcodes:
-        List of unique barcodes that have been used with the flow-cell
-        Where a barcode is represented by an index in the range of 1
-        to 384 only.
+SetChannelConfigurationRequest.__doc__ = """Attributes:
+    channel_configurations:
+        A map between <channel name, config to set>  Will return an
+        error if any of the key values (representing channel names)
+        are below 1, or above the channel count value returned from
+        :meth:`get_flow_cell_info`  The selected well cannot be set to
+        WELL_OTHER, and will error if it tries to do so  DEPRECATED:
+        Note that the type to set may change from 4.0 to enforce the
+        fact that unblock cannot be set through this call
 """
-GetTemperatureResponse.MinIONTemperature.__doc__ = """Packet of temperatures appropriate for a MinION.
-
-Attributes:
-    asic_temperature:
-        Temperature as measured by the probe inside the asic. This is
-        the "secondary" temperature
-    heatsink_temperature:
-        Temperature as measured by the probe in the minion heatsink.
-        This is the "primary" temperature
-"""
-SetTemperatureRequest.WaitForTemperatureSettings.__doc__ = """Attributes:
-    timeout:
-        Maximum duration (in seconds) to wait for the device to reach
-        temperature.  Not specifying a value will wait for a maximum
-        of 5 minutes.
-    min_stable_duration:
-        Minimum duration (in seconds) that the reported temperature
-        must be continually within the target temperature range,
-        before the device is considered to have reached temperature.
-        A value of zero means that the device will be considered to
-        have reached temperature as soon as the reported temperature
-        is equal to the target temperature.  Not specifying a value is
-        equivalent to specifying a value of zero.  The
-        min_stable_duration must be less than or equal to the timeout
-        duration (if it were greater, then the temperature would never
-        be read as 'stable' before the time-out occurred).  Since 3.4
-    tolerance:
-        Specify an optional tolerance to apply to the wait.  For
-        example, if the target temperature is 35, and the tolerance is
-        1 any temperature in the range 34 - 36 will cause the request
-        to return.  Default is 0.5 degree tolerance.
-"""
-SetCalibrationRequest.__doc__ = """Attributes:
-    first_channel:
-        The first channel included in calibration data.  This must
-        always be 1. This is required in order to make sure the client
-        and MinKNOW agree on what data is being provided.
-    last_channel:
-        The last channel included in calibration data.  This must
-        always be the same as the channel count returned by
-        :meth:`get_flow_cell_info`. This is required in order to make
-        sure the client and MinKNOW agree on what data is being
-        provided.
-    offsets:
-        The ADC value adjustment to reach 0pA on each channel.  This
-        is ``-x``, where ``x`` is the (mean) ADC value at 0pA.
-    pa_ranges:
-        The range of possible pA values that can be produced by the
-        device.
+GetChannelConfigurationRequest.__doc__ = """Attributes:
+    channels:
+        A list of channel names (1-indexed) to specify what channels
+        to get channel configs for  Will return an error if any of the
+        channel names are below 1, or above the channel count value
+        returned from :meth:`get_flow_cell_info`
 """
 GetCalibrationRequest.__doc__ = """Attributes:
     first_channel:
@@ -541,54 +526,29 @@ GetCalibrationRequest.__doc__ = """Attributes:
         normally be the channel count returned by
         :meth:`get_flow_cell_info`.
 """
-SetTemperatureResponse.__doc__ = """Attributes:
-    timed_out_waiting_for_temperature:
-        Find if we hit a timeout waiting for the temperature to be
-        hit.  Deprecated since 5.5; in favour of the
-        `TIMED_OUT_WAITING_FOR_TEMPERATURE` result code.
-    result:
-        The result of setting the temperature  Since 5.5  NB - before
-        5.5, checking this field will always return a value of
-        `TARGET_TEMPERATURE_SET` The "real" value may be inferred as
-        follows:  - If `wait_for_temperature` was NOT specified, the
-        "real" result is    `TARGET_TEMPERATURE_SET`  - If
-        `wait_for_temperature` was specified, and
-        `timed_out_waiting_for_temperature` is    false, the "real"
-        result is `REACHED_TEMPERATURE`  - If `wait_for_temperature`
-        was specified, and `timed_out_waiting_for_temperature` is
-        true, the "real" result is `TIMED_OUT_WAITING_FOR_TEMPERATURE`
-        - Versions prior to 5.5 do not support setting the secondary
-        temperature limit, and so (for    these versions) the "real"
-        value can never be `SECONDARY_TEMPERATURE_LIMITS_EXCEEDED`
-"""
-GetChannelConfigurationResponse.__doc__ = """Attributes:
-    channel_configurations:
-        A list of channel configurations  The order of channel
-        configurations matches the channel order specified by
-        :attribute:`channels` in the request message
-"""
-GetDeviceInfoResponse.ComponentVersion.__doc__ = """Firmware versions and serial-numbers of components associated with
-this device  Depending on the hardware, there may be several
-components associated with this device, each with their own firmware
-version and serial-number. Not all components have serial-numbers.
+GetTemperatureResponse.PromethIONTemperature.__doc__ = """Packet of temperatures appropriate for a PromethION.
 
 Attributes:
-    component:
-        Description of the component that has firmware
-    version:
-        The firmware version, if this cannot be determined for a
-        component where the firmware version would usually be
-        available, this will contain "Unknown"
-    serial_number:
-        The serial-number of a component. If this in not applicable to
-        the type of component or cannot be read at the current time,
-        then this field will be blank.
+    flowcell_temperature:
+        Temperature as measured by thermistor TH2 on the P-Chip. This
+        is the "primary" temperature
+    chamber_temperature:
+        Mean of 12 pixel-blocks temperatures measured with sensors in
+        the ASIC. This is the "secondary" temperature
 """
-SetUserSpecifiedProductCodeRequest.__doc__ = """Attributes:
-    code:
-        A product code for the flow cell, which the user can specify.
-        In the event a flow cell does not have an eeprom, the user can
-        specify product code here.  Since 1.12
+GetTemperatureResponse.PebbleTemperature.__doc__ = """Packet of temperatures appropriate for a Pebble
+
+Attributes:
+    asic_temperature:
+        Temperature as measured by a sensor in the ASIC silicon. This
+        is the "primary" temperature.
+    instrument_temperature:
+        Temperature as measured by temperature-sensor on the PCB
+        inside the instrument, but not on the P-Chip. This is the
+        "secondary" temperature.
+    pchip_temperature:
+        Temperature as measured by a temperature-sensor on the P-Chip.
+        Likely to be removed in future revisions.
 """
 GetFlowCellInfoResponse.__doc__ = """Attributes:
     has_flow_cell:
@@ -635,9 +595,9 @@ GetFlowCellInfoResponse.__doc__ = """Attributes:
         A unique identifier for the flow cell, which the user can
         specify.  In the event a flow cell does not have an eeprom,
         this field contains data input by the user using
-        set_flow_cell_info to record required data.  Only alpha-
-        numeric, space, dash and underscore characters are allowed in
-        this field.  Since 1.12
+        set_flow_cell_info to record required data.  Only
+        alphanumeric, space, dash and underscore characters are
+        allowed in this field.  Since 1.12
     user_specified_product_code:
         A product code for the flow cell, which the user can specify.
         This should be the code displayed in the shop where the flow
@@ -673,7 +633,7 @@ GetFlowCellInfoResponse.__doc__ = """Attributes:
         cell is inserted, this shows if it completed successfully.
         Since 5.0
     use_count:
-        The use count for this flow cell.   Since 5.6
+        The use count for this flow cell.  Since 5.6
     use_count_limit:
         The advised flow-cell use_count_limit from the configuration.
         This limit will not be enforced by MinKNOW-Core.  Since 5.6
@@ -698,71 +658,51 @@ GetFlowCellInfoResponse.__doc__ = """Attributes:
         where this field is 'true', the flow cell is definitely a CTC.
         In cases where it is 'false', the flow cell _may_ be a CTC.
         Since 6.0
+    incompatible_flow_cell_partner:
+        Set to true if the flow cell partner is incompatible with this
+        installation of MinKNOW.  Note that it is possible for this
+        field to be true and for flow_cell_partner to be empty (if the
+        installation requires a specific flow cell partner value).
+        Since 5.6 (China IVD and Q)  NB: this does not appear in the
+        5.6 OND release, or in RUO releases 5.7, 5.8, 5.9 or 6.0. It
+        is available in all 6.2 releases onwards.
 """
-ChannelConfiguration.__doc__ = """Describes the configuration of a channel on the device.  Note that
-this is a lossy representation. The device-specific APIs provide more
-precise information. This only describes common configurations, and
-omits anything that doesn't impact the received signal.
+SetTemperatureResponse.__doc__ = """Attributes:
+    timed_out_waiting_for_temperature:
+        Find if we hit a timeout waiting for the temperature to be
+        hit.  Deprecated since 5.5; in favour of the
+        `TIMED_OUT_WAITING_FOR_TEMPERATURE` result code.
+    result:
+        The result of setting the temperature  Since 5.5  NB - before
+        5.5, checking this field will always return a value of
+        `TARGET_TEMPERATURE_SET` The "real" value may be inferred as
+        follows:  - If `wait_for_temperature` was NOT specified, the
+        "real" result is    `TARGET_TEMPERATURE_SET`  - If
+        `wait_for_temperature` was specified, and
+        `timed_out_waiting_for_temperature` is    false, the "real"
+        result is `REACHED_TEMPERATURE`  - If `wait_for_temperature`
+        was specified, and `timed_out_waiting_for_temperature` is
+        true, the "real" result is `TIMED_OUT_WAITING_FOR_TEMPERATURE`
+        - Versions prior to 5.5 do not support setting the secondary
+        temperature limit, and so (for    these versions) the "real"
+        value can never be `SECONDARY_TEMPERATURE_LIMITS_EXCEEDED`
+"""
+GetDeviceInfoResponse.ComponentVersion.__doc__ = """Firmware versions and serial-numbers of components associated with
+this device  Depending on the hardware, there may be several
+components associated with this device, each with their own firmware
+version and serial-number. Not all components have serial-numbers.
 
 Attributes:
-    well:
-        The currently-connected well.  Wells are counted from 1. 0
-        indicates that no well is connected. 5 indicates some non-
-        generic configuration such as ground for a minion or
-        connecting all wells on promethion  Note that MinKNOW can
-        return channel configurations where the well number is larger
-        than the ``max_well_count`` value returned by
-        :meth:`DeviceService.get_device_info`. This indicates that
-        some other connection has been made (for example, PromethIONs
-        can simultaneously connect all wells, and MinIONs can connect
-        to ground).
-    test_current:
-        Whether the test current is connected to the integrator
-        (measurement circuit).  The signal will be a steady test
-        current produced on the device. This can be used for
-        calibration or to test the device integration circuits.
-"""
-ReturnedChannelConfiguration.__doc__ = """Describes the configuration of a channel on the device.  Note that
-this is a lossy representation. The device-specific APIs provide more
-precise information. This only describes common configurations, and
-omits anything that doesn't impact the received signal.
-
-Attributes:
-    well:
-        The currently-connected well.  Wells are counted from 1. 0
-        indicates that no well is connected. 5 indicates some non-
-        generic configuration such as ground for a minion or
-        connecting all wells on promethion  Note that MinKNOW can
-        return channel configurations where the well number is larger
-        than the ``max_well_count`` value returned by
-        :meth:`DeviceService.get_device_info`. This indicates that
-        some other connection has been made (for example, PromethIONs
-        can simultaneously connect all wells, and MinIONs can connect
-        to ground).
-    test_current:
-        Whether the test current is connected to the integrator
-        (measurement circuit).  The signal will be a steady test
-        current produced on the device. This can be used for
-        calibration or to test the device integration circuits.
-    unblock:
-        Whether the unblock voltage is connected to the integrator
-        (measurement circuit).  Provides a reverse potential across
-        the connected well. This can be used to drive molecules back
-        out of the well.
-"""
-SaturationConfig.__doc__ = """Attributes:
-    thresholds:
-        Settings for saturation count thresholds, this controls how
-        long a saturated value must be over limit before the channel
-        is turned off.  If not specified, the previous thresholds are
-        kept.
-    software_saturation:
-        Settings for software saturation, specified in adc units of
-        the device.  If not specified, the previous thresholds are
-        kept.
-    user_threshold_saturation:
-        Settings for user threshold saturation, specified in pA.  If
-        not specified, the previous thresholds are kept.
+    component:
+        Description of the component that has firmware
+    version:
+        The firmware version, if this cannot be determined for a
+        component where the firmware version would usually be
+        available, this will contain "Unknown"
+    serial_number:
+        The serial-number of a component. If this in not applicable to
+        the type of component or cannot be read at the current time,
+        then this field will be blank.
 """
 GetTemperatureResponse.__doc__ = """Attributes:
     target_temperature:
@@ -792,15 +732,99 @@ Attributes:
         The maximum adc value that is not a saturation.  If this value
         is not specified, the previous value is kept.
 """
-GetDeviceStateResponse.__doc__ = """Attributes:
-    device_state:
-        Whether the physical hardware is present.  This is really only
-        relevant to MinIONs, which could be unplugged by the user at
-        any time.
-    flow_cell_connector:
-        Indicates what sort of flow cell can be inserted.  For
-        example, if the user needs to set or override the flow cell
-        product code, this can be used to limit the list of possible
-        flow cell product codes to choose from.  Since 4.1
+SetUserSpecifiedProductCodeRequest.__doc__ = """Attributes:
+    code:
+        A product code for the flow cell, which the user can specify.
+        In the event a flow cell does not have an eeprom, the user can
+        specify product code here.  Since 1.12
+"""
+ChannelConfiguration.__doc__ = """Describes the configuration of a channel on the device.  Note that
+this is a lossy representation. The device-specific APIs provide more
+precise information. This only describes common configurations, and
+omits anything that doesn't impact the received signal.
+
+Attributes:
+    well:
+        The currently-connected well.  Wells are counted from 1. 0
+        indicates that no well is connected. 5 indicates some non-
+        generic configuration such as ground for a minion or
+        connecting all wells on promethion  Note that MinKNOW can
+        return channel configurations where the well number is larger
+        than the ``max_well_count`` value returned by
+        :meth:`DeviceService.get_device_info`. This indicates that
+        some other connection has been made (for example, PromethIONs
+        can simultaneously connect all wells, and MinIONs can connect
+        to ground).
+    test_current:
+        Whether the test current is connected to the integrator
+        (measurement circuit).  The signal will be a steady test
+        current produced on the device. This can be used for
+        calibration or to test the device integration circuits.
+"""
+SetFlowCellBarcodeKitRequest.__doc__ = """Attributes:
+    id:
+        The Barcode Kit ID can be up to 8 characters long
+"""
+SetUserSpecifiedFlowCellIdRequest.__doc__ = """Attributes:
+    id:
+        A unique identifier for the flow cell, which the user can
+        specify.  In the event a flow cell does not have an eeprom,
+        this field can be used by the user to record their
+        flow_cell_id.  Since 1.12
+"""
+CancelUnblocksResponse.__doc__ = """Attributes:
+    cancelled_unblocks:
+        The number of unblocks which have been cancelled as part of
+        this request.  Should return the total number of unblock
+        operations which have been cancelled.
+"""
+GetChannelConfigurationResponse.__doc__ = """Attributes:
+    channel_configurations:
+        A list of channel configurations  The order of channel
+        configurations matches the channel order specified by
+        :attribute:`channels` in the request message
+"""
+SaturationConfig.UserThresholdSaturation.__doc__ = """User threshold is specified in pico amps
+
+Attributes:
+    enabled:
+        Set to enable or disable software saturation.
+    user_threshold_min_pa:
+        The minimum pA value that is not a saturation.  If this value
+        is not specified, the previous value is kept.
+    user_threshold_max_pa:
+        The maximum pA value that is not a saturation.  If this value
+        is not specified, the previous value is kept.
+"""
+GetTemperatureResponse.MinIONTemperature.__doc__ = """Packet of temperatures appropriate for a MinION.
+
+Attributes:
+    asic_temperature:
+        Temperature as measured by the probe inside the asic. This is
+        the "secondary" temperature
+    heatsink_temperature:
+        Temperature as measured by the probe in the minion heatsink.
+        This is the "primary" temperature
+"""
+SaturationConfig.Thresholds.__doc__ = """The thresholds define how many over limit samples are required to
+trigger saturation on the device.  Each packet of frames minknow
+receive is delivered to the saturation check (in approx 64 frame
+chunks), only the first frame of each packet is inspected. The
+thresholds control how many _packets_ must be outside the valid range.
+ie. if general_threshold is set to 10, at least 640 frames are
+required to trigger saturation.  It is also possible to not define the
+value to never trigger saturation in this config.  Note: Setting a
+saturation threshold to 0 will prevent the threshold from triggering.
+
+Attributes:
+    general_threshold:
+        Threshold for software saturation on all non-unblock muxes
+    unblock_threshold:
+        Threshold for software saturation on unblock muxes
+    user_general_threshold:
+        Threshold for user threshold  saturation on all non-unblock
+        muxes
+    user_unblock_threshold:
+        Threshold for user threshold saturation on unblock muxes
 """
 # @@protoc_insertion_point(module_scope)

@@ -45,7 +45,7 @@ service AnalysisConfigurationService {
     //
     // 'including_default_value_fields' is needed because in proto3, primitive values that are default initialised (like a uint32 with value 0)
     // will not be sent on the wire, so the value wouldn't appear when converting to json. In practice, most values are wrapper types and this
-    // field won't have an affect in wrapper types, but it does affect enum types as the default initailised value is the 0th enum.
+    // field won't have an affect in wrapper types, but it does affect enum types as the default initialised value is the 0th enum.
     //
     // NOTE: if the analysis configuration was set using the new parameters (with the filename for basecalling config files), the old parameters
     // from jsn will be ignored. So set_analysis_configuration must be used with either the old protobuf message for the basecaller parameters,
@@ -178,12 +178,12 @@ service AnalysisConfigurationService {
         option idempotency_level = NO_SIDE_EFFECTS;
     };
 
-    // Set the dynamic analysis configuration, used during 
+    // Set the dynamic analysis configuration, used during
     //
     // This can be changed during an acquisition period, and should be called as new values become appropriate.
     // The new analysis parameters will be used after any data already received has been processe.
     rpc set_dynamic_analysis_configuration(DynamicAnalysisConfiguration) returns (SetDynamicAnalysisConfigurationResponse) { }
-    
+
 }
 
 message EventDetection {
@@ -352,6 +352,21 @@ message ReadClassificationParams {
         repeated string rules_in_execution_order = 2;
     }
 
+    message MetricsEwma {
+        google.protobuf.FloatValue median = 1;
+        google.protobuf.FloatValue median_sd = 2;
+        google.protobuf.FloatValue range = 3;
+        google.protobuf.FloatValue median_dwell = 4;
+        google.protobuf.FloatValue dwell_sd = 5;
+
+        // How many read chunks are required before an ewma is calculated.
+        //
+        // If we don't use ewma, a straight mean of all samples so far is used instead.
+        //
+        // Default value is 0: Always use ewma.
+        google.protobuf.Int32Value read_chunks_required_for_ewma = 6;
+    }
+
     Scheme scheme_module = 1;
 
     // This tells minknow the maximum number of means to store in memory before using a different strategy
@@ -383,7 +398,7 @@ message ReadClassificationParams {
     // Determine how to classify a whole read based on the strategy
     //
     // 'ultimate':      Chooses the last (ultimate) read chunk's classification
-    // 'penultimate':   Chooses the second-to-last read chunk's clasification
+    // 'penultimate':   Chooses the second-to-last read chunk's classification
     // 'modal':         Chooses the most common classification out of all read chunks
     // 'threshold':     Chooses a classification based on the combination of threshold parameters.
     //                  If selected, values for the "selected_classifications_fraction_required"
@@ -431,6 +446,19 @@ message ReadClassificationParams {
     //
     // If unspecified a default value is used.
     google.protobuf.UInt64Value max_read_length_before_selected_decision_seconds = 12;
+
+    // Configuration for Exponentially weighted moving averages over read metrics.
+    // These values configure how sensitive the complete read metrics are to per chunk changes in value;
+    // higher values in the config here cause an increase in sensitivity in the metrics to per chunk changes.
+    //
+    // The values provided here are biased based on the length of each chunk, so short chunks will have less
+    // effect on the computed metric than longer chunks.
+    //
+    // A value of 1.0 will take as much of the local chunk value as possible, while values closer to zero will
+    // make the computed metric slower moving.
+    //
+    // The default weight if unspecified is 0.1.
+    MetricsEwma metrics_ewma = 13;
 }
 
 message ChannelStates {
@@ -540,6 +568,10 @@ message ChannelStates {
 }
 
 message GetAnalysisConfigurationRequest {
+    // The unique identifier assigned to this acquisition run.
+    //
+    // Since 6.2
+    string run_id = 1;
 }
 
 
@@ -567,7 +599,7 @@ message ReadScalingParams
     // Alpha decay value to use. Higher values cause a more rapid decay in greater trust of earlier numbers.
     float alpha_number_estimates_decay = 5;
 
-    // Maximum difference in event quantiles which will be added into trackers. 
+    // Maximum difference in event quantiles which will be added into trackers.
     // This is used to filter away cases where pore signal is included in the read and thus cannot be trusted.
     float quantile_maxdiff = 10;
 
@@ -588,7 +620,7 @@ message ReadScalingParams
 
     // Scale factor applied to conductance to produce a basic scale estimate, also combined with q90_q10_to_normal.
     float conductance_factor_scale = 11;
-    
+
     // Scale factor applied to conductance to produce a basic shift estimate.
     float conductance_factor_shift = 12;
     float q90_q10_to_normal = 13;
@@ -600,7 +632,7 @@ message AnalysisConfiguration {
 
     ReadClassificationParams read_classification = 4;
     map<string, ChannelStates> channel_states = 7;
-    
+
     // Add read scale tracking to the pipeline.
     // If this message is unspecified, read scaling is not enabled.
     ReadScalingParams read_scaling = 8;
@@ -696,7 +728,7 @@ message BarcodingConfiguration
     repeated string barcoding_kits = 1;
 
     // Whether the basecaller should trim barcodes
-    // If not specified, this value defaults to false (not triming barcodes)
+    // If not specified, this value defaults to false (not trimming barcodes)
     // If barcoding is not enabled (e.g., because no barcoding kits are specified),
     // this parameter has no effect.
     bool trim_barcodes = 2;
@@ -715,7 +747,7 @@ message BarcodingConfiguration
     reserved 7;
     reserved "min_score_mask";
     reserved 8;
-    
+
     // If set, barcodes that aren't in barcode user data list will be ignored
     //
     // Since 5.6
@@ -782,12 +814,15 @@ message BasecallerConfiguration
 {
     message ReadFiltering {
         google.protobuf.DoubleValue min_qscore = 1;
-        google.protobuf.UInt64Value min_samples = 2;
-        google.protobuf.UInt64Value max_samples = 3;
+        reserved "min_samples"; // Removed as of 6.1 as this option is no longer supported.
+        reserved 2;
+        reserved "max_samples"; // Removed as of 6.1 as this option is no longer supported.
+        reserved 3;
         google.protobuf.UInt64Value min_bases = 4;
         google.protobuf.UInt64Value max_bases = 5;
-        google.protobuf.UInt64Value max_failed_chunks = 6;
-        
+        reserved "max_failed_chunks"; // Removed as of 6.1 as this option is no longer supported.
+        reserved 6;
+
         // Since 5.8
         google.protobuf.DoubleValue min_duplex_qscore = 7;
     }
@@ -812,9 +847,9 @@ message BasecallerConfiguration
 
     // Enable or disable pass/fail filtering based on alignment.  When enabled, reads which
     // do not align to any references will be marked as "failed", and written to the folder
-    // specified in MinKNOW configuration for failed reads.  
+    // specified in MinKNOW configuration for failed reads.
     //
-    // The setting applies to both regular read filtering and target filtering; if it is 
+    // The setting applies to both regular read filtering and target filtering; if it is
     // enabled, then a read will not be marked as a target read if it does not align to a reference.
     //
     // Default setting is false, i.e. disabled.
@@ -840,8 +875,8 @@ message BasecallerConfiguration
 
     // Control how target filtering is applied to output of basecaller.
     // Reads which pass these filtering criteria will be marked as
-    // "target" reads, and will be written to a separate folder; this 
-    // folder is specified in MinKNOW configuration.  Reads which do 
+    // "target" reads, and will be written to a separate folder; this
+    // folder is specified in MinKNOW configuration.  Reads which do
     // not pass these criteria will have the regular read filtering
     // applied to them, as specified by the `read-filtering` settings
     // above.
@@ -892,7 +927,7 @@ message SetBasecallerConfigurationResponse{}
 message GetBasecallerConfigurationRequest
 {
     // The unique identifier assigned to this acquisition run.
-    // 
+    //
     // Since 6.0
     string run_id = 1;
 }
@@ -959,7 +994,6 @@ message SetPoreTypeConfigurationResponse {}
 // The tokens used to expand depend on the file type:
 //
 // Read centric files (fastq, (multi-)fast5, protobuf):
-//  - read_classification:  The classification applied to the completed read (eg. strand).
 //  - batch_number:         The batch number of this read, evaluated based on the destination file.
 //  - read_id:              Unique read id for each read, formatted as a hash.
 //  - channel_name:         The name of the channel which produced the read.
@@ -1248,7 +1282,7 @@ message WriterConfiguration {
 
             // Number of estimated bases within a batch before it rotates to a new batch
             uint64 bases_per_batch = 7;
-            
+
             // Do not perform batching based on output
             // (time-based batching is still performed, if specified)
             google.protobuf.Empty no_output_based_batching = 9;
@@ -1350,7 +1384,7 @@ message WriterConfiguration {
         //
         // Stored with the frame commands take effect sequence in /Device/AsicCommands
         bool device_commands = 12;
-        
+
         // Dynamic analysis configuration
         //
         // Stored with the frame config took effect in /Meta/User/DynamicAnalysisConfiguration
@@ -1513,7 +1547,7 @@ message SetWriterConfigurationResponse {
 message GetWriterConfigurationRequest
 {
     // The unique identifier assigned to this acquisition run.
-    // 
+    //
     // Since 6.0
     string run_id = 1;
 }
@@ -1527,7 +1561,7 @@ message GetReadClassificationsResponse {
 message DynamicAnalysisConfiguration {
 
     message ReadScaleTracking {
-        // Set the voltage the most recent conductance scan occured at.
+        // Set the voltage the most recent conductance scan occurred at.
         float conductance_scan_voltage = 1;
 
         message ChannelConductance {

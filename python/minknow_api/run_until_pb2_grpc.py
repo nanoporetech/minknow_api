@@ -26,10 +26,10 @@ class RunUntilServiceStub(object):
     time remaining, and Run-Until actions (i.e. starting/stopping the experiment).
 
     Finally, this service provides an API for Run-Until Scripts.  A Run-Until Script is responsible
-    for actually implementing the Run-Until functionality.  The Run-Until Script reads the Target 
+    for actually implementing the Run-Until functionality.  The Run-Until Script reads the Target
     Run-Until Criteria that are set by the user.  It then monitors the experiment's progress, and
     pauses or stops the experiment when the Run-Until Criteria have been fulfilled.  There is a
-    "standard" ONT-provided run-until script, which supports the "standard" Run-Until Criteria. 
+    "standard" ONT-provided run-until script, which supports the "standard" Run-Until Criteria.
     Custom Run-Until Scripts can be implemented which extend the "standard" Run-Until Script to
     provide support for additional criteria.
 
@@ -115,7 +115,7 @@ class RunUntilServiceStub(object):
     stream as follows:
 
     - When the protocol starts, an empty message is added to the history
-    - When an update is received on the `write_updates()` interface, the values of the 
+    - When an update is received on the `write_updates()` interface, the values of the
     `estimated_time_remaining_update` and `current_progress_update` fields are updated, by
     "merging" the corresponding fields of the last message in the history.  "Merging" here means
     copying keys/values which appear in the "previous" message, but which don't have
@@ -127,7 +127,7 @@ class RunUntilServiceStub(object):
     previous message in the history is overwritten with the "merged" message
     - Otherwise, the "merged" message is appended to the history.
 
-    After updating the history, the final entry in the history is sent to any open 
+    After updating the history, the final entry in the history is sent to any open
     `stream_updates()` streams.  The `idx` in the `StreamUpdatesResponse` message is set equal to
     the index of the entry in the history.  This means that the `stream_updates()` stream will
     likely contain repeated `idx` values -- this will happen when the previous message in the
@@ -186,10 +186,10 @@ class RunUntilServiceServicer(object):
     time remaining, and Run-Until actions (i.e. starting/stopping the experiment).
 
     Finally, this service provides an API for Run-Until Scripts.  A Run-Until Script is responsible
-    for actually implementing the Run-Until functionality.  The Run-Until Script reads the Target 
+    for actually implementing the Run-Until functionality.  The Run-Until Script reads the Target
     Run-Until Criteria that are set by the user.  It then monitors the experiment's progress, and
     pauses or stops the experiment when the Run-Until Criteria have been fulfilled.  There is a
-    "standard" ONT-provided run-until script, which supports the "standard" Run-Until Criteria. 
+    "standard" ONT-provided run-until script, which supports the "standard" Run-Until Criteria.
     Custom Run-Until Scripts can be implemented which extend the "standard" Run-Until Script to
     provide support for additional criteria.
 
@@ -275,7 +275,7 @@ class RunUntilServiceServicer(object):
     stream as follows:
 
     - When the protocol starts, an empty message is added to the history
-    - When an update is received on the `write_updates()` interface, the values of the 
+    - When an update is received on the `write_updates()` interface, the values of the
     `estimated_time_remaining_update` and `current_progress_update` fields are updated, by
     "merging" the corresponding fields of the last message in the history.  "Merging" here means
     copying keys/values which appear in the "previous" message, but which don't have
@@ -287,7 +287,7 @@ class RunUntilServiceServicer(object):
     previous message in the history is overwritten with the "merged" message
     - Otherwise, the "merged" message is appended to the history.
 
-    After updating the history, the final entry in the history is sent to any open 
+    After updating the history, the final entry in the history is sent to any open
     `stream_updates()` streams.  The `idx` in the `StreamUpdatesResponse` message is set equal to
     the index of the entry in the history.  This means that the `stream_updates()` stream will
     likely contain repeated `idx` values -- this will happen when the previous message in the
@@ -394,10 +394,10 @@ class RunUntilService(object):
     time remaining, and Run-Until actions (i.e. starting/stopping the experiment).
 
     Finally, this service provides an API for Run-Until Scripts.  A Run-Until Script is responsible
-    for actually implementing the Run-Until functionality.  The Run-Until Script reads the Target 
+    for actually implementing the Run-Until functionality.  The Run-Until Script reads the Target
     Run-Until Criteria that are set by the user.  It then monitors the experiment's progress, and
     pauses or stops the experiment when the Run-Until Criteria have been fulfilled.  There is a
-    "standard" ONT-provided run-until script, which supports the "standard" Run-Until Criteria. 
+    "standard" ONT-provided run-until script, which supports the "standard" Run-Until Criteria.
     Custom Run-Until Scripts can be implemented which extend the "standard" Run-Until Script to
     provide support for additional criteria.
 
@@ -483,7 +483,7 @@ class RunUntilService(object):
     stream as follows:
 
     - When the protocol starts, an empty message is added to the history
-    - When an update is received on the `write_updates()` interface, the values of the 
+    - When an update is received on the `write_updates()` interface, the values of the
     `estimated_time_remaining_update` and `current_progress_update` fields are updated, by
     "merging" the corresponding fields of the last message in the history.  "Merging" here means
     copying keys/values which appear in the "previous" message, but which don't have
@@ -495,7 +495,7 @@ class RunUntilService(object):
     previous message in the history is overwritten with the "merged" message
     - Otherwise, the "merged" message is appended to the history.
 
-    After updating the history, the final entry in the history is sent to any open 
+    After updating the history, the final entry in the history is sent to any open
     `stream_updates()` streams.  The `idx` in the `StreamUpdatesResponse` message is set equal to
     the index of the entry in the history.  This means that the `stream_updates()` stream will
     likely contain repeated `idx` values -- this will happen when the previous message in the

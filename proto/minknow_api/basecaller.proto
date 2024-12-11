@@ -23,8 +23,11 @@ service Basecaller {
     // List the available basecalling configurations sorted by flow cell and kit.
     //
     // Since 3.5
+    //
+    // DEPRECATED: This rpc is no longer supported and does not return any results.
     rpc list_configs_by_kit (ListConfigsByKitRequest) returns (ListConfigsByKitResponse) {
         option idempotency_level = NO_SIDE_EFFECTS;
+        option deprecated = true;
     }
 
     // Start basecalling reads files.
@@ -64,7 +67,7 @@ service Basecaller {
         option idempotency_level = NO_SIDE_EFFECTS;
     }
 
-    
+
     // Clears run info data for each analysis specified
     //
     // Run info data is the data returned by `get_info()`.
@@ -132,7 +135,7 @@ service Basecaller {
     // Since 5.0
     rpc send_ping(SendPingRequest) returns (SendPingResponse) {}
 }
- 
+
 
 message ListConfigsByKitRequest {
 }
@@ -201,6 +204,11 @@ message StartBasecallingRequest {
 
     // Options to control alignment performed once basecalling reads is complete.
     analysis_configuration.AlignmentConfiguration alignment_configuration = 11;
+
+    // Minimum Q-Score for a read to be passed by the basecaller.
+    //
+    // Since 6.1.
+    optional double min_qscore = 15;
 
     // Enable read splitting in the basecaller
     //
@@ -304,7 +312,7 @@ message StartPostProcessingProtocolRequest {
     string input_fast5_directory = 2;
     string input_fastq_directory = 3;
     string input_bam_directory = 4;
-    
+
     // Path to the sample sheet output by minknow
     string sample_sheet_path = 8;
 
@@ -546,7 +554,7 @@ message ListSettingsForPostProcessingProtocolResponse {
 message UpdateProgressRequest {
     // id of the protocol to update (stored in environment variable for python process)
     string id = 1;
- 
+
     // Progress indicator, 0-1.
     float progress = 2;
 }

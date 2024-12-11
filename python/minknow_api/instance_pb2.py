@@ -97,20 +97,14 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   _globals['_STREAMINSTANCEACTIVITYRESPONSE_FLOWCELLHEALTH_CHANNELSTATEPERCENTAGESENTRY']._serialized_end=2704
   _globals['_INSTANCESERVICE']._serialized_start=2723
   _globals['_INSTANCESERVICE']._serialized_end=3879
-BasecallSpeed.__doc__ = """Attributes:
-    mean_basecall_speed:
-        Mean basecall speed, in bases per second.  This value is only
-        streamed for acquisitions where basecalling is enabled.  The
-        value reported here is the value stored in last completed
-        basecall boxplot bucket Each boxplot bucket covers a duration
-        of `boxplot_time_coverage_in_minutes`
-"""
-DeviceInfo.__doc__ = """Attributes:
-    device_state:
-        The current state of the device
-    device_info:
-        Information about the connected device (or no content if
-        disconnected see: device_state)
+N50.__doc__ = """Attributes:
+    n50:
+        N50 data, in basecalled bases  This value is only streamed for
+        acquisitions where basecalling is enabled.  The latest value
+        is sent once per minute
+    estimated_n50:
+        N50 data, in estimated bases  The latest value is sent once
+        per minute
 """
 StreamInstanceActivityResponse.FlowCellHealth.__doc__ = """Attributes:
     channel_state_percentages:
@@ -171,7 +165,7 @@ StreamInstanceActivityResponse.__doc__ = """Attributes:
     yield_summary:
         Acquisition yield information. Describes information such as
         number of reads, what number of those reads have passed or
-        failed basecalling etc. Rate  limited to 1 second per update
+        failed basecalling etc. Rate limited to 1 second per update
     basecall_speed:
         Basecall speed information Note: only available if an
         acquisition with basecalling enabled is in progress
@@ -180,6 +174,10 @@ StreamInstanceActivityResponse.__doc__ = """Attributes:
         basecalled bases and estimated bases  Note: basecalled bases
         only available if an acquisition with basecalling enabled is
         in progress
+"""
+GetMachineIdResponse.__doc__ = """Attributes:
+    machine_id:
+        The machine_id MinKNOW uses for this host.
 """
 OutputDirectories.__doc__ = """Attributes:
     output:
@@ -190,11 +188,12 @@ OutputDirectories.__doc__ = """Attributes:
     reads:
         Base directory where reads will be outputted.
 """
-StreamDiskSpaceInfoRequest.__doc__ = """Attributes:
-    period:
-        Disk space information will be streamed with this value
-        determining the period in seconds between updates. A period of
-        0 is invalid
+DeviceInfo.__doc__ = """Attributes:
+    device_state:
+        The current state of the device
+    device_info:
+        Information about the connected device (or no content if
+        disconnected see: device_state)
 """
 GetVersionInfoResponse.__doc__ = """Version of the basecaller MinKNOW is running with.  Since 5.0 This
 field has been updated since 6.0  guppy_connected_version
@@ -204,10 +203,10 @@ Attributes:
         What minknow version is installed. Split into major, minor and
         patch versions Also includes the full version as a string,
         which contain the major, minor and patch numbers as well as if
-        the version is pre-release version (-pre), whether it is a
-        release candidate (-rc#) or whether it is a variant version
+        the version is pre-release version (~pre), whether it is a
+        release candidate (~rc#) or whether it is a variant version
         (i.e. for conferences) (-variant). For non-release builds it
-        also  includes the hash of the commit it is based on, and
+        also includes the hash of the commit it is based on, and
         whether the working copy is different from that has (-dirty)
     bream:
         The version of Bream that is installed.  An invalid
@@ -232,17 +231,18 @@ Attributes:
         affect the available features, or the update process.  Since
         4.1
 """
-N50.__doc__ = """Attributes:
-    n50:
-        N50 data, in basecalled bases  This value is only streamed for
-        acquisitions where basecalling is enabled.  The latest value
-        is sent once per minute
-    estimated_n50:
-        N50 data, in estimated bases  The latest value is sent once
-        per minute
+StreamDiskSpaceInfoRequest.__doc__ = """Attributes:
+    period:
+        Disk space information will be streamed with this value
+        determining the period in seconds between updates. A period of
+        0 is invalid
 """
-GetMachineIdResponse.__doc__ = """Attributes:
-    machine_id:
-        The machine_id MinKNOW uses for this host.
+BasecallSpeed.__doc__ = """Attributes:
+    mean_basecall_speed:
+        Mean basecall speed, in bases per second.  This value is only
+        streamed for acquisitions where basecalling is enabled.  The
+        value reported here is the value stored in last completed
+        basecall boxplot bucket Each boxplot bucket covers a duration
+        of `boxplot_time_coverage_in_minutes`
 """
 # @@protoc_insertion_point(module_scope)

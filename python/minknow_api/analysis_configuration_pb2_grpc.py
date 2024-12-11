@@ -136,7 +136,7 @@ class AnalysisConfigurationServiceServicer(object):
 
         'including_default_value_fields' is needed because in proto3, primitive values that are default initialised (like a uint32 with value 0)
         will not be sent on the wire, so the value wouldn't appear when converting to json. In practice, most values are wrapper types and this
-        field won't have an affect in wrapper types, but it does affect enum types as the default initailised value is the 0th enum.
+        field won't have an affect in wrapper types, but it does affect enum types as the default initialised value is the 0th enum.
 
         NOTE: if the analysis configuration was set using the new parameters (with the filename for basecalling config files), the old parameters
         from jsn will be ignored. So set_analysis_configuration must be used with either the old protobuf message for the basecaller parameters,
@@ -297,7 +297,7 @@ class AnalysisConfigurationServiceServicer(object):
         raise NotImplementedError('Method not implemented!')
 
     def set_dynamic_analysis_configuration(self, request, context):
-        """Set the dynamic analysis configuration, used during 
+        """Set the dynamic analysis configuration, used during
 
         This can be changed during an acquisition period, and should be called as new values become appropriate.
         The new analysis parameters will be used after any data already received has been processe.

@@ -22,7 +22,7 @@ from google.protobuf import timestamp_pb2 as google_dot_protobuf_dot_timestamp__
 from google.protobuf import wrappers_pb2 as google_dot_protobuf_dot_wrappers__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x1aminknow_api/protocol.proto\x12\x14minknow_api.protocol\x1a\x1dminknow_api/acquisition.proto\x1a$minknow_api/analysis_workflows.proto\x1a\x1cminknow_api/basecaller.proto\x1a\x18minknow_api/device.proto\x1a#minknow_api/protocol_settings.proto\x1a\x1dminknow_api/rpc_options.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1egoogle/protobuf/wrappers.proto\"\xcb\x03\n\x0f\x42\x61rcodeUserData\x12\x14\n\x0c\x62\x61rcode_name\x18\x01 \x01(\t\x12\x1d\n\x15\x62\x61rcode_name_internal\x18\x05 \x01(\t\x12\x17\n\x0flamp_barcode_id\x18\x02 \x01(\t\x12\r\n\x05\x61lias\x18\x03 \x01(\t\x12>\n\x04type\x18\x04 \x01(\x0e\x32\x30.minknow_api.protocol.BarcodeUserData.SampleType\x12P\n\x0epassenger_info\x18\x06 \x03(\x0b\x32\x38.minknow_api.protocol.BarcodeUserData.PassengerInfoEntry\x1a\x34\n\x12PassengerInfoEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\x92\x01\n\nSampleType\x12\x0f\n\x0btest_sample\x10\x00\x12\x14\n\x10positive_control\x10\x01\x12\x14\n\x10negative_control\x10\x02\x12\x17\n\x13no_template_control\x10\x03\x12\x16\n\x12positive_control_1\x10\x04\x12\x16\n\x12positive_control_2\x10\x05\"A\n\x07KitInfo\x12\x16\n\x0esequencing_kit\x18\x01 \x01(\t\x12\x1e\n\x16\x62\x61rcode_expansion_kits\x18\x02 \x03(\t\"\xf8\x02\n\x13ProtocolRunUserInfo\x12\x37\n\x11protocol_group_id\x18\x01 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12/\n\tsample_id\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12@\n\x11\x62\x61rcode_user_info\x18\x03 \x03(\x0b\x32%.minknow_api.protocol.BarcodeUserData\x12\x41\n\x1buser_specified_flow_cell_id\x18\x04 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x41\n\x1buser_specified_product_code\x18\x05 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12/\n\x08kit_info\x18\x06 \x01(\x0b\x32\x1d.minknow_api.protocol.KitInfo\"R\n\x13OffloadLocationInfo\x12\x1c\n\x14offload_location_ids\x18\x01 \x03(\t\x12\x1d\n\x15offload_location_path\x18\x02 \x01(\t\"\xba\x01\n\x17\x41nalysisWorkflowRequest\x12\x43\n\rproxy_request\x18\x01 \x01(\x0b\x32,.minknow_api.analysis_workflows.ProxyRequest\x12@\n\x04when\x18\x02 \x01(\x0e\x32\x32.minknow_api.protocol.AnalysisWorkflowRequest.When\"\x18\n\x04When\x12\x10\n\x0cPROTOCOL_END\x10\x00\"\xf2\x02\n\x14StartProtocolRequest\x12\x18\n\nidentifier\x18\x01 \x01(\tB\x04\x88\xb5\x18\x01\x12\x0c\n\x04\x61rgs\x18\x02 \x03(\t\x12<\n\tuser_info\x18\x03 \x01(\x0b\x32).minknow_api.protocol.ProtocolRunUserInfo\x12H\n\x15offload_location_info\x18\x04 \x01(\x0b\x32).minknow_api.protocol.OffloadLocationInfo\x12R\n\x19target_run_until_criteria\x18\x05 \x01(\x0b\x32/.minknow_api.acquisition.TargetRunUntilCriteria\x12P\n\x19\x61nalysis_workflow_request\x18\x07 \x01(\x0b\x32-.minknow_api.protocol.AnalysisWorkflowRequestJ\x04\x08\x06\x10\x07\"\'\n\x15StartProtocolResponse\x12\x0e\n\x06run_id\x18\x01 \x01(\t\"c\n\x13StopProtocolRequest\x12L\n\x13\x64\x61ta_action_on_stop\x18\x01 \x01(\x0e\x32/.minknow_api.acquisition.StopRequest.DataAction\"\x16\n\x14StopProtocolResponse\"\x16\n\x14PauseProtocolRequest\"\x17\n\x15PauseProtocolResponse\"\x17\n\x15ResumeProtocolRequest\"\x18\n\x16ResumeProtocolResponse\"\x17\n\x15TriggerMuxScanRequest\"\x18\n\x16TriggerMuxScanResponse\",\n\x14ListProtocolsRequest\x12\x14\n\x0c\x66orce_reload\x18\x01 \x01(\x08\"\xff\x03\n\x0cProtocolInfo\x12\x12\n\nidentifier\x18\x01 \x01(\t\x12:\n\x04tags\x18\x02 \x03(\x0b\x32,.minknow_api.protocol.ProtocolInfo.TagsEntry\x12\x0c\n\x04name\x18\x03 \x01(\t\x12U\n\x15tag_extraction_result\x18\x04 \x01(\x0b\x32\x36.minknow_api.protocol.ProtocolInfo.TagExtractionResult\x1a\xa1\x01\n\x08TagValue\x12\x16\n\x0cstring_value\x18\x01 \x01(\tH\x00\x12\x14\n\nbool_value\x18\x02 \x01(\x08H\x00\x12\x13\n\tint_value\x18\x03 \x01(\x03H\x00\x12\x16\n\x0c\x64ouble_value\x18\x04 \x01(\x01H\x00\x12\x15\n\x0b\x61rray_value\x18\x05 \x01(\tH\x00\x12\x16\n\x0cobject_value\x18\x06 \x01(\tH\x00\x42\x0b\n\ttag_value\x1a<\n\x13TagExtractionResult\x12\x0f\n\x07success\x18\x01 \x01(\x08\x12\x14\n\x0c\x65rror_report\x18\x02 \x01(\t\x1aX\n\tTagsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12:\n\x05value\x18\x02 \x01(\x0b\x32+.minknow_api.protocol.ProtocolInfo.TagValue:\x02\x38\x01\"N\n\x15ListProtocolsResponse\x12\x35\n\tprotocols\x18\x01 \x03(\x0b\x32\".minknow_api.protocol.ProtocolInfo\"\xff\x01\n\x16WaitForFinishedRequest\x12\x14\n\x06run_id\x18\x01 \x01(\tB\x04\x88\xb5\x18\x01\x12M\n\x05state\x18\x02 \x01(\x0e\x32>.minknow_api.protocol.WaitForFinishedRequest.NotificationState\x12\x0f\n\x07timeout\x18\x03 \x01(\x02\"o\n\x11NotificationState\x12\x19\n\x15NOTIFY_ON_TERMINATION\x10\x00\x12\x1d\n\x19NOTIFY_BEFORE_TERMINATION\x10\x01\x12 \n\x1cNOTIFY_ON_SCRIPT_TERMINATION\x10\x02\"#\n\x11GetRunInfoRequest\x12\x0e\n\x06run_id\x18\x01 \x01(\t\"\xa5\x03\n\rRequestOrigin\x12\x38\n\x04user\x18\x01 \x01(\x0b\x32(.minknow_api.protocol.RequestOrigin.UserH\x00\x12>\n\x07minknow\x18\x02 \x01(\x0b\x32+.minknow_api.protocol.RequestOrigin.MinKNOWH\x00\x12`\n\x19protocol_phase_management\x18\x03 \x01(\x0b\x32;.minknow_api.protocol.RequestOrigin.ProtocolPhaseManagementH\x00\x12\x41\n\trun_until\x18\x04 \x01(\x0b\x32,.minknow_api.protocol.RequestOrigin.RunUntilH\x00\x1a\x18\n\x04User\x12\x10\n\x08identity\x18\x01 \x01(\t\x1a\x18\n\x07MinKNOW\x12\r\n\x05\x63\x61use\x18\x01 \x01(\t\x1a\x19\n\x17ProtocolPhaseManagement\x1a\x1c\n\x08RunUntil\x12\x10\n\x08\x63riteria\x18\x01 \x01(\tB\x08\n\x06origin\"2\n\x17\x45pi2meWorkflowReference\x12\n\n\x02id\x18\x01 \x01(\x03\x12\x0b\n\x03url\x18\x02 \x01(\t\"\xf7\x01\n AssociatedPostProcessingAnalysis\x12\x12\n\nstarted_id\x18\x01 \x01(\t\x12;\n\rstart_request\x18\x02 \x01(\x0b\x32$.minknow_api.basecaller.StartRequest\x12K\n\x05state\x18\x03 \x01(\x0e\x32<.minknow_api.protocol.AssociatedPostProcessingAnalysis.State\"5\n\x05State\x12\n\n\x06QUEUED\x10\x00\x12\x0b\n\x07STARTED\x10\x01\x12\x13\n\x0f\x46\x41ILED_TO_START\x10\x02\"R\n\x10PlatformQcResult\x12\x14\n\x0c\x66low_cell_id\x18\x01 \x01(\t\x12\x0e\n\x06passed\x18\x02 \x01(\x08\x12\x18\n\x10total_pore_count\x18\x03 \x01(\r\"\xd4\x02\n\x13HardwareCheckResult\x12M\n\x06status\x18\x01 \x01(\x0e\x32=.minknow_api.protocol.HardwareCheckResult.HardwareCheckStatus\x12\\\n\x0e\x66\x61ilure_reason\x18\x02 \x01(\x0e\x32\x44.minknow_api.protocol.HardwareCheckResult.HardwareCheckFailureReason\"G\n\x13HardwareCheckStatus\x12\x08\n\x04None\x10\x00\x12\x0b\n\x07Started\x10\x01\x12\r\n\tSucceeded\x10\x02\x12\n\n\x06\x46\x61iled\x10\x03\"G\n\x1aHardwareCheckFailureReason\x12\x0b\n\x07NoError\x10\x00\x12\x0b\n\x07Unknown\x10\x01\x12\x0f\n\x0bScriptError\x10\x02\"&\n\x0f\x45xternalOffload\x12\x13\n\x0boffload_ids\x18\x01 \x03(\t\"\xa6\x05\n\x16GetVersionInfoResponse\x12L\n\x07minknow\x18\x01 \x01(\x0b\x32;.minknow_api.protocol.GetVersionInfoResponse.MinknowVersion\x12\r\n\x05\x62ream\x18\x02 \x01(\t\x12\x1c\n\x14\x64istribution_version\x18\x03 \x01(\t\x12\\\n\x13\x64istribution_status\x18\x04 \x01(\x0e\x32?.minknow_api.protocol.GetVersionInfoResponse.DistributionStatus\x12\x1e\n\x16protocol_configuration\x18\x05 \x01(\t\x12X\n\x11installation_type\x18\x06 \x01(\x0e\x32=.minknow_api.protocol.GetVersionInfoResponse.InstallationType\x12 \n\x18\x62\x61secaller_build_version\x18\t \x01(\t\x12$\n\x1c\x62\x61secaller_connected_version\x18\n \x01(\t\x1aK\n\x0eMinknowVersion\x12\r\n\x05major\x18\x01 \x01(\x05\x12\r\n\x05minor\x18\x02 \x01(\x05\x12\r\n\x05patch\x18\x03 \x01(\x05\x12\x0c\n\x04\x66ull\x18\x04 \x01(\t\"I\n\x12\x44istributionStatus\x12\x0b\n\x07UNKNOWN\x10\x00\x12\n\n\x06STABLE\x10\x01\x12\x0c\n\x08UNSTABLE\x10\x02\x12\x0c\n\x08MODIFIED\x10\x03\"M\n\x10InstallationType\x12\x07\n\x03ONT\x10\x00\x12\x06\n\x02NC\x10\x01\x12\x08\n\x04PROD\x10\x02\x12\r\n\tQ_RELEASE\x10\x03\x12\x0f\n\x0bOND_RELEASE\x10\x04J\x04\x08\x07\x10\x08J\x04\x08\x08\x10\t\"\x9d\x03\n\x14\x41nalysisWorkflowInfo\x12>\n\x07request\x18\x01 \x01(\x0b\x32-.minknow_api.protocol.AnalysisWorkflowRequest\x12\x13\n\x0bworkflow_id\x18\x02 \x01(\t\x12\x15\n\rworkflow_name\x18\x03 \x01(\t\x12\x18\n\x10workflow_version\x18\x04 \x01(\t\x12J\n\x0fworkflow_status\x18\x05 \x01(\x0e\x32\x31.minknow_api.protocol.AnalysisWorkflowInfo.Status\x12\x1c\n\x14workflow_stop_reason\x18\x06 \x01(\t\x12\x14\n\x0creport_names\x18\x07 \x03(\t\"\x7f\n\x06Status\x12\x0b\n\x07UNKNOWN\x10\x00\x12\n\n\x06QUEUED\x10\x06\x12\x0b\n\x07RUNNING\x10\x01\x12\r\n\tCOMPLETED\x10\x02\x12\x13\n\x0fSTOPPED_BY_USER\x10\x03\x12\x16\n\x12STOPPED_WITH_ERROR\x10\x04\x12\x13\n\x0f\x46\x41ILED_TO_START\x10\x05\"\x81\x0c\n\x0fProtocolRunInfo\x12\x0e\n\x06run_id\x18\x01 \x01(\t\x12\x13\n\x0bprotocol_id\x18\x02 \x01(\t\x12\x0c\n\x04\x61rgs\x18\x03 \x03(\t\x12\x45\n\x08settings\x18\x19 \x03(\x0b\x32\x33.minknow_api.protocol.ProtocolRunInfo.SettingsEntry\x12\x13\n\x0boutput_path\x18\x0b \x01(\t\x12!\n\x14reported_output_path\x18\x18 \x01(\tH\x00\x88\x01\x01\x12\x32\n\x05state\x18\x04 \x01(\x0e\x32#.minknow_api.protocol.ProtocolState\x12\x32\n\x05phase\x18\x10 \x01(\x0e\x32#.minknow_api.protocol.ProtocolPhase\x12\x35\n\x11last_phase_change\x18\x11 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x11\n\tcan_pause\x18\x12 \x01(\x08\x12\x1c\n\x14\x63\x61n_trigger_mux_scan\x18\x13 \x01(\x08\x12.\n\nstart_time\x18\x05 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x33\n\x0fscript_end_time\x18\t \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12,\n\x08\x65nd_time\x18\x06 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x38\n\x0bstop_origin\x18\x17 \x01(\x0b\x32#.minknow_api.protocol.RequestOrigin\x12\x1b\n\x13\x61\x63quisition_run_ids\x18\x07 \x03(\t\x12<\n\tuser_info\x18\x08 \x01(\x0b\x32).minknow_api.protocol.ProtocolRunUserInfo\x12G\n\x10\x65pi2me_workflows\x18\n \x03(\x0b\x32-.minknow_api.protocol.Epi2meWorkflowReference\x12\x39\n\x06\x64\x65vice\x18\x0c \x01(\x0b\x32).minknow_api.device.GetDeviceInfoResponse\x12>\n\tflow_cell\x18\r \x01(\x0b\x32+.minknow_api.device.GetFlowCellInfoResponse\x12\x35\n\tmeta_info\x18\x0e \x01(\x0b\x32\".minknow_api.protocol.ProtocolInfo\x12\x63\n#associated_post_processing_analysis\x18\x0f \x03(\x0b\x32\x36.minknow_api.protocol.AssociatedPostProcessingAnalysis\x12\x45\n\x11\x61nalysis_workflow\x18\x1b \x01(\x0b\x32*.minknow_api.protocol.AnalysisWorkflowInfo\x12:\n\npqc_result\x18\x14 \x01(\x0b\x32&.minknow_api.protocol.PlatformQcResult\x12H\n\x15hardware_check_result\x18\x1a \x01(\x0b\x32).minknow_api.protocol.HardwareCheckResult\x12?\n\x10\x65xternal_offload\x18\x15 \x01(\x0b\x32%.minknow_api.protocol.ExternalOffload\x12G\n\x11software_versions\x18\x16 \x01(\x0b\x32,.minknow_api.protocol.GetVersionInfoResponse\x1at\n\rSettingsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12R\n\x05value\x18\x02 \x01(\x0b\x32\x43.minknow_api.protocol_settings.ProtocolSetting.ProtocolSettingValue:\x02\x38\x01\x42\x17\n\x15_reported_output_path\"\xfb\x03\n\rFilteringInfo\x12H\n\npqc_filter\x18\x01 \x01(\x0b\x32\x34.minknow_api.protocol.FilteringInfo.PlatformQcFilter\x12V\n\x15hardware_check_filter\x18\x04 \x01(\x0b\x32\x37.minknow_api.protocol.FilteringInfo.HardwareCheckFilter\x12\x1e\n\x11protocol_group_id\x18\x02 \x01(\tH\x00\x88\x01\x01\x12M\n\x15\x65xperiment_start_time\x18\x03 \x01(\x0b\x32..minknow_api.protocol.FilteringInfo.TimeFilter\x1a>\n\x10PlatformQcFilter\x12\x19\n\x0c\x66low_cell_id\x18\x01 \x01(\tH\x00\x88\x01\x01\x42\x0f\n\r_flow_cell_id\x1a\x15\n\x13HardwareCheckFilter\x1al\n\nTimeFilter\x12/\n\x0bstart_range\x18\x01 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12-\n\tend_range\x18\x02 \x01(\x0b\x32\x1a.google.protobuf.TimestampB\x14\n\x12_protocol_group_id\"S\n\x17ListProtocolRunsRequest\x12\x38\n\x0b\x66ilter_info\x18\x01 \x01(\x0b\x32#.minknow_api.protocol.FilteringInfo\"+\n\x18ListProtocolRunsResponse\x12\x0f\n\x07run_ids\x18\x01 \x03(\t\"\x1e\n\x1cGetCurrentProtocolRunRequest\"X\n\x1dGetCurrentProtocolRunResponse\x12\x37\n\x08run_info\x18\x03 \x01(\x0b\x32%.minknow_api.protocol.ProtocolRunInfo\" \n\x1eWatchCurrentProtocolRunRequest\"\x17\n\x15GetContextInfoRequest\"\xa1\x01\n\x16GetContextInfoResponse\x12S\n\x0c\x63ontext_info\x18\x01 \x03(\x0b\x32=.minknow_api.protocol.GetContextInfoResponse.ContextInfoEntry\x1a\x32\n\x10\x43ontextInfoEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\x9f\x01\n\x15SetContextInfoRequest\x12R\n\x0c\x63ontext_info\x18\x01 \x03(\x0b\x32<.minknow_api.protocol.SetContextInfoRequest.ContextInfoEntry\x1a\x32\n\x10\x43ontextInfoEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\x18\n\x16SetContextInfoResponse\"\x1b\n\x19GetProtocolPurposeRequest\"-\n\x1aGetProtocolPurposeResponse\x12\x0f\n\x07purpose\x18\x01 \x01(\t\",\n\x19SetProtocolPurposeRequest\x12\x0f\n\x07purpose\x18\x01 \x01(\t\"\x1c\n\x1aSetProtocolPurposeResponse\"~\n\x18\x41\x64\x64\x45pi2meWorkflowRequest\x12\x14\n\x06run_id\x18\x01 \x01(\tB\x04\x88\xb5\x18\x01\x12L\n\x0f\x65pi2me_workflow\x18\x02 \x01(\x0b\x32-.minknow_api.protocol.Epi2meWorkflowReferenceB\x04\x88\xb5\x18\x01\"\x1b\n\x19\x41\x64\x64\x45pi2meWorkflowResponse\"`\n\x13ProtocolGroupIdInfo\x12\x19\n\x11protocol_group_id\x18\x01 \x01(\t\x12.\n\nstart_time\x18\x02 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\"W\n\x1bListProtocolGroupIdsRequest\x12\x38\n\x0b\x66ilter_info\x18\x01 \x01(\x0b\x32#.minknow_api.protocol.FilteringInfo\"\x86\x01\n\x1cListProtocolGroupIdsResponse\x12\x1a\n\x12protocol_group_ids\x18\x01 \x03(\t\x12J\n\x17protocol_group_ids_info\x18\x02 \x03(\x0b\x32).minknow_api.protocol.ProtocolGroupIdInfo\"\x1b\n\x19\x42\x65ginHardwareCheckRequest\",\n\x1a\x42\x65ginHardwareCheckResponse\x12\x0e\n\x06run_id\x18\x01 \x01(\t\"\x18\n\x16\x42\x65ginPlatformQcRequest\")\n\x17\x42\x65ginPlatformQcResponse\x12\x0e\n\x06run_id\x18\x01 \x01(\t\"\x8c\x05\n\x14\x42\x65ginProtocolRequest\x12\x14\n\nidentifier\x18\x01 \x01(\tH\x00\x12Q\n\ncomponents\x18\x02 \x01(\x0b\x32;.minknow_api.protocol_settings.ProtocolIdentifierComponentsH\x00\x12<\n\tuser_info\x18\x03 \x01(\x0b\x32).minknow_api.protocol.ProtocolRunUserInfo\x12H\n\x15offload_location_info\x18\x05 \x01(\x0b\x32).minknow_api.protocol.OffloadLocationInfo\x12R\n\x19target_run_until_criteria\x18\x06 \x01(\x0b\x32/.minknow_api.acquisition.TargetRunUntilCriteria\x12J\n\x08settings\x18\x04 \x03(\x0b\x32\x38.minknow_api.protocol.BeginProtocolRequest.SettingsEntry\x12P\n\x19\x61nalysis_workflow_request\x18\x08 \x01(\x0b\x32-.minknow_api.protocol.AnalysisWorkflowRequest\x1at\n\rSettingsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12R\n\x05value\x18\x02 \x01(\x0b\x32\x43.minknow_api.protocol_settings.ProtocolSetting.ProtocolSettingValue:\x02\x38\x01\x42\x15\n\x13protocol_identifierJ\x04\x08\x07\x10\x08\"\'\n\x15\x42\x65ginProtocolResponse\x12\x0e\n\x06run_id\x18\x01 \x01(\t\"q\n\x1aSetPlatformQcResultRequest\x12\x17\n\x0fprotocol_run_id\x18\x01 \x01(\t\x12:\n\npqc_result\x18\x02 \x01(\x0b\x32&.minknow_api.protocol.PlatformQcResult\"\x1d\n\x1bSetPlatformQcResultResponse\"s\n\x1dSetHardwareCheckResultRequest\x12\x17\n\x0fprotocol_run_id\x18\x01 \x01(\t\x12\x39\n\x06result\x18\x02 \x01(\x0b\x32).minknow_api.protocol.HardwareCheckResult\" \n\x1eSetHardwareCheckResultResponse\"u\n&AssociatePostProcessingAnalysisRequest\x12\x0e\n\x06run_id\x18\x01 \x01(\t\x12;\n\rstart_request\x18\x02 \x01(\x0b\x32$.minknow_api.basecaller.StartRequest\"5\n\'AssociatePostProcessingAnalysisResponse\x12\n\n\x02id\x18\x01 \x01(\t\"7\n\x1f\x43learProtocolHistoryDataRequest\x12\x14\n\x0cprotocol_ids\x18\x01 \x03(\t\"\"\n ClearProtocolHistoryDataResponse\"\xf2\x01\n\x1eProtocolPhaseManagementRequest\x12[\n\x10set_capabilities\x18\x01 \x01(\x0b\x32\x41.minknow_api.protocol.ProtocolPhaseManagementRequest.Capabilities\x12\x32\n\x05phase\x18\x02 \x01(\x0e\x32#.minknow_api.protocol.ProtocolPhase\x1a?\n\x0c\x43\x61pabilities\x12\x11\n\tcan_pause\x18\x01 \x01(\x08\x12\x1c\n\x14\x63\x61n_trigger_mux_scan\x18\x02 \x01(\x08\"O\n\x1fProtocolPhaseManagementResponse\x12,\n\x06\x61\x63tion\x18\x01 \x01(\x0e\x32\x1c.minknow_api.protocol.Action\"O\n\x18GenerateRunReportRequest\x12\x17\n\x0fprotocol_run_id\x18\x01 \x01(\t\x12\x1a\n\x12include_input_data\x18\x02 \x01(\x08\"\x97\x01\n\x19GenerateRunReportResponse\x12\x17\n\x0fprotocol_run_id\x18\x01 \x01(\t\x12\x13\n\x0breport_data\x18\x02 \x01(\t\x12\x18\n\x10remaining_length\x18\x03 \x01(\x05\x12\x12\n\ninput_data\x18\x04 \x01(\t\x12\x1e\n\x16remaining_input_length\x18\x05 \x01(\x05*\xa9\x06\n\rProtocolState\x12\x14\n\x10PROTOCOL_RUNNING\x10\x00\x12$\n PROTOCOL_WAITING_FOR_TEMPERATURE\x10\x04\x12$\n PROTOCOL_WAITING_FOR_ACQUISITION\x10\x05\x12\x16\n\x12PROTOCOL_COMPLETED\x10\x01\x12\x1c\n\x18PROTOCOL_STOPPED_BY_USER\x10\x02\x12 \n\x1cPROTOCOL_FINISHED_WITH_ERROR\x10\x03\x12\'\n#PROTOCOL_FINISHED_WITH_DEVICE_ERROR\x10\x06\x12.\n*PROTOCOL_FINISHED_UNABLE_TO_SEND_TELEMETRY\x10\x07\x12/\n+PROTOCOL_FINISHED_WITH_FLOW_CELL_DISCONNECT\x10\x08\x12,\n(PROTOCOL_FINISHED_WITH_DEVICE_DISCONNECT\x10\t\x12,\n(PROTOCOL_FINISHED_WITH_ERROR_CALIBRATION\x10\x14\x12\x32\n.PROTOCOL_FINISHED_WITH_ERROR_BASECALL_SETTINGS\x10\x15\x12\x35\n1PROTOCOL_FINISHED_WITH_ERROR_TEMPERATURE_REQUIRED\x10\x16\x12.\n*PROTOCOL_FINISHED_WITH_ERROR_NO_DISK_SPACE\x10\x17\x12\x31\n-PROTOCOL_FINISHED_WITH_ERROR_TEMPERATURE_HIGH\x10\x19\x12\x39\n5PROTOCOL_FINISHED_WITH_ERROR_BASECALLER_COMMUNICATION\x10\x1a\x12\x36\n2PROTOCOL_FINISHED_WITH_NO_FLOWCELL_FOR_ACQUISITION\x10\x1b\x12\x37\n3PROTOCOL_FINISHED_WITH_ERROR_BASECALLER_UNAVAILABLE\x10\x1c*\xea\x01\n\rProtocolPhase\x12\x11\n\rPHASE_UNKNOWN\x10\x00\x12\x16\n\x12PHASE_INITIALISING\x10\x01\x12\x14\n\x10PHASE_SEQUENCING\x10\x02\x12 \n\x1cPHASE_PREPARING_FOR_MUX_SCAN\x10\x03\x12\x12\n\x0ePHASE_MUX_SCAN\x10\x04\x12\x10\n\x0cPHASE_PAUSED\x10\x05\x12\x11\n\rPHASE_PAUSING\x10\x06\x12)\n%PHASE_BAD_TEMPERATURE_AUTOMATIC_PAUSE\x10\x08\x12\x12\n\x0ePHASE_RESUMING\x10\x07*[\n\x06\x41\x63tion\x12\x0f\n\x0b\x41\x43TION_NONE\x10\x00\x12\x10\n\x0c\x41\x43TION_PAUSE\x10\x01\x12\x11\n\rACTION_RESUME\x10\x02\x12\x1b\n\x17\x41\x43TION_TRIGGER_MUX_SCAN\x10\x03\x32\xb7\x19\n\x0fProtocolService\x12k\n\x0estart_protocol\x12*.minknow_api.protocol.StartProtocolRequest\x1a+.minknow_api.protocol.StartProtocolResponse\"\x00\x12h\n\rstop_protocol\x12).minknow_api.protocol.StopProtocolRequest\x1a*.minknow_api.protocol.StopProtocolResponse\"\x00\x12n\n\x0epause_protocol\x12*.minknow_api.protocol.PauseProtocolRequest\x1a+.minknow_api.protocol.PauseProtocolResponse\"\x03\x90\x02\x02\x12q\n\x0fresume_protocol\x12+.minknow_api.protocol.ResumeProtocolRequest\x1a,.minknow_api.protocol.ResumeProtocolResponse\"\x03\x90\x02\x02\x12r\n\x10trigger_mux_scan\x12+.minknow_api.protocol.TriggerMuxScanRequest\x1a,.minknow_api.protocol.TriggerMuxScanResponse\"\x03\x90\x02\x02\x12m\n\x11wait_for_finished\x12,.minknow_api.protocol.WaitForFinishedRequest\x1a%.minknow_api.protocol.ProtocolRunInfo\"\x03\x90\x02\x01\x12\x63\n\x0cget_run_info\x12\'.minknow_api.protocol.GetRunInfoRequest\x1a%.minknow_api.protocol.ProtocolRunInfo\"\x03\x90\x02\x01\x12x\n\x12list_protocol_runs\x12-.minknow_api.protocol.ListProtocolRunsRequest\x1a..minknow_api.protocol.ListProtocolRunsResponse\"\x03\x90\x02\x01\x12z\n\x18get_current_protocol_run\x12\x32.minknow_api.protocol.GetCurrentProtocolRunRequest\x1a%.minknow_api.protocol.ProtocolRunInfo\"\x03\x90\x02\x01\x12\x80\x01\n\x1awatch_current_protocol_run\x12\x34.minknow_api.protocol.WatchCurrentProtocolRunRequest\x1a%.minknow_api.protocol.ProtocolRunInfo\"\x03\x90\x02\x01\x30\x01\x12n\n\x0elist_protocols\x12*.minknow_api.protocol.ListProtocolsRequest\x1a+.minknow_api.protocol.ListProtocolsResponse\"\x03\x90\x02\x02\x12r\n\x10get_context_info\x12+.minknow_api.protocol.GetContextInfoRequest\x1a,.minknow_api.protocol.GetContextInfoResponse\"\x03\x90\x02\x01\x12r\n\x10set_context_info\x12+.minknow_api.protocol.SetContextInfoRequest\x1a,.minknow_api.protocol.SetContextInfoResponse\"\x03\x90\x02\x02\x12~\n\x14get_protocol_purpose\x12/.minknow_api.protocol.GetProtocolPurposeRequest\x1a\x30.minknow_api.protocol.GetProtocolPurposeResponse\"\x03\x90\x02\x01\x12~\n\x14set_protocol_purpose\x12/.minknow_api.protocol.SetProtocolPurposeRequest\x1a\x30.minknow_api.protocol.SetProtocolPurposeResponse\"\x03\x90\x02\x02\x12x\n\x13\x61\x64\x64_epi2me_workflow\x12..minknow_api.protocol.AddEpi2meWorkflowRequest\x1a/.minknow_api.protocol.AddEpi2meWorkflowResponse\"\x00\x12\x85\x01\n\x17list_protocol_group_ids\x12\x31.minknow_api.protocol.ListProtocolGroupIdsRequest\x1a\x32.minknow_api.protocol.ListProtocolGroupIdsResponse\"\x03\x90\x02\x01\x12\x7f\n\x14\x62\x65gin_hardware_check\x12/.minknow_api.protocol.BeginHardwareCheckRequest\x1a\x30.minknow_api.protocol.BeginHardwareCheckResponse\"\x04\x98\xb5\x18\x01\x12v\n\x11\x62\x65gin_platform_qc\x12,.minknow_api.protocol.BeginPlatformQcRequest\x1a-.minknow_api.protocol.BeginPlatformQcResponse\"\x04\x98\xb5\x18\x01\x12o\n\x0e\x62\x65gin_protocol\x12*.minknow_api.protocol.BeginProtocolRequest\x1a+.minknow_api.protocol.BeginProtocolResponse\"\x04\x98\xb5\x18\x01\x12\x82\x01\n\x16set_platform_qc_result\x12\x30.minknow_api.protocol.SetPlatformQcResultRequest\x1a\x31.minknow_api.protocol.SetPlatformQcResultResponse\"\x03\x90\x02\x02\x12\x8b\x01\n\x19set_hardware_check_result\x12\x33.minknow_api.protocol.SetHardwareCheckResultRequest\x1a\x34.minknow_api.protocol.SetHardwareCheckResultResponse\"\x03\x90\x02\x02\x12\xb0\x01\n/associate_post_processing_analysis_for_protocol\x12<.minknow_api.protocol.AssociatePostProcessingAnalysisRequest\x1a=.minknow_api.protocol.AssociatePostProcessingAnalysisResponse\"\x00\x12\x8e\x01\n\x1b\x63lear_protocol_history_data\x12\x35.minknow_api.protocol.ClearProtocolHistoryDataRequest\x1a\x36.minknow_api.protocol.ClearProtocolHistoryDataResponse\"\x00\x12\x8e\x01\n\x19protocol_phase_management\x12\x34.minknow_api.protocol.ProtocolPhaseManagementRequest\x1a\x35.minknow_api.protocol.ProtocolPhaseManagementResponse\"\x00(\x01\x30\x01\x12}\n\x13generate_run_report\x12..minknow_api.protocol.GenerateRunReportRequest\x1a/.minknow_api.protocol.GenerateRunReportResponse\"\x03\x90\x02\x02\x30\x01\x42&\n\x1c\x63om.nanoporetech.minknow_api\xa2\x02\x05MKAPIb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x1aminknow_api/protocol.proto\x12\x14minknow_api.protocol\x1a\x1dminknow_api/acquisition.proto\x1a$minknow_api/analysis_workflows.proto\x1a\x1cminknow_api/basecaller.proto\x1a\x18minknow_api/device.proto\x1a#minknow_api/protocol_settings.proto\x1a\x1dminknow_api/rpc_options.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1egoogle/protobuf/wrappers.proto\"\xcb\x03\n\x0f\x42\x61rcodeUserData\x12\x14\n\x0c\x62\x61rcode_name\x18\x01 \x01(\t\x12\x1d\n\x15\x62\x61rcode_name_internal\x18\x05 \x01(\t\x12\x17\n\x0flamp_barcode_id\x18\x02 \x01(\t\x12\r\n\x05\x61lias\x18\x03 \x01(\t\x12>\n\x04type\x18\x04 \x01(\x0e\x32\x30.minknow_api.protocol.BarcodeUserData.SampleType\x12P\n\x0epassenger_info\x18\x06 \x03(\x0b\x32\x38.minknow_api.protocol.BarcodeUserData.PassengerInfoEntry\x1a\x34\n\x12PassengerInfoEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\x92\x01\n\nSampleType\x12\x0f\n\x0btest_sample\x10\x00\x12\x14\n\x10positive_control\x10\x01\x12\x14\n\x10negative_control\x10\x02\x12\x17\n\x13no_template_control\x10\x03\x12\x16\n\x12positive_control_1\x10\x04\x12\x16\n\x12positive_control_2\x10\x05\"A\n\x07KitInfo\x12\x16\n\x0esequencing_kit\x18\x01 \x01(\t\x12\x1e\n\x16\x62\x61rcode_expansion_kits\x18\x02 \x03(\t\"\xf8\x02\n\x13ProtocolRunUserInfo\x12\x37\n\x11protocol_group_id\x18\x01 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12/\n\tsample_id\x18\x02 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12@\n\x11\x62\x61rcode_user_info\x18\x03 \x03(\x0b\x32%.minknow_api.protocol.BarcodeUserData\x12\x41\n\x1buser_specified_flow_cell_id\x18\x04 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12\x41\n\x1buser_specified_product_code\x18\x05 \x01(\x0b\x32\x1c.google.protobuf.StringValue\x12/\n\x08kit_info\x18\x06 \x01(\x0b\x32\x1d.minknow_api.protocol.KitInfo\"R\n\x13OffloadLocationInfo\x12\x1c\n\x14offload_location_ids\x18\x01 \x03(\t\x12\x1d\n\x15offload_location_path\x18\x02 \x01(\t\"\xba\x01\n\x17\x41nalysisWorkflowRequest\x12\x43\n\rproxy_request\x18\x01 \x01(\x0b\x32,.minknow_api.analysis_workflows.ProxyRequest\x12@\n\x04when\x18\x02 \x01(\x0e\x32\x32.minknow_api.protocol.AnalysisWorkflowRequest.When\"\x18\n\x04When\x12\x10\n\x0cPROTOCOL_END\x10\x00\"\xf2\x02\n\x14StartProtocolRequest\x12\x18\n\nidentifier\x18\x01 \x01(\tB\x04\x88\xb5\x18\x01\x12\x0c\n\x04\x61rgs\x18\x02 \x03(\t\x12<\n\tuser_info\x18\x03 \x01(\x0b\x32).minknow_api.protocol.ProtocolRunUserInfo\x12H\n\x15offload_location_info\x18\x04 \x01(\x0b\x32).minknow_api.protocol.OffloadLocationInfo\x12R\n\x19target_run_until_criteria\x18\x05 \x01(\x0b\x32/.minknow_api.acquisition.TargetRunUntilCriteria\x12P\n\x19\x61nalysis_workflow_request\x18\x07 \x01(\x0b\x32-.minknow_api.protocol.AnalysisWorkflowRequestJ\x04\x08\x06\x10\x07\"\'\n\x15StartProtocolResponse\x12\x0e\n\x06run_id\x18\x01 \x01(\t\"c\n\x13StopProtocolRequest\x12L\n\x13\x64\x61ta_action_on_stop\x18\x01 \x01(\x0e\x32/.minknow_api.acquisition.StopRequest.DataAction\"\x16\n\x14StopProtocolResponse\"\x16\n\x14PauseProtocolRequest\"\x17\n\x15PauseProtocolResponse\"\x17\n\x15ResumeProtocolRequest\"\x18\n\x16ResumeProtocolResponse\"\x17\n\x15TriggerMuxScanRequest\"\x18\n\x16TriggerMuxScanResponse\",\n\x14ListProtocolsRequest\x12\x14\n\x0c\x66orce_reload\x18\x01 \x01(\x08\"\xff\x03\n\x0cProtocolInfo\x12\x12\n\nidentifier\x18\x01 \x01(\t\x12:\n\x04tags\x18\x02 \x03(\x0b\x32,.minknow_api.protocol.ProtocolInfo.TagsEntry\x12\x0c\n\x04name\x18\x03 \x01(\t\x12U\n\x15tag_extraction_result\x18\x04 \x01(\x0b\x32\x36.minknow_api.protocol.ProtocolInfo.TagExtractionResult\x1a\xa1\x01\n\x08TagValue\x12\x16\n\x0cstring_value\x18\x01 \x01(\tH\x00\x12\x14\n\nbool_value\x18\x02 \x01(\x08H\x00\x12\x13\n\tint_value\x18\x03 \x01(\x03H\x00\x12\x16\n\x0c\x64ouble_value\x18\x04 \x01(\x01H\x00\x12\x15\n\x0b\x61rray_value\x18\x05 \x01(\tH\x00\x12\x16\n\x0cobject_value\x18\x06 \x01(\tH\x00\x42\x0b\n\ttag_value\x1a<\n\x13TagExtractionResult\x12\x0f\n\x07success\x18\x01 \x01(\x08\x12\x14\n\x0c\x65rror_report\x18\x02 \x01(\t\x1aX\n\tTagsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12:\n\x05value\x18\x02 \x01(\x0b\x32+.minknow_api.protocol.ProtocolInfo.TagValue:\x02\x38\x01\"N\n\x15ListProtocolsResponse\x12\x35\n\tprotocols\x18\x01 \x03(\x0b\x32\".minknow_api.protocol.ProtocolInfo\"\xff\x01\n\x16WaitForFinishedRequest\x12\x14\n\x06run_id\x18\x01 \x01(\tB\x04\x88\xb5\x18\x01\x12M\n\x05state\x18\x02 \x01(\x0e\x32>.minknow_api.protocol.WaitForFinishedRequest.NotificationState\x12\x0f\n\x07timeout\x18\x03 \x01(\x02\"o\n\x11NotificationState\x12\x19\n\x15NOTIFY_ON_TERMINATION\x10\x00\x12\x1d\n\x19NOTIFY_BEFORE_TERMINATION\x10\x01\x12 \n\x1cNOTIFY_ON_SCRIPT_TERMINATION\x10\x02\"#\n\x11GetRunInfoRequest\x12\x0e\n\x06run_id\x18\x01 \x01(\t\"\xa5\x03\n\rRequestOrigin\x12\x38\n\x04user\x18\x01 \x01(\x0b\x32(.minknow_api.protocol.RequestOrigin.UserH\x00\x12>\n\x07minknow\x18\x02 \x01(\x0b\x32+.minknow_api.protocol.RequestOrigin.MinKNOWH\x00\x12`\n\x19protocol_phase_management\x18\x03 \x01(\x0b\x32;.minknow_api.protocol.RequestOrigin.ProtocolPhaseManagementH\x00\x12\x41\n\trun_until\x18\x04 \x01(\x0b\x32,.minknow_api.protocol.RequestOrigin.RunUntilH\x00\x1a\x18\n\x04User\x12\x10\n\x08identity\x18\x01 \x01(\t\x1a\x18\n\x07MinKNOW\x12\r\n\x05\x63\x61use\x18\x01 \x01(\t\x1a\x19\n\x17ProtocolPhaseManagement\x1a\x1c\n\x08RunUntil\x12\x10\n\x08\x63riteria\x18\x01 \x01(\tB\x08\n\x06origin\"\xaf\x01\n\x15ProtocolPhaseSnapshot\x12\x32\n\x05phase\x18\x01 \x01(\x0e\x32#.minknow_api.protocol.ProtocolPhase\x12-\n\ttimestamp\x18\x02 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x33\n\x06origin\x18\x03 \x01(\x0b\x32#.minknow_api.protocol.RequestOrigin\"2\n\x17\x45pi2meWorkflowReference\x12\n\n\x02id\x18\x01 \x01(\x03\x12\x0b\n\x03url\x18\x02 \x01(\t\"\xf7\x01\n AssociatedPostProcessingAnalysis\x12\x12\n\nstarted_id\x18\x01 \x01(\t\x12;\n\rstart_request\x18\x02 \x01(\x0b\x32$.minknow_api.basecaller.StartRequest\x12K\n\x05state\x18\x03 \x01(\x0e\x32<.minknow_api.protocol.AssociatedPostProcessingAnalysis.State\"5\n\x05State\x12\n\n\x06QUEUED\x10\x00\x12\x0b\n\x07STARTED\x10\x01\x12\x13\n\x0f\x46\x41ILED_TO_START\x10\x02\"R\n\x10PlatformQcResult\x12\x14\n\x0c\x66low_cell_id\x18\x01 \x01(\t\x12\x0e\n\x06passed\x18\x02 \x01(\x08\x12\x18\n\x10total_pore_count\x18\x03 \x01(\r\"\xd4\x02\n\x13HardwareCheckResult\x12M\n\x06status\x18\x01 \x01(\x0e\x32=.minknow_api.protocol.HardwareCheckResult.HardwareCheckStatus\x12\\\n\x0e\x66\x61ilure_reason\x18\x02 \x01(\x0e\x32\x44.minknow_api.protocol.HardwareCheckResult.HardwareCheckFailureReason\"G\n\x13HardwareCheckStatus\x12\x08\n\x04None\x10\x00\x12\x0b\n\x07Started\x10\x01\x12\r\n\tSucceeded\x10\x02\x12\n\n\x06\x46\x61iled\x10\x03\"G\n\x1aHardwareCheckFailureReason\x12\x0b\n\x07NoError\x10\x00\x12\x0b\n\x07Unknown\x10\x01\x12\x0f\n\x0bScriptError\x10\x02\"&\n\x0f\x45xternalOffload\x12\x13\n\x0boffload_ids\x18\x01 \x03(\t\"\xa6\x05\n\x16GetVersionInfoResponse\x12L\n\x07minknow\x18\x01 \x01(\x0b\x32;.minknow_api.protocol.GetVersionInfoResponse.MinknowVersion\x12\r\n\x05\x62ream\x18\x02 \x01(\t\x12\x1c\n\x14\x64istribution_version\x18\x03 \x01(\t\x12\\\n\x13\x64istribution_status\x18\x04 \x01(\x0e\x32?.minknow_api.protocol.GetVersionInfoResponse.DistributionStatus\x12\x1e\n\x16protocol_configuration\x18\x05 \x01(\t\x12X\n\x11installation_type\x18\x06 \x01(\x0e\x32=.minknow_api.protocol.GetVersionInfoResponse.InstallationType\x12 \n\x18\x62\x61secaller_build_version\x18\t \x01(\t\x12$\n\x1c\x62\x61secaller_connected_version\x18\n \x01(\t\x1aK\n\x0eMinknowVersion\x12\r\n\x05major\x18\x01 \x01(\x05\x12\r\n\x05minor\x18\x02 \x01(\x05\x12\r\n\x05patch\x18\x03 \x01(\x05\x12\x0c\n\x04\x66ull\x18\x04 \x01(\t\"I\n\x12\x44istributionStatus\x12\x0b\n\x07UNKNOWN\x10\x00\x12\n\n\x06STABLE\x10\x01\x12\x0c\n\x08UNSTABLE\x10\x02\x12\x0c\n\x08MODIFIED\x10\x03\"M\n\x10InstallationType\x12\x07\n\x03ONT\x10\x00\x12\x06\n\x02NC\x10\x01\x12\x08\n\x04PROD\x10\x02\x12\r\n\tQ_RELEASE\x10\x03\x12\x0f\n\x0bOND_RELEASE\x10\x04J\x04\x08\x07\x10\x08J\x04\x08\x08\x10\t\"\x9d\x03\n\x14\x41nalysisWorkflowInfo\x12>\n\x07request\x18\x01 \x01(\x0b\x32-.minknow_api.protocol.AnalysisWorkflowRequest\x12\x13\n\x0bworkflow_id\x18\x02 \x01(\t\x12\x15\n\rworkflow_name\x18\x03 \x01(\t\x12\x18\n\x10workflow_version\x18\x04 \x01(\t\x12J\n\x0fworkflow_status\x18\x05 \x01(\x0e\x32\x31.minknow_api.protocol.AnalysisWorkflowInfo.Status\x12\x1c\n\x14workflow_stop_reason\x18\x06 \x01(\t\x12\x14\n\x0creport_names\x18\x07 \x03(\t\"\x7f\n\x06Status\x12\x0b\n\x07UNKNOWN\x10\x00\x12\n\n\x06QUEUED\x10\x06\x12\x0b\n\x07RUNNING\x10\x01\x12\r\n\tCOMPLETED\x10\x02\x12\x13\n\x0fSTOPPED_BY_USER\x10\x03\x12\x16\n\x12STOPPED_WITH_ERROR\x10\x04\x12\x13\n\x0f\x46\x41ILED_TO_START\x10\x05\"\xc5\x0c\n\x0fProtocolRunInfo\x12\x0e\n\x06run_id\x18\x01 \x01(\t\x12\x13\n\x0bprotocol_id\x18\x02 \x01(\t\x12\x0c\n\x04\x61rgs\x18\x03 \x03(\t\x12\x45\n\x08settings\x18\x19 \x03(\x0b\x32\x33.minknow_api.protocol.ProtocolRunInfo.SettingsEntry\x12\x13\n\x0boutput_path\x18\x0b \x01(\t\x12!\n\x14reported_output_path\x18\x18 \x01(\tH\x00\x88\x01\x01\x12\x32\n\x05state\x18\x04 \x01(\x0e\x32#.minknow_api.protocol.ProtocolState\x12\x32\n\x05phase\x18\x10 \x01(\x0e\x32#.minknow_api.protocol.ProtocolPhase\x12\x35\n\x11last_phase_change\x18\x11 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x42\n\rphase_history\x18\x1c \x03(\x0b\x32+.minknow_api.protocol.ProtocolPhaseSnapshot\x12\x11\n\tcan_pause\x18\x12 \x01(\x08\x12\x1c\n\x14\x63\x61n_trigger_mux_scan\x18\x13 \x01(\x08\x12.\n\nstart_time\x18\x05 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x33\n\x0fscript_end_time\x18\t \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12,\n\x08\x65nd_time\x18\x06 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x38\n\x0bstop_origin\x18\x17 \x01(\x0b\x32#.minknow_api.protocol.RequestOrigin\x12\x1b\n\x13\x61\x63quisition_run_ids\x18\x07 \x03(\t\x12<\n\tuser_info\x18\x08 \x01(\x0b\x32).minknow_api.protocol.ProtocolRunUserInfo\x12G\n\x10\x65pi2me_workflows\x18\n \x03(\x0b\x32-.minknow_api.protocol.Epi2meWorkflowReference\x12\x39\n\x06\x64\x65vice\x18\x0c \x01(\x0b\x32).minknow_api.device.GetDeviceInfoResponse\x12>\n\tflow_cell\x18\r \x01(\x0b\x32+.minknow_api.device.GetFlowCellInfoResponse\x12\x35\n\tmeta_info\x18\x0e \x01(\x0b\x32\".minknow_api.protocol.ProtocolInfo\x12\x63\n#associated_post_processing_analysis\x18\x0f \x03(\x0b\x32\x36.minknow_api.protocol.AssociatedPostProcessingAnalysis\x12\x45\n\x11\x61nalysis_workflow\x18\x1b \x01(\x0b\x32*.minknow_api.protocol.AnalysisWorkflowInfo\x12:\n\npqc_result\x18\x14 \x01(\x0b\x32&.minknow_api.protocol.PlatformQcResult\x12H\n\x15hardware_check_result\x18\x1a \x01(\x0b\x32).minknow_api.protocol.HardwareCheckResult\x12?\n\x10\x65xternal_offload\x18\x15 \x01(\x0b\x32%.minknow_api.protocol.ExternalOffload\x12G\n\x11software_versions\x18\x16 \x01(\x0b\x32,.minknow_api.protocol.GetVersionInfoResponse\x1at\n\rSettingsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12R\n\x05value\x18\x02 \x01(\x0b\x32\x43.minknow_api.protocol_settings.ProtocolSetting.ProtocolSettingValue:\x02\x38\x01\x42\x17\n\x15_reported_output_path\"\xfb\x03\n\rFilteringInfo\x12H\n\npqc_filter\x18\x01 \x01(\x0b\x32\x34.minknow_api.protocol.FilteringInfo.PlatformQcFilter\x12V\n\x15hardware_check_filter\x18\x04 \x01(\x0b\x32\x37.minknow_api.protocol.FilteringInfo.HardwareCheckFilter\x12\x1e\n\x11protocol_group_id\x18\x02 \x01(\tH\x00\x88\x01\x01\x12M\n\x15\x65xperiment_start_time\x18\x03 \x01(\x0b\x32..minknow_api.protocol.FilteringInfo.TimeFilter\x1a>\n\x10PlatformQcFilter\x12\x19\n\x0c\x66low_cell_id\x18\x01 \x01(\tH\x00\x88\x01\x01\x42\x0f\n\r_flow_cell_id\x1a\x15\n\x13HardwareCheckFilter\x1al\n\nTimeFilter\x12/\n\x0bstart_range\x18\x01 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12-\n\tend_range\x18\x02 \x01(\x0b\x32\x1a.google.protobuf.TimestampB\x14\n\x12_protocol_group_id\"S\n\x17ListProtocolRunsRequest\x12\x38\n\x0b\x66ilter_info\x18\x01 \x01(\x0b\x32#.minknow_api.protocol.FilteringInfo\"+\n\x18ListProtocolRunsResponse\x12\x0f\n\x07run_ids\x18\x01 \x03(\t\"\x1e\n\x1cGetCurrentProtocolRunRequest\"X\n\x1dGetCurrentProtocolRunResponse\x12\x37\n\x08run_info\x18\x03 \x01(\x0b\x32%.minknow_api.protocol.ProtocolRunInfo\" \n\x1eWatchCurrentProtocolRunRequest\"\x17\n\x15GetContextInfoRequest\"\xa1\x01\n\x16GetContextInfoResponse\x12S\n\x0c\x63ontext_info\x18\x01 \x03(\x0b\x32=.minknow_api.protocol.GetContextInfoResponse.ContextInfoEntry\x1a\x32\n\x10\x43ontextInfoEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\x9f\x01\n\x15SetContextInfoRequest\x12R\n\x0c\x63ontext_info\x18\x01 \x03(\x0b\x32<.minknow_api.protocol.SetContextInfoRequest.ContextInfoEntry\x1a\x32\n\x10\x43ontextInfoEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\x18\n\x16SetContextInfoResponse\"\x1b\n\x19GetProtocolPurposeRequest\"-\n\x1aGetProtocolPurposeResponse\x12\x0f\n\x07purpose\x18\x01 \x01(\t\",\n\x19SetProtocolPurposeRequest\x12\x0f\n\x07purpose\x18\x01 \x01(\t\"\x1c\n\x1aSetProtocolPurposeResponse\"~\n\x18\x41\x64\x64\x45pi2meWorkflowRequest\x12\x14\n\x06run_id\x18\x01 \x01(\tB\x04\x88\xb5\x18\x01\x12L\n\x0f\x65pi2me_workflow\x18\x02 \x01(\x0b\x32-.minknow_api.protocol.Epi2meWorkflowReferenceB\x04\x88\xb5\x18\x01\"\x1b\n\x19\x41\x64\x64\x45pi2meWorkflowResponse\"`\n\x13ProtocolGroupIdInfo\x12\x19\n\x11protocol_group_id\x18\x01 \x01(\t\x12.\n\nstart_time\x18\x02 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\"W\n\x1bListProtocolGroupIdsRequest\x12\x38\n\x0b\x66ilter_info\x18\x01 \x01(\x0b\x32#.minknow_api.protocol.FilteringInfo\"\x86\x01\n\x1cListProtocolGroupIdsResponse\x12\x1a\n\x12protocol_group_ids\x18\x01 \x03(\t\x12J\n\x17protocol_group_ids_info\x18\x02 \x03(\x0b\x32).minknow_api.protocol.ProtocolGroupIdInfo\"\x1b\n\x19\x42\x65ginHardwareCheckRequest\",\n\x1a\x42\x65ginHardwareCheckResponse\x12\x0e\n\x06run_id\x18\x01 \x01(\t\"\x18\n\x16\x42\x65ginPlatformQcRequest\")\n\x17\x42\x65ginPlatformQcResponse\x12\x0e\n\x06run_id\x18\x01 \x01(\t\"\xa7\x05\n\x14\x42\x65ginProtocolRequest\x12\x14\n\nidentifier\x18\x01 \x01(\tH\x00\x12Q\n\ncomponents\x18\x02 \x01(\x0b\x32;.minknow_api.protocol_settings.ProtocolIdentifierComponentsH\x00\x12<\n\tuser_info\x18\x03 \x01(\x0b\x32).minknow_api.protocol.ProtocolRunUserInfo\x12H\n\x15offload_location_info\x18\x05 \x01(\x0b\x32).minknow_api.protocol.OffloadLocationInfo\x12R\n\x19target_run_until_criteria\x18\x06 \x01(\x0b\x32/.minknow_api.acquisition.TargetRunUntilCriteria\x12J\n\x08settings\x18\x04 \x03(\x0b\x32\x38.minknow_api.protocol.BeginProtocolRequest.SettingsEntry\x12P\n\x19\x61nalysis_workflow_request\x18\x08 \x01(\x0b\x32-.minknow_api.protocol.AnalysisWorkflowRequest\x12\x19\n\x11simulation_source\x18\t \x01(\t\x1at\n\rSettingsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12R\n\x05value\x18\x02 \x01(\x0b\x32\x43.minknow_api.protocol_settings.ProtocolSetting.ProtocolSettingValue:\x02\x38\x01\x42\x15\n\x13protocol_identifierJ\x04\x08\x07\x10\x08\"\'\n\x15\x42\x65ginProtocolResponse\x12\x0e\n\x06run_id\x18\x01 \x01(\t\"q\n\x1aSetPlatformQcResultRequest\x12\x17\n\x0fprotocol_run_id\x18\x01 \x01(\t\x12:\n\npqc_result\x18\x02 \x01(\x0b\x32&.minknow_api.protocol.PlatformQcResult\"\x1d\n\x1bSetPlatformQcResultResponse\"s\n\x1dSetHardwareCheckResultRequest\x12\x17\n\x0fprotocol_run_id\x18\x01 \x01(\t\x12\x39\n\x06result\x18\x02 \x01(\x0b\x32).minknow_api.protocol.HardwareCheckResult\" \n\x1eSetHardwareCheckResultResponse\"u\n&AssociatePostProcessingAnalysisRequest\x12\x0e\n\x06run_id\x18\x01 \x01(\t\x12;\n\rstart_request\x18\x02 \x01(\x0b\x32$.minknow_api.basecaller.StartRequest\"5\n\'AssociatePostProcessingAnalysisResponse\x12\n\n\x02id\x18\x01 \x01(\t\"7\n\x1f\x43learProtocolHistoryDataRequest\x12\x14\n\x0cprotocol_ids\x18\x01 \x03(\t\"\"\n ClearProtocolHistoryDataResponse\"\xf2\x01\n\x1eProtocolPhaseManagementRequest\x12[\n\x10set_capabilities\x18\x01 \x01(\x0b\x32\x41.minknow_api.protocol.ProtocolPhaseManagementRequest.Capabilities\x12\x32\n\x05phase\x18\x02 \x01(\x0e\x32#.minknow_api.protocol.ProtocolPhase\x1a?\n\x0c\x43\x61pabilities\x12\x11\n\tcan_pause\x18\x01 \x01(\x08\x12\x1c\n\x14\x63\x61n_trigger_mux_scan\x18\x02 \x01(\x08\"O\n\x1fProtocolPhaseManagementResponse\x12,\n\x06\x61\x63tion\x18\x01 \x01(\x0e\x32\x1c.minknow_api.protocol.Action\"O\n\x18GenerateRunReportRequest\x12\x17\n\x0fprotocol_run_id\x18\x01 \x01(\t\x12\x1a\n\x12include_input_data\x18\x02 \x01(\x08\"\x97\x01\n\x19GenerateRunReportResponse\x12\x17\n\x0fprotocol_run_id\x18\x01 \x01(\t\x12\x13\n\x0breport_data\x18\x02 \x01(\t\x12\x18\n\x10remaining_length\x18\x03 \x01(\x05\x12\x12\n\ninput_data\x18\x04 \x01(\t\x12\x1e\n\x16remaining_input_length\x18\x05 \x01(\x05*\xa9\x06\n\rProtocolState\x12\x14\n\x10PROTOCOL_RUNNING\x10\x00\x12$\n PROTOCOL_WAITING_FOR_TEMPERATURE\x10\x04\x12$\n PROTOCOL_WAITING_FOR_ACQUISITION\x10\x05\x12\x16\n\x12PROTOCOL_COMPLETED\x10\x01\x12\x1c\n\x18PROTOCOL_STOPPED_BY_USER\x10\x02\x12 \n\x1cPROTOCOL_FINISHED_WITH_ERROR\x10\x03\x12\'\n#PROTOCOL_FINISHED_WITH_DEVICE_ERROR\x10\x06\x12.\n*PROTOCOL_FINISHED_UNABLE_TO_SEND_TELEMETRY\x10\x07\x12/\n+PROTOCOL_FINISHED_WITH_FLOW_CELL_DISCONNECT\x10\x08\x12,\n(PROTOCOL_FINISHED_WITH_DEVICE_DISCONNECT\x10\t\x12,\n(PROTOCOL_FINISHED_WITH_ERROR_CALIBRATION\x10\x14\x12\x32\n.PROTOCOL_FINISHED_WITH_ERROR_BASECALL_SETTINGS\x10\x15\x12\x35\n1PROTOCOL_FINISHED_WITH_ERROR_TEMPERATURE_REQUIRED\x10\x16\x12.\n*PROTOCOL_FINISHED_WITH_ERROR_NO_DISK_SPACE\x10\x17\x12\x31\n-PROTOCOL_FINISHED_WITH_ERROR_TEMPERATURE_HIGH\x10\x19\x12\x39\n5PROTOCOL_FINISHED_WITH_ERROR_BASECALLER_COMMUNICATION\x10\x1a\x12\x36\n2PROTOCOL_FINISHED_WITH_NO_FLOWCELL_FOR_ACQUISITION\x10\x1b\x12\x37\n3PROTOCOL_FINISHED_WITH_ERROR_BASECALLER_UNAVAILABLE\x10\x1c*\xff\x01\n\rProtocolPhase\x12\x11\n\rPHASE_UNKNOWN\x10\x00\x12\x16\n\x12PHASE_INITIALISING\x10\x01\x12\x14\n\x10PHASE_SEQUENCING\x10\x02\x12 \n\x1cPHASE_PREPARING_FOR_MUX_SCAN\x10\x03\x12\x12\n\x0ePHASE_MUX_SCAN\x10\x04\x12\x10\n\x0cPHASE_PAUSED\x10\x05\x12\x11\n\rPHASE_PAUSING\x10\x06\x12)\n%PHASE_BAD_TEMPERATURE_AUTOMATIC_PAUSE\x10\x08\x12\x12\n\x0ePHASE_RESUMING\x10\x07\x12\x13\n\x0fPHASE_COMPLETED\x10\t*[\n\x06\x41\x63tion\x12\x0f\n\x0b\x41\x43TION_NONE\x10\x00\x12\x10\n\x0c\x41\x43TION_PAUSE\x10\x01\x12\x11\n\rACTION_RESUME\x10\x02\x12\x1b\n\x17\x41\x43TION_TRIGGER_MUX_SCAN\x10\x03\x32\xb7\x19\n\x0fProtocolService\x12k\n\x0estart_protocol\x12*.minknow_api.protocol.StartProtocolRequest\x1a+.minknow_api.protocol.StartProtocolResponse\"\x00\x12h\n\rstop_protocol\x12).minknow_api.protocol.StopProtocolRequest\x1a*.minknow_api.protocol.StopProtocolResponse\"\x00\x12n\n\x0epause_protocol\x12*.minknow_api.protocol.PauseProtocolRequest\x1a+.minknow_api.protocol.PauseProtocolResponse\"\x03\x90\x02\x02\x12q\n\x0fresume_protocol\x12+.minknow_api.protocol.ResumeProtocolRequest\x1a,.minknow_api.protocol.ResumeProtocolResponse\"\x03\x90\x02\x02\x12r\n\x10trigger_mux_scan\x12+.minknow_api.protocol.TriggerMuxScanRequest\x1a,.minknow_api.protocol.TriggerMuxScanResponse\"\x03\x90\x02\x02\x12m\n\x11wait_for_finished\x12,.minknow_api.protocol.WaitForFinishedRequest\x1a%.minknow_api.protocol.ProtocolRunInfo\"\x03\x90\x02\x01\x12\x63\n\x0cget_run_info\x12\'.minknow_api.protocol.GetRunInfoRequest\x1a%.minknow_api.protocol.ProtocolRunInfo\"\x03\x90\x02\x01\x12x\n\x12list_protocol_runs\x12-.minknow_api.protocol.ListProtocolRunsRequest\x1a..minknow_api.protocol.ListProtocolRunsResponse\"\x03\x90\x02\x01\x12z\n\x18get_current_protocol_run\x12\x32.minknow_api.protocol.GetCurrentProtocolRunRequest\x1a%.minknow_api.protocol.ProtocolRunInfo\"\x03\x90\x02\x01\x12\x80\x01\n\x1awatch_current_protocol_run\x12\x34.minknow_api.protocol.WatchCurrentProtocolRunRequest\x1a%.minknow_api.protocol.ProtocolRunInfo\"\x03\x90\x02\x01\x30\x01\x12n\n\x0elist_protocols\x12*.minknow_api.protocol.ListProtocolsRequest\x1a+.minknow_api.protocol.ListProtocolsResponse\"\x03\x90\x02\x02\x12r\n\x10get_context_info\x12+.minknow_api.protocol.GetContextInfoRequest\x1a,.minknow_api.protocol.GetContextInfoResponse\"\x03\x90\x02\x01\x12r\n\x10set_context_info\x12+.minknow_api.protocol.SetContextInfoRequest\x1a,.minknow_api.protocol.SetContextInfoResponse\"\x03\x90\x02\x02\x12~\n\x14get_protocol_purpose\x12/.minknow_api.protocol.GetProtocolPurposeRequest\x1a\x30.minknow_api.protocol.GetProtocolPurposeResponse\"\x03\x90\x02\x01\x12~\n\x14set_protocol_purpose\x12/.minknow_api.protocol.SetProtocolPurposeRequest\x1a\x30.minknow_api.protocol.SetProtocolPurposeResponse\"\x03\x90\x02\x02\x12x\n\x13\x61\x64\x64_epi2me_workflow\x12..minknow_api.protocol.AddEpi2meWorkflowRequest\x1a/.minknow_api.protocol.AddEpi2meWorkflowResponse\"\x00\x12\x85\x01\n\x17list_protocol_group_ids\x12\x31.minknow_api.protocol.ListProtocolGroupIdsRequest\x1a\x32.minknow_api.protocol.ListProtocolGroupIdsResponse\"\x03\x90\x02\x01\x12\x7f\n\x14\x62\x65gin_hardware_check\x12/.minknow_api.protocol.BeginHardwareCheckRequest\x1a\x30.minknow_api.protocol.BeginHardwareCheckResponse\"\x04\x98\xb5\x18\x01\x12v\n\x11\x62\x65gin_platform_qc\x12,.minknow_api.protocol.BeginPlatformQcRequest\x1a-.minknow_api.protocol.BeginPlatformQcResponse\"\x04\x98\xb5\x18\x01\x12o\n\x0e\x62\x65gin_protocol\x12*.minknow_api.protocol.BeginProtocolRequest\x1a+.minknow_api.protocol.BeginProtocolResponse\"\x04\x98\xb5\x18\x01\x12\x82\x01\n\x16set_platform_qc_result\x12\x30.minknow_api.protocol.SetPlatformQcResultRequest\x1a\x31.minknow_api.protocol.SetPlatformQcResultResponse\"\x03\x90\x02\x02\x12\x8b\x01\n\x19set_hardware_check_result\x12\x33.minknow_api.protocol.SetHardwareCheckResultRequest\x1a\x34.minknow_api.protocol.SetHardwareCheckResultResponse\"\x03\x90\x02\x02\x12\xb0\x01\n/associate_post_processing_analysis_for_protocol\x12<.minknow_api.protocol.AssociatePostProcessingAnalysisRequest\x1a=.minknow_api.protocol.AssociatePostProcessingAnalysisResponse\"\x00\x12\x8e\x01\n\x1b\x63lear_protocol_history_data\x12\x35.minknow_api.protocol.ClearProtocolHistoryDataRequest\x1a\x36.minknow_api.protocol.ClearProtocolHistoryDataResponse\"\x00\x12\x8e\x01\n\x19protocol_phase_management\x12\x34.minknow_api.protocol.ProtocolPhaseManagementRequest\x1a\x35.minknow_api.protocol.ProtocolPhaseManagementResponse\"\x00(\x01\x30\x01\x12}\n\x13generate_run_report\x12..minknow_api.protocol.GenerateRunReportRequest\x1a/.minknow_api.protocol.GenerateRunReportResponse\"\x03\x90\x02\x02\x30\x01\x42&\n\x1c\x63om.nanoporetech.minknow_api\xa2\x02\x05MKAPIb\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -90,12 +90,12 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   _globals['_PROTOCOLSERVICE'].methods_by_name['set_hardware_check_result']._serialized_options = b'\220\002\002'
   _globals['_PROTOCOLSERVICE'].methods_by_name['generate_run_report']._options = None
   _globals['_PROTOCOLSERVICE'].methods_by_name['generate_run_report']._serialized_options = b'\220\002\002'
-  _globals['_PROTOCOLSTATE']._serialized_start=10718
-  _globals['_PROTOCOLSTATE']._serialized_end=11527
-  _globals['_PROTOCOLPHASE']._serialized_start=11530
-  _globals['_PROTOCOLPHASE']._serialized_end=11764
-  _globals['_ACTION']._serialized_start=11766
-  _globals['_ACTION']._serialized_end=11857
+  _globals['_PROTOCOLSTATE']._serialized_start=10991
+  _globals['_PROTOCOLSTATE']._serialized_end=11800
+  _globals['_PROTOCOLPHASE']._serialized_start=11803
+  _globals['_PROTOCOLPHASE']._serialized_end=12058
+  _globals['_ACTION']._serialized_start=12060
+  _globals['_ACTION']._serialized_end=12151
   _globals['_BARCODEUSERDATA']._serialized_start=311
   _globals['_BARCODEUSERDATA']._serialized_end=770
   _globals['_BARCODEUSERDATA_PASSENGERINFOENTRY']._serialized_start=569
@@ -160,128 +160,488 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   _globals['_REQUESTORIGIN_PROTOCOLPHASEMANAGEMENT']._serialized_end=3498
   _globals['_REQUESTORIGIN_RUNUNTIL']._serialized_start=3500
   _globals['_REQUESTORIGIN_RUNUNTIL']._serialized_end=3528
-  _globals['_EPI2MEWORKFLOWREFERENCE']._serialized_start=3540
-  _globals['_EPI2MEWORKFLOWREFERENCE']._serialized_end=3590
-  _globals['_ASSOCIATEDPOSTPROCESSINGANALYSIS']._serialized_start=3593
-  _globals['_ASSOCIATEDPOSTPROCESSINGANALYSIS']._serialized_end=3840
-  _globals['_ASSOCIATEDPOSTPROCESSINGANALYSIS_STATE']._serialized_start=3787
-  _globals['_ASSOCIATEDPOSTPROCESSINGANALYSIS_STATE']._serialized_end=3840
-  _globals['_PLATFORMQCRESULT']._serialized_start=3842
-  _globals['_PLATFORMQCRESULT']._serialized_end=3924
-  _globals['_HARDWARECHECKRESULT']._serialized_start=3927
-  _globals['_HARDWARECHECKRESULT']._serialized_end=4267
-  _globals['_HARDWARECHECKRESULT_HARDWARECHECKSTATUS']._serialized_start=4123
-  _globals['_HARDWARECHECKRESULT_HARDWARECHECKSTATUS']._serialized_end=4194
-  _globals['_HARDWARECHECKRESULT_HARDWARECHECKFAILUREREASON']._serialized_start=4196
-  _globals['_HARDWARECHECKRESULT_HARDWARECHECKFAILUREREASON']._serialized_end=4267
-  _globals['_EXTERNALOFFLOAD']._serialized_start=4269
-  _globals['_EXTERNALOFFLOAD']._serialized_end=4307
-  _globals['_GETVERSIONINFORESPONSE']._serialized_start=4310
-  _globals['_GETVERSIONINFORESPONSE']._serialized_end=4988
-  _globals['_GETVERSIONINFORESPONSE_MINKNOWVERSION']._serialized_start=4747
-  _globals['_GETVERSIONINFORESPONSE_MINKNOWVERSION']._serialized_end=4822
-  _globals['_GETVERSIONINFORESPONSE_DISTRIBUTIONSTATUS']._serialized_start=4824
-  _globals['_GETVERSIONINFORESPONSE_DISTRIBUTIONSTATUS']._serialized_end=4897
-  _globals['_GETVERSIONINFORESPONSE_INSTALLATIONTYPE']._serialized_start=4899
-  _globals['_GETVERSIONINFORESPONSE_INSTALLATIONTYPE']._serialized_end=4976
-  _globals['_ANALYSISWORKFLOWINFO']._serialized_start=4991
-  _globals['_ANALYSISWORKFLOWINFO']._serialized_end=5404
-  _globals['_ANALYSISWORKFLOWINFO_STATUS']._serialized_start=5277
-  _globals['_ANALYSISWORKFLOWINFO_STATUS']._serialized_end=5404
-  _globals['_PROTOCOLRUNINFO']._serialized_start=5407
-  _globals['_PROTOCOLRUNINFO']._serialized_end=6944
-  _globals['_PROTOCOLRUNINFO_SETTINGSENTRY']._serialized_start=6803
-  _globals['_PROTOCOLRUNINFO_SETTINGSENTRY']._serialized_end=6919
-  _globals['_FILTERINGINFO']._serialized_start=6947
-  _globals['_FILTERINGINFO']._serialized_end=7454
-  _globals['_FILTERINGINFO_PLATFORMQCFILTER']._serialized_start=7237
-  _globals['_FILTERINGINFO_PLATFORMQCFILTER']._serialized_end=7299
-  _globals['_FILTERINGINFO_HARDWARECHECKFILTER']._serialized_start=7301
-  _globals['_FILTERINGINFO_HARDWARECHECKFILTER']._serialized_end=7322
-  _globals['_FILTERINGINFO_TIMEFILTER']._serialized_start=7324
-  _globals['_FILTERINGINFO_TIMEFILTER']._serialized_end=7432
-  _globals['_LISTPROTOCOLRUNSREQUEST']._serialized_start=7456
-  _globals['_LISTPROTOCOLRUNSREQUEST']._serialized_end=7539
-  _globals['_LISTPROTOCOLRUNSRESPONSE']._serialized_start=7541
-  _globals['_LISTPROTOCOLRUNSRESPONSE']._serialized_end=7584
-  _globals['_GETCURRENTPROTOCOLRUNREQUEST']._serialized_start=7586
-  _globals['_GETCURRENTPROTOCOLRUNREQUEST']._serialized_end=7616
-  _globals['_GETCURRENTPROTOCOLRUNRESPONSE']._serialized_start=7618
-  _globals['_GETCURRENTPROTOCOLRUNRESPONSE']._serialized_end=7706
-  _globals['_WATCHCURRENTPROTOCOLRUNREQUEST']._serialized_start=7708
-  _globals['_WATCHCURRENTPROTOCOLRUNREQUEST']._serialized_end=7740
-  _globals['_GETCONTEXTINFOREQUEST']._serialized_start=7742
-  _globals['_GETCONTEXTINFOREQUEST']._serialized_end=7765
-  _globals['_GETCONTEXTINFORESPONSE']._serialized_start=7768
-  _globals['_GETCONTEXTINFORESPONSE']._serialized_end=7929
-  _globals['_GETCONTEXTINFORESPONSE_CONTEXTINFOENTRY']._serialized_start=7879
-  _globals['_GETCONTEXTINFORESPONSE_CONTEXTINFOENTRY']._serialized_end=7929
-  _globals['_SETCONTEXTINFOREQUEST']._serialized_start=7932
-  _globals['_SETCONTEXTINFOREQUEST']._serialized_end=8091
-  _globals['_SETCONTEXTINFOREQUEST_CONTEXTINFOENTRY']._serialized_start=7879
-  _globals['_SETCONTEXTINFOREQUEST_CONTEXTINFOENTRY']._serialized_end=7929
-  _globals['_SETCONTEXTINFORESPONSE']._serialized_start=8093
-  _globals['_SETCONTEXTINFORESPONSE']._serialized_end=8117
-  _globals['_GETPROTOCOLPURPOSEREQUEST']._serialized_start=8119
-  _globals['_GETPROTOCOLPURPOSEREQUEST']._serialized_end=8146
-  _globals['_GETPROTOCOLPURPOSERESPONSE']._serialized_start=8148
-  _globals['_GETPROTOCOLPURPOSERESPONSE']._serialized_end=8193
-  _globals['_SETPROTOCOLPURPOSEREQUEST']._serialized_start=8195
-  _globals['_SETPROTOCOLPURPOSEREQUEST']._serialized_end=8239
-  _globals['_SETPROTOCOLPURPOSERESPONSE']._serialized_start=8241
-  _globals['_SETPROTOCOLPURPOSERESPONSE']._serialized_end=8269
-  _globals['_ADDEPI2MEWORKFLOWREQUEST']._serialized_start=8271
-  _globals['_ADDEPI2MEWORKFLOWREQUEST']._serialized_end=8397
-  _globals['_ADDEPI2MEWORKFLOWRESPONSE']._serialized_start=8399
-  _globals['_ADDEPI2MEWORKFLOWRESPONSE']._serialized_end=8426
-  _globals['_PROTOCOLGROUPIDINFO']._serialized_start=8428
-  _globals['_PROTOCOLGROUPIDINFO']._serialized_end=8524
-  _globals['_LISTPROTOCOLGROUPIDSREQUEST']._serialized_start=8526
-  _globals['_LISTPROTOCOLGROUPIDSREQUEST']._serialized_end=8613
-  _globals['_LISTPROTOCOLGROUPIDSRESPONSE']._serialized_start=8616
-  _globals['_LISTPROTOCOLGROUPIDSRESPONSE']._serialized_end=8750
-  _globals['_BEGINHARDWARECHECKREQUEST']._serialized_start=8752
-  _globals['_BEGINHARDWARECHECKREQUEST']._serialized_end=8779
-  _globals['_BEGINHARDWARECHECKRESPONSE']._serialized_start=8781
-  _globals['_BEGINHARDWARECHECKRESPONSE']._serialized_end=8825
-  _globals['_BEGINPLATFORMQCREQUEST']._serialized_start=8827
-  _globals['_BEGINPLATFORMQCREQUEST']._serialized_end=8851
-  _globals['_BEGINPLATFORMQCRESPONSE']._serialized_start=8853
-  _globals['_BEGINPLATFORMQCRESPONSE']._serialized_end=8894
-  _globals['_BEGINPROTOCOLREQUEST']._serialized_start=8897
-  _globals['_BEGINPROTOCOLREQUEST']._serialized_end=9549
-  _globals['_BEGINPROTOCOLREQUEST_SETTINGSENTRY']._serialized_start=6803
-  _globals['_BEGINPROTOCOLREQUEST_SETTINGSENTRY']._serialized_end=6919
-  _globals['_BEGINPROTOCOLRESPONSE']._serialized_start=9551
-  _globals['_BEGINPROTOCOLRESPONSE']._serialized_end=9590
-  _globals['_SETPLATFORMQCRESULTREQUEST']._serialized_start=9592
-  _globals['_SETPLATFORMQCRESULTREQUEST']._serialized_end=9705
-  _globals['_SETPLATFORMQCRESULTRESPONSE']._serialized_start=9707
-  _globals['_SETPLATFORMQCRESULTRESPONSE']._serialized_end=9736
-  _globals['_SETHARDWARECHECKRESULTREQUEST']._serialized_start=9738
-  _globals['_SETHARDWARECHECKRESULTREQUEST']._serialized_end=9853
-  _globals['_SETHARDWARECHECKRESULTRESPONSE']._serialized_start=9855
-  _globals['_SETHARDWARECHECKRESULTRESPONSE']._serialized_end=9887
-  _globals['_ASSOCIATEPOSTPROCESSINGANALYSISREQUEST']._serialized_start=9889
-  _globals['_ASSOCIATEPOSTPROCESSINGANALYSISREQUEST']._serialized_end=10006
-  _globals['_ASSOCIATEPOSTPROCESSINGANALYSISRESPONSE']._serialized_start=10008
-  _globals['_ASSOCIATEPOSTPROCESSINGANALYSISRESPONSE']._serialized_end=10061
-  _globals['_CLEARPROTOCOLHISTORYDATAREQUEST']._serialized_start=10063
-  _globals['_CLEARPROTOCOLHISTORYDATAREQUEST']._serialized_end=10118
-  _globals['_CLEARPROTOCOLHISTORYDATARESPONSE']._serialized_start=10120
-  _globals['_CLEARPROTOCOLHISTORYDATARESPONSE']._serialized_end=10154
-  _globals['_PROTOCOLPHASEMANAGEMENTREQUEST']._serialized_start=10157
-  _globals['_PROTOCOLPHASEMANAGEMENTREQUEST']._serialized_end=10399
-  _globals['_PROTOCOLPHASEMANAGEMENTREQUEST_CAPABILITIES']._serialized_start=10336
-  _globals['_PROTOCOLPHASEMANAGEMENTREQUEST_CAPABILITIES']._serialized_end=10399
-  _globals['_PROTOCOLPHASEMANAGEMENTRESPONSE']._serialized_start=10401
-  _globals['_PROTOCOLPHASEMANAGEMENTRESPONSE']._serialized_end=10480
-  _globals['_GENERATERUNREPORTREQUEST']._serialized_start=10482
-  _globals['_GENERATERUNREPORTREQUEST']._serialized_end=10561
-  _globals['_GENERATERUNREPORTRESPONSE']._serialized_start=10564
-  _globals['_GENERATERUNREPORTRESPONSE']._serialized_end=10715
-  _globals['_PROTOCOLSERVICE']._serialized_start=11860
-  _globals['_PROTOCOLSERVICE']._serialized_end=15115
+  _globals['_PROTOCOLPHASESNAPSHOT']._serialized_start=3541
+  _globals['_PROTOCOLPHASESNAPSHOT']._serialized_end=3716
+  _globals['_EPI2MEWORKFLOWREFERENCE']._serialized_start=3718
+  _globals['_EPI2MEWORKFLOWREFERENCE']._serialized_end=3768
+  _globals['_ASSOCIATEDPOSTPROCESSINGANALYSIS']._serialized_start=3771
+  _globals['_ASSOCIATEDPOSTPROCESSINGANALYSIS']._serialized_end=4018
+  _globals['_ASSOCIATEDPOSTPROCESSINGANALYSIS_STATE']._serialized_start=3965
+  _globals['_ASSOCIATEDPOSTPROCESSINGANALYSIS_STATE']._serialized_end=4018
+  _globals['_PLATFORMQCRESULT']._serialized_start=4020
+  _globals['_PLATFORMQCRESULT']._serialized_end=4102
+  _globals['_HARDWARECHECKRESULT']._serialized_start=4105
+  _globals['_HARDWARECHECKRESULT']._serialized_end=4445
+  _globals['_HARDWARECHECKRESULT_HARDWARECHECKSTATUS']._serialized_start=4301
+  _globals['_HARDWARECHECKRESULT_HARDWARECHECKSTATUS']._serialized_end=4372
+  _globals['_HARDWARECHECKRESULT_HARDWARECHECKFAILUREREASON']._serialized_start=4374
+  _globals['_HARDWARECHECKRESULT_HARDWARECHECKFAILUREREASON']._serialized_end=4445
+  _globals['_EXTERNALOFFLOAD']._serialized_start=4447
+  _globals['_EXTERNALOFFLOAD']._serialized_end=4485
+  _globals['_GETVERSIONINFORESPONSE']._serialized_start=4488
+  _globals['_GETVERSIONINFORESPONSE']._serialized_end=5166
+  _globals['_GETVERSIONINFORESPONSE_MINKNOWVERSION']._serialized_start=4925
+  _globals['_GETVERSIONINFORESPONSE_MINKNOWVERSION']._serialized_end=5000
+  _globals['_GETVERSIONINFORESPONSE_DISTRIBUTIONSTATUS']._serialized_start=5002
+  _globals['_GETVERSIONINFORESPONSE_DISTRIBUTIONSTATUS']._serialized_end=5075
+  _globals['_GETVERSIONINFORESPONSE_INSTALLATIONTYPE']._serialized_start=5077
+  _globals['_GETVERSIONINFORESPONSE_INSTALLATIONTYPE']._serialized_end=5154
+  _globals['_ANALYSISWORKFLOWINFO']._serialized_start=5169
+  _globals['_ANALYSISWORKFLOWINFO']._serialized_end=5582
+  _globals['_ANALYSISWORKFLOWINFO_STATUS']._serialized_start=5455
+  _globals['_ANALYSISWORKFLOWINFO_STATUS']._serialized_end=5582
+  _globals['_PROTOCOLRUNINFO']._serialized_start=5585
+  _globals['_PROTOCOLRUNINFO']._serialized_end=7190
+  _globals['_PROTOCOLRUNINFO_SETTINGSENTRY']._serialized_start=7049
+  _globals['_PROTOCOLRUNINFO_SETTINGSENTRY']._serialized_end=7165
+  _globals['_FILTERINGINFO']._serialized_start=7193
+  _globals['_FILTERINGINFO']._serialized_end=7700
+  _globals['_FILTERINGINFO_PLATFORMQCFILTER']._serialized_start=7483
+  _globals['_FILTERINGINFO_PLATFORMQCFILTER']._serialized_end=7545
+  _globals['_FILTERINGINFO_HARDWARECHECKFILTER']._serialized_start=7547
+  _globals['_FILTERINGINFO_HARDWARECHECKFILTER']._serialized_end=7568
+  _globals['_FILTERINGINFO_TIMEFILTER']._serialized_start=7570
+  _globals['_FILTERINGINFO_TIMEFILTER']._serialized_end=7678
+  _globals['_LISTPROTOCOLRUNSREQUEST']._serialized_start=7702
+  _globals['_LISTPROTOCOLRUNSREQUEST']._serialized_end=7785
+  _globals['_LISTPROTOCOLRUNSRESPONSE']._serialized_start=7787
+  _globals['_LISTPROTOCOLRUNSRESPONSE']._serialized_end=7830
+  _globals['_GETCURRENTPROTOCOLRUNREQUEST']._serialized_start=7832
+  _globals['_GETCURRENTPROTOCOLRUNREQUEST']._serialized_end=7862
+  _globals['_GETCURRENTPROTOCOLRUNRESPONSE']._serialized_start=7864
+  _globals['_GETCURRENTPROTOCOLRUNRESPONSE']._serialized_end=7952
+  _globals['_WATCHCURRENTPROTOCOLRUNREQUEST']._serialized_start=7954
+  _globals['_WATCHCURRENTPROTOCOLRUNREQUEST']._serialized_end=7986
+  _globals['_GETCONTEXTINFOREQUEST']._serialized_start=7988
+  _globals['_GETCONTEXTINFOREQUEST']._serialized_end=8011
+  _globals['_GETCONTEXTINFORESPONSE']._serialized_start=8014
+  _globals['_GETCONTEXTINFORESPONSE']._serialized_end=8175
+  _globals['_GETCONTEXTINFORESPONSE_CONTEXTINFOENTRY']._serialized_start=8125
+  _globals['_GETCONTEXTINFORESPONSE_CONTEXTINFOENTRY']._serialized_end=8175
+  _globals['_SETCONTEXTINFOREQUEST']._serialized_start=8178
+  _globals['_SETCONTEXTINFOREQUEST']._serialized_end=8337
+  _globals['_SETCONTEXTINFOREQUEST_CONTEXTINFOENTRY']._serialized_start=8125
+  _globals['_SETCONTEXTINFOREQUEST_CONTEXTINFOENTRY']._serialized_end=8175
+  _globals['_SETCONTEXTINFORESPONSE']._serialized_start=8339
+  _globals['_SETCONTEXTINFORESPONSE']._serialized_end=8363
+  _globals['_GETPROTOCOLPURPOSEREQUEST']._serialized_start=8365
+  _globals['_GETPROTOCOLPURPOSEREQUEST']._serialized_end=8392
+  _globals['_GETPROTOCOLPURPOSERESPONSE']._serialized_start=8394
+  _globals['_GETPROTOCOLPURPOSERESPONSE']._serialized_end=8439
+  _globals['_SETPROTOCOLPURPOSEREQUEST']._serialized_start=8441
+  _globals['_SETPROTOCOLPURPOSEREQUEST']._serialized_end=8485
+  _globals['_SETPROTOCOLPURPOSERESPONSE']._serialized_start=8487
+  _globals['_SETPROTOCOLPURPOSERESPONSE']._serialized_end=8515
+  _globals['_ADDEPI2MEWORKFLOWREQUEST']._serialized_start=8517
+  _globals['_ADDEPI2MEWORKFLOWREQUEST']._serialized_end=8643
+  _globals['_ADDEPI2MEWORKFLOWRESPONSE']._serialized_start=8645
+  _globals['_ADDEPI2MEWORKFLOWRESPONSE']._serialized_end=8672
+  _globals['_PROTOCOLGROUPIDINFO']._serialized_start=8674
+  _globals['_PROTOCOLGROUPIDINFO']._serialized_end=8770
+  _globals['_LISTPROTOCOLGROUPIDSREQUEST']._serialized_start=8772
+  _globals['_LISTPROTOCOLGROUPIDSREQUEST']._serialized_end=8859
+  _globals['_LISTPROTOCOLGROUPIDSRESPONSE']._serialized_start=8862
+  _globals['_LISTPROTOCOLGROUPIDSRESPONSE']._serialized_end=8996
+  _globals['_BEGINHARDWARECHECKREQUEST']._serialized_start=8998
+  _globals['_BEGINHARDWARECHECKREQUEST']._serialized_end=9025
+  _globals['_BEGINHARDWARECHECKRESPONSE']._serialized_start=9027
+  _globals['_BEGINHARDWARECHECKRESPONSE']._serialized_end=9071
+  _globals['_BEGINPLATFORMQCREQUEST']._serialized_start=9073
+  _globals['_BEGINPLATFORMQCREQUEST']._serialized_end=9097
+  _globals['_BEGINPLATFORMQCRESPONSE']._serialized_start=9099
+  _globals['_BEGINPLATFORMQCRESPONSE']._serialized_end=9140
+  _globals['_BEGINPROTOCOLREQUEST']._serialized_start=9143
+  _globals['_BEGINPROTOCOLREQUEST']._serialized_end=9822
+  _globals['_BEGINPROTOCOLREQUEST_SETTINGSENTRY']._serialized_start=7049
+  _globals['_BEGINPROTOCOLREQUEST_SETTINGSENTRY']._serialized_end=7165
+  _globals['_BEGINPROTOCOLRESPONSE']._serialized_start=9824
+  _globals['_BEGINPROTOCOLRESPONSE']._serialized_end=9863
+  _globals['_SETPLATFORMQCRESULTREQUEST']._serialized_start=9865
+  _globals['_SETPLATFORMQCRESULTREQUEST']._serialized_end=9978
+  _globals['_SETPLATFORMQCRESULTRESPONSE']._serialized_start=9980
+  _globals['_SETPLATFORMQCRESULTRESPONSE']._serialized_end=10009
+  _globals['_SETHARDWARECHECKRESULTREQUEST']._serialized_start=10011
+  _globals['_SETHARDWARECHECKRESULTREQUEST']._serialized_end=10126
+  _globals['_SETHARDWARECHECKRESULTRESPONSE']._serialized_start=10128
+  _globals['_SETHARDWARECHECKRESULTRESPONSE']._serialized_end=10160
+  _globals['_ASSOCIATEPOSTPROCESSINGANALYSISREQUEST']._serialized_start=10162
+  _globals['_ASSOCIATEPOSTPROCESSINGANALYSISREQUEST']._serialized_end=10279
+  _globals['_ASSOCIATEPOSTPROCESSINGANALYSISRESPONSE']._serialized_start=10281
+  _globals['_ASSOCIATEPOSTPROCESSINGANALYSISRESPONSE']._serialized_end=10334
+  _globals['_CLEARPROTOCOLHISTORYDATAREQUEST']._serialized_start=10336
+  _globals['_CLEARPROTOCOLHISTORYDATAREQUEST']._serialized_end=10391
+  _globals['_CLEARPROTOCOLHISTORYDATARESPONSE']._serialized_start=10393
+  _globals['_CLEARPROTOCOLHISTORYDATARESPONSE']._serialized_end=10427
+  _globals['_PROTOCOLPHASEMANAGEMENTREQUEST']._serialized_start=10430
+  _globals['_PROTOCOLPHASEMANAGEMENTREQUEST']._serialized_end=10672
+  _globals['_PROTOCOLPHASEMANAGEMENTREQUEST_CAPABILITIES']._serialized_start=10609
+  _globals['_PROTOCOLPHASEMANAGEMENTREQUEST_CAPABILITIES']._serialized_end=10672
+  _globals['_PROTOCOLPHASEMANAGEMENTRESPONSE']._serialized_start=10674
+  _globals['_PROTOCOLPHASEMANAGEMENTRESPONSE']._serialized_end=10753
+  _globals['_GENERATERUNREPORTREQUEST']._serialized_start=10755
+  _globals['_GENERATERUNREPORTREQUEST']._serialized_end=10834
+  _globals['_GENERATERUNREPORTRESPONSE']._serialized_start=10837
+  _globals['_GENERATERUNREPORTRESPONSE']._serialized_end=10988
+  _globals['_PROTOCOLSERVICE']._serialized_start=12154
+  _globals['_PROTOCOLSERVICE']._serialized_end=15409
+KitInfo.__doc__ = """Attributes:
+    sequencing_kit:
+        The sequencing kit used to select the protocol e.g. "SQK-
+        LSK108"
+    barcode_expansion_kits:
+        The expansion barcoding kits that the protocol supports e.g.
+        "EXP-NBD104"
+"""
+AssociatePostProcessingAnalysisResponse.__doc__ = """Attributes:
+    id:
+        Id of the basecaller.proto post processing task that was
+        triggered, if the post processing analysis was executed
+        immediately (protocol was finished).
+"""
+ExternalOffload.__doc__ = """Attributes:
+    offload_ids:
+        The `id`s associated with active external data offloads
+        associated with the protocol The offload status can be queried
+        using `mooneye.offload_manager.watch_offloads()``
+"""
+RequestOrigin.RunUntil.__doc__ = """A request made by the run until script due to certain criteria being
+met
+
+Attributes:
+    criteria:
+        What criteria caused the state change
+"""
+BeginProtocolResponse.__doc__ = """Attributes:
+    run_id:
+        UUID generated when the protocol is started, to uniquely
+        represent this protocol instance
+"""
+StartProtocolRequest.__doc__ = """ passenger_info
+
+Attributes:
+    identifier:
+        The identifier of the protocol, as provided by
+        list_protocols().
+    args:
+        The arguments to pass to the protocol.
+    user_info:
+        User input describing the protocol.
+    offload_location_info:
+        Information about data offload locations to use to store data
+        Since 5.0.
+    target_run_until_criteria:
+        Initial Target Run-Until Criteria to use when starting an
+        acquisition for this protocol. These can be updated during the
+        acquisition using the Run-Until API.  Since 5.3
+    analysis_workflow_request:
+        Workflow request that should be started when the protocol is
+        started  EXPERIMENTAL: This field may change or be removed
+        between minor versions without warning
+"""
+StartProtocolResponse.__doc__ = """Attributes:
+    run_id:
+        UUID generated when the protocol is started, to uniquely
+        represent this protocol instance
+"""
+WaitForFinishedRequest.__doc__ = """Attributes:
+    run_id:
+        Only consider a specific protocol run.
+    state:
+        Control what to wait for.  Specifying
+        NOTIFY_BEFORE_TERMINATION allows a caller to be notified the
+        script will be ended _soon_, and do final work to end cleanly.
+        Since 1.11
+    timeout:
+        Timeout to wait for finished, if the timeout expires before
+        the protocol is complete (in the state requested) then the
+        response returns.  By default the timeout will wait forever.
+        Since 1.15
+"""
+Epi2meWorkflowReference.__doc__ = """Attributes:
+    id:
+        The unique identifier for a workflow ( unique to a specific
+        instance of epi2me )
+    url:
+        URL that links to the workflow report. Syntax for a local
+        workflow: file:// otherwise: http(s)://
+"""
+AssociatePostProcessingAnalysisRequest.__doc__ = """Attributes:
+    run_id:
+        Protocol id to associate analysis with:
+"""
+ProtocolPhaseManagementRequest.Capabilities.__doc__ = """Attributes:
+    can_pause:
+        Indicate that the protocol will respond to pause and resume
+        requests.
+    can_trigger_mux_scan:
+        Indicate that the protocol will respond to mux scan requests.
+"""
+ProtocolPhaseSnapshot.__doc__ = """Attributes:
+    phase:
+        The new protocol phase when the phase request happened
+    timestamp:
+        UTC timestamp of when the protocol phase changed was requested
+    origin:
+        Who requested the phase change  Candidates:
+        ProtocolPhaseMangement: Through protocol_phase_management API
+        MinKNOW: When the protocol ends and the phase is marked
+        PHASE_COMPLETED
+"""
+FilteringInfo.__doc__ = """Attributes:
+    pqc_filter:
+        Filter by runs that have platform QC results  Just
+        initialising this message is enough to filter out runs with
+        platform QC results from ones that don't  Further filtering on
+        the platform QC results can be applied by using the fields
+        within PlatformQcFilter
+    hardware_check_filter:
+        Filter by runs that have hardware check results  Initialising
+        this message means that only runs with a hardware check result
+        will be returned
+    protocol_group_id:
+        Filter runs by a specific protocol_group_id
+"""
+ProtocolPhaseManagementRequest.__doc__ = """Attributes:
+    set_capabilities:
+        Update the set of capabilities (messages that will be
+        responded to by the protocol).
+    phase:
+        Update the protocol phase.  Leave empty (ie: PHASE_UNKNOWN) to
+        keep the previous phase.
+"""
+GetRunInfoRequest.__doc__ = """Attributes:
+    run_id:
+        The protocol run to get information about.
+"""
+RequestOrigin.MinKNOW.__doc__ = """A request from minknow will usually come in the form of something
+ending naturally, or an error occurring where minknow has to take
+action
+
+Attributes:
+    cause:
+        Optional further details on the cause of the request
+"""
+GetVersionInfoResponse.__doc__ = """Version of the basecaller MinKNOW is running with.  Since 5.0 This
+field has been updated since 6.0  guppy_connected_version
+
+Attributes:
+    minknow:
+        What minknow version is installed. Split into major, minor and
+        patch versions Also includes the full version as a string,
+        which contain the major, minor and patch numbers as well as if
+        the version is pre-release version (~pre), whether it is a
+        release candidate (~rc#) or whether it is a variant version
+        (i.e. for conferences) (-variant). For non-release builds it
+        also includes the hash of the commit it is based on, and
+        whether the working copy is different from that has (-dirty)
+    bream:
+        The version of Bream that is installed.  An invalid
+        installation will cause this to return "0.0.0".  Prior to 5.0,
+        this field was called "protocols".  Since 5.0
+    distribution_version:
+        Describes the distribution that this MinKNOW installation is
+        part of, usually this will be the Metapackage version
+        number/identity, this will be "unknown" if the distribution-
+        version hasn't been set. This information is also communicated
+        in the Manager's DaemonMessage in daemon.proto
+    distribution_status:
+        Indicates if the MinKNOW distribution including components
+        such as Bream are stable, unstable or have been modified.
+    protocol_configuration:
+        The version of the protocol configuration files that is
+        installed.  An invalid installation will cause this to return
+        "0.0.0".  Prior to 5.0, this field was called "configuration".
+        Since 5.0
+    installation_type:
+        The installation type of MinKNOW.  The installation type may
+        affect the available features, or the update process.  Since
+        4.1
+"""
+OffloadLocationInfo.__doc__ = """Attributes:
+    offload_location_ids:
+        Data offload locations to use to store protocol data,
+        specified using their `location_id`.  Valid `location_id`s can
+        be retrieved using
+        mooneye.offload_manager.list_offload_locations()  If any
+        `offload_location_ids` are specified, then:   - Data is not
+        stored locally   - `offload_location_path` must NOT be set (or
+        must be set to an empty value)      - The
+        `offload_location_ids` indicate that data should be offloaded,
+        rather than        stored locally; the `offload_location_path`
+        is used to set a local storage location.      - If both are
+        set, an error is returned  This requires a running instance of
+        Mooneye  Since 5.0.
+    offload_location_path:
+        Local, e.g., internal / external drive, paths to where the
+        protocol output will be stored.  This setting overrides the
+        default output locations (as set through configuration files
+        and/or the instance service).  If `offload_location_path` is
+        set to a non-empty value, then:  -  `offload_location_ids`
+        MUST be empty      - The `offload_location_ids` indicate that
+        data should be offloaded, rather than        stored locally;
+        the `offload_location_path` is used to set a local storage
+        location.      - If both are set, an error is returned  This
+        does not require a running instance of Mooneye  Since 5.0
+"""
+AnalysisWorkflowRequest.__doc__ = """ EXPERIMENTAL: All fields within this message are marked as
+experimental and may change or be removed between minor versions
+without warning
+
+Attributes:
+    proxy_request:
+        The workflow request to start
+    when:
+        When to start the request
+"""
+ListProtocolsRequest.__doc__ = """Attributes:
+    force_reload:
+        If this is false, then will try to use the cached value of the
+        protocol list where possible (still subject to changes in flow
+        cell). If this is true, then will force a reload of the
+        protocol list  Defaults to false
+"""
+AssociatedPostProcessingAnalysis.__doc__ = """Attributes:
+    started_id:
+        Id of analysis if this has been triggered (otherwise empty).
+    start_request:
+        Start request for analysis
+"""
+PlatformQcResult.__doc__ = """Attributes:
+    flow_cell_id:
+        The flow cell id that the pqc was performed for
+    passed:
+        Whether the flow cell passed the platform qc check
+    total_pore_count:
+        Total number of pores that were found on the flow cell, across
+        all muxes.
+"""
+HardwareCheckResult.__doc__ = """The data sent to the UI
+
+Attributes:
+    failure_reason:
+        `failure_reason` is guaranteed to be:  - `NoError` if `status`
+        is NOT `Failed`  - NOT `NoError` if `status` is `Failed`
+    hardware_check_id:
+        The ID of this hardware check result.
+    start_time:
+        The time (UTC) when the hardware check was started.
+    end_time:
+        The time (UTC) when the hardware check completed.  Unset if
+        the check is still running.
+    hardware_check_script_data:
+        The data from the hardware check script
+"""
+SetPlatformQcResultRequest.__doc__ = """Attributes:
+    protocol_run_id:
+        The protocol_run_id that was given when the pqc run was
+        started
+"""
+ListProtocolGroupIdsResponse.__doc__ = """Attributes:
+    protocol_group_ids:
+        A list of protocol group ids used in any protocol started on
+        this instance of minknow.  deprecated and replaced by string
+        protocol_group_id in message ProtocolGroupIdInfo  string data
+        is guaranteed to be ordered by most recent start time, since
+        5.6
+    protocol_group_ids_info:
+        A list of the most recent start time for each protocol group
+        id on this instance of minknow.  guaranteed to be ordered by
+        most recent start time since 5.6
+"""
+ProtocolGroupIdInfo.__doc__ = """timestamp for the last activity for experiment ordering since 5.6
+
+Attributes:
+    start_time:
+        Most recent start time for the protocol group id
+"""
+ProtocolPhaseManagementResponse.__doc__ = """Attributes:
+    action:
+        Requests that the protocol changes phase.  The client should
+        never receive an action type (other than possibly ACTION_NONE)
+        that it has not explicitly opted into via the
+        `ProtocolPhaseManagementRequest.set_capabilities` field.  If
+        this is set to ACTION_NONE, the message should be ignored
+        (this is for future compatibility).
+"""
+RequestOrigin.User.__doc__ = """'User' based changes will typically come from calls made by the UI
+such as 'stop_protocol'
+
+Attributes:
+    identity:
+        If available then provide any identity information MinKNOW has
+        about the client that made the RPC request
+"""
+AnalysisWorkflowInfo.__doc__ = """ EXPERIMENTAL: All fields within this message are marked as
+experimental and may change or be removed between minor versions
+without warning
+
+Attributes:
+    request:
+        The request that started the analysis workflow
+    workflow_id:
+        The workflow id of the started analysis workflow.  May be
+        empty if the workflow was unable to start
+    workflow_name:
+        Human-readable name of the workflow.
+    workflow_version:
+        What version the analysis workflow is running
+    workflow_status:
+        Current status of the workflow.
+    workflow_stop_reason:
+        If 'workflow_status' is STOPPED_WITH_ERROR, then this field
+        will be populated with a human readable error message
+        describing why the workflow was stopped.  For any other
+        status, it is empty.
+    report_names:
+        The main report(s) for the analysis workflow  Indicates that
+        the report(s) are able to be retrieved from the Reception
+        server
+"""
+StopProtocolRequest.__doc__ = """Attributes:
+    data_action_on_stop:
+        Specify how any running acquisition should be handled when
+        stopping the protocol.  Protocol state will enter
+        PROTOCOL_WAITING_FOR_ACQUISITION whilst any running
+        acquisition is finished.  If a script ends on its own any
+        analysis that was started is stopped, and it is allowed to
+        catchup. If the caller wants to end catchup they can call
+        stop_protocol to end catchup.  Since 1.15
+"""
+BeginHardwareCheckResponse.__doc__ = """Attributes:
+    run_id:
+        UUID generated when the protocol is started, to uniquely
+        represent this protocol instance
+"""
+BeginPlatformQcResponse.__doc__ = """Attributes:
+    run_id:
+        UUID generated when the protocol is started, to uniquely
+        represent this protocol instance
+"""
+SetHardwareCheckResultRequest.__doc__ = """Attributes:
+    protocol_run_id:
+        The protocol_run_id that was given when the hardware check run
+        was started
+"""
+GenerateRunReportResponse.__doc__ = """Attributes:
+    protocol_run_id:
+        Protocol ID the run report is for.
+    report_data:
+        A section of the run report data (note the api to return this
+        data may stream back several sections).
+    remaining_length:
+        How many further characters of data remain after this message
+        (excluding of this message).
+    input_data:
+        If include_input_data was set, this will be a section of that
+        data (note the api to return this data may stream back several
+        sections).
+    remaining_input_length:
+        If include_input_data was set, how many further characters of
+        input data remain after this message (excluding of this
+        message).
+"""
+RequestOrigin.ProtocolPhaseManagement.__doc__ = """The protocol script/bream is mainly responsible for making changes via
+protocol_phase_management"""
 ProtocolRunInfo.__doc__ = """Attributes:
     run_id:
         The unique identifier assigned to this run.  This is
@@ -318,12 +678,17 @@ ProtocolRunInfo.__doc__ = """Attributes:
         PHASE_UNKNOWN.  Note that clients should handle unexpected
         values of this field gracefully. This can happen if new phases
         are added but the client is still using an older version of
-        the API specification.  Since 4.4.
+        the API specification.  Since 4.4.  DEPRECATED 6.1: Use
+        phase_history instead
     last_phase_change:
         The last time the phase changed.  This can be used to
         determine how long the protocol has been in the current phase.
         NB: This will not be set if the phase is PHASE_UNKNOWN.  Since
-        4.4.
+        4.4.  DEPRECATED 6.1: Use phase_history instead
+    phase_history:
+        The phase history of the protocol  Describes all phases that
+        the protocol went through, with timestamps at each stage to
+        track how long it had taken between each phase  Since 6.1
     can_pause:
         Whether the protocol can be paused.  Not all protocols can be
         paused, and cannot be paused in all phases.  Note that if this
@@ -367,6 +732,8 @@ ProtocolRunInfo.__doc__ = """Attributes:
         List of scheduled post processing analysis tasks
     analysis_workflow:
         The analysis workflow (if any) associated with the protocol
+        EXPERIMENTAL: This field may change or be removed between
+        minor versions without warning
     pqc_result:
         Platform QC result. Set by bream by calling
         `set_platform_qc_result()`. Possible to not be set (e.g. not a
@@ -380,156 +747,6 @@ ProtocolRunInfo.__doc__ = """Attributes:
         with this protocol  Since 5.0
     software_versions:
         For storing version numbers to output to run report  Since 5.6
-"""
-BeginPlatformQcResponse.__doc__ = """Attributes:
-    run_id:
-        UUID generated when the protocol is started, to uniquely
-        represent this protocol instance
-"""
-ListProtocolGroupIdsResponse.__doc__ = """Attributes:
-    protocol_group_ids:
-        A list of protocol group ids used in any protocol started on
-        this instance of minknow.  deprecated and replaced by string
-        protocol_group_id in message ProtocolGroupIdInfo  string data
-        is guaranteed to be ordered by most recent start time, since
-        5.6
-    protocol_group_ids_info:
-        A list of the most recent start time for each protocol group
-        id on this instance of minknow.  guaranteed to be ordered by
-        most recent start time since 5.6
-"""
-OffloadLocationInfo.__doc__ = """Attributes:
-    offload_location_ids:
-        Data offload locations to use to store protocol data,
-        specified using their `location_id`.  Valid `location_id`s can
-        be retrieved using
-        mooneye.offload_manager.list_offload_locations()  If any
-        `offload_location_ids` are specified, then:   - Data is not
-        stored locally   - `offload_location_path` must NOT be set (or
-        must be set to an empty value)      - The
-        `offload_location_ids` indicate that data should be offloaded,
-        rather than        stored locally; the `offload_location_path`
-        is used to set a local storage location.      - If both are
-        set, an error is returned  This requires a running instance of
-        Mooneye  Since 5.0.
-    offload_location_path:
-        Local, e.g., internal / external drive, paths to where the
-        protocol output will be stored.  This setting overrides the
-        default output locations (as set through configuration files
-        and/or the instance service).  If `offload_location_path` is
-        set to a non-empty value, then:  -  `offload_location_ids`
-        MUST be empty      - The `offload_location_ids` indicate that
-        data should be offloaded, rather than        stored locally;
-        the `offload_location_path` is used to set a local storage
-        location.      - If both are set, an error is returned  This
-        does not require a running instance of Mooneye  Since 5.0
-"""
-FilteringInfo.__doc__ = """Attributes:
-    pqc_filter:
-        Filter by runs that have platform QC results  Just
-        initialising this message is enough to filter out runs with
-        platform QC results from ones that don't  Further filtering on
-        the platform QC results can be applied by using the fields
-        within PlatformQcFilter
-    hardware_check_filter:
-        Filter by runs that have hardware check results  Initialising
-        this message means that only runs with a hardware check result
-        will be returned
-    protocol_group_id:
-        Filter runs by a specific protocol_group_id
-"""
-StartProtocolRequest.__doc__ = """ passenger_info
-
-Attributes:
-    identifier:
-        The identifier of the protocol, as provided by
-        list_protocols().
-    args:
-        The arguments to pass to the protocol.
-    user_info:
-        User input describing the protocol.
-    offload_location_info:
-        Information about data offload locations to use to store data
-        Since 5.0.
-    target_run_until_criteria:
-        Initial Target Run-Until Criteria to use when starting an
-        acquisition for this protocol. These can be updated during the
-        acquisition using the Run-Until API.  Since 5.3
-    analysis_workflow_request:
-        Workflow request that should be started when the protocol is
-        started
-"""
-ProtocolPhaseManagementResponse.__doc__ = """Attributes:
-    action:
-        Requests that the protocol changes phase.  The client should
-        never receive an action type (other than possibly ACTION_NONE)
-        that it has not explicitly opted into via the
-        `ProtocolPhaseManagementRequest.set_capabilities` field.  If
-        this is set to ACTION_NONE, the message should be ignored
-        (this is for future compatibility).
-"""
-ExternalOffload.__doc__ = """Attributes:
-    offload_ids:
-        The `id`s associated with active external data offloads
-        associated with the protocol The offload status can be queried
-        using `mooneye.offload_manager.watch_offloads()``
-"""
-BeginProtocolResponse.__doc__ = """Attributes:
-    run_id:
-        UUID generated when the protocol is started, to uniquely
-        represent this protocol instance
-"""
-SetHardwareCheckResultRequest.__doc__ = """Attributes:
-    protocol_run_id:
-        The protocol_run_id that was given when the hardware check run
-        was started
-"""
-StartProtocolResponse.__doc__ = """Attributes:
-    run_id:
-        UUID generated when the protocol is started, to uniquely
-        represent this protocol instance
-"""
-GenerateRunReportRequest.__doc__ = """Attributes:
-    protocol_run_id:
-        The protocol_run_id to generate a report for.
-    include_input_data:
-        Optionally return the input data used to generate the report.
-        This input data is represented as the data seen in
-        report_data.proto
-"""
-AssociatePostProcessingAnalysisRequest.__doc__ = """Attributes:
-    run_id:
-        Protocol id to associate analysis with:
-"""
-WaitForFinishedRequest.__doc__ = """Attributes:
-    run_id:
-        Only consider a specific protocol run.
-    state:
-        Control what to wait for.  Specifying
-        NOTIFY_BEFORE_TERMINATION allows a caller to be notified the
-        script will be ended _soon_, and do final work to end cleanly.
-        Since 1.11
-    timeout:
-        Timeout to wait for finished, if the timeout expires before
-        the protocol is complete (in the state requested) then the
-        response returns.  By default the timeout will wait forever.
-        Since 1.15
-"""
-ProtocolRunUserInfo.__doc__ = """Attributes:
-    protocol_group_id:
-        The group which the experiment should be held in.  note: This
-        value could be unset if a user did not specify a group_id when
-        starting the protocol.
-    sample_id:
-        sample_id created by the user
-    barcode_user_info:
-        User supplied info for barcodes
-    user_specified_flow_cell_id:
-        user_specified_flow_cell_id created by the user
-    user_specified_product_code:
-        user_specified_product_code created by the user
-    kit_info:
-        Kit information the user requested
 """
 BeginProtocolRequest.__doc__ = """ passenger_info
 
@@ -558,182 +775,9 @@ Attributes:
     analysis_workflow_request:
         Workflow request that should be started when the protocol is
         started
-"""
-AssociatePostProcessingAnalysisResponse.__doc__ = """Attributes:
-    id:
-        Id of the basecaller.proto post processing task that was
-        triggered, if the post processing analysis was executed
-        immediately (protocol was finished).
-"""
-GenerateRunReportResponse.__doc__ = """Attributes:
-    protocol_run_id:
-        Protocol ID the run report is for.
-    report_data:
-        A section of the run report data (note the api to return this
-        data may stream back several sections).
-    remaining_length:
-        How many further characters of data remain after this message
-        (excluding of this message).
-    input_data:
-        If include_input_data was set, this will be a section of that
-        data (note the api to return this data may stream back several
-        sections).
-    remaining_input_length:
-        If include_input_data was set, how many further characters of
-        input data remain after this message (excluding of this
-        message).
-"""
-BeginHardwareCheckResponse.__doc__ = """Attributes:
-    run_id:
-        UUID generated when the protocol is started, to uniquely
-        represent this protocol instance
-"""
-KitInfo.__doc__ = """Attributes:
-    sequencing_kit:
-        The sequencing kit used to select the protocol e.g. "SQK-
-        LSK108"
-    barcode_expansion_kits:
-        The expansion barcoding kits that the protocol supports e.g.
-        "EXP-NBD104"
-"""
-SetPlatformQcResultRequest.__doc__ = """Attributes:
-    protocol_run_id:
-        The protocol_run_id that was given when the pqc run was
-        started
-"""
-AnalysisWorkflowInfo.__doc__ = """Attributes:
-    request:
-        The request that started the analysis workflow
-    workflow_id:
-        The workflow id of the started analysis workflow.  May be
-        empty if the workflow was unable to start
-    workflow_name:
-        Human-readable name of the workflow.
-    workflow_version:
-        What version the analysis workflow is running
-    workflow_status:
-        Current status of the workflow.
-    workflow_stop_reason:
-        If 'workflow_status' is STOPPED_WITH_ERROR, then this field
-        will be populated with a human readable error message
-        describing why the workflow was stopped.  For any other
-        status, it is empty.
-    report_names:
-        The main report(s) for the analysis workflow  Indicates that
-        the report(s) are able to be retrieved from the Reception
-        server
-"""
-GetVersionInfoResponse.__doc__ = """Version of the basecaller MinKNOW is running with.  Since 5.0 This
-field has been updated since 6.0  guppy_connected_version
-
-Attributes:
-    minknow:
-        What minknow version is installed. Split into major, minor and
-        patch versions Also includes the full version as a string,
-        which contain the major, minor and patch numbers as well as if
-        the version is pre-release version (-pre), whether it is a
-        release candidate (-rc#) or whether it is a variant version
-        (i.e. for conferences) (-variant). For non-release builds it
-        also  includes the hash of the commit it is based on, and
-        whether the working copy is different from that has (-dirty)
-    bream:
-        The version of Bream that is installed.  An invalid
-        installation will cause this to return "0.0.0".  Prior to 5.0,
-        this field was called "protocols".  Since 5.0
-    distribution_version:
-        Describes the distribution that this MinKNOW installation is
-        part of, usually this will be the Metapackage version
-        number/identity, this will be "unknown" if the distribution-
-        version hasn't been set. This information is also communicated
-        in the Manager's DaemonMessage in daemon.proto
-    distribution_status:
-        Indicates if the MinKNOW distribution including components
-        such as Bream are stable, unstable or have been modified.
-    protocol_configuration:
-        The version of the protocol configuration files that is
-        installed.  An invalid installation will cause this to return
-        "0.0.0".  Prior to 5.0, this field was called "configuration".
-        Since 5.0
-    installation_type:
-        The installation type of MinKNOW.  The installation type may
-        affect the available features, or the update process.  Since
-        4.1
-"""
-ProtocolPhaseManagementRequest.__doc__ = """Attributes:
-    set_capabilities:
-        Update the set of capabilities (messages that will be
-        responded to by the protocol).
-    phase:
-        Update the protocol phase.  Leave empty (ie: PHASE_UNKNOWN) to
-        keep the previous phase.
-"""
-RequestOrigin.MinKNOW.__doc__ = """A request from minknow will usually come in the form of something
-ending naturally, or an error occurring where minknow has to take
-action
-
-Attributes:
-    cause:
-        Optional further details on the cause of the request
-"""
-RequestOrigin.ProtocolPhaseManagement.__doc__ = """The protocol script/bream is mainly responsible for making changes via
-protocol_phase_management"""
-HardwareCheckResult.__doc__ = """Attributes:
-    failure_reason:
-        `failure_reason` is guaranteed to be:  - `NoError` if `status`
-        is NOT `Failed`  - NOT `NoError` if `status` is `Failed`
-"""
-ProtocolPhaseManagementRequest.Capabilities.__doc__ = """Attributes:
-    can_pause:
-        Indicate that the protocol will respond to pause and resume
-        requests.
-    can_trigger_mux_scan:
-        Indicate that the protocol will respond to mux scan requests.
-"""
-Epi2meWorkflowReference.__doc__ = """Attributes:
-    id:
-        The unique identifier for a workflow ( unique to a specific
-        instance of epi2me )
-    url:
-        URL that links to the workflow report. Syntax for a local
-        workflow: file:// otherwise: http(s)://
-"""
-AssociatedPostProcessingAnalysis.__doc__ = """Attributes:
-    started_id:
-        Id of analysis if this has been triggered (otherwise empty).
-    start_request:
-        Start request for analysis
-"""
-RequestOrigin.RunUntil.__doc__ = """A request made by the run until script due to certain criteria being
-met
-
-Attributes:
-    criteria:
-        What criteria caused the state change
-"""
-PlatformQcResult.__doc__ = """Attributes:
-    flow_cell_id:
-        The flow cell id that the pqc was performed for
-    passed:
-        Whether the flow cell passed the platform qc check
-    total_pore_count:
-        Total number of pores that were found on the flow cell, across
-        all muxes.
-"""
-StopProtocolRequest.__doc__ = """Attributes:
-    data_action_on_stop:
-        Specify how any running acquisition should be handled when
-        stopping the protocol.  Protocol state will enter
-        PROTOCOL_WAITING_FOR_ACQUISITION whilst any running
-        acquisition is finished.  If a script ends on its own any
-        analysis that was started is stopped, and it is allowed to
-        catchup. If the caller wants to end catchup they can call
-        stop_protocol to end catchup.  Since 1.15
-"""
-ProtocolGroupIdInfo.__doc__ = """timestamp for the last activity for experiment ordering since 5.6
-
-Attributes:
-    start_time:
-        Most recent start time for the protocol group id
+    simulation_source:
+        Simulation source for playback device data, either an hdf file
+        or directory for use with arrow playback files.  Since 6.2
 """
 BarcodeUserData.__doc__ = """Attributes:
     barcode_name:
@@ -753,29 +797,28 @@ BarcodeUserData.__doc__ = """Attributes:
     passenger_info:
         Extra context per barcode
 """
-GetRunInfoRequest.__doc__ = """Attributes:
-    run_id:
-        The protocol run to get information about.
+GenerateRunReportRequest.__doc__ = """Attributes:
+    protocol_run_id:
+        The protocol_run_id to generate a report for.
+    include_input_data:
+        Optionally return the input data used to generate the report.
+        This input data is represented as the data seen in
+        report_data.proto
 """
-ListProtocolsRequest.__doc__ = """Attributes:
-    force_reload:
-        If this is false, then will try to use the cached value of the
-        protocol list where possible (still subject to changes in flow
-        cell). If this is true, then will force a reload of the
-        protocol list  Defaults to false
-"""
-AnalysisWorkflowRequest.__doc__ = """Attributes:
-    proxy_request:
-        The workflow request to start
-    when:
-        When to start the request
-"""
-RequestOrigin.User.__doc__ = """'User' based changes will typically come from calls made by the UI
-such as 'stop_protocol'
-
-Attributes:
-    identity:
-        If available then provide any identity information MinKNOW has
-        about the client that made the RPC request
+ProtocolRunUserInfo.__doc__ = """Attributes:
+    protocol_group_id:
+        The group which the experiment should be held in.  note: This
+        value could be unset if a user did not specify a group_id when
+        starting the protocol.
+    sample_id:
+        sample_id created by the user
+    barcode_user_info:
+        User supplied info for barcodes
+    user_specified_flow_cell_id:
+        user_specified_flow_cell_id created by the user
+    user_specified_product_code:
+        user_specified_product_code created by the user
+    kit_info:
+        Kit information the user requested
 """
 # @@protoc_insertion_point(module_scope)

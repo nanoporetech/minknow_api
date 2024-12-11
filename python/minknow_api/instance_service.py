@@ -98,7 +98,7 @@ class InstanceService(object):
                               [],
                               "minknow_api.instance.InstanceService")
     def get_output_directories(self, _message=None, _timeout=None, **kwargs):
-        """Returns various directory locations where minknow is outputting data. The paths are absolute paths, 
+        """Returns various directory locations where minknow is outputting data. The paths are absolute paths,
         local to the machine where minknow is installed
 
         the `output` base directory can be changed internally

@@ -107,6 +107,8 @@ class BasecallerServicer(object):
         """List the available basecalling configurations sorted by flow cell and kit.
 
         Since 3.5
+
+        DEPRECATED: This rpc is no longer supported and does not return any results.
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')

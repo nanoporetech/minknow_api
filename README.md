@@ -18,7 +18,7 @@ including gathering information about running or finished experiments, starting 
 experiments, and even exerting more fine-grained control. Anything that can be done via MinKNOW's
 user interface (and more) can be done using the APIs in this project.
 
-This project is targetted at LIMS developers or developers of other tools that have a need to
+This project is targeted at LIMS developers or developers of other tools that have a need to
 integrate with MinKNOW. Some familiarity with Python is expected (although the APIs can be used from
 other languages), as the examples are written in Python. If you are not familiar with [gRPC][grpc],
 it is worth reading through some of the [gRPC documentation][grpc-docs] to get a feel for it.

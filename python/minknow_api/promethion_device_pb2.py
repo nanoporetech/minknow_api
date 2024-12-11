@@ -116,91 +116,98 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   _globals['_GETTEMPERATURERESPONSE']._serialized_end=5418
   _globals['_PROMETHIONDEVICESERVICE']._serialized_start=5421
   _globals['_PROMETHIONDEVICESERVICE']._serialized_end=6499
-ChangeDeviceSettingsResponse.__doc__ = """Attributes:
-    real_sampling_frequency:
-        The sampling frequency actually applied to the hardware, as
-        close as possible to the requested rate.  Note: only returned
-        if sampling rate was set as part of this call.
-"""
-PixelSettings.__doc__ = """Attributes:
-    input:
-        The input driving the adv
-    overload_mode:
-        The mode the asic uses to handle currents that go above its
-        adc range.
-    cutoff_frequency:
-        Signal filter for input adc signal.
-    gain_multiplier:
-        Signal gain multiplier, applied to the integrator circuit.
-    gain_capacitor:
-        Gain capacitor, used in the integrator circuit.
-    calibration_mode:
-        The calibration mode to use.
+DeviceSettings.__doc__ = """Attributes:
+    sample_rate:
+        The number of measurements to take each second.  Possible
+        values are between 1000, and 5000. If the value is outside of
+        this range, it will be clamped within it  FAILED_PRECONDITION
+        will be returned if attempting to change during acquisition
+    temperature_target:
+        If the device is capable (see
+        device.get_device_info().temperature_controllable) then this
+        sets the minimum and maximum temperatures of the flow-cell.
+        These values must be between the limits specified in the
+        application config, see: min_user_setpoint_temperature_celsius
+        and max_user_setpoint_temperature_celsius
+    reference_voltage:
+        The reference voltage Vref  This value must be within the
+        range of [700..1100](mV) and will be rounded down to the
+        nearest 50mV. INVALID_ARGUMENT will be returned if outside
+        these limits
     unblock_voltage:
-        Controls the application of the unblock voltage to the pixel.
-    current_inverted:
-        Inverts the current's polarity.
-    membrane_simulation_enabled:
-        Control the state of the membrane simulation.
-    regeneration_current:
+        The unblock voltage to apply when a channel is unblocking.
+        The acceptable input range depends on Vref The default Vref of
+        900mV gives the unblock level a range between [-840..900]mV
+        INVALID_ARGUMENT will be returned if outside of the limits set
+        depending on Vref
+    regen_current_range:
+        Determines the range of regen current available for selection
+        Range 0.5nA, step 0.1nA         Range 0.667nA, step 0.133nA
+        Range 1.0nA, step 0.2nA (DEFAULT)         Range 2.0nA, step
+        0.4nA INVALID_ARGUMENT will be returned if range option does
+        not exist
+    regen_current:
         Control the regeneration current used when regenerating
-        well's.
-    regeneration_current_test_enabled:
-        Control if the regeneration current test is enabled.  This
-        connects the regeneration current to the integration adc
-        circuit and the input well. and allows users to read regen
-        current via the channel adc value.
-    bias_current:
-        The bias current for the amplifier - this controls the level
-        of noise of the signal.  The higher the bias current, the
-        lower the noise, but the bigger the heat and power drawn by
-        the amplifier. If it is set to off, no signal readings can be
-        made.
-"""
-StreamTemperatureRequest.__doc__ = """Attributes:
-    period_seconds:
-        How often temperature updates should be sent Defaults to a
-        period of 1 second, if not specified, or set to 0
-    acquisition_run_id:
-        The acquisition id of the experiment.
-    data_selection:
-        The desired data selection.  The units for all values are
-        `seconds since the start of the experiment`.
-"""
-WaveformSettings.__doc__ = """Attributes:
-    voltages:
-        The waveform data applied to the device (in millivolts)  Must
-        contain 32 values, in order to be a valid waveform.
-    frequency:
-        The frequency of the applied waveform, in Hz.  Valid values
-        are between 7.8125Hz and 500Hz.
-"""
-GetPixelSettingsRequest.__doc__ = """Attributes:
-    pixels:
-        The channels (one based) to return data for. A sparse map is
-        accepted
-"""
-GetTemperatureResponse.__doc__ = """Attributes:
-    target_temperature:
-        Return the temperature target the device is aiming to reach.
-    starting_temperature:
-        Starting temperature value  Since 6.0
-    flowcell_temperature:
-        Temperature as measured by thermistor TH2 on the P-Chip.
-    chamber_temperature:
-        Flow-cell chamber-temperature, calculated from the pixel-block
-        temperatures
-    pixel_block_temperature:
-        Temperature measured at each sensor in the ASIC, there are 12
-        sensors, one sensor per pixel-block
-"""
-ChangePixelBlockSettingsRequest.__doc__ = """Attributes:
-    pixel_blocks:
-        1 based map of different pixel blocks settings, a sparse map
-        is accepted, keys should be integers between 1 and 12.
-    pixel_block_default:
-        If supplied, contains settings applied to every block before
-        then applying any specific settings in the per block settings.
+        well's.  The acceptable value is in pico Amps and depends on
+        the specified regen_current_range option. Will round down to
+        nearest acceptable step in value within the range.
+        INVALID_ARGUMENT will be returned if outside the acceptable
+        range
+    regen_current_voltage_clamp:
+        Voltage clamp for regeneration circuit (in millivolts)  The
+        voltage in the regeneration circuit is clamped under this
+        value, whilst applying the current specified in each quads
+        settings.  This is a +/- voltage relative to Vref The polarity
+        is determined by the regen current With a default Vref of
+        900mV this gives the regen level a range of [0..840]mV
+        INVALID_ARGUMENT will be returned if outside the acceptable
+        range
+    bias_voltage_setting:
+        Settings controlling the device bias voltage
+    bias_voltage:
+        The value to apply as the bias voltage (in millivolts)  Valid
+        values are in the range -1250mv..1250mv
+    bias_voltage_waveform:
+        The waveform settings
+    int_capacitor:
+        Integration capacitor used for controlling the Gain This size
+        of the capacitance used is based on the provided setting with
+        a value of [0..31]  Refer to §2.3.1 of the OG2 ASIC
+        documentation for both the nominal and measured capacitance
+        that each setting produces.  This value is applied globally to
+        all QUADs and therefore all channels  INVALID_ARGUMENT will be
+        returned if outside the range of [0..31]
+    lpf_time_constant:
+        Low pass filter time constant This modifies the anti-alias
+        resistor to produce a specific time constant for the low pass
+        filter.
+    timings:
+        If specified, the device will adopt these timings to set how
+        long is spent at various stages of the current digitisation
+        processes. The message includes a way of returning to default
+        timings.  This value cannot be changed during acquisition
+    power_save_active:
+        Enable ASIC power save.  Setting to active will save power,
+        but doing so will allow the ASIC to cool down, and it will
+        take time to heat it up again along with performing a device
+        reset.
+    overload_protection:
+        Settings for the hardware based saturation/overload protection
+        (spike suppression)
+    sampling_frequency:
+        The number of measurements to take each second.  Possible
+        values are between 1000, and 10000. If the value is outside of
+        this range, it will be clamped within it  This value cannot be
+        changed during acquisition.
+    ramp_voltage:
+        The value to apply as the ramp voltage (in millivolts)  Valid
+        values are in the range -1250mv..1250mv
+    saturation_control_enabled:
+        Enables saturation control on the device
+    fast_calibration_enabled:
+        Enable use of the fast calibration mode across the device
+        DEPRECATED since 5.5. This will be removed in a future
+        release.
 """
 TimingEnginePeriods.__doc__ = """ Timing-engine periods are specified in 5ns units. Some of the timing
 mechanism can only achieve 10ns accuracy, so even numbers are
@@ -208,6 +215,14 @@ preferred.  Note: There is a timing feature in the ASIC that requires
 the sum of the RST1 and DATA periods to be a multiple of 16
 
 Attributes:
+    states:
+        Zero index based map [0-15] of up to 16 timing engine states
+    use_default_values:
+        If written true, other fields will be ignored and the hardware
+        will use default timings. When read will return true if
+        previously set true, it will not tell you if the timing
+        periods you previously entered are the same as the default
+        values.
     RST1:
         Reset1 phase  Note: Commands are written to the ASIC during
         this period, to allow sufficient time to write the commands,
@@ -240,63 +255,58 @@ Attributes:
         SH phase (Sample and Hold)
     SH_RST1:
         SH to Reset1 transition
-    use_default_values:
-        If written true, other fields will be ignored and the hardware
-        will use default timings. When read will return true if
-        previously set true, it will not tell you if the timing
-        periods you previously entered are the same as the default
-        values.
 """
-GetPixelBlockSettingsResponse.__doc__ = """Attributes:
-    pixel_blocks:
-        1 based map of different pixel blocks settings, containing 12
-        entries.
+ChangePixelSettingsRequest.__doc__ = """Attributes:
+    pixels:
+        1 based map of up to 3000 different pixel settings
+    pixel_default:
+        If supplied, contains settings applied to every pixel before
+        then applying any specific settings in the per pixel settings.
 """
-DeviceSettings.__doc__ = """Attributes:
-    sampling_frequency:
-        The number of measurements to take each second.  Possible
-        values are between 1000, and 10000. If the value is outside of
-        this range, it will be clamped within it  This value cannot be
-        changed during acquisition.
-    ramp_voltage:
-        The value to apply as the ramp voltage (in millivolts)  Valid
-        values are in the range -1250mv..1250mv
-    bias_voltage_setting:
-        Settings controlling the device bias voltage
-    bias_voltage:
-        The value to apply as the bias voltage (in millivolts)  Valid
-        values are in the range -1250mv..1250mv
-    bias_voltage_waveform:
-        The waveform settings
-    saturation_control_enabled:
-        Enables saturation control on the device
-    fast_calibration_enabled:
-        Enable use of the fast calibration mode across the device
-        DEPRECATED since 5.5. This will be removed in a future
-        release.
-    temperature_target:
-        If the device is capable (see
-        device.get_device_info().temperature_controllable) then this
-        sets the minimum and maximum temperatures of the flow-cell.
-        These values must be between the limits specified in the
-        application config, see: min_user_setpoint_temperature_celsius
-        and max_user_setpoint_temperature_celsius
-    timings:
-        If specified, the device will adopt these timings to set how
-        long is spent at various stages of the current digitisation
-        processes. The message includes a way of returning to default
-        timings.  This value cannot be changed during acquisition
-"""
-PixelBlockSettings.__doc__ = """Attributes:
-    regen_current_voltage_clamp:
-        Voltage clamp for regeneration circuit (in millivolts)  The
-        voltage in the regeneration circuit is clamped under this
-        value, whilst applying the current specified in each pixel's
-        settings.  The acceptable input range is -1000..1000
-        (inclusive)
+PixelSettings.__doc__ = """Attributes:
+    input:
+        The input driving the adv
+    overload_mode:
+        The mode the asic uses to handle currents that go above its
+        adc range.
+    cutoff_frequency:
+        Signal filter for input adc signal.
+    gain_multiplier:
+        Signal gain multiplier, applied to the integrator circuit.
+    gain_capacitor:
+        Gain capacitor, used in the integrator circuit.
+    calibration_mode:
+        The calibration mode to use.
     unblock_voltage:
-        The unblock voltage to apply when a pixel is unblocking.  The
-        acceptable input range is -1000..1000 (inclusive)
+        Controls the application of the unblock voltage to the pixel.
+    current_inverted:
+        Inverts the current's polarity.
+    membrane_simulation_enabled:
+        Control the state of the membrane simulation.
+    regeneration_current:
+        Control the regeneration current used when regenerating
+        well's.
+    regeneration_current_test_enabled:
+        Control if the regeneration current test is enabled.  This
+        connects the regeneration current to the integration adc
+        circuit and the input well. and allows users to read regen
+        current via the channel adc value.
+    bias_current:
+        The bias current for the amplifier - this controls the level
+        of noise of the signal. The higher the bias current, the lower
+        the noise, but the bigger the heat and power drawn by the
+        amplifier. If it is set to off, no signal readings can be
+        made.
+"""
+ChangeDeviceSettingsResponse.__doc__ = """Attributes:
+    real_sample_rate:
+        The sampling frequency actually applied to the hardware, as
+        close as possible to the requested rate.  Note: only returned
+        if sampling rate was set as part of this call.
+    real_sampling_frequency:
+        The sampling frequency actually applied to the hardware, as
+        close as possible to the requested rate.  Note: only returned
+        if sampling rate was set as part of this call.
 """
 PixelSettings.InputWell.__doc__ = """Attributes:
     input_well:
@@ -309,15 +319,73 @@ PixelSettings.InputWell.__doc__ = """Attributes:
         input. For example, { input: 1, regeneration: all } is
         invalid, as an well cannot be both input and regenerated.
 """
+GetPixelSettingsRequest.__doc__ = """Attributes:
+    pixels:
+        The channels (one based) to return data for. A sparse map is
+        accepted
+"""
+WaveformSettings.__doc__ = """Attributes:
+    voltages:
+        The waveform data applied to the device (in millivolts)  Must
+        contain 32 values, in order to be a valid waveform.
+    samples_per_entry:
+        The number of samples each wavetable entry will be valid for
+        Valid value must be between [1..31] INVALID_ARGUMENT will be
+        returned if not between these values
+    frequency:
+        The frequency of the applied waveform, in Hz.  Valid values
+        are between 7.8125Hz and 500Hz.
+"""
 GetPixelSettingsResponse.__doc__ = """Attributes:
     pixels:
         List of all requested pixel settings, in the order requested.
 """
-ChangePixelSettingsRequest.__doc__ = """Attributes:
-    pixels:
-        1 based map of up to 3000 different pixel settings
-    pixel_default:
-        If supplied, contains settings applied to every pixel before
-        then applying any specific settings in the per pixel settings.
+GetTemperatureResponse.__doc__ = """Attributes:
+    target_temperature:
+        Return the temperature target the device is aiming to reach.
+    starting_temperature:
+        Starting temperature value  Since 6.0
+    flowcell_temperature:
+        Temperature as measured by thermistor TH2 on the P-Chip.
+    chamber_temperature:
+        Flow-cell chamber-temperature, calculated from the pixel-block
+        temperatures
+    pixel_block_temperature:
+        Temperature measured at each sensor in the ASIC, there are 12
+        sensors, one sensor per pixel-block
+"""
+PixelBlockSettings.__doc__ = """Attributes:
+    regen_current_voltage_clamp:
+        Voltage clamp for regeneration circuit (in millivolts)  The
+        voltage in the regeneration circuit is clamped under this
+        value, whilst applying the current specified in each pixel's
+        settings.  The acceptable input range is -1000..1000
+        (inclusive)
+    unblock_voltage:
+        The unblock voltage to apply when a pixel is unblocking.  The
+        acceptable input range is -1000..1000 (inclusive)
+"""
+ChangePixelBlockSettingsRequest.__doc__ = """Attributes:
+    pixel_blocks:
+        1 based map of different pixel blocks settings, a sparse map
+        is accepted, keys should be integers between 1 and 12.
+    pixel_block_default:
+        If supplied, contains settings applied to every block before
+        then applying any specific settings in the per block settings.
+"""
+GetPixelBlockSettingsResponse.__doc__ = """Attributes:
+    pixel_blocks:
+        1 based map of different pixel blocks settings, containing 12
+        entries.
+"""
+StreamTemperatureRequest.__doc__ = """Attributes:
+    period_seconds:
+        How often temperature updates should be sent Defaults to a
+        period of 1 second, if not specified, or set to 0
+    acquisition_run_id:
+        The acquisition id of the experiment.
+    data_selection:
+        The desired data selection.  The units for all values are
+        `seconds since the start of the experiment`.
 """
 # @@protoc_insertion_point(module_scope)

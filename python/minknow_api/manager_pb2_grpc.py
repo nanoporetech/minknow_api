@@ -175,6 +175,11 @@ class ManagerServiceStub(object):
                 request_serializer=minknow__api_dot_manager__pb2.RestartDeviceAdminRequest.SerializeToString,
                 response_deserializer=minknow__api_dot_manager__pb2.RestartDeviceAdminResponse.FromString,
                 )
+        self.check_bed_file = channel.unary_unary(
+                '/minknow_api.manager.ManagerService/check_bed_file',
+                request_serializer=minknow__api_dot_manager__pb2.CheckBedFileRequest.SerializeToString,
+                response_deserializer=minknow__api_dot_manager__pb2.CheckBedFileResponse.FromString,
+                )
 
 
 class ManagerServiceServicer(object):
@@ -480,13 +485,7 @@ class ManagerServiceServicer(object):
     def association_device_code(self, request, context):
         """Get the device code/key for association.
 
-        This can be used to either get the code that the user must enter into the customer support
-        portal to associate the device with their account, or the key used for online association.
-
-        Errors:
-        INVALID_ARGUMENT: The requested flow cell position does not exist.
-
-        Since 4.4
+        DEPRECATED since 6.2 device association is no-longer required. This RPC will return UNIMPLEMENTED.
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -495,21 +494,7 @@ class ManagerServiceServicer(object):
     def apply_offline_association_unlock_code(self, request, context):
         """Apply the unlock code for offline association.
 
-        This is the code that the user receives from the customer support portal after entering the
-        device code for this device (see `offline_association_device_code`).
-
-        This is only required if either `describe_host` indicates that the device as a whole needs
-        association, or `flow_cell_positions` indicates that a particular positions needs it.
-
-        Errors:
-        INVALID_ARGUMENT: The requested flow cell position does not exist, or no unlock code
-        was provided.
-
-        Note that you will need to check the result to see if the association was successful. Calling
-        this on an already-associated device with a valid unlock code will succeed, but have no
-        effect.
-
-        Since 4.4
+        DEPRECATED since 6.2 device association is no-longer required. This RPC will return UNIMPLEMENTED.
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -593,6 +578,18 @@ class ManagerServiceServicer(object):
         """Forcibly halt and restart any MinKNOW-related device administration services, such as Mooneye.
 
         Since 6.0
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def check_bed_file(self, request, context):
+        """Checks the validity of a BED file against a corresponding index or genome file
+
+        Errors:
+        INVALID_ARGUMENT if the bed_file_path or index_file_path is empty
+
+        Since 6.1
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -760,6 +757,11 @@ def add_ManagerServiceServicer_to_server(servicer, server):
                     servicer.restart_device_admin_service,
                     request_deserializer=minknow__api_dot_manager__pb2.RestartDeviceAdminRequest.FromString,
                     response_serializer=minknow__api_dot_manager__pb2.RestartDeviceAdminResponse.SerializeToString,
+            ),
+            'check_bed_file': grpc.unary_unary_rpc_method_handler(
+                    servicer.check_bed_file,
+                    request_deserializer=minknow__api_dot_manager__pb2.CheckBedFileRequest.FromString,
+                    response_serializer=minknow__api_dot_manager__pb2.CheckBedFileResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -1312,5 +1314,22 @@ class ManagerService(object):
         return grpc.experimental.unary_unary(request, target, '/minknow_api.manager.ManagerService/restart_device_admin_service',
             minknow__api_dot_manager__pb2.RestartDeviceAdminRequest.SerializeToString,
             minknow__api_dot_manager__pb2.RestartDeviceAdminResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def check_bed_file(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/minknow_api.manager.ManagerService/check_bed_file',
+            minknow__api_dot_manager__pb2.CheckBedFileRequest.SerializeToString,
+            minknow__api_dot_manager__pb2.CheckBedFileResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

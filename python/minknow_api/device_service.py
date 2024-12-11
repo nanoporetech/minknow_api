@@ -76,6 +76,7 @@ __all__ = [
     "FCCON_PROMETHION",
     "FCCON_MINION_MK1",
     "FCCON_FLONGLE",
+    "FCCON_PEBBLE",
     "InsertionScriptStatus",
     "NOT_RUN",
     "FAILED",
@@ -485,7 +486,7 @@ class DeviceService(object):
                               [],
                               "minknow_api.device.DeviceService")
     def reset_device_settings(self, _message=None, _timeout=None, **kwargs):
-        """Reset all settings associate with the current device.
+        """Reset all settings associated with the current device.
 
         This call will initialise all settings to their default state, ie the same as when MinKNOW boots.
 

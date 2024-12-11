@@ -473,14 +473,14 @@ message ReadLengthN50Request {
 }
 
 message ReadLengthN50Response {
-    
+
     message ReadN50Data {
         // The estimated N50 value in bases
         //
         // This is always set
         //
         float estimated_n50 = 1;
-        
+
         // The basecalled N50 value
         //
         // If the acquisition did/does not have live basecalling enabled, this will be 0.0
@@ -523,7 +523,7 @@ message QScoreHistogramKey {
         // If duplex basecalling is not enabled, equivalent to `Simplex`
         // If duplex basecalling is enabled, the sum of `Simplex` and `Duplex`
         All = 0;
-    
+
         // All simplex data
         //
         // When duplex basecalling is enabled, this contains reads/bases from both:
@@ -531,14 +531,14 @@ message QScoreHistogramKey {
         // - Template and complement reads (which are subsequently combined into duplex reads)
         //
         Simplex = 1;
-    
+
         // Duplex data
         // Only available if duplex basecalling is enabled
         Duplex = 2;
     };
 
     ReadType read_type = 1;
-    
+
     enum BasecallStatus {
         Any = 0;
         Skipped = 1;
@@ -658,7 +658,7 @@ message QAccuracyHistogramKey {
         // If duplex basecalling is not enabled, equivalent to `Simplex`
         // If duplex basecalling is enabled, the sum of `Simplex` and `Duplex`
         All = 0;
-    
+
         // All simplex data
         //
         // When duplex basecalling is enabled, this contains reads/bases from both:
@@ -666,7 +666,7 @@ message QAccuracyHistogramKey {
         // - Template and complement reads (which are subsequently combined into duplex reads)
         //
         Simplex = 1;
-    
+
         // Duplex data
         // Only available if duplex basecalling is enabled
         Duplex = 2;
@@ -991,9 +991,20 @@ message TemperaturePacket {
         double chamber_temperature = 2;
     }
 
+    // Packet of temperatures appropriate for a Pebble.
+    message PebbleTemperature
+    {
+        // Temperature as measured by probe inside the ASIC.
+        double asic_temperature = 1;
+
+        // Temperature as measured by thermistor on the instrument.
+        double instrument_temperature = 2;
+    }
+
     oneof temperature {
         MinIONTemperature minion = 1;
         PromethIONTemperature promethion = 2;
+        PebbleTemperature pebble = 4;
     }
 
     // The range is based on the requested target temperature and tolerance.

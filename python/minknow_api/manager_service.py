@@ -74,6 +74,8 @@ __all__ = [
     "SetFeaturesResponse",
     "RestartDeviceAdminRequest",
     "RestartDeviceAdminResponse",
+    "CheckBedFileRequest",
+    "CheckBedFileResponse",
     "SimpleProtocolState",
     "NO_PROTOCOL_STATE",
     "PROTOCOL_RUNNING",
@@ -82,7 +84,6 @@ __all__ = [
     "SimulatedDeviceType",
     "SIMULATED_AUTO",
     "SIMULATED_MINION",
-    "SIMULATED_TRAXION",
     "SIMULATED_PROMETHION",
     "SIMULATED_P2",
     "ExperimentType",
@@ -1232,13 +1233,7 @@ class ManagerService(object):
     def association_device_code(self, _message=None, _timeout=None, **kwargs):
         """Get the device code/key for association.
 
-        This can be used to either get the code that the user must enter into the customer support
-        portal to associate the device with their account, or the key used for online association.
-
-        Errors:
-            INVALID_ARGUMENT: The requested flow cell position does not exist.
-
-        Since 4.4
+        DEPRECATED since 6.2 device association is no-longer required. This RPC will return UNIMPLEMENTED.
 
         This RPC has no side effects. Calling it will have no effect on the state of the
         system. It is safe to call repeatedly, or to retry on failure, although there is no
@@ -1292,21 +1287,7 @@ class ManagerService(object):
     def apply_offline_association_unlock_code(self, _message=None, _timeout=None, **kwargs):
         """Apply the unlock code for offline association.
 
-        This is the code that the user receives from the customer support portal after entering the
-        device code for this device (see `offline_association_device_code`).
-
-        This is only required if either `describe_host` indicates that the device as a whole needs
-        association, or `flow_cell_positions` indicates that a particular positions needs it.
-
-        Errors:
-            INVALID_ARGUMENT: The requested flow cell position does not exist, or no unlock code
-                was provided.
-
-        Note that you will need to check the result to see if the association was successful. Calling
-        this on an already-associated device with a valid unlock code will succeed, but have no
-        effect.
-
-        Since 4.4
+        DEPRECATED since 6.2 device association is no-longer required. This RPC will return UNIMPLEMENTED.
 
         This RPC is idempotent. It may change the state of the system, but if the requested
         change has already happened, it will not fail because of this, make any additional
@@ -1762,6 +1743,72 @@ class ManagerService(object):
             raise ArgumentError("Unexpected keyword arguments to restart_device_admin_service: '{}'".format(", ".join(unused_args)))
 
         return run_with_retry(self._stub.restart_device_admin_service,
+                              _message, _timeout,
+                              [],
+                              "minknow_api.manager.ManagerService")
+    def check_bed_file(self, _message=None, _timeout=None, **kwargs):
+        """Checks the validity of a BED file against a corresponding index or genome file
+
+        Errors:
+          INVALID_ARGUMENT if the bed_file_path or index_file_path is empty
+
+        Since 6.1
+
+        This RPC has no side effects. Calling it will have no effect on the state of the
+        system. It is safe to call repeatedly, or to retry on failure, although there is no
+        guarantee it will return the same information each time.
+
+        Args:
+            _message (minknow_api.manager_pb2.CheckBedFileRequest, optional): The message to send.
+                This can be passed instead of the keyword arguments.
+            _timeout (float, optional): The call will be cancelled after this number of seconds
+                if it has not been completed.
+            bed_file_path (str, optional): The path to the BED file to validate
+            index_file_path (str, optional): The path to the index file that the BED file should validate against
+
+                Can be a .fasta, .fai or .mmi file
+            strict (bool, optional): Strictly conforms to the BED file specification and allows both tabs and spaces
+                to be used as delimiters between columns
+            stranded (bool, optional): Check strand values are allowed
+
+        Returns:
+            minknow_api.manager_pb2.CheckBedFileResponse
+
+        Note that the returned messages are actually wrapped in a type that collapses
+        submessages for fields marked with ``[rpc_unwrap]``.
+        """
+        if _message is not None:
+            if isinstance(_message, MessageWrapper):
+                _message = _message._message
+            return run_with_retry(self._stub.check_bed_file,
+                                  _message, _timeout,
+                                  [],
+                                  "minknow_api.manager.ManagerService")
+
+        unused_args = set(kwargs.keys())
+
+        _message = CheckBedFileRequest()
+
+        if "bed_file_path" in kwargs:
+            unused_args.remove("bed_file_path")
+            _message.bed_file_path = kwargs['bed_file_path']
+
+        if "index_file_path" in kwargs:
+            unused_args.remove("index_file_path")
+            _message.index_file_path = kwargs['index_file_path']
+
+        if "strict" in kwargs:
+            unused_args.remove("strict")
+            _message.strict = kwargs['strict']
+
+        if "stranded" in kwargs:
+            unused_args.remove("stranded")
+            _message.stranded = kwargs['stranded']
+
+        if len(unused_args) > 0:
+            raise ArgumentError("Unexpected keyword arguments to check_bed_file: '{}'".format(", ".join(unused_args)))
+
+        return run_with_retry(self._stub.check_bed_file,
                               _message, _timeout,
                               [],
                               "minknow_api.manager.ManagerService")

@@ -2,6 +2,7 @@ import subprocess
 import sys
 from dataclasses import dataclass
 from pathlib import Path
+import os
 
 from mock_server import (
     InstanceServicer,
@@ -25,13 +26,17 @@ example_root = Path(__file__).parent.parent.parent / "minknow_api" / "examples"
 
 start_protocol_source = example_root / "start_protocol.py"
 
-TEST_PROTOCOL_IDENTIFIER = "foo-identifier"
+TEST_PROTOCOL_NAME = "foo-identifier"
+TEST_BARCODING_PROTOCOL_NAME = "foo-barcoding-identifier"
 TEST_KIT_NAME = "foo-bar-kit"
+TEST_PROTOCOL_IDENTIFIER = f"{TEST_PROTOCOL_NAME}:{TEST_KIT_NAME}"
+TEST_BARCODING_PROTOCOL_IDENTIFIER = f"{TEST_BARCODING_PROTOCOL_NAME}:{TEST_KIT_NAME}"
 TEST_BASECLL_MODEL = "test.cfg"
 TEST_BASECLL_MODEL_OTHER = "test2.cfg"
 TEST_BARCODING_KIT = "foo-barcodes"
 TEST_PROTOCOL = protocol_pb2.ProtocolInfo(
     identifier=TEST_PROTOCOL_IDENTIFIER,
+    name=TEST_PROTOCOL_NAME,
     tag_extraction_result=protocol_pb2.ProtocolInfo.TagExtractionResult(success=True),
     tags={
         "kit": protocol_pb2.ProtocolInfo.TagValue(string_value=TEST_KIT_NAME),
@@ -47,7 +52,7 @@ TEST_PROTOCOL = protocol_pb2.ProtocolInfo(
     },
 )
 TEST_BARCODING_PROTOCOL = protocol_pb2.ProtocolInfo(
-    identifier=TEST_PROTOCOL_IDENTIFIER,
+    identifier=TEST_BARCODING_PROTOCOL_IDENTIFIER,
     tag_extraction_result=protocol_pb2.ProtocolInfo.TagExtractionResult(success=True),
     tags={
         "kit": protocol_pb2.ProtocolInfo.TagValue(string_value=TEST_KIT_NAME),
@@ -534,7 +539,7 @@ def test_barcoding_start_protocol():
 
             assert len(sequencing_position.protocol_service.protocol_runs) == 1
             protocol = sequencing_position.protocol_service.protocol_runs[-1]
-            assert protocol.identifier == TEST_PROTOCOL_IDENTIFIER
+            assert protocol.identifier == TEST_BARCODING_PROTOCOL_IDENTIFIER
             assert protocol.args == [
                 "--base_calling=on",
                 "--barcoding",
@@ -561,13 +566,6 @@ def test_barcoding_start_protocol():
                         TEST_BARCODING_KIT,
                         "--trim-barcodes",
                         "--barcodes-both-ends",
-                        "--detect-mid-strand-barcodes",
-                        "--min-score",
-                        "5",
-                        "--min-score-rear",
-                        "6",
-                        "--min-score-mid",
-                        "7",
                     ],
                 )[0]
                 == 0
@@ -575,7 +573,7 @@ def test_barcoding_start_protocol():
 
             assert len(sequencing_position.protocol_service.protocol_runs) == 2
             protocol = sequencing_position.protocol_service.protocol_runs[-1]
-            assert protocol.identifier == TEST_PROTOCOL_IDENTIFIER
+            assert protocol.identifier == TEST_BARCODING_PROTOCOL_IDENTIFIER
             assert protocol.args == [
                 "--base_calling=on",
                 "--barcoding",
@@ -884,6 +882,190 @@ def test_output_start_protocol():
             assert protocol.target_run_until_criteria == TEST_RUN_UNTIL_CRITERIA
 
 
+def test_analysis_workflows_start_protocol():
+    with SequencingPositionTestServer() as sequencing_position:
+        manager_servicer = ManagerServicer(
+            [
+                manager_pb2.FlowCellPosition(
+                    name="MN00000",
+                    state=manager_pb2.FlowCellPosition.State.STATE_RUNNING,
+                    rpc_ports=manager_pb2.FlowCellPosition.RpcPorts(
+                        secure=sequencing_position.port
+                    ),
+                ),
+            ]
+        )
+        with Server([manager_servicer]) as server:
+            # Setup for experiment
+            test_flow_cell_id = "foo-bar-flow-cell"
+            sequencing_position.set_flow_cell_info(
+                FlowCellInfo(has_flow_cell=True, flow_cell_id=test_flow_cell_id)
+            )
+            sequencing_position.set_protocol_list([TEST_PROTOCOL])
+
+            # test for file not found error
+            filepath = Path("test.json")
+            assert (
+                run_start_protocol_example(
+                    server.port,
+                    [
+                        "--kit",
+                        TEST_KIT_NAME,
+                        "--position=MN00000",
+                        "--workflow_json_file",
+                        filepath,
+                    ],
+                )[0]
+                == 1
+            )
+
+            # test for empty json file with no data
+            open(filepath, "w").close()
+            assert (
+                run_start_protocol_example(
+                    server.port,
+                    [
+                        "--kit",
+                        TEST_KIT_NAME,
+                        "--position=MN00000",
+                        "--workflow_json_file",
+                        filepath,
+                    ],
+                )[0]
+                == 1
+            )
+
+            # test for bad data in json file error
+            input_string = '{ "name" : "test json file", "data" : "i am a workflow"}'
+            filepath.write_text(input_string)
+
+            assert (
+                run_start_protocol_example(
+                    server.port,
+                    [
+                        "--kit",
+                        TEST_KIT_NAME,
+                        "--position=MN00000",
+                        "--workflow_json_file",
+                        filepath,
+                    ],
+                )[0]
+                == 1
+            )
+
+            # test for bad workflow data in json file error
+            input_string = '{ "workflow_id" : "blah", "parameters": {"foo": "bar"} '  # unclosed brace
+            filepath.write_text(input_string)
+
+            assert (
+                run_start_protocol_example(
+                    server.port,
+                    [
+                        "--kit",
+                        TEST_KIT_NAME,
+                        "--position=MN00000",
+                        "--workflow_json_file",
+                        filepath,
+                    ],
+                )[0]
+                == 1
+            )
+
+            # test for good data in json file
+            request_body = '{"workflow_id":"ZXBpMm1lLWxhYnMvd2YtaHVtYW4tdmFyaWF0aW9u","parameters":{"sv":true,"snp":true,"cnv":true,"str":true,"mod":true,"ref":"/data/hg38.fasta","phased":false,"include_all_ctgs":false,"output_gene_summary":false}}'
+            filepath.write_text(request_body)
+
+            assert (
+                run_start_protocol_example(
+                    server.port,
+                    [
+                        "--kit",
+                        TEST_KIT_NAME,
+                        "--position=MN00000",
+                        "--workflow_json_file",
+                        filepath,
+                    ],
+                )[0]
+                == 0
+            )
+            protocol = sequencing_position.protocol_service.protocol_runs[-1]
+            assert (
+                protocol.analysis_workflow_request.proxy_request.request_body
+                == request_body
+            )
+
+            # delete test json file when done
+            if os.path.exists(filepath):
+                os.remove(filepath)
+
+            # test for no data json string error
+            assert (
+                run_start_protocol_example(
+                    server.port,
+                    [
+                        "--kit",
+                        TEST_KIT_NAME,
+                        "--position=MN00000",
+                        "--workflow_json_string",
+                        "test_string",
+                    ],
+                )[0]
+                == 1
+            )
+
+            # test for bad json string data error
+            assert (
+                run_start_protocol_example(
+                    server.port,
+                    [
+                        "--kit",
+                        TEST_KIT_NAME,
+                        "--position=MN00000",
+                        "--workflow_json_string",
+                        input_string,
+                    ],
+                )[0]
+                == 1
+            )
+
+            # test for good json string data
+            assert (
+                run_start_protocol_example(
+                    server.port,
+                    [
+                        "--kit",
+                        TEST_KIT_NAME,
+                        "--position=MN00000",
+                        "--workflow_json_string",
+                        request_body,
+                    ],
+                )[0]
+                == 0
+            )
+            protocol = sequencing_position.protocol_service.protocol_runs[-1]
+            assert (
+                protocol.analysis_workflow_request.proxy_request.request_body
+                == request_body
+            )
+
+            # test for adding in both arguments error
+            assert (
+                run_start_protocol_example(
+                    server.port,
+                    [
+                        "--kit",
+                        TEST_KIT_NAME,
+                        "--position=MN00000",
+                        "--workflow_json_file",
+                        filepath,
+                        "--workflow_json_string",
+                        request_body,
+                    ],
+                )[0]
+                == 2
+            )
+
+
 def sample_sheet_csv_path(*args):
     return str(
         Path(__file__).parent.joinpath("sample_sheets", *args).with_suffix(".csv")
@@ -933,13 +1115,6 @@ def test_sample_sheet_start_protocol():
                         TEST_BARCODING_KIT,
                         "--trim-barcodes",
                         "--barcodes-both-ends",
-                        "--detect-mid-strand-barcodes",
-                        "--min-score",
-                        "5",
-                        "--min-score-rear",
-                        "6",
-                        "--min-score-mid",
-                        "7",
                     ],
                 )[0]
                 == 0
@@ -1013,13 +1188,6 @@ def test_sample_sheet_start_protocol():
                         TEST_BARCODING_KIT,
                         "--trim-barcodes",
                         "--barcodes-both-ends",
-                        "--detect-mid-strand-barcodes",
-                        "--min-score",
-                        "5",
-                        "--min-score-rear",
-                        "6",
-                        "--min-score-mid",
-                        "7",
                     ],
                 )[0]
                 == 0
@@ -1132,13 +1300,6 @@ def test_sample_sheet_start_protocol():
                         TEST_BARCODING_KIT,
                         "--trim-barcodes",
                         "--barcodes-both-ends",
-                        "--detect-mid-strand-barcodes",
-                        "--min-score",
-                        "5",
-                        "--min-score-rear",
-                        "6",
-                        "--min-score-mid",
-                        "7",
                     ],
                 )[0]
                 == 1
@@ -1162,13 +1323,6 @@ def test_sample_sheet_start_protocol():
                         TEST_BARCODING_KIT,
                         "--trim-barcodes",
                         "--barcodes-both-ends",
-                        "--detect-mid-strand-barcodes",
-                        "--min-score",
-                        "5",
-                        "--min-score-rear",
-                        "6",
-                        "--min-score-mid",
-                        "7",
                     ],
                 )[0]
                 == 1
@@ -1272,7 +1426,6 @@ def test_read_until_start_protocol():
             assert len(sequencing_position.protocol_service.protocol_runs) == 1
             protocol = sequencing_position.protocol_service.protocol_runs[-1]
             assert protocol.identifier == TEST_PROTOCOL_IDENTIFIER
-            print(protocol.args)
             assert protocol.args == [
                 "--read_until",
                 "filter_type=deplete",
@@ -1286,3 +1439,127 @@ def test_read_until_start_protocol():
                 "--mux_scan_period=1.5",
             ]
             assert protocol.target_run_until_criteria == TEST_RUN_UNTIL_CRITERIA
+
+
+def test_simulation_start_protocol():
+    """Verify custom config arguments work as expected."""
+
+    with SequencingPositionTestServer() as sequencing_position:
+        manager_servicer = ManagerServicer(
+            [
+                manager_pb2.FlowCellPosition(
+                    name="MN00000",
+                    state=manager_pb2.FlowCellPosition.State.STATE_RUNNING,
+                    rpc_ports=manager_pb2.FlowCellPosition.RpcPorts(
+                        secure=sequencing_position.port
+                    ),
+                ),
+            ]
+        )
+        with Server([manager_servicer]) as server:
+            # Setup for experiment
+            test_flow_cell_id = "foo-bar-flow-cell"
+            sequencing_position.set_flow_cell_info(
+                FlowCellInfo(has_flow_cell=True, flow_cell_id=test_flow_cell_id)
+            )
+            sequencing_position.set_protocol_list([TEST_PROTOCOL])
+
+            assert (
+                run_start_protocol_example(
+                    server.port,
+                    [
+                        "--kit",
+                        TEST_KIT_NAME,
+                        "--position=MN00000",
+                        "--simulation",
+                        "non-existent.fast5",
+                    ],
+                )[0]
+                != 0
+            )
+
+            assert (
+                run_start_protocol_example(
+                    server.port,
+                    [
+                        "--kit",
+                        TEST_KIT_NAME,
+                        "--position=MN00000",
+                        "--simulation",
+                        __file__,  # We know this file exists
+                    ],
+                )[0]
+                == 0
+            )
+
+            assert len(sequencing_position.protocol_service.protocol_runs) == 1
+            protocol = sequencing_position.protocol_service.protocol_runs[-1]
+            assert protocol.identifier == TEST_PROTOCOL_IDENTIFIER
+            assert protocol.args == [
+                "--fast5=off",
+                "--pod5=off",
+                "--fastq=off",
+                "--bam=off",
+                "--active_channel_selection=on",
+                "--mux_scan_period=1.5",
+                "--simulation",
+                __file__,
+            ]
+
+
+def test_custom_config_start_protocol():
+    """Verify custom config arguments work as expected."""
+
+    with SequencingPositionTestServer() as sequencing_position:
+        manager_servicer = ManagerServicer(
+            [
+                manager_pb2.FlowCellPosition(
+                    name="MN00000",
+                    state=manager_pb2.FlowCellPosition.State.STATE_RUNNING,
+                    rpc_ports=manager_pb2.FlowCellPosition.RpcPorts(
+                        secure=sequencing_position.port
+                    ),
+                ),
+            ]
+        )
+        with Server([manager_servicer]) as server:
+            # Setup for experiment
+            test_flow_cell_id = "foo-bar-flow-cell"
+            sequencing_position.set_flow_cell_info(
+                FlowCellInfo(has_flow_cell=True, flow_cell_id=test_flow_cell_id)
+            )
+            sequencing_position.set_protocol_list(
+                [TEST_PROTOCOL, TEST_BARCODING_PROTOCOL]
+            )
+
+            assert (
+                run_start_protocol_example(
+                    server.port,
+                    [
+                        "--kit",
+                        TEST_KIT_NAME,
+                        "--position=MN00000",
+                        "--config-name",
+                        "foo",
+                    ],
+                )[0]
+                != 0
+            )
+
+            assert (
+                run_start_protocol_example(
+                    server.port,
+                    [
+                        "--kit",
+                        TEST_KIT_NAME,
+                        "--position=MN00000",
+                        "--config-name",
+                        TEST_PROTOCOL_NAME,
+                    ],
+                )[0]
+                == 0
+            )
+
+            assert len(sequencing_position.protocol_service.protocol_runs) == 1
+            protocol = sequencing_position.protocol_service.protocol_runs[-1]
+            assert protocol.identifier == TEST_PROTOCOL_IDENTIFIER

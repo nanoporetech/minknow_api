@@ -75,7 +75,7 @@ class InstanceServiceServicer(object):
         raise NotImplementedError('Method not implemented!')
 
     def get_output_directories(self, request, context):
-        """Returns various directory locations where minknow is outputting data. The paths are absolute paths, 
+        """Returns various directory locations where minknow is outputting data. The paths are absolute paths,
         local to the machine where minknow is installed
 
         the `output` base directory can be changed internally

@@ -89,7 +89,7 @@ service DeviceService {
         option idempotency_level = NO_SIDE_EFFECTS;
     }
 
-    // Reset all settings associate with the current device.
+    // Reset all settings associated with the current device.
     //
     // This call will initialise all settings to their default state, ie the same as when MinKNOW boots.
     rpc reset_device_settings(ResetDeviceSettingsRequest) returns (ResetDeviceSettingsResponse) {
@@ -273,7 +273,7 @@ service DeviceService {
     // This has a hard limit of 255, and an error will occur if an overflow is detected.
     //
     // Since 5.6
-    rpc increment_flow_cell_use_count (IncrementFlowCellUseCountRequest) returns (IncrementFlowCellUseCountResponse) {        
+    rpc increment_flow_cell_use_count (IncrementFlowCellUseCountRequest) returns (IncrementFlowCellUseCountResponse) {
     }
 
     // Specify the barcode kit that has been used with the flow cell
@@ -282,7 +282,7 @@ service DeviceService {
     // barcodes that have been used until this has been set.
     //
     // Since 5.6
-    rpc set_flow_cell_barcode_kit(SetFlowCellBarcodeKitRequest) returns (SetFlowCellBarcodeKitResponse) {        
+    rpc set_flow_cell_barcode_kit(SetFlowCellBarcodeKitRequest) returns (SetFlowCellBarcodeKitResponse) {
     }
 
     // Register that a distinct barcode has been used with the flow-cell
@@ -290,7 +290,7 @@ service DeviceService {
     // Barcodes cannot be cleared once registered. A Barcode Kit must also be set using set_flow_cell_barcode_kit()
     //
     // Since 5.6
-    rpc register_flow_cell_barcodes(RegisterFlowCellBarcodesRequest) returns (RegisterFlowCellBarcodesResponse) {        
+    rpc register_flow_cell_barcodes(RegisterFlowCellBarcodesRequest) returns (RegisterFlowCellBarcodesResponse) {
     }
 }
 
@@ -371,20 +371,26 @@ enum FlowCellConnectorType {
     //
     // Currently, this means a MinION or GridION with a Flongle adapter inserted.
     FCCON_FLONGLE = 3;
+
+    // The flow cell position accepts Pebble-style flow-cells.
+    // This should be treated as experimental and subject to change
+    FCCON_PEBBLE = 4;
 }
 
 message GetDeviceInfoRequest {}
 
 message GetDeviceInfoResponse {
+    // The `PEBBLE` device type should be treated as experimental and subject to change
     enum DeviceType {
+        reserved 5;
         MINION = 0;
         GRIDION = 2;
         PROMETHION = 3;
         MINION_MK1C = 4;
-        TRAXION = 5;
         P2_SOLO = 6;
         MINION_MK1D = 7;
         P2_INTEGRATED = 8;
+        PEBBLE = 9;
     }
 
     // A unique identifier for the device.
@@ -559,7 +565,7 @@ message GetFlowCellInfoResponse {
     // In the event a flow cell does not have an eeprom, this field contains data input by the user
     // using set_flow_cell_info to record required data.
     //
-    // Only alpha-numeric, space, dash and underscore characters are allowed in this field.
+    // Only alphanumeric, space, dash and underscore characters are allowed in this field.
     //
     // Since 1.12
     string user_specified_flow_cell_id = 7;
@@ -613,7 +619,7 @@ message GetFlowCellInfoResponse {
     // Since 5.0
     InsertionScriptStatus insertion_script_status = 14;
 
-    // The use count for this flow cell. 
+    // The use count for this flow cell.
     //
     // Since 5.6
     uint32 use_count = 15;
@@ -647,7 +653,7 @@ message GetFlowCellInfoResponse {
 
     // True if the flow cell is a Configuration Test Cell (CTC).
     //
-    // Note that this is currently set if and only if the cell's 
+    // Note that this is currently set if and only if the cell's
     // product ID starts with 'CTC'.
     // Detection of CTCs constructed from repurposed standard flow cells
     // will be implemented later.
@@ -658,6 +664,17 @@ message GetFlowCellInfoResponse {
     //
     // Since 6.0
     bool is_ctc = 20;
+
+    // Set to true if the flow cell partner is incompatible with this installation of MinKNOW.
+    //
+    // Note that it is possible for this field to be true and for flow_cell_partner to be empty (if
+    // the installation requires a specific flow cell partner value).
+    //
+    // Since 5.6 (China IVD and Q)
+    //
+    // NB: this does not appear in the 5.6 OND release, or in RUO releases 5.7, 5.8, 5.9 or 6.0. It
+    // is available in all 6.2 releases onwards.
+    bool incompatible_flow_cell_partner = 21;
 }
 
 message StreamFlowCellInfoRequest {}
@@ -901,7 +918,7 @@ message SetTemperatureResponse {
         //  `set_temperature()`
         SECONDARY_TEMPERATURE_LIMITS_EXCEEDED = 3;
     }
-    
+
     // The result of setting the temperature
     //
     // Since 5.5
@@ -949,22 +966,41 @@ message GetTemperatureResponse
         google.protobuf.FloatValue chamber_temperature = 2;
     }
 
+    // Packet of temperatures appropriate for a Pebble
+    message PebbleTemperature
+    {
+        // Temperature as measured by a sensor in the ASIC silicon.
+        // This is the "primary" temperature.
+        google.protobuf.FloatValue asic_temperature = 1;
+
+        // Temperature as measured by temperature-sensor on the PCB inside the
+        // instrument, but not on the P-Chip.
+        // This is the "secondary" temperature.
+        google.protobuf.FloatValue instrument_temperature = 2;
+
+        // Temperature as measured by a temperature-sensor on the P-Chip.
+        // Likely to be removed in future revisions.
+        google.protobuf.FloatValue pchip_temperature = 3;
+    }
+
     oneof temperature {
         MinIONTemperature minion = 1;
         PromethIONTemperature promethion = 2;
+        PebbleTemperature pebble = 6;
     }
 
     // Return the temperature target the device is aiming to reach.
     //
     // Since 1.15
     google.protobuf.FloatValue target_temperature = 3;
-    
+
     // Starting temperature value
     //
     // Since 6.0
     oneof starting_temperature {
         google.protobuf.FloatValue minion_starting_temperature = 4;
         google.protobuf.FloatValue promethion_starting_temperature = 5;
+        google.protobuf.FloatValue pebble_starting_temperature = 7;
     }
 }
 
@@ -1203,10 +1239,10 @@ message DumpStateRequest {
 message DumpStateResponse {
 }
 
-message IncrementFlowCellUseCountRequest {    
+message IncrementFlowCellUseCountRequest {
 }
 
-message IncrementFlowCellUseCountResponse {    
+message IncrementFlowCellUseCountResponse {
 }
 
 message SetFlowCellBarcodeKitRequest {
@@ -1217,11 +1253,11 @@ message SetFlowCellBarcodeKitRequest {
 message SetFlowCellBarcodeKitResponse {
 }
 
-message RegisterFlowCellBarcodesRequest {    
+message RegisterFlowCellBarcodesRequest {
     // List of unique barcodes that have been used with the flow-cell
     // Where a barcode is represented by an index in the range of 1 to 384 only.
     repeated uint32 barcodes = 1;
 }
 
-message RegisterFlowCellBarcodesResponse {    
+message RegisterFlowCellBarcodesResponse {
 }

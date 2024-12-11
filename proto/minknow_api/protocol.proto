@@ -371,6 +371,9 @@ message OffloadLocationInfo {
 }
 
 message AnalysisWorkflowRequest {
+    // EXPERIMENTAL: All fields within this message are marked as experimental and
+    // may change or be removed between minor versions without warning
+
     enum When {
         // Start the analysis workflow at the end of the protocol
         PROTOCOL_END = 0;
@@ -378,7 +381,7 @@ message AnalysisWorkflowRequest {
 
     // The workflow request to start
     analysis_workflows.ProxyRequest proxy_request = 1;
-    
+
     // When to start the request
     When when = 2;
 }
@@ -405,8 +408,10 @@ message StartProtocolRequest {
     //
     // Since 5.3
     acquisition.TargetRunUntilCriteria target_run_until_criteria = 5;
-    
+
     // Workflow request that should be started when the protocol is started
+    //
+    // EXPERIMENTAL: This field may change or be removed between minor versions without warning
     AnalysisWorkflowRequest analysis_workflow_request = 7;
 }
 
@@ -630,6 +635,9 @@ enum ProtocolPhase {
     // It should move into another phase, such as PHASE_SEQUENCING or PHASE_PREPARING_FOR_MUX_SCAN,
     // in a short time.
     PHASE_RESUMING = 7;
+
+    // When the protocol is completed
+    PHASE_COMPLETED = 9;
 }
 
 message RequestOrigin {
@@ -661,6 +669,21 @@ message RequestOrigin {
         ProtocolPhaseManagement protocol_phase_management = 3;
         RunUntil run_until = 4;
     }
+}
+
+message ProtocolPhaseSnapshot {
+    // The new protocol phase when the phase request happened
+    ProtocolPhase phase = 1;
+
+    // UTC timestamp of when the protocol phase changed was requested
+    google.protobuf.Timestamp timestamp = 2;
+
+    // Who requested the phase change
+    //
+    // Candidates:
+    //  ProtocolPhaseMangement: Through protocol_phase_management API
+    //  MinKNOW: When the protocol ends and the phase is marked PHASE_COMPLETED
+    RequestOrigin origin = 3;
 }
 
 message Epi2meWorkflowReference {
@@ -760,7 +783,7 @@ message GetVersionInfoResponse {
 
     // What minknow version is installed. Split into major, minor and patch versions
     // Also includes the full version as a string, which contain the major, minor and patch numbers
-    // as well as if the version is pre-release version (-pre), whether it is a release candidate (-rc#)
+    // as well as if the version is pre-release version (~pre), whether it is a release candidate (~rc#)
     // or whether it is a variant version (i.e. for conferences) (-variant). For non-release builds it also
     // includes the hash of the commit it is based on, and whether the working copy is different from that has (-dirty)
     MinknowVersion minknow = 1;
@@ -842,6 +865,9 @@ message GetVersionInfoResponse {
 }
 
 message AnalysisWorkflowInfo {
+    // EXPERIMENTAL: All fields within this message are marked as experimental and
+    // may change or be removed between minor versions without warning
+
     // The request that started the analysis workflow
     AnalysisWorkflowRequest request = 1;
 
@@ -955,6 +981,8 @@ message ProtocolRunInfo {
     // specification.
     //
     // Since 4.4.
+    //
+    // DEPRECATED 6.1: Use phase_history instead
     ProtocolPhase phase = 16;
 
     // The last time the phase changed.
@@ -964,7 +992,17 @@ message ProtocolRunInfo {
     // NB: This will not be set if the phase is PHASE_UNKNOWN.
     //
     // Since 4.4.
+    //
+    // DEPRECATED 6.1: Use phase_history instead
     google.protobuf.Timestamp last_phase_change = 17;
+
+    // The phase history of the protocol
+    //
+    // Describes all phases that the protocol went through, with timestamps at each stage
+    // to track how long it had taken between each phase
+    //
+    // Since 6.1
+    repeated ProtocolPhaseSnapshot phase_history = 28;
 
     // Whether the protocol can be paused.
     //
@@ -1038,6 +1076,8 @@ message ProtocolRunInfo {
     repeated AssociatedPostProcessingAnalysis associated_post_processing_analysis = 15;
 
     // The analysis workflow (if any) associated with the protocol
+    //
+    // EXPERIMENTAL: This field may change or be removed between minor versions without warning
     AnalysisWorkflowInfo analysis_workflow = 27;
 
     // Platform QC result. Set by bream by calling `set_platform_qc_result()`.
@@ -1247,6 +1287,11 @@ message BeginProtocolRequest {
 
     // Workflow request that should be started when the protocol is started
     AnalysisWorkflowRequest analysis_workflow_request = 8;
+
+    // Simulation source for playback device data, either an hdf file or directory for use with arrow playback files.
+    //
+    // Since 6.2
+    string simulation_source = 9;
 }
 
 message BeginProtocolResponse {
