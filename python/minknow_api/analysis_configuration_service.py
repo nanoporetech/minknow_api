@@ -45,6 +45,8 @@ __all__ = [
     "DynamicAnalysisConfiguration",
     "GetDynamicAnalysisConfigurationRequest",
     "SetDynamicAnalysisConfigurationResponse",
+    "FindBasecallConfigurationDefaultsRequest",
+    "FindBasecallConfigurationDefaultsResponse",
 ]
 
 def run_with_retry(method, message, timeout, unwraps, full_name):
@@ -407,6 +409,11 @@ class AnalysisConfigurationService(object):
 
                 Filename can be absolute, or a basename (eg dna_r9.4_450bps.cfg)
                 which the basecaller should locate (see basecaller application config entry: "data_path")
+            model_names (minknow_api.analysis_configuration_pb2.BasecallerConfiguration.ModelNames, optional): Specify the models to run by name (see find_basecall_configurations in manager.proto)
+
+                Model names should be taken from the `name` field of the above RPC directly.
+
+                Since 6.3
             align_filter (bool, optional): Enable or disable pass/fail filtering based on alignment.  When enabled, reads which
                 do not align to any references will be marked as "failed", and written to the folder
                 specified in MinKNOW configuration for failed reads.
@@ -462,6 +469,9 @@ class AnalysisConfigurationService(object):
                 Since 4.5
 
                 Note: Since 5.9 this option has no effect, the basecaller is responsible for deciding read splitting score.
+            estimate_poly_a (bool, optional): Enable poly a tail estimation.
+
+                Since 6.3
 
         Returns:
             minknow_api.analysis_configuration_pb2.SetBasecallerConfigurationResponse
@@ -488,6 +498,10 @@ class AnalysisConfigurationService(object):
         if "config_filename" in kwargs:
             unused_args.remove("config_filename")
             _message.configs.config_filename = kwargs['config_filename']
+
+        if "model_names" in kwargs:
+            unused_args.remove("model_names")
+            _message.configs.model_names.CopyFrom(kwargs['model_names'])
 
         if "align_filter" in kwargs:
             unused_args.remove("align_filter")
@@ -520,6 +534,10 @@ class AnalysisConfigurationService(object):
         if "min_score_read_splitting" in kwargs:
             unused_args.remove("min_score_read_splitting")
             _message.configs.min_score_read_splitting.value = kwargs['min_score_read_splitting']
+
+        if "estimate_poly_a" in kwargs:
+            unused_args.remove("estimate_poly_a")
+            _message.configs.estimate_poly_a = kwargs['estimate_poly_a']
 
         if len(unused_args) > 0:
             raise ArgumentError("Unexpected keyword arguments to set_basecaller_configuration: '{}'".format(", ".join(unused_args)))
@@ -555,6 +573,11 @@ class AnalysisConfigurationService(object):
 
                 Filename can be absolute, or a basename (eg dna_r9.4_450bps.cfg)
                 which the basecaller should locate (see basecaller application config entry: "data_path")
+            model_names (minknow_api.analysis_configuration_pb2.BasecallerConfiguration.ModelNames, optional): Specify the models to run by name (see find_basecall_configurations in manager.proto)
+
+                Model names should be taken from the `name` field of the above RPC directly.
+
+                Since 6.3
             align_filter (bool, optional): Enable or disable pass/fail filtering based on alignment.  When enabled, reads which
                 do not align to any references will be marked as "failed", and written to the folder
                 specified in MinKNOW configuration for failed reads.
@@ -610,6 +633,9 @@ class AnalysisConfigurationService(object):
                 Since 4.5
 
                 Note: Since 5.9 this option has no effect, the basecaller is responsible for deciding read splitting score.
+            estimate_poly_a (bool, optional): Enable poly a tail estimation.
+
+                Since 6.3
 
         Returns:
             minknow_api.analysis_configuration_pb2.SetBasecallerConfigurationResponse
@@ -636,6 +662,10 @@ class AnalysisConfigurationService(object):
         if "config_filename" in kwargs:
             unused_args.remove("config_filename")
             _message.configs.config_filename = kwargs['config_filename']
+
+        if "model_names" in kwargs:
+            unused_args.remove("model_names")
+            _message.configs.model_names.CopyFrom(kwargs['model_names'])
 
         if "align_filter" in kwargs:
             unused_args.remove("align_filter")
@@ -668,6 +698,10 @@ class AnalysisConfigurationService(object):
         if "min_score_read_splitting" in kwargs:
             unused_args.remove("min_score_read_splitting")
             _message.configs.min_score_read_splitting.value = kwargs['min_score_read_splitting']
+
+        if "estimate_poly_a" in kwargs:
+            unused_args.remove("estimate_poly_a")
+            _message.configs.estimate_poly_a = kwargs['estimate_poly_a']
 
         if len(unused_args) > 0:
             raise ArgumentError("Unexpected keyword arguments to preload_basecaller_configuration: '{}'".format(", ".join(unused_args)))
@@ -1085,6 +1119,15 @@ class AnalysisConfigurationService(object):
             _timeout (float, optional): The call will be cancelled after this number of seconds
                 if it has not been completed.
             read_scale_tracking (minknow_api.analysis_configuration_pb2.DynamicAnalysisConfiguration.ReadScaleTracking, optional): Parameters for read scale tracking:
+            force_veto_all_reads (bool, optional): Force MinKNOW to not write or basecall all data from the live
+                sequencing stream.
+
+                This may be useful if there is a section of data that is not
+                wanted in the final output files and reports.
+            force_veto_end_reasons (minknow_api.read_end_reason_pb2.ReadEndReason, optional): Force MinKNOW to not write or basecall data with specific end reasons.
+
+                This may be useful if there is a section of data that is not
+                wanted in the final output files and reports.
 
         Returns:
             minknow_api.analysis_configuration_pb2.SetDynamicAnalysisConfigurationResponse
@@ -1108,10 +1151,61 @@ class AnalysisConfigurationService(object):
             unused_args.remove("read_scale_tracking")
             _message.read_scale_tracking.CopyFrom(kwargs['read_scale_tracking'])
 
+        if "force_veto_all_reads" in kwargs:
+            unused_args.remove("force_veto_all_reads")
+            _message.force_veto_all_reads = kwargs['force_veto_all_reads']
+
+        if "force_veto_end_reasons" in kwargs:
+            unused_args.remove("force_veto_end_reasons")
+            _message.force_veto_end_reasons.extend(kwargs['force_veto_end_reasons'])
+
         if len(unused_args) > 0:
             raise ArgumentError("Unexpected keyword arguments to set_dynamic_analysis_configuration: '{}'".format(", ".join(unused_args)))
 
         return run_with_retry(self._stub.set_dynamic_analysis_configuration,
+                              _message, _timeout,
+                              [],
+                              "minknow_api.analysis_configuration.AnalysisConfigurationService")
+    def find_basecall_configuration_defaults(self, _message=None, _timeout=None, **kwargs):
+        """Basecall configuration defaults
+
+        These defaults will be based on the connected flow cell type and the selected base calling substrate.
+
+        Since 6.3
+
+        
+
+        Note this API is experimental - it may be changed, revised or removed in future minor versions.
+
+        Args:
+            _message (minknow_api.analysis_configuration_pb2.FindBasecallConfigurationDefaultsRequest, optional): The message to send.
+                This can be passed instead of the keyword arguments.
+            _timeout (float, optional): The call will be cancelled after this number of seconds
+                if it has not been completed.
+
+        Returns:
+            minknow_api.analysis_configuration_pb2.FindBasecallConfigurationDefaultsResponse
+
+        Note that the returned messages are actually wrapped in a type that collapses
+        submessages for fields marked with ``[rpc_unwrap]``.
+        """
+        print("Warning: Method AnalysisConfigurationService.find_basecall_configuration_defaults is experimental and may be changed, revised or removed in future minor versions.", file=sys.stderr)
+        if _message is not None:
+            if isinstance(_message, MessageWrapper):
+                _message = _message._message
+            return run_with_retry(self._stub.find_basecall_configuration_defaults,
+                                  _message, _timeout,
+                                  [],
+                                  "minknow_api.analysis_configuration.AnalysisConfigurationService")
+
+        unused_args = set(kwargs.keys())
+
+        _message = FindBasecallConfigurationDefaultsRequest()
+
+        if len(unused_args) > 0:
+            raise ArgumentError("Unexpected keyword arguments to find_basecall_configuration_defaults: '{}'".format(", ".join(unused_args)))
+
+        return run_with_retry(self._stub.find_basecall_configuration_defaults,
                               _message, _timeout,
                               [],
                               "minknow_api.analysis_configuration.AnalysisConfigurationService")

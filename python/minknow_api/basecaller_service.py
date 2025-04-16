@@ -149,6 +149,11 @@ class Basecaller(object):
 
                 Reads will be sorted into subdirectories based on the sequencing run they came from.
             configuration (str, optional): The name of the basecalling configuration to use.
+            model_names (minknow_api.analysis_configuration_pb2.BasecallerConfiguration.ModelNames, optional): Specify the models to run by name (see find_basecall_configurations in manager.proto)
+
+                Model names should be taken from the `name` field of the above RPC directly.
+
+                Since 6.3
             fast5_out (bool, optional): Enable output of .fast5 files containing original raw reads, event data/trace table from
                 basecall and basecall result sequence.
 
@@ -178,6 +183,9 @@ class Basecaller(object):
                 is used from the basecaller.
 
                 Note: Since 5.9 this option has no effect, the basecaller is responsible for deciding when read splitting should be enabled.
+            estimate_poly_a (bool, optional): Enable poly a tail estimation.
+
+                Since 6.3
 
         Returns:
             minknow_api.basecaller_pb2.StartBasecallingResponse
@@ -194,6 +202,15 @@ class Basecaller(object):
                                   "minknow_api.basecaller.Basecaller")
 
         unused_args = set(kwargs.keys())
+
+        # check oneof group 'basecall_model'
+        oneof_fields = set([
+            "configuration",
+            "model_names",
+        ])
+
+        if len(unused_args & oneof_fields) > 1:
+            raise ArgumentError("start_basecalling given multiple conflicting arguments: '{}'".format(", ".join(unused_args & oneof_fields)))
 
         _message = StartBasecallingRequest()
 
@@ -212,6 +229,10 @@ class Basecaller(object):
         if "configuration" in kwargs:
             unused_args.remove("configuration")
             _message.configuration = kwargs['configuration']
+
+        if "model_names" in kwargs:
+            unused_args.remove("model_names")
+            _message.model_names.CopyFrom(kwargs['model_names'])
 
         if "fast5_out" in kwargs:
             unused_args.remove("fast5_out")
@@ -248,6 +269,10 @@ class Basecaller(object):
         if "min_score_read_splitting" in kwargs:
             unused_args.remove("min_score_read_splitting")
             _message.min_score_read_splitting.value = kwargs['min_score_read_splitting']
+
+        if "estimate_poly_a" in kwargs:
+            unused_args.remove("estimate_poly_a")
+            _message.estimate_poly_a = kwargs['estimate_poly_a']
 
         if len(unused_args) > 0:
             raise ArgumentError("Unexpected keyword arguments to start_basecalling: '{}'".format(", ".join(unused_args)))

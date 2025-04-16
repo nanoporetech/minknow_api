@@ -3,8 +3,10 @@ syntax="proto3";
 package minknow_api.acquisition;
 
 option java_package = "com.nanoporetech.minknow_api";
+option go_package ="github.com/nanoporetech/minknow_api/go/gen/acquisition";
 option objc_class_prefix = "MKAPI";
 
+import "minknow_api/analysis_configuration.proto";
 import "minknow_api/run_until.proto";
 import "minknow_api/rpc_options.proto";
 import "google/protobuf/timestamp.proto";
@@ -674,8 +676,18 @@ message AcquisitionConfigSummary {
 
     // Was basecalling enabled for the run.
     bool basecalling_enabled = 1;
-    // Basecalling configuration filename (if basecalling enabled)
-    string basecalling_config_filename = 16;
+    oneof basecall_model {
+        // Basecalling configuration filename (if basecalling enabled)
+        string basecalling_config_filename = 16;
+
+        // Specify the models to run by name (see find_basecall_configurations in manager.proto)
+        //
+        // Model names should be taken from the `name` field of the above RPC directly.
+        //
+        // Since 6.3
+        analysis_configuration.BasecallerConfiguration.ModelNames basecalling_model_names = 25;
+    }
+
     // Basecalling model version (empty if basecalling not enabled)
     // Since 6.0
     string basecalling_model_version = 24;

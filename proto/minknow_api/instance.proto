@@ -4,6 +4,7 @@ package minknow_api.instance;
 
 option java_package = "com.nanoporetech.minknow_api";
 option objc_class_prefix = "MKAPI";
+option go_package ="github.com/nanoporetech/minknow_api/go/gen/instance";
 
 import "minknow_api/acquisition.proto";
 import "minknow_api/device.proto";
@@ -63,6 +64,7 @@ service InstanceService {
     // Since 1.11
     rpc get_disk_space_info(GetDiskSpaceInfoRequest) returns (GetDiskSpaceInfoResponse) {
         option idempotency_level = NO_SIDE_EFFECTS;
+        option deprecated = true;
     }
 
     // Stream information about the amount of disk space available, how quickly
@@ -73,6 +75,7 @@ service InstanceService {
     // Since 4.0
     rpc stream_disk_space_info(StreamDiskSpaceInfoRequest) returns (stream GetDiskSpaceInfoResponse) {
         option idempotency_level = NO_SIDE_EFFECTS;
+        option deprecated = true;
     }
 
     // Find the machine id MinKNOW uses for this machine.

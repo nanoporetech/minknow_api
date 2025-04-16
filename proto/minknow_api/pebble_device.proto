@@ -2,6 +2,7 @@ syntax="proto3";
 
 package minknow_api.pebble_device;
 
+option go_package ="github.com/nanoporetech/minknow_api/go/gen/pebble_device";
 option java_package = "com.nanoporetech.minknow_api";
 option objc_class_prefix = "MKAPI";
 
@@ -277,6 +278,7 @@ message ChannelSettings {
         UNBLOCK = 2;
         MEMBRANE_SIMULATION = 3;
         REGEN = 4;
+        CALIBRATION = 5;
     }
 
     // The input to be digitised

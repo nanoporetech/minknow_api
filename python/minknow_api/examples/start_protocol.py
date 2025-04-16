@@ -9,7 +9,9 @@ python ./python/minknow_api/examples/start_protocol.py \
     --experiment-duration 24 \
     --kit SQK-LSK109 \
     --basecalling \
+    --basecall-simplex-model "dna_r10.4.1_e8.2_400bps_fast@v4.1.0" \
     --fastq --bam
+
 
 This will start a protocol on position X1 of the local machine, with the sample ID set
 to "my_sample" and the run placed in the experiment group "my_group". It will be set to
@@ -24,18 +26,22 @@ from pathlib import Path
 import sys
 import json
 
-# minknow_api.manager supplies "Manager" a wrapper around MinKNOW's Manager gRPC API with utilities
-# for querying sequencing positions + offline basecalling tools.
 from enum import Enum
-from typing import Sequence
+from typing import Sequence, Literal, Optional, List
+from dataclasses import dataclass
+from packaging.version import Version, parse
 
 from minknow_api.examples.load_sample_sheet import (
     ParsedSampleSheetEntry,
     SampleSheetParseError,
     load_sample_sheet_csv,
 )
+
+# minknow_api.manager supplies "Manager" a wrapper around MinKNOW's Manager gRPC API with utilities
+# for querying sequencing positions + offline basecalling tools.
 from minknow_api.manager import Manager
-from minknow_api.protocol_pb2 import AnalysisWorkflowRequest
+import minknow_api.manager_pb2 as manager_pb2
+from minknow_api.analysis_workflows_pb2 import AnalysisWorkflowRequest
 
 # We need `find_protocol` to search for the required protocol given a kit + product code.
 from minknow_api.tools import protocols
@@ -137,8 +143,29 @@ def parse_args():
     )
 
     parser.add_argument(
-        "--basecall-config",
-        help="specify the base-calling config and enable base-calling",
+        "--basecall-model-complex",
+        help="specify the 'model complex' to be passed to the basecaller for automatic selection. See https://github.com/nanoporetech/dorado?tab=readme-ov-file#automatic-model-selection-complex for examples.",
+    )
+
+    parser.add_argument(
+        "--basecall-simplex-model",
+        help="specify the simplex base-calling model to use. If not specified a default model will be used.",
+    )
+
+    parser.add_argument(
+        "--basecall-modified-models",
+        nargs="+",
+        help="specify the modified base-calling models to use. If not specified modified calling will be disabled.",
+    )
+
+    parser.add_argument(
+        "--basecall-duplex-model",
+        help="specify the duplex base-calling model to use. If not specified duplex calling will be disabled.",
+    )
+
+    parser.add_argument(
+        "--min-qscore",
+        help="specify the minimum q score to use for base calling. If non is specified, the default value is used.",
     )
 
     # BARCODING ARGUMENTS
@@ -329,14 +356,20 @@ def parse_args():
     if args.bed_file and not args.alignment_reference:
         parser.error("Unable to specify `--bed-file` without `--alignment-reference`.")
 
-    if (args.barcoding or args.barcode_kits) and not (
-        args.basecalling or args.basecall_config
-    ):
+    if (args.barcoding or args.barcode_kits) and not args.basecalling:
         parser.error(
             "Unable to specify `--barcoding` or `--barcode-kits` without `--basecalling`."
         )
 
-    if args.alignment_reference and not (args.basecalling or args.basecall_config):
+    if (
+        args.basecall_simplex_model
+        or args.basecall_modified_models
+        or args.basecall_duplex_model
+        or args.basecall_model_complex
+    ) and not args.basecalling:
+        parser.error("Unable to specify a basecall model without `--basecalling`.")
+
+    if args.alignment_reference and not args.basecalling:
         parser.error(
             "Unable to specify `--alignment-reference` without `--basecalling`."
         )
@@ -363,6 +396,7 @@ class ExperimentSpec(object):
         self.entry = entry
         self.position = None
         self.protocol_id = ""
+        self.sample_rate = None
 
 
 ExperimentSpecs = Sequence[ExperimentSpec]
@@ -591,8 +625,6 @@ def add_protocol_ids(experiment_specs, args):
             product_code=product_code,
             kit=args.kit,
             config_name=args.config_name,
-            basecalling=args.basecalling,
-            basecall_config=args.basecall_config,
             barcoding=args.barcoding,
             barcoding_kits=args.barcode_kits,
         )
@@ -603,7 +635,6 @@ def add_protocol_ids(experiment_specs, args):
             print("  product-code: %s" % args.product_code)
             print("  kit: %s" % args.kit)
             print("  basecalling: %s" % args.basecalling)
-            print("  basecall_config: %s" % args.basecall_config)
             print("  barcode-kits: %s" % args.barcode_kits)
             print("  barcoding: %s" % args.barcoding)
             print("  config-name: %s" % args.config_name)
@@ -611,6 +642,193 @@ def add_protocol_ids(experiment_specs, args):
 
         # Store the identifier for later:
         spec.protocol_id = protocol_info.identifier
+        spec.sample_rate = protocol_info.tags["sample rate"].int_value
+
+
+@dataclass
+class ModelNames:
+    simplex: str
+    modified: Optional[List[str]] = None
+    stereo: Optional[str] = None
+
+    @staticmethod
+    def get_rightmost_version_from(model_name: str) -> Optional[Version]:
+        """
+        Get the rightmost version from a model name string -
+        which should always have the base model version e.g.
+        dna_r10.4.1_e8.2_400bps_hac@v5.0.0_5mC_5hmC@v2
+                                    ^ not this      ^ this
+        """
+        if "@" not in model_name:
+            return None
+
+        version_string = model_name.split("@")[-1]
+        return parse(version_string) if version_string != "latest" else None
+        # technically doesn't work if someone's named a model 'v1.2.3_dna'
+        # but that is not a valid model name, so it is OK.
+
+
+@dataclass
+class ModelComplex:
+    """e.g.
+    hac@v3.5,5mCG_5hmCG@v2,6mA@latest,4mC_5mC
+    fast@latest,duplex
+    """
+
+    @dataclass
+    class Modification:
+        """e.g. 5mCG_5hmCG@v2"""
+
+        variant: str
+        version: Optional[Version]
+        """if version is 'None', this implies 'latest, please'"""
+
+        @classmethod
+        def from_model(
+            cls, model: manager_pb2.FindBasecallConfigurationsResponse.ModifiedModel
+        ):
+            version = ModelNames.get_rightmost_version_from(model.name)
+            return cls(variant=model.variant, version=version)
+
+        @classmethod
+        def parse_from(cls, input: str):
+            chunks = input.split("@")
+            version = ModelNames.get_rightmost_version_from(input)
+            return cls(variant=chunks[0], version=version)
+
+        def __str__(self):
+            return self.variant + (("@v" + str(self.version)) if self.version else "")
+
+        def is_satisfied_by(
+            self, model: manager_pb2.FindBasecallConfigurationsResponse.ModifiedModel
+        ) -> bool:
+            parsed = ModelComplex.Modification.from_model(model)
+            logging.debug(f"checking if {self} is satisfied by {parsed}")
+            version_matches = (self.version is None) or (parsed.version == self.version)
+            return (model.variant == self.variant) and version_matches
+
+    speed: Literal["fast", "sup", "hac"]
+    version: Optional[Version]
+    """if version is 'None', this implies 'latest, please'"""
+    modifications: List[Modification]
+    duplex: bool = False
+    """this may also have to hold a duplex version."""
+
+    @classmethod
+    def parse_from(cls, input: str):
+        chunks = input.split(",")
+        tmp = ModelComplex.Modification.parse_from(chunks[0])
+        s = tmp.variant
+        v = tmp.version
+        m = [
+            ModelComplex.Modification.parse_from(chunk)
+            for chunk in chunks[1:]
+            if chunk != "duplex"
+        ]
+        return cls(speed=s, version=v, modifications=m, duplex="duplex" in input)
+
+    def __str__(self):
+        return (
+            self.speed
+            + (("@v" + str(self.version)) if self.version else "")
+            + (",duplex" if self.duplex else "")
+            + (
+                "," + ",".join([str(m) for m in self.modifications])
+                if len(self.modifications) > 0
+                else ""
+            )
+        )
+
+    def is_satisfied_by_modified(
+        self, model: manager_pb2.FindBasecallConfigurationsResponse.ModifiedModel
+    ) -> bool:
+        return any(
+            [modification.is_satisfied_by(model) for modification in self.modifications]
+        )
+
+    def is_satisfied_by_stereo(
+        self, model: manager_pb2.FindBasecallConfigurationsResponse.StereoModel
+    ) -> bool:
+        parsed = ModelComplex.Modification.parse_from(model.name)
+        return self.version is None or parsed.version == self.version
+
+    def is_satisfied_by_simplex(
+        self, model: manager_pb2.FindBasecallConfigurationsResponse.SimplexModel
+    ) -> bool:
+        parsed = ModelComplex.Modification.parse_from(model.name)
+        version_match = self.version is None or parsed.version == self.version
+        return version_match and (model.variant == self.speed)
+
+    def get_matching_models_from(
+        self,
+        config: manager_pb2.FindBasecallConfigurationsResponse.BasecallConfiguration,
+    ) -> List[ModelNames]:
+        logging.debug(f"Searching for models matching {self}...")
+        logging.debug(f"Requires {len(self.modifications)} modifications...")
+        result: List[ModelNames] = []
+        for simplex_model in filter(
+            lambda model: self.is_satisfied_by_simplex(model), config.simplex_models
+        ):
+            names = ModelNames(simplex=simplex_model.name)
+
+            if self.duplex:
+                for stereo_model in filter(
+                    lambda model: self.is_satisfied_by_stereo(model),
+                    simplex_model.stereo_models,
+                ):
+                    names.stereo = stereo_model.name
+
+            if len(self.modifications) > 0:
+                approved_mods = [
+                    model.name
+                    for model in simplex_model.modified_models
+                    if self.is_satisfied_by_modified(model)
+                ]
+                if len(approved_mods) > 0:
+                    names.modified = approved_mods
+                else:
+                    # must have mods if mods are specified
+                    continue
+
+            result.append(names)
+
+        if len(result) > 0:
+            logging.debug(f"{self} matched: {result}")
+
+        return result
+
+
+def auto_model_selection(
+    possible_configs: Sequence[
+        manager_pb2.FindBasecallConfigurationsResponse.BasecallConfiguration
+    ],
+    model_complex: ModelComplex,
+) -> ModelNames:
+    matches: List[ModelNames] = []
+    for config in possible_configs:
+        matches += model_complex.get_matching_models_from(config)
+
+    match_count = len(matches)
+
+    if match_count == 0:
+        raise RuntimeError(
+            f"Couldn't find a suitable available model for {model_complex} in any of {possible_configs}"
+        )
+    elif match_count > 1:
+        if not model_complex.version:
+            logging.debug(
+                f"Latest version requested - sorting {match_count} matches..."
+            )
+            matches.sort(
+                key=lambda models: ModelNames.get_rightmost_version_from(models.simplex)
+            )
+            return matches[0]
+
+        raise RuntimeError(
+            f"Found multiple possible models for {model_complex}:{chr(10)} {chr(10).join([str(m) for m in matches])}. Can't decide!"
+        )
+    else:
+        return matches[0]
 
 
 def main():
@@ -627,8 +845,8 @@ def main():
 
         # convert string to protobuf
         workflow_params = AnalysisWorkflowRequest()
-        workflow_params.proxy_request.api = "/workflow_instances/start"
-        workflow_params.proxy_request.request_body = request_body
+        workflow_params.workflow_id = req["workflow_id"]
+        workflow_params.parameters = json.dumps(req["parameters"])
         return workflow_params
 
     # parse json analysis workflow data from input file
@@ -661,7 +879,7 @@ def main():
 
     # Build arguments for starting protocol:
     basecalling_args = None
-    if args.basecalling or args.basecall_config:
+    if args.basecalling:
         barcoding_args = None
         alignment_args = None
         if args.barcode_kits or args.barcoding:
@@ -678,9 +896,12 @@ def main():
             )
 
         basecalling_args = protocols.BasecallingArgs(
-            config=args.basecall_config,
+            simplex_model=args.basecall_simplex_model,
+            modified_models=args.basecall_modified_models,
+            stereo_model=args.basecall_duplex_model,
             barcoding=barcoding_args,
             alignment=alignment_args,
+            min_qscore=args.min_qscore,
         )
 
     read_until_args = None
@@ -706,6 +927,8 @@ def main():
     pod5_arguments = build_output_arguments(args, "pod5")
     bam_arguments = build_output_arguments(args, "bam")
 
+    available_basecall_configs = manager.find_basecall_configurations()
+
     # Now start the protocol(s):
     print("Starting protocol on %s positions" % len(experiment_specs))
     for spec in experiment_specs:
@@ -723,13 +946,84 @@ def main():
             runtime=int(args.experiment_duration * 60 * 60)
         )
 
+        flow_cell_info = position_connection.device.get_flow_cell_info()
+        position_basecalling_args = None
+        if basecalling_args:
+            if args.basecall_model_complex:
+                product_code = (
+                    args.product_code
+                    or flow_cell_info.user_specified_product_code
+                    or flow_cell_info.product_code
+                )
+
+                available_basecall_configs_for_this_experiment = (
+                    manager.find_basecall_configurations(
+                        product_code, args.kit, spec.sample_rate
+                    )
+                )
+
+                model_complex = ModelComplex.parse_from(args.basecall_model_complex)
+                selected_models = auto_model_selection(
+                    available_basecall_configs_for_this_experiment, model_complex
+                )
+
+                basecalling_args = protocols.BasecallingArgs(
+                    simplex_model=selected_models.simplex,
+                    modified_models=selected_models.modified,
+                    stereo_model=selected_models.stereo,
+                    barcoding=barcoding_args,
+                    alignment=alignment_args,
+                    min_qscore=args.min_qscore,
+                )
+
+            # Pick a simplex model if we weren't passed one:
+            simplex_model_name = basecalling_args.simplex_model
+            if not simplex_model_name:
+                if position_connection and args.kit and available_basecall_configs:
+                    _, simplex_config = protocols.find_default_simplex_model(
+                        position_connection,
+                        args.kit,
+                        spec.sample_rate,
+                        available_basecall_configs,
+                    )
+                    simplex_model_name = simplex_config.name
+                else:
+                    raise RuntimeError(
+                        "Basecalling enabled but no simplex model specified."
+                    )
+
+            # Find the default qscore filter to use:
+            min_qscore = basecalling_args.min_qscore
+            if min_qscore is None:
+                simplex_model = protocols.find_simplex_model(
+                    available_basecall_configs, simplex_model_name
+                )
+                if simplex_model:
+                    min_qscore = simplex_model.default_q_score_cutoff
+                else:
+                    logging.warning(
+                        "Failed to find simplex model %s, not specifying qscore cutoff.",
+                        simplex_model_name,
+                    )
+
+            position_basecalling_args = protocols.BasecallingArgs(
+                simplex_model=simplex_model_name,
+                modified_models=args.basecall_modified_models
+                or basecalling_args.modified_models,
+                stereo_model=args.basecall_duplex_model
+                or basecalling_args.stereo_model,
+                barcoding=basecalling_args.barcoding,
+                alignment=basecalling_args.alignment,
+                min_qscore=min_qscore,
+            )
+
         run_id = protocols.start_protocol(
             position_connection,
             identifier=spec.protocol_id,
             sample_id=spec.entry.sample_id,
             experiment_group=spec.entry.experiment_id,
             barcode_info=spec.entry.barcode_info,
-            basecalling=basecalling_args,
+            basecalling=position_basecalling_args,
             read_until=read_until_args,
             fastq_arguments=fastq_arguments,
             fast5_arguments=fast5_arguments,
@@ -742,8 +1036,6 @@ def main():
             simulation_path=args.simulation,
             args=args.extra_args,  # Any extra args passed.
         )
-
-        flow_cell_info = position_connection.device.get_flow_cell_info()
 
         print("Started protocol:")
         print("    run_id={}".format(run_id))

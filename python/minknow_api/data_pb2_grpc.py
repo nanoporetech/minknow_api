@@ -294,6 +294,9 @@ class DataServiceServicer(object):
     def get_experiment_yield_info(self, request, context):
         """Returns various points of yield information for the ongoing experiment, such as complete
         read information and basecaller progress.
+
+        Note: This API does not guarantee between versions and may change as internal MinKNOW changes
+        require different data is monitored.
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')

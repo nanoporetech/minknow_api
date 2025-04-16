@@ -158,7 +158,21 @@ class ProtocolServiceServicer(object):
         raise NotImplementedError('Method not implemented!')
 
     def stop_protocol(self, request, context):
-        """Stops the currently running protocol script instance.
+        """Stop a running protocol
+
+        If `protocol_run_id` is supplied, stops that protocol if it is currently running.
+        Otherwise, if no `protocol_run_id` is supplied, stops the protocol that is currently in
+        progress.
+
+        The call will fail with `INVALID_ARGUMENT` if:
+        	- An invalid `protocol_run_id` is supplied (i.e. one which does not exist on the current
+        position)
+
+        The call will fail with `FAILED_PRECONDITION` if:
+        	- There is no protocol in progress
+        	- A valid `protocol_run_id` is supplied that does not match the `protocol_run_id` of the
+        protocol in progress.
+
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -169,6 +183,19 @@ class ProtocolServiceServicer(object):
 
         This will return an error unless the ProtocolRunInfo has the `can_pause` field set to true.
         It will have no effect if the protocol is already paused or pausing.
+
+        If `protocol_run_id` is supplied, pauses that protocol if it is currently running.
+        Otherwise, if no `protocol_run_id` is supplied, pauses the protocol that is currently in
+        progress.
+
+        The call will fail with `INVALID_ARGUMENT` if:
+        	- An invalid `protocol_run_id` is supplied (i.e. one which does not exist on the current
+        position)
+
+        The call will fail with `FAILED_PRECONDITION` if:
+        	- There is no protocol in progress
+        	- A valid `protocol_run_id` is supplied that does not match the `protocol_run_id` of the
+        protocol in progress.
 
         Since 4.4.
         """
@@ -181,6 +208,19 @@ class ProtocolServiceServicer(object):
 
         This will return an error unless the ProtocolRunInfo has the `can_pause` field set to true.
         It will have no effect if the protocol is not paused or pausing.
+
+        If `protocol_run_id` is supplied, resumes that protocol if it is currently running.
+        Otherwise, if no `protocol_run_id` is supplied, resumes the protocol that is currently in
+        progress.
+
+        The call will fail with `INVALID_ARGUMENT` if:
+        	- An invalid `protocol_run_id` is supplied (i.e. one which does not exist on the current
+        position)
+
+        The call will fail with `FAILED_PRECONDITION` if:
+        	- There is no protocol in progress
+        	- A valid `protocol_run_id` is supplied that does not match the `protocol_run_id` of the
+        protocol in progress.
 
         Since 4.4.
         """

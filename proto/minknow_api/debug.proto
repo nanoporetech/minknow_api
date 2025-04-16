@@ -1,0 +1,38 @@
+syntax="proto3";
+
+package minknow_api.debug;
+
+option java_package = "com.nanoporetech.minknow_api";
+option objc_class_prefix = "MKAPI";
+option go_package ="github.com/nanoporetech/minknow_api/go/gen/debug";
+
+import "minknow_api/rpc_options.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/wrappers.proto";
+
+service DebugService {
+
+    // Returns the state of the basecall client
+    rpc get_basecall_clients_states (GetBasecallClientState) returns (GetBasecallClientResponse) {
+        option idempotency_level = NO_SIDE_EFFECTS;
+    }
+
+     // Returns the state of the basecall server
+   rpc get_basecaller_server_state (GetBasecallServerState) returns (GetBasecallServerResponse) {
+        option idempotency_level = NO_SIDE_EFFECTS;
+    }
+}
+
+message GetBasecallClientState {}
+
+message GetBasecallClientResponse {
+    // This debug string with internal debug data, in practice it generally a JSON-formatted string.
+   repeated string client_state = 1;
+}
+
+message GetBasecallServerState {}
+
+message GetBasecallServerResponse {
+    // This debug string with internal debug data, in practice it generally a JSON-formatted string.
+   string server_state = 1;
+}

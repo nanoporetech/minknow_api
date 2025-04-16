@@ -2,6 +2,7 @@ syntax="proto3";
 
 package minknow_api.analysis_workflows;
 
+option go_package ="github.com/nanoporetech/minknow_api/go/gen/analysis_workflow";
 option java_package = "com.nanoporetech.minknow_api";
 option objc_class_prefix = "MKAPI";
 
@@ -35,4 +36,12 @@ message ProxyRequest {
 message ProxyResponse {
     uint32 status_code = 1;
     string response_body = 2;
+}
+
+message AnalysisWorkflowRequest {
+    // The id of the workflow to start
+    string workflow_id = 1;
+
+    // The parameters to send to the workflow, represented as a stringified JSON object
+    string parameters = 2;
 }

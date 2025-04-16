@@ -12,19 +12,20 @@ from google.protobuf.internal import builder as _builder
 _sym_db = _symbol_database.Default()
 
 
+from minknow_api import analysis_configuration_pb2 as minknow__api_dot_analysis__configuration__pb2
 from minknow_api import run_until_pb2 as minknow__api_dot_run__until__pb2
 from minknow_api import rpc_options_pb2 as minknow__api_dot_rpc__options__pb2
 from google.protobuf import timestamp_pb2 as google_dot_protobuf_dot_timestamp__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x1dminknow_api/acquisition.proto\x12\x17minknow_api.acquisition\x1a\x1bminknow_api/run_until.proto\x1a\x1dminknow_api/rpc_options.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\xd3\x03\n\x0cStartRequest\x12\"\n\x1a\x64ont_wait_for_device_ready\x18\x02 \x01(\x08\x12\x38\n\x0fgenerate_report\x18\x03 \x01(\x0e\x32\x1f.minknow_api.acquisition.Option\x12\x45\n\x1csend_sequencing_read_metrics\x18\x04 \x01(\x0e\x32\x1f.minknow_api.acquisition.Option\x12\x41\n\x18send_basecalling_metrics\x18\x05 \x01(\x0e\x32\x1f.minknow_api.acquisition.Option\x12\x31\n\x07purpose\x18\x06 \x01(\x0e\x32 .minknow_api.acquisition.Purpose\x12\x31\n\x08\x61nalysis\x18\x07 \x01(\x0e\x32\x1f.minknow_api.acquisition.Option\x12\x34\n\x0b\x66ile_output\x18\x08 \x01(\x0e\x32\x1f.minknow_api.acquisition.Option\x12?\n\x16generate_final_summary\x18\t \x01(\x0e\x32\x1f.minknow_api.acquisition.Option\"\x1f\n\rStartResponse\x12\x0e\n\x06run_id\x18\x01 \x01(\t\"\xe0\x01\n\x0bStopRequest\x12L\n\x13\x64\x61ta_action_on_stop\x18\x01 \x01(\x0e\x32/.minknow_api.acquisition.StopRequest.DataAction\x12\x18\n\x10wait_until_ready\x18\x02 \x01(\x08\x12\x15\n\rkeep_power_on\x18\x03 \x01(\x08\"R\n\nDataAction\x12\x10\n\x0cSTOP_DEFAULT\x10\x00\x12\x16\n\x12STOP_KEEP_ALL_DATA\x10\x01\x12\x1a\n\x16STOP_FINISH_PROCESSING\x10\x02\"\x0e\n\x0cStopResponse\"+\n\x1bWatchForStatusChangeRequest\x12\x0c\n\x04stop\x18\x01 \x01(\x08\"V\n\x1cWatchForStatusChangeResponse\x12\x36\n\x06status\x18\x01 \x01(\x0e\x32&.minknow_api.acquisition.MinknowStatus\"\x16\n\x14\x43urrentStatusRequest\"O\n\x15\x43urrentStatusResponse\x12\x36\n\x06status\x18\x01 \x01(\x0e\x32&.minknow_api.acquisition.MinknowStatus\"\x14\n\x12GetProgressRequest\"\xa0\x01\n\x13GetProgressResponse\x12S\n\x0fraw_per_channel\x18\x01 \x01(\x0b\x32:.minknow_api.acquisition.GetProgressResponse.RawPerChannel\x1a\x34\n\rRawPerChannel\x12\x10\n\x08\x61\x63quired\x18\x01 \x01(\x04\x12\x11\n\tprocessed\x18\x02 \x01(\x04\".\n\x1cGetAcquisitionRunInfoRequest\x12\x0e\n\x06run_id\x18\x01 \x01(\t\"\xcb\x08\n\x17\x41\x63quisitionYieldSummary\x12\x12\n\nread_count\x18\x01 \x01(\x03\x12\x1b\n\x13\x66raction_basecalled\x18\x14 \x01(\x02\x12\x18\n\x10\x66raction_skipped\x18\x15 \x01(\x02\x12\"\n\x1a\x62\x61secalled_pass_read_count\x18\x03 \x01(\x03\x12\"\n\x1a\x62\x61secalled_fail_read_count\x18\x04 \x01(\x03\x12%\n\x1d\x62\x61secalled_skipped_read_count\x18\n \x01(\x03\x12\x1d\n\x15\x62\x61secalled_pass_bases\x18\x05 \x01(\x03\x12\x1d\n\x15\x62\x61secalled_fail_bases\x18\x12 \x01(\x03\x12m\n\x1b\x62\x61secalled_pass_reads_split\x18\x16 \x01(\x0b\x32H.minknow_api.acquisition.AcquisitionYieldSummary.TotalsPerDuplexCategory\x12m\n\x1b\x62\x61secalled_fail_reads_split\x18\x17 \x01(\x0b\x32H.minknow_api.acquisition.AcquisitionYieldSummary.TotalsPerDuplexCategory\x12m\n\x1b\x62\x61secalled_pass_bases_split\x18\x18 \x01(\x0b\x32H.minknow_api.acquisition.AcquisitionYieldSummary.TotalsPerDuplexCategory\x12m\n\x1b\x62\x61secalled_fail_bases_split\x18\x19 \x01(\x0b\x32H.minknow_api.acquisition.AcquisitionYieldSummary.TotalsPerDuplexCategory\x12\x1a\n\x12\x62\x61secalled_samples\x18\x06 \x01(\x03\x12\x1c\n\x14selected_raw_samples\x18\x07 \x01(\x03\x12\x17\n\x0fselected_events\x18\x08 \x01(\x03\x12 \n\x18\x65stimated_selected_bases\x18\t \x01(\x03\x12\x19\n\x11\x61lignment_matches\x18\x0e \x01(\x03\x12\x1c\n\x14\x61lignment_mismatches\x18\x0f \x01(\x03\x12\x1c\n\x14\x61lignment_insertions\x18\x10 \x01(\x03\x12\x1b\n\x13\x61lignment_deletions\x18\x11 \x01(\x03\x12\x1a\n\x12\x61lignment_coverage\x18\x13 \x01(\x02\x1aw\n\x17TotalsPerDuplexCategory\x12\x0f\n\x07simplex\x18\x01 \x01(\x03\x12\x17\n\x0f\x64uplex_template\x18\x02 \x01(\x03\x12\x19\n\x11\x64uplex_complement\x18\x03 \x01(\x03\x12\x17\n\x0f\x64uplex_combined\x18\x04 \x01(\x03\"\x96\x01\n\x18\x41\x63quisitionWriterSummary\x12\x1f\n\x17\x62ytes_to_write_produced\x18\x02 \x01(\x03\x12\x1d\n\x15\x62ytes_to_write_failed\x18\x03 \x01(\x03\x12 \n\x18\x62ytes_to_write_completed\x18\x04 \x01(\x03J\x04\x08\x01\x10\x02R\x12written_read_count\"\xb0\x03\n\x10\x43hannelStateInfo\x12?\n\x06groups\x18\x01 \x03(\x0b\x32/.minknow_api.acquisition.ChannelStateInfo.Group\x1a;\n\x05Style\x12\r\n\x05label\x18\x01 \x01(\t\x12\x13\n\x0b\x64\x65scription\x18\x02 \x01(\t\x12\x0e\n\x06\x63olour\x18\x03 \x01(\t\x1a~\n\x0c\x43hannelState\x12\n\n\x02id\x18\x01 \x01(\r\x12\x0c\n\x04name\x18\x02 \x01(\t\x12>\n\x05style\x18\x03 \x01(\x0b\x32/.minknow_api.acquisition.ChannelStateInfo.Style\x12\x14\n\x0cglobal_order\x18\x04 \x01(\r\x1a\x9d\x01\n\x05Group\x12\x0c\n\x04name\x18\x01 \x01(\t\x12>\n\x05style\x18\x02 \x01(\x0b\x32/.minknow_api.acquisition.ChannelStateInfo.Style\x12\x46\n\x06states\x18\x03 \x03(\x0b\x32\x36.minknow_api.acquisition.ChannelStateInfo.ChannelState\"\xdc\x05\n\x18\x41\x63quisitionConfigSummary\x12\x31\n\x07purpose\x18\x15 \x01(\x0e\x32 .minknow_api.acquisition.Purpose\x12\x1b\n\x13\x62\x61secalling_enabled\x18\x01 \x01(\x08\x12#\n\x1b\x62\x61secalling_config_filename\x18\x10 \x01(\t\x12!\n\x19\x62\x61secalling_model_version\x18\x18 \x01(\t\x12\x16\n\x0e\x64uplex_enabled\x18\x17 \x01(\x08\x12\x19\n\x11\x62\x61rcoding_enabled\x18\r \x01(\x08\x12\x16\n\x0e\x62\x61rcoding_kits\x18\x11 \x03(\t\x12\x19\n\x11\x61lignment_enabled\x18\x0e \x01(\x08\x12!\n\x19\x61lignment_reference_files\x18\x12 \x03(\t\x12\x1a\n\x12\x61lignment_bed_file\x18\x13 \x01(\t\x12\x14\n\x0clamp_enabled\x18\x0f \x01(\x08\x12\x10\n\x08lamp_kit\x18\x14 \x01(\t\x12\x17\n\x0freads_directory\x18\x02 \x01(\t\x12\"\n\x1areads_fallback_directories\x18\x03 \x03(\t\x12\x1b\n\x13\x66\x61st5_reads_enabled\x18\x04 \x01(\x08\x12\x1b\n\x13\x66\x61stq_reads_enabled\x18\x05 \x01(\x08\x12\x1a\n\x12pod5_reads_enabled\x18\x16 \x01(\x08\x12\x16\n\x0e\x62ulk_file_path\x18\x07 \x01(\t\x12\x19\n\x11\x62ulk_file_enabled\x18\x08 \x01(\x08\x12\x45\n\x12\x63hannel_state_info\x18\t \x01(\x0b\x32).minknow_api.acquisition.ChannelStateInfo\x12\x1c\n\x14\x65vents_to_base_ratio\x18\n \x01(\x02\x12\x13\n\x0bsample_rate\x18\x0b \x01(\r\x12\x15\n\rchannel_count\x18\x0c \x01(\rJ\x04\x08\x06\x10\x07\"\xd6\x03\n\x0fMuxScanMetadata\x12\"\n\x1a\x61uto_mux_scan_period_hours\x18\x01 \x01(\x02\x12O\n\x0f\x63\x61tegory_groups\x18\x02 \x03(\x0b\x32\x36.minknow_api.acquisition.MuxScanMetadata.CategoryGroup\x1a;\n\x05Style\x12\r\n\x05label\x18\x01 \x01(\t\x12\x13\n\x0b\x64\x65scription\x18\x02 \x01(\t\x12\x0e\n\x06\x63olour\x18\x03 \x01(\t\x1am\n\x08\x43\x61tegory\x12\x0c\n\x04name\x18\x01 \x01(\t\x12=\n\x05style\x18\x02 \x01(\x0b\x32..minknow_api.acquisition.MuxScanMetadata.Style\x12\x14\n\x0cglobal_order\x18\x03 \x01(\r\x1a\xa1\x01\n\rCategoryGroup\x12\x0c\n\x04name\x18\x01 \x01(\t\x12=\n\x05style\x18\x02 \x01(\x0b\x32..minknow_api.acquisition.MuxScanMetadata.Style\x12\x43\n\x08\x63\x61tegory\x18\x03 \x03(\x0b\x32\x31.minknow_api.acquisition.MuxScanMetadata.Category\"\x9e\x01\n\rMuxScanResult\x12\x42\n\x06\x63ounts\x18\x01 \x03(\x0b\x32\x32.minknow_api.acquisition.MuxScanResult.CountsEntry\x12\x1a\n\x12mux_scan_timestamp\x18\x02 \x01(\x04\x1a-\n\x0b\x43ountsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\r:\x02\x38\x01\"\x93\x03\n\tBreamInfo\x12\x43\n\x11mux_scan_metadata\x18\x01 \x01(\x0b\x32(.minknow_api.acquisition.MuxScanMetadata\x12@\n\x10mux_scan_results\x18\x02 \x03(\x0b\x32&.minknow_api.acquisition.MuxScanResult\x12L\n\x1atarget_translocation_speed\x18\x03 \x01(\x0b\x32(.minknow_api.acquisition.BreamInfo.Range\x12@\n\x0etarget_q_score\x18\x04 \x01(\x0b\x32(.minknow_api.acquisition.BreamInfo.Range\x12\x44\n\x12target_temperature\x18\x05 \x01(\x0b\x32(.minknow_api.acquisition.BreamInfo.Range\x1a)\n\x05Range\x12\x0f\n\x07minimum\x18\x01 \x01(\x01\x12\x0f\n\x07maximum\x18\x02 \x01(\x01\"\x95\x01\n\x16TargetRunUntilCriteria\x12=\n\x0epause_criteria\x18\x01 \x01(\x0b\x32%.minknow_api.run_until.CriteriaValues\x12<\n\rstop_criteria\x18\x02 \x01(\x0b\x32%.minknow_api.run_until.CriteriaValues\"\xfb\x07\n\x12\x41\x63quisitionRunInfo\x12\x0e\n\x06run_id\x18\x01 \x01(\t\x12<\n\rstartup_state\x18\x0c \x01(\x0e\x32%.minknow_api.acquisition.StartupState\x12?\n\x1bstartup_state_estimated_end\x18\r \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x30\n(startup_state_estimated_percent_complete\x18\x0e \x01(\x02\x12\x38\n\x05state\x18\x02 \x01(\x0e\x32).minknow_api.acquisition.AcquisitionState\x12@\n\x0f\x66inishing_state\x18\n \x01(\x0e\x32\'.minknow_api.acquisition.FinishingState\x12(\n finishing_state_percent_complete\x18\x11 \x01(\x02\x12\x43\n\x0bstop_reason\x18\x03 \x01(\x0e\x32..minknow_api.acquisition.AcquisitionStopReason\x12.\n\nstart_time\x18\x04 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x38\n\x14\x64\x61ta_read_start_time\x18\x05 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x36\n\x12\x64\x61ta_read_end_time\x18\x06 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12,\n\x08\x65nd_time\x18\x07 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12G\n\ryield_summary\x18\x08 \x01(\x0b\x32\x30.minknow_api.acquisition.AcquisitionYieldSummary\x12I\n\x0e\x63onfig_summary\x18\t \x01(\x0b\x32\x31.minknow_api.acquisition.AcquisitionConfigSummary\x12I\n\x0ewriter_summary\x18\x0b \x01(\x0b\x32\x31.minknow_api.acquisition.AcquisitionWriterSummary\x12\x36\n\nbream_info\x18\x0f \x01(\x0b\x32\".minknow_api.acquisition.BreamInfo\x12R\n\x19target_run_until_criteria\x18\x10 \x01(\x0b\x32/.minknow_api.acquisition.TargetRunUntilCriteria\"\x1c\n\x1aListAcquisitionRunsRequest\".\n\x1bListAcquisitionRunsResponse\x12\x0f\n\x07run_ids\x18\x01 \x03(\t\"!\n\x1fGetCurrentAcquisitionRunRequest\"#\n!WatchCurrentAcquisitionRunRequest\"\xf1\x02\n\x16SetSignalReaderRequest\x12V\n\x06reader\x18\x01 \x01(\x0e\x32@.minknow_api.acquisition.SetSignalReaderRequest.SignalReaderTypeB\x04\x88\xb5\x18\x01\x12\x12\n\nhdf_source\x18\x02 \x01(\t\x12P\n\x08hdf_mode\x18\x03 \x01(\x0e\x32>.minknow_api.acquisition.SetSignalReaderRequest.SourceFileMode\x12 \n\x18sample_rate_scale_factor\x18\x04 \x01(\x02\":\n\x10SignalReaderType\x12\x08\n\x04HDF5\x10\x00\x12\x0c\n\x08PLAYBACK\x10\x00\x12\n\n\x06\x44\x45VICE\x10\x01\x1a\x02\x10\x01\";\n\x0eSourceFileMode\x12\x0f\n\x0bUNSPECIFIED\x10\x00\x12\x0e\n\nSINGLE_RUN\x10\x01\x12\x08\n\x04LOOP\x10\x02\"\x19\n\x17SetSignalReaderResponse\"\x18\n\x16GetSignalReaderRequest\"\x83\x02\n\x17GetSignalReaderResponse\x12V\n\x06reader\x18\x01 \x01(\x0e\x32@.minknow_api.acquisition.SetSignalReaderRequest.SignalReaderTypeB\x04\x88\xb5\x18\x01\x12\x17\n\x0fplayback_source\x18\x02 \x01(\t\x12U\n\rplayback_mode\x18\x03 \x01(\x0e\x32>.minknow_api.acquisition.SetSignalReaderRequest.SourceFileMode\x12 \n\x18sample_rate_scale_factor\x18\x04 \x01(\x02\"g\n\x13SetBreamInfoRequest\x12\x30\n\x04info\x18\x01 \x01(\x0b\x32\".minknow_api.acquisition.BreamInfo\x12\x1e\n\x16overwrite_unset_fields\x18\x02 \x01(\x08\"\x16\n\x14SetBreamInfoResponse\"\x1d\n\x1b\x41ppendMuxScanResultResponse*Y\n\rMinknowStatus\x12\x10\n\x0c\x45RROR_STATUS\x10\x00\x12\t\n\x05READY\x10\x01\x12\x0c\n\x08STARTING\x10\x02\x12\x0e\n\nPROCESSING\x10\x03\x12\r\n\tFINISHING\x10\x04**\n\x06Option\x12\x08\n\x04\x41UTO\x10\x00\x12\x0b\n\x07\x44ISABLE\x10\x01\x12\t\n\x05\x46ORCE\x10\x02*=\n\x07Purpose\x12\x11\n\rOTHER_PURPOSE\x10\x00\x12\x0e\n\nSEQUENCING\x10\x02\x12\x0f\n\x0b\x43\x41LIBRATION\x10\x03*\x93\x01\n\x10\x41\x63quisitionState\x12\x18\n\x14\x41\x43QUISITION_STARTING\x10\x00\x12\x17\n\x13\x41\x43QUISITION_RUNNING\x10\x01\x12\x19\n\x15\x41\x43QUISITION_FINISHING\x10\x02\x12\x19\n\x15\x41\x43QUISITION_COMPLETED\x10\x03\x12\x16\n\x12\x41\x43QUISITION_PAUSED\x10\x04*\xb2\x02\n\x15\x41\x63quisitionStopReason\x12\x13\n\x0fSTOPPED_NOT_SET\x10\x00\x12\x1a\n\x16STOPPED_USER_REQUESTED\x10\x01\x12\x19\n\x15STOPPED_NO_DISK_SPACE\x10\x02\x12&\n\"STOPPED_DEVICE_STOPPED_ACQUISITION\x10\x03\x12 \n\x1cSTOPPED_STARTING_ANOTHER_RUN\x10\x04\x12\x1a\n\x16STOPPED_PROTOCOL_ENDED\x10\x05\x12\x18\n\x14STOPPED_DEVICE_ERROR\x10\x06\x12\x1b\n\x17STOPPED_BAD_TEMPERATURE\x10\x07\x12\x14\n\x10STOPPED_SHUTDOWN\x10\x08\x12\x1a\n\x16STOPPED_INTERNAL_ERROR\x10\t*\x96\x02\n\x0cStartupState\x12\x13\n\x0fSTARTUP_UNKNOWN\x10\x00\x12\x1d\n\x19STARTUP_BUILDING_PIPELINE\x10\x02\x12#\n\x1fSTARTUP_INITIALISING_BASECALLER\x10\x03\x12-\n)STARTUP_INITIALISING_BASECALLER_ALIGNMENT\x10\x04\x12%\n!STARTUP_INITIALISING_DATA_WRITERS\x10\x05\x12\x32\n.STARTUP_INITIALISING_INTERMEDIATE_DATA_STORAGE\x10\x06\x12#\n\x1fSTARTUP_INITIALISING_STATISTICS\x10\x07*\x8b\x01\n\x0e\x46inishingState\x12\x15\n\x11\x46INISHING_UNKNOWN\x10\x00\x12&\n\"FINISHING_PROCESSING_DEVICE_SIGNAL\x10\x01\x12\x1f\n\x1b\x46INISHING_BASECALLING_READS\x10\x02\x12\x19\n\x15\x46INISHING_SAVING_DATA\x10\x03\x32\xd1\x0c\n\x12\x41\x63quisitionService\x12X\n\x05start\x12%.minknow_api.acquisition.StartRequest\x1a&.minknow_api.acquisition.StartResponse\"\x00\x12U\n\x04stop\x12$.minknow_api.acquisition.StopRequest\x1a%.minknow_api.acquisition.StopResponse\"\x00\x12\x8f\x01\n\x17watch_for_status_change\x12\x34.minknow_api.acquisition.WatchForStatusChangeRequest\x1a\x35.minknow_api.acquisition.WatchForStatusChangeResponse\"\x03\x90\x02\x01(\x01\x30\x01\x12\x8f\x01\n\x1dwatch_current_acquisition_run\x12:.minknow_api.acquisition.WatchCurrentAcquisitionRunRequest\x1a+.minknow_api.acquisition.AcquisitionRunInfo\"\x03\x90\x02\x01\x30\x01\x12t\n\x0e\x63urrent_status\x12-.minknow_api.acquisition.CurrentStatusRequest\x1a..minknow_api.acquisition.CurrentStatusResponse\"\x03\x90\x02\x01\x12n\n\x0cget_progress\x12+.minknow_api.acquisition.GetProgressRequest\x1a,.minknow_api.acquisition.GetProgressResponse\"\x03\x90\x02\x01\x12\x7f\n\x14get_acquisition_info\x12\x35.minknow_api.acquisition.GetAcquisitionRunInfoRequest\x1a+.minknow_api.acquisition.AcquisitionRunInfo\"\x03\x90\x02\x01\x12\x87\x01\n\x15list_acquisition_runs\x12\x33.minknow_api.acquisition.ListAcquisitionRunsRequest\x1a\x34.minknow_api.acquisition.ListAcquisitionRunsResponse\"\x03\x90\x02\x01\x12\x89\x01\n\x1bget_current_acquisition_run\x12\x38.minknow_api.acquisition.GetCurrentAcquisitionRunRequest\x1a+.minknow_api.acquisition.AcquisitionRunInfo\"\x03\x90\x02\x01\x12{\n\x11set_signal_reader\x12/.minknow_api.acquisition.SetSignalReaderRequest\x1a\x30.minknow_api.acquisition.SetSignalReaderResponse\"\x03\x90\x02\x02\x12{\n\x11get_signal_reader\x12/.minknow_api.acquisition.GetSignalReaderRequest\x1a\x30.minknow_api.acquisition.GetSignalReaderResponse\"\x03\x90\x02\x02\x12r\n\x0eset_bream_info\x12,.minknow_api.acquisition.SetBreamInfoRequest\x1a-.minknow_api.acquisition.SetBreamInfoResponse\"\x03\x90\x02\x02\x12{\n\x16\x61ppend_mux_scan_result\x12&.minknow_api.acquisition.MuxScanResult\x1a\x34.minknow_api.acquisition.AppendMuxScanResultResponse\"\x03\x90\x02\x02\x42&\n\x1c\x63om.nanoporetech.minknow_api\xa2\x02\x05MKAPIb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x1dminknow_api/acquisition.proto\x12\x17minknow_api.acquisition\x1a(minknow_api/analysis_configuration.proto\x1a\x1bminknow_api/run_until.proto\x1a\x1dminknow_api/rpc_options.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\xd3\x03\n\x0cStartRequest\x12\"\n\x1a\x64ont_wait_for_device_ready\x18\x02 \x01(\x08\x12\x38\n\x0fgenerate_report\x18\x03 \x01(\x0e\x32\x1f.minknow_api.acquisition.Option\x12\x45\n\x1csend_sequencing_read_metrics\x18\x04 \x01(\x0e\x32\x1f.minknow_api.acquisition.Option\x12\x41\n\x18send_basecalling_metrics\x18\x05 \x01(\x0e\x32\x1f.minknow_api.acquisition.Option\x12\x31\n\x07purpose\x18\x06 \x01(\x0e\x32 .minknow_api.acquisition.Purpose\x12\x31\n\x08\x61nalysis\x18\x07 \x01(\x0e\x32\x1f.minknow_api.acquisition.Option\x12\x34\n\x0b\x66ile_output\x18\x08 \x01(\x0e\x32\x1f.minknow_api.acquisition.Option\x12?\n\x16generate_final_summary\x18\t \x01(\x0e\x32\x1f.minknow_api.acquisition.Option\"\x1f\n\rStartResponse\x12\x0e\n\x06run_id\x18\x01 \x01(\t\"\xe0\x01\n\x0bStopRequest\x12L\n\x13\x64\x61ta_action_on_stop\x18\x01 \x01(\x0e\x32/.minknow_api.acquisition.StopRequest.DataAction\x12\x18\n\x10wait_until_ready\x18\x02 \x01(\x08\x12\x15\n\rkeep_power_on\x18\x03 \x01(\x08\"R\n\nDataAction\x12\x10\n\x0cSTOP_DEFAULT\x10\x00\x12\x16\n\x12STOP_KEEP_ALL_DATA\x10\x01\x12\x1a\n\x16STOP_FINISH_PROCESSING\x10\x02\"\x0e\n\x0cStopResponse\"+\n\x1bWatchForStatusChangeRequest\x12\x0c\n\x04stop\x18\x01 \x01(\x08\"V\n\x1cWatchForStatusChangeResponse\x12\x36\n\x06status\x18\x01 \x01(\x0e\x32&.minknow_api.acquisition.MinknowStatus\"\x16\n\x14\x43urrentStatusRequest\"O\n\x15\x43urrentStatusResponse\x12\x36\n\x06status\x18\x01 \x01(\x0e\x32&.minknow_api.acquisition.MinknowStatus\"\x14\n\x12GetProgressRequest\"\xa0\x01\n\x13GetProgressResponse\x12S\n\x0fraw_per_channel\x18\x01 \x01(\x0b\x32:.minknow_api.acquisition.GetProgressResponse.RawPerChannel\x1a\x34\n\rRawPerChannel\x12\x10\n\x08\x61\x63quired\x18\x01 \x01(\x04\x12\x11\n\tprocessed\x18\x02 \x01(\x04\".\n\x1cGetAcquisitionRunInfoRequest\x12\x0e\n\x06run_id\x18\x01 \x01(\t\"\xcb\x08\n\x17\x41\x63quisitionYieldSummary\x12\x12\n\nread_count\x18\x01 \x01(\x03\x12\x1b\n\x13\x66raction_basecalled\x18\x14 \x01(\x02\x12\x18\n\x10\x66raction_skipped\x18\x15 \x01(\x02\x12\"\n\x1a\x62\x61secalled_pass_read_count\x18\x03 \x01(\x03\x12\"\n\x1a\x62\x61secalled_fail_read_count\x18\x04 \x01(\x03\x12%\n\x1d\x62\x61secalled_skipped_read_count\x18\n \x01(\x03\x12\x1d\n\x15\x62\x61secalled_pass_bases\x18\x05 \x01(\x03\x12\x1d\n\x15\x62\x61secalled_fail_bases\x18\x12 \x01(\x03\x12m\n\x1b\x62\x61secalled_pass_reads_split\x18\x16 \x01(\x0b\x32H.minknow_api.acquisition.AcquisitionYieldSummary.TotalsPerDuplexCategory\x12m\n\x1b\x62\x61secalled_fail_reads_split\x18\x17 \x01(\x0b\x32H.minknow_api.acquisition.AcquisitionYieldSummary.TotalsPerDuplexCategory\x12m\n\x1b\x62\x61secalled_pass_bases_split\x18\x18 \x01(\x0b\x32H.minknow_api.acquisition.AcquisitionYieldSummary.TotalsPerDuplexCategory\x12m\n\x1b\x62\x61secalled_fail_bases_split\x18\x19 \x01(\x0b\x32H.minknow_api.acquisition.AcquisitionYieldSummary.TotalsPerDuplexCategory\x12\x1a\n\x12\x62\x61secalled_samples\x18\x06 \x01(\x03\x12\x1c\n\x14selected_raw_samples\x18\x07 \x01(\x03\x12\x17\n\x0fselected_events\x18\x08 \x01(\x03\x12 \n\x18\x65stimated_selected_bases\x18\t \x01(\x03\x12\x19\n\x11\x61lignment_matches\x18\x0e \x01(\x03\x12\x1c\n\x14\x61lignment_mismatches\x18\x0f \x01(\x03\x12\x1c\n\x14\x61lignment_insertions\x18\x10 \x01(\x03\x12\x1b\n\x13\x61lignment_deletions\x18\x11 \x01(\x03\x12\x1a\n\x12\x61lignment_coverage\x18\x13 \x01(\x02\x1aw\n\x17TotalsPerDuplexCategory\x12\x0f\n\x07simplex\x18\x01 \x01(\x03\x12\x17\n\x0f\x64uplex_template\x18\x02 \x01(\x03\x12\x19\n\x11\x64uplex_complement\x18\x03 \x01(\x03\x12\x17\n\x0f\x64uplex_combined\x18\x04 \x01(\x03\"\x96\x01\n\x18\x41\x63quisitionWriterSummary\x12\x1f\n\x17\x62ytes_to_write_produced\x18\x02 \x01(\x03\x12\x1d\n\x15\x62ytes_to_write_failed\x18\x03 \x01(\x03\x12 \n\x18\x62ytes_to_write_completed\x18\x04 \x01(\x03J\x04\x08\x01\x10\x02R\x12written_read_count\"\xb0\x03\n\x10\x43hannelStateInfo\x12?\n\x06groups\x18\x01 \x03(\x0b\x32/.minknow_api.acquisition.ChannelStateInfo.Group\x1a;\n\x05Style\x12\r\n\x05label\x18\x01 \x01(\t\x12\x13\n\x0b\x64\x65scription\x18\x02 \x01(\t\x12\x0e\n\x06\x63olour\x18\x03 \x01(\t\x1a~\n\x0c\x43hannelState\x12\n\n\x02id\x18\x01 \x01(\r\x12\x0c\n\x04name\x18\x02 \x01(\t\x12>\n\x05style\x18\x03 \x01(\x0b\x32/.minknow_api.acquisition.ChannelStateInfo.Style\x12\x14\n\x0cglobal_order\x18\x04 \x01(\r\x1a\x9d\x01\n\x05Group\x12\x0c\n\x04name\x18\x01 \x01(\t\x12>\n\x05style\x18\x02 \x01(\x0b\x32/.minknow_api.acquisition.ChannelStateInfo.Style\x12\x46\n\x06states\x18\x03 \x03(\x0b\x32\x36.minknow_api.acquisition.ChannelStateInfo.ChannelState\"\xdb\x06\n\x18\x41\x63quisitionConfigSummary\x12\x31\n\x07purpose\x18\x15 \x01(\x0e\x32 .minknow_api.acquisition.Purpose\x12\x1b\n\x13\x62\x61secalling_enabled\x18\x01 \x01(\x08\x12%\n\x1b\x62\x61secalling_config_filename\x18\x10 \x01(\tH\x00\x12i\n\x17\x62\x61secalling_model_names\x18\x19 \x01(\x0b\x32\x46.minknow_api.analysis_configuration.BasecallerConfiguration.ModelNamesH\x00\x12!\n\x19\x62\x61secalling_model_version\x18\x18 \x01(\t\x12\x16\n\x0e\x64uplex_enabled\x18\x17 \x01(\x08\x12\x19\n\x11\x62\x61rcoding_enabled\x18\r \x01(\x08\x12\x16\n\x0e\x62\x61rcoding_kits\x18\x11 \x03(\t\x12\x19\n\x11\x61lignment_enabled\x18\x0e \x01(\x08\x12!\n\x19\x61lignment_reference_files\x18\x12 \x03(\t\x12\x1a\n\x12\x61lignment_bed_file\x18\x13 \x01(\t\x12\x14\n\x0clamp_enabled\x18\x0f \x01(\x08\x12\x10\n\x08lamp_kit\x18\x14 \x01(\t\x12\x17\n\x0freads_directory\x18\x02 \x01(\t\x12\"\n\x1areads_fallback_directories\x18\x03 \x03(\t\x12\x1b\n\x13\x66\x61st5_reads_enabled\x18\x04 \x01(\x08\x12\x1b\n\x13\x66\x61stq_reads_enabled\x18\x05 \x01(\x08\x12\x1a\n\x12pod5_reads_enabled\x18\x16 \x01(\x08\x12\x16\n\x0e\x62ulk_file_path\x18\x07 \x01(\t\x12\x19\n\x11\x62ulk_file_enabled\x18\x08 \x01(\x08\x12\x45\n\x12\x63hannel_state_info\x18\t \x01(\x0b\x32).minknow_api.acquisition.ChannelStateInfo\x12\x1c\n\x14\x65vents_to_base_ratio\x18\n \x01(\x02\x12\x13\n\x0bsample_rate\x18\x0b \x01(\r\x12\x15\n\rchannel_count\x18\x0c \x01(\rB\x10\n\x0e\x62\x61secall_modelJ\x04\x08\x06\x10\x07\"\xd6\x03\n\x0fMuxScanMetadata\x12\"\n\x1a\x61uto_mux_scan_period_hours\x18\x01 \x01(\x02\x12O\n\x0f\x63\x61tegory_groups\x18\x02 \x03(\x0b\x32\x36.minknow_api.acquisition.MuxScanMetadata.CategoryGroup\x1a;\n\x05Style\x12\r\n\x05label\x18\x01 \x01(\t\x12\x13\n\x0b\x64\x65scription\x18\x02 \x01(\t\x12\x0e\n\x06\x63olour\x18\x03 \x01(\t\x1am\n\x08\x43\x61tegory\x12\x0c\n\x04name\x18\x01 \x01(\t\x12=\n\x05style\x18\x02 \x01(\x0b\x32..minknow_api.acquisition.MuxScanMetadata.Style\x12\x14\n\x0cglobal_order\x18\x03 \x01(\r\x1a\xa1\x01\n\rCategoryGroup\x12\x0c\n\x04name\x18\x01 \x01(\t\x12=\n\x05style\x18\x02 \x01(\x0b\x32..minknow_api.acquisition.MuxScanMetadata.Style\x12\x43\n\x08\x63\x61tegory\x18\x03 \x03(\x0b\x32\x31.minknow_api.acquisition.MuxScanMetadata.Category\"\x9e\x01\n\rMuxScanResult\x12\x42\n\x06\x63ounts\x18\x01 \x03(\x0b\x32\x32.minknow_api.acquisition.MuxScanResult.CountsEntry\x12\x1a\n\x12mux_scan_timestamp\x18\x02 \x01(\x04\x1a-\n\x0b\x43ountsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\r:\x02\x38\x01\"\x93\x03\n\tBreamInfo\x12\x43\n\x11mux_scan_metadata\x18\x01 \x01(\x0b\x32(.minknow_api.acquisition.MuxScanMetadata\x12@\n\x10mux_scan_results\x18\x02 \x03(\x0b\x32&.minknow_api.acquisition.MuxScanResult\x12L\n\x1atarget_translocation_speed\x18\x03 \x01(\x0b\x32(.minknow_api.acquisition.BreamInfo.Range\x12@\n\x0etarget_q_score\x18\x04 \x01(\x0b\x32(.minknow_api.acquisition.BreamInfo.Range\x12\x44\n\x12target_temperature\x18\x05 \x01(\x0b\x32(.minknow_api.acquisition.BreamInfo.Range\x1a)\n\x05Range\x12\x0f\n\x07minimum\x18\x01 \x01(\x01\x12\x0f\n\x07maximum\x18\x02 \x01(\x01\"\x95\x01\n\x16TargetRunUntilCriteria\x12=\n\x0epause_criteria\x18\x01 \x01(\x0b\x32%.minknow_api.run_until.CriteriaValues\x12<\n\rstop_criteria\x18\x02 \x01(\x0b\x32%.minknow_api.run_until.CriteriaValues\"\xfb\x07\n\x12\x41\x63quisitionRunInfo\x12\x0e\n\x06run_id\x18\x01 \x01(\t\x12<\n\rstartup_state\x18\x0c \x01(\x0e\x32%.minknow_api.acquisition.StartupState\x12?\n\x1bstartup_state_estimated_end\x18\r \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x30\n(startup_state_estimated_percent_complete\x18\x0e \x01(\x02\x12\x38\n\x05state\x18\x02 \x01(\x0e\x32).minknow_api.acquisition.AcquisitionState\x12@\n\x0f\x66inishing_state\x18\n \x01(\x0e\x32\'.minknow_api.acquisition.FinishingState\x12(\n finishing_state_percent_complete\x18\x11 \x01(\x02\x12\x43\n\x0bstop_reason\x18\x03 \x01(\x0e\x32..minknow_api.acquisition.AcquisitionStopReason\x12.\n\nstart_time\x18\x04 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x38\n\x14\x64\x61ta_read_start_time\x18\x05 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x36\n\x12\x64\x61ta_read_end_time\x18\x06 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12,\n\x08\x65nd_time\x18\x07 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12G\n\ryield_summary\x18\x08 \x01(\x0b\x32\x30.minknow_api.acquisition.AcquisitionYieldSummary\x12I\n\x0e\x63onfig_summary\x18\t \x01(\x0b\x32\x31.minknow_api.acquisition.AcquisitionConfigSummary\x12I\n\x0ewriter_summary\x18\x0b \x01(\x0b\x32\x31.minknow_api.acquisition.AcquisitionWriterSummary\x12\x36\n\nbream_info\x18\x0f \x01(\x0b\x32\".minknow_api.acquisition.BreamInfo\x12R\n\x19target_run_until_criteria\x18\x10 \x01(\x0b\x32/.minknow_api.acquisition.TargetRunUntilCriteria\"\x1c\n\x1aListAcquisitionRunsRequest\".\n\x1bListAcquisitionRunsResponse\x12\x0f\n\x07run_ids\x18\x01 \x03(\t\"!\n\x1fGetCurrentAcquisitionRunRequest\"#\n!WatchCurrentAcquisitionRunRequest\"\xf1\x02\n\x16SetSignalReaderRequest\x12V\n\x06reader\x18\x01 \x01(\x0e\x32@.minknow_api.acquisition.SetSignalReaderRequest.SignalReaderTypeB\x04\x88\xb5\x18\x01\x12\x12\n\nhdf_source\x18\x02 \x01(\t\x12P\n\x08hdf_mode\x18\x03 \x01(\x0e\x32>.minknow_api.acquisition.SetSignalReaderRequest.SourceFileMode\x12 \n\x18sample_rate_scale_factor\x18\x04 \x01(\x02\":\n\x10SignalReaderType\x12\x08\n\x04HDF5\x10\x00\x12\x0c\n\x08PLAYBACK\x10\x00\x12\n\n\x06\x44\x45VICE\x10\x01\x1a\x02\x10\x01\";\n\x0eSourceFileMode\x12\x0f\n\x0bUNSPECIFIED\x10\x00\x12\x0e\n\nSINGLE_RUN\x10\x01\x12\x08\n\x04LOOP\x10\x02\"\x19\n\x17SetSignalReaderResponse\"\x18\n\x16GetSignalReaderRequest\"\x83\x02\n\x17GetSignalReaderResponse\x12V\n\x06reader\x18\x01 \x01(\x0e\x32@.minknow_api.acquisition.SetSignalReaderRequest.SignalReaderTypeB\x04\x88\xb5\x18\x01\x12\x17\n\x0fplayback_source\x18\x02 \x01(\t\x12U\n\rplayback_mode\x18\x03 \x01(\x0e\x32>.minknow_api.acquisition.SetSignalReaderRequest.SourceFileMode\x12 \n\x18sample_rate_scale_factor\x18\x04 \x01(\x02\"g\n\x13SetBreamInfoRequest\x12\x30\n\x04info\x18\x01 \x01(\x0b\x32\".minknow_api.acquisition.BreamInfo\x12\x1e\n\x16overwrite_unset_fields\x18\x02 \x01(\x08\"\x16\n\x14SetBreamInfoResponse\"\x1d\n\x1b\x41ppendMuxScanResultResponse*Y\n\rMinknowStatus\x12\x10\n\x0c\x45RROR_STATUS\x10\x00\x12\t\n\x05READY\x10\x01\x12\x0c\n\x08STARTING\x10\x02\x12\x0e\n\nPROCESSING\x10\x03\x12\r\n\tFINISHING\x10\x04**\n\x06Option\x12\x08\n\x04\x41UTO\x10\x00\x12\x0b\n\x07\x44ISABLE\x10\x01\x12\t\n\x05\x46ORCE\x10\x02*=\n\x07Purpose\x12\x11\n\rOTHER_PURPOSE\x10\x00\x12\x0e\n\nSEQUENCING\x10\x02\x12\x0f\n\x0b\x43\x41LIBRATION\x10\x03*\x93\x01\n\x10\x41\x63quisitionState\x12\x18\n\x14\x41\x43QUISITION_STARTING\x10\x00\x12\x17\n\x13\x41\x43QUISITION_RUNNING\x10\x01\x12\x19\n\x15\x41\x43QUISITION_FINISHING\x10\x02\x12\x19\n\x15\x41\x43QUISITION_COMPLETED\x10\x03\x12\x16\n\x12\x41\x43QUISITION_PAUSED\x10\x04*\xb2\x02\n\x15\x41\x63quisitionStopReason\x12\x13\n\x0fSTOPPED_NOT_SET\x10\x00\x12\x1a\n\x16STOPPED_USER_REQUESTED\x10\x01\x12\x19\n\x15STOPPED_NO_DISK_SPACE\x10\x02\x12&\n\"STOPPED_DEVICE_STOPPED_ACQUISITION\x10\x03\x12 \n\x1cSTOPPED_STARTING_ANOTHER_RUN\x10\x04\x12\x1a\n\x16STOPPED_PROTOCOL_ENDED\x10\x05\x12\x18\n\x14STOPPED_DEVICE_ERROR\x10\x06\x12\x1b\n\x17STOPPED_BAD_TEMPERATURE\x10\x07\x12\x14\n\x10STOPPED_SHUTDOWN\x10\x08\x12\x1a\n\x16STOPPED_INTERNAL_ERROR\x10\t*\x96\x02\n\x0cStartupState\x12\x13\n\x0fSTARTUP_UNKNOWN\x10\x00\x12\x1d\n\x19STARTUP_BUILDING_PIPELINE\x10\x02\x12#\n\x1fSTARTUP_INITIALISING_BASECALLER\x10\x03\x12-\n)STARTUP_INITIALISING_BASECALLER_ALIGNMENT\x10\x04\x12%\n!STARTUP_INITIALISING_DATA_WRITERS\x10\x05\x12\x32\n.STARTUP_INITIALISING_INTERMEDIATE_DATA_STORAGE\x10\x06\x12#\n\x1fSTARTUP_INITIALISING_STATISTICS\x10\x07*\x8b\x01\n\x0e\x46inishingState\x12\x15\n\x11\x46INISHING_UNKNOWN\x10\x00\x12&\n\"FINISHING_PROCESSING_DEVICE_SIGNAL\x10\x01\x12\x1f\n\x1b\x46INISHING_BASECALLING_READS\x10\x02\x12\x19\n\x15\x46INISHING_SAVING_DATA\x10\x03\x32\xd1\x0c\n\x12\x41\x63quisitionService\x12X\n\x05start\x12%.minknow_api.acquisition.StartRequest\x1a&.minknow_api.acquisition.StartResponse\"\x00\x12U\n\x04stop\x12$.minknow_api.acquisition.StopRequest\x1a%.minknow_api.acquisition.StopResponse\"\x00\x12\x8f\x01\n\x17watch_for_status_change\x12\x34.minknow_api.acquisition.WatchForStatusChangeRequest\x1a\x35.minknow_api.acquisition.WatchForStatusChangeResponse\"\x03\x90\x02\x01(\x01\x30\x01\x12\x8f\x01\n\x1dwatch_current_acquisition_run\x12:.minknow_api.acquisition.WatchCurrentAcquisitionRunRequest\x1a+.minknow_api.acquisition.AcquisitionRunInfo\"\x03\x90\x02\x01\x30\x01\x12t\n\x0e\x63urrent_status\x12-.minknow_api.acquisition.CurrentStatusRequest\x1a..minknow_api.acquisition.CurrentStatusResponse\"\x03\x90\x02\x01\x12n\n\x0cget_progress\x12+.minknow_api.acquisition.GetProgressRequest\x1a,.minknow_api.acquisition.GetProgressResponse\"\x03\x90\x02\x01\x12\x7f\n\x14get_acquisition_info\x12\x35.minknow_api.acquisition.GetAcquisitionRunInfoRequest\x1a+.minknow_api.acquisition.AcquisitionRunInfo\"\x03\x90\x02\x01\x12\x87\x01\n\x15list_acquisition_runs\x12\x33.minknow_api.acquisition.ListAcquisitionRunsRequest\x1a\x34.minknow_api.acquisition.ListAcquisitionRunsResponse\"\x03\x90\x02\x01\x12\x89\x01\n\x1bget_current_acquisition_run\x12\x38.minknow_api.acquisition.GetCurrentAcquisitionRunRequest\x1a+.minknow_api.acquisition.AcquisitionRunInfo\"\x03\x90\x02\x01\x12{\n\x11set_signal_reader\x12/.minknow_api.acquisition.SetSignalReaderRequest\x1a\x30.minknow_api.acquisition.SetSignalReaderResponse\"\x03\x90\x02\x02\x12{\n\x11get_signal_reader\x12/.minknow_api.acquisition.GetSignalReaderRequest\x1a\x30.minknow_api.acquisition.GetSignalReaderResponse\"\x03\x90\x02\x02\x12r\n\x0eset_bream_info\x12,.minknow_api.acquisition.SetBreamInfoRequest\x1a-.minknow_api.acquisition.SetBreamInfoResponse\"\x03\x90\x02\x02\x12{\n\x16\x61ppend_mux_scan_result\x12&.minknow_api.acquisition.MuxScanResult\x1a\x34.minknow_api.acquisition.AppendMuxScanResultResponse\"\x03\x90\x02\x02\x42^\n\x1c\x63om.nanoporetech.minknow_apiZ6github.com/nanoporetech/minknow_api/go/gen/acquisition\xa2\x02\x05MKAPIb\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
 _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'minknow_api.acquisition_pb2', _globals)
 if _descriptor._USE_C_DESCRIPTORS == False:
   _globals['DESCRIPTOR']._options = None
-  _globals['DESCRIPTOR']._serialized_options = b'\n\034com.nanoporetech.minknow_api\242\002\005MKAPI'
+  _globals['DESCRIPTOR']._serialized_options = b'\n\034com.nanoporetech.minknow_apiZ6github.com/nanoporetech/minknow_api/go/gen/acquisition\242\002\005MKAPI'
   _globals['_MUXSCANRESULT_COUNTSENTRY']._options = None
   _globals['_MUXSCANRESULT_COUNTSENTRY']._serialized_options = b'8\001'
   _globals['_SETSIGNALREADERREQUEST_SIGNALREADERTYPE']._options = None
@@ -55,223 +56,110 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   _globals['_ACQUISITIONSERVICE'].methods_by_name['set_bream_info']._serialized_options = b'\220\002\002'
   _globals['_ACQUISITIONSERVICE'].methods_by_name['append_mux_scan_result']._options = None
   _globals['_ACQUISITIONSERVICE'].methods_by_name['append_mux_scan_result']._serialized_options = b'\220\002\002'
-  _globals['_MINKNOWSTATUS']._serialized_start=7004
-  _globals['_MINKNOWSTATUS']._serialized_end=7093
-  _globals['_OPTION']._serialized_start=7095
-  _globals['_OPTION']._serialized_end=7137
-  _globals['_PURPOSE']._serialized_start=7139
-  _globals['_PURPOSE']._serialized_end=7200
-  _globals['_ACQUISITIONSTATE']._serialized_start=7203
-  _globals['_ACQUISITIONSTATE']._serialized_end=7350
-  _globals['_ACQUISITIONSTOPREASON']._serialized_start=7353
-  _globals['_ACQUISITIONSTOPREASON']._serialized_end=7659
-  _globals['_STARTUPSTATE']._serialized_start=7662
-  _globals['_STARTUPSTATE']._serialized_end=7940
-  _globals['_FINISHINGSTATE']._serialized_start=7943
-  _globals['_FINISHINGSTATE']._serialized_end=8082
-  _globals['_STARTREQUEST']._serialized_start=152
-  _globals['_STARTREQUEST']._serialized_end=619
-  _globals['_STARTRESPONSE']._serialized_start=621
-  _globals['_STARTRESPONSE']._serialized_end=652
-  _globals['_STOPREQUEST']._serialized_start=655
-  _globals['_STOPREQUEST']._serialized_end=879
-  _globals['_STOPREQUEST_DATAACTION']._serialized_start=797
-  _globals['_STOPREQUEST_DATAACTION']._serialized_end=879
-  _globals['_STOPRESPONSE']._serialized_start=881
-  _globals['_STOPRESPONSE']._serialized_end=895
-  _globals['_WATCHFORSTATUSCHANGEREQUEST']._serialized_start=897
-  _globals['_WATCHFORSTATUSCHANGEREQUEST']._serialized_end=940
-  _globals['_WATCHFORSTATUSCHANGERESPONSE']._serialized_start=942
-  _globals['_WATCHFORSTATUSCHANGERESPONSE']._serialized_end=1028
-  _globals['_CURRENTSTATUSREQUEST']._serialized_start=1030
-  _globals['_CURRENTSTATUSREQUEST']._serialized_end=1052
-  _globals['_CURRENTSTATUSRESPONSE']._serialized_start=1054
-  _globals['_CURRENTSTATUSRESPONSE']._serialized_end=1133
-  _globals['_GETPROGRESSREQUEST']._serialized_start=1135
-  _globals['_GETPROGRESSREQUEST']._serialized_end=1155
-  _globals['_GETPROGRESSRESPONSE']._serialized_start=1158
-  _globals['_GETPROGRESSRESPONSE']._serialized_end=1318
-  _globals['_GETPROGRESSRESPONSE_RAWPERCHANNEL']._serialized_start=1266
-  _globals['_GETPROGRESSRESPONSE_RAWPERCHANNEL']._serialized_end=1318
-  _globals['_GETACQUISITIONRUNINFOREQUEST']._serialized_start=1320
-  _globals['_GETACQUISITIONRUNINFOREQUEST']._serialized_end=1366
-  _globals['_ACQUISITIONYIELDSUMMARY']._serialized_start=1369
-  _globals['_ACQUISITIONYIELDSUMMARY']._serialized_end=2468
-  _globals['_ACQUISITIONYIELDSUMMARY_TOTALSPERDUPLEXCATEGORY']._serialized_start=2349
-  _globals['_ACQUISITIONYIELDSUMMARY_TOTALSPERDUPLEXCATEGORY']._serialized_end=2468
-  _globals['_ACQUISITIONWRITERSUMMARY']._serialized_start=2471
-  _globals['_ACQUISITIONWRITERSUMMARY']._serialized_end=2621
-  _globals['_CHANNELSTATEINFO']._serialized_start=2624
-  _globals['_CHANNELSTATEINFO']._serialized_end=3056
-  _globals['_CHANNELSTATEINFO_STYLE']._serialized_start=2709
-  _globals['_CHANNELSTATEINFO_STYLE']._serialized_end=2768
-  _globals['_CHANNELSTATEINFO_CHANNELSTATE']._serialized_start=2770
-  _globals['_CHANNELSTATEINFO_CHANNELSTATE']._serialized_end=2896
-  _globals['_CHANNELSTATEINFO_GROUP']._serialized_start=2899
-  _globals['_CHANNELSTATEINFO_GROUP']._serialized_end=3056
-  _globals['_ACQUISITIONCONFIGSUMMARY']._serialized_start=3059
-  _globals['_ACQUISITIONCONFIGSUMMARY']._serialized_end=3791
-  _globals['_MUXSCANMETADATA']._serialized_start=3794
-  _globals['_MUXSCANMETADATA']._serialized_end=4264
-  _globals['_MUXSCANMETADATA_STYLE']._serialized_start=2709
-  _globals['_MUXSCANMETADATA_STYLE']._serialized_end=2768
-  _globals['_MUXSCANMETADATA_CATEGORY']._serialized_start=3991
-  _globals['_MUXSCANMETADATA_CATEGORY']._serialized_end=4100
-  _globals['_MUXSCANMETADATA_CATEGORYGROUP']._serialized_start=4103
-  _globals['_MUXSCANMETADATA_CATEGORYGROUP']._serialized_end=4264
-  _globals['_MUXSCANRESULT']._serialized_start=4267
-  _globals['_MUXSCANRESULT']._serialized_end=4425
-  _globals['_MUXSCANRESULT_COUNTSENTRY']._serialized_start=4380
-  _globals['_MUXSCANRESULT_COUNTSENTRY']._serialized_end=4425
-  _globals['_BREAMINFO']._serialized_start=4428
-  _globals['_BREAMINFO']._serialized_end=4831
-  _globals['_BREAMINFO_RANGE']._serialized_start=4790
-  _globals['_BREAMINFO_RANGE']._serialized_end=4831
-  _globals['_TARGETRUNUNTILCRITERIA']._serialized_start=4834
-  _globals['_TARGETRUNUNTILCRITERIA']._serialized_end=4983
-  _globals['_ACQUISITIONRUNINFO']._serialized_start=4986
-  _globals['_ACQUISITIONRUNINFO']._serialized_end=6005
-  _globals['_LISTACQUISITIONRUNSREQUEST']._serialized_start=6007
-  _globals['_LISTACQUISITIONRUNSREQUEST']._serialized_end=6035
-  _globals['_LISTACQUISITIONRUNSRESPONSE']._serialized_start=6037
-  _globals['_LISTACQUISITIONRUNSRESPONSE']._serialized_end=6083
-  _globals['_GETCURRENTACQUISITIONRUNREQUEST']._serialized_start=6085
-  _globals['_GETCURRENTACQUISITIONRUNREQUEST']._serialized_end=6118
-  _globals['_WATCHCURRENTACQUISITIONRUNREQUEST']._serialized_start=6120
-  _globals['_WATCHCURRENTACQUISITIONRUNREQUEST']._serialized_end=6155
-  _globals['_SETSIGNALREADERREQUEST']._serialized_start=6158
-  _globals['_SETSIGNALREADERREQUEST']._serialized_end=6527
-  _globals['_SETSIGNALREADERREQUEST_SIGNALREADERTYPE']._serialized_start=6408
-  _globals['_SETSIGNALREADERREQUEST_SIGNALREADERTYPE']._serialized_end=6466
-  _globals['_SETSIGNALREADERREQUEST_SOURCEFILEMODE']._serialized_start=6468
-  _globals['_SETSIGNALREADERREQUEST_SOURCEFILEMODE']._serialized_end=6527
-  _globals['_SETSIGNALREADERRESPONSE']._serialized_start=6529
-  _globals['_SETSIGNALREADERRESPONSE']._serialized_end=6554
-  _globals['_GETSIGNALREADERREQUEST']._serialized_start=6556
-  _globals['_GETSIGNALREADERREQUEST']._serialized_end=6580
-  _globals['_GETSIGNALREADERRESPONSE']._serialized_start=6583
-  _globals['_GETSIGNALREADERRESPONSE']._serialized_end=6842
-  _globals['_SETBREAMINFOREQUEST']._serialized_start=6844
-  _globals['_SETBREAMINFOREQUEST']._serialized_end=6947
-  _globals['_SETBREAMINFORESPONSE']._serialized_start=6949
-  _globals['_SETBREAMINFORESPONSE']._serialized_end=6971
-  _globals['_APPENDMUXSCANRESULTRESPONSE']._serialized_start=6973
-  _globals['_APPENDMUXSCANRESULTRESPONSE']._serialized_end=7002
-  _globals['_ACQUISITIONSERVICE']._serialized_start=8085
-  _globals['_ACQUISITIONSERVICE']._serialized_end=9702
-ChannelStateInfo.__doc__ = """Attributes:
-    groups:
-        The groups of channel states.  The groups are ordered
-        according to the "order" attribute of the group style in the
-        channel states configuration.
-"""
-MuxScanResult.__doc__ = """A report of the states of channel muxes (wells) across the flow cell.
-Every channel mux (well) is assigned to a specific category describing
-its state (for example, is it expected to produce good results, and if
-not why not?). This is a report of how many channel muxes are in each
-category.
-
-Attributes:
-    counts:
-        How many channel muxes are in each category.  The sum of all
-        the values in this map should be the number of channels
-        multiplied by the number of muxes on each channel (eg:
-        512x4=2048 on a MinION Mk1B without a flongle adapter).  eg.
-        'sequencing': 1500
-    mux_scan_timestamp:
-        When this mux scan result was added (Seconds since the start
-        of the acquisition).
-"""
-GetSignalReaderResponse.__doc__ = """Attributes:
-    reader:
-        The type of signal reader to use
-    playback_source:
-        The following is only set if the signal reader is a playback
-        source.
-"""
-SetSignalReaderRequest.__doc__ = """Attributes:
-    reader:
-        The type of signal reader to use
-    hdf_source:
-        The following settings are optional, and only used when
-        setting the reader to hdf5
-    hdf_mode:
-         Defaults to UNSPECIFIED, since this setting is optional
-"""
-BreamInfo.__doc__ = """Information provided by Bream.  Note that this is provided by the
-protocol, and some protocols may choose not to provide this.
-
-Attributes:
-    mux_scan_metadata:
-        Presentation information for mux scan results.
-    mux_scan_results:
-        Mux scan results.
-    target_translocation_speed:
-        The ideal translocation speed range.  This can be used to
-        provide context for speed graphs (see the statistics RPCs),
-        showing what range is considered "good".
-    target_q_score:
-        The ideal quality (Q) score range.  This can be used to
-        provide context for q-score graphs (see the statistics RPCs),
-        showing what range is considered "good".
-    target_temperature:
-        The ideal temperature range.  This can be used to provide
-        context for temperature (see the statistics RPCs), showing
-        what range is considered "good".  Note that a protocol may
-        request a different temperature range than this (eg: it might
-        request a tighter range, or it may adjust the temperature it
-        is requesting throughout the run). This intended only to
-        provide context when presenting data to users.
-"""
-ChannelStateInfo.Style.__doc__ = """Attributes:
-    label:
-        The human-readable name to display when rendering this channel
-        state or group.
-    description:
-        A sentence describing the meaning of the channel state or
-        group.  This can be used as a tooltip, for example.
-    colour:
-        The colour to use when rendering this channel state or group.
-        This is a six-digit hex string describing an RGB colour (eg:
-        "ff00ff" for purple).
-"""
-MuxScanMetadata.Category.__doc__ = """A category that a channel mux can be assigned.
-
-Attributes:
-    name:
-        Name of the category.  This is the value that will be in the
-        `MuxScanResult.counts` field.  The user should not be shown
-        this. Instead, `style.label` should be displayed.
-    style:
-        How to render the category in a graphical user interface.
-    global_order:
-        An order ranking for the category when displaying them without
-        using groups.
-"""
-BreamInfo.Range.__doc__ = """Represents a range of values."""
-MuxScanMetadata.Style.__doc__ = """Presentation information for a category or group.
-
-Attributes:
-    label:
-        The human-readable name to display when rendering this
-        category or group.
-    description:
-        A sentence describing the meaning of the category or group.
-        This can be used as a tooltip, for example.
-    colour:
-        The colour to use when rendering this category or group.  This
-        is a six-digit hex string describing an RGB colour (eg:
-        "ff0000" for red).
-"""
-MuxScanMetadata.CategoryGroup.__doc__ = """Attributes:
-    name:
-        The name of the group.
-    style:
-        How to render the group in a graphical user interface.
-    category:
-        The categories contained in the group.  Within this group,
-        categories should be presented in the order of this list.
-"""
+  _globals['_MINKNOWSTATUS']._serialized_start=7173
+  _globals['_MINKNOWSTATUS']._serialized_end=7262
+  _globals['_OPTION']._serialized_start=7264
+  _globals['_OPTION']._serialized_end=7306
+  _globals['_PURPOSE']._serialized_start=7308
+  _globals['_PURPOSE']._serialized_end=7369
+  _globals['_ACQUISITIONSTATE']._serialized_start=7372
+  _globals['_ACQUISITIONSTATE']._serialized_end=7519
+  _globals['_ACQUISITIONSTOPREASON']._serialized_start=7522
+  _globals['_ACQUISITIONSTOPREASON']._serialized_end=7828
+  _globals['_STARTUPSTATE']._serialized_start=7831
+  _globals['_STARTUPSTATE']._serialized_end=8109
+  _globals['_FINISHINGSTATE']._serialized_start=8112
+  _globals['_FINISHINGSTATE']._serialized_end=8251
+  _globals['_STARTREQUEST']._serialized_start=194
+  _globals['_STARTREQUEST']._serialized_end=661
+  _globals['_STARTRESPONSE']._serialized_start=663
+  _globals['_STARTRESPONSE']._serialized_end=694
+  _globals['_STOPREQUEST']._serialized_start=697
+  _globals['_STOPREQUEST']._serialized_end=921
+  _globals['_STOPREQUEST_DATAACTION']._serialized_start=839
+  _globals['_STOPREQUEST_DATAACTION']._serialized_end=921
+  _globals['_STOPRESPONSE']._serialized_start=923
+  _globals['_STOPRESPONSE']._serialized_end=937
+  _globals['_WATCHFORSTATUSCHANGEREQUEST']._serialized_start=939
+  _globals['_WATCHFORSTATUSCHANGEREQUEST']._serialized_end=982
+  _globals['_WATCHFORSTATUSCHANGERESPONSE']._serialized_start=984
+  _globals['_WATCHFORSTATUSCHANGERESPONSE']._serialized_end=1070
+  _globals['_CURRENTSTATUSREQUEST']._serialized_start=1072
+  _globals['_CURRENTSTATUSREQUEST']._serialized_end=1094
+  _globals['_CURRENTSTATUSRESPONSE']._serialized_start=1096
+  _globals['_CURRENTSTATUSRESPONSE']._serialized_end=1175
+  _globals['_GETPROGRESSREQUEST']._serialized_start=1177
+  _globals['_GETPROGRESSREQUEST']._serialized_end=1197
+  _globals['_GETPROGRESSRESPONSE']._serialized_start=1200
+  _globals['_GETPROGRESSRESPONSE']._serialized_end=1360
+  _globals['_GETPROGRESSRESPONSE_RAWPERCHANNEL']._serialized_start=1308
+  _globals['_GETPROGRESSRESPONSE_RAWPERCHANNEL']._serialized_end=1360
+  _globals['_GETACQUISITIONRUNINFOREQUEST']._serialized_start=1362
+  _globals['_GETACQUISITIONRUNINFOREQUEST']._serialized_end=1408
+  _globals['_ACQUISITIONYIELDSUMMARY']._serialized_start=1411
+  _globals['_ACQUISITIONYIELDSUMMARY']._serialized_end=2510
+  _globals['_ACQUISITIONYIELDSUMMARY_TOTALSPERDUPLEXCATEGORY']._serialized_start=2391
+  _globals['_ACQUISITIONYIELDSUMMARY_TOTALSPERDUPLEXCATEGORY']._serialized_end=2510
+  _globals['_ACQUISITIONWRITERSUMMARY']._serialized_start=2513
+  _globals['_ACQUISITIONWRITERSUMMARY']._serialized_end=2663
+  _globals['_CHANNELSTATEINFO']._serialized_start=2666
+  _globals['_CHANNELSTATEINFO']._serialized_end=3098
+  _globals['_CHANNELSTATEINFO_STYLE']._serialized_start=2751
+  _globals['_CHANNELSTATEINFO_STYLE']._serialized_end=2810
+  _globals['_CHANNELSTATEINFO_CHANNELSTATE']._serialized_start=2812
+  _globals['_CHANNELSTATEINFO_CHANNELSTATE']._serialized_end=2938
+  _globals['_CHANNELSTATEINFO_GROUP']._serialized_start=2941
+  _globals['_CHANNELSTATEINFO_GROUP']._serialized_end=3098
+  _globals['_ACQUISITIONCONFIGSUMMARY']._serialized_start=3101
+  _globals['_ACQUISITIONCONFIGSUMMARY']._serialized_end=3960
+  _globals['_MUXSCANMETADATA']._serialized_start=3963
+  _globals['_MUXSCANMETADATA']._serialized_end=4433
+  _globals['_MUXSCANMETADATA_STYLE']._serialized_start=2751
+  _globals['_MUXSCANMETADATA_STYLE']._serialized_end=2810
+  _globals['_MUXSCANMETADATA_CATEGORY']._serialized_start=4160
+  _globals['_MUXSCANMETADATA_CATEGORY']._serialized_end=4269
+  _globals['_MUXSCANMETADATA_CATEGORYGROUP']._serialized_start=4272
+  _globals['_MUXSCANMETADATA_CATEGORYGROUP']._serialized_end=4433
+  _globals['_MUXSCANRESULT']._serialized_start=4436
+  _globals['_MUXSCANRESULT']._serialized_end=4594
+  _globals['_MUXSCANRESULT_COUNTSENTRY']._serialized_start=4549
+  _globals['_MUXSCANRESULT_COUNTSENTRY']._serialized_end=4594
+  _globals['_BREAMINFO']._serialized_start=4597
+  _globals['_BREAMINFO']._serialized_end=5000
+  _globals['_BREAMINFO_RANGE']._serialized_start=4959
+  _globals['_BREAMINFO_RANGE']._serialized_end=5000
+  _globals['_TARGETRUNUNTILCRITERIA']._serialized_start=5003
+  _globals['_TARGETRUNUNTILCRITERIA']._serialized_end=5152
+  _globals['_ACQUISITIONRUNINFO']._serialized_start=5155
+  _globals['_ACQUISITIONRUNINFO']._serialized_end=6174
+  _globals['_LISTACQUISITIONRUNSREQUEST']._serialized_start=6176
+  _globals['_LISTACQUISITIONRUNSREQUEST']._serialized_end=6204
+  _globals['_LISTACQUISITIONRUNSRESPONSE']._serialized_start=6206
+  _globals['_LISTACQUISITIONRUNSRESPONSE']._serialized_end=6252
+  _globals['_GETCURRENTACQUISITIONRUNREQUEST']._serialized_start=6254
+  _globals['_GETCURRENTACQUISITIONRUNREQUEST']._serialized_end=6287
+  _globals['_WATCHCURRENTACQUISITIONRUNREQUEST']._serialized_start=6289
+  _globals['_WATCHCURRENTACQUISITIONRUNREQUEST']._serialized_end=6324
+  _globals['_SETSIGNALREADERREQUEST']._serialized_start=6327
+  _globals['_SETSIGNALREADERREQUEST']._serialized_end=6696
+  _globals['_SETSIGNALREADERREQUEST_SIGNALREADERTYPE']._serialized_start=6577
+  _globals['_SETSIGNALREADERREQUEST_SIGNALREADERTYPE']._serialized_end=6635
+  _globals['_SETSIGNALREADERREQUEST_SOURCEFILEMODE']._serialized_start=6637
+  _globals['_SETSIGNALREADERREQUEST_SOURCEFILEMODE']._serialized_end=6696
+  _globals['_SETSIGNALREADERRESPONSE']._serialized_start=6698
+  _globals['_SETSIGNALREADERRESPONSE']._serialized_end=6723
+  _globals['_GETSIGNALREADERREQUEST']._serialized_start=6725
+  _globals['_GETSIGNALREADERREQUEST']._serialized_end=6749
+  _globals['_GETSIGNALREADERRESPONSE']._serialized_start=6752
+  _globals['_GETSIGNALREADERRESPONSE']._serialized_end=7011
+  _globals['_SETBREAMINFOREQUEST']._serialized_start=7013
+  _globals['_SETBREAMINFOREQUEST']._serialized_end=7116
+  _globals['_SETBREAMINFORESPONSE']._serialized_start=7118
+  _globals['_SETBREAMINFORESPONSE']._serialized_end=7140
+  _globals['_APPENDMUXSCANRESULTRESPONSE']._serialized_start=7142
+  _globals['_APPENDMUXSCANRESULTRESPONSE']._serialized_end=7171
+  _globals['_ACQUISITIONSERVICE']._serialized_start=8254
+  _globals['_ACQUISITIONSERVICE']._serialized_end=9871
 AcquisitionYieldSummary.__doc__ = """Attributes:
     read_count:
         Number of reads selected by analysis as good reads.  The reads
@@ -339,15 +227,280 @@ AcquisitionYieldSummary.__doc__ = """Attributes:
         bases, if "alignment_matches" is 2500, then
         "alignment_coverage" will be 0.5  Since 4.3
 """
+BreamInfo.Range.__doc__ = """Represents a range of values."""
+AcquisitionRunInfo.__doc__ = """Attributes:
+    run_id:
+        The unique identifier assigned to this acquisition run.  This
+        is guaranteed to be made of ASCII characters, and at most 40
+        characters. It is globally unique across all acquisitions on
+        all MinKNOW instances.
+    startup_state:
+        Current startup task (or STARTUP_UNKNOWN if not starting up).
+    startup_state_estimated_end:
+        Estimated time for current startup state to end.  In some
+        cases this field is left unset, to indicate no estimation.
+    startup_state_estimated_percent_complete:
+        Estimate startup state completion percent (0 - 1).  In some
+        cases this field is left at 0, indicating no estimation.
+    state:
+        Indicates the current state of the acquisition.
+    finishing_state:
+        If the experiment is finishing, an extra piece of state
+        describing the current finishing state.
+    finishing_state_percent_complete:
+        Progress through the current finishing state, ranges from 0 -
+        1.  This will increase from 0 -> 1 for each individual
+        finishing state, then reset.
+    stop_reason:
+        The reason the acquisition period was ended.
+    start_time:
+        When the acquisition period was started (UTC).
+    data_read_start_time:
+        When MinKNOW began acquiring data (UTC).  Unset if the
+        acquisition is still starting up.
+    data_read_end_time:
+        When the MinKNOW stopped acquiring data (UTC).  Unset if the
+        acquisition is still acquiring.
+    end_time:
+        When the acquisition terminated (UTC).  Unset if the
+        acquisition period is still running.
+    yield_summary:
+        Summary of acquisition yields.  Since 1.12
+    config_summary:
+        Summary of the configuration settings for a run.  Since 1.14
+    writer_summary:
+        Summary of writer yields.  Since 4.0
+    bream_info:
+        Set information provided by the Bream toolkit.
+    target_run_until_criteria:
+        Target Run-Until Criteria, used to determine when the
+        acquisition should be paused or stopped.  Since 5.3
+"""
+ChannelStateInfo.Group.__doc__ = """Attributes:
+    name:
+        The name of the group.
+    style:
+        How to render the group in a graphical user interface.  Note
+        that the style may be missing from some groups (such as the
+        ones that are built in to MinKNOW).
+    states:
+        The channel states contained in the group.  The groups are
+        ordered according to the "order" attribute of the channel
+        state style in the channel states configuration.
+"""
+MuxScanMetadata.__doc__ = """Provides information about how mux scans are configured.  This
+primarily information to help present mux scan results to the user
+(see `MuxScanResult`).
+
+Attributes:
+    auto_mux_scan_period_hours:
+        How frequently automatic scans are scheduled to occur.
+    category_groups:
+        Presentation information for categories.  Describes the
+        preferred way to present mux scan categories to users. Groups
+        should be presented in the order of this list.
+"""
+ChannelStateInfo.__doc__ = """Attributes:
+    groups:
+        The groups of channel states.  The groups are ordered
+        according to the "order" attribute of the group style in the
+        channel states configuration.
+"""
+GetProgressResponse.__doc__ = """Attributes:
+    raw_per_channel:
+        The amount of raw data (per channel) that has been acquired
+        and processed.
+"""
+AcquisitionWriterSummary.__doc__ = """Attributes:
+    bytes_to_write_produced:
+        Number of bytes which minknow needs to write in order to
+        finish the experiment.
+    bytes_to_write_failed:
+        Number of bytes which minknow has failed to write to final
+        location. These reads are instead contained in the
+        fallback/tmp locations.
+    bytes_to_write_completed:
+        Number of bytes which minknow has written to final location.
+"""
+GetSignalReaderResponse.__doc__ = """Attributes:
+    reader:
+        The type of signal reader to use
+    playback_source:
+        The following is only set if the signal reader is a playback
+        source.
+"""
+ChannelStateInfo.ChannelState.__doc__ = """Attributes:
+    id:
+        The numeric identifier of the state.  This is what is reported
+        in any other APIs that return a channel state ID.
+    name:
+        The internal name of the state.  This is what is reported in
+        any other APIs that return a channel state name.
+    style:
+        How to render the channel state in a graphical user interface.
+        Note that the style may be missing from some channel states
+        (such as the ones that are built in to MinKNOW).
+    global_order:
+        An order ranking for the channel states when they are
+        ungrouped.  This can be used to order the channel states after
+        merging the groups.
+"""
+MuxScanMetadata.Category.__doc__ = """A category that a channel mux can be assigned.
+
+Attributes:
+    name:
+        Name of the category.  This is the value that will be in the
+        `MuxScanResult.counts` field.  The user should not be shown
+        this. Instead, `style.label` should be displayed.
+    style:
+        How to render the category in a graphical user interface.
+    global_order:
+        An order ranking for the category when displaying them without
+        using groups.
+"""
+SetBreamInfoRequest.__doc__ = """Attributes:
+    info:
+        The information to set.  Note that, other than treating the
+        top-level fields independently (see the other flags on this
+        request), MinKNOW Core will not do anything special to the
+        data. In particular, the caller must fill in the
+        `mux_scan_timestamp` field in `MuxScanResult` messages.
+    overwrite_unset_fields:
+        If any `BreamInfo` fields were set in a previous call, but are
+        unset in the `info` field of this call, then use the old value
+        for them.  For example, to just update the mux_scan_metadata
+        field, use a BreamInfo object with only the
+        `mux_scan_metadata` field set, and leave this as False. To
+        clear the entire BreamInfo structure, leave `info` empty and
+        set this to True.
+"""
+ChannelStateInfo.Style.__doc__ = """Attributes:
+    label:
+        The human-readable name to display when rendering this channel
+        state or group.
+    description:
+        A sentence describing the meaning of the channel state or
+        group.  This can be used as a tooltip, for example.
+    colour:
+        The colour to use when rendering this channel state or group.
+        This is a six-digit hex string describing an RGB colour (eg:
+        "ff00ff" for purple).
+"""
+BreamInfo.__doc__ = """Information provided by Bream.  Note that this is provided by the
+protocol, and some protocols may choose not to provide this.
+
+Attributes:
+    mux_scan_metadata:
+        Presentation information for mux scan results.
+    mux_scan_results:
+        Mux scan results.
+    target_translocation_speed:
+        The ideal translocation speed range.  This can be used to
+        provide context for speed graphs (see the statistics RPCs),
+        showing what range is considered "good".
+    target_q_score:
+        The ideal quality (Q) score range.  This can be used to
+        provide context for q-score graphs (see the statistics RPCs),
+        showing what range is considered "good".
+    target_temperature:
+        The ideal temperature range.  This can be used to provide
+        context for temperature (see the statistics RPCs), showing
+        what range is considered "good".  Note that a protocol may
+        request a different temperature range than this (eg: it might
+        request a tighter range, or it may adjust the temperature it
+        is requesting throughout the run). This intended only to
+        provide context when presenting data to users.
+"""
+MuxScanMetadata.Style.__doc__ = """Presentation information for a category or group.
+
+Attributes:
+    label:
+        The human-readable name to display when rendering this
+        category or group.
+    description:
+        A sentence describing the meaning of the category or group.
+        This can be used as a tooltip, for example.
+    colour:
+        The colour to use when rendering this category or group.  This
+        is a six-digit hex string describing an RGB colour (eg:
+        "ff0000" for red).
+"""
 GetAcquisitionRunInfoRequest.__doc__ = """Attributes:
     run_id:
         The acquisition period to get information about.
 """
-StartResponse.__doc__ = """Attributes:
-    run_id:
-        Globally-unique identifier generated when the acquisition is
-        started.  This is guaranteed to unique, including aross
-        sequencing devices.
+AcquisitionYieldSummary.TotalsPerDuplexCategory.__doc__ = """Note: If duplex isn't enabled, all reads and basecalls will be classed
+as 'simplex' and the 'duplex' fields will be 0."""
+GetProgressResponse.RawPerChannel.__doc__ = """Attributes:
+    acquired:
+        Number of samples (per channel) acquired from the device.
+    processed:
+        Number of samples (per channel) passed to the analysis
+        pipeline for processing.  This can be compared to acquired to
+        see how far behind the analysis is lagging.
+"""
+AcquisitionConfigSummary.__doc__ = """This field has been removed Since 5.8
+
+Attributes:
+    purpose:
+        The purpose, as supplied to `acquisition.start()`
+    basecalling_enabled:
+        Was basecalling enabled for the run.
+    basecalling_config_filename:
+        Basecalling configuration filename (if basecalling enabled)
+    basecalling_model_names:
+        Specify the models to run by name (see
+        find_basecall_configurations in manager.proto)  Model names
+        should be taken from the `name` field of the above RPC
+        directly.  Since 6.3
+    basecalling_model_version:
+        Basecalling model version (empty if basecalling not enabled)
+        Since 6.0
+    duplex_enabled:
+        Was the experiment a duplex basecalling experiment (false if
+        basecalling is disabled)
+    barcoding_enabled:
+        Is barcoding enabled for the run
+    barcoding_kits:
+        / Barcoding kit(s) used (if barcoding enabled)
+    alignment_enabled:
+        Is alignment enabled for the run
+    alignment_reference_files:
+        Alignment reference file(s) used (if alignment enabled)
+    alignment_bed_file:
+        bed file used (if alignment enabled, and bed file specified)
+    lamp_enabled:
+        Is lamp enabled for the run  DEPRECATED 6.0: Lamp support has
+        been removed and this value will always be false.
+    lamp_kit:
+        The LAMP kit used (if LAMP enabled)  DEPRECATED 6.0: Lamp
+        support has been removed and this value will always be empty.
+    reads_directory:
+        Root directory reads were written to for the run.  Empty if no
+        reads were enabled.
+    reads_fallback_directories:
+        Directories reads are written to if the reads_directory is on
+        the network and writes to it fail.  Empty if no reads were
+        enabled.
+    fast5_reads_enabled:
+        Determine if fast5 reads were enabled for the run.
+    fastq_reads_enabled:
+        Determine if fastq reads were enabled for the run.
+    pod5_reads_enabled:
+        Determine if pod5 reads were enabled for the run.
+    bulk_file_path:
+        The path of the bulk file for the run.  Empty if no reads were
+        enabled.
+    bulk_file_enabled:
+        Find if the bulk writer was enabled for a run.
+    channel_state_info:
+        Channel state styling information
+    events_to_base_ratio:
+        Number of bases per event
+    sample_rate:
+        Sample rate for the acquisition.  Since 3.3
+    channel_count:
+        Channel count used in the acquisition.  Since 3.3
 """
 StartRequest.__doc__ = """ Protobuf messages for input/output of RPC calls
 
@@ -422,89 +575,27 @@ Attributes:
         Start request that will be used to trigger analysis, used to
         union over all the different types of analysis possible.
     proxy_request:
-        Since 5.8
+        Since 5.8  DEPRECATED: use 'analysis_workflow_request'
+    analysis_workflow_request:
+        Since 6.4
 """
-AcquisitionConfigSummary.__doc__ = """This field has been removed Since 5.8
+MuxScanResult.__doc__ = """A report of the states of channel muxes (wells) across the flow cell.
+Every channel mux (well) is assigned to a specific category describing
+its state (for example, is it expected to produce good results, and if
+not why not?). This is a report of how many channel muxes are in each
+category.
 
 Attributes:
-    purpose:
-        The purpose, as supplied to `acquisition.start()`
-    basecalling_enabled:
-        Was basecalling enabled for the run.
-    basecalling_config_filename:
-        Basecalling configuration filename (if basecalling enabled)
-    basecalling_model_version:
-        Basecalling model version (empty if basecalling not enabled)
-        Since 6.0
-    duplex_enabled:
-        Was the experiment a duplex basecalling experiment (false if
-        basecalling is disabled)
-    barcoding_enabled:
-        Is barcoding enabled for the run
-    barcoding_kits:
-        / Barcoding kit(s) used (if barcoding enabled)
-    alignment_enabled:
-        Is alignment enabled for the run
-    alignment_reference_files:
-        Alignment reference file(s) used (if alignment enabled)
-    alignment_bed_file:
-        bed file used (if alignment enabled, and bed file specified)
-    lamp_enabled:
-        Is lamp enabled for the run  DEPRECATED 6.0: Lamp support has
-        been removed and this value will always be false.
-    lamp_kit:
-        The LAMP kit used (if LAMP enabled)  DEPRECATED 6.0: Lamp
-        support has been removed and this value will always be empty.
-    reads_directory:
-        Root directory reads were written to for the run.  Empty if no
-        reads were enabled.
-    reads_fallback_directories:
-        Directories reads are written to if the reads_directory is on
-        the network and writes to it fail.  Empty if no reads were
-        enabled.
-    fast5_reads_enabled:
-        Determine if fast5 reads were enabled for the run.
-    fastq_reads_enabled:
-        Determine if fastq reads were enabled for the run.
-    pod5_reads_enabled:
-        Determine if pod5 reads were enabled for the run.
-    bulk_file_path:
-        The path of the bulk file for the run.  Empty if no reads were
-        enabled.
-    bulk_file_enabled:
-        Find if the bulk writer was enabled for a run.
-    channel_state_info:
-        Channel state styling information
-    events_to_base_ratio:
-        Number of bases per event
-    sample_rate:
-        Sample rate for the acquisition.  Since 3.3
-    channel_count:
-        Channel count used in the acquisition.  Since 3.3
+    counts:
+        How many channel muxes are in each category.  The sum of all
+        the values in this map should be the number of channels
+        multiplied by the number of muxes on each channel (eg:
+        512x4=2048 on a MinION Mk1B without a flongle adapter).  eg.
+        'sequencing': 1500
+    mux_scan_timestamp:
+        When this mux scan result was added (Seconds since the start
+        of the acquisition).
 """
-SetBreamInfoRequest.__doc__ = """Attributes:
-    info:
-        The information to set.  Note that, other than treating the
-        top-level fields independently (see the other flags on this
-        request), MinKNOW Core will not do anything special to the
-        data. In particular, the caller must fill in the
-        `mux_scan_timestamp` field in `MuxScanResult` messages.
-    overwrite_unset_fields:
-        If any `BreamInfo` fields were set in a previous call, but are
-        unset in the `info` field of this call, then use the old value
-        for them.  For example, to just update the mux_scan_metadata
-        field, use a BreamInfo object with only the
-        `mux_scan_metadata` field set, and leave this as False. To
-        clear the entire BreamInfo structure, leave `info` empty and
-        set this to True.
-"""
-GetProgressResponse.__doc__ = """Attributes:
-    raw_per_channel:
-        The amount of raw data (per channel) that has been acquired
-        and processed.
-"""
-AcquisitionYieldSummary.TotalsPerDuplexCategory.__doc__ = """Note: If duplex isn't enabled, all reads and basecalls will be classed
-as 'simplex' and the 'duplex' fields will be 0."""
 StopRequest.__doc__ = """Attributes:
     wait_until_ready:
         Defaults to false If false will return as soon as minknow
@@ -530,111 +621,28 @@ StopRequest.__doc__ = """Attributes:
         configuration options for further details.  This option has no
         effect on PromethIONs.  Since 1.15.2
 """
-GetProgressResponse.RawPerChannel.__doc__ = """Attributes:
-    acquired:
-        Number of samples (per channel) acquired from the device.
-    processed:
-        Number of samples (per channel) passed to the analysis
-        pipeline for processing.  This can be compared to acquired to
-        see how far behind the analysis is lagging.
+SetSignalReaderRequest.__doc__ = """Attributes:
+    reader:
+        The type of signal reader to use
+    hdf_source:
+        The following settings are optional, and only used when
+        setting the reader to hdf5
+    hdf_mode:
+         Defaults to UNSPECIFIED, since this setting is optional
 """
-ChannelStateInfo.Group.__doc__ = """Attributes:
+StartResponse.__doc__ = """Attributes:
+    run_id:
+        Globally-unique identifier generated when the acquisition is
+        started.  This is guaranteed to unique, including aross
+        sequencing devices.
+"""
+MuxScanMetadata.CategoryGroup.__doc__ = """Attributes:
     name:
         The name of the group.
     style:
-        How to render the group in a graphical user interface.  Note
-        that the style may be missing from some groups (such as the
-        ones that are built in to MinKNOW).
-    states:
-        The channel states contained in the group.  The groups are
-        ordered according to the "order" attribute of the channel
-        state style in the channel states configuration.
-"""
-AcquisitionWriterSummary.__doc__ = """Attributes:
-    bytes_to_write_produced:
-        Number of bytes which minknow needs to write in order to
-        finish the experiment.
-    bytes_to_write_failed:
-        Number of bytes which minknow has failed to write to final
-        location. These reads are instead contained in the
-        fallback/tmp locations.
-    bytes_to_write_completed:
-        Number of bytes which minknow has written to final location.
-"""
-ChannelStateInfo.ChannelState.__doc__ = """Attributes:
-    id:
-        The numeric identifier of the state.  This is what is reported
-        in any other APIs that return a channel state ID.
-    name:
-        The internal name of the state.  This is what is reported in
-        any other APIs that return a channel state name.
-    style:
-        How to render the channel state in a graphical user interface.
-        Note that the style may be missing from some channel states
-        (such as the ones that are built in to MinKNOW).
-    global_order:
-        An order ranking for the channel states when they are
-        ungrouped.  This can be used to order the channel states after
-        merging the groups.
-"""
-MuxScanMetadata.__doc__ = """Provides information about how mux scans are configured.  This
-primarily information to help present mux scan results to the user
-(see `MuxScanResult`).
-
-Attributes:
-    auto_mux_scan_period_hours:
-        How frequently automatic scans are scheduled to occur.
-    category_groups:
-        Presentation information for categories.  Describes the
-        preferred way to present mux scan categories to users. Groups
-        should be presented in the order of this list.
-"""
-AcquisitionRunInfo.__doc__ = """Attributes:
-    run_id:
-        The unique identifier assigned to this acquisition run.  This
-        is guaranteed to be made of ASCII characters, and at most 40
-        characters. It is globally unique across all acquisitions on
-        all MinKNOW instances.
-    startup_state:
-        Current startup task (or STARTUP_UNKNOWN if not starting up).
-    startup_state_estimated_end:
-        Estimated time for current startup state to end.  In some
-        cases this field is left unset, to indicate no estimation.
-    startup_state_estimated_percent_complete:
-        Estimate startup state completion percent (0 - 1).  In some
-        cases this field is left at 0, indicating no estimation.
-    state:
-        Indicates the current state of the acquisition.
-    finishing_state:
-        If the experiment is finishing, an extra piece of state
-        describing the current finishing state.
-    finishing_state_percent_complete:
-        Progress through the current finishing state, ranges from 0 -
-        1.  This will increase from 0 -> 1 for each individual
-        finishing state, then reset.
-    stop_reason:
-        The reason the acquisition period was ended.
-    start_time:
-        When the acquisition period was started (UTC).
-    data_read_start_time:
-        When MinKNOW began acquiring data (UTC).  Unset if the
-        acquisition is still starting up.
-    data_read_end_time:
-        When the MinKNOW stopped acquiring data (UTC).  Unset if the
-        acquisition is still acquiring.
-    end_time:
-        When the acquisition terminated (UTC).  Unset if the
-        acquisition period is still running.
-    yield_summary:
-        Summary of acquisition yields.  Since 1.12
-    config_summary:
-        Summary of the configuration settings for a run.  Since 1.14
-    writer_summary:
-        Summary of writer yields.  Since 4.0
-    bream_info:
-        Set information provided by the Bream toolkit.
-    target_run_until_criteria:
-        Target Run-Until Criteria, used to determine when the
-        acquisition should be paused or stopped.  Since 5.3
+        How to render the group in a graphical user interface.
+    category:
+        The categories contained in the group.  Within this group,
+        categories should be presented in the order of this list.
 """
 # @@protoc_insertion_point(module_scope)

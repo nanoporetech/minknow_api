@@ -2,6 +2,7 @@ syntax="proto3";
 
 package minknow_api.basecaller;
 
+option go_package ="github.com/nanoporetech/minknow_api/go/gen/basecaller";
 option java_package = "com.nanoporetech.minknow_api";
 option objc_class_prefix = "MKAPI";
 
@@ -171,8 +172,17 @@ message StartBasecallingRequest {
     // Reads will be sorted into subdirectories based on the sequencing run they came from.
     string output_reads_directory = 2;
 
-    // The name of the basecalling configuration to use.
-    string configuration = 3;
+    oneof basecall_model {
+        // The name of the basecalling configuration to use.
+        string configuration = 3;
+
+        // Specify the models to run by name (see find_basecall_configurations in manager.proto)
+        //
+        // Model names should be taken from the `name` field of the above RPC directly.
+        //
+        // Since 6.3
+        analysis_configuration.BasecallerConfiguration.ModelNames model_names = 16;
+    }
 
     // Enable output of .fast5 files containing original raw reads, event data/trace table from
     // basecall and basecall result sequence.
@@ -208,7 +218,7 @@ message StartBasecallingRequest {
     // Minimum Q-Score for a read to be passed by the basecaller.
     //
     // Since 6.1.
-    optional double min_qscore = 15;
+    double min_qscore = 15;
 
     // Enable read splitting in the basecaller
     //
@@ -220,6 +230,11 @@ message StartBasecallingRequest {
     //
     // Note: Since 5.9 this option has no effect, the basecaller is responsible for deciding when read splitting should be enabled.
     google.protobuf.FloatValue min_score_read_splitting = 14;
+
+    // Enable poly a tail estimation.
+    //
+    // Since 6.3
+    bool estimate_poly_a = 156;
 }
 
 message StartBasecallingResponse {
@@ -333,7 +348,12 @@ message StartRequest {
         basecaller.StartPostProcessingProtocolRequest start_post_processing_protocol_request = 5;
 
         // Since 5.8
+        //
+        // DEPRECATED: use 'analysis_workflow_request'
         analysis_workflows.ProxyRequest proxy_request = 6;
+
+        // Since 6.4
+        analysis_workflows.AnalysisWorkflowRequest analysis_workflow_request = 7;
     }
 }
 

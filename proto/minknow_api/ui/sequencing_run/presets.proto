@@ -1,0 +1,257 @@
+syntax="proto3";
+
+package minknow_api.ui.sequencing_run.presets;
+
+import "google/protobuf/timestamp.proto";
+
+service PresetsService {
+    // Store preset data. Input can contain a (protobuf) preset object or a (json) string
+    // preset. Will store the preset in persistent storage and return a unique preset id
+    rpc store_preset (StorePresetRequest) returns (StorePresetResponse) {}
+
+    // Delete a stored preset (limited to user presets). The given preset id will have its
+    // corresponding preset records erased fromd disc
+    rpc delete_preset (DeletePresetRequest) returns (DeletePresetResponse) {}
+
+    // Returns a preset.
+    // The input can reference a stored preset file via its preset id, or can provide a preset object with the purpose
+    // of converting the type of the preset into either a protobuf or string.
+    // The preset return type should be specified in the request.
+    rpc get_preset (GetPresetRequest) returns (GetPresetResponse) {}
+
+    // Lists all stored presets. Returns a valid subset of preset ids and meta data
+    rpc list_presets (ListPresetsRequest) returns (ListPresetsResponse) {}
+
+    // Check if a preset is valid. Validity is determined by if the preset can be successfully serialised into a Preset object.
+    // If given a preset id, then validity requires the corresponding preset file to be present and for the preset file itself to be a valid.
+    // If provided a preset string, then validity is determined.
+    // Finally, if a preset object is provided, then it is assumed valid.
+    //
+    // Returns preset meta data if it is valid, otherwise returns INVALID_ARGUMENT.
+    rpc check_preset (CheckPresetRequest) returns (CheckPresetResponse) {}
+
+    // Gets a start request. Given an preset id, object or string, returns a valid corresponding start request
+    rpc get_start_protocol (GetStartProtocolRequest) returns (GetStartProtocolResponse) {}
+}
+
+message PresetMeta {
+    // The preset name, not to be confused with the preset id (the file name, unique across both user and app dirs)
+    string preset_name = 1;
+
+    // Special authors, currently used to differentiate between ONT presets and user made presets
+    enum SpecialAuthor {
+        ONT = 0;
+    }
+    oneof author {
+        SpecialAuthor special_author = 2;
+        string author_name = 3;
+    }
+
+    // The kit used
+    repeated string kits = 4;
+
+    // The last time the preset was used in a protocol. Used to chronologically order the preset list.
+    google.protobuf.Timestamp last_used = 5;
+}
+
+message Preset {
+    enum RunLengthCondition {
+        DEFAULT_RUN_LENGTH_CONDITION = 0;
+        TIME = 1;
+        AVAILABLE_PORES = 2;
+    }
+
+    enum TargetDataCondition {
+        DEFAULT_TARGET_DATA_CONDITION = 0;
+        ESTIMATED_BASES = 1;
+        PASSED_BASECALLED_BASES = 2;
+    }
+
+    enum TargetDataUnit {
+        DEFAULT_TARGET_DATA_UNIT = 0;
+        GIGABASES = 1;
+        MEGABASES = 2;
+    }
+
+    RunLengthCondition run_length_condition = 1;
+
+    float run_length_hours = 2;
+
+    TargetDataCondition target_data_condition = 3;
+
+    uint64 target_data_value = 4;
+
+    TargetDataUnit target_data_unit = 5;
+
+    bool adaptive_sampling_enabled = 6;
+
+    bool enrich_deplete_adaptive_sampling_enabled = 7;
+
+    bool should_enrich_adaptive_sampling_ref = 8;
+
+    string enrich_deplete_adaptive_sampling_ref_file = 9;
+
+    string enrich_deplete_adaptive_sampling_bed_file = 10;
+
+    uint32 adaptive_sampling_channel_start = 11;
+
+    uint32 adaptive_sampling_channel_end = 12;
+
+    bool barcode_balancing_enabled = 13;
+
+    bool barcode_balancing_custom_barcodes = 14;
+
+    string barcode_balancing_barcode_selection = 15;
+
+    float mux_scan_period = 16;
+
+    bool reserved_pores = 17;
+
+    string simulated_playback_file_path = 18;
+
+    bool basecalling_enabled = 19;
+
+    bool modified_basecalling_enabled = 20;
+
+    bool duplex_basecalling_enabled = 21;
+
+    string basecall_model = 22;
+
+    string modified_basecalling_context = 23;
+
+    string duplex_basecalling_model = 24;
+
+    bool barcoding_enabled = 25;
+
+    bool trim_barcodes_enabled = 26;
+
+    bool require_barcodes_both_ends = 27;
+
+    bool has_custom_barcodes_selection = 28;
+
+    string custom_barcodes_selection = 29;
+
+    bool alignment_enabled = 30;
+
+    string alignment_ref_file = 31;
+
+    string alignment_bed_file = 32;
+
+    bool fastq_enabled = 33;
+
+    bool bam_enabled = 34;
+
+    bool fastq_data_compression = 35;
+
+    bool fast5_enabled = 36;
+
+    bool pod5_enabled = 37;
+
+    bool split_output_files_by_barcode = 38;
+
+    uint32 basecalled_output_period = 39;
+
+    bool bulk_file_enabled = 40;
+
+    bool bulk_file_events_enabled = 41;
+
+    bool bulk_file_read_table_enabled = 42;
+
+    bool bulk_file_raw_enabled = 43;
+
+    string bulk_file_events = 44;
+
+    string bulk_file_read_table = 45;
+
+    string bulk_file_raw = 46;
+
+    bool read_filtering_enabled = 47;
+
+    uint32 read_filtering_min_qscore = 48;
+
+    uint64 read_filtering_min_readlength = 49;
+
+    uint64 read_filtering_max_readlength = 50;
+
+    bool fail_unaligned_reads = 51;
+
+    PresetMeta preset_meta = 52;
+}
+
+message PresetType {
+    oneof data {
+        string preset_id = 1;
+        string preset_string = 2;
+        Preset preset_object = 3;
+    }
+}
+
+// Store preset Request
+//
+// Stores a preset with preset_id.
+//
+// If preset_id is left blank, then a random UUID is generated and used instead.
+// If the given preset_id already exists, then the request will fail with grpc code ALREADY_EXISTS.
+// However, if the overwrite parameter is set to true, then any existing preset is overwritten without error.
+message StorePresetRequest {
+    oneof data {
+        string preset_string = 1;
+        Preset preset_object = 2;
+    }
+
+    string preset_id = 3;
+    bool overwrite = 4;
+}
+
+message StorePresetResponse {
+    string preset_id = 1;
+}
+
+message DeletePresetRequest {
+    string preset_id = 1;
+}
+
+message DeletePresetResponse {
+}
+
+message ListPresetsRequest {
+}
+
+message ListPresetsResponse {
+    message PresetInfo {
+        string preset_id = 1;
+        PresetMeta preset_meta = 2;
+    }
+    repeated PresetInfo preset_info_list = 1;
+}
+
+message CheckPresetRequest {
+    PresetType preset_type = 1;
+}
+
+message CheckPresetResponse {
+    bool is_valid = 1;
+}
+
+message GetStartProtocolRequest {
+    PresetType preset_type = 1;
+}
+
+message GetStartProtocolResponse {
+}
+
+message GetPresetRequest {
+    enum ReturnType {
+        preset_object = 0;
+        preset_string = 1;
+    }
+    PresetType preset_type = 1;
+    ReturnType return_type = 2;
+}
+
+message GetPresetResponse {
+    // The preset_type should never resolve to preset id,
+    // But as this message is exclusively used as a return type
+    // There are no issues of the unused case.
+    PresetType preset_type = 1;
+}

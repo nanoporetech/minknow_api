@@ -180,6 +180,16 @@ class ManagerServiceStub(object):
                 request_serializer=minknow__api_dot_manager__pb2.CheckBedFileRequest.SerializeToString,
                 response_deserializer=minknow__api_dot_manager__pb2.CheckBedFileResponse.FromString,
                 )
+        self.find_basecall_configurations = channel.unary_unary(
+                '/minknow_api.manager.ManagerService/find_basecall_configurations',
+                request_serializer=minknow__api_dot_manager__pb2.FindBasecallConfigurationsRequest.SerializeToString,
+                response_deserializer=minknow__api_dot_manager__pb2.FindBasecallConfigurationsResponse.FromString,
+                )
+        self.check_path_info = channel.unary_unary(
+                '/minknow_api.manager.ManagerService/check_path_info',
+                request_serializer=minknow__api_dot_manager__pb2.CheckPathInfoRequest.SerializeToString,
+                response_deserializer=minknow__api_dot_manager__pb2.CheckPathInfoResponse.FromString,
+                )
 
 
 class ManagerServiceServicer(object):
@@ -595,6 +605,32 @@ class ManagerServiceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def find_basecall_configurations(self, request, context):
+        """Find basecall configurations that are available to be used.
+
+        Throws an error if there is no basecaller available
+
+        Since 6.3
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def check_path_info(self, request, context):
+        """Check file path info.
+
+        Return information about a file path specified by the caller.
+
+        If the path is not reachable (eg. a parent path cannot be listed) a `PERMISSION_DENIED` error is generated.
+        If the path is not absolute a `FAILED_PRECONDITION` error is generated.
+        If the path is non-existent, no info is returned for is_readable, is_writable or space fields.
+
+        Since 6.3
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_ManagerServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -762,6 +798,16 @@ def add_ManagerServiceServicer_to_server(servicer, server):
                     servicer.check_bed_file,
                     request_deserializer=minknow__api_dot_manager__pb2.CheckBedFileRequest.FromString,
                     response_serializer=minknow__api_dot_manager__pb2.CheckBedFileResponse.SerializeToString,
+            ),
+            'find_basecall_configurations': grpc.unary_unary_rpc_method_handler(
+                    servicer.find_basecall_configurations,
+                    request_deserializer=minknow__api_dot_manager__pb2.FindBasecallConfigurationsRequest.FromString,
+                    response_serializer=minknow__api_dot_manager__pb2.FindBasecallConfigurationsResponse.SerializeToString,
+            ),
+            'check_path_info': grpc.unary_unary_rpc_method_handler(
+                    servicer.check_path_info,
+                    request_deserializer=minknow__api_dot_manager__pb2.CheckPathInfoRequest.FromString,
+                    response_serializer=minknow__api_dot_manager__pb2.CheckPathInfoResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -1331,5 +1377,39 @@ class ManagerService(object):
         return grpc.experimental.unary_unary(request, target, '/minknow_api.manager.ManagerService/check_bed_file',
             minknow__api_dot_manager__pb2.CheckBedFileRequest.SerializeToString,
             minknow__api_dot_manager__pb2.CheckBedFileResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def find_basecall_configurations(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/minknow_api.manager.ManagerService/find_basecall_configurations',
+            minknow__api_dot_manager__pb2.FindBasecallConfigurationsRequest.SerializeToString,
+            minknow__api_dot_manager__pb2.FindBasecallConfigurationsResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def check_path_info(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/minknow_api.manager.ManagerService/check_path_info',
+            minknow__api_dot_manager__pb2.CheckPathInfoRequest.SerializeToString,
+            minknow__api_dot_manager__pb2.CheckPathInfoResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

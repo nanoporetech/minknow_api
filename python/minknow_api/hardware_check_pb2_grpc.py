@@ -66,8 +66,10 @@ class HardwareCheckServiceServicer(object):
         raise NotImplementedError('Method not implemented!')
 
     def stream_hardware_check_results(self, request, context):
-        """Lists all hardware checks.
+        """Lists all hardware checks
+
         Stream remains open whilst subscribed and any additionally started hardware checks are added to the list.
+
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')

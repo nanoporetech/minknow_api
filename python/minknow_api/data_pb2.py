@@ -14,19 +14,19 @@ _sym_db = _symbol_database.Default()
 
 from minknow_api import rpc_options_pb2 as minknow__api_dot_rpc__options__pb2
 from minknow_api import device_pb2 as minknow__api_dot_device__pb2
-from minknow_api import statistics_pb2 as minknow__api_dot_statistics__pb2
+from minknow_api import read_end_reason_pb2 as minknow__api_dot_read__end__reason__pb2
 from google.protobuf import duration_pb2 as google_dot_protobuf_dot_duration__pb2
 from google.protobuf import wrappers_pb2 as google_dot_protobuf_dot_wrappers__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x16minknow_api/data.proto\x12\x10minknow_api.data\x1a\x1dminknow_api/rpc_options.proto\x1a\x18minknow_api/device.proto\x1a\x1cminknow_api/statistics.proto\x1a\x1egoogle/protobuf/duration.proto\x1a\x1egoogle/protobuf/wrappers.proto\"\xd9\x01\n\x17GetChannelStatesRequest\x12\x1b\n\rfirst_channel\x18\x01 \x01(\rB\x04\x88\xb5\x18\x01\x12\x1a\n\x0clast_channel\x18\x02 \x01(\rB\x04\x88\xb5\x18\x01\x12:\n\x16use_channel_states_ids\x18\x03 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12\x1b\n\x13wait_for_processing\x18\x04 \x01(\x08\x12,\n\theartbeat\x18\x05 \x01(\x0b\x32\x19.google.protobuf.Duration\"\xdb\x02\n\x18GetChannelStatesResponse\x12S\n\x0e\x63hannel_states\x18\x01 \x03(\x0b\x32;.minknow_api.data.GetChannelStatesResponse.ChannelStateData\x1a\xe9\x01\n\x10\x43hannelStateData\x12\x0f\n\x07\x63hannel\x18\x01 \x01(\r\x12\x12\n\x08state_id\x18\x02 \x01(\rH\x00\x12\x14\n\nstate_name\x18\x03 \x01(\tH\x00\x12\x1d\n\x15\x61\x63quisition_raw_index\x18\x04 \x01(\x04\x12\x1a\n\x12\x61nalysis_raw_index\x18\x05 \x01(\x04\x12\x14\n\x0ctrigger_time\x18\x07 \x01(\x04\x12@\n\x06\x63onfig\x18\x06 \x01(\x0b\x32\x30.minknow_api.device.ReturnedChannelConfigurationB\x07\n\x05state\"\x15\n\x13GetDataTypesRequest\"\xb1\x03\n\x14GetDataTypesResponse\x12L\n\x13uncalibrated_signal\x18\x01 \x01(\x0b\x32/.minknow_api.data.GetDataTypesResponse.DataType\x12J\n\x11\x63\x61librated_signal\x18\x02 \x01(\x0b\x32/.minknow_api.data.GetDataTypesResponse.DataType\x12\x46\n\rbias_voltages\x18\x03 \x01(\x0b\x32/.minknow_api.data.GetDataTypesResponse.DataType\x1a\xb6\x01\n\x08\x44\x61taType\x12\x42\n\x04type\x18\x01 \x01(\x0e\x32\x34.minknow_api.data.GetDataTypesResponse.DataType.Type\x12\x12\n\nbig_endian\x18\x02 \x01(\x08\x12\x0c\n\x04size\x18\x03 \x01(\r\"D\n\x04Type\x12\x12\n\x0eSIGNED_INTEGER\x10\x00\x12\x14\n\x10UNSIGNED_INTEGER\x10\x01\x12\x12\n\x0e\x46LOATING_POINT\x10\x02\"\xf8\x01\n\x15GetSignalBytesRequest\x12\x11\n\x07seconds\x18\x01 \x01(\x02H\x00\x12\x11\n\x07samples\x18\x02 \x01(\rH\x00\x12\x1b\n\rfirst_channel\x18\x03 \x01(\rB\x04\x88\xb5\x18\x01\x12\x1a\n\x0clast_channel\x18\x04 \x01(\rB\x04\x88\xb5\x18\x01\x12\x1f\n\x17include_channel_configs\x18\x05 \x01(\x08\x12\x1d\n\x15include_bias_voltages\x18\x06 \x01(\x08\x12\x17\n\x0f\x63\x61librated_data\x18\x07 \x01(\x08\x12\x1d\n\x15return_when_listening\x18\x08 \x01(\x08\x42\x08\n\x06length\"\xa7\x03\n\x16GetSignalBytesResponse\x12\x1b\n\x13samples_since_start\x18\x01 \x01(\x04\x12\x1b\n\x13seconds_since_start\x18\x02 \x01(\x01\x12\x18\n\x10skipped_channels\x18\x03 \x01(\r\x12\x46\n\x08\x63hannels\x18\x04 \x03(\x0b\x32\x34.minknow_api.data.GetSignalBytesResponse.ChannelData\x12\x15\n\rbias_voltages\x18\x05 \x01(\x0c\x1ag\n\x13\x43hannelConfigChange\x12@\n\x06\x63onfig\x18\x01 \x01(\x0b\x32\x30.minknow_api.device.ReturnedChannelConfiguration\x12\x0e\n\x06offset\x18\x02 \x01(\x04\x1aq\n\x0b\x43hannelData\x12\x0c\n\x04\x64\x61ta\x18\x01 \x01(\x0c\x12T\n\x0e\x63onfig_changes\x18\x03 \x03(\x0b\x32<.minknow_api.data.GetSignalBytesResponse.ChannelConfigChange\"\x85\x01\n\x16GetSignalMinMaxRequest\x12\x1b\n\rfirst_channel\x18\x03 \x01(\rB\x04\x88\xb5\x18\x01\x12\x1a\n\x0clast_channel\x18\x04 \x01(\rB\x04\x88\xb5\x18\x01\x12\x19\n\x0bwindow_size\x18\x05 \x01(\rB\x04\x88\xb5\x18\x01\x12\x17\n\x0f\x63\x61librated_data\x18\x07 \x01(\x08\"\xa3\x02\n\x17GetSignalMinMaxResponse\x12\x1b\n\x13samples_since_start\x18\x01 \x01(\x04\x12\x1b\n\x13seconds_since_start\x18\x02 \x01(\x01\x12\x18\n\x10skipped_channels\x18\x03 \x01(\r\x12G\n\x08\x63hannels\x18\x04 \x03(\x0b\x32\x35.minknow_api.data.GetSignalMinMaxResponse.ChannelData\x1ak\n\x0b\x43hannelData\x12\x19\n\x11\x63\x61librated_minima\x18\x01 \x03(\x02\x12\x12\n\nraw_minima\x18\x02 \x03(\x05\x12\x19\n\x11\x63\x61librated_maxima\x18\x03 \x03(\x02\x12\x12\n\nraw_maxima\x18\x04 \x03(\x05\"\xaa\x07\n\x13GetLiveReadsRequest\x12\x42\n\x05setup\x18\x01 \x01(\x0b\x32\x31.minknow_api.data.GetLiveReadsRequest.StreamSetupH\x00\x12@\n\x07\x61\x63tions\x18\x02 \x01(\x0b\x32-.minknow_api.data.GetLiveReadsRequest.ActionsH\x00\x1a!\n\rUnblockAction\x12\x10\n\x08\x64uration\x18\x01 \x01(\x01\x1a\x11\n\x0fStopFurtherData\x1a\xee\x01\n\x06\x41\x63tion\x12\x11\n\taction_id\x18\x01 \x01(\t\x12\x0f\n\x07\x63hannel\x18\x02 \x01(\r\x12\x0c\n\x02id\x18\x03 \x01(\tH\x00\x12\x46\n\x07unblock\x18\x05 \x01(\x0b\x32\x33.minknow_api.data.GetLiveReadsRequest.UnblockActionH\x01\x12R\n\x11stop_further_data\x18\x06 \x01(\x0b\x32\x35.minknow_api.data.GetLiveReadsRequest.StopFurtherDataH\x01\x42\x06\n\x04readB\x08\n\x06\x61\x63tionJ\x04\x08\x04\x10\x05\x1a\xc6\x02\n\x0bStreamSetup\x12\x15\n\rfirst_channel\x18\x01 \x01(\r\x12\x14\n\x0clast_channel\x18\x02 \x01(\r\x12H\n\rraw_data_type\x18\x03 \x01(\x0e\x32\x31.minknow_api.data.GetLiveReadsRequest.RawDataType\x12!\n\x19sample_minimum_chunk_size\x18\x04 \x01(\x04\x12)\n\x1fmax_unblock_read_length_samples\x18\x05 \x01(\x04H\x00\x12)\n\x1fmax_unblock_read_length_seconds\x18\x06 \x01(\x01H\x00\x12,\n$accepted_first_chunk_classifications\x18\x07 \x03(\x05\x42\x19\n\x17max_unblock_read_length\x1aH\n\x07\x41\x63tions\x12=\n\x07\x61\x63tions\x18\x02 \x03(\x0b\x32,.minknow_api.data.GetLiveReadsRequest.Action\"H\n\x0bRawDataType\x12\r\n\tKEEP_LAST\x10\x00\x12\x08\n\x04NONE\x10\x01\x12\x0e\n\nCALIBRATED\x10\x02\x12\x10\n\x0cUNCALIBRATED\x10\x03\x42\t\n\x07request\"\xbe\x06\n\x14GetLiveReadsResponse\x12\x1b\n\x13samples_since_start\x18\x01 \x01(\x04\x12\x1b\n\x13seconds_since_start\x18\x02 \x01(\x01\x12\x46\n\x08\x63hannels\x18\x04 \x03(\x0b\x32\x34.minknow_api.data.GetLiveReadsResponse.ChannelsEntry\x12O\n\x10\x61\x63tion_responses\x18\x05 \x03(\x0b\x32\x35.minknow_api.data.GetLiveReadsResponse.ActionResponse\x1a\xab\x02\n\x08ReadData\x12\n\n\x02id\x18\x01 \x01(\t\x12\x14\n\x0cstart_sample\x18\x03 \x01(\x04\x12\x1a\n\x12\x63hunk_start_sample\x18\x04 \x01(\x04\x12\x14\n\x0c\x63hunk_length\x18\x05 \x01(\x04\x12\x1d\n\x15\x63hunk_classifications\x18\x06 \x03(\x05\x12\x10\n\x08raw_data\x18\x07 \x01(\x0c\x12\x15\n\rmedian_before\x18\x08 \x01(\x02\x12\x0e\n\x06median\x18\t \x01(\x02\x12$\n\x1cprevious_read_classification\x18\n \x01(\x05\x12G\n\x18previous_read_end_reason\x18\x0b \x01(\x0e\x32%.minknow_api.statistics.ReadEndReasonJ\x04\x08\x02\x10\x03\x1a\xc2\x01\n\x0e\x41\x63tionResponse\x12\x11\n\taction_id\x18\x01 \x01(\t\x12P\n\x08response\x18\x02 \x01(\x0e\x32>.minknow_api.data.GetLiveReadsResponse.ActionResponse.Response\"K\n\x08Response\x12\x0b\n\x07SUCCESS\x10\x00\x12\x18\n\x14\x46\x41ILED_READ_FINISHED\x10\x01\x12\x18\n\x14\x46\x41ILED_READ_TOO_LONG\x10\x02\x1a`\n\rChannelsEntry\x12\x0b\n\x03key\x18\x01 \x01(\r\x12>\n\x05value\x18\x02 \x01(\x0b\x32/.minknow_api.data.GetLiveReadsResponse.ReadData:\x02\x38\x01\"\x1b\n\x19ResetChannelStatesRequest\"\x1c\n\x1aResetChannelStatesResponse\"\xf0\x01\n(RecordAdaptiveSamplingInformationRequest\x12Y\n\tobjective\x18\x01 \x01(\x0e\x32\x44.minknow_api.data.RecordAdaptiveSamplingInformationRequest.ObjectiveH\x00\x12\x14\n\nend_reason\x18\x02 \x01(\tH\x00\"D\n\tObjective\x12\t\n\x05OTHER\x10\x00\x12\x13\n\x0f\x42\x41RCODE_BALANCE\x10\x01\x12\n\n\x06\x45NRICH\x10\x02\x12\x0b\n\x07\x44\x45PLETE\x10\x03\x42\r\n\x0binformation\"+\n)RecordAdaptiveSamplingInformationResponse\"\xb8\x02\n\x18GetReadStatisticsRequest\x12\x10\n\x08\x63hannels\x18\x01 \x03(\r\x12\x11\n\x07seconds\x18\x02 \x01(\x02H\x00\x12\x11\n\x07samples\x18\x03 \x01(\x04H\x00\x12N\n\nread_split\x18\x04 \x01(\x0e\x32\x34.minknow_api.data.GetReadStatisticsRequest.ReadSplitB\x04\x88\xb5\x18\x01\x12\x1d\n\x15no_current_statistics\x18\x05 \x01(\x08\x12\x1b\n\x13no_chunk_statistics\x18\x06 \x01(\x08\x12 \n\x18required_classifications\x18\x07 \x03(\t\"*\n\tReadSplit\x12\t\n\x05\x43HUNK\x10\x00\x12\x12\n\x0e\x43OMPLETED_READ\x10\x01\x42\n\n\x08\x64uration\"\xe4\n\n\x19GetReadStatisticsResponse\x12L\n\x08\x63hannels\x18\x01 \x03(\x0b\x32:.minknow_api.data.GetReadStatisticsResponse.PerChannelData\x12\x1b\n\x13samples_since_start\x18\x02 \x01(\x04\x12\x1b\n\x13seconds_since_start\x18\x03 \x01(\x01\x1a\xa4\x01\n\nStatistics\x12\x0b\n\x03min\x18\x01 \x01(\x01\x12\x0b\n\x03max\x18\x02 \x01(\x01\x12\x0c\n\x04mean\x18\x03 \x01(\x01\x12\x0b\n\x03s_d\x18\x04 \x01(\x01\x12\x0e\n\x06median\x18\x06 \x01(\x01\x12\x0b\n\x03q_5\x18\x07 \x01(\x01\x12\x0c\n\x04q_10\x18\x08 \x01(\x01\x12\x0c\n\x04q_25\x18\t \x01(\x01\x12\x0c\n\x04q_75\x18\n \x01(\x01\x12\x0c\n\x04q_90\x18\x0b \x01(\x01\x12\x0c\n\x04q_95\x18\x0c \x01(\x01\x1a\x43\n\x0f\x43hunkStatistics\x12\x11\n\tmedian_sd\x18\x01 \x01(\x01\x12\x0e\n\x06median\x18\x02 \x01(\x01\x12\r\n\x05range\x18\x03 \x01(\x01\x1a\xcb\x02\n\x15PerClassificationData\x12S\n\x13\x64uration_statistics\x18\x01 \x01(\x0b\x32\x36.minknow_api.data.GetReadStatisticsResponse.Statistics\x12R\n\x12\x63urrent_statistics\x18\x02 \x01(\x0b\x32\x36.minknow_api.data.GetReadStatisticsResponse.Statistics\x12U\n\x10\x63hunk_statistics\x18\x06 \x01(\x0b\x32;.minknow_api.data.GetReadStatisticsResponse.ChunkStatistics\x12\x18\n\x10samples_duration\x18\x04 \x01(\x04\x12\x18\n\x10seconds_duration\x18\x05 \x01(\x01\x1a\xa9\x03\n\x14PerConfigurationData\x12O\n\x15\x63hannel_configuration\x18\x01 \x01(\x0b\x32\x30.minknow_api.device.ReturnedChannelConfiguration\x12n\n\x0f\x63lassifications\x18\x02 \x03(\x0b\x32U.minknow_api.data.GetReadStatisticsResponse.PerConfigurationData.ClassificationsEntry\x12U\n\nincomplete\x18\x03 \x01(\x0b\x32\x41.minknow_api.data.GetReadStatisticsResponse.PerClassificationData\x1ay\n\x14\x43lassificationsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12P\n\x05value\x18\x02 \x01(\x0b\x32\x41.minknow_api.data.GetReadStatisticsResponse.PerClassificationData:\x02\x38\x01\x1a\xd8\x01\n\x0ePerChannelData\x12X\n\x0e\x63onfigurations\x18\x06 \x03(\x0b\x32@.minknow_api.data.GetReadStatisticsResponse.PerConfigurationData\x12\x1b\n\x13samples_since_start\x18\x02 \x01(\x04\x12\x1b\n\x13seconds_since_start\x18\x03 \x01(\x01\x12\x18\n\x10samples_duration\x18\x04 \x01(\x04\x12\x18\n\x10seconds_duration\x18\x05 \x01(\x01\"L\n\x18LockChannelStatesRequest\x12\x16\n\x08\x63hannels\x18\x01 \x03(\x04\x42\x04\x88\xb5\x18\x01\x12\x18\n\nstate_name\x18\x02 \x01(\tB\x04\x88\xb5\x18\x01\"\x1b\n\x19LockChannelStatesResponse\"4\n\x1aUnlockChannelStatesRequest\x12\x16\n\x08\x63hannels\x18\x01 \x03(\x04\x42\x04\x88\xb5\x18\x01\"\x1d\n\x1bUnlockChannelStatesResponse\"\x1f\n\x1dGetExperimentYieldInfoRequest\"\x84\x1c\n\x1eGetExperimentYieldInfoResponse\x12]\n\x12\x63omplete_read_info\x18\x01 \x01(\x0b\x32\x41.minknow_api.data.GetExperimentYieldInfoResponse.CompleteReadInfo\x12Z\n\x10\x61\x63quisition_info\x18\x02 \x01(\x0b\x32@.minknow_api.data.GetExperimentYieldInfoResponse.AcquisitionInfo\x12T\n\ranalyser_info\x18\x03 \x01(\x0b\x32=.minknow_api.data.GetExperimentYieldInfoResponse.AnalyserInfo\x12L\n\tbulk_info\x18\x04 \x01(\x0b\x32\x39.minknow_api.data.GetExperimentYieldInfoResponse.BulkInfo\x12W\n\x0fhdf_writer_info\x18\x05 \x01(\x0b\x32>.minknow_api.data.GetExperimentYieldInfoResponse.HdfWriterInfo\x12\x62\n\x15\x62\x61secaller_statistics\x18\x06 \x01(\x0b\x32\x43.minknow_api.data.GetExperimentYieldInfoResponse.BasecallStatistics\x12z\n\"hdf_multi_read_writing_statisitics\x18\x07 \x01(\x0b\x32N.minknow_api.data.GetExperimentYieldInfoResponse.HdfMultiReadWritingStatistics\x12r\n\x1d\x66\x61stq_read_writing_statistics\x18\x08 \x01(\x0b\x32K.minknow_api.data.GetExperimentYieldInfoResponse.FastqReadWritingStatistics\x12x\n protobuf_read_writing_statistics\x18\t \x01(\x0b\x32N.minknow_api.data.GetExperimentYieldInfoResponse.ProtobufReadWritingStatistics\x12r\n\x1d\x66ile_operation_queue_progress\x18\n \x01(\x0b\x32K.minknow_api.data.GetExperimentYieldInfoResponse.FileOperationQueueProgress\x1a\xa8\x04\n\x10\x43ompleteReadInfo\x12\x16\n\x0epending_chunks\x18\x01 \x01(\x04\x12\x1c\n\x14pending_memory_reads\x18\x02 \x01(\x04\x12\x1a\n\x12pending_disk_reads\x18\x0f \x01(\x04\x12 \n\x18pending_multi_disk_reads\x18\x03 \x01(\x04\x12\x1d\n\x15pending_skipped_reads\x18\x04 \x01(\x04\x12#\n\x1bpending_force_skipped_reads\x18\x05 \x01(\x04\x12\x1e\n\x16processed_memory_reads\x18\x06 \x01(\x04\x12\x1c\n\x14processed_disk_reads\x18\x07 \x01(\x04\x12\x1f\n\x17processed_skipped_reads\x18\x08 \x01(\x04\x12%\n\x1dprocessed_force_skipped_reads\x18\t \x01(\x04\x12!\n\x19stored_reads_bytes_memory\x18\n \x01(\x04\x12+\n#stored_read_supporting_bytes_memory\x18\x10 \x01(\x04\x12\x1f\n\x17stored_reads_bytes_disk\x18\x0b \x01(\x04\x12\x1d\n\x15\x64iscarded_error_bytes\x18\x0c \x01(\x04\x12 \n\x18\x63hannels_writing_to_disk\x18\r \x01(\x04\x12$\n\x1c\x63hannels_writing_to_disk_tmp\x18\x0e \x01(\x04\x1aI\n\x0f\x41\x63quisitionInfo\x12\x17\n\x0fraw_per_channel\x18\x01 \x01(\x04\x12\x1d\n\x15\x66rame_discontinuities\x18\x02 \x01(\x04\x1a\xe5\x01\n\x0c\x41nalyserInfo\x12\x17\n\x0fraw_per_channel\x18\x01 \x01(\x04\x12\x1a\n\x12total_selected_raw\x18\x02 \x01(\x04\x12\x1d\n\x15total_selected_events\x18\x03 \x01(\x04\x12\x14\n\x0ctotal_events\x18\x04 \x01(\x04\x12\x19\n\x11total_read_chunks\x18\x05 \x01(\x04\x12&\n\x1e\x63ompleted_selected_reads_count\x18\x06 \x01(\x04\x12(\n completed_unselected_reads_count\x18\x07 \x01(\x04\x1a\x33\n\x08\x42ulkInfo\x12\x11\n\ttotal_raw\x18\x01 \x01(\x04\x12\x14\n\x0ctotal_events\x18\x02 \x01(\x04\x1a\xa0\x01\n\rHdfWriterInfo\x12\x1c\n\x14pending_compressions\x18\x01 \x01(\x04\x12\x16\n\x0epending_writes\x18\x02 \x01(\x04\x12\x19\n\x11pending_hdf_tasks\x18\x03 \x01(\x04\x12\x18\n\x10\x63ompleted_writes\x18\x04 \x01(\x04\x12$\n\x1c\x64\x61taset_bytes_data_in_flight\x18\x05 \x01(\x04\x1a\xd9\x02\n\x12\x42\x61secallStatistics\x12\x19\n\x11reads_in_progress\x18\x01 \x01(\x04\x12\x17\n\x0freads_processed\x18\x02 \x01(\x04\x12\x15\n\rreads_skipped\x18\x03 \x01(\x04\x12\x1b\n\x13reads_force_skipped\x18\x04 \x01(\x04\x12%\n\x1dreads_failed_calling_filtered\x18\x05 \x01(\x04\x12\x1c\n\x14reads_failed_calling\x18\x06 \x01(\x04\x12\x14\n\x0creads_called\x18\x07 \x01(\x04\x12\x16\n\x0esamples_called\x18\x08 \x01(\x04\x12\x17\n\x0fsamples_skipped\x18\t \x01(\x04\x12\x1b\n\x13\x62\x61ses_passed_called\x18\n \x01(\x04\x12\x1b\n\x13\x62\x61ses_failed_called\x18\x0c \x01(\x04\x12\x15\n\revents_called\x18\x0b \x01(\x04\x1a\xf6\x01\n\x1dHdfMultiReadWritingStatistics\x12\x15\n\rreads_written\x18\x01 \x01(\x04\x12\x1c\n\x14passed_reads_written\x18\x02 \x01(\x04\x12\x1c\n\x14\x66\x61iled_reads_written\x18\x03 \x01(\x04\x12#\n\x1b\x66orce_skipped_reads_written\x18\x04 \x01(\x04\x12\x19\n\x11raw_bytes_written\x18\x05 \x01(\x04\x12\x1b\n\x13\x66\x61stq_bytes_written\x18\x06 \x01(\x04\x12%\n\x1d\x62\x61secall_events_bytes_written\x18\x07 \x01(\x04\x1a\xa7\x01\n\x1a\x46\x61stqReadWritingStatistics\x12\x1c\n\x14passed_reads_written\x18\x01 \x01(\x04\x12\x15\n\rskipped_reads\x18\x02 \x01(\x04\x12\x16\n\x0e\x66orced_skipped\x18\x03 \x01(\x04\x12\x1c\n\x14\x66\x61iled_reads_written\x18\x04 \x01(\x04\x12\x1e\n\x16\x66\x61iled_reads_discarded\x18\x05 \x01(\x04\x1a\x8b\x01\n\x1dProtobufReadWritingStatistics\x12\x1b\n\x13read_chunks_written\x18\x01 \x01(\x04\x12\x1d\n\x15read_chunks_discarded\x18\x02 \x01(\x04\x12\x15\n\rreads_written\x18\x03 \x01(\x04\x12\x17\n\x0freads_discarded\x18\x04 \x01(\x04\x1a\xa4\x04\n\x1a\x46ileOperationQueueProgress\x12\x1a\n\x12pending_operations\x18\x01 \x01(\x04\x12&\n\x1e\x63omplete_successful_operations\x18\x02 \x01(\x04\x12\"\n\x1a\x63omplete_failed_operations\x18\x03 \x01(\x04\x12\x1c\n\x14\x62ytes_to_move_posted\x18\x04 \x01(\x04\x12\x1c\n\x14\x62ytes_to_move_failed\x18\x05 \x01(\x04\x12\x1f\n\x17\x62ytes_to_move_completed\x18\x06 \x01(\x04\x12g\n\x05\x66\x61st5\x18\x07 \x01(\x0b\x32X.minknow_api.data.GetExperimentYieldInfoResponse.FileOperationQueueProgress.FileTypeInfo\x12g\n\x05\x66\x61stq\x18\x08 \x01(\x0b\x32X.minknow_api.data.GetExperimentYieldInfoResponse.FileOperationQueueProgress.FileTypeInfo\x1ao\n\x0c\x46ileTypeInfo\x12 \n\x18\x66iles_moved_successfully\x18\x01 \x01(\x04\x12\x1f\n\x17\x66iles_moved_to_fallback\x18\x02 \x01(\x04\x12\x1c\n\x14\x66iles_failed_to_move\x18\x03 \x01(\x04\x32\xb2\n\n\x0b\x44\x61taService\x12r\n\x12get_channel_states\x12).minknow_api.data.GetChannelStatesRequest\x1a*.minknow_api.data.GetChannelStatesResponse\"\x03\x90\x02\x01\x30\x01\x12\x64\n\x0eget_data_types\x12%.minknow_api.data.GetDataTypesRequest\x1a&.minknow_api.data.GetDataTypesResponse\"\x03\x90\x02\x01\x12l\n\x10get_signal_bytes\x12\'.minknow_api.data.GetSignalBytesRequest\x1a(.minknow_api.data.GetSignalBytesResponse\"\x03\x90\x02\x01\x30\x01\x12p\n\x12get_signal_min_max\x12(.minknow_api.data.GetSignalMinMaxRequest\x1a).minknow_api.data.GetSignalMinMaxResponse\"\x03\x90\x02\x01\x30\x01\x12s\n\x14reset_channel_states\x12+.minknow_api.data.ResetChannelStatesRequest\x1a,.minknow_api.data.ResetChannelStatesResponse\"\x00\x12p\n\x13lock_channel_states\x12*.minknow_api.data.LockChannelStatesRequest\x1a+.minknow_api.data.LockChannelStatesResponse\"\x00\x12v\n\x15unlock_channel_states\x12,.minknow_api.data.UnlockChannelStatesRequest\x1a-.minknow_api.data.UnlockChannelStatesResponse\"\x00\x12h\n\x0eget_live_reads\x12%.minknow_api.data.GetLiveReadsRequest\x1a&.minknow_api.data.GetLiveReadsResponse\"\x03\x90\x02\x01(\x01\x30\x01\x12\xa4\x01\n$record_adaptive_sampling_information\x12:.minknow_api.data.RecordAdaptiveSamplingInformationRequest\x1a;.minknow_api.data.RecordAdaptiveSamplingInformationResponse\"\x03\x90\x02\x02\x12s\n\x13get_read_statistics\x12*.minknow_api.data.GetReadStatisticsRequest\x1a+.minknow_api.data.GetReadStatisticsResponse\"\x03\x90\x02\x01\x12\x83\x01\n\x19get_experiment_yield_info\x12/.minknow_api.data.GetExperimentYieldInfoRequest\x1a\x30.minknow_api.data.GetExperimentYieldInfoResponse\"\x03\x90\x02\x01\x42&\n\x1c\x63om.nanoporetech.minknow_api\xa2\x02\x05MKAPIb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x16minknow_api/data.proto\x12\x10minknow_api.data\x1a\x1dminknow_api/rpc_options.proto\x1a\x18minknow_api/device.proto\x1a!minknow_api/read_end_reason.proto\x1a\x1egoogle/protobuf/duration.proto\x1a\x1egoogle/protobuf/wrappers.proto\"\xd9\x01\n\x17GetChannelStatesRequest\x12\x1b\n\rfirst_channel\x18\x01 \x01(\rB\x04\x88\xb5\x18\x01\x12\x1a\n\x0clast_channel\x18\x02 \x01(\rB\x04\x88\xb5\x18\x01\x12:\n\x16use_channel_states_ids\x18\x03 \x01(\x0b\x32\x1a.google.protobuf.BoolValue\x12\x1b\n\x13wait_for_processing\x18\x04 \x01(\x08\x12,\n\theartbeat\x18\x05 \x01(\x0b\x32\x19.google.protobuf.Duration\"\xdb\x02\n\x18GetChannelStatesResponse\x12S\n\x0e\x63hannel_states\x18\x01 \x03(\x0b\x32;.minknow_api.data.GetChannelStatesResponse.ChannelStateData\x1a\xe9\x01\n\x10\x43hannelStateData\x12\x0f\n\x07\x63hannel\x18\x01 \x01(\r\x12\x12\n\x08state_id\x18\x02 \x01(\rH\x00\x12\x14\n\nstate_name\x18\x03 \x01(\tH\x00\x12\x1d\n\x15\x61\x63quisition_raw_index\x18\x04 \x01(\x04\x12\x1a\n\x12\x61nalysis_raw_index\x18\x05 \x01(\x04\x12\x14\n\x0ctrigger_time\x18\x07 \x01(\x04\x12@\n\x06\x63onfig\x18\x06 \x01(\x0b\x32\x30.minknow_api.device.ReturnedChannelConfigurationB\x07\n\x05state\"\x15\n\x13GetDataTypesRequest\"\xb1\x03\n\x14GetDataTypesResponse\x12L\n\x13uncalibrated_signal\x18\x01 \x01(\x0b\x32/.minknow_api.data.GetDataTypesResponse.DataType\x12J\n\x11\x63\x61librated_signal\x18\x02 \x01(\x0b\x32/.minknow_api.data.GetDataTypesResponse.DataType\x12\x46\n\rbias_voltages\x18\x03 \x01(\x0b\x32/.minknow_api.data.GetDataTypesResponse.DataType\x1a\xb6\x01\n\x08\x44\x61taType\x12\x42\n\x04type\x18\x01 \x01(\x0e\x32\x34.minknow_api.data.GetDataTypesResponse.DataType.Type\x12\x12\n\nbig_endian\x18\x02 \x01(\x08\x12\x0c\n\x04size\x18\x03 \x01(\r\"D\n\x04Type\x12\x12\n\x0eSIGNED_INTEGER\x10\x00\x12\x14\n\x10UNSIGNED_INTEGER\x10\x01\x12\x12\n\x0e\x46LOATING_POINT\x10\x02\"\xf8\x01\n\x15GetSignalBytesRequest\x12\x11\n\x07seconds\x18\x01 \x01(\x02H\x00\x12\x11\n\x07samples\x18\x02 \x01(\rH\x00\x12\x1b\n\rfirst_channel\x18\x03 \x01(\rB\x04\x88\xb5\x18\x01\x12\x1a\n\x0clast_channel\x18\x04 \x01(\rB\x04\x88\xb5\x18\x01\x12\x1f\n\x17include_channel_configs\x18\x05 \x01(\x08\x12\x1d\n\x15include_bias_voltages\x18\x06 \x01(\x08\x12\x17\n\x0f\x63\x61librated_data\x18\x07 \x01(\x08\x12\x1d\n\x15return_when_listening\x18\x08 \x01(\x08\x42\x08\n\x06length\"\xa7\x03\n\x16GetSignalBytesResponse\x12\x1b\n\x13samples_since_start\x18\x01 \x01(\x04\x12\x1b\n\x13seconds_since_start\x18\x02 \x01(\x01\x12\x18\n\x10skipped_channels\x18\x03 \x01(\r\x12\x46\n\x08\x63hannels\x18\x04 \x03(\x0b\x32\x34.minknow_api.data.GetSignalBytesResponse.ChannelData\x12\x15\n\rbias_voltages\x18\x05 \x01(\x0c\x1ag\n\x13\x43hannelConfigChange\x12@\n\x06\x63onfig\x18\x01 \x01(\x0b\x32\x30.minknow_api.device.ReturnedChannelConfiguration\x12\x0e\n\x06offset\x18\x02 \x01(\x04\x1aq\n\x0b\x43hannelData\x12\x0c\n\x04\x64\x61ta\x18\x01 \x01(\x0c\x12T\n\x0e\x63onfig_changes\x18\x03 \x03(\x0b\x32<.minknow_api.data.GetSignalBytesResponse.ChannelConfigChange\"\x85\x01\n\x16GetSignalMinMaxRequest\x12\x1b\n\rfirst_channel\x18\x03 \x01(\rB\x04\x88\xb5\x18\x01\x12\x1a\n\x0clast_channel\x18\x04 \x01(\rB\x04\x88\xb5\x18\x01\x12\x19\n\x0bwindow_size\x18\x05 \x01(\rB\x04\x88\xb5\x18\x01\x12\x17\n\x0f\x63\x61librated_data\x18\x07 \x01(\x08\"\xa3\x02\n\x17GetSignalMinMaxResponse\x12\x1b\n\x13samples_since_start\x18\x01 \x01(\x04\x12\x1b\n\x13seconds_since_start\x18\x02 \x01(\x01\x12\x18\n\x10skipped_channels\x18\x03 \x01(\r\x12G\n\x08\x63hannels\x18\x04 \x03(\x0b\x32\x35.minknow_api.data.GetSignalMinMaxResponse.ChannelData\x1ak\n\x0b\x43hannelData\x12\x19\n\x11\x63\x61librated_minima\x18\x01 \x03(\x02\x12\x12\n\nraw_minima\x18\x02 \x03(\x05\x12\x19\n\x11\x63\x61librated_maxima\x18\x03 \x03(\x02\x12\x12\n\nraw_maxima\x18\x04 \x03(\x05\"\xaa\x07\n\x13GetLiveReadsRequest\x12\x42\n\x05setup\x18\x01 \x01(\x0b\x32\x31.minknow_api.data.GetLiveReadsRequest.StreamSetupH\x00\x12@\n\x07\x61\x63tions\x18\x02 \x01(\x0b\x32-.minknow_api.data.GetLiveReadsRequest.ActionsH\x00\x1a!\n\rUnblockAction\x12\x10\n\x08\x64uration\x18\x01 \x01(\x01\x1a\x11\n\x0fStopFurtherData\x1a\xee\x01\n\x06\x41\x63tion\x12\x11\n\taction_id\x18\x01 \x01(\t\x12\x0f\n\x07\x63hannel\x18\x02 \x01(\r\x12\x0c\n\x02id\x18\x03 \x01(\tH\x00\x12\x46\n\x07unblock\x18\x05 \x01(\x0b\x32\x33.minknow_api.data.GetLiveReadsRequest.UnblockActionH\x01\x12R\n\x11stop_further_data\x18\x06 \x01(\x0b\x32\x35.minknow_api.data.GetLiveReadsRequest.StopFurtherDataH\x01\x42\x06\n\x04readB\x08\n\x06\x61\x63tionJ\x04\x08\x04\x10\x05\x1a\xc6\x02\n\x0bStreamSetup\x12\x15\n\rfirst_channel\x18\x01 \x01(\r\x12\x14\n\x0clast_channel\x18\x02 \x01(\r\x12H\n\rraw_data_type\x18\x03 \x01(\x0e\x32\x31.minknow_api.data.GetLiveReadsRequest.RawDataType\x12!\n\x19sample_minimum_chunk_size\x18\x04 \x01(\x04\x12)\n\x1fmax_unblock_read_length_samples\x18\x05 \x01(\x04H\x00\x12)\n\x1fmax_unblock_read_length_seconds\x18\x06 \x01(\x01H\x00\x12,\n$accepted_first_chunk_classifications\x18\x07 \x03(\x05\x42\x19\n\x17max_unblock_read_length\x1aH\n\x07\x41\x63tions\x12=\n\x07\x61\x63tions\x18\x02 \x03(\x0b\x32,.minknow_api.data.GetLiveReadsRequest.Action\"H\n\x0bRawDataType\x12\r\n\tKEEP_LAST\x10\x00\x12\x08\n\x04NONE\x10\x01\x12\x0e\n\nCALIBRATED\x10\x02\x12\x10\n\x0cUNCALIBRATED\x10\x03\x42\t\n\x07request\"\xc3\x06\n\x14GetLiveReadsResponse\x12\x1b\n\x13samples_since_start\x18\x01 \x01(\x04\x12\x1b\n\x13seconds_since_start\x18\x02 \x01(\x01\x12\x46\n\x08\x63hannels\x18\x04 \x03(\x0b\x32\x34.minknow_api.data.GetLiveReadsResponse.ChannelsEntry\x12O\n\x10\x61\x63tion_responses\x18\x05 \x03(\x0b\x32\x35.minknow_api.data.GetLiveReadsResponse.ActionResponse\x1a\xb0\x02\n\x08ReadData\x12\n\n\x02id\x18\x01 \x01(\t\x12\x14\n\x0cstart_sample\x18\x03 \x01(\x04\x12\x1a\n\x12\x63hunk_start_sample\x18\x04 \x01(\x04\x12\x14\n\x0c\x63hunk_length\x18\x05 \x01(\x04\x12\x1d\n\x15\x63hunk_classifications\x18\x06 \x03(\x05\x12\x10\n\x08raw_data\x18\x07 \x01(\x0c\x12\x15\n\rmedian_before\x18\x08 \x01(\x02\x12\x0e\n\x06median\x18\t \x01(\x02\x12$\n\x1cprevious_read_classification\x18\n \x01(\x05\x12L\n\x18previous_read_end_reason\x18\x0b \x01(\x0e\x32*.minknow_api.read_end_reason.ReadEndReasonJ\x04\x08\x02\x10\x03\x1a\xc2\x01\n\x0e\x41\x63tionResponse\x12\x11\n\taction_id\x18\x01 \x01(\t\x12P\n\x08response\x18\x02 \x01(\x0e\x32>.minknow_api.data.GetLiveReadsResponse.ActionResponse.Response\"K\n\x08Response\x12\x0b\n\x07SUCCESS\x10\x00\x12\x18\n\x14\x46\x41ILED_READ_FINISHED\x10\x01\x12\x18\n\x14\x46\x41ILED_READ_TOO_LONG\x10\x02\x1a`\n\rChannelsEntry\x12\x0b\n\x03key\x18\x01 \x01(\r\x12>\n\x05value\x18\x02 \x01(\x0b\x32/.minknow_api.data.GetLiveReadsResponse.ReadData:\x02\x38\x01\"\x1b\n\x19ResetChannelStatesRequest\"\x1c\n\x1aResetChannelStatesResponse\"\xf0\x01\n(RecordAdaptiveSamplingInformationRequest\x12Y\n\tobjective\x18\x01 \x01(\x0e\x32\x44.minknow_api.data.RecordAdaptiveSamplingInformationRequest.ObjectiveH\x00\x12\x14\n\nend_reason\x18\x02 \x01(\tH\x00\"D\n\tObjective\x12\t\n\x05OTHER\x10\x00\x12\x13\n\x0f\x42\x41RCODE_BALANCE\x10\x01\x12\n\n\x06\x45NRICH\x10\x02\x12\x0b\n\x07\x44\x45PLETE\x10\x03\x42\r\n\x0binformation\"+\n)RecordAdaptiveSamplingInformationResponse\"\xb8\x02\n\x18GetReadStatisticsRequest\x12\x10\n\x08\x63hannels\x18\x01 \x03(\r\x12\x11\n\x07seconds\x18\x02 \x01(\x02H\x00\x12\x11\n\x07samples\x18\x03 \x01(\x04H\x00\x12N\n\nread_split\x18\x04 \x01(\x0e\x32\x34.minknow_api.data.GetReadStatisticsRequest.ReadSplitB\x04\x88\xb5\x18\x01\x12\x1d\n\x15no_current_statistics\x18\x05 \x01(\x08\x12\x1b\n\x13no_chunk_statistics\x18\x06 \x01(\x08\x12 \n\x18required_classifications\x18\x07 \x03(\t\"*\n\tReadSplit\x12\t\n\x05\x43HUNK\x10\x00\x12\x12\n\x0e\x43OMPLETED_READ\x10\x01\x42\n\n\x08\x64uration\"\xe4\n\n\x19GetReadStatisticsResponse\x12L\n\x08\x63hannels\x18\x01 \x03(\x0b\x32:.minknow_api.data.GetReadStatisticsResponse.PerChannelData\x12\x1b\n\x13samples_since_start\x18\x02 \x01(\x04\x12\x1b\n\x13seconds_since_start\x18\x03 \x01(\x01\x1a\xa4\x01\n\nStatistics\x12\x0b\n\x03min\x18\x01 \x01(\x01\x12\x0b\n\x03max\x18\x02 \x01(\x01\x12\x0c\n\x04mean\x18\x03 \x01(\x01\x12\x0b\n\x03s_d\x18\x04 \x01(\x01\x12\x0e\n\x06median\x18\x06 \x01(\x01\x12\x0b\n\x03q_5\x18\x07 \x01(\x01\x12\x0c\n\x04q_10\x18\x08 \x01(\x01\x12\x0c\n\x04q_25\x18\t \x01(\x01\x12\x0c\n\x04q_75\x18\n \x01(\x01\x12\x0c\n\x04q_90\x18\x0b \x01(\x01\x12\x0c\n\x04q_95\x18\x0c \x01(\x01\x1a\x43\n\x0f\x43hunkStatistics\x12\x11\n\tmedian_sd\x18\x01 \x01(\x01\x12\x0e\n\x06median\x18\x02 \x01(\x01\x12\r\n\x05range\x18\x03 \x01(\x01\x1a\xcb\x02\n\x15PerClassificationData\x12S\n\x13\x64uration_statistics\x18\x01 \x01(\x0b\x32\x36.minknow_api.data.GetReadStatisticsResponse.Statistics\x12R\n\x12\x63urrent_statistics\x18\x02 \x01(\x0b\x32\x36.minknow_api.data.GetReadStatisticsResponse.Statistics\x12U\n\x10\x63hunk_statistics\x18\x06 \x01(\x0b\x32;.minknow_api.data.GetReadStatisticsResponse.ChunkStatistics\x12\x18\n\x10samples_duration\x18\x04 \x01(\x04\x12\x18\n\x10seconds_duration\x18\x05 \x01(\x01\x1a\xa9\x03\n\x14PerConfigurationData\x12O\n\x15\x63hannel_configuration\x18\x01 \x01(\x0b\x32\x30.minknow_api.device.ReturnedChannelConfiguration\x12n\n\x0f\x63lassifications\x18\x02 \x03(\x0b\x32U.minknow_api.data.GetReadStatisticsResponse.PerConfigurationData.ClassificationsEntry\x12U\n\nincomplete\x18\x03 \x01(\x0b\x32\x41.minknow_api.data.GetReadStatisticsResponse.PerClassificationData\x1ay\n\x14\x43lassificationsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12P\n\x05value\x18\x02 \x01(\x0b\x32\x41.minknow_api.data.GetReadStatisticsResponse.PerClassificationData:\x02\x38\x01\x1a\xd8\x01\n\x0ePerChannelData\x12X\n\x0e\x63onfigurations\x18\x06 \x03(\x0b\x32@.minknow_api.data.GetReadStatisticsResponse.PerConfigurationData\x12\x1b\n\x13samples_since_start\x18\x02 \x01(\x04\x12\x1b\n\x13seconds_since_start\x18\x03 \x01(\x01\x12\x18\n\x10samples_duration\x18\x04 \x01(\x04\x12\x18\n\x10seconds_duration\x18\x05 \x01(\x01\"L\n\x18LockChannelStatesRequest\x12\x16\n\x08\x63hannels\x18\x01 \x03(\x04\x42\x04\x88\xb5\x18\x01\x12\x18\n\nstate_name\x18\x02 \x01(\tB\x04\x88\xb5\x18\x01\"\x1b\n\x19LockChannelStatesResponse\"4\n\x1aUnlockChannelStatesRequest\x12\x16\n\x08\x63hannels\x18\x01 \x03(\x04\x42\x04\x88\xb5\x18\x01\"\x1d\n\x1bUnlockChannelStatesResponse\"\x1f\n\x1dGetExperimentYieldInfoRequest\"\x97\x1d\n\x1eGetExperimentYieldInfoResponse\x12]\n\x12\x63omplete_read_info\x18\x01 \x01(\x0b\x32\x41.minknow_api.data.GetExperimentYieldInfoResponse.CompleteReadInfo\x12Z\n\x10\x61\x63quisition_info\x18\x02 \x01(\x0b\x32@.minknow_api.data.GetExperimentYieldInfoResponse.AcquisitionInfo\x12T\n\ranalyser_info\x18\x03 \x01(\x0b\x32=.minknow_api.data.GetExperimentYieldInfoResponse.AnalyserInfo\x12L\n\tbulk_info\x18\x04 \x01(\x0b\x32\x39.minknow_api.data.GetExperimentYieldInfoResponse.BulkInfo\x12W\n\x0fhdf_writer_info\x18\x05 \x01(\x0b\x32>.minknow_api.data.GetExperimentYieldInfoResponse.HdfWriterInfo\x12\x62\n\x15\x62\x61secaller_statistics\x18\x06 \x01(\x0b\x32\x43.minknow_api.data.GetExperimentYieldInfoResponse.BasecallStatistics\x12z\n\"hdf_multi_read_writing_statisitics\x18\x07 \x01(\x0b\x32N.minknow_api.data.GetExperimentYieldInfoResponse.HdfMultiReadWritingStatistics\x12r\n\x1d\x66\x61stq_read_writing_statistics\x18\x08 \x01(\x0b\x32K.minknow_api.data.GetExperimentYieldInfoResponse.FastqReadWritingStatistics\x12x\n protobuf_read_writing_statistics\x18\t \x01(\x0b\x32N.minknow_api.data.GetExperimentYieldInfoResponse.ProtobufReadWritingStatistics\x12r\n\x1d\x66ile_operation_queue_progress\x18\n \x01(\x0b\x32K.minknow_api.data.GetExperimentYieldInfoResponse.FileOperationQueueProgress\x1a\xfc\x04\n\x10\x43ompleteReadInfo\x12\x16\n\x0epending_chunks\x18\x01 \x01(\x04\x12\x1c\n\x14pending_memory_reads\x18\x02 \x01(\x04\x12\x1a\n\x12pending_disk_reads\x18\x0f \x01(\x04\x12 \n\x18pending_multi_disk_reads\x18\x03 \x01(\x04\x12\x1d\n\x15pending_skipped_reads\x18\x04 \x01(\x04\x12#\n\x1bpending_force_skipped_reads\x18\x05 \x01(\x04\x12\x1b\n\x13pending_retry_reads\x18\x12 \x01(\x04\x12\x1e\n\x16processed_memory_reads\x18\x06 \x01(\x04\x12\x1c\n\x14processed_disk_reads\x18\x07 \x01(\x04\x12\x1f\n\x17processed_skipped_reads\x18\x08 \x01(\x04\x12%\n\x1dprocessed_force_skipped_reads\x18\t \x01(\x04\x12!\n\x19stored_reads_bytes_memory\x18\n \x01(\x04\x12+\n#stored_read_supporting_bytes_memory\x18\x10 \x01(\x04\x12\x35\n-stored_reads_bytes_memory_including_in_flight\x18\x11 \x01(\x04\x12\x1f\n\x17stored_reads_bytes_disk\x18\x0b \x01(\x04\x12\x1d\n\x15\x64iscarded_error_bytes\x18\x0c \x01(\x04\x12 \n\x18\x63hannels_writing_to_disk\x18\r \x01(\x04\x12$\n\x1c\x63hannels_writing_to_disk_tmp\x18\x0e \x01(\x04\x1aI\n\x0f\x41\x63quisitionInfo\x12\x17\n\x0fraw_per_channel\x18\x01 \x01(\x04\x12\x1d\n\x15\x66rame_discontinuities\x18\x02 \x01(\x04\x1a\xe5\x01\n\x0c\x41nalyserInfo\x12\x17\n\x0fraw_per_channel\x18\x01 \x01(\x04\x12\x1a\n\x12total_selected_raw\x18\x02 \x01(\x04\x12\x1d\n\x15total_selected_events\x18\x03 \x01(\x04\x12\x14\n\x0ctotal_events\x18\x04 \x01(\x04\x12\x19\n\x11total_read_chunks\x18\x05 \x01(\x04\x12&\n\x1e\x63ompleted_selected_reads_count\x18\x06 \x01(\x04\x12(\n completed_unselected_reads_count\x18\x07 \x01(\x04\x1a\x33\n\x08\x42ulkInfo\x12\x11\n\ttotal_raw\x18\x01 \x01(\x04\x12\x14\n\x0ctotal_events\x18\x02 \x01(\x04\x1a\xa0\x01\n\rHdfWriterInfo\x12\x1c\n\x14pending_compressions\x18\x01 \x01(\x04\x12\x16\n\x0epending_writes\x18\x02 \x01(\x04\x12\x19\n\x11pending_hdf_tasks\x18\x03 \x01(\x04\x12\x18\n\x10\x63ompleted_writes\x18\x04 \x01(\x04\x12$\n\x1c\x64\x61taset_bytes_data_in_flight\x18\x05 \x01(\x04\x1a\x98\x03\n\x12\x42\x61secallStatistics\x12\x19\n\x11reads_in_progress\x18\x01 \x01(\x04\x12\x1b\n\x13samples_in_progress\x18\x0e \x01(\x04\x12\x17\n\x0freads_processed\x18\x02 \x01(\x04\x12\x15\n\rreads_skipped\x18\x03 \x01(\x04\x12\x1b\n\x13reads_force_skipped\x18\x04 \x01(\x04\x12%\n\x1dreads_failed_calling_filtered\x18\x05 \x01(\x04\x12\x1c\n\x14reads_failed_calling\x18\x06 \x01(\x04\x12\x14\n\x0creads_called\x18\x07 \x01(\x04\x12 \n\x18samples_in_client_buffer\x18\r \x01(\x04\x12\x16\n\x0esamples_called\x18\x08 \x01(\x04\x12\x17\n\x0fsamples_skipped\x18\t \x01(\x04\x12\x1b\n\x13\x62\x61ses_passed_called\x18\n \x01(\x04\x12\x1b\n\x13\x62\x61ses_failed_called\x18\x0c \x01(\x04\x12\x15\n\revents_called\x18\x0b \x01(\x04\x1a\xf6\x01\n\x1dHdfMultiReadWritingStatistics\x12\x15\n\rreads_written\x18\x01 \x01(\x04\x12\x1c\n\x14passed_reads_written\x18\x02 \x01(\x04\x12\x1c\n\x14\x66\x61iled_reads_written\x18\x03 \x01(\x04\x12#\n\x1b\x66orce_skipped_reads_written\x18\x04 \x01(\x04\x12\x19\n\x11raw_bytes_written\x18\x05 \x01(\x04\x12\x1b\n\x13\x66\x61stq_bytes_written\x18\x06 \x01(\x04\x12%\n\x1d\x62\x61secall_events_bytes_written\x18\x07 \x01(\x04\x1a\xa7\x01\n\x1a\x46\x61stqReadWritingStatistics\x12\x1c\n\x14passed_reads_written\x18\x01 \x01(\x04\x12\x15\n\rskipped_reads\x18\x02 \x01(\x04\x12\x16\n\x0e\x66orced_skipped\x18\x03 \x01(\x04\x12\x1c\n\x14\x66\x61iled_reads_written\x18\x04 \x01(\x04\x12\x1e\n\x16\x66\x61iled_reads_discarded\x18\x05 \x01(\x04\x1a\x8b\x01\n\x1dProtobufReadWritingStatistics\x12\x1b\n\x13read_chunks_written\x18\x01 \x01(\x04\x12\x1d\n\x15read_chunks_discarded\x18\x02 \x01(\x04\x12\x15\n\rreads_written\x18\x03 \x01(\x04\x12\x17\n\x0freads_discarded\x18\x04 \x01(\x04\x1a\xa4\x04\n\x1a\x46ileOperationQueueProgress\x12\x1a\n\x12pending_operations\x18\x01 \x01(\x04\x12&\n\x1e\x63omplete_successful_operations\x18\x02 \x01(\x04\x12\"\n\x1a\x63omplete_failed_operations\x18\x03 \x01(\x04\x12\x1c\n\x14\x62ytes_to_move_posted\x18\x04 \x01(\x04\x12\x1c\n\x14\x62ytes_to_move_failed\x18\x05 \x01(\x04\x12\x1f\n\x17\x62ytes_to_move_completed\x18\x06 \x01(\x04\x12g\n\x05\x66\x61st5\x18\x07 \x01(\x0b\x32X.minknow_api.data.GetExperimentYieldInfoResponse.FileOperationQueueProgress.FileTypeInfo\x12g\n\x05\x66\x61stq\x18\x08 \x01(\x0b\x32X.minknow_api.data.GetExperimentYieldInfoResponse.FileOperationQueueProgress.FileTypeInfo\x1ao\n\x0c\x46ileTypeInfo\x12 \n\x18\x66iles_moved_successfully\x18\x01 \x01(\x04\x12\x1f\n\x17\x66iles_moved_to_fallback\x18\x02 \x01(\x04\x12\x1c\n\x14\x66iles_failed_to_move\x18\x03 \x01(\x04\x32\xb6\n\n\x0b\x44\x61taService\x12r\n\x12get_channel_states\x12).minknow_api.data.GetChannelStatesRequest\x1a*.minknow_api.data.GetChannelStatesResponse\"\x03\x90\x02\x01\x30\x01\x12\x64\n\x0eget_data_types\x12%.minknow_api.data.GetDataTypesRequest\x1a&.minknow_api.data.GetDataTypesResponse\"\x03\x90\x02\x01\x12l\n\x10get_signal_bytes\x12\'.minknow_api.data.GetSignalBytesRequest\x1a(.minknow_api.data.GetSignalBytesResponse\"\x03\x90\x02\x01\x30\x01\x12p\n\x12get_signal_min_max\x12(.minknow_api.data.GetSignalMinMaxRequest\x1a).minknow_api.data.GetSignalMinMaxResponse\"\x03\x90\x02\x01\x30\x01\x12s\n\x14reset_channel_states\x12+.minknow_api.data.ResetChannelStatesRequest\x1a,.minknow_api.data.ResetChannelStatesResponse\"\x00\x12p\n\x13lock_channel_states\x12*.minknow_api.data.LockChannelStatesRequest\x1a+.minknow_api.data.LockChannelStatesResponse\"\x00\x12v\n\x15unlock_channel_states\x12,.minknow_api.data.UnlockChannelStatesRequest\x1a-.minknow_api.data.UnlockChannelStatesResponse\"\x00\x12h\n\x0eget_live_reads\x12%.minknow_api.data.GetLiveReadsRequest\x1a&.minknow_api.data.GetLiveReadsResponse\"\x03\x90\x02\x01(\x01\x30\x01\x12\xa4\x01\n$record_adaptive_sampling_information\x12:.minknow_api.data.RecordAdaptiveSamplingInformationRequest\x1a;.minknow_api.data.RecordAdaptiveSamplingInformationResponse\"\x03\x90\x02\x02\x12s\n\x13get_read_statistics\x12*.minknow_api.data.GetReadStatisticsRequest\x1a+.minknow_api.data.GetReadStatisticsResponse\"\x03\x90\x02\x01\x12\x87\x01\n\x19get_experiment_yield_info\x12/.minknow_api.data.GetExperimentYieldInfoRequest\x1a\x30.minknow_api.data.GetExperimentYieldInfoResponse\"\x07\x90\x02\x01\x98\xb5\x18\x01\x42W\n\x1c\x63om.nanoporetech.minknow_apiZ/github.com/nanoporetech/minknow_api/go/gen/data\xa2\x02\x05MKAPIb\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
 _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'minknow_api.data_pb2', _globals)
 if _descriptor._USE_C_DESCRIPTORS == False:
   _globals['DESCRIPTOR']._options = None
-  _globals['DESCRIPTOR']._serialized_options = b'\n\034com.nanoporetech.minknow_api\242\002\005MKAPI'
+  _globals['DESCRIPTOR']._serialized_options = b'\n\034com.nanoporetech.minknow_apiZ/github.com/nanoporetech/minknow_api/go/gen/data\242\002\005MKAPI'
   _globals['_GETCHANNELSTATESREQUEST'].fields_by_name['first_channel']._options = None
   _globals['_GETCHANNELSTATESREQUEST'].fields_by_name['first_channel']._serialized_options = b'\210\265\030\001'
   _globals['_GETCHANNELSTATESREQUEST'].fields_by_name['last_channel']._options = None
@@ -68,123 +68,140 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   _globals['_DATASERVICE'].methods_by_name['get_read_statistics']._options = None
   _globals['_DATASERVICE'].methods_by_name['get_read_statistics']._serialized_options = b'\220\002\001'
   _globals['_DATASERVICE'].methods_by_name['get_experiment_yield_info']._options = None
-  _globals['_DATASERVICE'].methods_by_name['get_experiment_yield_info']._serialized_options = b'\220\002\001'
-  _globals['_GETCHANNELSTATESREQUEST']._serialized_start=196
-  _globals['_GETCHANNELSTATESREQUEST']._serialized_end=413
-  _globals['_GETCHANNELSTATESRESPONSE']._serialized_start=416
-  _globals['_GETCHANNELSTATESRESPONSE']._serialized_end=763
-  _globals['_GETCHANNELSTATESRESPONSE_CHANNELSTATEDATA']._serialized_start=530
-  _globals['_GETCHANNELSTATESRESPONSE_CHANNELSTATEDATA']._serialized_end=763
-  _globals['_GETDATATYPESREQUEST']._serialized_start=765
-  _globals['_GETDATATYPESREQUEST']._serialized_end=786
-  _globals['_GETDATATYPESRESPONSE']._serialized_start=789
-  _globals['_GETDATATYPESRESPONSE']._serialized_end=1222
-  _globals['_GETDATATYPESRESPONSE_DATATYPE']._serialized_start=1040
-  _globals['_GETDATATYPESRESPONSE_DATATYPE']._serialized_end=1222
-  _globals['_GETDATATYPESRESPONSE_DATATYPE_TYPE']._serialized_start=1154
-  _globals['_GETDATATYPESRESPONSE_DATATYPE_TYPE']._serialized_end=1222
-  _globals['_GETSIGNALBYTESREQUEST']._serialized_start=1225
-  _globals['_GETSIGNALBYTESREQUEST']._serialized_end=1473
-  _globals['_GETSIGNALBYTESRESPONSE']._serialized_start=1476
-  _globals['_GETSIGNALBYTESRESPONSE']._serialized_end=1899
-  _globals['_GETSIGNALBYTESRESPONSE_CHANNELCONFIGCHANGE']._serialized_start=1681
-  _globals['_GETSIGNALBYTESRESPONSE_CHANNELCONFIGCHANGE']._serialized_end=1784
-  _globals['_GETSIGNALBYTESRESPONSE_CHANNELDATA']._serialized_start=1786
-  _globals['_GETSIGNALBYTESRESPONSE_CHANNELDATA']._serialized_end=1899
-  _globals['_GETSIGNALMINMAXREQUEST']._serialized_start=1902
-  _globals['_GETSIGNALMINMAXREQUEST']._serialized_end=2035
-  _globals['_GETSIGNALMINMAXRESPONSE']._serialized_start=2038
-  _globals['_GETSIGNALMINMAXRESPONSE']._serialized_end=2329
-  _globals['_GETSIGNALMINMAXRESPONSE_CHANNELDATA']._serialized_start=2222
-  _globals['_GETSIGNALMINMAXRESPONSE_CHANNELDATA']._serialized_end=2329
-  _globals['_GETLIVEREADSREQUEST']._serialized_start=2332
-  _globals['_GETLIVEREADSREQUEST']._serialized_end=3270
-  _globals['_GETLIVEREADSREQUEST_UNBLOCKACTION']._serialized_start=2489
-  _globals['_GETLIVEREADSREQUEST_UNBLOCKACTION']._serialized_end=2522
-  _globals['_GETLIVEREADSREQUEST_STOPFURTHERDATA']._serialized_start=2524
-  _globals['_GETLIVEREADSREQUEST_STOPFURTHERDATA']._serialized_end=2541
-  _globals['_GETLIVEREADSREQUEST_ACTION']._serialized_start=2544
-  _globals['_GETLIVEREADSREQUEST_ACTION']._serialized_end=2782
-  _globals['_GETLIVEREADSREQUEST_STREAMSETUP']._serialized_start=2785
-  _globals['_GETLIVEREADSREQUEST_STREAMSETUP']._serialized_end=3111
-  _globals['_GETLIVEREADSREQUEST_ACTIONS']._serialized_start=3113
-  _globals['_GETLIVEREADSREQUEST_ACTIONS']._serialized_end=3185
-  _globals['_GETLIVEREADSREQUEST_RAWDATATYPE']._serialized_start=3187
-  _globals['_GETLIVEREADSREQUEST_RAWDATATYPE']._serialized_end=3259
-  _globals['_GETLIVEREADSRESPONSE']._serialized_start=3273
-  _globals['_GETLIVEREADSRESPONSE']._serialized_end=4103
-  _globals['_GETLIVEREADSRESPONSE_READDATA']._serialized_start=3509
-  _globals['_GETLIVEREADSRESPONSE_READDATA']._serialized_end=3808
-  _globals['_GETLIVEREADSRESPONSE_ACTIONRESPONSE']._serialized_start=3811
-  _globals['_GETLIVEREADSRESPONSE_ACTIONRESPONSE']._serialized_end=4005
-  _globals['_GETLIVEREADSRESPONSE_ACTIONRESPONSE_RESPONSE']._serialized_start=3930
-  _globals['_GETLIVEREADSRESPONSE_ACTIONRESPONSE_RESPONSE']._serialized_end=4005
-  _globals['_GETLIVEREADSRESPONSE_CHANNELSENTRY']._serialized_start=4007
-  _globals['_GETLIVEREADSRESPONSE_CHANNELSENTRY']._serialized_end=4103
-  _globals['_RESETCHANNELSTATESREQUEST']._serialized_start=4105
-  _globals['_RESETCHANNELSTATESREQUEST']._serialized_end=4132
-  _globals['_RESETCHANNELSTATESRESPONSE']._serialized_start=4134
-  _globals['_RESETCHANNELSTATESRESPONSE']._serialized_end=4162
-  _globals['_RECORDADAPTIVESAMPLINGINFORMATIONREQUEST']._serialized_start=4165
-  _globals['_RECORDADAPTIVESAMPLINGINFORMATIONREQUEST']._serialized_end=4405
-  _globals['_RECORDADAPTIVESAMPLINGINFORMATIONREQUEST_OBJECTIVE']._serialized_start=4322
-  _globals['_RECORDADAPTIVESAMPLINGINFORMATIONREQUEST_OBJECTIVE']._serialized_end=4390
-  _globals['_RECORDADAPTIVESAMPLINGINFORMATIONRESPONSE']._serialized_start=4407
-  _globals['_RECORDADAPTIVESAMPLINGINFORMATIONRESPONSE']._serialized_end=4450
-  _globals['_GETREADSTATISTICSREQUEST']._serialized_start=4453
-  _globals['_GETREADSTATISTICSREQUEST']._serialized_end=4765
-  _globals['_GETREADSTATISTICSREQUEST_READSPLIT']._serialized_start=4711
-  _globals['_GETREADSTATISTICSREQUEST_READSPLIT']._serialized_end=4753
-  _globals['_GETREADSTATISTICSRESPONSE']._serialized_start=4768
-  _globals['_GETREADSTATISTICSRESPONSE']._serialized_end=6148
-  _globals['_GETREADSTATISTICSRESPONSE_STATISTICS']._serialized_start=4934
-  _globals['_GETREADSTATISTICSRESPONSE_STATISTICS']._serialized_end=5098
-  _globals['_GETREADSTATISTICSRESPONSE_CHUNKSTATISTICS']._serialized_start=5100
-  _globals['_GETREADSTATISTICSRESPONSE_CHUNKSTATISTICS']._serialized_end=5167
-  _globals['_GETREADSTATISTICSRESPONSE_PERCLASSIFICATIONDATA']._serialized_start=5170
-  _globals['_GETREADSTATISTICSRESPONSE_PERCLASSIFICATIONDATA']._serialized_end=5501
-  _globals['_GETREADSTATISTICSRESPONSE_PERCONFIGURATIONDATA']._serialized_start=5504
-  _globals['_GETREADSTATISTICSRESPONSE_PERCONFIGURATIONDATA']._serialized_end=5929
-  _globals['_GETREADSTATISTICSRESPONSE_PERCONFIGURATIONDATA_CLASSIFICATIONSENTRY']._serialized_start=5808
-  _globals['_GETREADSTATISTICSRESPONSE_PERCONFIGURATIONDATA_CLASSIFICATIONSENTRY']._serialized_end=5929
-  _globals['_GETREADSTATISTICSRESPONSE_PERCHANNELDATA']._serialized_start=5932
-  _globals['_GETREADSTATISTICSRESPONSE_PERCHANNELDATA']._serialized_end=6148
-  _globals['_LOCKCHANNELSTATESREQUEST']._serialized_start=6150
-  _globals['_LOCKCHANNELSTATESREQUEST']._serialized_end=6226
-  _globals['_LOCKCHANNELSTATESRESPONSE']._serialized_start=6228
-  _globals['_LOCKCHANNELSTATESRESPONSE']._serialized_end=6255
-  _globals['_UNLOCKCHANNELSTATESREQUEST']._serialized_start=6257
-  _globals['_UNLOCKCHANNELSTATESREQUEST']._serialized_end=6309
-  _globals['_UNLOCKCHANNELSTATESRESPONSE']._serialized_start=6311
-  _globals['_UNLOCKCHANNELSTATESRESPONSE']._serialized_end=6340
-  _globals['_GETEXPERIMENTYIELDINFOREQUEST']._serialized_start=6342
-  _globals['_GETEXPERIMENTYIELDINFOREQUEST']._serialized_end=6373
-  _globals['_GETEXPERIMENTYIELDINFORESPONSE']._serialized_start=6376
-  _globals['_GETEXPERIMENTYIELDINFORESPONSE']._serialized_end=9964
-  _globals['_GETEXPERIMENTYIELDINFORESPONSE_COMPLETEREADINFO']._serialized_start=7429
-  _globals['_GETEXPERIMENTYIELDINFORESPONSE_COMPLETEREADINFO']._serialized_end=7981
-  _globals['_GETEXPERIMENTYIELDINFORESPONSE_ACQUISITIONINFO']._serialized_start=7983
-  _globals['_GETEXPERIMENTYIELDINFORESPONSE_ACQUISITIONINFO']._serialized_end=8056
-  _globals['_GETEXPERIMENTYIELDINFORESPONSE_ANALYSERINFO']._serialized_start=8059
-  _globals['_GETEXPERIMENTYIELDINFORESPONSE_ANALYSERINFO']._serialized_end=8288
-  _globals['_GETEXPERIMENTYIELDINFORESPONSE_BULKINFO']._serialized_start=8290
-  _globals['_GETEXPERIMENTYIELDINFORESPONSE_BULKINFO']._serialized_end=8341
-  _globals['_GETEXPERIMENTYIELDINFORESPONSE_HDFWRITERINFO']._serialized_start=8344
-  _globals['_GETEXPERIMENTYIELDINFORESPONSE_HDFWRITERINFO']._serialized_end=8504
-  _globals['_GETEXPERIMENTYIELDINFORESPONSE_BASECALLSTATISTICS']._serialized_start=8507
-  _globals['_GETEXPERIMENTYIELDINFORESPONSE_BASECALLSTATISTICS']._serialized_end=8852
-  _globals['_GETEXPERIMENTYIELDINFORESPONSE_HDFMULTIREADWRITINGSTATISTICS']._serialized_start=8855
-  _globals['_GETEXPERIMENTYIELDINFORESPONSE_HDFMULTIREADWRITINGSTATISTICS']._serialized_end=9101
-  _globals['_GETEXPERIMENTYIELDINFORESPONSE_FASTQREADWRITINGSTATISTICS']._serialized_start=9104
-  _globals['_GETEXPERIMENTYIELDINFORESPONSE_FASTQREADWRITINGSTATISTICS']._serialized_end=9271
-  _globals['_GETEXPERIMENTYIELDINFORESPONSE_PROTOBUFREADWRITINGSTATISTICS']._serialized_start=9274
-  _globals['_GETEXPERIMENTYIELDINFORESPONSE_PROTOBUFREADWRITINGSTATISTICS']._serialized_end=9413
-  _globals['_GETEXPERIMENTYIELDINFORESPONSE_FILEOPERATIONQUEUEPROGRESS']._serialized_start=9416
-  _globals['_GETEXPERIMENTYIELDINFORESPONSE_FILEOPERATIONQUEUEPROGRESS']._serialized_end=9964
-  _globals['_GETEXPERIMENTYIELDINFORESPONSE_FILEOPERATIONQUEUEPROGRESS_FILETYPEINFO']._serialized_start=9853
-  _globals['_GETEXPERIMENTYIELDINFORESPONSE_FILEOPERATIONQUEUEPROGRESS_FILETYPEINFO']._serialized_end=9964
-  _globals['_DATASERVICE']._serialized_start=9967
-  _globals['_DATASERVICE']._serialized_end=11297
+  _globals['_DATASERVICE'].methods_by_name['get_experiment_yield_info']._serialized_options = b'\220\002\001\230\265\030\001'
+  _globals['_GETCHANNELSTATESREQUEST']._serialized_start=201
+  _globals['_GETCHANNELSTATESREQUEST']._serialized_end=418
+  _globals['_GETCHANNELSTATESRESPONSE']._serialized_start=421
+  _globals['_GETCHANNELSTATESRESPONSE']._serialized_end=768
+  _globals['_GETCHANNELSTATESRESPONSE_CHANNELSTATEDATA']._serialized_start=535
+  _globals['_GETCHANNELSTATESRESPONSE_CHANNELSTATEDATA']._serialized_end=768
+  _globals['_GETDATATYPESREQUEST']._serialized_start=770
+  _globals['_GETDATATYPESREQUEST']._serialized_end=791
+  _globals['_GETDATATYPESRESPONSE']._serialized_start=794
+  _globals['_GETDATATYPESRESPONSE']._serialized_end=1227
+  _globals['_GETDATATYPESRESPONSE_DATATYPE']._serialized_start=1045
+  _globals['_GETDATATYPESRESPONSE_DATATYPE']._serialized_end=1227
+  _globals['_GETDATATYPESRESPONSE_DATATYPE_TYPE']._serialized_start=1159
+  _globals['_GETDATATYPESRESPONSE_DATATYPE_TYPE']._serialized_end=1227
+  _globals['_GETSIGNALBYTESREQUEST']._serialized_start=1230
+  _globals['_GETSIGNALBYTESREQUEST']._serialized_end=1478
+  _globals['_GETSIGNALBYTESRESPONSE']._serialized_start=1481
+  _globals['_GETSIGNALBYTESRESPONSE']._serialized_end=1904
+  _globals['_GETSIGNALBYTESRESPONSE_CHANNELCONFIGCHANGE']._serialized_start=1686
+  _globals['_GETSIGNALBYTESRESPONSE_CHANNELCONFIGCHANGE']._serialized_end=1789
+  _globals['_GETSIGNALBYTESRESPONSE_CHANNELDATA']._serialized_start=1791
+  _globals['_GETSIGNALBYTESRESPONSE_CHANNELDATA']._serialized_end=1904
+  _globals['_GETSIGNALMINMAXREQUEST']._serialized_start=1907
+  _globals['_GETSIGNALMINMAXREQUEST']._serialized_end=2040
+  _globals['_GETSIGNALMINMAXRESPONSE']._serialized_start=2043
+  _globals['_GETSIGNALMINMAXRESPONSE']._serialized_end=2334
+  _globals['_GETSIGNALMINMAXRESPONSE_CHANNELDATA']._serialized_start=2227
+  _globals['_GETSIGNALMINMAXRESPONSE_CHANNELDATA']._serialized_end=2334
+  _globals['_GETLIVEREADSREQUEST']._serialized_start=2337
+  _globals['_GETLIVEREADSREQUEST']._serialized_end=3275
+  _globals['_GETLIVEREADSREQUEST_UNBLOCKACTION']._serialized_start=2494
+  _globals['_GETLIVEREADSREQUEST_UNBLOCKACTION']._serialized_end=2527
+  _globals['_GETLIVEREADSREQUEST_STOPFURTHERDATA']._serialized_start=2529
+  _globals['_GETLIVEREADSREQUEST_STOPFURTHERDATA']._serialized_end=2546
+  _globals['_GETLIVEREADSREQUEST_ACTION']._serialized_start=2549
+  _globals['_GETLIVEREADSREQUEST_ACTION']._serialized_end=2787
+  _globals['_GETLIVEREADSREQUEST_STREAMSETUP']._serialized_start=2790
+  _globals['_GETLIVEREADSREQUEST_STREAMSETUP']._serialized_end=3116
+  _globals['_GETLIVEREADSREQUEST_ACTIONS']._serialized_start=3118
+  _globals['_GETLIVEREADSREQUEST_ACTIONS']._serialized_end=3190
+  _globals['_GETLIVEREADSREQUEST_RAWDATATYPE']._serialized_start=3192
+  _globals['_GETLIVEREADSREQUEST_RAWDATATYPE']._serialized_end=3264
+  _globals['_GETLIVEREADSRESPONSE']._serialized_start=3278
+  _globals['_GETLIVEREADSRESPONSE']._serialized_end=4113
+  _globals['_GETLIVEREADSRESPONSE_READDATA']._serialized_start=3514
+  _globals['_GETLIVEREADSRESPONSE_READDATA']._serialized_end=3818
+  _globals['_GETLIVEREADSRESPONSE_ACTIONRESPONSE']._serialized_start=3821
+  _globals['_GETLIVEREADSRESPONSE_ACTIONRESPONSE']._serialized_end=4015
+  _globals['_GETLIVEREADSRESPONSE_ACTIONRESPONSE_RESPONSE']._serialized_start=3940
+  _globals['_GETLIVEREADSRESPONSE_ACTIONRESPONSE_RESPONSE']._serialized_end=4015
+  _globals['_GETLIVEREADSRESPONSE_CHANNELSENTRY']._serialized_start=4017
+  _globals['_GETLIVEREADSRESPONSE_CHANNELSENTRY']._serialized_end=4113
+  _globals['_RESETCHANNELSTATESREQUEST']._serialized_start=4115
+  _globals['_RESETCHANNELSTATESREQUEST']._serialized_end=4142
+  _globals['_RESETCHANNELSTATESRESPONSE']._serialized_start=4144
+  _globals['_RESETCHANNELSTATESRESPONSE']._serialized_end=4172
+  _globals['_RECORDADAPTIVESAMPLINGINFORMATIONREQUEST']._serialized_start=4175
+  _globals['_RECORDADAPTIVESAMPLINGINFORMATIONREQUEST']._serialized_end=4415
+  _globals['_RECORDADAPTIVESAMPLINGINFORMATIONREQUEST_OBJECTIVE']._serialized_start=4332
+  _globals['_RECORDADAPTIVESAMPLINGINFORMATIONREQUEST_OBJECTIVE']._serialized_end=4400
+  _globals['_RECORDADAPTIVESAMPLINGINFORMATIONRESPONSE']._serialized_start=4417
+  _globals['_RECORDADAPTIVESAMPLINGINFORMATIONRESPONSE']._serialized_end=4460
+  _globals['_GETREADSTATISTICSREQUEST']._serialized_start=4463
+  _globals['_GETREADSTATISTICSREQUEST']._serialized_end=4775
+  _globals['_GETREADSTATISTICSREQUEST_READSPLIT']._serialized_start=4721
+  _globals['_GETREADSTATISTICSREQUEST_READSPLIT']._serialized_end=4763
+  _globals['_GETREADSTATISTICSRESPONSE']._serialized_start=4778
+  _globals['_GETREADSTATISTICSRESPONSE']._serialized_end=6158
+  _globals['_GETREADSTATISTICSRESPONSE_STATISTICS']._serialized_start=4944
+  _globals['_GETREADSTATISTICSRESPONSE_STATISTICS']._serialized_end=5108
+  _globals['_GETREADSTATISTICSRESPONSE_CHUNKSTATISTICS']._serialized_start=5110
+  _globals['_GETREADSTATISTICSRESPONSE_CHUNKSTATISTICS']._serialized_end=5177
+  _globals['_GETREADSTATISTICSRESPONSE_PERCLASSIFICATIONDATA']._serialized_start=5180
+  _globals['_GETREADSTATISTICSRESPONSE_PERCLASSIFICATIONDATA']._serialized_end=5511
+  _globals['_GETREADSTATISTICSRESPONSE_PERCONFIGURATIONDATA']._serialized_start=5514
+  _globals['_GETREADSTATISTICSRESPONSE_PERCONFIGURATIONDATA']._serialized_end=5939
+  _globals['_GETREADSTATISTICSRESPONSE_PERCONFIGURATIONDATA_CLASSIFICATIONSENTRY']._serialized_start=5818
+  _globals['_GETREADSTATISTICSRESPONSE_PERCONFIGURATIONDATA_CLASSIFICATIONSENTRY']._serialized_end=5939
+  _globals['_GETREADSTATISTICSRESPONSE_PERCHANNELDATA']._serialized_start=5942
+  _globals['_GETREADSTATISTICSRESPONSE_PERCHANNELDATA']._serialized_end=6158
+  _globals['_LOCKCHANNELSTATESREQUEST']._serialized_start=6160
+  _globals['_LOCKCHANNELSTATESREQUEST']._serialized_end=6236
+  _globals['_LOCKCHANNELSTATESRESPONSE']._serialized_start=6238
+  _globals['_LOCKCHANNELSTATESRESPONSE']._serialized_end=6265
+  _globals['_UNLOCKCHANNELSTATESREQUEST']._serialized_start=6267
+  _globals['_UNLOCKCHANNELSTATESREQUEST']._serialized_end=6319
+  _globals['_UNLOCKCHANNELSTATESRESPONSE']._serialized_start=6321
+  _globals['_UNLOCKCHANNELSTATESRESPONSE']._serialized_end=6350
+  _globals['_GETEXPERIMENTYIELDINFOREQUEST']._serialized_start=6352
+  _globals['_GETEXPERIMENTYIELDINFOREQUEST']._serialized_end=6383
+  _globals['_GETEXPERIMENTYIELDINFORESPONSE']._serialized_start=6386
+  _globals['_GETEXPERIMENTYIELDINFORESPONSE']._serialized_end=10121
+  _globals['_GETEXPERIMENTYIELDINFORESPONSE_COMPLETEREADINFO']._serialized_start=7439
+  _globals['_GETEXPERIMENTYIELDINFORESPONSE_COMPLETEREADINFO']._serialized_end=8075
+  _globals['_GETEXPERIMENTYIELDINFORESPONSE_ACQUISITIONINFO']._serialized_start=8077
+  _globals['_GETEXPERIMENTYIELDINFORESPONSE_ACQUISITIONINFO']._serialized_end=8150
+  _globals['_GETEXPERIMENTYIELDINFORESPONSE_ANALYSERINFO']._serialized_start=8153
+  _globals['_GETEXPERIMENTYIELDINFORESPONSE_ANALYSERINFO']._serialized_end=8382
+  _globals['_GETEXPERIMENTYIELDINFORESPONSE_BULKINFO']._serialized_start=8384
+  _globals['_GETEXPERIMENTYIELDINFORESPONSE_BULKINFO']._serialized_end=8435
+  _globals['_GETEXPERIMENTYIELDINFORESPONSE_HDFWRITERINFO']._serialized_start=8438
+  _globals['_GETEXPERIMENTYIELDINFORESPONSE_HDFWRITERINFO']._serialized_end=8598
+  _globals['_GETEXPERIMENTYIELDINFORESPONSE_BASECALLSTATISTICS']._serialized_start=8601
+  _globals['_GETEXPERIMENTYIELDINFORESPONSE_BASECALLSTATISTICS']._serialized_end=9009
+  _globals['_GETEXPERIMENTYIELDINFORESPONSE_HDFMULTIREADWRITINGSTATISTICS']._serialized_start=9012
+  _globals['_GETEXPERIMENTYIELDINFORESPONSE_HDFMULTIREADWRITINGSTATISTICS']._serialized_end=9258
+  _globals['_GETEXPERIMENTYIELDINFORESPONSE_FASTQREADWRITINGSTATISTICS']._serialized_start=9261
+  _globals['_GETEXPERIMENTYIELDINFORESPONSE_FASTQREADWRITINGSTATISTICS']._serialized_end=9428
+  _globals['_GETEXPERIMENTYIELDINFORESPONSE_PROTOBUFREADWRITINGSTATISTICS']._serialized_start=9431
+  _globals['_GETEXPERIMENTYIELDINFORESPONSE_PROTOBUFREADWRITINGSTATISTICS']._serialized_end=9570
+  _globals['_GETEXPERIMENTYIELDINFORESPONSE_FILEOPERATIONQUEUEPROGRESS']._serialized_start=9573
+  _globals['_GETEXPERIMENTYIELDINFORESPONSE_FILEOPERATIONQUEUEPROGRESS']._serialized_end=10121
+  _globals['_GETEXPERIMENTYIELDINFORESPONSE_FILEOPERATIONQUEUEPROGRESS_FILETYPEINFO']._serialized_start=10010
+  _globals['_GETEXPERIMENTYIELDINFORESPONSE_FILEOPERATIONQUEUEPROGRESS_FILETYPEINFO']._serialized_end=10121
+  _globals['_DATASERVICE']._serialized_start=10124
+  _globals['_DATASERVICE']._serialized_end=11458
+RecordAdaptiveSamplingInformationRequest.__doc__ = """Attributes:
+    objective:
+        The reason for applying the adaptive sampling technique. This
+        must be recorded during the acquisition period in which
+        adaptive sampling is applied.
+    end_reason:
+        The reason why the adaptive sampling script ended. This string
+        will be truncated to 80 characters.
+"""
+GetExperimentYieldInfoResponse.CompleteReadInfo.__doc__ = """Attributes:
+    pending_skipped_reads:
+         No longer used
+    processed_skipped_reads:
+         No longer used
+    stored_read_supporting_bytes_memory:
+         No longer used
+"""
 GetReadStatisticsResponse.PerClassificationData.__doc__ = """Attributes:
     duration_statistics:
         Statistics of read (chunk) durations. These will be in the
@@ -207,62 +224,33 @@ GetReadStatisticsResponse.PerClassificationData.__doc__ = """Attributes:
         channel in this channel configuration.  This is the same as
         ``samples_duration``, but expressed in seconds.
 """
-GetLiveReadsRequest.UnblockAction.__doc__ = """Attributes:
-    duration:
-        Duration of unblock in seconds.
-"""
-GetLiveReadsRequest.Action.__doc__ = """removed since 6.0
-
-Attributes:
-    channel:
-        Channel name to unblock
-    read:
-        Identifier for the read to act on.  If the read requested is
-        no longer in progress, the action fails.
-    unblock:
-        Unblock a read and skip further data from this read.
-    stop_further_data:
-        Skip further data from this read, doesn't affect the read
-        data.
-"""
-LockChannelStatesRequest.__doc__ = """Attributes:
+GetReadStatisticsRequest.__doc__ = """Attributes:
     channels:
-        The channels that we want to 'deactivate' = set them to the
-        given state until we re-activate them with
-        unlock_channel_states If the channels are already deactivated,
-        it will update the state to the new forced state given (if
-        different). Channels are indexed from 1.
-    state_name:
-        Channel state name as specified in the channel state
-        configuration. It HAS to be different to 'unclassified', which
-        denotes that the channel is active, but had not met any
-        successful criteria yet.
+        List of channels required, indexed from 1.
+    duration:
+        How long to collect the statistics for
+    no_current_statistics:
+        Disable current_statistics results in returned data.  Intended
+        for use when the consumer doesn't need specific fields
+        allowing the implementation to be more efficient.
+    no_chunk_statistics:
+        Disable chunk_statistics results in returned data.  Intended
+        for use when the consumer doesn't need specific fields
+        allowing the implementation to be more efficient.
+    required_classifications:
+        Specify classifications which the user wants information
+        about.  The default behaviour (when empty) is to return
+        information on all classifications.  Specifying which
+        classifications the user needs information about may allow the
+        implementation to be more efficient.
 """
-GetReadStatisticsResponse.PerConfigurationData.__doc__ = """Attributes:
-    channel_configuration:
-        The channel configuration active during the reads these
-        statistics were gathered for.
-    classifications:
-        Map from classification names to statistics about read
-        (chunks) with that classification.
-    incomplete:
-        If statistics about complete reads were requested, this field
-        may contain data for a final, incomplete read (whose
-        classification is therefore unknown).  This field will not be
-        set if read chunks were requested, or if the data capture
-        happened to end at a complete read boundary.
+GetSignalBytesResponse.ChannelConfigChange.__doc__ = """Attributes:
+    config:
+        The new channel configuration.
+    offset:
+        The offset in the returned data where the change was applied.
 """
-GetDataTypesResponse.DataType.__doc__ = """Attributes:
-    type:
-        The basic type of the data item.
-    big_endian:
-        Whether the type is big-endian (high-byte first).  For numeric
-        data types, if this is not set, they are little-endian (low-
-        byte first).
-    size:
-        The size of the data type in bytes.
-"""
-GetSignalMinMaxResponse.__doc__ = """Attributes:
+GetSignalBytesResponse.__doc__ = """Attributes:
     samples_since_start:
         The number of samples collected before the first sample
         included in this response.  This gives the position of the
@@ -277,37 +265,50 @@ GetSignalMinMaxResponse.__doc__ = """Attributes:
         The number of channels omitted at the start of the
         ``channels`` array.
     channels:
-        The window bounds for each requested channel.  Note that
+        The signal for each requested channel.  Note that
         ``skipped_channels`` must be used to determine which channels
         are given here, as not all channels will be included in every
         message. The channels that are provided are contiguous and in
         order, with the first channel being ``first_channel +
         skipped_channels`` (where ``first_channel`` is from the
         request message).
+    bias_voltages:
+        The bias voltages set for each sample.  If bias voltages were
+        requested, this will provide voltage data, one voltage per
+        sample. Note that not every message may include bias_voltages
+        (they will generally be included when ``skipped_channels`` is
+        0, but that is not guaranteed).  The get_data_types() RPC call
+        should be used to determine the format of the data.
 """
-GetReadStatisticsResponse.ChunkStatistics.__doc__ = """Attributes:
-    median_sd:
-        Aggregated median_sd value from all classified reads. Computed
-        as median(median_sd[...])
-    median:
-        Aggregated median_sd value from all classified reads.
-        Computed as median(median[...])
-    range:
-        Aggregated range value from all classified reads.  Computed as
-        median(q90[...] - q10[...])
+GetChannelStatesResponse.__doc__ = """Attributes:
+    channel_states:
+        The streamed data for all channels will be appended to this
+        vector. After the request is made, all the channel state
+        changes are streamed through this array. This is implemented
+        in the idea of a sparse array because we can have channels
+        that remain in the same state for a long time.
 """
-GetSignalMinMaxRequest.__doc__ = """Attributes:
-    first_channel:
-        The first channel (inclusive) to return data for.  Note that
-        channel numbering starts at 1.
-    last_channel:
-        The last channel (inclusive) to return data for.  Note that
-        channel numbering starts at 1.
-    window_size:
-        The size of window to summarise.  A value of zero will be
-        rejected; there is no default.
-    calibrated_data:
-        Whether the data should be calibrated.
+GetLiveReadsResponse.__doc__ = """NOTE that the read metrics below are tracked from the receipt of the
+first StreamSetup message. It is advised that the first StreamSetup be
+sent close to the experiment start time for maximum accuracy.
+
+Attributes:
+    samples_since_start:
+        The number of samples collected before the first sample
+        included in this response.  This gives the position of the
+        first data point on each channel in the overall stream of data
+        being acquired from the device (since this period of data
+        acquisition was started).
+    seconds_since_start:
+        The number of seconds elapsed since data acquisition started.
+        This is the same as ``samples_since_start``, but expressed in
+        seconds.
+    channels:
+        In progress reads for the requested channels.  Sparsely
+        populated as not all channels have new/incomplete reads.
+    action_responses:
+        List of responses to requested actions, informing the caller
+        of results to requested unblocks or discards of data.
 """
 GetChannelStatesResponse.ChannelStateData.__doc__ = """Attributes:
     channel:
@@ -331,47 +332,23 @@ GetChannelStatesResponse.ChannelStateData.__doc__ = """Attributes:
         Channel config (mux state) the channel state was determined
         on.
 """
-GetReadStatisticsResponse.PerChannelData.__doc__ = """Attributes:
-    configurations:
-        Data for each channel configuration seen on this channel.
-        Note that each channel configuration will only appear once in
-        this list, and this list is *not* in any way ordered by time.
-        The only reason it is not a map is because of restrictions on
-        map key types.
-    samples_since_start:
-        The number of samples collected before this channel's first
-        sample.
-    seconds_since_start:
-        The number of seconds elapsed since data acquisition started.
-        This is the same as ``samples_since_start``, but expressed in
-        seconds.
-    samples_duration:
-        The number of samples collected for this channel.
-    seconds_duration:
-        The number of seconds of data captured for this session.  This
-        is the same as ``samples_duration``, but expressed in seconds.
+GetDataTypesResponse.__doc__ = """Attributes:
+    uncalibrated_signal:
+        The format of the uncalibrated (ADC) signal data returned by
+        get_raw_signal_bytes().  In the current release, this will
+        describe 16-bit little-endian integers.
+    calibrated_signal:
+        The format of the calibrated (picoamp) signal data returned by
+        get_raw_signal_bytes().  In the current release, this will
+        describe 32-bit IEEE 754 floating point values.
+    bias_voltages:
+        The format of the bias voltage data returned by
+        get_raw_signal_bytes().  In the current release, this will
+        describe 16-bit little-endian integers.
 """
-GetSignalMinMaxResponse.ChannelData.__doc__ = """Attributes:
-    calibrated_minima:
-        The minimum value for each window.  The type of the elements
-        will depend on whether calibrated data was chosen.
-        Uncalibrated data will be signed integers and calibrated data
-        will be floating-point numbers.  It would be nice to use the
-        "oneof" enum-like type to capture this, but you can't have
-        repeated members in a oneof, and nor can you have a repeated
-        oneof field.  We can simply include message fields for both
-        types of data, as all fields are optional in proto3.  We will
-        rely on the code that constructs this message to guarantee
-        that we don't try and put both types of data into the same
-        message.  Calibrated data is in picoamps. Uncalibrated data is
-        the raw values output by the device's ADC (analogue-digital
-        converter).  This is guaranteed to be the same size as the
-        respective foo_maxima field.
-    calibrated_maxima:
-        The maximum value for each window.  See comments for the
-        "minima" fields above for details of calibrated and
-        uncalibrated data.  This is guaranteed to be the same size as
-        the respective foo_minima field.
+GetLiveReadsRequest.UnblockAction.__doc__ = """Attributes:
+    duration:
+        Duration of unblock in seconds.
 """
 GetSignalBytesResponse.ChannelData.__doc__ = """Attributes:
     data:
@@ -399,18 +376,47 @@ GetSignalBytesResponse.ChannelData.__doc__ = """Attributes:
         the zero-based index into the adc or picoamps list.  The
         changes will be ordered by offset.
 """
-GetLiveReadsRequest.__doc__ = """Attributes:
-    setup:
-        Read setup request, initialises channel numbers and type of
-        data returned.  note: Must be specified in the first message
-        sent to MinKNOW. Once MinKNOW has the first setup message
-        reads are sent to the caller as requested. The user can then
-        resend a setup message as frequently as they need to in order
-        to reconfigure live reads - for example by changing if raw
-        data is sent with reads or not.
-    actions:
-        Actions to take given data returned to the user - can only be
-        sent once the setup message above has been sent.
+GetReadStatisticsResponse.PerChannelData.__doc__ = """Attributes:
+    configurations:
+        Data for each channel configuration seen on this channel.
+        Note that each channel configuration will only appear once in
+        this list, and this list is *not* in any way ordered by time.
+        The only reason it is not a map is because of restrictions on
+        map key types.
+    samples_since_start:
+        The number of samples collected before this channel's first
+        sample.
+    seconds_since_start:
+        The number of seconds elapsed since data acquisition started.
+        This is the same as ``samples_since_start``, but expressed in
+        seconds.
+    samples_duration:
+        The number of samples collected for this channel.
+    seconds_duration:
+        The number of seconds of data captured for this session.  This
+        is the same as ``samples_duration``, but expressed in seconds.
+"""
+GetLiveReadsRequest.Action.__doc__ = """removed since 6.0
+
+Attributes:
+    channel:
+        Channel name to unblock
+    read:
+        Identifier for the read to act on.  If the read requested is
+        no longer in progress, the action fails.
+    unblock:
+        Unblock a read and skip further data from this read.
+    stop_further_data:
+        Skip further data from this read, doesn't affect the read
+        data.
+"""
+GetExperimentYieldInfoResponse.HdfWriterInfo.__doc__ = """Attributes:
+    pending_compressions:
+         No longer used
+    pending_writes:
+         No longer used
+    completed_writes:
+         No longer used
 """
 GetReadStatisticsResponse.__doc__ = """Attributes:
     channels:
@@ -427,12 +433,6 @@ GetReadStatisticsResponse.__doc__ = """Attributes:
         The number of seconds elapsed before the first sample included
         in this response.  This is the same as
         ``samples_since_start``, but expressed in seconds.
-"""
-GetSignalBytesResponse.ChannelConfigChange.__doc__ = """Attributes:
-    config:
-        The new channel configuration.
-    offset:
-        The offset in the returned data where the change was applied.
 """
 GetChannelStatesRequest.__doc__ = """Attributes:
     first_channel:
@@ -459,13 +459,97 @@ GetChannelStatesRequest.__doc__ = """Attributes:
         message will be sent. This can be useful to force a minimum
         wakeup interval in the client code.
 """
-GetChannelStatesResponse.__doc__ = """Attributes:
-    channel_states:
-        The streamed data for all channels will be appended to this
-        vector. After the request is made, all the channel state
-        changes are streamed through this array. This is implemented
-        in the idea of a sparse array because we can have channels
-        that remain in the same state for a long time.
+GetLiveReadsRequest.StreamSetup.__doc__ = """Attributes:
+    first_channel:
+        The first channel (inclusive) to return data for.  Note that
+        channel numbering starts at 1.
+    last_channel:
+        The last channel (inclusive) to return data for.  Note that
+        channel numbering starts at 1.
+    raw_data_type:
+        Specify the type of raw data to retrieve
+    sample_minimum_chunk_size:
+        Minimum chunk size read data is returned in.
+    max_unblock_read_length:
+        Maximum read length MinKNOW will attempt to unblock reads
+        beyond this length will not be unblocked when Action's
+        request, instead minknow will skip any further data from the
+        read. NOTE that read length metrics are tracked from the
+        receipt of the first StreamSetup message, so reads from the
+        first batch sent could be longer than the
+        `max_unblock_read_length_xxx` values unless the first
+        StreamSetup is sent close to the experiment start time.
+    max_unblock_read_length_samples:
+        Maximum read length MinKNOW will attempt to unblock (in
+        samples).  A value of 0 will cause minknow to unblock reads of
+        any length.
+    max_unblock_read_length_seconds:
+        Maximum read length MinKNOW will attempt to unblock (in
+        seconds).  A value of 0.0 will cause minknow to unblock reads
+        of any length.
+    accepted_first_chunk_classifications:
+        A set of classification identifiers which the client is
+        interested in. If a read starts with a classification not
+        listed here the read is never sent to the client.
+"""
+GetReadStatisticsResponse.Statistics.__doc__ = """Attributes:
+    q_5:
+         Quantiles (percentiles)
+"""
+GetSignalMinMaxResponse.__doc__ = """Attributes:
+    samples_since_start:
+        The number of samples collected before the first sample
+        included in this response.  This gives the position of the
+        first data point on each channel in the overall stream of data
+        being acquired from the device (since this period of data
+        acquisition was started).
+    seconds_since_start:
+        The number of seconds elapsed since data acquisition started.
+        This is the same as ``samples_since_start``, but expressed in
+        seconds.
+    skipped_channels:
+        The number of channels omitted at the start of the
+        ``channels`` array.
+    channels:
+        The window bounds for each requested channel.  Note that
+        ``skipped_channels`` must be used to determine which channels
+        are given here, as not all channels will be included in every
+        message. The channels that are provided are contiguous and in
+        order, with the first channel being ``first_channel +
+        skipped_channels`` (where ``first_channel`` is from the
+        request message).
+"""
+GetSignalBytesRequest.__doc__ = """Attributes:
+    length:
+        The amount of data to return.  If this is omitted, data will
+        be streamed until the call is cancelled.
+    seconds:
+        The amount of data to return in seconds.  The number of
+        samples returned will be just enough to cover this period of
+        time. Cannot be specified at the same time as ``samples``.
+    samples:
+        The amount of data to return in samples.  The result will
+        contain exactly this many samples. If this is not possible,
+        the call will fail. Cannot be specified at the same time as
+        ``seconds``.
+    first_channel:
+        The first channel (inclusive) to return data for.  Note that
+        channel numbering starts at 1.
+    last_channel:
+        The last channel (inclusive) to return data for.  Note that
+        channel numbering starts at 1.
+    include_channel_configs:
+        Whether to include channel configuration settings.
+    include_bias_voltages:
+        Whether to include bias voltage information.
+    calibrated_data:
+        Whether the data should be calibrated.
+    return_when_listening:
+        When this value is set to true, then an empty message will be
+        sent back to the client to indicate that the backend has
+        acknowledged the request, and that any calls made that will
+        affect the signal after that initial response will be
+        reflected in the next messages
 """
 GetLiveReadsResponse.ReadData.__doc__ = """removed since 6.0
 
@@ -504,174 +588,106 @@ Attributes:
     previous_read_end_reason:
         The classification of the chunk prior to this read starting.
 """
+LockChannelStatesRequest.__doc__ = """Attributes:
+    channels:
+        The channels that we want to 'deactivate' = set them to the
+        given state until we re-activate them with
+        unlock_channel_states If the channels are already deactivated,
+        it will update the state to the new forced state given (if
+        different). Channels are indexed from 1.
+    state_name:
+        Channel state name as specified in the channel state
+        configuration. It HAS to be different to 'unclassified', which
+        denotes that the channel is active, but had not met any
+        successful criteria yet.
+"""
 UnlockChannelStatesRequest.__doc__ = """Attributes:
     channels:
         The channels to activate (active = they will be considered for
         channel state evaluation in the future). Channels are indexed
         from 1.
 """
-GetReadStatisticsRequest.__doc__ = """Attributes:
-    channels:
-        List of channels required, indexed from 1.
-    duration:
-        How long to collect the statistics for
-    no_current_statistics:
-        Disable current_statistics results in returned data.  Intended
-        for use when the consumer doesn't need specific fields
-        allowing the implementation to be more efficient.
-    no_chunk_statistics:
-        Disable chunk_statistics results in returned data.  Intended
-        for use when the consumer doesn't need specific fields
-        allowing the implementation to be more efficient.
-    required_classifications:
-        Specify classifications which the user wants information
-        about.  The default behaviour (when empty) is to return
-        information on all classifications.  Specifying which
-        classifications the user needs information about may allow the
-        implementation to be more efficient.
+GetDataTypesResponse.DataType.__doc__ = """Attributes:
+    type:
+        The basic type of the data item.
+    big_endian:
+        Whether the type is big-endian (high-byte first).  For numeric
+        data types, if this is not set, they are little-endian (low-
+        byte first).
+    size:
+        The size of the data type in bytes.
 """
-GetLiveReadsResponse.__doc__ = """NOTE that the read metrics below are tracked from the receipt of the
-first StreamSetup message. It is advised that the first StreamSetup be
-sent close to the experiment start time for maximum accuracy.
-
-Attributes:
-    samples_since_start:
-        The number of samples collected before the first sample
-        included in this response.  This gives the position of the
-        first data point on each channel in the overall stream of data
-        being acquired from the device (since this period of data
-        acquisition was started).
-    seconds_since_start:
-        The number of seconds elapsed since data acquisition started.
-        This is the same as ``samples_since_start``, but expressed in
-        seconds.
-    channels:
-        In progress reads for the requested channels.  Sparsely
-        populated as not all channels have new/incomplete reads.
-    action_responses:
-        List of responses to requested actions, informing the caller
-        of results to requested unblocks or discards of data.
+GetReadStatisticsResponse.PerConfigurationData.__doc__ = """Attributes:
+    channel_configuration:
+        The channel configuration active during the reads these
+        statistics were gathered for.
+    classifications:
+        Map from classification names to statistics about read
+        (chunks) with that classification.
+    incomplete:
+        If statistics about complete reads were requested, this field
+        may contain data for a final, incomplete read (whose
+        classification is therefore unknown).  This field will not be
+        set if read chunks were requested, or if the data capture
+        happened to end at a complete read boundary.
 """
-GetDataTypesResponse.__doc__ = """Attributes:
-    uncalibrated_signal:
-        The format of the uncalibrated (ADC) signal data returned by
-        get_raw_signal_bytes().  In the current release, this will
-        describe 16-bit little-endian integers.
-    calibrated_signal:
-        The format of the calibrated (picoamp) signal data returned by
-        get_raw_signal_bytes().  In the current release, this will
-        describe 32-bit IEEE 754 floating point values.
-    bias_voltages:
-        The format of the bias voltage data returned by
-        get_raw_signal_bytes().  In the current release, this will
-        describe 16-bit little-endian integers.
+GetLiveReadsRequest.__doc__ = """Attributes:
+    setup:
+        Read setup request, initialises channel numbers and type of
+        data returned.  note: Must be specified in the first message
+        sent to MinKNOW. Once MinKNOW has the first setup message
+        reads are sent to the caller as requested. The user can then
+        resend a setup message as frequently as they need to in order
+        to reconfigure live reads - for example by changing if raw
+        data is sent with reads or not.
+    actions:
+        Actions to take given data returned to the user - can only be
+        sent once the setup message above has been sent.
 """
-GetLiveReadsRequest.StreamSetup.__doc__ = """Attributes:
+GetReadStatisticsResponse.ChunkStatistics.__doc__ = """Attributes:
+    median_sd:
+        Aggregated median_sd value from all classified reads. Computed
+        as median(median_sd[...])
+    median:
+        Aggregated median_sd value from all classified reads.
+        Computed as median(median[...])
+    range:
+        Aggregated range value from all classified reads.  Computed as
+        median(q90[...] - q10[...])
+"""
+GetSignalMinMaxResponse.ChannelData.__doc__ = """Attributes:
+    calibrated_minima:
+        The minimum value for each window.  The type of the elements
+        will depend on whether calibrated data was chosen.
+        Uncalibrated data will be signed integers and calibrated data
+        will be floating-point numbers.  It would be nice to use the
+        "oneof" enum-like type to capture this, but you can't have
+        repeated members in a oneof, and nor can you have a repeated
+        oneof field.  We can simply include message fields for both
+        types of data, as all fields are optional in proto3.  We will
+        rely on the code that constructs this message to guarantee
+        that we don't try and put both types of data into the same
+        message.  Calibrated data is in picoamps. Uncalibrated data is
+        the raw values output by the device's ADC (analogue-digital
+        converter).  This is guaranteed to be the same size as the
+        respective foo_maxima field.
+    calibrated_maxima:
+        The maximum value for each window.  See comments for the
+        "minima" fields above for details of calibrated and
+        uncalibrated data.  This is guaranteed to be the same size as
+        the respective foo_minima field.
+"""
+GetSignalMinMaxRequest.__doc__ = """Attributes:
     first_channel:
         The first channel (inclusive) to return data for.  Note that
         channel numbering starts at 1.
     last_channel:
         The last channel (inclusive) to return data for.  Note that
         channel numbering starts at 1.
-    raw_data_type:
-        Specify the type of raw data to retrieve
-    sample_minimum_chunk_size:
-        Minimum chunk size read data is returned in.
-    max_unblock_read_length:
-        Maximum read length MinKNOW will attempt to unblock reads
-        beyond this length will not be unblocked when Action's
-        request, instead minknow will skip any further data from the
-        read. NOTE that read length metrics are tracked from the
-        receipt of the first StreamSetup message, so reads from the
-        first batch sent could be longer than the
-        `max_unblock_read_length_xxx` values unless the first
-        StreamSetup is sent close to the experiment start time.
-    max_unblock_read_length_samples:
-        Maximum read length MinKNOW will attempt to unblock (in
-        samples).  A value of 0 will cause minknow to unblock reads of
-        any length.
-    max_unblock_read_length_seconds:
-        Maximum read length MinKNOW will attempt to unblock (in
-        seconds).  A value of 0.0 will cause minknow to unblock reads
-        of any length.
-    accepted_first_chunk_classifications:
-        A set of classification identifiers which the client is
-        interested in. If a read starts with a classification not
-        listed here the read is never sent to the client.
-"""
-GetSignalBytesResponse.__doc__ = """Attributes:
-    samples_since_start:
-        The number of samples collected before the first sample
-        included in this response.  This gives the position of the
-        first data point on each channel in the overall stream of data
-        being acquired from the device (since this period of data
-        acquisition was started).
-    seconds_since_start:
-        The number of seconds elapsed since data acquisition started.
-        This is the same as ``samples_since_start``, but expressed in
-        seconds.
-    skipped_channels:
-        The number of channels omitted at the start of the
-        ``channels`` array.
-    channels:
-        The signal for each requested channel.  Note that
-        ``skipped_channels`` must be used to determine which channels
-        are given here, as not all channels will be included in every
-        message. The channels that are provided are contiguous and in
-        order, with the first channel being ``first_channel +
-        skipped_channels`` (where ``first_channel`` is from the
-        request message).
-    bias_voltages:
-        The bias voltages set for each sample.  If bias voltages were
-        requested, this will provide voltage data, one voltage per
-        sample. Note that not every message may include bias_voltages
-        (they will generally be included when ``skipped_channels`` is
-        0, but that is not guaranteed).  The get_data_types() RPC call
-        should be used to determine the format of the data.
-"""
-GetSignalBytesRequest.__doc__ = """Attributes:
-    length:
-        The amount of data to return.  If this is omitted, data will
-        be streamed until the call is cancelled.
-    seconds:
-        The amount of data to return in seconds.  The number of
-        samples returned will be just enough to cover this period of
-        time. Cannot be specified at the same time as ``samples``.
-    samples:
-        The amount of data to return in samples.  The result will
-        contain exactly this many samples. If this is not possible,
-        the call will fail. Cannot be specified at the same time as
-        ``seconds``.
-    first_channel:
-        The first channel (inclusive) to return data for.  Note that
-        channel numbering starts at 1.
-    last_channel:
-        The last channel (inclusive) to return data for.  Note that
-        channel numbering starts at 1.
-    include_channel_configs:
-        Whether to include channel configuration settings.
-    include_bias_voltages:
-        Whether to include bias voltage information.
+    window_size:
+        The size of window to summarise.  A value of zero will be
+        rejected; there is no default.
     calibrated_data:
         Whether the data should be calibrated.
-    return_when_listening:
-        When this value is set to true, then an empty message will be
-        sent back to the client to indicate that the backend has
-        acknowledged the request, and that any calls made that will
-        affect the signal after that initial response will be
-        reflected in the next messages
-"""
-GetReadStatisticsResponse.Statistics.__doc__ = """Attributes:
-    q_5:
-         Quantiles (percentiles)
-"""
-RecordAdaptiveSamplingInformationRequest.__doc__ = """Attributes:
-    objective:
-        The reason for applying the adaptive sampling technique. This
-        must be recorded during the acquisition period in which
-        adaptive sampling is applied.
-    end_reason:
-        The reason why the adaptive sampling script ended. This string
-        will be truncated to 80 characters.
 """
 # @@protoc_insertion_point(module_scope)

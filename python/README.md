@@ -79,6 +79,7 @@ you can try setting the `MINKNOW_API_USE_LOCAL_TOKEN` environment variable to `0
 ### MissingMinknowSSlCertError
 
 If you get a `MissingMinknowSSlCertError` exception, try setting the `MINKNOW_TRUSTED_CA`
-environment variable. This should be the path to the `conf/rpc-certs/ca.crt` file found in a MinKNOW
-installation. You should use a copy of the file from the same version of MinKNOW as the one you are
+environment variable. This should be the path to the `<data_dir>/rpc-certs/minknow/ca.crt` file,
+where `<data_dir>` maps to `C:\\data` on Windows and `/data` on Ubuntu and MacOS platforms.
+You should use a copy of the file from the same version of MinKNOW as the one you are
 attempting to connect to.

@@ -1,0 +1,142 @@
+syntax = "proto3";
+
+package minknow_api.v2.protocol;
+
+option java_package = "com.nanoporetech.minknow_api.v2";
+option objc_class_prefix = "MKAPI";
+option go_package = "github.com/nanoporetech/minknow_api/go/gen/v2/protocol";
+
+import "minknow_api/protocol.proto";
+import "minknow_api/manager.proto";
+import "util/status.proto";
+
+service ProtocolsService
+{
+    // Run a protocol on the connected flow cell.
+    //
+    // The protocol must be described by a TOML file. The request identifies the
+    // protocol and supplies overrides to the default protocol-settings described
+    // in the TOML file, in addition it provides user-info for the experiment.
+    //
+    // This will return an error if one or more of the sub-requests' flow cell identification information is invalid.
+    // Otherwise, will return OK, even if any of the sub-requests fail.
+    //
+    // If a sub-request fails, this will be indicated by the individual response's 'status' field being set.
+    rpc begin_protocols(BeginProtocolsRequest) returns (BeginProtocolsResponse) {}
+
+    // Initiates a python instance that runs the script specified by the `path` argument.
+    // `list_protocols` will give back a list of protocol scripts that can be started by this call
+    //
+    // This will return an error if one or more of the sub-requests' flow cell identification information is invalid.
+    // Otherwise, will return OK, even if any of the sub-requests fail.
+    //
+    // If a sub-request fails, this will be indicated by the individual response's 'status' field being set.
+    rpc start_protocols(StartProtocolsRequest) returns (StartProtocolsResponse) {}
+
+    // Stops the named protocols.
+    //
+    // This will return an error if one or more of the sub-requests' run IDs does not correspond to a currently running experiment.
+    // Otherwise, will return OK, even if any of the sub-requests fail.
+    //
+    // If a sub-request fails, this will be indicated by the individual response's 'status' field being set.
+    rpc stop_protocols(StopProtocolsRequest) returns (StopProtocolsResponse) {}
+
+
+    // Gets information about a protocol run.
+    //
+    // If no run ID is provided, information about the most recently started protocol run is
+    // provided.
+    //
+    // Since 6.5
+    rpc get_run_info (minknow_api.protocol.GetRunInfoRequest) returns (minknow_api.protocol.ProtocolRunInfo) {
+        option idempotency_level = NO_SIDE_EFFECTS;
+    }
+
+    // List previously started protocol run ids (including any current protocol), in order of starting.
+    //
+    // The returned object can be used to find protocol information with get_run_info.
+    //
+    // Since 6.5
+    rpc list_protocol_runs (minknow_api.protocol.ListProtocolRunsRequest) returns (minknow_api.protocol.ListProtocolRunsResponse) {
+        option idempotency_level = NO_SIDE_EFFECTS;
+    }
+}
+
+message BeginProtocolsRequest
+{
+    message IndividualRequest
+    {
+        // The position on which to start this protocol.
+        string flow_cell_position_name = 1;
+        minknow_api.protocol.BeginProtocolRequest settings = 2;
+    }
+
+    repeated IndividualRequest requests = 1;
+}
+
+message BeginProtocolsResponse
+{
+    // Represents the response from the proxied call to 'begin_protocol'
+    // on a specific flow cell.
+    message IndividualResponse
+    {
+        string flow_cell_position_name = 1;
+
+        oneof payload
+        {
+            minknow_api.protocol.BeginProtocolResponse response = 2;
+            google.rpc.Status status = 3;
+        }
+    }
+
+    repeated IndividualResponse responses = 1;
+}
+
+message StartProtocolsRequest
+{
+    message IndividualRequest
+    {
+        // The position on which to start this protocol.
+        string flow_cell_position_name = 1;
+        minknow_api.protocol.StartProtocolRequest settings = 2;
+    }
+
+    repeated IndividualRequest requests = 1;
+}
+
+message StartProtocolsResponse
+{
+    message IndividualResponse
+    {
+        string flow_cell_position_name = 1;
+
+        oneof payload
+        {
+            minknow_api.protocol.StartProtocolResponse response = 2;
+            google.rpc.Status status = 3;
+        }
+    }
+
+    repeated IndividualResponse responses = 1;
+}
+
+message StopProtocolsRequest
+{
+    repeated minknow_api.protocol.StopProtocolRequest requests = 1;
+}
+
+message StopProtocolsResponse
+{
+    message IndividualResponse
+    {
+        string run_id = 1;
+
+        oneof payload
+        {
+            minknow_api.protocol.StopProtocolResponse response = 2;
+            google.rpc.Status status = 3;
+        }
+    }
+
+    repeated IndividualResponse responses = 1;
+}

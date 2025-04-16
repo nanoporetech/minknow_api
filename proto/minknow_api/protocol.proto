@@ -4,6 +4,7 @@ package minknow_api.protocol;
 
 option java_package = "com.nanoporetech.minknow_api";
 option objc_class_prefix = "MKAPI";
+option go_package ="github.com/nanoporetech/minknow_api/go/gen/protocol";
 
 import "minknow_api/acquisition.proto";
 import "minknow_api/analysis_workflows.proto";
@@ -19,13 +20,40 @@ service ProtocolService {
     // `list_protocols` will give back a list of protocol scripts that can be started by this call
     rpc start_protocol (StartProtocolRequest) returns (StartProtocolResponse) {}
 
-    // Stops the currently running protocol script instance.
+    // Stop a running protocol
+    //
+    // If `protocol_run_id` is supplied, stops that protocol if it is currently running.
+    // Otherwise, if no `protocol_run_id` is supplied, stops the protocol that is currently in
+    // progress.
+    //
+    // The call will fail with `INVALID_ARGUMENT` if:
+    //	- An invalid `protocol_run_id` is supplied (i.e. one which does not exist on the current
+    //    position)
+    //
+    // The call will fail with `FAILED_PRECONDITION` if:
+    //	- There is no protocol in progress
+    //	- A valid `protocol_run_id` is supplied that does not match the `protocol_run_id` of the
+    //    protocol in progress.
+    //
     rpc stop_protocol (StopProtocolRequest) returns (StopProtocolResponse) {}
 
     // Request the protocol to pause.
     //
     // This will return an error unless the ProtocolRunInfo has the `can_pause` field set to true.
     // It will have no effect if the protocol is already paused or pausing.
+    //
+    // If `protocol_run_id` is supplied, pauses that protocol if it is currently running.
+    // Otherwise, if no `protocol_run_id` is supplied, pauses the protocol that is currently in
+    // progress.
+    //
+    // The call will fail with `INVALID_ARGUMENT` if:
+    //	- An invalid `protocol_run_id` is supplied (i.e. one which does not exist on the current
+    //    position)
+    //
+    // The call will fail with `FAILED_PRECONDITION` if:
+    //	- There is no protocol in progress
+    //	- A valid `protocol_run_id` is supplied that does not match the `protocol_run_id` of the
+    //    protocol in progress.
     //
     // Since 4.4.
     rpc pause_protocol (PauseProtocolRequest) returns (PauseProtocolResponse) {
@@ -36,6 +64,19 @@ service ProtocolService {
     //
     // This will return an error unless the ProtocolRunInfo has the `can_pause` field set to true.
     // It will have no effect if the protocol is not paused or pausing.
+    //
+    // If `protocol_run_id` is supplied, resumes that protocol if it is currently running.
+    // Otherwise, if no `protocol_run_id` is supplied, resumes the protocol that is currently in
+    // progress.
+    //
+    // The call will fail with `INVALID_ARGUMENT` if:
+    //	- An invalid `protocol_run_id` is supplied (i.e. one which does not exist on the current
+    //    position)
+    //
+    // The call will fail with `FAILED_PRECONDITION` if:
+    //	- There is no protocol in progress
+    //	- A valid `protocol_run_id` is supplied that does not match the `protocol_run_id` of the
+    //    protocol in progress.
     //
     // Since 4.4.
     rpc resume_protocol (ResumeProtocolRequest) returns (ResumeProtocolResponse) {
@@ -323,6 +364,18 @@ message ProtocolRunUserInfo {
     // sample_id created by the user
     google.protobuf.StringValue sample_id = 2;
 
+    // Ordinarily, data is split into separate top-level per-protocol directories
+    //
+    // If `pooled_output` is set to true, the splitting into per-protocol directories happens
+    // at the bottom level instead.  This in turn means that the output files for protocols with
+    // the same `protocol_group_id` and `sample_id` are stored next to each other, in
+    // subdirectories under the output type directory
+    //
+    // (The precise configuration is controlled by the `protocol_output_pattern` and
+    // `pooled_protocol_output_pattern` user configuration values)
+    //
+    bool pool_output = 7;
+
     // User supplied info for barcodes
     repeated BarcodeUserData barcode_user_info = 3;
 
@@ -370,22 +423,6 @@ message OffloadLocationInfo {
     string offload_location_path = 2;
 }
 
-message AnalysisWorkflowRequest {
-    // EXPERIMENTAL: All fields within this message are marked as experimental and
-    // may change or be removed between minor versions without warning
-
-    enum When {
-        // Start the analysis workflow at the end of the protocol
-        PROTOCOL_END = 0;
-    }
-
-    // The workflow request to start
-    analysis_workflows.ProxyRequest proxy_request = 1;
-
-    // When to start the request
-    When when = 2;
-}
-
 message StartProtocolRequest {
     reserved 6; // passenger_info
 
@@ -410,9 +447,7 @@ message StartProtocolRequest {
     acquisition.TargetRunUntilCriteria target_run_until_criteria = 5;
 
     // Workflow request that should be started when the protocol is started
-    //
-    // EXPERIMENTAL: This field may change or be removed between minor versions without warning
-    AnalysisWorkflowRequest analysis_workflow_request = 7;
+    analysis_workflows.AnalysisWorkflowRequest analysis_workflow_request = 7;
 }
 
 message StartProtocolResponse {
@@ -421,6 +456,14 @@ message StartProtocolResponse {
 }
 
 message StopProtocolRequest {
+	// The protocol run id of the protocol to stop
+	//
+	// If empty, stops the currently running protocol (if any)
+	// Otherwise, stops the specified protocol if it is currently in progress
+	//
+	// Since 6.4
+	string protocol_run_id = 2;
+
     // Specify how any running acquisition should
     // be handled when stopping the protocol.
     //
@@ -439,10 +482,24 @@ message StopProtocolResponse {
 }
 
 message PauseProtocolRequest {
+    // The protocol run id of the protocol to pause
+	//
+	// If empty, pause the currently running protocol (if any)
+	// Otherwise, pauses the specified protocol if it is currently in progress
+	//
+	// Since 6.4
+	string protocol_run_id = 1;
 }
 message PauseProtocolResponse {
 }
 message ResumeProtocolRequest {
+    // The protocol run id of the protocol to resume
+	//
+	// If empty, resumes the currently running protocol (if any)
+	// Otherwise, resumes the specified protocol if it is currently in progress
+	//
+	// Since 6.4
+	string protocol_run_id = 1;
 }
 message ResumeProtocolResponse {
 }
@@ -488,7 +545,8 @@ message ListProtocolsResponse {
 
 message WaitForFinishedRequest {
     enum NotificationState {
-        // Request return just after the protocol has terminated, including any acquisition periods completing.
+        // Request return just after the protocol has terminated, including any acquisition periods completing, as
+        // well as any analysis workflow scheduled to run after acquisition.
         NOTIFY_ON_TERMINATION = 0;
 
         // Request return prior to the script being terminated.
@@ -497,6 +555,12 @@ message WaitForFinishedRequest {
 
         // Notify as the protocol script finishes, not waiting for any in progress acquisition to complete.
         NOTIFY_ON_SCRIPT_TERMINATION = 2;
+
+        // Will return when basecalling has complete and all output files have been written
+        //
+        // This is only relevant if there is an analysis workflow that is scheduled to be run after the writing has
+        // completed. If there is no analysis workflow, then this option is the same as NOTIFY_ON_TERMINATION
+        NOTIFY_ON_WRITING_COMPLETE = 3;
     };
 
     // Only consider a specific protocol run.
@@ -630,6 +694,34 @@ enum ProtocolPhase {
     // The user will have to confirm if they want to proceed with sequencing before resuming
     PHASE_BAD_TEMPERATURE_AUTOMATIC_PAUSE = 8;
 
+    // The protocol is paused by MinKNOW after detecting a missing flow cell.
+    //
+    // This can occur in either of the following two scenarios:
+    // 1) the user has physically detached the flow cell from the device
+    // 2) an electrostatic causing the flow cell to momentarily disappear
+    // In both cases MinKNOW will attempt to automatic resume the protocol. In the
+    // first scenario, the user may also explicitly resume the protocol after re-inserting the flow cell.
+    PHASE_FLOWCELL_DISCONNECT_AUTOMATIC_PAUSE = 10;
+
+    // The protocol is paused by MinKNOW after detecting a different flow cell
+    // from the one used to start the protocol.
+    //
+    // This phase will typically be entered after the user explicitly detaches a flow cell
+    // then attempts to resume the protocol with a different flow cell inserted.
+    PHASE_FLOWCELL_MISMATCH_AUTOMATIC_PAUSE = 11;
+
+    // The protocol is paused by MinKNOW after detecting an error in the data transfer from the ASIC.
+    //
+    // MinKNOW will attempt to automatically resume the protocol. If unable to resume the protocol
+    // MinKNOW will transition to the 'STOPPED_DEVICE_ERROR' state.
+    PHASE_DEVICE_ERROR_AUTOMATIC_PAUSE = 12;
+
+    // The protocol is paused by MinKNOW due to insufficient disk space.
+    //
+    // MinKNOW will monitor the disk space and attempt to automatically resume the protocol. The user
+    // may also explicitly resume the protocol after freeing some disk space.
+    PHASE_LOW_DISK_SPACE_AUTOMATIC_PAUSE =  13;
+
     // The protocol is in the process of resuming from a paused state.
     //
     // It should move into another phase, such as PHASE_SEQUENCING or PHASE_PREPARING_FOR_MUX_SCAN,
@@ -726,10 +818,72 @@ message PlatformQcResult {
     uint32 total_pore_count = 3;
 }
 
+message HardwareCheckTemperatureResults {
+    enum HardwareCheckTemperatureFailureReason {
+        // Not a hardware check protocol, or
+        // Hardware check has not failed
+        NoError = 0;
+
+        // Hardware check failed for a reason that is not otherwise specified
+        Unknown = 1;
+
+        // The hardware check script failed, and was unable to set the HardwareCheckFailureReason
+        // to a more specific value
+        ScriptError = 2;
+
+        // Temperature test failed
+        // Mean heatsink temperature not within temperature tolerance range
+        TemperatureTooLow = 3;
+
+        TemperatureTooHigh= 4;
+    }
+
+    // `failure_reason` is guaranteed to be:
+    //  - `NoError` if `status` is NOT `Failed`
+    //  - NOT `NoError` if `status` is `Failed`
+    //
+    HardwareCheckTemperatureFailureReason failure_reason = 1;
+
+    // Target temperature to maintain during temperature test
+    float target_temperature = 2;
+
+    // Mean achieved temperature during temperature test
+    float mean_heatsink_temperature = 3;
+
+    // allowed temperature tolerance range
+    float temperature_tolerance = 4;
+}
+
+message HardwareCheckCalibrationResults {
+    enum HardwareCheckCalibrationFailureReason {
+        // Not a hardware check protocol, or
+        // Hardware check has not failed
+        NoError = 0;
+
+        // Hardware check failed for a reason that is not otherwise specified
+        Unknown = 1;
+
+        // The hardware check script failed, and was unable to set the HardwareCheckFailureReason
+        // to a more specific value
+        ScriptError = 2;
+
+        // Calibration test failed
+        CalibrationFailed = 3;
+
+    }
+
+    // `failure_reason` is guaranteed to be:
+    //  - `NoError` if `status` is NOT `Failed`
+    //  - NOT `NoError` if `status` is `Failed`
+    //
+    HardwareCheckCalibrationFailureReason failure_reason = 1;
+
+}
+
 message HardwareCheckResult {
     enum HardwareCheckStatus {
         // Not a hardware check protocol
-        None = 0;
+        NONE = 0;
 
         // Hardware check has been started, but has not yet completed
         Started = 1;
@@ -742,8 +896,6 @@ message HardwareCheckResult {
         Failed = 3;
     }
 
-    HardwareCheckStatus status = 1;
-
     enum HardwareCheckFailureReason {
         // Not a hardware check protocol, or
         // Hardware check has not failed
@@ -755,13 +907,24 @@ message HardwareCheckResult {
         // The hardware check script failed, and was unable to set the HardwareCheckFailureReason
         // to a more specific value
         ScriptError = 2;
+
+        // Script ran but the result was failed
+        CheckFailed = 3;
     }
+
+    HardwareCheckStatus status = 1;
 
     // `failure_reason` is guaranteed to be:
     //  - `NoError` if `status` is NOT `Failed`
     //  - NOT `NoError` if `status` is `Failed`
     //
     HardwareCheckFailureReason failure_reason = 2;
+
+    // Results data for calibration test
+    HardwareCheckCalibrationResults calibration_results = 3;
+
+    // Results data for temperature test
+    HardwareCheckTemperatureResults temperature_results = 4;
 }
 
 message ExternalOffload {
@@ -865,11 +1028,8 @@ message GetVersionInfoResponse {
 }
 
 message AnalysisWorkflowInfo {
-    // EXPERIMENTAL: All fields within this message are marked as experimental and
-    // may change or be removed between minor versions without warning
-
     // The request that started the analysis workflow
-    AnalysisWorkflowRequest request = 1;
+    analysis_workflows.AnalysisWorkflowRequest request = 1;
 
     // The workflow id of the started analysis workflow.
     //
@@ -1076,8 +1236,6 @@ message ProtocolRunInfo {
     repeated AssociatedPostProcessingAnalysis associated_post_processing_analysis = 15;
 
     // The analysis workflow (if any) associated with the protocol
-    //
-    // EXPERIMENTAL: This field may change or be removed between minor versions without warning
     AnalysisWorkflowInfo analysis_workflow = 27;
 
     // Platform QC result. Set by bream by calling `set_platform_qc_result()`.
@@ -1113,6 +1271,13 @@ message FilteringInfo {
     // the fields within PlatformQcFilter
     PlatformQcFilter pqc_filter = 1;
 
+    // Flow cell ID for any given protocol run must match this _exactly_ to pass filtering.
+    // Note that this is intended to be position-agnostic, so doesn't include the position
+    // identifier.
+    // Will be checked against both the 'original' ID and the user-specified ID.
+    // If either one matches, this will pass filtering.
+    optional string flow_cell_id = 9;
+
     message HardwareCheckFilter {}
 
     // Filter by runs that have hardware check results
@@ -1142,6 +1307,33 @@ message FilteringInfo {
     }
 
     TimeFilter experiment_start_time = 3;
+
+    // Restrict the number of returned run_ids. If unset returns all run_ids.
+    optional int32 count = 5;
+
+    // Defines which run ID index to offset by for the run_ids that are returned.
+    //
+    // If count is set and offset is unset or zero then the dataset containing the
+    // first run_id[0] to run_id[count] is returned.
+    //
+    // If offset is set to a value that is beyond the bounds of the dataset then
+    // the last valid set of run_ids are returned that satisfies the specified count.
+    optional int32 offset = 6;
+
+    enum OrderBy {
+        START_TIME = 0;
+    }
+
+    // Default of START_TIME
+    optional OrderBy order_by = 7;
+
+    enum OrderDirection {
+        DESCENDING = 0;
+        ASCENDING = 1;
+    }
+
+    // Default of DESCENDING
+    optional OrderDirection order_direction = 8;
 }
 
 message ListProtocolRunsRequest {
@@ -1150,7 +1342,15 @@ message ListProtocolRunsRequest {
 
 message ListProtocolRunsResponse {
     repeated string run_ids = 1;
+
+    // The total number of stored run_ids
+    int32 total_count = 2;
+
+    // The offset of the first returned run_id, when ordered according to the criteria in the
+    // request
+    int32 offset = 3;
 }
+
 message GetCurrentProtocolRunRequest {
 
 }
@@ -1286,7 +1486,7 @@ message BeginProtocolRequest {
     map<string, protocol_settings.ProtocolSetting.ProtocolSettingValue> settings = 4;
 
     // Workflow request that should be started when the protocol is started
-    AnalysisWorkflowRequest analysis_workflow_request = 8;
+    analysis_workflows.AnalysisWorkflowRequest analysis_workflow_request = 8;
 
     // Simulation source for playback device data, either an hdf file or directory for use with arrow playback files.
     //

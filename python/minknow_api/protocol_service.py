@@ -14,7 +14,6 @@ __all__ = [
     "KitInfo",
     "ProtocolRunUserInfo",
     "OffloadLocationInfo",
-    "AnalysisWorkflowRequest",
     "StartProtocolRequest",
     "StartProtocolResponse",
     "StopProtocolRequest",
@@ -35,6 +34,8 @@ __all__ = [
     "Epi2meWorkflowReference",
     "AssociatedPostProcessingAnalysis",
     "PlatformQcResult",
+    "HardwareCheckTemperatureResults",
+    "HardwareCheckCalibrationResults",
     "HardwareCheckResult",
     "ExternalOffload",
     "GetVersionInfoResponse",
@@ -105,6 +106,10 @@ __all__ = [
     "PHASE_PAUSED",
     "PHASE_PAUSING",
     "PHASE_BAD_TEMPERATURE_AUTOMATIC_PAUSE",
+    "PHASE_FLOWCELL_DISCONNECT_AUTOMATIC_PAUSE",
+    "PHASE_FLOWCELL_MISMATCH_AUTOMATIC_PAUSE",
+    "PHASE_DEVICE_ERROR_AUTOMATIC_PAUSE",
+    "PHASE_LOW_DISK_SPACE_AUTOMATIC_PAUSE",
     "PHASE_RESUMING",
     "PHASE_COMPLETED",
     "Action",
@@ -159,9 +164,7 @@ class ProtocolService(object):
                 These can be updated during the acquisition using the Run-Until API.
 
                 Since 5.3
-            analysis_workflow_request (minknow_api.protocol_pb2.AnalysisWorkflowRequest, optional): Workflow request that should be started when the protocol is started
-
-                EXPERIMENTAL: This field may change or be removed between minor versions without warning
+            analysis_workflow_request (minknow_api.analysis_workflows_pb2.AnalysisWorkflowRequest, optional): Workflow request that should be started when the protocol is started
 
         Returns:
             minknow_api.protocol_pb2.StartProtocolResponse
@@ -215,7 +218,20 @@ class ProtocolService(object):
                               [],
                               "minknow_api.protocol.ProtocolService")
     def stop_protocol(self, _message=None, _timeout=None, **kwargs):
-        """Stops the currently running protocol script instance.
+        """Stop a running protocol
+
+         If `protocol_run_id` is supplied, stops that protocol if it is currently running.
+         Otherwise, if no `protocol_run_id` is supplied, stops the protocol that is currently in
+         progress.
+
+         The call will fail with `INVALID_ARGUMENT` if:
+        	- An invalid `protocol_run_id` is supplied (i.e. one which does not exist on the current
+            position)
+
+         The call will fail with `FAILED_PRECONDITION` if:
+        	- There is no protocol in progress
+        	- A valid `protocol_run_id` is supplied that does not match the `protocol_run_id` of the
+            protocol in progress.
 
         
 
@@ -224,6 +240,12 @@ class ProtocolService(object):
                 This can be passed instead of the keyword arguments.
             _timeout (float, optional): The call will be cancelled after this number of seconds
                 if it has not been completed.
+            protocol_run_id (str, optional): The protocol run id of the protocol to stop
+
+                If empty, stops the currently running protocol (if any)
+                Otherwise, stops the specified protocol if it is currently in progress
+
+                Since 6.4
             data_action_on_stop (minknow_api.acquisition_pb2.StopRequest.DataAction, optional): Specify how any running acquisition should
                 be handled when stopping the protocol.
 
@@ -254,6 +276,10 @@ class ProtocolService(object):
 
         _message = StopProtocolRequest()
 
+        if "protocol_run_id" in kwargs:
+            unused_args.remove("protocol_run_id")
+            _message.protocol_run_id = kwargs['protocol_run_id']
+
         if "data_action_on_stop" in kwargs:
             unused_args.remove("data_action_on_stop")
             _message.data_action_on_stop = kwargs['data_action_on_stop']
@@ -268,10 +294,23 @@ class ProtocolService(object):
     def pause_protocol(self, _message=None, _timeout=None, **kwargs):
         """Request the protocol to pause.
 
-        This will return an error unless the ProtocolRunInfo has the `can_pause` field set to true.
-        It will have no effect if the protocol is already paused or pausing.
+         This will return an error unless the ProtocolRunInfo has the `can_pause` field set to true.
+         It will have no effect if the protocol is already paused or pausing.
 
-        Since 4.4.
+         If `protocol_run_id` is supplied, pauses that protocol if it is currently running.
+         Otherwise, if no `protocol_run_id` is supplied, pauses the protocol that is currently in
+         progress.
+
+         The call will fail with `INVALID_ARGUMENT` if:
+        	- An invalid `protocol_run_id` is supplied (i.e. one which does not exist on the current
+            position)
+
+         The call will fail with `FAILED_PRECONDITION` if:
+        	- There is no protocol in progress
+        	- A valid `protocol_run_id` is supplied that does not match the `protocol_run_id` of the
+            protocol in progress.
+
+         Since 4.4.
 
         This RPC is idempotent. It may change the state of the system, but if the requested
         change has already happened, it will not fail because of this, make any additional
@@ -282,6 +321,12 @@ class ProtocolService(object):
                 This can be passed instead of the keyword arguments.
             _timeout (float, optional): The call will be cancelled after this number of seconds
                 if it has not been completed.
+            protocol_run_id (str, optional): The protocol run id of the protocol to pause
+
+                If empty, pause the currently running protocol (if any)
+                Otherwise, pauses the specified protocol if it is currently in progress
+
+                Since 6.4
 
         Returns:
             minknow_api.protocol_pb2.PauseProtocolResponse
@@ -301,6 +346,10 @@ class ProtocolService(object):
 
         _message = PauseProtocolRequest()
 
+        if "protocol_run_id" in kwargs:
+            unused_args.remove("protocol_run_id")
+            _message.protocol_run_id = kwargs['protocol_run_id']
+
         if len(unused_args) > 0:
             raise ArgumentError("Unexpected keyword arguments to pause_protocol: '{}'".format(", ".join(unused_args)))
 
@@ -311,10 +360,23 @@ class ProtocolService(object):
     def resume_protocol(self, _message=None, _timeout=None, **kwargs):
         """Request the protocol to resume.
 
-        This will return an error unless the ProtocolRunInfo has the `can_pause` field set to true.
-        It will have no effect if the protocol is not paused or pausing.
+         This will return an error unless the ProtocolRunInfo has the `can_pause` field set to true.
+         It will have no effect if the protocol is not paused or pausing.
 
-        Since 4.4.
+         If `protocol_run_id` is supplied, resumes that protocol if it is currently running.
+         Otherwise, if no `protocol_run_id` is supplied, resumes the protocol that is currently in
+         progress.
+
+         The call will fail with `INVALID_ARGUMENT` if:
+        	- An invalid `protocol_run_id` is supplied (i.e. one which does not exist on the current
+            position)
+
+         The call will fail with `FAILED_PRECONDITION` if:
+        	- There is no protocol in progress
+        	- A valid `protocol_run_id` is supplied that does not match the `protocol_run_id` of the
+            protocol in progress.
+
+         Since 4.4.
 
         This RPC is idempotent. It may change the state of the system, but if the requested
         change has already happened, it will not fail because of this, make any additional
@@ -325,6 +387,12 @@ class ProtocolService(object):
                 This can be passed instead of the keyword arguments.
             _timeout (float, optional): The call will be cancelled after this number of seconds
                 if it has not been completed.
+            protocol_run_id (str, optional): The protocol run id of the protocol to resume
+
+                If empty, resumes the currently running protocol (if any)
+                Otherwise, resumes the specified protocol if it is currently in progress
+
+                Since 6.4
 
         Returns:
             minknow_api.protocol_pb2.ResumeProtocolResponse
@@ -343,6 +411,10 @@ class ProtocolService(object):
         unused_args = set(kwargs.keys())
 
         _message = ResumeProtocolRequest()
+
+        if "protocol_run_id" in kwargs:
+            unused_args.remove("protocol_run_id")
+            _message.protocol_run_id = kwargs['protocol_run_id']
 
         if len(unused_args) > 0:
             raise ArgumentError("Unexpected keyword arguments to resume_protocol: '{}'".format(", ".join(unused_args)))
@@ -1093,7 +1165,7 @@ class ProtocolService(object):
 
                 Since 5.3
             settings (minknow_api.protocol_pb2.BeginProtocolRequest.SettingsEntry, optional): Any settings changed from the defaults specified in the protocol's .toml file.
-            analysis_workflow_request (minknow_api.protocol_pb2.AnalysisWorkflowRequest, optional): Workflow request that should be started when the protocol is started
+            analysis_workflow_request (minknow_api.analysis_workflows_pb2.AnalysisWorkflowRequest, optional): Workflow request that should be started when the protocol is started
             simulation_source (str, optional): Simulation source for playback device data, either an hdf file or directory for use with arrow playback files.
 
                 Since 6.2

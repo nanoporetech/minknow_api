@@ -4,6 +4,7 @@ package minknow_api.manager;
 
 option java_package = "com.nanoporetech.minknow_api";
 option objc_class_prefix = "MKAPI";
+option go_package ="github.com/nanoporetech/minknow_api/go/gen/manager";
 
 import "minknow_api/rpc_options.proto";
 import "minknow_api/device.proto";
@@ -136,6 +137,7 @@ service ManagerService {
     // Since 3.7
     rpc get_disk_space_info (GetDiskSpaceInfoRequest) returns (GetDiskSpaceInfoResponse) {
         option idempotency_level = NO_SIDE_EFFECTS;
+        option deprecated = true;
     }
 
     // As with `instance.get_default_output_directories`, this will return the
@@ -155,6 +157,7 @@ service ManagerService {
     // Since 4.0
     rpc stream_disk_space_info(StreamDiskSpaceInfoRequest) returns (stream GetDiskSpaceInfoResponse) {
         option idempotency_level = NO_SIDE_EFFECTS;
+        option deprecated = true;
     }
 
     // Get info about all available barcoding kits
@@ -358,6 +361,28 @@ service ManagerService {
     rpc check_bed_file(CheckBedFileRequest) returns (CheckBedFileResponse) {
         option idempotency_level = NO_SIDE_EFFECTS;
     }
+
+    // Find basecall configurations that are available to be used.
+    //
+    // Throws an error if there is no basecaller available
+    //
+    // Since 6.3
+    rpc find_basecall_configurations(FindBasecallConfigurationsRequest) returns (FindBasecallConfigurationsResponse) {
+        option (experimental) = true;
+    }
+
+    // Check file path info.
+    //
+    // Return information about a file path specified by the caller.
+    //
+    // If the path is not reachable (eg. a parent path cannot be listed) a `PERMISSION_DENIED` error is generated.
+    // If the path is not absolute a `FAILED_PRECONDITION` error is generated.
+    // If the path is non-existent, no info is returned for is_readable, is_writable or space fields.
+    //
+    // Since 6.3
+    rpc check_path_info(CheckPathInfoRequest) returns (CheckPathInfoResponse) {
+        option idempotency_level = NO_SIDE_EFFECTS;
+    }
 }
 
 message DescribeHostRequest {
@@ -436,13 +461,24 @@ message DescribeHostResponse {
     // Since 4.4
     bool can_sequence_offline = 5;
 
+    enum HostUsbSequencerAvailability {
+        // Host is unable to connect to a USB Sequencer
+        HOST_USB_SEQUENCER_UNAVAILABLE = 0;
+        // Host is unable to connect to a USB Sequencer as required system driver is currently disabled
+        HOST_USB_SEQUENCER_DRIVER_DISABLED = 1;
+        // Host is able to connect to a USB Sequencer
+        HOST_USB_SEQUENCER_AVAILABLE = 2;
+    }
+
     // Whether or not the host system can connect to a USB sequencer.
     //
-    // This is true on all systems except iOS where it is true if and only if the driver that is
-    // shipped with the app has been enabled in system settings.
+    // Only on iOS hosts do we expect to see HOST_USB_SEQUENCER_DRIVER_DISABLED if the driver that is
+    // shipped with the app has not been enabled in the system settings.
+    //
+    // Otherwise all other systems should report HOST_USB_SEQUENCER_AVAILABLE
     //
     // Since 6.1
-    bool can_connect_to_usb_device = 17;
+    HostUsbSequencerAvailability can_connect_to_usb_device = 17;
 
     enum BasecallingAvailability {
         // Basecalling is available and the underlying services are up and running
@@ -513,6 +549,16 @@ enum SimpleProtocolState {
 
     // No protocol is currently running, and the last protocol finished with an error.
     PROTOCOL_FINISHED_WITH_ERROR = 3;
+
+    // Protocol sequencing has finished, but a workflow is still running
+    WORKFLOW_RUNNING = 4;
+
+    // A workflow that was started previously has successfully finished (it either run to completion
+    // or the user stopped it)
+    WORKFLOW_FINISHED_SUCCESSFULLY = 5;
+
+    // A workflow that was started previously resulted in an error
+    WORKFLOW_FINISHED_WITH_ERROR = 6;
 }
 
 message FlowCellPosition {
@@ -1376,10 +1422,13 @@ message ListSettingsForProtocolResponse {
         protocol_settings.ProtocolSetting basecall_model = 4;
         protocol_settings.ProtocolSetting trim_barcodes_enabled = 5;
         protocol_settings.ProtocolSetting require_barcodes_both_ends = 6;
+        protocol_settings.ProtocolSetting ignore_unspecified_barcodes = 7;
         protocol_settings.ProtocolSetting alignment_enabled = 13;
         protocol_settings.ProtocolSetting alignment_ref_file = 14;
-        protocol_settings.ProtocolSetting alignment_bed_file_enabled = 15;
         protocol_settings.ProtocolSetting alignment_bed_file = 16;
+        protocol_settings.ProtocolSetting model_names_simplex_model = 17;
+        protocol_settings.ProtocolSetting model_names_modified_models = 18;
+        protocol_settings.ProtocolSetting model_names_stereo_model = 19;
     }
 
     // Output
@@ -1496,4 +1545,138 @@ message CheckBedFileRequest  {
 
 message CheckBedFileResponse {
     bool passed = 1;
+}
+
+message FindBasecallConfigurationsRequest {
+    // Find basecall configurations that are compatible with this flow cell product code.
+    //
+    // Set to empty string to find protocols matching all flow cell product codes.
+    string flow_cell_product_code = 1;
+
+    // Limit to basecall configurations that are compatible with this sequencing kit.
+    //
+    // Set to empty string to find protocols matching all kits.
+    string sequencing_kit = 2;
+
+
+    // Limit to basecall configurations that are compatible with this sampling rate.
+    //
+    // Set to zero to find all possible sampling rates.
+    int32 sampling_rate = 3;
+
+    // Should configurations and models that are not already on disk be included in the responses.
+    //
+    // This may include research or one off models, or models not appropriate for the current platform.
+    bool include_remote_configurations = 4;
+
+    // Should outdated configurations be included in the response.
+    bool include_outdated = 5;
+}
+
+message FindBasecallConfigurationsResponse {
+
+    // A modification model that can be used in combination with a simplex model.
+    message ModifiedModel {
+        // The name of the modified model.
+        string name = 1;
+
+        // The variant of this model (eg 5mc)
+        string variant = 2;
+
+        // Is this model outdated - ie. there is a newer model for the same run condition.
+        bool outdated = 3;
+
+        // What is the base this model evaluates modifications for.
+        //
+        // When selecting modifications to run, a user can only select one model for each canonical base.
+        string canonical_base = 4;
+
+        // The context for this modified basecall model.
+        //
+        // Expected to be one of: "A", "C", "T", "G", "CG", "DRACH".
+        string context = 5;
+    }
+
+    message StereoModel {
+        // The name of the stereo model.
+        string name = 1;
+
+        // Is this model outdated - ie. there is a newer model for the same run condition.
+        bool outdated = 2;
+    }
+
+    message SimplexModel {
+        // The name of the simplex model.
+        string name = 1;
+        // Is this model outdated - ie. there is a newer model for the same run condition.
+        bool outdated = 2;
+
+        // The variant of this model (eg. FAST, HAC, SUP)
+        string variant = 4;
+        // The default q score cutoff to use for this model.
+        float default_q_score_cutoff = 5;
+
+        // Available modified bases for this simplex model.
+        repeated ModifiedModel modified_models = 6;
+
+        // Available stereo models for this simplex model.
+        repeated StereoModel stereo_models = 7;
+    }
+
+    message BasecallConfiguration {
+        // The name of this condition, for example `rna002_70bps` or `dna_r10.4.1_e8.2_400bps_5khz`.
+        string name = 1;
+        // A string identifying the sample type this configuration is to be used with.
+        string sample_type = 2;
+        // The sample rate this configuration requires.
+        int32 sampling_rate = 3;
+
+        // The flowcell types this configuration is compatible with.
+        repeated string flowcells = 4;
+        // The kits this configuration is compatible with.
+        repeated string kits = 5;
+
+        // The models that are available for this configuration.
+        repeated SimplexModel simplex_models = 6;
+    }
+
+    repeated BasecallConfiguration configurations = 1;
+}
+
+message CheckPathInfoRequest {
+    // The file path to query.
+    string file_path = 1;
+}
+
+message CheckPathInfoResponse {
+    enum Type {
+        // The type of the file path could not be determined.
+        UNKNOWN = 0;
+
+        // The file path provided does not exist.
+        NON_EXISTANT = 1;
+        // An existing file.
+        FILE = 2;
+        // An existing directory.
+        DIRECTORY = 3;
+
+    }
+
+    // The type of the passed file path.
+    Type type = 1;
+
+    // Is the file path passed readable?
+    bool is_readable = 2;
+
+    // Is the file path passed writable?
+    bool is_writable = 3;
+
+    // How many bytes have been used for existing content on the disk.
+    uint64 bytes_used = 4;
+
+    // How many bytes are available for content on the disk.
+    uint64 bytes_available = 5;
+
+    // How many bytes capacity is in total size of the disk.
+    uint64 bytes_capacity = 6;
 }

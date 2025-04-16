@@ -14,14 +14,13 @@ import inspect
 import logging
 import warnings
 from concurrent import futures
-from importlib import import_module
 from pathlib import Path
 
 import grpc
 from packaging.version import parse
 
 import minknow_api
-from minknow_api import _optional_services, _services
+from minknow_api import _optional_services, _services, _import_submodule, SubmoduleType
 
 LOGGER = logging.getLogger(__name__)
 VERSION = parse(minknow_api.__version__)
@@ -156,11 +155,11 @@ class MockMinKNOWServer:
             # get service name excluding '_service'
             if service.endswith("_service"):
                 service = service[: -len("_service")]
-            if service in _services:
-                self.logger.info("Using user defined service for {!r}".format(service))
+            if service in _services.keys():
+                self.logger.info(f"Using user defined service for {repr(service)}")
             else:
                 self.logger.warning(
-                    "Skipped user defined service {!r}, not recognised".format(service)
+                    f"Skipped user defined service {repr(service)}, not recognised"
                 )
 
         # Store kwargs, add 'instance_service' here as it is the
@@ -172,17 +171,17 @@ class MockMinKNOWServer:
         # Iterate the services defined in minknow_api._services
         #   adding the base Servicer unless another is specified
         #   via kwargs
-        for name, svc_list in _services.items():
-            svc_name = "{}_service".format(name)
+        for name, svc in _services.items():
+            svc_name = f"{name}_service"
             try:
-                svc_module = import_module("minknow_api.{}_pb2_grpc".format(name))
+                svc_module = _import_submodule(name, svc, SubmoduleType.PB2_GRPC)
             except ImportError:
                 if name not in _optional_services:
                     raise
             else:
                 # There should be only one entry for each service
-                for svc in svc_list:
-                    svc_servicer = "{}Servicer".format(svc)
+                for svc_class_name in svc.services:
+                    svc_servicer = f"{svc_class_name}Servicer"
 
                     # Get the user overridden module from kwargs
                     #   or fallback onto the baseclass from grpc
@@ -196,19 +195,19 @@ class MockMinKNOWServer:
                     setattr(self, svc_name, module())
 
                     # Add servicer to server
-                    func = "add_{}_to_server".format(svc_servicer)
+                    func = f"add_{svc_servicer}_to_server"
                     add_servicer_to_server_func = getattr(svc_module, func)
                     add_servicer_to_server_func(getattr(self, svc_name), self.server)
 
             grpc_creds = None
             if self.certs_path:
                 grpc_creds = make_secure_grpc_credentials(self.certs_path)
-            bound = self.server.add_secure_port("[::]:{}".format(self.port), grpc_creds)
+            bound = self.server.add_secure_port(f"[::]:{self.port}", grpc_creds)
         if bound == 0:
-            raise ConnectionError("Could not connect using port {}".format(self.port))
+            raise ConnectionError(f"Could not connect using port {self.port}")
         self.port = bound
 
-        self.logger.info("Using port {}".format(self.port))
+        self.logger.info(f"Using port {self.port}")
 
     def make_channel_credentials(self):
         certs_path = self.__dict__["certs_path"]

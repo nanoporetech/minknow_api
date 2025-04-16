@@ -816,9 +816,14 @@ class DataService(object):
         """Returns various points of yield information for the ongoing experiment, such as complete
         read information and basecaller progress.
 
+        Note: This API does not guarantee between versions and may change as internal MinKNOW changes
+        require different data is monitored.
+
         This RPC has no side effects. Calling it will have no effect on the state of the
         system. It is safe to call repeatedly, or to retry on failure, although there is no
         guarantee it will return the same information each time.
+
+        Note this API is experimental - it may be changed, revised or removed in future minor versions.
 
         Args:
             _message (minknow_api.data_pb2.GetExperimentYieldInfoRequest, optional): The message to send.
@@ -832,6 +837,7 @@ class DataService(object):
         Note that the returned messages are actually wrapped in a type that collapses
         submessages for fields marked with ``[rpc_unwrap]``.
         """
+        print("Warning: Method DataService.get_experiment_yield_info is experimental and may be changed, revised or removed in future minor versions.", file=sys.stderr)
         if _message is not None:
             if isinstance(_message, MessageWrapper):
                 _message = _message._message

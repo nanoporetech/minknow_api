@@ -2,12 +2,14 @@ syntax="proto3";
 
 package minknow_api.analysis_configuration;
 
+option go_package ="github.com/nanoporetech/minknow_api/go/gen/analysis_configuration";
 option java_package = "com.nanoporetech.minknow_api";
 option objc_class_prefix = "MKAPI";
 
 import "google/protobuf/duration.proto";
 import "google/protobuf/empty.proto";
 import "google/protobuf/wrappers.proto";
+import "minknow_api/read_end_reason.proto";
 import "minknow_api/rpc_options.proto";
 
 service AnalysisConfigurationService {
@@ -184,6 +186,14 @@ service AnalysisConfigurationService {
     // The new analysis parameters will be used after any data already received has been processe.
     rpc set_dynamic_analysis_configuration(DynamicAnalysisConfiguration) returns (SetDynamicAnalysisConfigurationResponse) { }
 
+    // Basecall configuration defaults
+    //
+    // These defaults will be based on the connected flow cell type and the selected base calling substrate.
+    //
+    // Since 6.3
+    rpc find_basecall_configuration_defaults(FindBasecallConfigurationDefaultsRequest) returns (FindBasecallConfigurationDefaultsResponse) {
+        option (experimental) = true;
+    }
 }
 
 message EventDetection {
@@ -238,6 +248,13 @@ message EventDetection {
     //
     // Note: no longer used.
     uint32 max_mux_change_back_shift = 18;
+
+    // Force minknow to detect events even when channels are disconnected
+    //
+    // If set to false (the default) events are not detected when channels are set outside well 1-4.
+    //
+    // If set to true events are always detected.
+    bool force_detect_events_when_disconnected = 20;
 }
 
 message ReadDetectionParams {
@@ -834,16 +851,44 @@ message BasecallerConfiguration
         google.protobuf.UInt64Value max_bases = 3;
     }
 
+    // A set of model names to run in the basecaller.
+    message ModelNames {
+        // Simplex model to use when basecalling.
+        //
+        // This field is not optional - empty values are invalid.
+        string simplex_model = 1;
+
+        // An optional list of modified bases to use, the caller is responsible
+        // for ensuring these are compatible modifications.
+        //
+        // An empty list will lead to no modified base calling.
+        repeated string modified_models = 2;
+
+        // An optional stereo model to use for calling.
+        //
+        // And empty string will perform no stereo step.
+        string stereo_model = 3;
+    }
+
     // Choose if the basecaller is enabled or disabled.
     //
     // If set to false then no basecalling will take place, and the rest of the config is ignored.
     bool enable = 2;
 
-    // The basecaller cfg file with all the settings.
-    //
-    // Filename can be absolute, or a basename (eg dna_r9.4_450bps.cfg)
-    // which the basecaller should locate (see basecaller application config entry: "data_path")
-    string config_filename = 1;
+    oneof basecall_model {
+        // The basecaller cfg file with all the settings.
+        //
+        // Filename can be absolute, or a basename (eg dna_r9.4_450bps.cfg)
+        // which the basecaller should locate (see basecaller application config entry: "data_path")
+        string config_filename = 1;
+
+        // Specify the models to run by name (see find_basecall_configurations in manager.proto)
+        //
+        // Model names should be taken from the `name` field of the above RPC directly.
+        //
+        // Since 6.3
+        ModelNames model_names = 12;
+    }
 
     // Enable or disable pass/fail filtering based on alignment.  When enabled, reads which
     // do not align to any references will be marked as "failed", and written to the folder
@@ -915,6 +960,11 @@ message BasecallerConfiguration
     //
     // Note: Since 5.9 this option has no effect, the basecaller is responsible for deciding read splitting score.
     google.protobuf.FloatValue min_score_read_splitting = 9;
+
+    // Enable poly a tail estimation.
+    //
+    // Since 6.3
+    bool estimate_poly_a = 11;
 }
 
 message SetBasecallerConfigurationRequest
@@ -1575,7 +1625,31 @@ message DynamicAnalysisConfiguration {
 
     // Parameters for read scale tracking:
     ReadScaleTracking read_scale_tracking = 1;
+
+    // Force MinKNOW to not write or basecall all data from the live
+    // sequencing stream.
+    //
+    // This may be useful if there is a section of data that is not
+    // wanted in the final output files and reports.
+    bool force_veto_all_reads = 2;
+
+    // Force MinKNOW to not write or basecall data with specific end reasons.
+    //
+    // This may be useful if there is a section of data that is not
+    // wanted in the final output files and reports.
+    repeated read_end_reason.ReadEndReason force_veto_end_reasons = 3;
 }
 
 message GetDynamicAnalysisConfigurationRequest {}
 message SetDynamicAnalysisConfigurationResponse {}
+
+message FindBasecallConfigurationDefaultsRequest {
+}
+
+message FindBasecallConfigurationDefaultsResponse {
+    // The default variant to be used.
+    //
+    // This can be used to search the results of manager.find_basecall_configurations
+    // for a simplex model with a matching variant.
+    string default_variant = 1;
+}

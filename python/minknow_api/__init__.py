@@ -40,6 +40,9 @@ data
     Stream acquisition data. Note that this is for data directly produced during acquisition, rather
     than statistics about acquired data. See `data_service.DataService` for a description of the
     available methods.
+debug
+    Debugging data. Note that this is for data that is useful for debugging. See
+    `debug_service.DebugService` for a description of the available methods.
 device
     Get information about and control the attached device. This useful presents information and
     settings in a device-independent way, so it can be used on PromethIONs as easily as on MinIONs.
@@ -57,6 +60,10 @@ instance
 log
     Get or produce general informational messages. See `log_service.LogService` for a description of
     the available methods.
+manager_service
+    Central service for managing individual sequencing positions. Can inspect information about
+    the host itself or information about sequencing positions. See `manager_service.ManagerService`
+    for a description of the available methods
 minion_device
     MinION-specific device interface. This exposes low-level settings for MinIONs and similar
     devices (eg: GridIONs). See `minion_device_service.MinionDeviceService` for a
@@ -89,24 +96,25 @@ information.
 
 """
 
+from dataclasses import dataclass
 import importlib
 import json
 import logging
 import os
+from pathlib import Path
+import platform
 import sys
 import threading
 import warnings
 import datetime
-from typing import Any, Dict, Optional, Tuple, Union
+from enum import Enum
+from typing import Any, Dict, Optional, Tuple, Union, List
 
 import grpc
 import pyrfc3339
 import pytz
 
-from . import data, manager
-
-from minknow_api.manager import get_local_authentication_token_file
-from minknow_api.tools.compatibility_helpers import read_binary_resource
+from . import data
 
 # Try and import from minknow_api_production package
 try:
@@ -122,27 +130,41 @@ try:
 except ImportError:
     pass
 
+
 #
 # Services
 #
-_services = {
-    "acquisition": ["AcquisitionService"],
-    "analysis_configuration": ["AnalysisConfigurationService"],
-    "analysis_workflows": ["AnalysisWorkflowsService"],
-    "data": ["DataService"],
-    "device": ["DeviceService"],
-    "hardware_check": ["HardwareCheckService"],
-    "instance": ["InstanceService"],
-    "keystore": ["KeyStoreService"],
-    "log": ["LogService"],
-    "minion_device": ["MinionDeviceService"],
-    "pebble_device": ["PebbleDeviceService"],
-    "production": ["ProductionService"],
-    "promethion_device": ["PromethionDeviceService"],
-    "protocol": ["ProtocolService"],
-    "run_until": ["RunUntilService"],
-    "statistics": ["StatisticsService"],
+@dataclass
+class Service:
+    services: List[str]
+    anchor: str = ""
+    """If this service is defined under a sub-directory,
+    where is it? Should be in python module form - replace '/' with '.'"""
+
+
+_services: Dict[str, Service] = {
+    "acquisition": Service(["AcquisitionService"]),
+    "analysis_configuration": Service(["AnalysisConfigurationService"]),
+    "analysis_workflows": Service(["AnalysisWorkflowsService"]),
+    "data": Service(["DataService"]),
+    "debug": Service(["DebugService"]),
+    "device": Service(["DeviceService"]),
+    "hardware_check": Service(["HardwareCheckService"]),
+    "instance": Service(["InstanceService"]),
+    "keystore": Service(["KeyStoreService"]),
+    "log": Service(["LogService"]),
+    "manager": Service(["ManagerService"]),
+    "minion_device": Service(["MinionDeviceService"]),
+    "pebble_device": Service(["PebbleDeviceService"]),
+    "production": Service(["ProductionService"]),
+    "promethion_device": Service(["PromethionDeviceService"]),
+    "protocol": Service(["ProtocolService"]),
+    "protocols": Service(["ProtocolsService"], ".v2"),
+    "presets": Service(["PresetsService"], ".ui.sequencing_run"),
+    "run_until": Service(["RunUntilService"]),
+    "statistics": Service(["StatisticsService"]),
 }
+
 _optional_services = ["production"]
 
 
@@ -150,12 +172,13 @@ _optional_services = ["production"]
 # Module meta-information
 #
 
-__all__ = [svc + "_service" for svc in _services] + [
+__all__ = [name + "_service" for name in _services.keys()] + [
     "Connection",
     "LocalAuthTokenCredentials",
     "data",
     "device",
     "load_grpc_credentials",
+    "get_local_authentication_token_file",
     "grpc_credentials",
     "read_ssl_certificate",
     "manager",
@@ -171,16 +194,39 @@ except ImportError:
 #
 # Submodule imports
 #
+class SubmoduleType(Enum):
+    PB2 = 1
+    PB2_GRPC = 2
+    SERVICE = 3
 
-# Convenience imports for each service
 
-for svc in _services:
+# Import a submodule.
+# name corresponds to a name as one of the keys in _services
+# submodule_type corresponds to if its service, pb2 or pb2_grpc file
+def _import_submodule(svc_name: str, svc: Service, submodule_type: SubmoduleType):
+    _submodule_type_str = {
+        SubmoduleType.PB2: "pb2",
+        SubmoduleType.PB2_GRPC: "pb2_grpc",
+        SubmoduleType.SERVICE: "service",
+    }
     try:
+        module_type_str = _submodule_type_str[submodule_type]
+    except KeyError:
+        raise
 
-        # effectively does `import .{svc}_service as {svc}_service`
-        importlib.import_module(".{}_service".format(svc), __name__)
+    # effectively does `import .{name}_service as {name}_service`
+    return importlib.import_module(
+        f".{svc_name}_{module_type_str}", __name__ + svc.anchor
+    )
+
+
+for svc_name, svc in _services.items():
+    try:
+        globals()[f"{svc_name}_service"] = _import_submodule(
+            svc_name, svc, SubmoduleType.SERVICE
+        )
     except ImportError:
-        if svc not in _optional_services:
+        if svc_name not in _optional_services:
             raise
 
 logger = logging.getLogger(__name__)
@@ -284,6 +330,39 @@ class ProtocolTokenCredentials(grpc.AuthMetadataPlugin):
         callback(metadata, None)
 
 
+def get_local_authentication_token_file(
+    host: str = "127.0.0.1", port: Optional[int] = None, ca_cert: Optional[bytes] = None
+) -> Optional[str]:
+    """Starts an isolated manager instance to retrieve the path
+    of the local authentication token file, which can then
+    be read to extract the local authentication token"""
+    if not port:
+        port = 9502
+
+    try:
+        if not ca_cert:
+            ca_cert = read_ssl_certificate()
+
+        ssl_creds = grpc.ssl_channel_credentials(ca_cert)
+
+        channel = grpc.secure_channel(
+            host + ":" + str(port),
+            ssl_creds,
+            # we need the ssl target name override
+            options=GRPC_CHANNEL_OPTIONS,
+        )
+
+        # Disable F821 for pyflakes as i believe it can't recognise our use of import_module
+        service = manager_service.ManagerService(channel)  # noqa: F821
+        return service.local_authentication_token_path().path
+    except grpc.RpcError:
+        logger.debug(
+            f"Unable to connect to manager on port '{port}' to retrieve local auth token path",
+            exc_info=True,
+        )
+        return None
+
+
 def get_protocol_token_credentials(
     environ: Union[Dict[str, str], os._Environ] = os.environ
 ) -> Optional[grpc.ChannelCredentials]:
@@ -303,7 +382,7 @@ def get_protocol_token_credentials(
 
 
 def get_local_auth_token_credentials(
-    manager_port: Optional[int],
+    manager_port: Optional[int], ca_cert: Optional[bytes] = None
 ) -> Optional[grpc.ChannelCredentials]:
     """Attempt to get the local authentication token.
 
@@ -317,7 +396,9 @@ def get_local_auth_token_credentials(
     You probably want to use `grpc_credentials()` instead. This is mostly a helper for
     that function.
     """
-    local_auth_path = get_local_authentication_token_file(port=manager_port)
+    local_auth_path = get_local_authentication_token_file(
+        port=manager_port, ca_cert=ca_cert
+    )
     logger.debug("Retrieving local token from file: '%s'", local_auth_path)
     if local_auth_path:
         if os.path.exists(local_auth_path):
@@ -325,7 +406,7 @@ def get_local_auth_token_credentials(
                 LocalAuthTokenCredentials(local_auth_path)
             )
         else:
-            logger.warn(
+            logger.warning(
                 'Local authentication token should be at "%s", '
                 + "but that file does not exist",
                 local_auth_path,
@@ -358,8 +439,10 @@ def read_ssl_certificate(
     """Get the CA certificate that should be used to verify a TLS connection to MinKNOW.
 
     If the ``MINKNOW_TRUSTED_CA`` environment variable is set to the path to an
-    existing file, its contents will be used. Otherwise, an internal copy of MinKNOW
-    Core's default CA will be used.
+    existing file, its contents will be used.
+
+    If environment variable not set then make best guess for the platform/OS where
+    the location of the ca.crt will be fixed after installation.
 
     You probably want to use `grpc_credentials()` instead. This is mostly a helper for
     that function.
@@ -375,7 +458,30 @@ def read_ssl_certificate(
             environ.get("MINKNOW_TRUSTED_CA"),
         )
 
-    return read_binary_resource("minknow_api", "ca.crt")
+    auto_cert_paths = []
+    os_name = platform.system()
+
+    # Provide best guess locations based on platform
+    if os_name == "Windows":
+        auto_cert_paths.append(Path(r"C:\data\rpc-certs\minknow\ca.crt"))
+    elif os_name == "Linux":
+        auto_cert_paths.append(Path("/data/rpc-certs/minknow/ca.crt"))
+        auto_cert_paths.append(Path("/var/lib/minknow/data/rpc-certs/minknow/ca.crt"))
+    elif os_name == "Darwin":
+        auto_cert_paths.append(Path("/Library/MinKNOW/data/rpc-certs/minknow/ca.crt"))
+    else:
+        pass
+
+    for cert in auto_cert_paths:
+        try:
+            with open(cert, "rb") as f:
+                return f.read()
+        except FileNotFoundError:
+            pass
+
+    msg = "Could not locate ca.crt file"
+    logger.error(msg)
+    raise Exception(msg)
 
 
 def _is_localhost(host: str) -> bool:
@@ -464,6 +570,7 @@ def load_grpc_credentials(
     host: Optional[str] = None,
     client_certificate_chain: Optional[bytes] = None,
     client_private_key: Optional[bytes] = None,
+    ca_certificate: Optional[bytes] = None,
     _warning_stacklevel: int = 0,
     environ: Union[Dict[str, str], os._Environ] = os.environ,
 ) -> grpc.ChannelCredentials:
@@ -482,6 +589,7 @@ def load_grpc_credentials(
             MinKNOW installation directory.
         client_private_key: The (PEM-encoded) private key for the first certificate in
             `client_cert_chain`.
+        ca_certificate: The (PEM-encoded) root CA certificate.
         environ: Optional dictionary containing global environment variables, if not provided
             then os.environ is used.
 
@@ -506,8 +614,11 @@ def load_grpc_credentials(
         client_certificate_chain, client_private_key = _try_client_cert_from_env_vars(
             environ
         )
+    if ca_certificate is None:
+        ca_certificate = read_ssl_certificate(environ)
+
     ssl_creds = grpc.ssl_channel_credentials(
-        root_certificates=read_ssl_certificate(environ),
+        root_certificates=ca_certificate,
         private_key=client_private_key,
         certificate_chain=client_certificate_chain,
     )
@@ -530,7 +641,7 @@ def load_grpc_credentials(
             try_local_token = True
         if try_local_token:
             logger.debug("Getting local token")
-            call_creds = get_local_auth_token_credentials(manager_port)
+            call_creds = get_local_auth_token_credentials(manager_port, ca_certificate)
 
     if not call_creds:
         # No local token, so check if there is a token provided from starting as a
@@ -559,6 +670,7 @@ def grpc_credentials(
     client_certificate_chain: Optional[bytes] = None,
     client_private_key: Optional[bytes] = None,
     _warning_stacklevel: int = 0,
+    ca_certificate: Optional[bytes] = None,
     environ: Union[Dict[str, str], os._Environ] = os.environ,
 ) -> grpc.ChannelCredentials:
     """Get a grpc.ChannelCredentials object for connecting to secure versions of MinKNOW"s gRPC
@@ -577,6 +689,7 @@ def grpc_credentials(
             MinKNOW installation directory.
         client_private_key: The (PEM-encoded) private key for the first certificate in
             `client_cert_chain`.
+        ca_certificate: The (PEM-encoded) root CA certificate.
         environ: Optional dictionary containing global environment variables, if not provided
             then os.environ is used.
 
@@ -587,8 +700,7 @@ def grpc_credentials(
 
     If run from the Python embedded in MinKNOW, this will find the correct certificate
     automatically. Otherwise, you may need to set the ``MINKNOW_TRUSTED_CA`` to point to the CA
-    certificate used by MinKNOW (which can be found at ``conf/rpc-certs/ca.crt`` in the MinKNOW
-    installation).
+    certificate used by MinKNOW (by default found under ``<data_dir>/rpc-certs/minknow/ca.crt``).
     """
     cache_key = (
         manager_port,
@@ -596,6 +708,7 @@ def grpc_credentials(
         host,
         client_certificate_chain,
         client_private_key,
+        ca_certificate,
     )
 
     global _grpc_credentials_cache
@@ -613,6 +726,7 @@ def grpc_credentials(
         host,
         client_certificate_chain,
         client_private_key,
+        ca_certificate,
         _warning_stacklevel=_warning_stacklevel + 1,
         environ=environ,
     )
@@ -658,6 +772,8 @@ class Connection(object):
         client_private_key: The (PEM-encoded) private key for the first certificate
             in `client_cert_chain`. Note: if `credentials` is provided, this
             parameter is ignored.
+        ca_certificate: The (PEM-encoded) root CA certificate. Note: if `credentials` is
+            provided, this parameter is ignored.
         environ: Optional dictionary containing global environment variables, if not provided
             then os.environ is used.
 
@@ -703,6 +819,7 @@ class Connection(object):
         developer_api_token: Optional[str] = None,
         client_certificate_chain: Optional[bytes] = None,
         client_private_key: Optional[bytes] = None,
+        ca_certificate: Optional[bytes] = None,
         environ: Union[Dict[str, str], os._Environ] = os.environ,
     ):
         import time
@@ -724,6 +841,8 @@ class Connection(object):
                 warnings.warn(
                     "`client_certificate_chain` and `client_private_key` ignored as `credentials` was provided"
                 )
+            if ca_certificate is not None:
+                warnings.warn("`ca_certificate` ignored as `credentials` was provided")
 
         error = None
         retry_count = 5
@@ -739,25 +858,28 @@ class Connection(object):
                     host=host,
                     client_certificate_chain=client_certificate_chain,
                     client_private_key=client_private_key,
+                    ca_certificate=ca_certificate,
                     _warning_stacklevel=1,
                     environ=self.environ,
                 )
 
             self.channel = grpc.secure_channel(
-                "{}:{}".format(host, port),
+                f"{host}:{port}",
                 credentials=credentials,
                 options=GRPC_CHANNEL_OPTIONS,
             )
 
             # One entry for each service
-            for name, svc_list in _services.items():
-                for svc in svc_list:
+            for name, svc in _services.items():
+                for svc_class_name in svc.services:
                     try:
-                        # effectively does `self.{name} = {name}_service.{svc}(self.channel)`
+                        # effectively does `self.{name} = {name}_service.{svc_class_name}(self.channel)`
                         setattr(
                             self,
                             name,
-                            getattr(globals()[name + "_service"], svc)(self.channel),
+                            getattr(globals()[f"{name}_service"], svc_class_name)(
+                                self.channel
+                            ),
                         )
                     except KeyError:
                         if name not in _optional_services:

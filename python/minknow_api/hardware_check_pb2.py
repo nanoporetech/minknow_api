@@ -17,14 +17,14 @@ from minknow_api import protocol_pb2 as minknow__api_dot_protocol__pb2
 from google.protobuf import timestamp_pb2 as google_dot_protobuf_dot_timestamp__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n minknow_api/hardware_check.proto\x12\x1aminknow_api.hardware_check\x1a\x18minknow_api/device.proto\x1a\x1aminknow_api/protocol.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"1\n\x19StartHardwareCheckRequest\x12\x14\n\x0cposition_ids\x18\x01 \x03(\t\"7\n\x1aStartHardwareCheckResponse\x12\x19\n\x11hardware_check_id\x18\x01 \x01(\t\"5\n\x18StopHardwareCheckRequest\x12\x19\n\x11hardware_check_id\x18\x01 \x01(\t\"\x1b\n\x19StopHardwareCheckResponse\"\xbf\x01\n\x13PositionCheckResult\x12\x13\n\x0bposition_id\x18\x01 \x01(\t\x12I\n\x0b\x64\x65vice_type\x18\x02 \x01(\x0e\x32\x34.minknow_api.device.GetDeviceInfoResponse.DeviceType\x12H\n\x15hardware_check_result\x18\x03 \x03(\x0b\x32).minknow_api.protocol.HardwareCheckResult\"\xa2\x01\n\x17HardwareCheckScriptData\x12O\n\x16position_check_results\x18\x01 \x03(\x0b\x32/.minknow_api.hardware_check.PositionCheckResult\x12\x18\n\x10progress_percent\x18\x02 \x01(\r\x12\x1c\n\x14progress_eta_seconds\x18\x03 \x01(\r\"\x97\x01\n!UpdateHardwareCheckResultsRequest\x12\x19\n\x11hardware_check_id\x18\x01 \x01(\t\x12W\n\x1ahardware_check_script_data\x18\x02 \x01(\x0b\x32\x33.minknow_api.hardware_check.HardwareCheckScriptData\"$\n\"UpdateHardwareCheckResultsResponse\"Y\n!StreamHardwareCheckResultsRequest\x12\x1e\n\x11hardware_check_id\x18\x01 \x01(\tH\x00\x88\x01\x01\x42\x14\n\x12_hardware_check_id\"\xe7\x01\n\x13HardwareCheckResult\x12\x19\n\x11hardware_check_id\x18\x01 \x01(\t\x12.\n\nstart_time\x18\x02 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12,\n\x08\x65nd_time\x18\x03 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12W\n\x1ahardware_check_script_data\x18\x04 \x01(\x0b\x32\x33.minknow_api.hardware_check.HardwareCheckScriptData\"t\n\"StreamHardwareCheckResultsResponse\x12N\n\x15hardware_check_result\x18\x01 \x01(\x0b\x32/.minknow_api.hardware_check.HardwareCheckResult\"?\n\"GenerateHardwareCheckReportRequest\x12\x19\n\x11hardware_check_id\x18\x01 \x01(\t\"U\n#GenerateHardwareCheckReportResponse\x12\x19\n\x11hardware_check_id\x18\x01 \x01(\t\x12\x13\n\x0breport_data\x18\x02 \x01(\t2\xa6\x06\n\x14HardwareCheckService\x12\x8a\x01\n\x14start_hardware_check\x12\x35.minknow_api.hardware_check.StartHardwareCheckRequest\x1a\x36.minknow_api.hardware_check.StartHardwareCheckResponse\"\x03\x90\x02\x02\x12\x87\x01\n\x13stop_hardware_check\x12\x34.minknow_api.hardware_check.StopHardwareCheckRequest\x1a\x35.minknow_api.hardware_check.StopHardwareCheckResponse\"\x03\x90\x02\x02\x12\xa3\x01\n\x1dupdate_hardware_check_results\x12=.minknow_api.hardware_check.UpdateHardwareCheckResultsRequest\x1a>.minknow_api.hardware_check.UpdateHardwareCheckResultsResponse\"\x03\x90\x02\x02\x12\xa5\x01\n\x1dstream_hardware_check_results\x12=.minknow_api.hardware_check.StreamHardwareCheckResultsRequest\x1a>.minknow_api.hardware_check.StreamHardwareCheckResultsResponse\"\x03\x90\x02\x01\x30\x01\x12\xa8\x01\n\x1egenerate_hardware_check_report\x12>.minknow_api.hardware_check.GenerateHardwareCheckReportRequest\x1a?.minknow_api.hardware_check.GenerateHardwareCheckReportResponse\"\x03\x90\x02\x02\x30\x01\x42&\n\x1c\x63om.nanoporetech.minknow_api\xa2\x02\x05MKAPIb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n minknow_api/hardware_check.proto\x12\x1aminknow_api.hardware_check\x1a\x18minknow_api/device.proto\x1a\x1aminknow_api/protocol.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"1\n\x19StartHardwareCheckRequest\x12\x14\n\x0cposition_ids\x18\x01 \x03(\t\"7\n\x1aStartHardwareCheckResponse\x12\x19\n\x11hardware_check_id\x18\x01 \x01(\t\"5\n\x18StopHardwareCheckRequest\x12\x19\n\x11hardware_check_id\x18\x01 \x01(\t\"\x1b\n\x19StopHardwareCheckResponse\"\xd3\x01\n\x13PositionCheckResult\x12\x13\n\x0bposition_id\x18\x01 \x01(\t\x12I\n\x0b\x64\x65vice_type\x18\x02 \x01(\x0e\x32\x34.minknow_api.device.GetDeviceInfoResponse.DeviceType\x12H\n\x15hardware_check_result\x18\x03 \x01(\x0b\x32).minknow_api.protocol.HardwareCheckResult\x12\x12\n\nadapter_id\x18\x04 \x01(\t\"\xd4\x01\n\x17HardwareCheckScriptData\x12O\n\x16position_check_results\x18\x01 \x03(\x0b\x32/.minknow_api.hardware_check.PositionCheckResult\x12\x18\n\x10progress_percent\x18\x02 \x01(\r\x12\x1c\n\x14progress_eta_seconds\x18\x03 \x01(\r\x12\x16\n\x0eoverall_result\x18\x05 \x01(\x08\x12\x18\n\x10protocol_run_ids\x18\x06 \x03(\t\"\x97\x01\n!UpdateHardwareCheckResultsRequest\x12\x19\n\x11hardware_check_id\x18\x01 \x01(\t\x12W\n\x1ahardware_check_script_data\x18\x02 \x01(\x0b\x32\x33.minknow_api.hardware_check.HardwareCheckScriptData\"$\n\"UpdateHardwareCheckResultsResponse\"M\n!StreamHardwareCheckResultsRequest\x12\x19\n\x11hardware_check_id\x18\x01 \x01(\t\x12\r\n\x05\x63ount\x18\x02 \x01(\x04\"\xa6\x02\n\x13HardwareCheckResult\x12\x19\n\x11hardware_check_id\x18\x01 \x01(\t\x12.\n\nstart_time\x18\x02 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12,\n\x08\x65nd_time\x18\x03 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12W\n\x1ahardware_check_script_data\x18\x04 \x01(\x0b\x32\x33.minknow_api.hardware_check.HardwareCheckScriptData\x12=\n\x05state\x18\x05 \x01(\x0e\x32..minknow_api.hardware_check.HardwareCheckState\"t\n\"StreamHardwareCheckResultsResponse\x12N\n\x15hardware_check_result\x18\x01 \x01(\x0b\x32/.minknow_api.hardware_check.HardwareCheckResult\"?\n\"GenerateHardwareCheckReportRequest\x12\x19\n\x11hardware_check_id\x18\x01 \x01(\t\"U\n#GenerateHardwareCheckReportResponse\x12\x19\n\x11hardware_check_id\x18\x01 \x01(\t\x12\x13\n\x0breport_data\x18\x02 \x01(\t*\xe3\x02\n\x12HardwareCheckState\x12\x1a\n\x16HARDWARE_CHECK_RUNNING\x10\x00\x12\x1c\n\x18HARDWARE_CHECK_COMPLETED\x10\x01\x12\x1a\n\x16HARDWARE_CHECK_STOPPED\x10\x02\x12\x41\n=HARDWARE_CHECK_FINISHED_WITH_ERROR_COULD_NOT_OBTAIN_EXIT_CODE\x10\x03\x12\x44\n@HARDWARE_CHECK_FINISHED_WITH_ERROR_PYTHON_EXECUTOR_DID_NOT_START\x10\x04\x12\x38\n4HARDWARE_CHECK_FINISHED_WITH_ERROR_SCRIPT_ERROR_CODE\x10\x05\x12\x34\n0HARDWARE_CHECK_FINISHED_WITH_ERROR_LINGERING_RUN\x10\x06\x32\xa6\x06\n\x14HardwareCheckService\x12\x8a\x01\n\x14start_hardware_check\x12\x35.minknow_api.hardware_check.StartHardwareCheckRequest\x1a\x36.minknow_api.hardware_check.StartHardwareCheckResponse\"\x03\x90\x02\x02\x12\x87\x01\n\x13stop_hardware_check\x12\x34.minknow_api.hardware_check.StopHardwareCheckRequest\x1a\x35.minknow_api.hardware_check.StopHardwareCheckResponse\"\x03\x90\x02\x02\x12\xa3\x01\n\x1dupdate_hardware_check_results\x12=.minknow_api.hardware_check.UpdateHardwareCheckResultsRequest\x1a>.minknow_api.hardware_check.UpdateHardwareCheckResultsResponse\"\x03\x90\x02\x02\x12\xa5\x01\n\x1dstream_hardware_check_results\x12=.minknow_api.hardware_check.StreamHardwareCheckResultsRequest\x1a>.minknow_api.hardware_check.StreamHardwareCheckResultsResponse\"\x03\x90\x02\x01\x30\x01\x12\xa8\x01\n\x1egenerate_hardware_check_report\x12>.minknow_api.hardware_check.GenerateHardwareCheckReportRequest\x1a?.minknow_api.hardware_check.GenerateHardwareCheckReportResponse\"\x03\x90\x02\x02\x30\x01\x42\x61\n\x1c\x63om.nanoporetech.minknow_apiZ9github.com/nanoporetech/minknow_api/go/gen/hardware_check\xa2\x02\x05MKAPIb\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
 _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'minknow_api.hardware_check_pb2', _globals)
 if _descriptor._USE_C_DESCRIPTORS == False:
   _globals['DESCRIPTOR']._options = None
-  _globals['DESCRIPTOR']._serialized_options = b'\n\034com.nanoporetech.minknow_api\242\002\005MKAPI'
+  _globals['DESCRIPTOR']._serialized_options = b'\n\034com.nanoporetech.minknow_apiZ9github.com/nanoporetech/minknow_api/go/gen/hardware_check\242\002\005MKAPI'
   _globals['_HARDWARECHECKSERVICE'].methods_by_name['start_hardware_check']._options = None
   _globals['_HARDWARECHECKSERVICE'].methods_by_name['start_hardware_check']._serialized_options = b'\220\002\002'
   _globals['_HARDWARECHECKSERVICE'].methods_by_name['stop_hardware_check']._options = None
@@ -35,6 +35,8 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   _globals['_HARDWARECHECKSERVICE'].methods_by_name['stream_hardware_check_results']._serialized_options = b'\220\002\001'
   _globals['_HARDWARECHECKSERVICE'].methods_by_name['generate_hardware_check_report']._options = None
   _globals['_HARDWARECHECKSERVICE'].methods_by_name['generate_hardware_check_report']._serialized_options = b'\220\002\002'
+  _globals['_HARDWARECHECKSTATE']._serialized_start=1611
+  _globals['_HARDWARECHECKSTATE']._serialized_end=1966
   _globals['_STARTHARDWARECHECKREQUEST']._serialized_start=151
   _globals['_STARTHARDWARECHECKREQUEST']._serialized_end=200
   _globals['_STARTHARDWARECHECKRESPONSE']._serialized_start=202
@@ -44,47 +46,25 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   _globals['_STOPHARDWARECHECKRESPONSE']._serialized_start=314
   _globals['_STOPHARDWARECHECKRESPONSE']._serialized_end=341
   _globals['_POSITIONCHECKRESULT']._serialized_start=344
-  _globals['_POSITIONCHECKRESULT']._serialized_end=535
-  _globals['_HARDWARECHECKSCRIPTDATA']._serialized_start=538
-  _globals['_HARDWARECHECKSCRIPTDATA']._serialized_end=700
-  _globals['_UPDATEHARDWARECHECKRESULTSREQUEST']._serialized_start=703
-  _globals['_UPDATEHARDWARECHECKRESULTSREQUEST']._serialized_end=854
-  _globals['_UPDATEHARDWARECHECKRESULTSRESPONSE']._serialized_start=856
-  _globals['_UPDATEHARDWARECHECKRESULTSRESPONSE']._serialized_end=892
-  _globals['_STREAMHARDWARECHECKRESULTSREQUEST']._serialized_start=894
-  _globals['_STREAMHARDWARECHECKRESULTSREQUEST']._serialized_end=983
-  _globals['_HARDWARECHECKRESULT']._serialized_start=986
-  _globals['_HARDWARECHECKRESULT']._serialized_end=1217
-  _globals['_STREAMHARDWARECHECKRESULTSRESPONSE']._serialized_start=1219
-  _globals['_STREAMHARDWARECHECKRESULTSRESPONSE']._serialized_end=1335
-  _globals['_GENERATEHARDWARECHECKREPORTREQUEST']._serialized_start=1337
-  _globals['_GENERATEHARDWARECHECKREPORTREQUEST']._serialized_end=1400
-  _globals['_GENERATEHARDWARECHECKREPORTRESPONSE']._serialized_start=1402
-  _globals['_GENERATEHARDWARECHECKREPORTRESPONSE']._serialized_end=1487
-  _globals['_HARDWARECHECKSERVICE']._serialized_start=1490
-  _globals['_HARDWARECHECKSERVICE']._serialized_end=2296
-StopHardwareCheckRequest.__doc__ = """Attributes:
-    hardware_check_id:
-        The unique ID for a hardware check.
-"""
-StreamHardwareCheckResultsRequest.__doc__ = """Attributes:
-    hardware_check_id:
-        Filter the response by a specific hardware check ID.  If no
-        hardware check ID is provided, persisted data will be returned
-        if any exists If a hardware check has started, the rpc will
-        return information about the new ongoing hardware check
-"""
-PositionCheckResult.__doc__ = """Each position result
-
-Attributes:
-    position_id:
-        The ID of the position that performed the hardware check.
-    device_type:
-        The type of the device the hardware check is running on.
-    hardware_check_result:
-        A list of position hardware check results. This is the
-        HardwareCheckResult message from the protocol
-"""
+  _globals['_POSITIONCHECKRESULT']._serialized_end=555
+  _globals['_HARDWARECHECKSCRIPTDATA']._serialized_start=558
+  _globals['_HARDWARECHECKSCRIPTDATA']._serialized_end=770
+  _globals['_UPDATEHARDWARECHECKRESULTSREQUEST']._serialized_start=773
+  _globals['_UPDATEHARDWARECHECKRESULTSREQUEST']._serialized_end=924
+  _globals['_UPDATEHARDWARECHECKRESULTSRESPONSE']._serialized_start=926
+  _globals['_UPDATEHARDWARECHECKRESULTSRESPONSE']._serialized_end=962
+  _globals['_STREAMHARDWARECHECKRESULTSREQUEST']._serialized_start=964
+  _globals['_STREAMHARDWARECHECKRESULTSREQUEST']._serialized_end=1041
+  _globals['_HARDWARECHECKRESULT']._serialized_start=1044
+  _globals['_HARDWARECHECKRESULT']._serialized_end=1338
+  _globals['_STREAMHARDWARECHECKRESULTSRESPONSE']._serialized_start=1340
+  _globals['_STREAMHARDWARECHECKRESULTSRESPONSE']._serialized_end=1456
+  _globals['_GENERATEHARDWARECHECKREPORTREQUEST']._serialized_start=1458
+  _globals['_GENERATEHARDWARECHECKREPORTREQUEST']._serialized_end=1521
+  _globals['_GENERATEHARDWARECHECKREPORTRESPONSE']._serialized_start=1523
+  _globals['_GENERATEHARDWARECHECKREPORTRESPONSE']._serialized_end=1608
+  _globals['_HARDWARECHECKSERVICE']._serialized_start=1969
+  _globals['_HARDWARECHECKSERVICE']._serialized_end=2775
 GenerateHardwareCheckReportRequest.__doc__ = """Attributes:
     hardware_check_id:
         The ID of the hardware check to generate a report for.
@@ -106,32 +86,12 @@ Attributes:
         complete, this will be zero.  Note that it is always an
         estimate - it is recommended to round larger values, like
         "about 2 minutes remaining".
-"""
-StartHardwareCheckResponse.__doc__ = """Attributes:
-    hardware_check_id:
-        The unique ID for the newly created hardware check.
-"""
-HardwareCheckResult.__doc__ = """The data sent to the UI
-
-Attributes:
-    failure_reason:
-        `failure_reason` is guaranteed to be:  - `NoError` if `status`
-        is NOT `Failed`  - NOT `NoError` if `status` is `Failed`
-    hardware_check_id:
-        The ID of this hardware check result.
-    start_time:
-        The time (UTC) when the hardware check was started.
-    end_time:
-        The time (UTC) when the hardware check completed.  Unset if
-        the check is still running.
-    hardware_check_script_data:
-        The data from the hardware check script
-"""
-UpdateHardwareCheckResultsRequest.__doc__ = """Attributes:
-    hardware_check_id:
-        The unique ID for a hardware check.
-    hardware_check_script_data:
-        The data from the hardware check script
+    overall_result:
+        Final overall pass/fail across all tests and positions
+    protocol_run_ids:
+        protocol_run_ids that have been started by the hardware check
+        If any protocol listed here is still running when the hardware
+        check finishes, that protocol will be stopped.
 """
 StreamHardwareCheckResultsResponse.__doc__ = """Attributes:
     hardware_check_result:
@@ -145,6 +105,37 @@ StreamHardwareCheckResultsResponse.__doc__ = """Attributes:
         it will stay connected for new updates and end when the check
         is completed.  Each result will be returned individually.
 """
+StreamHardwareCheckResultsRequest.__doc__ = """Attributes:
+    hardware_check_id:
+        Filter the response by a specific hardware check ID.  If this
+        is empty, then:      - HardwareCheckResults for existing
+        hardware checks will be streamed immediately          - Up to
+        `count` newest hardware check results will be returned      -
+        The stream will remain open      - Any subsequent hardware
+        check updates will also be streamed, including those for
+        any hardware checks that are started after the
+        `stream_hardware_check_results()`        call was made.
+        Otherwise, if this is non-empty, then:      - The
+        HardwareCheckResult for the corresponding hardware check will
+        be returned      - If that hardware check is still in
+        progress, then the stream will remain open and        any
+        updates for that hardware check will be returned.      - The
+        stream will be closed if/when the specified hardware check
+        finishes          - This will be immediately after returning
+        the first response if the hardware            check was
+        already finished when the call was made      - If the
+        specified `hardware_check_id` doesn't correspond to a valid
+        hardware check,        an INVALID_ARGUMENT status will be
+        returned.
+    count:
+        The maximum number of records to return initially  Since
+        HardwareCheckResults are returned newest-to-oldest, this
+        provides a way to get information only for the newest hardware
+        checks  (Note that subsequent updates will also be streamed,
+        and so more than `count` responses may be returned on the
+        stream)  If `count` is `0` (the default) then all matching
+        records will be returned
+"""
 GenerateHardwareCheckReportResponse.__doc__ = """Attributes:
     hardware_check_id:
         The ID of the hardware check the report is for.
@@ -152,9 +143,59 @@ GenerateHardwareCheckReportResponse.__doc__ = """Attributes:
         A section of the hardware check report data (note the api to
         return this data may stream back several sections).
 """
+UpdateHardwareCheckResultsRequest.__doc__ = """Attributes:
+    hardware_check_id:
+        The unique ID for a hardware check.
+    hardware_check_script_data:
+        The data from the hardware check script
+"""
 StartHardwareCheckRequest.__doc__ = """Attributes:
     position_ids:
         A list of position IDs to start a hardware check on e.g.
         `['X1', X2', 'X5']`.
+"""
+StopHardwareCheckRequest.__doc__ = """Attributes:
+    hardware_check_id:
+        The unique ID for a hardware check.
+"""
+PositionCheckResult.__doc__ = """Each position result
+
+Attributes:
+    position_id:
+        The ID of the position that performed the hardware check.
+    device_type:
+        The type of the device the hardware check is running on.
+    hardware_check_result:
+        The position hardware check result This is the
+        HardwareCheckResult message from the protocol
+    adapter_id:
+        The unique identifier of an attached flongle adapter. This
+        should be same as the value printed onto the adapter casing.
+"""
+StartHardwareCheckResponse.__doc__ = """Attributes:
+    hardware_check_id:
+        The unique ID for the newly created hardware check.
+"""
+HardwareCheckResult.__doc__ = """The data sent to the UI
+
+Attributes:
+    failure_reason:
+        `failure_reason` is guaranteed to be:  - `NoError` if `status`
+        is NOT `Failed`  - NOT `NoError` if `status` is `Failed`
+    calibration_results:
+        Results data for calibration test
+    temperature_results:
+        Results data for temperature test
+    hardware_check_id:
+        The ID of this hardware check result.
+    start_time:
+        The time (UTC) when the hardware check was started.
+    end_time:
+        The time (UTC) when the hardware check completed.  Unset if
+        the check is still running.
+    hardware_check_script_data:
+        The data from the hardware check script
+    state:
+        Indicates the current state of the hardware check run.
 """
 # @@protoc_insertion_point(module_scope)

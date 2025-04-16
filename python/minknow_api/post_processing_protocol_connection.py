@@ -26,6 +26,7 @@ class PostProcessingProtocolConnection(object):
         host="127.0.0.1",
         port=None,
         credentials=None,
+        ca_certificate: bytes = None,
     ):
         if port is None:
             port = int(os.environ["MINKNOW_BASECALLER_RPC_PORT_SECURE"])
@@ -37,7 +38,9 @@ class PostProcessingProtocolConnection(object):
             raise Exception("Invalid id specified for PostProcessingProtocolConnection")
 
         if credentials is None:
-            credentials = minknow_api.grpc_credentials(host=host)
+            credentials = minknow_api.grpc_credentials(
+                host=host, ca_certificate=ca_certificate
+            )
         self._basecaller = minknow_api.manager.Basecaller(
             host="127.0.0.1", port=port, credentials=credentials
         )

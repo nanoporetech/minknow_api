@@ -12,6 +12,7 @@ __all__ = [
     "AnalysisWorkflowsService",
     "ProxyRequest",
     "ProxyResponse",
+    "AnalysisWorkflowRequest",
 ]
 
 def run_with_retry(method, message, timeout, unwraps, full_name):

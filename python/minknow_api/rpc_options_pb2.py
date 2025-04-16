@@ -15,12 +15,12 @@ _sym_db = _symbol_database.Default()
 from google.protobuf import descriptor_pb2 as google_dot_protobuf_dot_descriptor__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x1dminknow_api/rpc_options.proto\x12\x0bminknow_api\x1a google/protobuf/descriptor.proto:5\n\x0crpc_required\x12\x1d.google.protobuf.FieldOptions\x18\xd1\x86\x03 \x01(\x08:3\n\nrpc_unwrap\x12\x1d.google.protobuf.FieldOptions\x18\xd2\x86\x03 \x01(\x08:6\n\x0c\x65xperimental\x12\x1e.google.protobuf.MethodOptions\x18\xd3\x86\x03 \x01(\x08\x42&\n\x1c\x63om.nanoporetech.minknow_api\xa2\x02\x05MKAPIb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x1dminknow_api/rpc_options.proto\x12\x0bminknow_api\x1a google/protobuf/descriptor.proto:5\n\x0crpc_required\x12\x1d.google.protobuf.FieldOptions\x18\xd1\x86\x03 \x01(\x08:3\n\nrpc_unwrap\x12\x1d.google.protobuf.FieldOptions\x18\xd2\x86\x03 \x01(\x08:6\n\x0c\x65xperimental\x12\x1e.google.protobuf.MethodOptions\x18\xd3\x86\x03 \x01(\x08\x42^\n\x1c\x63om.nanoporetech.minknow_apiZ6github.com/nanoporetech/minknow_api/go/gen/rpc_options\xa2\x02\x05MKAPIb\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
 _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'minknow_api.rpc_options_pb2', _globals)
 if _descriptor._USE_C_DESCRIPTORS == False:
   _globals['DESCRIPTOR']._options = None
-  _globals['DESCRIPTOR']._serialized_options = b'\n\034com.nanoporetech.minknow_api\242\002\005MKAPI'
+  _globals['DESCRIPTOR']._serialized_options = b'\n\034com.nanoporetech.minknow_apiZ6github.com/nanoporetech/minknow_api/go/gen/rpc_options\242\002\005MKAPI'
 # @@protoc_insertion_point(module_scope)

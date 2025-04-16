@@ -16,14 +16,14 @@ from minknow_api import rpc_options_pb2 as minknow__api_dot_rpc__options__pb2
 from google.protobuf import timestamp_pb2 as google_dot_protobuf_dot_timestamp__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x15minknow_api/log.proto\x12\x0fminknow_api.log\x1a\x1dminknow_api/rpc_options.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"6\n\x16GetUserMessagesRequest\x12\x1c\n\x14include_old_messages\x18\x01 \x01(\x08\"\x81\x02\n\x0bUserMessage\x12(\n\x04time\x18\x01 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12+\n\x08severity\x18\x02 \x01(\x0e\x32\x19.minknow_api.log.Severity\x12\x12\n\nidentifier\x18\x03 \x01(\t\x12\x14\n\x0cuser_message\x18\x04 \x01(\t\x12?\n\nextra_data\x18\x05 \x03(\x0b\x32+.minknow_api.log.UserMessage.ExtraDataEntry\x1a\x30\n\x0e\x45xtraDataEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\xf9\x01\n\x16SendUserMessageRequest\x12\x31\n\x08severity\x18\x02 \x01(\x0e\x32\x19.minknow_api.log.SeverityB\x04\x88\xb5\x18\x01\x12\x12\n\nidentifier\x18\x03 \x01(\t\x12\x1a\n\x0cuser_message\x18\x01 \x01(\tB\x04\x88\xb5\x18\x01\x12J\n\nextra_data\x18\x04 \x03(\x0b\x32\x36.minknow_api.log.SendUserMessageRequest.ExtraDataEntry\x1a\x30\n\x0e\x45xtraDataEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\x19\n\x17SendUserMessageResponse\"E\n\x0fSendPingRequest\x12\x17\n\tping_data\x18\x01 \x01(\tB\x04\x88\xb5\x18\x01\x12\x19\n\x11\x64\x61ys_until_expiry\x18\x02 \x01(\x04\"\x12\n\x10SendPingResponse\"c\n\x13\x43ollectPingsRequest\x12!\n\x13\x63ollected_ping_file\x18\x01 \x01(\tB\x04\x88\xb5\x18\x01\x12)\n!include_previously_colleced_pings\x18\x02 \x01(\x08\"I\n\x14\x43ollectPingsResponse\x12\x31\n\x05stage\x18\x01 \x01(\x0e\x32\".minknow_api.log.CollectPingsStage*{\n\x08Severity\x12\x1a\n\x16MESSAGE_SEVERITY_TRACE\x10\x00\x12\x19\n\x15MESSAGE_SEVERITY_INFO\x10\x01\x12\x1c\n\x18MESSAGE_SEVERITY_WARNING\x10\x02\x12\x1a\n\x16MESSAGE_SEVERITY_ERROR\x10\x03*\xac\x01\n\x11\x43ollectPingsStage\x12\x18\n\x14PAUSING_PING_SERVICE\x10\x00\x12\x1a\n\x16LOOKING_FOR_PING_FILES\x10\x01\x12\x14\n\x10\x43REATING_ARCHIVE\x10\x02\x12 \n\x1c\x41\x44\x44ING_PING_FILES_TO_ARCHIVE\x10\x03\x12\x1b\n\x17RESTARTING_PING_SERVICE\x10\x04\x12\x0c\n\x08\x43OMPLETE\x10\x05\x32\x8c\x03\n\nLogService\x12^\n\x11get_user_messages\x12\'.minknow_api.log.GetUserMessagesRequest\x1a\x1c.minknow_api.log.UserMessage\"\x00\x30\x01\x12h\n\x11send_user_message\x12\'.minknow_api.log.SendUserMessageRequest\x1a(.minknow_api.log.SendUserMessageResponse\"\x00\x12R\n\tsend_ping\x12 .minknow_api.log.SendPingRequest\x1a!.minknow_api.log.SendPingResponse\"\x00\x12`\n\rcollect_pings\x12$.minknow_api.log.CollectPingsRequest\x1a%.minknow_api.log.CollectPingsResponse\"\x00\x30\x01\x42&\n\x1c\x63om.nanoporetech.minknow_api\xa2\x02\x05MKAPIb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x15minknow_api/log.proto\x12\x0fminknow_api.log\x1a\x1dminknow_api/rpc_options.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"6\n\x16GetUserMessagesRequest\x12\x1c\n\x14include_old_messages\x18\x01 \x01(\x08\"\x81\x02\n\x0bUserMessage\x12(\n\x04time\x18\x01 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12+\n\x08severity\x18\x02 \x01(\x0e\x32\x19.minknow_api.log.Severity\x12\x12\n\nidentifier\x18\x03 \x01(\t\x12\x14\n\x0cuser_message\x18\x04 \x01(\t\x12?\n\nextra_data\x18\x05 \x03(\x0b\x32+.minknow_api.log.UserMessage.ExtraDataEntry\x1a\x30\n\x0e\x45xtraDataEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\xf9\x01\n\x16SendUserMessageRequest\x12\x31\n\x08severity\x18\x02 \x01(\x0e\x32\x19.minknow_api.log.SeverityB\x04\x88\xb5\x18\x01\x12\x12\n\nidentifier\x18\x03 \x01(\t\x12\x1a\n\x0cuser_message\x18\x01 \x01(\tB\x04\x88\xb5\x18\x01\x12J\n\nextra_data\x18\x04 \x03(\x0b\x32\x36.minknow_api.log.SendUserMessageRequest.ExtraDataEntry\x1a\x30\n\x0e\x45xtraDataEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\x19\n\x17SendUserMessageResponse\"E\n\x0fSendPingRequest\x12\x17\n\tping_data\x18\x01 \x01(\tB\x04\x88\xb5\x18\x01\x12\x19\n\x11\x64\x61ys_until_expiry\x18\x02 \x01(\x04\"\x12\n\x10SendPingResponse\"c\n\x13\x43ollectPingsRequest\x12!\n\x13\x63ollected_ping_file\x18\x01 \x01(\tB\x04\x88\xb5\x18\x01\x12)\n!include_previously_colleced_pings\x18\x02 \x01(\x08\"I\n\x14\x43ollectPingsResponse\x12\x31\n\x05stage\x18\x01 \x01(\x0e\x32\".minknow_api.log.CollectPingsStage*{\n\x08Severity\x12\x1a\n\x16MESSAGE_SEVERITY_TRACE\x10\x00\x12\x19\n\x15MESSAGE_SEVERITY_INFO\x10\x01\x12\x1c\n\x18MESSAGE_SEVERITY_WARNING\x10\x02\x12\x1a\n\x16MESSAGE_SEVERITY_ERROR\x10\x03*\xac\x01\n\x11\x43ollectPingsStage\x12\x18\n\x14PAUSING_PING_SERVICE\x10\x00\x12\x1a\n\x16LOOKING_FOR_PING_FILES\x10\x01\x12\x14\n\x10\x43REATING_ARCHIVE\x10\x02\x12 \n\x1c\x41\x44\x44ING_PING_FILES_TO_ARCHIVE\x10\x03\x12\x1b\n\x17RESTARTING_PING_SERVICE\x10\x04\x12\x0c\n\x08\x43OMPLETE\x10\x05\x32\x8c\x03\n\nLogService\x12^\n\x11get_user_messages\x12\'.minknow_api.log.GetUserMessagesRequest\x1a\x1c.minknow_api.log.UserMessage\"\x00\x30\x01\x12h\n\x11send_user_message\x12\'.minknow_api.log.SendUserMessageRequest\x1a(.minknow_api.log.SendUserMessageResponse\"\x00\x12R\n\tsend_ping\x12 .minknow_api.log.SendPingRequest\x1a!.minknow_api.log.SendPingResponse\"\x00\x12`\n\rcollect_pings\x12$.minknow_api.log.CollectPingsRequest\x1a%.minknow_api.log.CollectPingsResponse\"\x00\x30\x01\x42V\n\x1c\x63om.nanoporetech.minknow_apiZ.github.com/nanoporetech/minknow_api/go/gen/log\xa2\x02\x05MKAPIb\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
 _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'minknow_api.log_pb2', _globals)
 if _descriptor._USE_C_DESCRIPTORS == False:
   _globals['DESCRIPTOR']._options = None
-  _globals['DESCRIPTOR']._serialized_options = b'\n\034com.nanoporetech.minknow_api\242\002\005MKAPI'
+  _globals['DESCRIPTOR']._serialized_options = b'\n\034com.nanoporetech.minknow_apiZ.github.com/nanoporetech/minknow_api/go/gen/log\242\002\005MKAPI'
   _globals['_USERMESSAGE_EXTRADATAENTRY']._options = None
   _globals['_USERMESSAGE_EXTRADATAENTRY']._serialized_options = b'8\001'
   _globals['_SENDUSERMESSAGEREQUEST_EXTRADATAENTRY']._options = None
@@ -62,16 +62,6 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   _globals['_COLLECTPINGSRESPONSE']._serialized_end=966
   _globals['_LOGSERVICE']._serialized_start=1269
   _globals['_LOGSERVICE']._serialized_end=1665
-SendPingRequest.__doc__ = """Since 5.0
-
-Attributes:
-    ping_data:
-        The json data to send as a ping.  note: if this string is not
-        a valid json object, an error will be raised.
-    days_until_expiry:
-        Should the ping fail to send, the number of days the ping will
-        be stored before being cleaned up.
-"""
 UserMessage.__doc__ = """Attributes:
     time:
         Timestamp for when the log message was emitted
@@ -93,6 +83,16 @@ GetUserMessagesRequest.__doc__ = """Attributes:
         sent.  If not specified - the default will not send messages
         that were sent previously.  note: there is a limit on how many
         messages are recorded for replay.
+"""
+SendPingRequest.__doc__ = """Since 5.0
+
+Attributes:
+    ping_data:
+        The json data to send as a ping.  note: if this string is not
+        a valid json object, an error will be raised.
+    days_until_expiry:
+        Should the ping fail to send, the number of days the ping will
+        be stored before being cleaned up.
 """
 CollectPingsRequest.__doc__ = """Attributes:
     collected_ping_file:

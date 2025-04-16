@@ -4,6 +4,7 @@ package minknow_api.promethion_device;
 
 option java_package = "com.nanoporetech.minknow_api";
 option objc_class_prefix = "MKAPI";
+option go_package ="github.com/nanoporetech/minknow_api/go/gen/promethion_device";
 
 import "google/protobuf/wrappers.proto";
 import "minknow_api/rpc_options.proto";

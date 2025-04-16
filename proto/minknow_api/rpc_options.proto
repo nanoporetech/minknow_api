@@ -4,6 +4,7 @@ package minknow_api;
 
 option java_package = "com.nanoporetech.minknow_api";
 option objc_class_prefix = "MKAPI";
+option go_package ="github.com/nanoporetech/minknow_api/go/gen/rpc_options";
 
 import "google/protobuf/descriptor.proto";
 

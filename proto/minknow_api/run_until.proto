@@ -4,6 +4,7 @@ package minknow_api.run_until;
 
 option java_package = "com.nanoporetech.minknow_api";
 option objc_class_prefix = "MKAPI";
+option go_package ="github.com/nanoporetech/minknow_api/go/gen/run_until";
 
 import "minknow_api/rpc_options.proto";
 import "google/protobuf/any.proto";

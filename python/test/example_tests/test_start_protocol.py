@@ -1,6 +1,8 @@
+import json
 import subprocess
 import sys
 from dataclasses import dataclass
+from typing import Optional, List
 from pathlib import Path
 import os
 
@@ -29,46 +31,57 @@ start_protocol_source = example_root / "start_protocol.py"
 TEST_PROTOCOL_NAME = "foo-identifier"
 TEST_BARCODING_PROTOCOL_NAME = "foo-barcoding-identifier"
 TEST_KIT_NAME = "foo-bar-kit"
+TEST_FLOW_CELL_PRODUCT_CODE = "product-code"
 TEST_PROTOCOL_IDENTIFIER = f"{TEST_PROTOCOL_NAME}:{TEST_KIT_NAME}"
 TEST_BARCODING_PROTOCOL_IDENTIFIER = f"{TEST_BARCODING_PROTOCOL_NAME}:{TEST_KIT_NAME}"
-TEST_BASECLL_MODEL = "test.cfg"
-TEST_BASECLL_MODEL_OTHER = "test2.cfg"
+TEST_BASECALL_MODEL = "simplex_model_hac@v2.3.4"
+TEST_BASECALL_MODEL_OTHER = "simplex_model_fast"
+TEST_BASECALL_DUPLEX_MODEL = "simplex_model_hac_stereo@v2.3.4"
+TEST_BASECALL_MODIFIED_MODEL = "simplex_model_fast_5mCG_5hmCG@v2"
 TEST_BARCODING_KIT = "foo-barcodes"
 TEST_PROTOCOL = protocol_pb2.ProtocolInfo(
     identifier=TEST_PROTOCOL_IDENTIFIER,
     name=TEST_PROTOCOL_NAME,
     tag_extraction_result=protocol_pb2.ProtocolInfo.TagExtractionResult(success=True),
     tags={
+        "flow cell": protocol_pb2.ProtocolInfo.TagValue(
+            string_value=TEST_FLOW_CELL_PRODUCT_CODE
+        ),
         "kit": protocol_pb2.ProtocolInfo.TagValue(string_value=TEST_KIT_NAME),
         "experiment type": protocol_pb2.ProtocolInfo.TagValue(
             string_value="sequencing"
         ),
         "default basecall model": protocol_pb2.ProtocolInfo.TagValue(
-            string_value=TEST_BASECLL_MODEL
+            string_value=TEST_BASECALL_MODEL
         ),
         "available basecall models": protocol_pb2.ProtocolInfo.TagValue(
-            array_value='["%s","%s"]' % (TEST_BASECLL_MODEL, TEST_BASECLL_MODEL_OTHER)
+            array_value='["%s","%s"]' % (TEST_BASECALL_MODEL, TEST_BASECALL_MODEL_OTHER)
         ),
+        "sample rate": protocol_pb2.ProtocolInfo.TagValue(int_value=5000),
     },
 )
 TEST_BARCODING_PROTOCOL = protocol_pb2.ProtocolInfo(
     identifier=TEST_BARCODING_PROTOCOL_IDENTIFIER,
     tag_extraction_result=protocol_pb2.ProtocolInfo.TagExtractionResult(success=True),
     tags={
+        "flow cell": protocol_pb2.ProtocolInfo.TagValue(
+            string_value=TEST_FLOW_CELL_PRODUCT_CODE
+        ),
         "kit": protocol_pb2.ProtocolInfo.TagValue(string_value=TEST_KIT_NAME),
         "experiment type": protocol_pb2.ProtocolInfo.TagValue(
             string_value="sequencing"
         ),
         "default basecall model": protocol_pb2.ProtocolInfo.TagValue(
-            string_value=TEST_BASECLL_MODEL
+            string_value=TEST_BASECALL_MODEL
         ),
         "available basecall models": protocol_pb2.ProtocolInfo.TagValue(
-            array_value='["%s","%s"]' % (TEST_BASECLL_MODEL, TEST_BASECLL_MODEL_OTHER)
+            array_value='["%s","%s"]' % (TEST_BASECALL_MODEL, TEST_BASECALL_MODEL_OTHER)
         ),
         "barcoding": protocol_pb2.ProtocolInfo.TagValue(bool_value=True),
         "barcoding kits": protocol_pb2.ProtocolInfo.TagValue(
             array_value='["%s"]' % (TEST_BARCODING_KIT)
         ),
+        "sample rate": protocol_pb2.ProtocolInfo.TagValue(int_value=5000),
     },
 )
 TEST_RUN_UNTIL_CRITERIA = acquisition_pb2.TargetRunUntilCriteria(
@@ -76,17 +89,50 @@ TEST_RUN_UNTIL_CRITERIA = acquisition_pb2.TargetRunUntilCriteria(
         criteria={"runtime": make_uint64_any(72 * 60 * 60)}
     )
 )
+TEST_BASECALL_CONFIGURATIONS = [
+    manager_pb2.FindBasecallConfigurationsResponse.BasecallConfiguration(
+        name="test_config",
+        kits=[TEST_KIT_NAME],
+        flowcells=[TEST_FLOW_CELL_PRODUCT_CODE],
+        sampling_rate=5000,
+        simplex_models=[
+            manager_pb2.FindBasecallConfigurationsResponse.SimplexModel(
+                name=TEST_BASECALL_MODEL,
+                variant="hac",
+                default_q_score_cutoff=9.0,
+                stereo_models=[
+                    manager_pb2.FindBasecallConfigurationsResponse.StereoModel(
+                        name=TEST_BASECALL_DUPLEX_MODEL
+                    )
+                ],
+            ),
+            manager_pb2.FindBasecallConfigurationsResponse.SimplexModel(
+                name=TEST_BASECALL_MODEL_OTHER,
+                variant="fast",
+                default_q_score_cutoff=9.0,
+                modified_models=[
+                    manager_pb2.FindBasecallConfigurationsResponse.ModifiedModel(
+                        name=TEST_BASECALL_MODIFIED_MODEL, variant="5mCG_5hmCG"
+                    )
+                ],
+            ),
+        ],
+    )
+]
 
 
 @dataclass
 class FlowCellInfo:
     flow_cell_id: str
     has_flow_cell: bool
+    product_code: str
 
 
 class DeviceServicer(device_pb2_grpc.DeviceServiceServicer):
     def __init__(self):
-        self.flow_cell_info = FlowCellInfo(flow_cell_id="", has_flow_cell=False)
+        self.flow_cell_info = FlowCellInfo(
+            flow_cell_id="", has_flow_cell=False, product_code=""
+        )
 
     def get_flow_cell_info(
         self, _request: device_pb2.GetFlowCellInfoRequest, _context
@@ -97,6 +143,7 @@ class DeviceServicer(device_pb2_grpc.DeviceServiceServicer):
             wells_per_channel=4,
             has_flow_cell=self.flow_cell_info.has_flow_cell,
             flow_cell_id=self.flow_cell_info.flow_cell_id,
+            product_code=self.flow_cell_info.product_code,
             has_adapter=False,
         )
 
@@ -164,6 +211,7 @@ def run_start_protocol_example(port, args):
     )
     if p.returncode:
         print(p.stdout.decode("utf-8"))
+        print(p.stderr.decode("utf-8"))
     return p.returncode, p.stdout
 
 
@@ -270,7 +318,7 @@ def test_basic_start_protocol():
 
             # No flow cell
             sequencing_position.set_flow_cell_info(
-                FlowCellInfo(has_flow_cell=False, flow_cell_id="")
+                FlowCellInfo(has_flow_cell=False, flow_cell_id="", product_code="")
             )
             assert (
                 run_start_protocol_example(
@@ -283,7 +331,11 @@ def test_basic_start_protocol():
             # Flow cell inserted
             test_flow_cell_id = "foo-bar-flow-cell"
             sequencing_position.set_flow_cell_info(
-                FlowCellInfo(has_flow_cell=True, flow_cell_id=test_flow_cell_id)
+                FlowCellInfo(
+                    has_flow_cell=True,
+                    flow_cell_id=test_flow_cell_id,
+                    product_code=TEST_FLOW_CELL_PRODUCT_CODE,
+                )
             )
 
             # No protocols available
@@ -322,7 +374,11 @@ def test_basic_start_protocol():
             assert protocol.target_run_until_criteria == TEST_RUN_UNTIL_CRITERIA
 
             sequencing_position.set_flow_cell_info(
-                FlowCellInfo(has_flow_cell=True, flow_cell_id=test_flow_cell_id)
+                FlowCellInfo(
+                    has_flow_cell=True,
+                    flow_cell_id=test_flow_cell_id,
+                    product_code=TEST_FLOW_CELL_PRODUCT_CODE,
+                )
             )
             assert (
                 run_start_protocol_example(
@@ -366,7 +422,11 @@ def test_naming_start_protocol():
             # Setup for experiment
             test_flow_cell_id = "foo-bar-flow-cell"
             sequencing_position.set_flow_cell_info(
-                FlowCellInfo(has_flow_cell=True, flow_cell_id=test_flow_cell_id)
+                FlowCellInfo(
+                    has_flow_cell=True,
+                    flow_cell_id=test_flow_cell_id,
+                    product_code=TEST_FLOW_CELL_PRODUCT_CODE,
+                )
             )
             sequencing_position.set_protocol_list([TEST_PROTOCOL])
 
@@ -418,10 +478,15 @@ def test_basecalling_start_protocol():
             ]
         )
         with Server([manager_servicer]) as server:
+            manager_servicer.basecall_configurations = TEST_BASECALL_CONFIGURATIONS
             # Setup for experiment
             test_flow_cell_id = "foo-bar-flow-cell"
             sequencing_position.set_flow_cell_info(
-                FlowCellInfo(has_flow_cell=True, flow_cell_id=test_flow_cell_id)
+                FlowCellInfo(
+                    has_flow_cell=True,
+                    flow_cell_id=test_flow_cell_id,
+                    product_code=TEST_FLOW_CELL_PRODUCT_CODE,
+                )
             )
             sequencing_position.set_protocol_list([TEST_PROTOCOL])
 
@@ -443,6 +508,10 @@ def test_basecalling_start_protocol():
             assert protocol.identifier == TEST_PROTOCOL_IDENTIFIER
             assert protocol.args == [
                 "--base_calling=on",
+                "--basecaller_models",
+                f"simplex_model='{TEST_BASECALL_MODEL}'",
+                "--read_filtering",
+                "min_qscore=9.0",
                 "--fast5=off",
                 "--pod5=off",
                 "--fastq=off",
@@ -452,7 +521,7 @@ def test_basecalling_start_protocol():
             ]
             assert protocol.target_run_until_criteria == TEST_RUN_UNTIL_CRITERIA
 
-            # Basecalling enabled
+            # Specific basecalling model
             assert (
                 run_start_protocol_example(
                     server.port,
@@ -461,8 +530,12 @@ def test_basecalling_start_protocol():
                         TEST_KIT_NAME,
                         "--position=MN00000",
                         "--basecalling",
-                        "--basecall-config",
-                        TEST_BASECLL_MODEL_OTHER,
+                        "--basecall-simplex-model",
+                        TEST_BASECALL_MODEL_OTHER,
+                        "--basecall-modified-models",
+                        TEST_BASECALL_MODIFIED_MODEL,
+                        "--basecall-duplex-model",
+                        TEST_BASECALL_DUPLEX_MODEL,
                     ],
                 )[0]
                 == 0
@@ -472,7 +545,12 @@ def test_basecalling_start_protocol():
             assert protocol.identifier == TEST_PROTOCOL_IDENTIFIER
             assert protocol.args == [
                 "--base_calling=on",
-                "--basecaller_filename=%s" % TEST_BASECLL_MODEL_OTHER,
+                "--basecaller_models",
+                f"simplex_model='{TEST_BASECALL_MODEL_OTHER}'",
+                f"modified_models=['{TEST_BASECALL_MODIFIED_MODEL}']",
+                f"stereo_model='{TEST_BASECALL_DUPLEX_MODEL}'",
+                "--read_filtering",
+                "min_qscore=9.0",
                 "--fast5=off",
                 "--pod5=off",
                 "--fastq=off",
@@ -481,6 +559,99 @@ def test_basecalling_start_protocol():
                 "--mux_scan_period=1.5",
             ]
             assert protocol.target_run_until_criteria == TEST_RUN_UNTIL_CRITERIA
+
+            # Auto-selected basecalling model based on model_complex
+            TEST_BAD_BASECALL_MODEL_COMPLEXES = [
+                "not_a_real_complex",
+                "hac@v2"  # only have v2.3.4 - not precise enough
+                "fast@v1.2.not_a_version",
+                "fast@v0.1",  # doesn't exist at this version
+                "fast,this_mod_does_not_exist@latest",
+            ]
+            for complex in TEST_BAD_BASECALL_MODEL_COMPLEXES:
+                return_code, _ = run_start_protocol_example(
+                    server.port,
+                    [
+                        "--kit",
+                        TEST_KIT_NAME,
+                        "--position=MN00000",
+                        "--basecalling",
+                        "--basecall-model-complex",
+                        complex,
+                    ],
+                )
+                assert (
+                    return_code != 0
+                ), f"Model complex '{complex}' should have produced no matching models, and a RuntimeError as a result."
+
+            @dataclass
+            class ModelNames:
+                simplex: str = TEST_BASECALL_MODEL
+                modified: Optional[List[str]] = None
+                stereo: Optional[str] = None
+
+                def as_args_list(self) -> List[str]:
+                    result = [f"simplex_model='{self.simplex}'"]
+                    if self.modified and len(self.modified) > 0:
+                        result.append(f"modified_models={self.modified}")
+                    if self.stereo:
+                        result.append(f"stereo_model='{self.stereo}'")
+                    return result
+
+            TEST_GOOD_BASECALL_MODEL_COMPLEXES = [
+                ("hac", ModelNames()),
+                ("hac@latest", ModelNames()),
+                ("hac@v2.3.4", ModelNames()),
+                (
+                    "hac,duplex",
+                    ModelNames(stereo=TEST_BASECALL_DUPLEX_MODEL),
+                ),
+                (
+                    "fast,5mCG_5hmCG@v2",
+                    ModelNames(
+                        simplex=TEST_BASECALL_MODEL_OTHER,
+                        modified=[TEST_BASECALL_MODIFIED_MODEL],
+                    ),
+                ),
+            ]
+
+            for complex, expected_models in TEST_GOOD_BASECALL_MODEL_COMPLEXES:
+                assert (
+                    run_start_protocol_example(
+                        server.port,
+                        [
+                            "--kit",
+                            TEST_KIT_NAME,
+                            "--position=MN00000",
+                            "--basecalling",
+                            "--basecall-model-complex",
+                            complex,
+                            "--verbose",
+                        ],
+                    )[0]
+                    == 0
+                )
+                assert len(sequencing_position.protocol_service.protocol_runs) > 0
+                protocol = sequencing_position.protocol_service.protocol_runs[-1]
+                assert protocol.identifier == TEST_PROTOCOL_IDENTIFIER
+                expected_args = (
+                    ["--base_calling=on", "--basecaller_models"]
+                    + expected_models.as_args_list()
+                    + [
+                        "--read_filtering",
+                        "min_qscore=9.0",
+                        "--fast5=off",
+                        "--pod5=off",
+                        "--fastq=off",
+                        "--bam=off",
+                        "--active_channel_selection=on",
+                        "--mux_scan_period=1.5",
+                    ]
+                )
+                assert (
+                    protocol.args == expected_args
+                ), f"was expecting different models for complex '{complex}'"
+                assert protocol.target_run_until_criteria == TEST_RUN_UNTIL_CRITERIA
 
 
 def test_barcoding_start_protocol():
@@ -499,10 +670,15 @@ def test_barcoding_start_protocol():
             ]
         )
         with Server([manager_servicer]) as server:
+            manager_servicer.basecall_configurations = TEST_BASECALL_CONFIGURATIONS
             # Setup for experiment
             test_flow_cell_id = "foo-bar-flow-cell"
             sequencing_position.set_flow_cell_info(
-                FlowCellInfo(has_flow_cell=True, flow_cell_id=test_flow_cell_id)
+                FlowCellInfo(
+                    has_flow_cell=True,
+                    flow_cell_id=test_flow_cell_id,
+                    product_code=TEST_FLOW_CELL_PRODUCT_CODE,
+                )
             )
             sequencing_position.set_protocol_list(
                 [TEST_PROTOCOL, TEST_BARCODING_PROTOCOL]
@@ -542,6 +718,10 @@ def test_barcoding_start_protocol():
             assert protocol.identifier == TEST_BARCODING_PROTOCOL_IDENTIFIER
             assert protocol.args == [
                 "--base_calling=on",
+                "--basecaller_models",
+                f"simplex_model='{TEST_BASECALL_MODEL}'",
+                "--read_filtering",
+                "min_qscore=9.0",
                 "--barcoding",
                 "--fast5=off",
                 "--pod5=off",
@@ -576,6 +756,10 @@ def test_barcoding_start_protocol():
             assert protocol.identifier == TEST_BARCODING_PROTOCOL_IDENTIFIER
             assert protocol.args == [
                 "--base_calling=on",
+                "--basecaller_models",
+                f"simplex_model='{TEST_BASECALL_MODEL}'",
+                "--read_filtering",
+                "min_qscore=9.0",
                 "--barcoding",
                 "barcoding_kits=['foo-barcodes',]",
                 "trim_barcodes=on",
@@ -606,10 +790,15 @@ def test_alignment_start_protocol():
             ]
         )
         with Server([manager_servicer]) as server:
+            manager_servicer.basecall_configurations = TEST_BASECALL_CONFIGURATIONS
             # Setup for experiment
             test_flow_cell_id = "foo-bar-flow-cell"
             sequencing_position.set_flow_cell_info(
-                FlowCellInfo(has_flow_cell=True, flow_cell_id=test_flow_cell_id)
+                FlowCellInfo(
+                    has_flow_cell=True,
+                    flow_cell_id=test_flow_cell_id,
+                    product_code=TEST_FLOW_CELL_PRODUCT_CODE,
+                )
             )
             sequencing_position.set_protocol_list(
                 [TEST_PROTOCOL, TEST_BARCODING_PROTOCOL]
@@ -668,6 +857,10 @@ def test_alignment_start_protocol():
             assert protocol.identifier == TEST_PROTOCOL_IDENTIFIER
             assert protocol.args == [
                 "--base_calling=on",
+                "--basecaller_models",
+                f"simplex_model='{TEST_BASECALL_MODEL}'",
+                "--read_filtering",
+                "min_qscore=9.0",
                 "--alignment",
                 "reference_files=['foo.fasta',]",
                 "--fast5=off",
@@ -702,6 +895,10 @@ def test_alignment_start_protocol():
             assert protocol.identifier == TEST_PROTOCOL_IDENTIFIER
             assert protocol.args == [
                 "--base_calling=on",
+                "--basecaller_models",
+                f"simplex_model='{TEST_BASECALL_MODEL}'",
+                "--read_filtering",
+                "min_qscore=9.0",
                 "--alignment",
                 "reference_files=['foo.fasta',]",
                 "bed_file='bar.bed'",
@@ -734,7 +931,11 @@ def test_output_start_protocol():
             # Setup for experiment
             test_flow_cell_id = "foo-bar-flow-cell"
             sequencing_position.set_flow_cell_info(
-                FlowCellInfo(has_flow_cell=True, flow_cell_id=test_flow_cell_id)
+                FlowCellInfo(
+                    has_flow_cell=True,
+                    flow_cell_id=test_flow_cell_id,
+                    product_code=TEST_FLOW_CELL_PRODUCT_CODE,
+                )
             )
             sequencing_position.set_protocol_list([TEST_PROTOCOL])
 
@@ -899,12 +1100,17 @@ def test_analysis_workflows_start_protocol():
             # Setup for experiment
             test_flow_cell_id = "foo-bar-flow-cell"
             sequencing_position.set_flow_cell_info(
-                FlowCellInfo(has_flow_cell=True, flow_cell_id=test_flow_cell_id)
+                FlowCellInfo(
+                    has_flow_cell=True,
+                    flow_cell_id=test_flow_cell_id,
+                    product_code=TEST_FLOW_CELL_PRODUCT_CODE,
+                )
             )
             sequencing_position.set_protocol_list([TEST_PROTOCOL])
 
             # test for file not found error
             filepath = Path("test.json")
+            print(str(filepath))
             assert (
                 run_start_protocol_example(
                     server.port,
@@ -989,9 +1195,12 @@ def test_analysis_workflows_start_protocol():
                 == 0
             )
             protocol = sequencing_position.protocol_service.protocol_runs[-1]
+
+            req = json.loads(request_body)
+            assert protocol.analysis_workflow_request.workflow_id == req["workflow_id"]
             assert (
-                protocol.analysis_workflow_request.proxy_request.request_body
-                == request_body
+                json.loads(protocol.analysis_workflow_request.parameters)
+                == req["parameters"]
             )
 
             # delete test json file when done
@@ -1043,9 +1252,10 @@ def test_analysis_workflows_start_protocol():
                 == 0
             )
             protocol = sequencing_position.protocol_service.protocol_runs[-1]
+            assert protocol.analysis_workflow_request.workflow_id == req["workflow_id"]
             assert (
-                protocol.analysis_workflow_request.proxy_request.request_body
-                == request_body
+                json.loads(protocol.analysis_workflow_request.parameters)
+                == req["parameters"]
             )
 
             # test for adding in both arguments error
@@ -1089,10 +1299,15 @@ def test_sample_sheet_start_protocol():
             ]
         )
         with Server([manager_servicer]) as server:
+            manager_servicer.basecall_configurations = TEST_BASECALL_CONFIGURATIONS
             # Setup for experiment
             test_flow_cell_id = "foo-bar-flow-cell"
             sequencing_position.set_flow_cell_info(
-                FlowCellInfo(has_flow_cell=True, flow_cell_id=test_flow_cell_id)
+                FlowCellInfo(
+                    has_flow_cell=True,
+                    flow_cell_id=test_flow_cell_id,
+                    product_code=TEST_FLOW_CELL_PRODUCT_CODE,
+                )
             )
             sequencing_position.set_protocol_list(
                 [TEST_PROTOCOL, TEST_BARCODING_PROTOCOL]
@@ -1126,6 +1341,10 @@ def test_sample_sheet_start_protocol():
             assert protocol.user_info.protocol_group_id.value == "my_experiment"
             assert protocol.args == [
                 "--base_calling=on",
+                "--basecaller_models",
+                f"simplex_model='{TEST_BASECALL_MODEL}'",
+                "--read_filtering",
+                "min_qscore=9.0",
                 "--barcoding",
                 "barcoding_kits=['foo-barcodes',]",
                 "trim_barcodes=on",
@@ -1199,6 +1418,10 @@ def test_sample_sheet_start_protocol():
             assert protocol.user_info.protocol_group_id.value == "my_experiment_2"
             assert protocol.args == [
                 "--base_calling=on",
+                "--basecaller_models",
+                f"simplex_model='{TEST_BASECALL_MODEL}'",
+                "--read_filtering",
+                "min_qscore=9.0",
                 "--barcoding",
                 "barcoding_kits=['foo-barcodes',]",
                 "trim_barcodes=on",
@@ -1348,7 +1571,11 @@ def test_read_until_start_protocol():
             # Setup for experiment
             test_flow_cell_id = "foo-bar-flow-cell"
             sequencing_position.set_flow_cell_info(
-                FlowCellInfo(has_flow_cell=True, flow_cell_id=test_flow_cell_id)
+                FlowCellInfo(
+                    has_flow_cell=True,
+                    flow_cell_id=test_flow_cell_id,
+                    product_code=TEST_FLOW_CELL_PRODUCT_CODE,
+                )
             )
             sequencing_position.set_protocol_list([TEST_PROTOCOL])
 
@@ -1460,7 +1687,11 @@ def test_simulation_start_protocol():
             # Setup for experiment
             test_flow_cell_id = "foo-bar-flow-cell"
             sequencing_position.set_flow_cell_info(
-                FlowCellInfo(has_flow_cell=True, flow_cell_id=test_flow_cell_id)
+                FlowCellInfo(
+                    has_flow_cell=True,
+                    flow_cell_id=test_flow_cell_id,
+                    product_code=TEST_FLOW_CELL_PRODUCT_CODE,
+                )
             )
             sequencing_position.set_protocol_list([TEST_PROTOCOL])
 
@@ -1526,7 +1757,11 @@ def test_custom_config_start_protocol():
             # Setup for experiment
             test_flow_cell_id = "foo-bar-flow-cell"
             sequencing_position.set_flow_cell_info(
-                FlowCellInfo(has_flow_cell=True, flow_cell_id=test_flow_cell_id)
+                FlowCellInfo(
+                    has_flow_cell=True,
+                    flow_cell_id=test_flow_cell_id,
+                    product_code=TEST_FLOW_CELL_PRODUCT_CODE,
+                )
             )
             sequencing_position.set_protocol_list(
                 [TEST_PROTOCOL, TEST_BARCODING_PROTOCOL]

@@ -4,6 +4,7 @@ package minknow_api.hardware_check;
 
 option java_package = "com.nanoporetech.minknow_api";
 option objc_class_prefix = "MKAPI";
+option go_package ="github.com/nanoporetech/minknow_api/go/gen/hardware_check";
 
 import "minknow_api/device.proto";
 import "minknow_api/protocol.proto";
@@ -25,8 +26,10 @@ service HardwareCheckService {
         option idempotency_level = IDEMPOTENT;
     }
 
-    // Lists all hardware checks.
+    // Lists all hardware checks
+    //
     // Stream remains open whilst subscribed and any additionally started hardware checks are added to the list.
+    //
     rpc stream_hardware_check_results (StreamHardwareCheckResultsRequest) returns (stream StreamHardwareCheckResultsResponse) {
         option idempotency_level = NO_SIDE_EFFECTS;
     }
@@ -63,9 +66,14 @@ message PositionCheckResult {
     // The type of the device the hardware check is running on.
     device.GetDeviceInfoResponse.DeviceType device_type = 2;
 
-    // A list of position hardware check results.
+    // The position hardware check result
     // This is the HardwareCheckResult message from the protocol
-    repeated protocol.HardwareCheckResult hardware_check_result = 3;
+    protocol.HardwareCheckResult hardware_check_result = 3;
+
+    // The unique identifier of an attached flongle adapter.
+    // This should be same as the value printed onto the adapter casing.
+    string adapter_id = 4;
+
 }
 
 // The data received from the hardware check script
@@ -88,6 +96,16 @@ message HardwareCheckScriptData {
     // Note that it is always an estimate - it is recommended to round larger values, like "about 2
     // minutes remaining".
     uint32 progress_eta_seconds = 3;
+
+    // Final overall pass/fail across all tests and positions
+    bool overall_result = 5;
+
+    // protocol_run_ids that have been started by the hardware check
+    //
+    // If any protocol listed here is still running when the hardware check finishes, that protocol
+    // will be stopped.
+    //
+    repeated string protocol_run_ids = 6;
 }
 
 message UpdateHardwareCheckResultsRequest {
@@ -103,11 +121,37 @@ message UpdateHardwareCheckResultsResponse {}
 message StreamHardwareCheckResultsRequest {
     // Filter the response by a specific hardware check ID.
     //
-    // If no hardware check ID is provided, persisted data will be returned
-    // if any exists
-    // If a hardware check has started, the rpc will return information about the
-    // new ongoing hardware check
-    optional string hardware_check_id = 1;
+    // If this is empty, then:
+    //      - HardwareCheckResults for existing hardware checks will be streamed immediately
+    //          - Up to `count` newest hardware check results will be returned
+    //      - The stream will remain open
+    //      - Any subsequent hardware check updates will also be streamed, including those for
+    //        any hardware checks that are started after the `stream_hardware_check_results()`
+    //        call was made.
+    //
+    // Otherwise, if this is non-empty, then:
+    //      - The HardwareCheckResult for the corresponding hardware check will be returned
+    //      - If that hardware check is still in progress, then the stream will remain open and
+    //        any updates for that hardware check will be returned.
+    //      - The stream will be closed if/when the specified hardware check finishes
+    //          - This will be immediately after returning the first response if the hardware
+    //            check was already finished when the call was made
+    //      - If the specified `hardware_check_id` doesn't correspond to a valid hardware check,
+    //        an INVALID_ARGUMENT status will be returned.
+    //
+    string hardware_check_id = 1;
+
+    // The maximum number of records to return initially
+    //
+    // Since HardwareCheckResults are returned newest-to-oldest, this provides a way to get
+    // information only for the newest hardware checks
+    //
+    // (Note that subsequent updates will also be streamed, and so more than `count` responses may
+    // be returned on the stream)
+    //
+    // If `count` is `0` (the default) then all matching records will be returned
+    //
+    uint64 count = 2;
 }
 
 // The data sent to the UI
@@ -125,6 +169,9 @@ message HardwareCheckResult {
 
     // The data from the hardware check script
     HardwareCheckScriptData hardware_check_script_data = 4;
+
+    // Indicates the current state of the hardware check run.
+    HardwareCheckState state = 5;
 }
 
 message StreamHardwareCheckResultsResponse {
@@ -153,4 +200,27 @@ message GenerateHardwareCheckReportResponse {
 
     // A section of the hardware check report data (note the api to return this data may stream back several sections).
     string report_data = 2;
+}
+
+enum HardwareCheckState {
+    // The hardware check is running
+    HARDWARE_CHECK_RUNNING = 0;
+
+    // The hardware check has finished successfully
+    HARDWARE_CHECK_COMPLETED = 1;
+
+    // The hardware check was cancelled/stopped by the user
+    HARDWARE_CHECK_STOPPED = 2;
+
+    // Failed to get the exit status of the python executor
+    HARDWARE_CHECK_FINISHED_WITH_ERROR_COULD_NOT_OBTAIN_EXIT_CODE = 3;
+
+    // The python executor returned an error code on start-up
+    HARDWARE_CHECK_FINISHED_WITH_ERROR_PYTHON_EXECUTOR_DID_NOT_START = 4;
+
+    // The python script finished with an error code
+    HARDWARE_CHECK_FINISHED_WITH_ERROR_SCRIPT_ERROR_CODE = 5;
+
+    // Clean-up encountered a lingering run
+    HARDWARE_CHECK_FINISHED_WITH_ERROR_LINGERING_RUN = 6;
 }

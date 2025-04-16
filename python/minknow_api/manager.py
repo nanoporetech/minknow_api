@@ -13,7 +13,6 @@ usually constructing using methods on ``Manager``.
 """
 
 import datetime
-import logging
 import os
 import warnings
 from typing import Dict, Iterator, Optional, NamedTuple, Sequence, Union
@@ -24,47 +23,23 @@ from google.protobuf import timestamp_pb2
 import minknow_api
 import minknow_api.basecaller_service
 import minknow_api.keystore_service
+import minknow_api.log_service
+import minknow_api.ui.sequencing_run.presets_service
 import minknow_api.hardware_check_service
 import minknow_api.manager_pb2 as manager_pb2
+import minknow_api.device_pb2 as device_pb2
 import minknow_api.manager_service
+import minknow_api.v2.protocols_service
+import minknow_api.protocol_settings_pb2 as protocol_settings_pb2
+
+from minknow_api import Connection, get_local_authentication_token_file
 
 __all__ = [
     "Basecaller",
     "FlowCellPosition",
     "Manager",
-    "get_local_authentication_token_file",
+    "get_local_authentication_token_file",  # Moved to minknow_api.__init__, but we export here for backwards compat for now
 ]
-
-
-def get_local_authentication_token_file(
-    host: str = "127.0.0.1", port: Optional[int] = None
-) -> Optional[str]:
-    """Starts an isolated manager instance to retrieve the path
-    of the local authentication token file, which can then
-    be read to extract the local authentication token"""
-    if not port:
-        port = 9502
-
-    try:
-        ssl_creds = grpc.ssl_channel_credentials(minknow_api.read_ssl_certificate())
-
-        channel = grpc.secure_channel(
-            host + ":" + str(port),
-            ssl_creds,
-            # we need the ssl target name override
-            options=minknow_api.GRPC_CHANNEL_OPTIONS,
-        )
-
-        service = minknow_api.manager_service.ManagerService(channel)
-        return service.local_authentication_token_path().path
-    except grpc.RpcError:
-        logging.debug(
-            "Unable to connect to manager on port '{}' to retrieve local auth token path".format(
-                port
-            ),
-            exc_info=True,
-        )
-        return None
 
 
 class ServiceBase(object):
@@ -179,6 +154,17 @@ class FlowCellPosition(object):
         return State.Name(self.description.state)[6:].lower()
 
     @property
+    def protocol_state(self) -> str:
+        """The simplified state of the protocol
+
+        One of "no_protocol_state", "protocol_running", "protocol_finished_successfully",
+        "protocol_finished_with_error", "workflow_running", "workflow_finished_successfully",
+        "workflow_finished_with_error"
+        """
+        ProtocolState = manager_pb2.SimpleProtocolState
+        return ProtocolState.Name(self.description.protocol_state).lower()
+
+    @property
     def running(self) -> bool:
         """Whether the software for the position is running.
 
@@ -196,7 +182,7 @@ class FlowCellPosition(object):
 
     def connect(
         self, credentials: Optional[grpc.ChannelCredentials] = None
-    ) -> "minknow_api.Connection":
+    ) -> Connection:
         """Connect to the position.
 
         Only valid to do if `running` is True.
@@ -277,6 +263,8 @@ class Manager(ServiceBase):
         client_private_key: The (PEM-encoded) private key for the first certificate
             in `client_cert_chain`. Note: if `credentials` is provided, this
             parameter is ignored.
+        ca_certificate: The (PEM-encoded) root CA certificate. Note: if `credentials`
+            is provided, this parameter is ignored.
 
     Attributes:
         bream_version (str): The version of Bream that is installed.
@@ -313,6 +301,7 @@ class Manager(ServiceBase):
         credentials: Optional[grpc.ChannelCredentials] = None,
         client_certificate_chain: Optional[bytes] = None,
         client_private_key: Optional[bytes] = None,
+        ca_certificate: Optional[bytes] = None,
         environ: Union[Dict[str, str], os._Environ] = os.environ,
     ):
         if port is None:
@@ -335,6 +324,8 @@ class Manager(ServiceBase):
                 warnings.warn(
                     "`client_certificate_chain` and `client_private_key` ignored as `credentials` was provided"
                 )
+            if ca_certificate is not None:
+                warnings.warn("`ca_certificate` ignored as `credentials` was provided")
 
         if credentials is None:
             credentials = minknow_api.grpc_credentials(
@@ -343,6 +334,7 @@ class Manager(ServiceBase):
                 host=host,
                 client_certificate_chain=client_certificate_chain,
                 client_private_key=client_private_key,
+                ca_certificate=ca_certificate,
                 _warning_stacklevel=1,
                 environ=environ,
             )
@@ -398,6 +390,15 @@ class Manager(ServiceBase):
         """
         return minknow_api.keystore_service.KeyStoreService(self.channel)
 
+    def log(self) -> minknow_api.log_service.LogService:
+        """
+        Find the log service running for this manager.
+
+        Returns:
+            LogService: The gRPC service for the manager level log service.
+        """
+        return minknow_api.log_service.LogService(self.channel)
+
     def basecaller(self, timeout: float = DEFAULT_TIMEOUT) -> Optional[Basecaller]:
         """Connect to the basecalling interface.
 
@@ -417,6 +418,43 @@ class Manager(ServiceBase):
         return Basecaller(
             host=self.host, port=bc_api.secure, credentials=self.credentials
         )
+
+    def protocols(self) -> minknow_api.v2.protocols_service.ProtocolsService:
+        """
+        Get the v2 Protocols service running on this manager.
+
+        Returns:
+            The wrapper for the Protocols gRPC service.
+        """
+        return minknow_api.v2.protocols_service.ProtocolsService(self.channel)
+
+    def presets(self) -> minknow_api.ui.sequencing_run.presets_service.PresetsService:
+        """
+        Find the presets service running for this manager.
+
+        Returns:
+            PresetsService: The gRPC service for the manager level presets service.
+        """
+        return minknow_api.ui.sequencing_run.presets_service.PresetsService(
+            self.channel
+        )
+
+    def connect_to(self, position: str) -> Connection:
+        """Connects to a position on the host
+
+        Args:
+            position: The name of the position to connect to
+
+        Returns:
+            The Connection object associated with the named position
+
+        Raises:
+            RuntimeError if the position cannot be found
+        """
+        for conn in self.flow_cell_positions():
+            if conn.name == position:
+                return conn.connect()
+        return RuntimeError(f"Cannot find position with name '{position}'")
 
     def create_directory(
         self, name: str, parent_path: str = "", timeout: float = DEFAULT_TIMEOUT
@@ -680,3 +718,84 @@ class Manager(ServiceBase):
             kwargs["sequencing_kit"] = sequencing_kit
 
         return self.rpc.find_protocols(experiment_type=experiment_type, **kwargs)
+
+    def get_sequencing_kits(
+        self,
+        flow_cell_product_code: Optional[str] = None,
+        timeout: float = DEFAULT_TIMEOUT,
+    ) -> manager_pb2.GetSequencingKitsResponse:
+        """List all known sequencing kits.
+
+        The intention is to provide a list of sequencing kits for a user to select from, plus extra
+        information that can be used to filter that list.
+
+        Args:
+            flow_cell_product_code (str, optional): The product code of the flow cell that will be used for sequencing.
+
+                Only kits compatible with this flow cell type will be returned (currently, this means that
+                there is at least one (sequencing or control) protocol that is compatible with both the kit
+                and this flow cell product code).
+
+                This may also affect the returned information about the kit. For example, if it isn't
+                possible to basecall on the flow cell, none of the kits will claim to be barcoding capable
+                (or compatible with any barcoding expansion kits).
+        """
+        kwargs = {}
+        if flow_cell_product_code is not None:
+            kwargs["flow_cell_product_code"] = flow_cell_product_code
+
+        return self.rpc.get_sequencing_kits(**kwargs)
+
+    def list_settings_for_protocol(
+        self,
+        flow_cell_connector: device_pb2.FlowCellConnectorType,
+        identifier: Optional[str] = None,
+        components: Optional[protocol_settings_pb2.ProtocolIdentifierComponents] = None,
+        timeout: float = DEFAULT_TIMEOUT,
+    ) -> manager_pb2.ListSettingsForProtocolResponse:
+        """List existing developer api tokens.
+
+        Args:
+            identifier (str, optional): specify the protocol with a string containing all the protocol's identifying components, eg:
+                "sequencing/sequencing_MIN106_DNA:FLO-MIN106:SQK-RPB004"
+            components (minknow_api.protocol_settings_pb2.ProtocolIdentifierComponents, optional): specify the protocol providing the identifying components individually. All components are optional, if more
+                than one protocol matches given strings, information about the first will be returned.
+            flow_cell_connector (minknow_api.device_pb2.FlowCellConnectorType): The flow-cell connector type identifies the type of hardware and is used
+                to identify the correct protocol.
+                The flow-cell connector types applicable to the device are listed by
+                the get_flow_cell_types rpc in this service and the get_device_state rpc
+                in the device service.
+            timeout: The maximum time to wait for the call to complete. Should
+                usually be left at the default.
+        """
+        kwargs = {}
+        if flow_cell_connector is not None:
+            kwargs["flow_cell_connector"] = flow_cell_connector
+        if identifier is not None:
+            kwargs["identifier"] = identifier
+        if components is not None:
+            kwargs["components"] = components
+
+        return self.rpc.list_settings_for_protocol(**kwargs)
+
+    def find_basecall_configurations(
+        self,
+        flow_cell_product_code: Optional[str] = None,
+        sequencing_kit: Optional[str] = None,
+        sampling_rate: Optional[int] = None,
+        include_remote_configurations: bool = False,
+        include_outdated: bool = True,
+    ) -> Sequence[manager_pb2.FindBasecallConfigurationsResponse.BasecallConfiguration]:
+        kwargs = {}
+        if flow_cell_product_code is not None:
+            kwargs["flow_cell_product_code"] = flow_cell_product_code
+        if sequencing_kit is not None:
+            kwargs["sequencing_kit"] = sequencing_kit
+        if sampling_rate is not None:
+            kwargs["sampling_rate"] = sampling_rate
+
+        return self.rpc.find_basecall_configurations(
+            include_remote_configurations=include_remote_configurations,
+            include_outdated=include_outdated,
+            **kwargs,
+        ).configurations

@@ -23,6 +23,14 @@ __all__ = [
     "StreamHardwareCheckResultsResponse",
     "GenerateHardwareCheckReportRequest",
     "GenerateHardwareCheckReportResponse",
+    "HardwareCheckState",
+    "HARDWARE_CHECK_RUNNING",
+    "HARDWARE_CHECK_COMPLETED",
+    "HARDWARE_CHECK_STOPPED",
+    "HARDWARE_CHECK_FINISHED_WITH_ERROR_COULD_NOT_OBTAIN_EXIT_CODE",
+    "HARDWARE_CHECK_FINISHED_WITH_ERROR_PYTHON_EXECUTOR_DID_NOT_START",
+    "HARDWARE_CHECK_FINISHED_WITH_ERROR_SCRIPT_ERROR_CODE",
+    "HARDWARE_CHECK_FINISHED_WITH_ERROR_LINGERING_RUN",
 ]
 
 def run_with_retry(method, message, timeout, unwraps, full_name):
@@ -185,7 +193,8 @@ class HardwareCheckService(object):
                               [],
                               "minknow_api.hardware_check.HardwareCheckService")
     def stream_hardware_check_results(self, _message=None, _timeout=None, **kwargs):
-        """Lists all hardware checks.
+        """Lists all hardware checks
+
         Stream remains open whilst subscribed and any additionally started hardware checks are added to the list.
 
         This RPC has no side effects. Calling it will have no effect on the state of the
@@ -201,10 +210,32 @@ class HardwareCheckService(object):
                 messages.
             hardware_check_id (str, optional): Filter the response by a specific hardware check ID.
 
-                If no hardware check ID is provided, persisted data will be returned
-                if any exists
-                If a hardware check has started, the rpc will return information about the
-                new ongoing hardware check
+                If this is empty, then:
+                     - HardwareCheckResults for existing hardware checks will be streamed immediately
+                         - Up to `count` newest hardware check results will be returned
+                     - The stream will remain open
+                     - Any subsequent hardware check updates will also be streamed, including those for
+                       any hardware checks that are started after the `stream_hardware_check_results()`
+                       call was made.
+
+                Otherwise, if this is non-empty, then:
+                     - The HardwareCheckResult for the corresponding hardware check will be returned
+                     - If that hardware check is still in progress, then the stream will remain open and
+                       any updates for that hardware check will be returned.
+                     - The stream will be closed if/when the specified hardware check finishes
+                         - This will be immediately after returning the first response if the hardware
+                           check was already finished when the call was made
+                     - If the specified `hardware_check_id` doesn't correspond to a valid hardware check,
+                       an INVALID_ARGUMENT status will be returned.
+            count (int, optional): The maximum number of records to return initially
+
+                Since HardwareCheckResults are returned newest-to-oldest, this provides a way to get
+                information only for the newest hardware checks
+
+                (Note that subsequent updates will also be streamed, and so more than `count` responses may
+                be returned on the stream)
+
+                If `count` is `0` (the default) then all matching records will be returned
 
         Returns:
             iter of minknow_api.hardware_check_pb2.StreamHardwareCheckResultsResponse
@@ -227,6 +258,10 @@ class HardwareCheckService(object):
         if "hardware_check_id" in kwargs:
             unused_args.remove("hardware_check_id")
             _message.hardware_check_id = kwargs['hardware_check_id']
+
+        if "count" in kwargs:
+            unused_args.remove("count")
+            _message.count = kwargs['count']
 
         if len(unused_args) > 0:
             raise ArgumentError("Unexpected keyword arguments to stream_hardware_check_results: '{}'".format(", ".join(unused_args)))

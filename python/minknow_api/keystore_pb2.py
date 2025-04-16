@@ -16,14 +16,14 @@ from google.protobuf import any_pb2 as google_dot_protobuf_dot_any__pb2
 from minknow_api import rpc_options_pb2 as minknow__api_dot_rpc__options__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x1aminknow_api/keystore.proto\x12\x14minknow_api.keystore\x1a\x19google/protobuf/any.proto\x1a\x1dminknow_api/rpc_options.proto\"\xcb\x01\n\x0cStoreRequest\x12\x44\n\x06values\x18\x01 \x03(\x0b\x32..minknow_api.keystore.StoreRequest.ValuesEntryB\x04\x88\xb5\x18\x01\x12\x30\n\x08lifetime\x18\x02 \x01(\x0e\x32\x1e.minknow_api.keystore.Lifetime\x1a\x43\n\x0bValuesEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12#\n\x05value\x18\x02 \x01(\x0b\x32\x14.google.protobuf.Any:\x02\x38\x01\"\x0f\n\rStoreResponse\";\n\rRemoveRequest\x12\x13\n\x05names\x18\x01 \x03(\tB\x04\x88\xb5\x18\x01\x12\x15\n\rallow_missing\x18\x02 \x01(\x08\"\x10\n\x0eRemoveResponse\"#\n\rGetOneRequest\x12\x12\n\x04name\x18\x01 \x01(\tB\x04\x88\xb5\x18\x01\"5\n\x0eGetOneResponse\x12#\n\x05value\x18\x02 \x01(\x0b\x32\x14.google.protobuf.Any\"2\n\nGetRequest\x12\r\n\x05names\x18\x01 \x03(\t\x12\x15\n\rallow_missing\x18\x02 \x01(\x08\"\x91\x01\n\x0bGetResponse\x12=\n\x06values\x18\x01 \x03(\x0b\x32-.minknow_api.keystore.GetResponse.ValuesEntry\x1a\x43\n\x0bValuesEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12#\n\x05value\x18\x02 \x01(\x0b\x32\x14.google.protobuf.Any:\x02\x38\x01\":\n\x0cWatchRequest\x12\x13\n\x05names\x18\x01 \x03(\tB\x04\x88\xb5\x18\x01\x12\x15\n\rallow_missing\x18\x02 \x01(\x08\"\xad\x01\n\rWatchResponse\x12?\n\x06values\x18\x01 \x03(\x0b\x32/.minknow_api.keystore.WatchResponse.ValuesEntry\x12\x16\n\x0eremoved_values\x18\x02 \x03(\t\x1a\x43\n\x0bValuesEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12#\n\x05value\x18\x02 \x01(\x0b\x32\x14.google.protobuf.Any:\x02\x38\x01*v\n\x08Lifetime\x12\x1d\n\x19UNTIL_NEXT_PROTOCOL_START\x10\x00\x12\x16\n\x12UNTIL_PROTOCOL_END\x10\x01\x12\x16\n\x12UNTIL_INSTANCE_END\x10\x02\x12\x1b\n\x17PERSIST_ACROSS_RESTARTS\x10\x03\x32\xc1\x03\n\x0fKeyStoreService\x12R\n\x05store\x12\".minknow_api.keystore.StoreRequest\x1a#.minknow_api.keystore.StoreResponse\"\x00\x12U\n\x06remove\x12#.minknow_api.keystore.RemoveRequest\x1a$.minknow_api.keystore.RemoveResponse\"\x00\x12Y\n\x07get_one\x12#.minknow_api.keystore.GetOneRequest\x1a$.minknow_api.keystore.GetOneResponse\"\x03\x90\x02\x01\x12O\n\x03get\x12 .minknow_api.keystore.GetRequest\x1a!.minknow_api.keystore.GetResponse\"\x03\x90\x02\x01\x12W\n\x05watch\x12\".minknow_api.keystore.WatchRequest\x1a#.minknow_api.keystore.WatchResponse\"\x03\x90\x02\x01\x30\x01\x42&\n\x1c\x63om.nanoporetech.minknow_api\xa2\x02\x05MKAPIb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x1aminknow_api/keystore.proto\x12\x14minknow_api.keystore\x1a\x19google/protobuf/any.proto\x1a\x1dminknow_api/rpc_options.proto\"\xcb\x01\n\x0cStoreRequest\x12\x44\n\x06values\x18\x01 \x03(\x0b\x32..minknow_api.keystore.StoreRequest.ValuesEntryB\x04\x88\xb5\x18\x01\x12\x30\n\x08lifetime\x18\x02 \x01(\x0e\x32\x1e.minknow_api.keystore.Lifetime\x1a\x43\n\x0bValuesEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12#\n\x05value\x18\x02 \x01(\x0b\x32\x14.google.protobuf.Any:\x02\x38\x01\"\x0f\n\rStoreResponse\";\n\rRemoveRequest\x12\x13\n\x05names\x18\x01 \x03(\tB\x04\x88\xb5\x18\x01\x12\x15\n\rallow_missing\x18\x02 \x01(\x08\"\x10\n\x0eRemoveResponse\"#\n\rGetOneRequest\x12\x12\n\x04name\x18\x01 \x01(\tB\x04\x88\xb5\x18\x01\"5\n\x0eGetOneResponse\x12#\n\x05value\x18\x02 \x01(\x0b\x32\x14.google.protobuf.Any\"2\n\nGetRequest\x12\r\n\x05names\x18\x01 \x03(\t\x12\x15\n\rallow_missing\x18\x02 \x01(\x08\"\x91\x01\n\x0bGetResponse\x12=\n\x06values\x18\x01 \x03(\x0b\x32-.minknow_api.keystore.GetResponse.ValuesEntry\x1a\x43\n\x0bValuesEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12#\n\x05value\x18\x02 \x01(\x0b\x32\x14.google.protobuf.Any:\x02\x38\x01\":\n\x0cWatchRequest\x12\x13\n\x05names\x18\x01 \x03(\tB\x04\x88\xb5\x18\x01\x12\x15\n\rallow_missing\x18\x02 \x01(\x08\"\xad\x01\n\rWatchResponse\x12?\n\x06values\x18\x01 \x03(\x0b\x32/.minknow_api.keystore.WatchResponse.ValuesEntry\x12\x16\n\x0eremoved_values\x18\x02 \x03(\t\x1a\x43\n\x0bValuesEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12#\n\x05value\x18\x02 \x01(\x0b\x32\x14.google.protobuf.Any:\x02\x38\x01*v\n\x08Lifetime\x12\x1d\n\x19UNTIL_NEXT_PROTOCOL_START\x10\x00\x12\x16\n\x12UNTIL_PROTOCOL_END\x10\x01\x12\x16\n\x12UNTIL_INSTANCE_END\x10\x02\x12\x1b\n\x17PERSIST_ACROSS_RESTARTS\x10\x03\x32\xc1\x03\n\x0fKeyStoreService\x12R\n\x05store\x12\".minknow_api.keystore.StoreRequest\x1a#.minknow_api.keystore.StoreResponse\"\x00\x12U\n\x06remove\x12#.minknow_api.keystore.RemoveRequest\x1a$.minknow_api.keystore.RemoveResponse\"\x00\x12Y\n\x07get_one\x12#.minknow_api.keystore.GetOneRequest\x1a$.minknow_api.keystore.GetOneResponse\"\x03\x90\x02\x01\x12O\n\x03get\x12 .minknow_api.keystore.GetRequest\x1a!.minknow_api.keystore.GetResponse\"\x03\x90\x02\x01\x12W\n\x05watch\x12\".minknow_api.keystore.WatchRequest\x1a#.minknow_api.keystore.WatchResponse\"\x03\x90\x02\x01\x30\x01\x42[\n\x1c\x63om.nanoporetech.minknow_apiZ3github.com/nanoporetech/minknow_api/go/gen/keystore\xa2\x02\x05MKAPIb\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
 _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'minknow_api.keystore_pb2', _globals)
 if _descriptor._USE_C_DESCRIPTORS == False:
   _globals['DESCRIPTOR']._options = None
-  _globals['DESCRIPTOR']._serialized_options = b'\n\034com.nanoporetech.minknow_api\242\002\005MKAPI'
+  _globals['DESCRIPTOR']._serialized_options = b'\n\034com.nanoporetech.minknow_apiZ3github.com/nanoporetech/minknow_api/go/gen/keystore\242\002\005MKAPI'
   _globals['_STOREREQUEST_VALUESENTRY']._options = None
   _globals['_STOREREQUEST_VALUESENTRY']._serialized_options = b'8\001'
   _globals['_STOREREQUEST'].fields_by_name['values']._options = None
@@ -74,6 +74,29 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   _globals['_WATCHRESPONSE_VALUESENTRY']._serialized_end=314
   _globals['_KEYSTORESERVICE']._serialized_start=1061
   _globals['_KEYSTORESERVICE']._serialized_end=1510
+GetOneResponse.__doc__ = """Attributes:
+    value:
+        The requested value.
+"""
+GetRequest.__doc__ = """Attributes:
+    names:
+        The names of the values you wish to fetch.
+    allow_missing:
+        Whether to allow missing values.  If set, names that are not
+        present in the store will simply be omitted from the response.
+        Otherwise, missing values will cause an error to be returned.
+        Defaults to 'false'
+"""
+WatchResponse.__doc__ = """Attributes:
+    runs:
+        The current state of some of the runs.
+    values:
+        The values that have changed.  The first received message will
+        contain the current state of all the watched values.
+        Subsequent messages will only contain the values that changed.
+    removed_values:
+        The values that have been removed.
+"""
 StoreRequest.__doc__ = """Attributes:
     values:
         The values to store.  See the notes in the KeyStore service
@@ -88,42 +111,13 @@ StoreRequest.__doc__ = """Attributes:
         the call to fail with `INVALID_ARGUMENT`  Note that calling
         remove() will remove the value regardless of this setting.
 """
-WatchResponse.__doc__ = """Attributes:
-    runs:
-        The current state of some of the runs.
-    values:
-        The values that have changed.  The first received message will
-        contain the current state of all the watched values.
-        Subsequent messages will only contain the values that changed.
-    removed_values:
-        The values that have been removed.
-"""
-GetOneRequest.__doc__ = """Attributes:
-    name:
-        The name of the value to fetch.
-"""
 GetResponse.__doc__ = """Attributes:
     values:
         The requested values.
 """
-RemoveRequest.__doc__ = """Attributes:
-    names:
-        The names of the values you wish to remove.
-    allow_missing:
-        Whether to allow missing values.  If set, names that are not
-        present in the store will be ignored, but any present values
-        will still be removed. Otherwise, missing values will cause an
-        error to be returned (in which case nothing will be removed).
-        Defaults to 'false'
-"""
-GetRequest.__doc__ = """Attributes:
-    names:
-        The names of the values you wish to fetch.
-    allow_missing:
-        Whether to allow missing values.  If set, names that are not
-        present in the store will simply be omitted from the response.
-        Otherwise, missing values will cause an error to be returned.
-        Defaults to 'false'
+GetOneRequest.__doc__ = """Attributes:
+    name:
+        The name of the value to fetch.
 """
 WatchRequest.__doc__ = """Attributes:
     send_finished_runs:
@@ -139,8 +133,14 @@ WatchRequest.__doc__ = """Attributes:
         message will be sent with the set values. Otherwise, missing
         values will cause an immediate error.  Defaults to 'false'
 """
-GetOneResponse.__doc__ = """Attributes:
-    value:
-        The requested value.
+RemoveRequest.__doc__ = """Attributes:
+    names:
+        The names of the values you wish to remove.
+    allow_missing:
+        Whether to allow missing values.  If set, names that are not
+        present in the store will be ignored, but any present values
+        will still be removed. Otherwise, missing values will cause an
+        error to be returned (in which case nothing will be removed).
+        Defaults to 'false'
 """
 # @@protoc_insertion_point(module_scope)

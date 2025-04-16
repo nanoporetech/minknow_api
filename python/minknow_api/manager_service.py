@@ -76,11 +76,18 @@ __all__ = [
     "RestartDeviceAdminResponse",
     "CheckBedFileRequest",
     "CheckBedFileResponse",
+    "FindBasecallConfigurationsRequest",
+    "FindBasecallConfigurationsResponse",
+    "CheckPathInfoRequest",
+    "CheckPathInfoResponse",
     "SimpleProtocolState",
     "NO_PROTOCOL_STATE",
     "PROTOCOL_RUNNING",
     "PROTOCOL_FINISHED_SUCCESSFULLY",
     "PROTOCOL_FINISHED_WITH_ERROR",
+    "WORKFLOW_RUNNING",
+    "WORKFLOW_FINISHED_SUCCESSFULLY",
+    "WORKFLOW_FINISHED_WITH_ERROR",
     "SimulatedDeviceType",
     "SIMULATED_AUTO",
     "SIMULATED_MINION",
@@ -1809,6 +1816,133 @@ class ManagerService(object):
             raise ArgumentError("Unexpected keyword arguments to check_bed_file: '{}'".format(", ".join(unused_args)))
 
         return run_with_retry(self._stub.check_bed_file,
+                              _message, _timeout,
+                              [],
+                              "minknow_api.manager.ManagerService")
+    def find_basecall_configurations(self, _message=None, _timeout=None, **kwargs):
+        """Find basecall configurations that are available to be used.
+
+        Throws an error if there is no basecaller available
+
+        Since 6.3
+
+        
+
+        Note this API is experimental - it may be changed, revised or removed in future minor versions.
+
+        Args:
+            _message (minknow_api.manager_pb2.FindBasecallConfigurationsRequest, optional): The message to send.
+                This can be passed instead of the keyword arguments.
+            _timeout (float, optional): The call will be cancelled after this number of seconds
+                if it has not been completed.
+            flow_cell_product_code (str, optional): Find basecall configurations that are compatible with this flow cell product code.
+
+                Set to empty string to find protocols matching all flow cell product codes.
+            sequencing_kit (str, optional): Limit to basecall configurations that are compatible with this sequencing kit.
+
+                Set to empty string to find protocols matching all kits.
+            sampling_rate (int, optional): Limit to basecall configurations that are compatible with this sampling rate.
+
+                Set to zero to find all possible sampling rates.
+            include_remote_configurations (bool, optional): Should configurations and models that are not already on disk be included in the responses.
+
+                This may include research or one off models, or models not appropriate for the current platform.
+            include_outdated (bool, optional): Should outdated configurations be included in the response.
+
+        Returns:
+            minknow_api.manager_pb2.FindBasecallConfigurationsResponse
+
+        Note that the returned messages are actually wrapped in a type that collapses
+        submessages for fields marked with ``[rpc_unwrap]``.
+        """
+        print("Warning: Method ManagerService.find_basecall_configurations is experimental and may be changed, revised or removed in future minor versions.", file=sys.stderr)
+        if _message is not None:
+            if isinstance(_message, MessageWrapper):
+                _message = _message._message
+            return run_with_retry(self._stub.find_basecall_configurations,
+                                  _message, _timeout,
+                                  [],
+                                  "minknow_api.manager.ManagerService")
+
+        unused_args = set(kwargs.keys())
+
+        _message = FindBasecallConfigurationsRequest()
+
+        if "flow_cell_product_code" in kwargs:
+            unused_args.remove("flow_cell_product_code")
+            _message.flow_cell_product_code = kwargs['flow_cell_product_code']
+
+        if "sequencing_kit" in kwargs:
+            unused_args.remove("sequencing_kit")
+            _message.sequencing_kit = kwargs['sequencing_kit']
+
+        if "sampling_rate" in kwargs:
+            unused_args.remove("sampling_rate")
+            _message.sampling_rate = kwargs['sampling_rate']
+
+        if "include_remote_configurations" in kwargs:
+            unused_args.remove("include_remote_configurations")
+            _message.include_remote_configurations = kwargs['include_remote_configurations']
+
+        if "include_outdated" in kwargs:
+            unused_args.remove("include_outdated")
+            _message.include_outdated = kwargs['include_outdated']
+
+        if len(unused_args) > 0:
+            raise ArgumentError("Unexpected keyword arguments to find_basecall_configurations: '{}'".format(", ".join(unused_args)))
+
+        return run_with_retry(self._stub.find_basecall_configurations,
+                              _message, _timeout,
+                              [],
+                              "minknow_api.manager.ManagerService")
+    def check_path_info(self, _message=None, _timeout=None, **kwargs):
+        """Check file path info.
+
+        Return information about a file path specified by the caller.
+
+        If the path is not reachable (eg. a parent path cannot be listed) a `PERMISSION_DENIED` error is generated.
+        If the path is not absolute a `FAILED_PRECONDITION` error is generated.
+        If the path is non-existent, no info is returned for is_readable, is_writable or space fields.
+
+        Since 6.3
+
+        This RPC has no side effects. Calling it will have no effect on the state of the
+        system. It is safe to call repeatedly, or to retry on failure, although there is no
+        guarantee it will return the same information each time.
+
+        Args:
+            _message (minknow_api.manager_pb2.CheckPathInfoRequest, optional): The message to send.
+                This can be passed instead of the keyword arguments.
+            _timeout (float, optional): The call will be cancelled after this number of seconds
+                if it has not been completed.
+            file_path (str, optional): The file path to query.
+
+        Returns:
+            minknow_api.manager_pb2.CheckPathInfoResponse
+
+        Note that the returned messages are actually wrapped in a type that collapses
+        submessages for fields marked with ``[rpc_unwrap]``.
+        """
+        if _message is not None:
+            if isinstance(_message, MessageWrapper):
+                _message = _message._message
+            return run_with_retry(self._stub.check_path_info,
+                                  _message, _timeout,
+                                  [],
+                                  "minknow_api.manager.ManagerService")
+
+        unused_args = set(kwargs.keys())
+
+        _message = CheckPathInfoRequest()
+
+        if "file_path" in kwargs:
+            unused_args.remove("file_path")
+            _message.file_path = kwargs['file_path']
+
+        if len(unused_args) > 0:
+            raise ArgumentError("Unexpected keyword arguments to check_path_info: '{}'".format(", ".join(unused_args)))
+
+        return run_with_retry(self._stub.check_path_info,
                               _message, _timeout,
                               [],
                               "minknow_api.manager.ManagerService")

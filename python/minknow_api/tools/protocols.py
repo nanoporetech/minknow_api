@@ -4,17 +4,70 @@ import collections
 import dataclasses
 from pathlib import Path
 import logging
-from typing import Optional, List, Sequence
+from typing import Optional, List, Sequence, Tuple
 
 import grpc
 
 from .. import Connection
 from minknow_api import protocol_pb2, run_until_pb2, acquisition_pb2
+from minknow_api.manager_pb2 import FindBasecallConfigurationsResponse
 from minknow_api.protocol_pb2 import BarcodeUserData
-from minknow_api.protocol_pb2 import AnalysisWorkflowRequest
+from minknow_api.analysis_workflows_pb2 import AnalysisWorkflowRequest
 from minknow_api.tools.any_helpers import make_float_any, make_uint64_any
 
 LOGGER = logging.getLogger(__name__)
+
+
+def find_default_simplex_model(
+    device_connection: Connection,
+    kit: str,
+    sample_rate: int,
+    available_basecall_configs: List[
+        FindBasecallConfigurationsResponse.BasecallConfiguration
+    ],
+) -> Tuple[
+    FindBasecallConfigurationsResponse.BasecallConfiguration,
+    FindBasecallConfigurationsResponse.SimplexModel,
+]:
+    default_variant = "HAC".casefold()
+
+    flow_cell_info = device_connection.device.get_flow_cell_info()
+    flow_cell_product_code = (
+        flow_cell_info.user_specified_product_code or flow_cell_info.product_code
+    )
+
+    for config in available_basecall_configs:
+        if (
+            kit in config.kits
+            and flow_cell_product_code in config.flowcells
+            and sample_rate == config.sampling_rate
+        ):
+            for simplex in config.simplex_models:
+                if simplex.variant.casefold() == default_variant:
+                    return config, simplex
+
+    raise RuntimeError(
+        f"No simplex model available for kit: {kit}, sample_rate: {sample_rate}. Searched {len(available_basecall_configs)} configs"
+    )
+
+
+def find_simplex_model(
+    available_basecall_configs: List[
+        FindBasecallConfigurationsResponse.BasecallConfiguration
+    ],
+    simplex_model_name: str,
+) -> Tuple[FindBasecallConfigurationsResponse.SimplexModel]:
+
+    searched_configs = set()
+    for config in available_basecall_configs:
+        for simplex in config.simplex_models:
+            searched_configs.add(simplex.name)
+            if simplex.name == simplex_model_name:
+                return simplex
+
+    raise RuntimeError(
+        f"No simplex model called '{simplex_model_name}' found. Searched: {', '.join(searched_configs)} configs"
+    )
 
 
 def find_protocol(
@@ -22,8 +75,6 @@ def find_protocol(
     product_code: str,
     kit: str,
     config_name: Optional[str],
-    basecalling: bool = False,
-    basecall_config: Optional[str] = None,
     barcoding: bool = False,
     barcoding_kits: Optional[List[str]] = None,
     force_reload: bool = False,
@@ -40,9 +91,6 @@ def find_protocol(
         product_code (:obj:`str`):              The flow-cell type, as in flow_cell_info.product_code.
         kit (:obj:`str`):                       The kit to be sequenced. eg: "SQK-LSK108".
         config_name (:obj:`str`):               Optional name of a config to select.
-        basecalling (bool):                     True if base-calling is required
-        basecall_config (:obj:`str):            The base-calling model that the protocol should support. If absent,
-                                                the protocol default will be used (if specified)
         barcoding (bool):                       True if barcoding is required.
         barcoding_kits (:obj:`list`):           Barcoding kits that the protocol should support. If specified,
                                                 barcoding is assumed to be True.
@@ -114,8 +162,6 @@ def find_protocol(
                 LOGGER.debug("Protocol does not support barcoding")
                 continue
             else:
-                if basecalling:
-                    LOGGER.warning("Not using barcoding for a barcoding kit")
                 LOGGER.debug("Protocol requires barcoding")
 
         supported_kits = tags["barcoding kits"].array_value
@@ -135,23 +181,6 @@ def find_protocol(
             )
             continue
 
-        # check base-calling is supported if required and with the requested model if
-        # specified or default if not
-        basecalling_required = basecalling or basecall_config is not None
-        if basecalling_required:
-            if "default basecall model" not in tags:
-                continue
-            default_basecall_model = tags.get("default basecall model").string_value
-            if not basecall_config:
-                basecall_config = default_basecall_model
-            if basecall_config not in tags["available basecall models"].array_value:
-                LOGGER.debug(
-                    'basecalling model "%s" is not in the list of supported basecalling models %s',
-                    basecall_config,
-                    tags["available basecall models"].array_value,
-                )
-                continue
-
         # we have a match, (ignore the rest)
         return protocol
     return None
@@ -167,7 +196,15 @@ BarcodingArgs = collections.namedtuple(
 )
 AlignmentArgs = collections.namedtuple("AlignmentArgs", ["reference_files", "bed_file"])
 BasecallingArgs = collections.namedtuple(
-    "BasecallingArgs", ["config", "barcoding", "alignment"]
+    "BasecallingArgs",
+    [
+        "simplex_model",
+        "modified_models",
+        "stereo_model",
+        "barcoding",
+        "alignment",
+        "min_qscore",
+    ],
 )
 OutputArgs = collections.namedtuple("OutputArgs", ["reads_per_file", "batch_duration"])
 
@@ -267,8 +304,21 @@ def make_protocol_arguments(
     if basecalling:
         protocol_args.append("--base_calling=on")
 
-        if basecalling.config:
-            protocol_args.append("--basecaller_filename=" + basecalling.config)
+        models_args = []
+
+        models_args.append(f"simplex_model='{basecalling.simplex_model}'")
+        if basecalling.modified_models:
+            modified_models = ",".join(f"'{m}'" for m in basecalling.modified_models)
+            models_args.append(f"modified_models=[{modified_models}]")
+        if basecalling.stereo_model:
+            models_args.append(f"stereo_model='{basecalling.stereo_model}'")
+
+        protocol_args.append("--basecaller_models")
+        protocol_args.extend(models_args)
+
+        protocol_args.extend(
+            ["--read_filtering", f"min_qscore={basecalling.min_qscore}"]
+        )
 
         if basecalling.barcoding:
             barcoding_args = []

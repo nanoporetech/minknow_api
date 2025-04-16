@@ -94,6 +94,11 @@ class AnalysisConfigurationServiceStub(object):
                 request_serializer=minknow__api_dot_analysis__configuration__pb2.DynamicAnalysisConfiguration.SerializeToString,
                 response_deserializer=minknow__api_dot_analysis__configuration__pb2.SetDynamicAnalysisConfigurationResponse.FromString,
                 )
+        self.find_basecall_configuration_defaults = channel.unary_unary(
+                '/minknow_api.analysis_configuration.AnalysisConfigurationService/find_basecall_configuration_defaults',
+                request_serializer=minknow__api_dot_analysis__configuration__pb2.FindBasecallConfigurationDefaultsRequest.SerializeToString,
+                response_deserializer=minknow__api_dot_analysis__configuration__pb2.FindBasecallConfigurationDefaultsResponse.FromString,
+                )
 
 
 class AnalysisConfigurationServiceServicer(object):
@@ -306,6 +311,17 @@ class AnalysisConfigurationServiceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def find_basecall_configuration_defaults(self, request, context):
+        """Basecall configuration defaults
+
+        These defaults will be based on the connected flow cell type and the selected base calling substrate.
+
+        Since 6.3
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_AnalysisConfigurationServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -388,6 +404,11 @@ def add_AnalysisConfigurationServiceServicer_to_server(servicer, server):
                     servicer.set_dynamic_analysis_configuration,
                     request_deserializer=minknow__api_dot_analysis__configuration__pb2.DynamicAnalysisConfiguration.FromString,
                     response_serializer=minknow__api_dot_analysis__configuration__pb2.SetDynamicAnalysisConfigurationResponse.SerializeToString,
+            ),
+            'find_basecall_configuration_defaults': grpc.unary_unary_rpc_method_handler(
+                    servicer.find_basecall_configuration_defaults,
+                    request_deserializer=minknow__api_dot_analysis__configuration__pb2.FindBasecallConfigurationDefaultsRequest.FromString,
+                    response_serializer=minknow__api_dot_analysis__configuration__pb2.FindBasecallConfigurationDefaultsResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -668,5 +689,22 @@ class AnalysisConfigurationService(object):
         return grpc.experimental.unary_unary(request, target, '/minknow_api.analysis_configuration.AnalysisConfigurationService/set_dynamic_analysis_configuration',
             minknow__api_dot_analysis__configuration__pb2.DynamicAnalysisConfiguration.SerializeToString,
             minknow__api_dot_analysis__configuration__pb2.SetDynamicAnalysisConfigurationResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def find_basecall_configuration_defaults(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/minknow_api.analysis_configuration.AnalysisConfigurationService/find_basecall_configuration_defaults',
+            minknow__api_dot_analysis__configuration__pb2.FindBasecallConfigurationDefaultsRequest.SerializeToString,
+            minknow__api_dot_analysis__configuration__pb2.FindBasecallConfigurationDefaultsResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

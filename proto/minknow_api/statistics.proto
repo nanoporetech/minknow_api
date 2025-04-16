@@ -4,8 +4,10 @@ package minknow_api.statistics;
 
 option java_package = "com.nanoporetech.minknow_api";
 option objc_class_prefix = "MKAPI";
+option go_package ="github.com/nanoporetech/minknow_api/go/gen/statistics";
 
 import "minknow_api/acquisition.proto";
+import "minknow_api/read_end_reason.proto";
 import "minknow_api/rpc_options.proto";
 
 service StatisticsService {
@@ -262,6 +264,8 @@ message StreamDutyTimeResponse {
 
     // Map between channel state names, and a list of bucketed duty time data
     map<string, ChannelStateData> channel_states = 2;
+
+    repeated float pore_occupancy = 3;
 }
 
 enum ReadLengthType {
@@ -299,17 +303,6 @@ enum BucketValueType {
     ReadLengths = 1;
 }
 
-enum ReadEndReason {
-    All = 0;
-    Unknown = 1;
-    Partial = 2;
-    MuxChange = 3;
-    UnblockMuxChange = 4;
-    SignalPositive = 5;
-    SignalNegative = 6;
-    DataServiceUnblockMuxChange = 7;
-};
-
 message ReadLengthHistogramKey {
     // Only return data for the given ReadEndReason.
     //
@@ -317,7 +310,7 @@ message ReadLengthHistogramKey {
     //   - Specify `ReadEndReason::All` to return data for all read end reasons
     //
     // If unspecified all read end reasons are returned.
-    ReadEndReason read_end_reason = 1;
+    read_end_reason.ReadEndReason read_end_reason = 1;
 }
 
 message ReadLengthHistogramSplit {
@@ -841,7 +834,7 @@ message AcquisitionOutputKey {
     //   - Specify `ReadEndReason::All` to return data for all read end reasons
     //
     // If unspecified all read end reasons are returned.
-    ReadEndReason read_end_reason = 7;
+    read_end_reason.ReadEndReason read_end_reason = 7;
 }
 
 message AcquisitionOutputSplit {

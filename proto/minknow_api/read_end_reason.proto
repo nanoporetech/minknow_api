@@ -1,0 +1,20 @@
+syntax="proto3";
+
+package minknow_api.read_end_reason;
+
+option java_package = "com.nanoporetech.minknow_api";
+option objc_class_prefix = "MKAPI";
+option go_package ="github.com/nanoporetech/minknow_api/go/gen/read_end_reason";
+
+
+enum ReadEndReason {
+    All = 0;
+    Unknown = 1;
+    Partial = 2;
+    MuxChange = 3;
+    UnblockMuxChange = 4;
+    SignalPositive = 5;
+    SignalNegative = 6;
+    DataServiceUnblockMuxChange = 7;
+    AnalysisConfigChange = 8;
+};

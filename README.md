@@ -86,10 +86,15 @@ See [AUTH.md](AUTH.md) for information on authenticating with the MinKNOW API.
 The files in [`proto/minknow_api`](proto/minknow_api/) describe MinKNOW's APIs. Each file
 describes a single *service*, which covers a specific area of MinKNOW's functionality.
 
-There are two global services, the [manager service](proto/minknow_api/manager.proto) and
+**Prior to 6.3**, there are two global services, the [manager service](proto/minknow_api/manager.proto) and
 [basecaller service](proto/minknow_api/basecaller.proto). There is only one instance of each of
-these services: see below for how to connect to them. All other services are provided by each flow
-cell position independently. For example, if you are using a GridION X5, which has 5 flow cell
+these services: see below for how to connect to them.
+
+**For 6.3 and above** we have begun to construct a 'consolidated' API which is intended to simplify control and interrogation of protocol/acquisition runs.
+This new API is also present on the 'manager' executable, and proxies requests to individual `control_server` instances.
+As such, it only requires a single gRPC client for _any number_ of flow cell positions.
+
+The original per-flow-cell-position APIs are still maintained on each flow cell position independently. For example, if you are using a GridION X5, which has 5 flow cell
 positions, there will be 5 ports (or sets of ports - secure, gRPC Web, etc), each of which
 will provide *all* the other services.
 
@@ -126,6 +131,17 @@ information about protocol runs from before the last restart is not available vi
 
 See the [`start_protocol` example](python/minknow_api/examples/start_protocol.py) for an example of how to use
 this service to start a protocol.
+
+### v2/protocol.proto
+
+**6.3+ only!**
+
+[This is the first 'consolidated' API.](proto/minknow_api/v2/protocol.proto) It is (like the endpoints on `manager.proto`) always available on port `9501` and `9502`.
+
+It allows for protocols to be started on multiple positions simultaneously.
+Once started, multiple protocols may also be stopped using only their `protocol_run_ids`, without reference to the flow cell positions on which they are running.
+
+This pattern is intended to be extended to all methods of interacting with protocols - 'start' should be the only call that requires the user to provide information about a specific position.
 
 ### acquisition.proto
 
@@ -209,8 +225,9 @@ If you are using the `minknow_api` Python package, this is all handled for you. 
 gRPC client libraries directly (for example, if you are connecting from a language other than
 Python), you will need to tell the library about MinKNOW's TLS certificates.
 
-Within the MinKNOW installation, you can find the CA certificate at `conf/rpc-certs/ca.crt`. This
-can be passed to most gRPC client libraries as part of creating a secure/SSL channel.
+You can find the CA certificate by default at the location `<data_dir>/rpc-certs/minknow/ca.crt`,
+where `<data_dir>` maps to `C:\\data` on Windows and `/data` on Ubuntu and MacOS platforms.
+This can be passed to most gRPC client libraries as part of creating a secure/SSL channel.
 
 Note that this certificate is only valid for the "localhost" name - connecting to `127.0.0.1`
 directly will not work, nor will connecting across the network. You can work around this by

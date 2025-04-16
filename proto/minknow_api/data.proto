@@ -3,11 +3,12 @@ syntax="proto3";
 package minknow_api.data;
 
 option java_package = "com.nanoporetech.minknow_api";
+option go_package ="github.com/nanoporetech/minknow_api/go/gen/data";
 option objc_class_prefix = "MKAPI";
 
 import "minknow_api/rpc_options.proto";
 import "minknow_api/device.proto";
-import "minknow_api/statistics.proto";
+import "minknow_api/read_end_reason.proto";
 import "google/protobuf/duration.proto";
 import "google/protobuf/wrappers.proto";
 
@@ -206,8 +207,12 @@ service DataService {
 
     // Returns various points of yield information for the ongoing experiment, such as complete
     // read information and basecaller progress.
+    //
+    // Note: This API does not guarantee between versions and may change as internal MinKNOW changes
+    // require different data is monitored.
     rpc get_experiment_yield_info (GetExperimentYieldInfoRequest) returns (GetExperimentYieldInfoResponse) {
         option idempotency_level = NO_SIDE_EFFECTS;
+        option (experimental) = true;
     }
 }
 
@@ -662,7 +667,7 @@ message GetLiveReadsResponse {
         int32 previous_read_classification = 10;
 
         // The classification of the chunk prior to this read starting.
-        statistics.ReadEndReason previous_read_end_reason = 11;
+        read_end_reason.ReadEndReason previous_read_end_reason = 11;
     };
 
     message ActionResponse {
@@ -913,14 +918,16 @@ message GetExperimentYieldInfoResponse{
         uint64 pending_memory_reads = 2;
         uint64 pending_disk_reads = 15;
         uint64 pending_multi_disk_reads = 3;
-        uint64 pending_skipped_reads = 4;
+        uint64 pending_skipped_reads = 4; // No longer used
         uint64 pending_force_skipped_reads = 5;
+        uint64 pending_retry_reads = 18;
         uint64 processed_memory_reads = 6;
         uint64 processed_disk_reads = 7;
-        uint64 processed_skipped_reads = 8;
+        uint64 processed_skipped_reads = 8; // No longer used
         uint64 processed_force_skipped_reads = 9;
         uint64 stored_reads_bytes_memory = 10;
-        uint64 stored_read_supporting_bytes_memory = 16;
+        uint64 stored_read_supporting_bytes_memory = 16; // No longer used
+        uint64 stored_reads_bytes_memory_including_in_flight = 17;
         uint64 stored_reads_bytes_disk = 11;
         uint64 discarded_error_bytes = 12;
         uint64 channels_writing_to_disk = 13;
@@ -948,21 +955,23 @@ message GetExperimentYieldInfoResponse{
     }
 
     message HdfWriterInfo {
-        uint64 pending_compressions = 1;
-        uint64 pending_writes = 2;
+        uint64 pending_compressions = 1; // No longer used
+        uint64 pending_writes = 2; // No longer used
         uint64 pending_hdf_tasks = 3;
-        uint64 completed_writes = 4;
+        uint64 completed_writes = 4; // No longer used
         uint64 dataset_bytes_data_in_flight = 5;
     }
 
     message BasecallStatistics {
         uint64 reads_in_progress = 1;
+        uint64 samples_in_progress = 14;
         uint64 reads_processed = 2;
         uint64 reads_skipped = 3;
         uint64 reads_force_skipped = 4;
         uint64 reads_failed_calling_filtered = 5;
         uint64 reads_failed_calling = 6;
         uint64 reads_called = 7;
+        uint64 samples_in_client_buffer = 13;
         uint64 samples_called = 8;
         uint64 samples_skipped = 9;
         uint64 bases_passed_called = 10;

@@ -20,14 +20,14 @@ from minknow_api import protocol_settings_pb2 as minknow__api_dot_protocol__sett
 from minknow_api import rpc_options_pb2 as minknow__api_dot_rpc__options__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x1cminknow_api/basecaller.proto\x12\x16minknow_api.basecaller\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1egoogle/protobuf/wrappers.proto\x1a(minknow_api/analysis_configuration.proto\x1a$minknow_api/analysis_workflows.proto\x1a#minknow_api/protocol_settings.proto\x1a\x1dminknow_api/rpc_options.proto\"\x19\n\x17ListConfigsByKitRequest\"\xf4\x03\n\x18ListConfigsByKitResponse\x12`\n\x11\x66low_cell_configs\x18\x01 \x03(\x0b\x32\x45.minknow_api.basecaller.ListConfigsByKitResponse.FlowCellConfigsEntry\x1a\x1d\n\nConfigList\x12\x0f\n\x07\x63onfigs\x18\x01 \x03(\t\x1a\xe0\x01\n\x0bPerFlowCell\x12\x61\n\x0bkit_configs\x18\x01 \x03(\x0b\x32L.minknow_api.basecaller.ListConfigsByKitResponse.PerFlowCell.KitConfigsEntry\x1an\n\x0fKitConfigsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12J\n\x05value\x18\x02 \x01(\x0b\x32;.minknow_api.basecaller.ListConfigsByKitResponse.ConfigList:\x02\x38\x01\x1at\n\x14\x46lowCellConfigsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12K\n\x05value\x18\x02 \x01(\x0b\x32<.minknow_api.basecaller.ListConfigsByKitResponse.PerFlowCell:\x02\x38\x01\"\x95\x04\n\x17StartBasecallingRequest\x12\x0c\n\x04name\x18\x0c \x01(\t\x12\x1f\n\x17input_reads_directories\x18\x01 \x03(\t\x12\x1e\n\x16output_reads_directory\x18\x02 \x01(\t\x12\x15\n\rconfiguration\x18\x03 \x01(\t\x12\x11\n\tfast5_out\x18\x04 \x01(\x08\x12\x16\n\x0e\x63ompress_fastq\x18\x05 \x01(\x08\x12\x16\n\x0e\x64isable_events\x18\x06 \x01(\x08\x12\x11\n\trecursive\x18\x07 \x01(\x08\x12[\n\x17\x62\x61rcoding_configuration\x18\n \x01(\x0b\x32:.minknow_api.analysis_configuration.BarcodingConfiguration\x12[\n\x17\x61lignment_configuration\x18\x0b \x01(\x0b\x32:.minknow_api.analysis_configuration.AlignmentConfiguration\x12\x17\n\nmin_qscore\x18\x0f \x01(\x01H\x00\x88\x01\x01\x12\x1d\n\x15\x65nable_read_splitting\x18\r \x01(\x08\x12=\n\x18min_score_read_splitting\x18\x0e \x01(\x0b\x32\x1b.google.protobuf.FloatValueB\r\n\x0b_min_qscore\"&\n\x18StartBasecallingResponse\x12\n\n\x02id\x18\x01 \x01(\t\"\xe5\x02\n\x15StartBarcodingRequest\x12\x0c\n\x04name\x18\x0b \x01(\t\x12\x1f\n\x17input_reads_directories\x18\x01 \x03(\t\x12\x1e\n\x16output_reads_directory\x18\x02 \x01(\t\x12\x16\n\x0e\x63ompress_fastq\x18\x04 \x01(\x08\x12\x11\n\trecursive\x18\x05 \x01(\x08\x12[\n\x17\x62\x61rcoding_configuration\x18\n \x01(\x0b\x32:.minknow_api.analysis_configuration.BarcodingConfiguration\x12Q\n\routput_format\x18\x0c \x01(\x0e\x32:.minknow_api.basecaller.StartBarcodingRequest.OutputFormat\"\"\n\x0cOutputFormat\x12\x07\n\x03\x42\x41M\x10\x00\x12\t\n\x05\x46\x41STQ\x10\x01\"$\n\x16StartBarcodingResponse\x12\n\n\x02id\x18\x01 \x01(\t\"\xd6\x01\n\x15StartAlignmentRequest\x12\x0c\n\x04name\x18\x07 \x01(\t\x12\x1f\n\x17input_reads_directories\x18\x01 \x03(\t\x12\x1e\n\x16output_reads_directory\x18\x02 \x01(\t\x12\x11\n\trecursive\x18\x04 \x01(\x08\x12[\n\x17\x61lignment_configuration\x18\x06 \x01(\x0b\x32:.minknow_api.analysis_configuration.AlignmentConfiguration\"$\n\x16StartAlignmentResponse\x12\n\n\x02id\x18\x01 \x01(\t\"\xce\x03\n\"StartPostProcessingProtocolRequest\x12\x12\n\nidentifier\x18\x01 \x01(\t\x12\"\n\x1asequencing_protocol_run_id\x18\x07 \x01(\t\x12\x1d\n\x15input_fast5_directory\x18\x02 \x01(\t\x12\x1d\n\x15input_fastq_directory\x18\x03 \x01(\t\x12\x1b\n\x13input_bam_directory\x18\x04 \x01(\t\x12\x19\n\x11sample_sheet_path\x18\x08 \x01(\t\x12\x18\n\x10output_directory\x18\x05 \x01(\t\x12\x65\n\x0esetting_values\x18\x06 \x03(\x0b\x32M.minknow_api.basecaller.StartPostProcessingProtocolRequest.SettingValuesEntry\x1ay\n\x12SettingValuesEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12R\n\x05value\x18\x02 \x01(\x0b\x32\x43.minknow_api.protocol_settings.ProtocolSetting.ProtocolSettingValue:\x02\x38\x01\"\xce\x03\n\x0cStartRequest\x12T\n\x19start_basecalling_request\x18\x02 \x01(\x0b\x32/.minknow_api.basecaller.StartBasecallingRequestH\x00\x12P\n\x17start_barcoding_request\x18\x03 \x01(\x0b\x32-.minknow_api.basecaller.StartBarcodingRequestH\x00\x12P\n\x17start_alignment_request\x18\x04 \x01(\x0b\x32-.minknow_api.basecaller.StartAlignmentRequestH\x00\x12l\n&start_post_processing_protocol_request\x18\x05 \x01(\x0b\x32:.minknow_api.basecaller.StartPostProcessingProtocolRequestH\x00\x12\x45\n\rproxy_request\x18\x06 \x01(\x0b\x32,.minknow_api.analysis_workflows.ProxyRequestH\x00\x42\x0f\n\rstart_request\"1\n#StartPostProcessingProtocolResponse\x12\n\n\x02id\x18\x01 \x01(\t\"\x1b\n\rCancelRequest\x12\n\n\x02id\x18\x01 \x01(\t\"\x10\n\x0e\x43\x61ncelResponse\"\xb4\x05\n\x07RunInfo\x12\n\n\x02id\x18\x01 \x01(\t\x12T\n\x19start_basecalling_request\x18\x02 \x01(\x0b\x32/.minknow_api.basecaller.StartBasecallingRequestH\x00\x12P\n\x17start_barcoding_request\x18\x0b \x01(\x0b\x32-.minknow_api.basecaller.StartBarcodingRequestH\x00\x12P\n\x17start_alignment_request\x18\x0c \x01(\x0b\x32-.minknow_api.basecaller.StartAlignmentRequestH\x00\x12l\n&start_post_processing_protocol_request\x18\r \x01(\x0b\x32:.minknow_api.basecaller.StartPostProcessingProtocolRequestH\x00\x12,\n\x05state\x18\x03 \x01(\x0e\x32\x1d.minknow_api.basecaller.State\x12\x0e\n\x06\x65rrors\x18\x04 \x03(\t\x12\x18\n\x10\x66iles_discovered\x18\x05 \x01(\x05\x12\x18\n\x10progress_current\x18\x06 \x01(\x05\x12\x16\n\x0eprogress_total\x18\x07 \x01(\x05\x12.\n\nstart_time\x18\x08 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12,\n\x08\x65nd_time\x18\t \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x36\n\x12\x65stimated_end_time\x18\n \x01(\x0b\x32\x1a.google.protobuf.TimestampB\x15\n\x13start_request_oneof\"\xbc\x01\n\x0eGetInfoRequest\x12\x39\n\x06preset\x18\x01 \x01(\x0e\x32\'.minknow_api.basecaller.SelectionPresetH\x00\x12\x0c\n\x02id\x18\x02 \x01(\tH\x00\x12=\n\x04list\x18\x03 \x01(\x0b\x32-.minknow_api.basecaller.GetInfoRequest.IdListH\x00\x1a\x15\n\x06IdList\x12\x0b\n\x03ids\x18\x01 \x03(\tB\x0b\n\tselection\"@\n\x0fGetInfoResponse\x12-\n\x04runs\x18\x01 \x03(\x0b\x32\x1f.minknow_api.basecaller.RunInfo\"\x1f\n\x10\x43learInfoRequest\x12\x0b\n\x03ids\x18\x01 \x03(\t\"\x13\n\x11\x43learInfoResponse\"*\n\x0cWatchRequest\x12\x1a\n\x12send_finished_runs\x18\x01 \x01(\x08\">\n\rWatchResponse\x12-\n\x04runs\x18\x01 \x03(\x0b\x32\x1f.minknow_api.basecaller.RunInfo\"^\n\x19MakeAlignmentIndexRequest\x12!\n\x19input_alignment_reference\x18\x01 \x01(\t\x12\x1e\n\x16output_alignment_index\x18\x02 \x01(\t\"\x1c\n\x1aMakeAlignmentIndexResponse\"$\n\"ListPostProcessingProtocolsRequest\"\xa6\x01\n\x1aPostProcessingProtocolInfo\x12\x12\n\nidentifier\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x0f\n\x07version\x18\x03 \x01(\t\x12\x13\n\x0b\x64\x65scription\x18\x04 \x01(\t\x12@\n\x08provider\x18\x05 \x01(\x0e\x32..minknow_api.basecaller.PostProcessingProvider\"l\n#ListPostProcessingProtocolsResponse\x12\x45\n\tprotocols\x18\x01 \x03(\x0b\x32\x32.minknow_api.basecaller.PostProcessingProtocolInfo\"B\n,ListSettingsForPostProcessingProtocolRequest\x12\x12\n\nidentifier\x18\x01 \x01(\t\"\xd2\x01\n-ListSettingsForPostProcessingProtocolResponse\x12\x1c\n\x14requires_fast5_input\x18\x01 \x01(\x08\x12\x1c\n\x14requires_fastq_input\x18\x02 \x01(\x08\x12\x1a\n\x12requires_bam_input\x18\x03 \x01(\x08\x12I\n\x11protocol_settings\x18\x04 \x03(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\"5\n\x15UpdateProgressRequest\x12\n\n\x02id\x18\x01 \x01(\t\x12\x10\n\x08progress\x18\x02 \x01(\x02\"\x18\n\x16UpdateProgressResponse\"*\n\x0fSendPingRequest\x12\x17\n\tping_data\x18\x01 \x01(\tB\x04\x88\xb5\x18\x01\"\x12\n\x10SendPingResponse*S\n\x05State\x12\x11\n\rSTATE_RUNNING\x10\x00\x12\x11\n\rSTATE_SUCCESS\x10\x01\x12\x0f\n\x0bSTATE_ERROR\x10\x02\x12\x13\n\x0fSTATE_CANCELLED\x10\x03*[\n\x0fSelectionPreset\x12\x16\n\x12PRESET_ALL_RUNNING\x10\x00\x12 \n\x1cPRESET_MOST_RECENTLY_STARTED\x10\x01\x12\x0e\n\nPRESET_ALL\x10\x02*0\n\x16PostProcessingProvider\x12\n\n\x06SCRIPT\x10\x00\x12\n\n\x06\x45PI2ME\x10\x01\x32\xe9\r\n\nBasecaller\x12\x80\x01\n\x13list_configs_by_kit\x12/.minknow_api.basecaller.ListConfigsByKitRequest\x1a\x30.minknow_api.basecaller.ListConfigsByKitResponse\"\x06\x88\x02\x01\x90\x02\x01\x12x\n\x11start_basecalling\x12/.minknow_api.basecaller.StartBasecallingRequest\x1a\x30.minknow_api.basecaller.StartBasecallingResponse\"\x00\x12r\n\x0fstart_barcoding\x12-.minknow_api.basecaller.StartBarcodingRequest\x1a..minknow_api.basecaller.StartBarcodingResponse\"\x00\x12\x9b\x01\n\x1estart_post_processing_protocol\x12:.minknow_api.basecaller.StartPostProcessingProtocolRequest\x1a;.minknow_api.basecaller.StartPostProcessingProtocolResponse\"\x00\x12r\n\x0fstart_alignment\x12-.minknow_api.basecaller.StartAlignmentRequest\x1a..minknow_api.basecaller.StartAlignmentResponse\"\x00\x12\\\n\x06\x63\x61ncel\x12%.minknow_api.basecaller.CancelRequest\x1a&.minknow_api.basecaller.CancelResponse\"\x03\x90\x02\x02\x12\x62\n\x08get_info\x12&.minknow_api.basecaller.GetInfoRequest\x1a\'.minknow_api.basecaller.GetInfoResponse\"\x03\x90\x02\x01\x30\x01\x12\x66\n\nclear_info\x12(.minknow_api.basecaller.ClearInfoRequest\x1a).minknow_api.basecaller.ClearInfoResponse\"\x03\x90\x02\x02\x12[\n\x05watch\x12$.minknow_api.basecaller.WatchRequest\x1a%.minknow_api.basecaller.WatchResponse\"\x03\x90\x02\x01\x30\x01\x12\x7f\n\x14make_alignment_index\x12\x31.minknow_api.basecaller.MakeAlignmentIndexRequest\x1a\x32.minknow_api.basecaller.MakeAlignmentIndexResponse\"\x00\x12\x9e\x01\n\x1elist_post_processing_protocols\x12:.minknow_api.basecaller.ListPostProcessingProtocolsRequest\x1a;.minknow_api.basecaller.ListPostProcessingProtocolsResponse\"\x03\x90\x02\x02\x12\xbe\x01\n*list_settings_for_post_processing_protocol\x12\x44.minknow_api.basecaller.ListSettingsForPostProcessingProtocolRequest\x1a\x45.minknow_api.basecaller.ListSettingsForPostProcessingProtocolResponse\"\x03\x90\x02\x01\x12\x8b\x01\n(update_post_processing_protocol_progress\x12-.minknow_api.basecaller.UpdateProgressRequest\x1a..minknow_api.basecaller.UpdateProgressResponse\"\x00\x12`\n\tsend_ping\x12\'.minknow_api.basecaller.SendPingRequest\x1a(.minknow_api.basecaller.SendPingResponse\"\x00\x42&\n\x1c\x63om.nanoporetech.minknow_api\xa2\x02\x05MKAPIb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x1cminknow_api/basecaller.proto\x12\x16minknow_api.basecaller\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1egoogle/protobuf/wrappers.proto\x1a(minknow_api/analysis_configuration.proto\x1a$minknow_api/analysis_workflows.proto\x1a#minknow_api/protocol_settings.proto\x1a\x1dminknow_api/rpc_options.proto\"\x19\n\x17ListConfigsByKitRequest\"\xf4\x03\n\x18ListConfigsByKitResponse\x12`\n\x11\x66low_cell_configs\x18\x01 \x03(\x0b\x32\x45.minknow_api.basecaller.ListConfigsByKitResponse.FlowCellConfigsEntry\x1a\x1d\n\nConfigList\x12\x0f\n\x07\x63onfigs\x18\x01 \x03(\t\x1a\xe0\x01\n\x0bPerFlowCell\x12\x61\n\x0bkit_configs\x18\x01 \x03(\x0b\x32L.minknow_api.basecaller.ListConfigsByKitResponse.PerFlowCell.KitConfigsEntry\x1an\n\x0fKitConfigsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12J\n\x05value\x18\x02 \x01(\x0b\x32;.minknow_api.basecaller.ListConfigsByKitResponse.ConfigList:\x02\x38\x01\x1at\n\x14\x46lowCellConfigsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12K\n\x05value\x18\x02 \x01(\x0b\x32<.minknow_api.basecaller.ListConfigsByKitResponse.PerFlowCell:\x02\x38\x01\"\x8e\x05\n\x17StartBasecallingRequest\x12\x0c\n\x04name\x18\x0c \x01(\t\x12\x1f\n\x17input_reads_directories\x18\x01 \x03(\t\x12\x1e\n\x16output_reads_directory\x18\x02 \x01(\t\x12\x17\n\rconfiguration\x18\x03 \x01(\tH\x00\x12]\n\x0bmodel_names\x18\x10 \x01(\x0b\x32\x46.minknow_api.analysis_configuration.BasecallerConfiguration.ModelNamesH\x00\x12\x11\n\tfast5_out\x18\x04 \x01(\x08\x12\x16\n\x0e\x63ompress_fastq\x18\x05 \x01(\x08\x12\x16\n\x0e\x64isable_events\x18\x06 \x01(\x08\x12\x11\n\trecursive\x18\x07 \x01(\x08\x12[\n\x17\x62\x61rcoding_configuration\x18\n \x01(\x0b\x32:.minknow_api.analysis_configuration.BarcodingConfiguration\x12[\n\x17\x61lignment_configuration\x18\x0b \x01(\x0b\x32:.minknow_api.analysis_configuration.AlignmentConfiguration\x12\x12\n\nmin_qscore\x18\x0f \x01(\x01\x12\x1d\n\x15\x65nable_read_splitting\x18\r \x01(\x08\x12=\n\x18min_score_read_splitting\x18\x0e \x01(\x0b\x32\x1b.google.protobuf.FloatValue\x12\x18\n\x0f\x65stimate_poly_a\x18\x9c\x01 \x01(\x08\x42\x10\n\x0e\x62\x61secall_model\"&\n\x18StartBasecallingResponse\x12\n\n\x02id\x18\x01 \x01(\t\"\xe5\x02\n\x15StartBarcodingRequest\x12\x0c\n\x04name\x18\x0b \x01(\t\x12\x1f\n\x17input_reads_directories\x18\x01 \x03(\t\x12\x1e\n\x16output_reads_directory\x18\x02 \x01(\t\x12\x16\n\x0e\x63ompress_fastq\x18\x04 \x01(\x08\x12\x11\n\trecursive\x18\x05 \x01(\x08\x12[\n\x17\x62\x61rcoding_configuration\x18\n \x01(\x0b\x32:.minknow_api.analysis_configuration.BarcodingConfiguration\x12Q\n\routput_format\x18\x0c \x01(\x0e\x32:.minknow_api.basecaller.StartBarcodingRequest.OutputFormat\"\"\n\x0cOutputFormat\x12\x07\n\x03\x42\x41M\x10\x00\x12\t\n\x05\x46\x41STQ\x10\x01\"$\n\x16StartBarcodingResponse\x12\n\n\x02id\x18\x01 \x01(\t\"\xd6\x01\n\x15StartAlignmentRequest\x12\x0c\n\x04name\x18\x07 \x01(\t\x12\x1f\n\x17input_reads_directories\x18\x01 \x03(\t\x12\x1e\n\x16output_reads_directory\x18\x02 \x01(\t\x12\x11\n\trecursive\x18\x04 \x01(\x08\x12[\n\x17\x61lignment_configuration\x18\x06 \x01(\x0b\x32:.minknow_api.analysis_configuration.AlignmentConfiguration\"$\n\x16StartAlignmentResponse\x12\n\n\x02id\x18\x01 \x01(\t\"\xce\x03\n\"StartPostProcessingProtocolRequest\x12\x12\n\nidentifier\x18\x01 \x01(\t\x12\"\n\x1asequencing_protocol_run_id\x18\x07 \x01(\t\x12\x1d\n\x15input_fast5_directory\x18\x02 \x01(\t\x12\x1d\n\x15input_fastq_directory\x18\x03 \x01(\t\x12\x1b\n\x13input_bam_directory\x18\x04 \x01(\t\x12\x19\n\x11sample_sheet_path\x18\x08 \x01(\t\x12\x18\n\x10output_directory\x18\x05 \x01(\t\x12\x65\n\x0esetting_values\x18\x06 \x03(\x0b\x32M.minknow_api.basecaller.StartPostProcessingProtocolRequest.SettingValuesEntry\x1ay\n\x12SettingValuesEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12R\n\x05value\x18\x02 \x01(\x0b\x32\x43.minknow_api.protocol_settings.ProtocolSetting.ProtocolSettingValue:\x02\x38\x01\"\xac\x04\n\x0cStartRequest\x12T\n\x19start_basecalling_request\x18\x02 \x01(\x0b\x32/.minknow_api.basecaller.StartBasecallingRequestH\x00\x12P\n\x17start_barcoding_request\x18\x03 \x01(\x0b\x32-.minknow_api.basecaller.StartBarcodingRequestH\x00\x12P\n\x17start_alignment_request\x18\x04 \x01(\x0b\x32-.minknow_api.basecaller.StartAlignmentRequestH\x00\x12l\n&start_post_processing_protocol_request\x18\x05 \x01(\x0b\x32:.minknow_api.basecaller.StartPostProcessingProtocolRequestH\x00\x12\x45\n\rproxy_request\x18\x06 \x01(\x0b\x32,.minknow_api.analysis_workflows.ProxyRequestH\x00\x12\\\n\x19\x61nalysis_workflow_request\x18\x07 \x01(\x0b\x32\x37.minknow_api.analysis_workflows.AnalysisWorkflowRequestH\x00\x42\x0f\n\rstart_request\"1\n#StartPostProcessingProtocolResponse\x12\n\n\x02id\x18\x01 \x01(\t\"\x1b\n\rCancelRequest\x12\n\n\x02id\x18\x01 \x01(\t\"\x10\n\x0e\x43\x61ncelResponse\"\xb4\x05\n\x07RunInfo\x12\n\n\x02id\x18\x01 \x01(\t\x12T\n\x19start_basecalling_request\x18\x02 \x01(\x0b\x32/.minknow_api.basecaller.StartBasecallingRequestH\x00\x12P\n\x17start_barcoding_request\x18\x0b \x01(\x0b\x32-.minknow_api.basecaller.StartBarcodingRequestH\x00\x12P\n\x17start_alignment_request\x18\x0c \x01(\x0b\x32-.minknow_api.basecaller.StartAlignmentRequestH\x00\x12l\n&start_post_processing_protocol_request\x18\r \x01(\x0b\x32:.minknow_api.basecaller.StartPostProcessingProtocolRequestH\x00\x12,\n\x05state\x18\x03 \x01(\x0e\x32\x1d.minknow_api.basecaller.State\x12\x0e\n\x06\x65rrors\x18\x04 \x03(\t\x12\x18\n\x10\x66iles_discovered\x18\x05 \x01(\x05\x12\x18\n\x10progress_current\x18\x06 \x01(\x05\x12\x16\n\x0eprogress_total\x18\x07 \x01(\x05\x12.\n\nstart_time\x18\x08 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12,\n\x08\x65nd_time\x18\t \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12\x36\n\x12\x65stimated_end_time\x18\n \x01(\x0b\x32\x1a.google.protobuf.TimestampB\x15\n\x13start_request_oneof\"\xbc\x01\n\x0eGetInfoRequest\x12\x39\n\x06preset\x18\x01 \x01(\x0e\x32\'.minknow_api.basecaller.SelectionPresetH\x00\x12\x0c\n\x02id\x18\x02 \x01(\tH\x00\x12=\n\x04list\x18\x03 \x01(\x0b\x32-.minknow_api.basecaller.GetInfoRequest.IdListH\x00\x1a\x15\n\x06IdList\x12\x0b\n\x03ids\x18\x01 \x03(\tB\x0b\n\tselection\"@\n\x0fGetInfoResponse\x12-\n\x04runs\x18\x01 \x03(\x0b\x32\x1f.minknow_api.basecaller.RunInfo\"\x1f\n\x10\x43learInfoRequest\x12\x0b\n\x03ids\x18\x01 \x03(\t\"\x13\n\x11\x43learInfoResponse\"*\n\x0cWatchRequest\x12\x1a\n\x12send_finished_runs\x18\x01 \x01(\x08\">\n\rWatchResponse\x12-\n\x04runs\x18\x01 \x03(\x0b\x32\x1f.minknow_api.basecaller.RunInfo\"^\n\x19MakeAlignmentIndexRequest\x12!\n\x19input_alignment_reference\x18\x01 \x01(\t\x12\x1e\n\x16output_alignment_index\x18\x02 \x01(\t\"\x1c\n\x1aMakeAlignmentIndexResponse\"$\n\"ListPostProcessingProtocolsRequest\"\xa6\x01\n\x1aPostProcessingProtocolInfo\x12\x12\n\nidentifier\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x0f\n\x07version\x18\x03 \x01(\t\x12\x13\n\x0b\x64\x65scription\x18\x04 \x01(\t\x12@\n\x08provider\x18\x05 \x01(\x0e\x32..minknow_api.basecaller.PostProcessingProvider\"l\n#ListPostProcessingProtocolsResponse\x12\x45\n\tprotocols\x18\x01 \x03(\x0b\x32\x32.minknow_api.basecaller.PostProcessingProtocolInfo\"B\n,ListSettingsForPostProcessingProtocolRequest\x12\x12\n\nidentifier\x18\x01 \x01(\t\"\xd2\x01\n-ListSettingsForPostProcessingProtocolResponse\x12\x1c\n\x14requires_fast5_input\x18\x01 \x01(\x08\x12\x1c\n\x14requires_fastq_input\x18\x02 \x01(\x08\x12\x1a\n\x12requires_bam_input\x18\x03 \x01(\x08\x12I\n\x11protocol_settings\x18\x04 \x03(\x0b\x32..minknow_api.protocol_settings.ProtocolSetting\"5\n\x15UpdateProgressRequest\x12\n\n\x02id\x18\x01 \x01(\t\x12\x10\n\x08progress\x18\x02 \x01(\x02\"\x18\n\x16UpdateProgressResponse\"*\n\x0fSendPingRequest\x12\x17\n\tping_data\x18\x01 \x01(\tB\x04\x88\xb5\x18\x01\"\x12\n\x10SendPingResponse*S\n\x05State\x12\x11\n\rSTATE_RUNNING\x10\x00\x12\x11\n\rSTATE_SUCCESS\x10\x01\x12\x0f\n\x0bSTATE_ERROR\x10\x02\x12\x13\n\x0fSTATE_CANCELLED\x10\x03*[\n\x0fSelectionPreset\x12\x16\n\x12PRESET_ALL_RUNNING\x10\x00\x12 \n\x1cPRESET_MOST_RECENTLY_STARTED\x10\x01\x12\x0e\n\nPRESET_ALL\x10\x02*0\n\x16PostProcessingProvider\x12\n\n\x06SCRIPT\x10\x00\x12\n\n\x06\x45PI2ME\x10\x01\x32\xe9\r\n\nBasecaller\x12\x80\x01\n\x13list_configs_by_kit\x12/.minknow_api.basecaller.ListConfigsByKitRequest\x1a\x30.minknow_api.basecaller.ListConfigsByKitResponse\"\x06\x88\x02\x01\x90\x02\x01\x12x\n\x11start_basecalling\x12/.minknow_api.basecaller.StartBasecallingRequest\x1a\x30.minknow_api.basecaller.StartBasecallingResponse\"\x00\x12r\n\x0fstart_barcoding\x12-.minknow_api.basecaller.StartBarcodingRequest\x1a..minknow_api.basecaller.StartBarcodingResponse\"\x00\x12\x9b\x01\n\x1estart_post_processing_protocol\x12:.minknow_api.basecaller.StartPostProcessingProtocolRequest\x1a;.minknow_api.basecaller.StartPostProcessingProtocolResponse\"\x00\x12r\n\x0fstart_alignment\x12-.minknow_api.basecaller.StartAlignmentRequest\x1a..minknow_api.basecaller.StartAlignmentResponse\"\x00\x12\\\n\x06\x63\x61ncel\x12%.minknow_api.basecaller.CancelRequest\x1a&.minknow_api.basecaller.CancelResponse\"\x03\x90\x02\x02\x12\x62\n\x08get_info\x12&.minknow_api.basecaller.GetInfoRequest\x1a\'.minknow_api.basecaller.GetInfoResponse\"\x03\x90\x02\x01\x30\x01\x12\x66\n\nclear_info\x12(.minknow_api.basecaller.ClearInfoRequest\x1a).minknow_api.basecaller.ClearInfoResponse\"\x03\x90\x02\x02\x12[\n\x05watch\x12$.minknow_api.basecaller.WatchRequest\x1a%.minknow_api.basecaller.WatchResponse\"\x03\x90\x02\x01\x30\x01\x12\x7f\n\x14make_alignment_index\x12\x31.minknow_api.basecaller.MakeAlignmentIndexRequest\x1a\x32.minknow_api.basecaller.MakeAlignmentIndexResponse\"\x00\x12\x9e\x01\n\x1elist_post_processing_protocols\x12:.minknow_api.basecaller.ListPostProcessingProtocolsRequest\x1a;.minknow_api.basecaller.ListPostProcessingProtocolsResponse\"\x03\x90\x02\x02\x12\xbe\x01\n*list_settings_for_post_processing_protocol\x12\x44.minknow_api.basecaller.ListSettingsForPostProcessingProtocolRequest\x1a\x45.minknow_api.basecaller.ListSettingsForPostProcessingProtocolResponse\"\x03\x90\x02\x01\x12\x8b\x01\n(update_post_processing_protocol_progress\x12-.minknow_api.basecaller.UpdateProgressRequest\x1a..minknow_api.basecaller.UpdateProgressResponse\"\x00\x12`\n\tsend_ping\x12\'.minknow_api.basecaller.SendPingRequest\x1a(.minknow_api.basecaller.SendPingResponse\"\x00\x42]\n\x1c\x63om.nanoporetech.minknow_apiZ5github.com/nanoporetech/minknow_api/go/gen/basecaller\xa2\x02\x05MKAPIb\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
 _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'minknow_api.basecaller_pb2', _globals)
 if _descriptor._USE_C_DESCRIPTORS == False:
   _globals['DESCRIPTOR']._options = None
-  _globals['DESCRIPTOR']._serialized_options = b'\n\034com.nanoporetech.minknow_api\242\002\005MKAPI'
+  _globals['DESCRIPTOR']._serialized_options = b'\n\034com.nanoporetech.minknow_apiZ5github.com/nanoporetech/minknow_api/go/gen/basecaller\242\002\005MKAPI'
   _globals['_LISTCONFIGSBYKITRESPONSE_PERFLOWCELL_KITCONFIGSENTRY']._options = None
   _globals['_LISTCONFIGSBYKITRESPONSE_PERFLOWCELL_KITCONFIGSENTRY']._serialized_options = b'8\001'
   _globals['_LISTCONFIGSBYKITRESPONSE_FLOWCELLCONFIGSENTRY']._options = None
@@ -50,12 +50,12 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   _globals['_BASECALLER'].methods_by_name['list_post_processing_protocols']._serialized_options = b'\220\002\002'
   _globals['_BASECALLER'].methods_by_name['list_settings_for_post_processing_protocol']._options = None
   _globals['_BASECALLER'].methods_by_name['list_settings_for_post_processing_protocol']._serialized_options = b'\220\002\001'
-  _globals['_STATE']._serialized_start=5039
-  _globals['_STATE']._serialized_end=5122
-  _globals['_SELECTIONPRESET']._serialized_start=5124
-  _globals['_SELECTIONPRESET']._serialized_end=5215
-  _globals['_POSTPROCESSINGPROVIDER']._serialized_start=5217
-  _globals['_POSTPROCESSINGPROVIDER']._serialized_end=5265
+  _globals['_STATE']._serialized_start=5254
+  _globals['_STATE']._serialized_end=5337
+  _globals['_SELECTIONPRESET']._serialized_start=5339
+  _globals['_SELECTIONPRESET']._serialized_end=5430
+  _globals['_POSTPROCESSINGPROVIDER']._serialized_start=5432
+  _globals['_POSTPROCESSINGPROVIDER']._serialized_end=5480
   _globals['_LISTCONFIGSBYKITREQUEST']._serialized_start=269
   _globals['_LISTCONFIGSBYKITREQUEST']._serialized_end=294
   _globals['_LISTCONFIGSBYKITRESPONSE']._serialized_start=297
@@ -69,88 +69,110 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   _globals['_LISTCONFIGSBYKITRESPONSE_FLOWCELLCONFIGSENTRY']._serialized_start=681
   _globals['_LISTCONFIGSBYKITRESPONSE_FLOWCELLCONFIGSENTRY']._serialized_end=797
   _globals['_STARTBASECALLINGREQUEST']._serialized_start=800
-  _globals['_STARTBASECALLINGREQUEST']._serialized_end=1333
-  _globals['_STARTBASECALLINGRESPONSE']._serialized_start=1335
-  _globals['_STARTBASECALLINGRESPONSE']._serialized_end=1373
-  _globals['_STARTBARCODINGREQUEST']._serialized_start=1376
-  _globals['_STARTBARCODINGREQUEST']._serialized_end=1733
-  _globals['_STARTBARCODINGREQUEST_OUTPUTFORMAT']._serialized_start=1699
-  _globals['_STARTBARCODINGREQUEST_OUTPUTFORMAT']._serialized_end=1733
-  _globals['_STARTBARCODINGRESPONSE']._serialized_start=1735
-  _globals['_STARTBARCODINGRESPONSE']._serialized_end=1771
-  _globals['_STARTALIGNMENTREQUEST']._serialized_start=1774
-  _globals['_STARTALIGNMENTREQUEST']._serialized_end=1988
-  _globals['_STARTALIGNMENTRESPONSE']._serialized_start=1990
-  _globals['_STARTALIGNMENTRESPONSE']._serialized_end=2026
-  _globals['_STARTPOSTPROCESSINGPROTOCOLREQUEST']._serialized_start=2029
-  _globals['_STARTPOSTPROCESSINGPROTOCOLREQUEST']._serialized_end=2491
-  _globals['_STARTPOSTPROCESSINGPROTOCOLREQUEST_SETTINGVALUESENTRY']._serialized_start=2370
-  _globals['_STARTPOSTPROCESSINGPROTOCOLREQUEST_SETTINGVALUESENTRY']._serialized_end=2491
-  _globals['_STARTREQUEST']._serialized_start=2494
-  _globals['_STARTREQUEST']._serialized_end=2956
-  _globals['_STARTPOSTPROCESSINGPROTOCOLRESPONSE']._serialized_start=2958
-  _globals['_STARTPOSTPROCESSINGPROTOCOLRESPONSE']._serialized_end=3007
-  _globals['_CANCELREQUEST']._serialized_start=3009
-  _globals['_CANCELREQUEST']._serialized_end=3036
-  _globals['_CANCELRESPONSE']._serialized_start=3038
-  _globals['_CANCELRESPONSE']._serialized_end=3054
-  _globals['_RUNINFO']._serialized_start=3057
-  _globals['_RUNINFO']._serialized_end=3749
-  _globals['_GETINFOREQUEST']._serialized_start=3752
-  _globals['_GETINFOREQUEST']._serialized_end=3940
-  _globals['_GETINFOREQUEST_IDLIST']._serialized_start=3906
-  _globals['_GETINFOREQUEST_IDLIST']._serialized_end=3927
-  _globals['_GETINFORESPONSE']._serialized_start=3942
-  _globals['_GETINFORESPONSE']._serialized_end=4006
-  _globals['_CLEARINFOREQUEST']._serialized_start=4008
-  _globals['_CLEARINFOREQUEST']._serialized_end=4039
-  _globals['_CLEARINFORESPONSE']._serialized_start=4041
-  _globals['_CLEARINFORESPONSE']._serialized_end=4060
-  _globals['_WATCHREQUEST']._serialized_start=4062
-  _globals['_WATCHREQUEST']._serialized_end=4104
-  _globals['_WATCHRESPONSE']._serialized_start=4106
-  _globals['_WATCHRESPONSE']._serialized_end=4168
-  _globals['_MAKEALIGNMENTINDEXREQUEST']._serialized_start=4170
-  _globals['_MAKEALIGNMENTINDEXREQUEST']._serialized_end=4264
-  _globals['_MAKEALIGNMENTINDEXRESPONSE']._serialized_start=4266
-  _globals['_MAKEALIGNMENTINDEXRESPONSE']._serialized_end=4294
-  _globals['_LISTPOSTPROCESSINGPROTOCOLSREQUEST']._serialized_start=4296
-  _globals['_LISTPOSTPROCESSINGPROTOCOLSREQUEST']._serialized_end=4332
-  _globals['_POSTPROCESSINGPROTOCOLINFO']._serialized_start=4335
-  _globals['_POSTPROCESSINGPROTOCOLINFO']._serialized_end=4501
-  _globals['_LISTPOSTPROCESSINGPROTOCOLSRESPONSE']._serialized_start=4503
-  _globals['_LISTPOSTPROCESSINGPROTOCOLSRESPONSE']._serialized_end=4611
-  _globals['_LISTSETTINGSFORPOSTPROCESSINGPROTOCOLREQUEST']._serialized_start=4613
-  _globals['_LISTSETTINGSFORPOSTPROCESSINGPROTOCOLREQUEST']._serialized_end=4679
-  _globals['_LISTSETTINGSFORPOSTPROCESSINGPROTOCOLRESPONSE']._serialized_start=4682
-  _globals['_LISTSETTINGSFORPOSTPROCESSINGPROTOCOLRESPONSE']._serialized_end=4892
-  _globals['_UPDATEPROGRESSREQUEST']._serialized_start=4894
-  _globals['_UPDATEPROGRESSREQUEST']._serialized_end=4947
-  _globals['_UPDATEPROGRESSRESPONSE']._serialized_start=4949
-  _globals['_UPDATEPROGRESSRESPONSE']._serialized_end=4973
-  _globals['_SENDPINGREQUEST']._serialized_start=4975
-  _globals['_SENDPINGREQUEST']._serialized_end=5017
-  _globals['_SENDPINGRESPONSE']._serialized_start=5019
-  _globals['_SENDPINGRESPONSE']._serialized_end=5037
-  _globals['_BASECALLER']._serialized_start=5268
-  _globals['_BASECALLER']._serialized_end=7037
-WatchResponse.__doc__ = """Attributes:
-    runs:
-        The current state of some of the runs.
-    values:
-        The values that have changed.  The first received message will
-        contain the current state of all the watched values.
-        Subsequent messages will only contain the values that changed.
-    removed_values:
-        The values that have been removed.
+  _globals['_STARTBASECALLINGREQUEST']._serialized_end=1454
+  _globals['_STARTBASECALLINGRESPONSE']._serialized_start=1456
+  _globals['_STARTBASECALLINGRESPONSE']._serialized_end=1494
+  _globals['_STARTBARCODINGREQUEST']._serialized_start=1497
+  _globals['_STARTBARCODINGREQUEST']._serialized_end=1854
+  _globals['_STARTBARCODINGREQUEST_OUTPUTFORMAT']._serialized_start=1820
+  _globals['_STARTBARCODINGREQUEST_OUTPUTFORMAT']._serialized_end=1854
+  _globals['_STARTBARCODINGRESPONSE']._serialized_start=1856
+  _globals['_STARTBARCODINGRESPONSE']._serialized_end=1892
+  _globals['_STARTALIGNMENTREQUEST']._serialized_start=1895
+  _globals['_STARTALIGNMENTREQUEST']._serialized_end=2109
+  _globals['_STARTALIGNMENTRESPONSE']._serialized_start=2111
+  _globals['_STARTALIGNMENTRESPONSE']._serialized_end=2147
+  _globals['_STARTPOSTPROCESSINGPROTOCOLREQUEST']._serialized_start=2150
+  _globals['_STARTPOSTPROCESSINGPROTOCOLREQUEST']._serialized_end=2612
+  _globals['_STARTPOSTPROCESSINGPROTOCOLREQUEST_SETTINGVALUESENTRY']._serialized_start=2491
+  _globals['_STARTPOSTPROCESSINGPROTOCOLREQUEST_SETTINGVALUESENTRY']._serialized_end=2612
+  _globals['_STARTREQUEST']._serialized_start=2615
+  _globals['_STARTREQUEST']._serialized_end=3171
+  _globals['_STARTPOSTPROCESSINGPROTOCOLRESPONSE']._serialized_start=3173
+  _globals['_STARTPOSTPROCESSINGPROTOCOLRESPONSE']._serialized_end=3222
+  _globals['_CANCELREQUEST']._serialized_start=3224
+  _globals['_CANCELREQUEST']._serialized_end=3251
+  _globals['_CANCELRESPONSE']._serialized_start=3253
+  _globals['_CANCELRESPONSE']._serialized_end=3269
+  _globals['_RUNINFO']._serialized_start=3272
+  _globals['_RUNINFO']._serialized_end=3964
+  _globals['_GETINFOREQUEST']._serialized_start=3967
+  _globals['_GETINFOREQUEST']._serialized_end=4155
+  _globals['_GETINFOREQUEST_IDLIST']._serialized_start=4121
+  _globals['_GETINFOREQUEST_IDLIST']._serialized_end=4142
+  _globals['_GETINFORESPONSE']._serialized_start=4157
+  _globals['_GETINFORESPONSE']._serialized_end=4221
+  _globals['_CLEARINFOREQUEST']._serialized_start=4223
+  _globals['_CLEARINFOREQUEST']._serialized_end=4254
+  _globals['_CLEARINFORESPONSE']._serialized_start=4256
+  _globals['_CLEARINFORESPONSE']._serialized_end=4275
+  _globals['_WATCHREQUEST']._serialized_start=4277
+  _globals['_WATCHREQUEST']._serialized_end=4319
+  _globals['_WATCHRESPONSE']._serialized_start=4321
+  _globals['_WATCHRESPONSE']._serialized_end=4383
+  _globals['_MAKEALIGNMENTINDEXREQUEST']._serialized_start=4385
+  _globals['_MAKEALIGNMENTINDEXREQUEST']._serialized_end=4479
+  _globals['_MAKEALIGNMENTINDEXRESPONSE']._serialized_start=4481
+  _globals['_MAKEALIGNMENTINDEXRESPONSE']._serialized_end=4509
+  _globals['_LISTPOSTPROCESSINGPROTOCOLSREQUEST']._serialized_start=4511
+  _globals['_LISTPOSTPROCESSINGPROTOCOLSREQUEST']._serialized_end=4547
+  _globals['_POSTPROCESSINGPROTOCOLINFO']._serialized_start=4550
+  _globals['_POSTPROCESSINGPROTOCOLINFO']._serialized_end=4716
+  _globals['_LISTPOSTPROCESSINGPROTOCOLSRESPONSE']._serialized_start=4718
+  _globals['_LISTPOSTPROCESSINGPROTOCOLSRESPONSE']._serialized_end=4826
+  _globals['_LISTSETTINGSFORPOSTPROCESSINGPROTOCOLREQUEST']._serialized_start=4828
+  _globals['_LISTSETTINGSFORPOSTPROCESSINGPROTOCOLREQUEST']._serialized_end=4894
+  _globals['_LISTSETTINGSFORPOSTPROCESSINGPROTOCOLRESPONSE']._serialized_start=4897
+  _globals['_LISTSETTINGSFORPOSTPROCESSINGPROTOCOLRESPONSE']._serialized_end=5107
+  _globals['_UPDATEPROGRESSREQUEST']._serialized_start=5109
+  _globals['_UPDATEPROGRESSREQUEST']._serialized_end=5162
+  _globals['_UPDATEPROGRESSRESPONSE']._serialized_start=5164
+  _globals['_UPDATEPROGRESSRESPONSE']._serialized_end=5188
+  _globals['_SENDPINGREQUEST']._serialized_start=5190
+  _globals['_SENDPINGREQUEST']._serialized_end=5232
+  _globals['_SENDPINGRESPONSE']._serialized_start=5234
+  _globals['_SENDPINGRESPONSE']._serialized_end=5252
+  _globals['_BASECALLER']._serialized_start=5483
+  _globals['_BASECALLER']._serialized_end=7252
+GetInfoRequest.__doc__ = """Attributes:
+    selection:
+        The selection of runs to return information about.  If no
+        selection is provided, the call will return all currently-
+        running basecall runs (as though PRESET_ALL_RUNNING were
+        selected).
+    preset:
+        A pre-determined selection of runs.
+    id:
+        An identifier, as returned by start().
+    list:
+        A list of identifiers, as returned by start().
 """
-GetInfoResponse.__doc__ = """Attributes:
-    runs:
-        Information about the requested runs.
+WatchRequest.__doc__ = """Attributes:
+    send_finished_runs:
+        By default, no information will be sent about runs that were
+        already finished when this call was made. Setting this to true
+        will cause the state of already-finished runs to be returned.
+    names:
+        The names of the values you wish to watch.
+    allow_missing:
+        Whether to allow missing values.  If set, names that are not
+        present in the store will be omitted from the first response,
+        but will still be watched. If and when they are added, a
+        message will be sent with the set values. Otherwise, missing
+        values will cause an immediate error.  Defaults to 'false'
 """
-StartBasecallingRequest.__doc__ = """Attributes:
+StartBarcodingResponse.__doc__ = """Attributes:
+    id:
+        An identifier for the basecalling run that was started. This
+        can be used to monitor or cancel the run.
+"""
+CancelRequest.__doc__ = """Attributes:
+    id:
+        An identifier as returned from a call to start() or list().
+"""
+StartBarcodingRequest.__doc__ = """Attributes:
     name:
-        User specified name to identify the basecall run.
+        User specified name to identify the barcoding run.
     input_reads_directories:
         Input directories to search for reads to be basecalled.
         Currently, only one directory can be specified, but this
@@ -160,23 +182,10 @@ StartBasecallingRequest.__doc__ = """Attributes:
         Output directory where called reads will be placed.  Reads
         will be sorted into subdirectories based on the sequencing run
         they came from.
-    configuration:
-        The name of the basecalling configuration to use.
-    fast5_out:
-        Enable output of .fast5 files containing original raw reads,
-        event data/trace table from basecall and basecall result
-        sequence.  This causes .fast5 files to be output in addition
-        to FASTQ files.  DEPRECATED: This option does not have any
-        effect - the basecaller no longer has the ability to write
-        fast5 files.
     compress_fastq:
-        Enable gzip compression of output FASTQ files.
-    disable_events:
-        Prevent events / trace tables being written to .fast5 files.
-        If event tables are not required for downstream processing
-        (eg: for 1d^2) then it is more efficient (and produces smaller
-        files) to disable them.  This has no effect if ``fast5_out``
-        is not enabled.
+        Enable gzip compression of output FASTQ files.  DEPRECATED:
+        This option does not have any effect - the offline barcoding
+        no longer has the ability to compress fastq output.
     recursive:
         Recursively find fast5 files to basecall in the
         `input_reads_directories`.  If False, only the fast5 files
@@ -186,22 +195,25 @@ StartBasecallingRequest.__doc__ = """Attributes:
     barcoding_configuration:
         Options to control barcoding performed once basecalling reads
         is complete.
-    alignment_configuration:
-        Options to control alignment performed once basecalling reads
-        is complete.
-    min_qscore:
-        Minimum Q-Score for a read to be passed by the basecaller.
-        Since 6.1.
-    enable_read_splitting:
-        Enable read splitting in the basecaller  Note: Since 5.9 this
-        option has no effect, the basecaller is responsible for
-        deciding when read splitting should be enabled.
-    min_score_read_splitting:
-        Override score to use for the basecaller read splitting. If
-        not specified a default value is used from the basecaller.
-        Note: Since 5.9 this option has no effect, the basecaller is
-        responsible for deciding when read splitting should be
-        enabled.
+    output_format:
+        The type of file format to use for the output, default is BAM.
+"""
+StartBasecallingResponse.__doc__ = """Attributes:
+    id:
+        An identifier for the basecalling run that was started. This
+        can be used to monitor or cancel the run.
+"""
+UpdateProgressRequest.__doc__ = """Attributes:
+    id:
+        id of the protocol to update (stored in environment variable
+        for python process)
+    progress:
+        Progress indicator, 0-1.
+"""
+ListConfigsByKitResponse.PerFlowCell.__doc__ = """Attributes:
+    kit_configs:
+        Key: kit name (eg: "SQK-LSK109") Value: list of configuration
+        names
 """
 StartPostProcessingProtocolRequest.__doc__ = """Attributes:
     identifier:
@@ -222,10 +234,117 @@ StartPostProcessingProtocolRequest.__doc__ = """Attributes:
         basecaller.list_settings_for_protocol) keys missing from the
         original protocol will cause errors.
 """
-StartAlignmentResponse.__doc__ = """Attributes:
+RunInfo.__doc__ = """Attributes:
     id:
-        An identifier for the alignment run that was started. This can
+        The ID of the run, as returned by start().
+    start_request_oneof:
+        The original message used to start the run.
+    start_basecalling_request:
+        Set if basecalling reads
+    start_barcoding_request:
+        Set if barcoding reads
+    start_alignment_request:
+        Set if aligning reads
+    start_post_processing_protocol_request:
+        Set if aligning reads
+    state:
+        What state the run is in.  While the basecalling is running
+        the state field will be ``STATE_RUNNING``.
+    errors:
+        If state is STATE_ERROR, this will contain (some of) the
+        errors encountered.  Note that if there are a lot of errors,
+        only some may be returned.
+    files_discovered:
+        The number of files selected for input.
+    progress_current:
+        The current basecalling progress (with respect to
+        progress_total).  This is intended to be an estimate of how
+        close to completion the basecalling run is. The numbers have
+        no particular meaning other than as a proportion of
+        progress_total.  Note that this only really has useful meaning
+        while state is STATE_RUNNING. On STATE_SUCCESS, it will always
+        be the same as progress_total. On STATE_ERROR or
+        STATE_CANCELLED, it may give some indication of how far
+        through basecalling was when it failed or was cancelled.
+    progress_total:
+        The maximum value of progress_current.  (progress_current /
+        progress_total) * 100 will give a percentage completion.  If
+        this is 0, it should be interpreted as "unknown progress".
+    start_time:
+        When basecalling was started (UTC).
+    end_time:
+        When basecalling ended (UTC).  Unset if basecalling is still
+        running.
+    estimated_end_time:
+        An estimate for when basecalling will end (UTC).  Unset if
+        basecalling has finished, or if an estimate cannot be
+        calculated (eg: because the baescalling software does not
+        support it).  Since 3.6.
+"""
+SendPingRequest.__doc__ = """Since 5.0
+
+Attributes:
+    ping_data:
+        The json data to send as a ping.  note: if this string is not
+        a valid json object, an error will be raised.
+    days_until_expiry:
+        Should the ping fail to send, the number of days the ping will
+        be stored before being cleaned up.
+"""
+ListSettingsForPostProcessingProtocolResponse.__doc__ = """Attributes:
+    requires_fast5_input:
+        Does the protocol require fast5 files as input
+    requires_fastq_input:
+        Does the protocol require fastq files as input
+    requires_bam_input:
+        Does the protocol require bam files as input
+    protocol_settings:
+        List of protocol settings used by the post processing protocol
+"""
+StartPostProcessingProtocolResponse.__doc__ = """Attributes:
+    id:
+        An identifier for the protocol run that was started. This can
         be used to monitor or cancel the run.
+"""
+MakeAlignmentIndexRequest.__doc__ = """Attributes:
+    input_alignment_reference:
+        Input fasta reference to use for building the index.
+    output_alignment_index:
+        Output file path to write index (mmi file) to.  Must have a
+        ".mmi" extension, and the paths parent directory must exist.
+"""
+WatchResponse.__doc__ = """Attributes:
+    runs:
+        The current state of some of the runs.
+    values:
+        The values that have changed.  The first received message will
+        contain the current state of all the watched values.
+        Subsequent messages will only contain the values that changed.
+    removed_values:
+        The values that have been removed.
+"""
+SendPingResponse.__doc__ = """Since 5.0"""
+ListSettingsForPostProcessingProtocolRequest.__doc__ = """Attributes:
+    identifier:
+        specify the protocol with a string containing all the
+        protocol's identifying components, eg:
+        "SYSTEM:post_processing/artic"
+"""
+PostProcessingProtocolInfo.__doc__ = """Attributes:
+    identifier:
+        System identifier for the protocol
+    name:
+        Readable name for the protocol (appropriate for use as a key
+        in translation database).  Note that this may not be unique:
+        in particular, the EPI2ME provider lists every version of a
+        workflow as a separate post-processing protocol.
+    version:
+        Protocol version.  This might not be set for all protocols or
+        all providers.
+    description:
+        A description of the protocol.
+    provider:
+        The source of the post-processing protocol.
 """
 StartAlignmentRequest.__doc__ = """Attributes:
     name:
@@ -247,40 +366,14 @@ StartAlignmentRequest.__doc__ = """Attributes:
         Options to control alignment performed once basecalling reads
         is complete.
 """
-PostProcessingProtocolInfo.__doc__ = """Attributes:
-    identifier:
-        System identifier for the protocol
-    name:
-        Readable name for the protocol (appropriate for use as a key
-        in translation database).  Note that this may not be unique:
-        in particular, the EPI2ME provider lists every version of a
-        workflow as a separate post-processing protocol.
-    version:
-        Protocol version.  This might not be set for all protocols or
-        all providers.
-    description:
-        A description of the protocol.
-    provider:
-        The source of the post-processing protocol.
+GetInfoResponse.__doc__ = """Attributes:
+    runs:
+        Information about the requested runs.
 """
-WatchRequest.__doc__ = """Attributes:
-    send_finished_runs:
-        By default, no information will be sent about runs that were
-        already finished when this call was made. Setting this to true
-        will cause the state of already-finished runs to be returned.
-    names:
-        The names of the values you wish to watch.
-    allow_missing:
-        Whether to allow missing values.  If set, names that are not
-        present in the store will be omitted from the first response,
-        but will still be watched. If and when they are added, a
-        message will be sent with the set values. Otherwise, missing
-        values will cause an immediate error.  Defaults to 'false'
-"""
-StartPostProcessingProtocolResponse.__doc__ = """Attributes:
-    id:
-        An identifier for the protocol run that was started. This can
-        be used to monitor or cancel the run.
+ListConfigsByKitResponse.__doc__ = """Attributes:
+    flow_cell_configs:
+        Key: flow cell type (eg: "FLO-MIN107") Value: FlowCellConfigs
+        describing configurations available for that flow cell.
 """
 StartRequest.__doc__ = """ Protobuf messages for input/output of RPC calls
 
@@ -355,108 +448,23 @@ Attributes:
         Start request that will be used to trigger analysis, used to
         union over all the different types of analysis possible.
     proxy_request:
-        Since 5.8
-"""
-SendPingResponse.__doc__ = """Since 5.0"""
-GetInfoRequest.__doc__ = """Attributes:
-    selection:
-        The selection of runs to return information about.  If no
-        selection is provided, the call will return all currently-
-        running basecall runs (as though PRESET_ALL_RUNNING were
-        selected).
-    preset:
-        A pre-determined selection of runs.
-    id:
-        An identifier, as returned by start().
-    list:
-        A list of identifiers, as returned by start().
-"""
-ListSettingsForPostProcessingProtocolResponse.__doc__ = """Attributes:
-    requires_fast5_input:
-        Does the protocol require fast5 files as input
-    requires_fastq_input:
-        Does the protocol require fastq files as input
-    requires_bam_input:
-        Does the protocol require bam files as input
-    protocol_settings:
-        List of protocol settings used by the post processing protocol
-"""
-ListConfigsByKitResponse.PerFlowCell.__doc__ = """Attributes:
-    kit_configs:
-        Key: kit name (eg: "SQK-LSK109") Value: list of configuration
-        names
-"""
-UpdateProgressRequest.__doc__ = """Attributes:
-    id:
-        id of the protocol to update (stored in environment variable
-        for python process)
-    progress:
-        Progress indicator, 0-1.
-"""
-StartBasecallingResponse.__doc__ = """Attributes:
-    id:
-        An identifier for the basecalling run that was started. This
-        can be used to monitor or cancel the run.
-"""
-RunInfo.__doc__ = """Attributes:
-    id:
-        The ID of the run, as returned by start().
-    start_request_oneof:
-        The original message used to start the run.
-    start_basecalling_request:
-        Set if basecalling reads
-    start_barcoding_request:
-        Set if barcoding reads
-    start_alignment_request:
-        Set if aligning reads
-    start_post_processing_protocol_request:
-        Set if aligning reads
-    state:
-        What state the run is in.  While the basecalling is running
-        the state field will be ``STATE_RUNNING``.
-    errors:
-        If state is STATE_ERROR, this will contain (some of) the
-        errors encountered.  Note that if there are a lot of errors,
-        only some may be returned.
-    files_discovered:
-        The number of files selected for input.
-    progress_current:
-        The current basecalling progress (with respect to
-        progress_total).  This is intended to be an estimate of how
-        close to completion the basecalling run is. The numbers have
-        no particular meaning other than as a proportion of
-        progress_total.  Note that this only really has useful meaning
-        while state is STATE_RUNNING. On STATE_SUCCESS, it will always
-        be the same as progress_total. On STATE_ERROR or
-        STATE_CANCELLED, it may give some indication of how far
-        through basecalling was when it failed or was cancelled.
-    progress_total:
-        The maximum value of progress_current.  (progress_current /
-        progress_total) * 100 will give a percentage completion.  If
-        this is 0, it should be interpreted as "unknown progress".
-    start_time:
-        When basecalling was started (UTC).
-    end_time:
-        When basecalling ended (UTC).  Unset if basecalling is still
-        running.
-    estimated_end_time:
-        An estimate for when basecalling will end (UTC).  Unset if
-        basecalling has finished, or if an estimate cannot be
-        calculated (eg: because the baescalling software does not
-        support it).  Since 3.6.
-"""
-CancelRequest.__doc__ = """Attributes:
-    id:
-        An identifier as returned from a call to start() or list().
+        Since 5.8  DEPRECATED: use 'analysis_workflow_request'
+    analysis_workflow_request:
+        Since 6.4
 """
 ListConfigsByKitResponse.ConfigList.__doc__ = """Attributes:
     configs:
         List of configuration names, to be used in
         ``StartBasecallingRequest.configuration``
 """
-StartBarcodingRequest.__doc__ = """Attributes:
+StartAlignmentResponse.__doc__ = """Attributes:
+    id:
+        An identifier for the alignment run that was started. This can
+        be used to monitor or cancel the run.
+"""
+StartBasecallingRequest.__doc__ = """Attributes:
     name:
-        User specified name to identify the barcoding run.
+        User specified name to identify the basecall run.
     input_reads_directories:
         Input directories to search for reads to be basecalled.
         Currently, only one directory can be specified, but this
@@ -466,10 +474,28 @@ StartBarcodingRequest.__doc__ = """Attributes:
         Output directory where called reads will be placed.  Reads
         will be sorted into subdirectories based on the sequencing run
         they came from.
+    configuration:
+        The name of the basecalling configuration to use.
+    model_names:
+        Specify the models to run by name (see
+        find_basecall_configurations in manager.proto)  Model names
+        should be taken from the `name` field of the above RPC
+        directly.  Since 6.3
+    fast5_out:
+        Enable output of .fast5 files containing original raw reads,
+        event data/trace table from basecall and basecall result
+        sequence.  This causes .fast5 files to be output in addition
+        to FASTQ files.  DEPRECATED: This option does not have any
+        effect - the basecaller no longer has the ability to write
+        fast5 files.
     compress_fastq:
-        Enable gzip compression of output FASTQ files.  DEPRECATED:
-        This option does not have any effect - the offline barcoding
-        no longer has the ability to compress fastq output.
+        Enable gzip compression of output FASTQ files.
+    disable_events:
+        Prevent events / trace tables being written to .fast5 files.
+        If event tables are not required for downstream processing
+        (eg: for 1d^2) then it is more efficient (and produces smaller
+        files) to disable them.  This has no effect if ``fast5_out``
+        is not enabled.
     recursive:
         Recursively find fast5 files to basecall in the
         `input_reads_directories`.  If False, only the fast5 files
@@ -479,40 +505,23 @@ StartBarcodingRequest.__doc__ = """Attributes:
     barcoding_configuration:
         Options to control barcoding performed once basecalling reads
         is complete.
-    output_format:
-        The type of file format to use for the output, default is BAM.
-"""
-ListSettingsForPostProcessingProtocolRequest.__doc__ = """Attributes:
-    identifier:
-        specify the protocol with a string containing all the
-        protocol's identifying components, eg:
-        "SYSTEM:post_processing/artic"
-"""
-SendPingRequest.__doc__ = """Since 5.0
-
-Attributes:
-    ping_data:
-        The json data to send as a ping.  note: if this string is not
-        a valid json object, an error will be raised.
-    days_until_expiry:
-        Should the ping fail to send, the number of days the ping will
-        be stored before being cleaned up.
-"""
-MakeAlignmentIndexRequest.__doc__ = """Attributes:
-    input_alignment_reference:
-        Input fasta reference to use for building the index.
-    output_alignment_index:
-        Output file path to write index (mmi file) to.  Must have a
-        ".mmi" extension, and the paths parent directory must exist.
-"""
-ListConfigsByKitResponse.__doc__ = """Attributes:
-    flow_cell_configs:
-        Key: flow cell type (eg: "FLO-MIN107") Value: FlowCellConfigs
-        describing configurations available for that flow cell.
-"""
-StartBarcodingResponse.__doc__ = """Attributes:
-    id:
-        An identifier for the basecalling run that was started. This
-        can be used to monitor or cancel the run.
+    alignment_configuration:
+        Options to control alignment performed once basecalling reads
+        is complete.
+    min_qscore:
+        Minimum Q-Score for a read to be passed by the basecaller.
+        Since 6.1.
+    enable_read_splitting:
+        Enable read splitting in the basecaller  Note: Since 5.9 this
+        option has no effect, the basecaller is responsible for
+        deciding when read splitting should be enabled.
+    min_score_read_splitting:
+        Override score to use for the basecaller read splitting. If
+        not specified a default value is used from the basecaller.
+        Note: Since 5.9 this option has no effect, the basecaller is
+        responsible for deciding when read splitting should be
+        enabled.
+    estimate_poly_a:
+        Enable poly a tail estimation.  Since 6.3
 """
 # @@protoc_insertion_point(module_scope)
