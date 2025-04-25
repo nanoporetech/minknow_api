@@ -78,6 +78,24 @@ GetOneResponse.__doc__ = """Attributes:
     value:
         The requested value.
 """
+WatchRequest.__doc__ = """Attributes:
+    send_finished_runs:
+        By default, no information will be sent about runs that were
+        already finished when this call was made. Setting this to true
+        will cause the state of already-finished runs to be returned.
+    names:
+        The names of the values you wish to watch.
+    allow_missing:
+        Whether to allow missing values.  If set, names that are not
+        present in the store will be omitted from the first response,
+        but will still be watched. If and when they are added, a
+        message will be sent with the set values. Otherwise, missing
+        values will cause an immediate error.  Defaults to 'false'
+"""
+GetOneRequest.__doc__ = """Attributes:
+    name:
+        The name of the value to fetch.
+"""
 GetRequest.__doc__ = """Attributes:
     names:
         The names of the values you wish to fetch.
@@ -87,15 +105,19 @@ GetRequest.__doc__ = """Attributes:
         Otherwise, missing values will cause an error to be returned.
         Defaults to 'false'
 """
-WatchResponse.__doc__ = """Attributes:
-    runs:
-        The current state of some of the runs.
+GetResponse.__doc__ = """Attributes:
     values:
-        The values that have changed.  The first received message will
-        contain the current state of all the watched values.
-        Subsequent messages will only contain the values that changed.
-    removed_values:
-        The values that have been removed.
+        The requested values.
+"""
+RemoveRequest.__doc__ = """Attributes:
+    names:
+        The names of the values you wish to remove.
+    allow_missing:
+        Whether to allow missing values.  If set, names that are not
+        present in the store will be ignored, but any present values
+        will still be removed. Otherwise, missing values will cause an
+        error to be returned (in which case nothing will be removed).
+        Defaults to 'false'
 """
 StoreRequest.__doc__ = """Attributes:
     values:
@@ -111,36 +133,14 @@ StoreRequest.__doc__ = """Attributes:
         the call to fail with `INVALID_ARGUMENT`  Note that calling
         remove() will remove the value regardless of this setting.
 """
-GetResponse.__doc__ = """Attributes:
+WatchResponse.__doc__ = """Attributes:
+    runs:
+        The current state of some of the runs.
     values:
-        The requested values.
-"""
-GetOneRequest.__doc__ = """Attributes:
-    name:
-        The name of the value to fetch.
-"""
-WatchRequest.__doc__ = """Attributes:
-    send_finished_runs:
-        By default, no information will be sent about runs that were
-        already finished when this call was made. Setting this to true
-        will cause the state of already-finished runs to be returned.
-    names:
-        The names of the values you wish to watch.
-    allow_missing:
-        Whether to allow missing values.  If set, names that are not
-        present in the store will be omitted from the first response,
-        but will still be watched. If and when they are added, a
-        message will be sent with the set values. Otherwise, missing
-        values will cause an immediate error.  Defaults to 'false'
-"""
-RemoveRequest.__doc__ = """Attributes:
-    names:
-        The names of the values you wish to remove.
-    allow_missing:
-        Whether to allow missing values.  If set, names that are not
-        present in the store will be ignored, but any present values
-        will still be removed. Otherwise, missing values will cause an
-        error to be returned (in which case nothing will be removed).
-        Defaults to 'false'
+        The values that have changed.  The first received message will
+        contain the current state of all the watched values.
+        Subsequent messages will only contain the values that changed.
+    removed_values:
+        The values that have been removed.
 """
 # @@protoc_insertion_point(module_scope)

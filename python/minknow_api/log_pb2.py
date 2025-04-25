@@ -76,35 +76,6 @@ UserMessage.__doc__ = """Attributes:
         Any extra data associated with the user message, as a map from
         key to data.
 """
-GetUserMessagesRequest.__doc__ = """Attributes:
-    include_old_messages:
-        If set, any messages which have already been sent to listeners
-        will be sent to the new stream again, before new messages are
-        sent.  If not specified - the default will not send messages
-        that were sent previously.  note: there is a limit on how many
-        messages are recorded for replay.
-"""
-SendPingRequest.__doc__ = """Since 5.0
-
-Attributes:
-    ping_data:
-        The json data to send as a ping.  note: if this string is not
-        a valid json object, an error will be raised.
-    days_until_expiry:
-        Should the ping fail to send, the number of days the ping will
-        be stored before being cleaned up.
-"""
-CollectPingsRequest.__doc__ = """Attributes:
-    collected_ping_file:
-        Any pings that are queued to be sent will be collected into a
-        zip file and written to this location. This location must be
-        in a folder writable by minknow. If the file name does not end
-        with ".zip", minknow will append ".zip" to the provided file
-        name.
-    include_previously_colleced_pings:
-        Normally previously collected pings are ignored, but by
-        setting this they will be included. Defaults to False.
-"""
 SendUserMessageRequest.__doc__ = """Attributes:
     severity:
         The severity of the message to send  note: TRACE messages
@@ -117,5 +88,34 @@ SendUserMessageRequest.__doc__ = """Attributes:
     extra_data:
         Any extra data associated with the user message, as a map from
         key to data.
+"""
+SendPingRequest.__doc__ = """Since 5.0
+
+Attributes:
+    ping_data:
+        The json data to send as a ping.  note: if this string is not
+        a valid json object, an error will be raised.
+    days_until_expiry:
+        Should the ping fail to send, the number of days the ping will
+        be stored before being cleaned up.
+"""
+GetUserMessagesRequest.__doc__ = """Attributes:
+    include_old_messages:
+        If set, any messages which have already been sent to listeners
+        will be sent to the new stream again, before new messages are
+        sent.  If not specified - the default will not send messages
+        that were sent previously.  note: there is a limit on how many
+        messages are recorded for replay.
+"""
+CollectPingsRequest.__doc__ = """Attributes:
+    collected_ping_file:
+        Any pings that are queued to be sent will be collected into a
+        zip file and written to this location. This location must be
+        in a folder writable by minknow. If the file name does not end
+        with ".zip", minknow will append ".zip" to the provided file
+        name.
+    include_previously_colleced_pings:
+        Normally previously collected pings are ignored, but by
+        setting this they will be included. Defaults to False.
 """
 # @@protoc_insertion_point(module_scope)

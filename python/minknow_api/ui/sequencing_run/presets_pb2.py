@@ -72,11 +72,6 @@ GetPresetResponse.__doc__ = """Attributes:
         message is exclusively used as a return type There are no
         issues of the unused case.
 """
-StorePresetRequest.__doc__ = """Store preset Request  Stores a preset with preset_id.  If preset_id is
-left blank, then a random UUID is generated and used instead. If the
-given preset_id already exists, then the request will fail with grpc
-code ALREADY_EXISTS. However, if the overwrite parameter is set to
-true, then any existing preset is overwritten without error."""
 PresetMeta.__doc__ = """Attributes:
     preset_name:
         The preset name, not to be confused with the preset id (the
@@ -87,4 +82,9 @@ PresetMeta.__doc__ = """Attributes:
         The last time the preset was used in a protocol. Used to
         chronologically order the preset list.
 """
+StorePresetRequest.__doc__ = """Store preset Request  Stores a preset with preset_id.  If preset_id is
+left blank, then a random UUID is generated and used instead. If the
+given preset_id already exists, then the request will fail with grpc
+code ALREADY_EXISTS. However, if the overwrite parameter is set to
+true, then any existing preset is overwritten without error."""
 # @@protoc_insertion_point(module_scope)

@@ -74,6 +74,15 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   _globals['_GETFANSPEEDRESPONSE']._serialized_end=3660
   _globals['_MINIONDEVICESERVICE']._serialized_start=3663
   _globals['_MINIONDEVICESERVICE']._serialized_end=4042
+ChangeSettingsRequest.__doc__ = """Attributes:
+    settings:
+        MinION device settings
+    channel_config_default:
+        The default channel configuration.  This provides the default
+        configuration to apply to any channels not listed in
+        settings.channel_config.
+"""
+GetSettingsRequest.__doc__ = """Request for MinionDeviceService.get_settings"""
 TemperatureRange.__doc__ = """Temperature range.
 
 Attributes:
@@ -90,15 +99,6 @@ Attributes:
         equal to min.  When soft temperature control is enabled, this
         is used as the target temperature, and ``min`` is not used.
 """
-GetSettingsRequest.__doc__ = """Request for MinionDeviceService.get_settings"""
-ChangeSettingsRequest.__doc__ = """Attributes:
-    settings:
-        MinION device settings
-    channel_config_default:
-        The default channel configuration.  This provides the default
-        configuration to apply to any channels not listed in
-        settings.channel_config.
-"""
 SamplingFrequencyParameters.__doc__ = """These values control the sampling frequency.
 
 Attributes:
@@ -111,6 +111,12 @@ Attributes:
         sinc_decimation value to 32.
     clock_speed:
         The speed of the high-speed clock.
+"""
+GetSettingsResponse.__doc__ = """Response for MinionDeviceService.get_settings
+
+Attributes:
+    settings:
+        MinION device settings
 """
 MinionDeviceSettings.__doc__ = """Describes the MinION device settings.  Both unset structures and
 *_KEEP values in enums indicate "no change". When changing settings,
@@ -274,11 +280,5 @@ Attributes:
         ``enable_bias_voltage_lookup``.  Up to 75 values can be
         provided. The values have the same constraints as
         ``bias_voltage``.
-"""
-GetSettingsResponse.__doc__ = """Response for MinionDeviceService.get_settings
-
-Attributes:
-    settings:
-        MinION device settings
 """
 # @@protoc_insertion_point(module_scope)

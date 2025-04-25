@@ -53,12 +53,12 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   _globals['_STOPPROTOCOLSRESPONSE_INDIVIDUALRESPONSE']._serialized_end=1500
   _globals['_PROTOCOLSSERVICE']._serialized_start=1503
   _globals['_PROTOCOLSSERVICE']._serialized_end=2095
-BeginProtocolsResponse.IndividualResponse.__doc__ = """Represents the response from the proxied call to 'begin_protocol' on a
-specific flow cell."""
 BeginProtocolsRequest.IndividualRequest.__doc__ = """Attributes:
     flow_cell_position_name:
         The position on which to start this protocol.
 """
+BeginProtocolsResponse.IndividualResponse.__doc__ = """Represents the response from the proxied call to 'begin_protocol' on a
+specific flow cell."""
 StartProtocolsRequest.IndividualRequest.__doc__ = """Attributes:
     flow_cell_position_name:
         The position on which to start this protocol.

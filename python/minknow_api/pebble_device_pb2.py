@@ -102,6 +102,81 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   _globals['_CHANGERESEARCHONLYSETTINGSRESPONSE']._serialized_end=3724
   _globals['_PEBBLEDEVICESERVICE']._serialized_start=3727
   _globals['_PEBBLEDEVICESERVICE']._serialized_end=4484
+GetChannelSettingsRequest.__doc__ = """Attributes:
+    channels:
+        The channels (one based) to return data for.
+"""
+GetChannelSettingsResponse.__doc__ = """Attributes:
+    channels:
+        List of all requested pixel settings, in the order requested.
+"""
+TimingEnginePeriods.TimingState.__doc__ = """Attributes:
+    duration:
+        The duration spent in each state is 1 more TEclock period than
+        set in the associated register, so setting 1 results in a
+        delay of 2 clock periods
+    mask:
+        The mask is built up of 7 user settable timing signals bit 0:
+        INT_RESET bit 1: CDS_SAMPLE bit 2: CDS_RESET bit 3: DIG_ENABLE
+        bit 4: CDS_SELECT bit 5: SYNC_MASTER bit 6: CML_ENABLE
+"""
+TimingEnginePeriods.__doc__ = """ Timing-engine periods are specified in 5ns units. Some of the timing
+mechanism can only achieve 10ns accuracy, so even numbers are
+preferred.  Note: There is a timing feature in the ASIC that requires
+the sum of the RST1 and DATA periods to be a multiple of 16
+
+Attributes:
+    RST1:
+        Reset1 phase  Note: Commands are written to the ASIC during
+        this period, to allow sufficient time to write the commands,
+        this should never be less than 1.2us or 240.
+    RST1_CDS1:
+        Reset1 to CDS1 transition
+    CDS1:
+        CDS1 phase (Correlated Double Sampling) sample-point 1
+    CDS1_DATA:
+        CDS1 to DATA transition
+    DATA:
+        DATA transfer phase  NOTE: Setting this value has no effect,
+        MinKNOW will choose a value for DATA itself to achieve the
+        required frame-rate. Reading it will return the chosen DATA
+        period.
+    DATA_RST2:
+        DATA transfer to Reset2 transition. MinKNOW may increase this
+        value by small amounts so that when changing the DATA period,
+        the sum of the RST1 and DATA periods is a multiple of 16 and
+        the frame-rate and integration-period are maintained.
+    RST2:
+        Reset2
+    RST2_CDS2:
+        Reset2 to CDS2 transition
+    CDS2:
+        CDS2 Phase (sample-point 2)
+    CDS2_SH:
+        CDS2 to SH transition
+    SH:
+        SH phase (Sample and Hold)
+    SH_RST1:
+        SH to Reset1 transition
+    use_default_values:
+        If written true, other fields will be ignored and the hardware
+        will use default timings. When read will return true if
+        previously set true, it will not tell you if the timing
+        periods you previously entered are the same as the default
+        values.
+    states:
+        Zero index based map [0-15] of up to 16 timing engine states
+"""
+ResearchOnlySettings.AsicRegisterWrite.__doc__ = """Attributes:
+    address:
+        Register to write to, value between 0..254
+    value:
+        Value to write to the register, value between 0..255 Note: If
+        value over two registers (high and low) then two separate
+        writes required
+    delay:
+        Delay to add after this write, before the next
+"""
 DeviceSettings.__doc__ = """Attributes:
     sampling_frequency:
         The number of measurements to take each second.  Possible
@@ -198,6 +273,28 @@ DeviceSettings.__doc__ = """Attributes:
         Settings for the hardware based saturation/overload protection
         (spike suppression)
 """
+ChannelSettings.__doc__ = """Attributes:
+    input:
+        The input to be digitised
+    mode:
+        The channel mode
+"""
+ResearchOnlySettings.InstrumentRegisterWrite.__doc__ = """Attributes:
+    address:
+        Register to write
+    value:
+        Value
+    delay:
+        Delay to add after this write, before the next
+"""
+ChangeChannelSettingsRequest.__doc__ = """Attributes:
+    channels:
+        1 based map of up to 400 different channel settings
+    channel_default:
+        If supplied, contains settings applied to every channel before
+        then applying any specific settings in the per channel
+        settings.
+"""
 ChangeDeviceSettingsResponse.__doc__ = """Attributes:
     real_sampling_frequency:
         The sampling frequency actually applied to the hardware, as
@@ -207,6 +304,34 @@ ChangeDeviceSettingsResponse.__doc__ = """Attributes:
         The sampling frequency actually applied to the hardware, as
         close as possible to the requested rate.  Note: only returned
         if sampling rate was set as part of this call.
+"""
+ResearchOnlySettings.__doc__ = """Attributes:
+    asic_writes:
+        List of ASIC register writes to append Use at own risk as no
+        validation is performed on the address or value of the
+        individual writes.  The number of writes in single request
+        limited to 128 due to internal MinKNOW limitations
+        INVALID_ARGUMENT will be returned if greater than this limit
+    instrument_writes:
+        List of instrument register writes Use at own risk as no
+        validation is performed on the address or value of the
+        individual writes.  The number of writes in single request
+        limited to 16 due to internal MinKNOW limitations
+        INVALID_ARGUMENT will be returned if greater than this limit
+"""
+WaveformSettings.__doc__ = """Attributes:
+    voltages:
+        The waveform data applied to the device (in millivolts)
+        INVALID_ARGUMENT will be returned if the length of voltages is
+        greater than 254 INVALID_ARGUMENT will be returned if one of
+        the voltages is outside of [-Vref..Vref]mV
+    frequency:
+        The frequency of the applied waveform, in Hz.  Valid values
+        are between 7.8125Hz and 500Hz.
+    samples_per_entry:
+        The number of samples each wavetable entry will be valid for
+        Valid value must be between [1..31] INVALID_ARGUMENT will be
+        returned if not between these values
 """
 OverloadProtectionConfig.__doc__ = """Attributes:
     enabled:
@@ -226,130 +351,5 @@ OverloadProtectionConfig.__doc__ = """Attributes:
         is not specified, the previous value is kept. Valid value must
         be between [-2047..2047] INVALID_ARGUMENT will be returned if
         not between these values
-"""
-GetChannelSettingsRequest.__doc__ = """Attributes:
-    channels:
-        The channels (one based) to return data for.
-"""
-ChannelSettings.__doc__ = """Attributes:
-    input:
-        The input to be digitised
-    mode:
-        The channel mode
-"""
-ResearchOnlySettings.AsicRegisterWrite.__doc__ = """Attributes:
-    address:
-        Register to write to, value between 0..254
-    value:
-        Value to write to the register, value between 0..255 Note: If
-        value over two registers (high and low) then two separate
-        writes required
-    delay:
-        Delay to add after this write, before the next
-"""
-GetChannelSettingsResponse.__doc__ = """Attributes:
-    channels:
-        List of all requested pixel settings, in the order requested.
-"""
-TimingEnginePeriods.__doc__ = """ Timing-engine periods are specified in 5ns units. Some of the timing
-mechanism can only achieve 10ns accuracy, so even numbers are
-preferred.  Note: There is a timing feature in the ASIC that requires
-the sum of the RST1 and DATA periods to be a multiple of 16
-
-Attributes:
-    RST1:
-        Reset1 phase  Note: Commands are written to the ASIC during
-        this period, to allow sufficient time to write the commands,
-        this should never be less than 1.2us or 240.
-    RST1_CDS1:
-        Reset1 to CDS1 transition
-    CDS1:
-        CDS1 phase (Correlated Double Sampling) sample-point 1
-    CDS1_DATA:
-        CDS1 to DATA transition
-    DATA:
-        DATA transfer phase  NOTE: Setting this value has no effect,
-        MinKNOW will choose a value for DATA itself to achieve the
-        required frame-rate. Reading it will return the chosen DATA
-        period.
-    DATA_RST2:
-        DATA transfer to Reset2 transition. MinKNOW may increase this
-        value by small amounts so that when changing the DATA period,
-        the sum of the RST1 and DATA periods is a multiple of 16 and
-        the frame-rate and integration-period are maintained.
-    RST2:
-        Reset2
-    RST2_CDS2:
-        Reset2 to CDS2 transition
-    CDS2:
-        CDS2 Phase (sample-point 2)
-    CDS2_SH:
-        CDS2 to SH transition
-    SH:
-        SH phase (Sample and Hold)
-    SH_RST1:
-        SH to Reset1 transition
-    use_default_values:
-        If written true, other fields will be ignored and the hardware
-        will use default timings. When read will return true if
-        previously set true, it will not tell you if the timing
-        periods you previously entered are the same as the default
-        values.
-    states:
-        Zero index based map [0-15] of up to 16 timing engine states
-"""
-ResearchOnlySettings.__doc__ = """Attributes:
-    asic_writes:
-        List of ASIC register writes to append Use at own risk as no
-        validation is performed on the address or value of the
-        individual writes.  The number of writes in single request
-        limited to 128 due to internal MinKNOW limitations
-        INVALID_ARGUMENT will be returned if greater than this limit
-    instrument_writes:
-        List of instrument register writes Use at own risk as no
-        validation is performed on the address or value of the
-        individual writes.  The number of writes in single request
-        limited to 16 due to internal MinKNOW limitations
-        INVALID_ARGUMENT will be returned if greater than this limit
-"""
-TimingEnginePeriods.TimingState.__doc__ = """Attributes:
-    duration:
-        The duration spent in each state is 1 more TEclock period than
-        set in the associated register, so setting 1 results in a
-        delay of 2 clock periods
-    mask:
-        The mask is built up of 7 user settable timing signals bit 0:
-        INT_RESET bit 1: CDS_SAMPLE bit 2: CDS_RESET bit 3: DIG_ENABLE
-        bit 4: CDS_SELECT bit 5: SYNC_MASTER bit 6: CML_ENABLE
-"""
-ChangeChannelSettingsRequest.__doc__ = """Attributes:
-    channels:
-        1 based map of up to 400 different channel settings
-    channel_default:
-        If supplied, contains settings applied to every channel before
-        then applying any specific settings in the per channel
-        settings.
-"""
-ResearchOnlySettings.InstrumentRegisterWrite.__doc__ = """Attributes:
-    address:
-        Register to write
-    value:
-        Value
-    delay:
-        Delay to add after this write, before the next
-"""
-WaveformSettings.__doc__ = """Attributes:
-    voltages:
-        The waveform data applied to the device (in millivolts)
-        INVALID_ARGUMENT will be returned if the length of voltages is
-        greater than 254 INVALID_ARGUMENT will be returned if one of
-        the voltages is outside of [-Vref..Vref]mV
-    frequency:
-        The frequency of the applied waveform, in Hz.  Valid values
-        are between 7.8125Hz and 500Hz.
-    samples_per_entry:
-        The number of samples each wavetable entry will be valid for
-        Valid value must be between [1..31] INVALID_ARGUMENT will be
-        returned if not between these values
 """
 # @@protoc_insertion_point(module_scope)

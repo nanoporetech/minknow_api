@@ -116,6 +116,103 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   _globals['_GETTEMPERATURERESPONSE']._serialized_end=5418
   _globals['_PROMETHIONDEVICESERVICE']._serialized_start=5421
   _globals['_PROMETHIONDEVICESERVICE']._serialized_end=6499
+ChangePixelBlockSettingsRequest.__doc__ = """Attributes:
+    pixel_blocks:
+        1 based map of different pixel blocks settings, a sparse map
+        is accepted, keys should be integers between 1 and 12.
+    pixel_block_default:
+        If supplied, contains settings applied to every block before
+        then applying any specific settings in the per block settings.
+"""
+StreamTemperatureRequest.__doc__ = """Attributes:
+    period_seconds:
+        How often temperature updates should be sent Defaults to a
+        period of 1 second, if not specified, or set to 0
+    acquisition_run_id:
+        The acquisition id of the experiment.
+    data_selection:
+        The desired data selection.  The units for all values are
+        `seconds since the start of the experiment`.
+"""
+ChangePixelSettingsRequest.__doc__ = """Attributes:
+    pixels:
+        1 based map of up to 3000 different pixel settings
+    pixel_default:
+        If supplied, contains settings applied to every pixel before
+        then applying any specific settings in the per pixel settings.
+"""
+GetTemperatureResponse.__doc__ = """Attributes:
+    target_temperature:
+        Return the temperature target the device is aiming to reach.
+    starting_temperature:
+        Starting temperature value  Since 6.0
+    flowcell_temperature:
+        Temperature as measured by thermistor TH2 on the P-Chip.
+    chamber_temperature:
+        Flow-cell chamber-temperature, calculated from the pixel-block
+        temperatures
+    pixel_block_temperature:
+        Temperature measured at each sensor in the ASIC, there are 12
+        sensors, one sensor per pixel-block
+"""
+PixelBlockSettings.__doc__ = """Attributes:
+    regen_current_voltage_clamp:
+        Voltage clamp for regeneration circuit (in millivolts)  The
+        voltage in the regeneration circuit is clamped under this
+        value, whilst applying the current specified in each pixel's
+        settings.  The acceptable input range is -1000..1000
+        (inclusive)
+    unblock_voltage:
+        The unblock voltage to apply when a pixel is unblocking.  The
+        acceptable input range is -1000..1000 (inclusive)
+"""
+TimingEnginePeriods.__doc__ = """ Timing-engine periods are specified in 5ns units. Some of the timing
+mechanism can only achieve 10ns accuracy, so even numbers are
+preferred.  Note: There is a timing feature in the ASIC that requires
+the sum of the RST1 and DATA periods to be a multiple of 16
+
+Attributes:
+    RST1:
+        Reset1 phase  Note: Commands are written to the ASIC during
+        this period, to allow sufficient time to write the commands,
+        this should never be less than 1.2us or 240.
+    RST1_CDS1:
+        Reset1 to CDS1 transition
+    CDS1:
+        CDS1 phase (Correlated Double Sampling) sample-point 1
+    CDS1_DATA:
+        CDS1 to DATA transition
+    DATA:
+        DATA transfer phase  NOTE: Setting this value has no effect,
+        MinKNOW will choose a value for DATA itself to achieve the
+        required frame-rate. Reading it will return the chosen DATA
+        period.
+    DATA_RST2:
+        DATA transfer to Reset2 transition. MinKNOW may increase this
+        value by small amounts so that when changing the DATA period,
+        the sum of the RST1 and DATA periods is a multiple of 16 and
+        the frame-rate and integration-period are maintained.
+    RST2:
+        Reset2
+    RST2_CDS2:
+        Reset2 to CDS2 transition
+    CDS2:
+        CDS2 Phase (sample-point 2)
+    CDS2_SH:
+        CDS2 to SH transition
+    SH:
+        SH phase (Sample and Hold)
+    SH_RST1:
+        SH to Reset1 transition
+    use_default_values:
+        If written true, other fields will be ignored and the hardware
+        will use default timings. When read will return true if
+        previously set true, it will not tell you if the timing
+        periods you previously entered are the same as the default
+        values.
+    states:
+        Zero index based map [0-15] of up to 16 timing engine states
+"""
 DeviceSettings.__doc__ = """Attributes:
     sampling_frequency:
         The number of measurements to take each second.  Possible
@@ -212,16 +309,16 @@ DeviceSettings.__doc__ = """Attributes:
         Settings for the hardware based saturation/overload protection
         (spike suppression)
 """
-PixelBlockSettings.__doc__ = """Attributes:
-    regen_current_voltage_clamp:
-        Voltage clamp for regeneration circuit (in millivolts)  The
-        voltage in the regeneration circuit is clamped under this
-        value, whilst applying the current specified in each pixel's
-        settings.  The acceptable input range is -1000..1000
-        (inclusive)
-    unblock_voltage:
-        The unblock voltage to apply when a pixel is unblocking.  The
-        acceptable input range is -1000..1000 (inclusive)
+PixelSettings.InputWell.__doc__ = """Attributes:
+    input_well:
+        Control which well is driving the adc minknow reads from.  ALL
+        is not a valid value here (other values are acceptable).
+    regeneration_well:
+        Control which wells are being regenerated (has the specified
+        regeneration current driven to it).  All possible Input values
+        are acceptable, as long as the input is not the active adc
+        input. For example, { input: 1, regeneration: all } is
+        invalid, as an well cannot be both input and regenerated.
 """
 PixelSettings.__doc__ = """Attributes:
     input:
@@ -258,6 +355,15 @@ PixelSettings.__doc__ = """Attributes:
         amplifier. If it is set to off, no signal readings can be
         made.
 """
+GetPixelBlockSettingsResponse.__doc__ = """Attributes:
+    pixel_blocks:
+        1 based map of different pixel blocks settings, containing 12
+        entries.
+"""
+GetPixelSettingsResponse.__doc__ = """Attributes:
+    pixels:
+        List of all requested pixel settings, in the order requested.
+"""
 ChangeDeviceSettingsResponse.__doc__ = """Attributes:
     real_sampling_frequency:
         The sampling frequency actually applied to the hardware, as
@@ -268,111 +374,10 @@ ChangeDeviceSettingsResponse.__doc__ = """Attributes:
         close as possible to the requested rate.  Note: only returned
         if sampling rate was set as part of this call.
 """
-ChangePixelSettingsRequest.__doc__ = """Attributes:
+GetPixelSettingsRequest.__doc__ = """Attributes:
     pixels:
-        1 based map of up to 3000 different pixel settings
-    pixel_default:
-        If supplied, contains settings applied to every pixel before
-        then applying any specific settings in the per pixel settings.
-"""
-PixelSettings.InputWell.__doc__ = """Attributes:
-    input_well:
-        Control which well is driving the adc minknow reads from.  ALL
-        is not a valid value here (other values are acceptable).
-    regeneration_well:
-        Control which wells are being regenerated (has the specified
-        regeneration current driven to it).  All possible Input values
-        are acceptable, as long as the input is not the active adc
-        input. For example, { input: 1, regeneration: all } is
-        invalid, as an well cannot be both input and regenerated.
-"""
-StreamTemperatureRequest.__doc__ = """Attributes:
-    period_seconds:
-        How often temperature updates should be sent Defaults to a
-        period of 1 second, if not specified, or set to 0
-    acquisition_run_id:
-        The acquisition id of the experiment.
-    data_selection:
-        The desired data selection.  The units for all values are
-        `seconds since the start of the experiment`.
-"""
-TimingEnginePeriods.__doc__ = """ Timing-engine periods are specified in 5ns units. Some of the timing
-mechanism can only achieve 10ns accuracy, so even numbers are
-preferred.  Note: There is a timing feature in the ASIC that requires
-the sum of the RST1 and DATA periods to be a multiple of 16
-
-Attributes:
-    RST1:
-        Reset1 phase  Note: Commands are written to the ASIC during
-        this period, to allow sufficient time to write the commands,
-        this should never be less than 1.2us or 240.
-    RST1_CDS1:
-        Reset1 to CDS1 transition
-    CDS1:
-        CDS1 phase (Correlated Double Sampling) sample-point 1
-    CDS1_DATA:
-        CDS1 to DATA transition
-    DATA:
-        DATA transfer phase  NOTE: Setting this value has no effect,
-        MinKNOW will choose a value for DATA itself to achieve the
-        required frame-rate. Reading it will return the chosen DATA
-        period.
-    DATA_RST2:
-        DATA transfer to Reset2 transition. MinKNOW may increase this
-        value by small amounts so that when changing the DATA period,
-        the sum of the RST1 and DATA periods is a multiple of 16 and
-        the frame-rate and integration-period are maintained.
-    RST2:
-        Reset2
-    RST2_CDS2:
-        Reset2 to CDS2 transition
-    CDS2:
-        CDS2 Phase (sample-point 2)
-    CDS2_SH:
-        CDS2 to SH transition
-    SH:
-        SH phase (Sample and Hold)
-    SH_RST1:
-        SH to Reset1 transition
-    use_default_values:
-        If written true, other fields will be ignored and the hardware
-        will use default timings. When read will return true if
-        previously set true, it will not tell you if the timing
-        periods you previously entered are the same as the default
-        values.
-    states:
-        Zero index based map [0-15] of up to 16 timing engine states
-"""
-ChangePixelBlockSettingsRequest.__doc__ = """Attributes:
-    pixel_blocks:
-        1 based map of different pixel blocks settings, a sparse map
-        is accepted, keys should be integers between 1 and 12.
-    pixel_block_default:
-        If supplied, contains settings applied to every block before
-        then applying any specific settings in the per block settings.
-"""
-GetTemperatureResponse.__doc__ = """Attributes:
-    target_temperature:
-        Return the temperature target the device is aiming to reach.
-    starting_temperature:
-        Starting temperature value  Since 6.0
-    flowcell_temperature:
-        Temperature as measured by thermistor TH2 on the P-Chip.
-    chamber_temperature:
-        Flow-cell chamber-temperature, calculated from the pixel-block
-        temperatures
-    pixel_block_temperature:
-        Temperature measured at each sensor in the ASIC, there are 12
-        sensors, one sensor per pixel-block
-"""
-GetPixelBlockSettingsResponse.__doc__ = """Attributes:
-    pixel_blocks:
-        1 based map of different pixel blocks settings, containing 12
-        entries.
-"""
-GetPixelSettingsResponse.__doc__ = """Attributes:
-    pixels:
-        List of all requested pixel settings, in the order requested.
+        The channels (one based) to return data for. A sparse map is
+        accepted
 """
 WaveformSettings.__doc__ = """Attributes:
     voltages:
@@ -387,10 +392,5 @@ WaveformSettings.__doc__ = """Attributes:
         The number of samples each wavetable entry will be valid for
         Valid value must be between [1..31] INVALID_ARGUMENT will be
         returned if not between these values
-"""
-GetPixelSettingsRequest.__doc__ = """Attributes:
-    pixels:
-        The channels (one based) to return data for. A sparse map is
-        accepted
 """
 # @@protoc_insertion_point(module_scope)

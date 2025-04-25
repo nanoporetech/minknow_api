@@ -39,13 +39,13 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   _globals['_GETBASECALLSERVERRESPONSE']._serialized_end=293
   _globals['_DEBUGSERVICE']._serialized_start=296
   _globals['_DEBUGSERVICE']._serialized_end=560
-GetBasecallServerResponse.__doc__ = """Attributes:
-    server_state:
+GetBasecallClientResponse.__doc__ = """Attributes:
+    client_state:
         This debug string with internal debug data, in practice it
         generally a JSON-formatted string.
 """
-GetBasecallClientResponse.__doc__ = """Attributes:
-    client_state:
+GetBasecallServerResponse.__doc__ = """Attributes:
+    server_state:
         This debug string with internal debug data, in practice it
         generally a JSON-formatted string.
 """

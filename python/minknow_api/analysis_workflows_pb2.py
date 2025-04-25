@@ -39,18 +39,18 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   _globals['_ANALYSISWORKFLOWREQUEST']._serialized_end=525
   _globals['_ANALYSISWORKFLOWSSERVICE']._serialized_start=528
   _globals['_ANALYSISWORKFLOWSSERVICE']._serialized_end=664
-ProxyRequest.__doc__ = """Attributes:
-    api:
-        with parameters but without the endpoint e.g.  for API
-        /workflows/{id}/start:
-        "/workflows/ae088129-8767-460f-8795-7c04771dc42f/start"
-        "/workflows/epi2me-labs/wf-alignment/v1.2.8/start"
-"""
 AnalysisWorkflowRequest.__doc__ = """Attributes:
     workflow_id:
         The id of the workflow to start
     parameters:
         The parameters to send to the workflow, represented as a
         stringified JSON object
+"""
+ProxyRequest.__doc__ = """Attributes:
+    api:
+        with parameters but without the endpoint e.g.  for API
+        /workflows/{id}/start:
+        "/workflows/ae088129-8767-460f-8795-7c04771dc42f/start"
+        "/workflows/epi2me-labs/wf-alignment/v1.2.8/start"
 """
 # @@protoc_insertion_point(module_scope)

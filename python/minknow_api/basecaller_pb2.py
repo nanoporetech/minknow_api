@@ -134,38 +134,12 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   _globals['_SENDPINGRESPONSE']._serialized_end=5252
   _globals['_BASECALLER']._serialized_start=5483
   _globals['_BASECALLER']._serialized_end=7252
-GetInfoRequest.__doc__ = """Attributes:
-    selection:
-        The selection of runs to return information about.  If no
-        selection is provided, the call will return all currently-
-        running basecall runs (as though PRESET_ALL_RUNNING were
-        selected).
-    preset:
-        A pre-determined selection of runs.
+StartPostProcessingProtocolResponse.__doc__ = """Attributes:
     id:
-        An identifier, as returned by start().
-    list:
-        A list of identifiers, as returned by start().
+        An identifier for the protocol run that was started. This can
+        be used to monitor or cancel the run.
 """
-WatchRequest.__doc__ = """Attributes:
-    send_finished_runs:
-        By default, no information will be sent about runs that were
-        already finished when this call was made. Setting this to true
-        will cause the state of already-finished runs to be returned.
-    names:
-        The names of the values you wish to watch.
-    allow_missing:
-        Whether to allow missing values.  If set, names that are not
-        present in the store will be omitted from the first response,
-        but will still be watched. If and when they are added, a
-        message will be sent with the set values. Otherwise, missing
-        values will cause an immediate error.  Defaults to 'false'
-"""
-StartBarcodingResponse.__doc__ = """Attributes:
-    id:
-        An identifier for the basecalling run that was started. This
-        can be used to monitor or cancel the run.
-"""
+SendPingResponse.__doc__ = """Since 5.0"""
 CancelRequest.__doc__ = """Attributes:
     id:
         An identifier as returned from a call to start() or list().
@@ -198,182 +172,18 @@ StartBarcodingRequest.__doc__ = """Attributes:
     output_format:
         The type of file format to use for the output, default is BAM.
 """
-StartBasecallingResponse.__doc__ = """Attributes:
+GetInfoRequest.__doc__ = """Attributes:
+    selection:
+        The selection of runs to return information about.  If no
+        selection is provided, the call will return all currently-
+        running basecall runs (as though PRESET_ALL_RUNNING were
+        selected).
+    preset:
+        A pre-determined selection of runs.
     id:
-        An identifier for the basecalling run that was started. This
-        can be used to monitor or cancel the run.
-"""
-UpdateProgressRequest.__doc__ = """Attributes:
-    id:
-        id of the protocol to update (stored in environment variable
-        for python process)
-    progress:
-        Progress indicator, 0-1.
-"""
-ListConfigsByKitResponse.PerFlowCell.__doc__ = """Attributes:
-    kit_configs:
-        Key: kit name (eg: "SQK-LSK109") Value: list of configuration
-        names
-"""
-StartPostProcessingProtocolRequest.__doc__ = """Attributes:
-    identifier:
-        identifier value from a protocol returned from
-        list_post_processing_protocols.
-    sequencing_protocol_run_id:
-        Optionally specify a sequencing protocol that is linked with
-        this analysis.
-    input_fast5_directory:
-        Input directories for the protocol (omit those which the
-        protocol doesn't require).
-    sample_sheet_path:
-        Path to the sample sheet output by minknow
-    output_directory:
-        Output directory where the analysed output should be written.
-    setting_values:
-        Configured values for display settings for the protocol (see
-        basecaller.list_settings_for_protocol) keys missing from the
-        original protocol will cause errors.
-"""
-RunInfo.__doc__ = """Attributes:
-    id:
-        The ID of the run, as returned by start().
-    start_request_oneof:
-        The original message used to start the run.
-    start_basecalling_request:
-        Set if basecalling reads
-    start_barcoding_request:
-        Set if barcoding reads
-    start_alignment_request:
-        Set if aligning reads
-    start_post_processing_protocol_request:
-        Set if aligning reads
-    state:
-        What state the run is in.  While the basecalling is running
-        the state field will be ``STATE_RUNNING``.
-    errors:
-        If state is STATE_ERROR, this will contain (some of) the
-        errors encountered.  Note that if there are a lot of errors,
-        only some may be returned.
-    files_discovered:
-        The number of files selected for input.
-    progress_current:
-        The current basecalling progress (with respect to
-        progress_total).  This is intended to be an estimate of how
-        close to completion the basecalling run is. The numbers have
-        no particular meaning other than as a proportion of
-        progress_total.  Note that this only really has useful meaning
-        while state is STATE_RUNNING. On STATE_SUCCESS, it will always
-        be the same as progress_total. On STATE_ERROR or
-        STATE_CANCELLED, it may give some indication of how far
-        through basecalling was when it failed or was cancelled.
-    progress_total:
-        The maximum value of progress_current.  (progress_current /
-        progress_total) * 100 will give a percentage completion.  If
-        this is 0, it should be interpreted as "unknown progress".
-    start_time:
-        When basecalling was started (UTC).
-    end_time:
-        When basecalling ended (UTC).  Unset if basecalling is still
-        running.
-    estimated_end_time:
-        An estimate for when basecalling will end (UTC).  Unset if
-        basecalling has finished, or if an estimate cannot be
-        calculated (eg: because the baescalling software does not
-        support it).  Since 3.6.
-"""
-SendPingRequest.__doc__ = """Since 5.0
-
-Attributes:
-    ping_data:
-        The json data to send as a ping.  note: if this string is not
-        a valid json object, an error will be raised.
-    days_until_expiry:
-        Should the ping fail to send, the number of days the ping will
-        be stored before being cleaned up.
-"""
-ListSettingsForPostProcessingProtocolResponse.__doc__ = """Attributes:
-    requires_fast5_input:
-        Does the protocol require fast5 files as input
-    requires_fastq_input:
-        Does the protocol require fastq files as input
-    requires_bam_input:
-        Does the protocol require bam files as input
-    protocol_settings:
-        List of protocol settings used by the post processing protocol
-"""
-StartPostProcessingProtocolResponse.__doc__ = """Attributes:
-    id:
-        An identifier for the protocol run that was started. This can
-        be used to monitor or cancel the run.
-"""
-MakeAlignmentIndexRequest.__doc__ = """Attributes:
-    input_alignment_reference:
-        Input fasta reference to use for building the index.
-    output_alignment_index:
-        Output file path to write index (mmi file) to.  Must have a
-        ".mmi" extension, and the paths parent directory must exist.
-"""
-WatchResponse.__doc__ = """Attributes:
-    runs:
-        The current state of some of the runs.
-    values:
-        The values that have changed.  The first received message will
-        contain the current state of all the watched values.
-        Subsequent messages will only contain the values that changed.
-    removed_values:
-        The values that have been removed.
-"""
-SendPingResponse.__doc__ = """Since 5.0"""
-ListSettingsForPostProcessingProtocolRequest.__doc__ = """Attributes:
-    identifier:
-        specify the protocol with a string containing all the
-        protocol's identifying components, eg:
-        "SYSTEM:post_processing/artic"
-"""
-PostProcessingProtocolInfo.__doc__ = """Attributes:
-    identifier:
-        System identifier for the protocol
-    name:
-        Readable name for the protocol (appropriate for use as a key
-        in translation database).  Note that this may not be unique:
-        in particular, the EPI2ME provider lists every version of a
-        workflow as a separate post-processing protocol.
-    version:
-        Protocol version.  This might not be set for all protocols or
-        all providers.
-    description:
-        A description of the protocol.
-    provider:
-        The source of the post-processing protocol.
-"""
-StartAlignmentRequest.__doc__ = """Attributes:
-    name:
-        User specified name to identify the alignment run.
-    input_reads_directories:
-        Input directories to search for reads to be aligned.
-        Currently, only one directory can be specified, but this
-        definition allows for multiple in the future without breaking
-        compatibility.
-    output_reads_directory:
-        Output directory where aligned reads will be placed.
-    recursive:
-        Recursively find fast5 files to align in the
-        `input_reads_directories`.  If False, only the fast5 files
-        directly in one of the `input_reads_directories` will be
-        aligned. If True, subdirectories of those directories will
-        also be searched recursively.
-    alignment_configuration:
-        Options to control alignment performed once basecalling reads
-        is complete.
-"""
-GetInfoResponse.__doc__ = """Attributes:
-    runs:
-        Information about the requested runs.
-"""
-ListConfigsByKitResponse.__doc__ = """Attributes:
-    flow_cell_configs:
-        Key: flow cell type (eg: "FLO-MIN107") Value: FlowCellConfigs
-        describing configurations available for that flow cell.
+        An identifier, as returned by start().
+    list:
+        A list of identifiers, as returned by start().
 """
 StartRequest.__doc__ = """ Protobuf messages for input/output of RPC calls
 
@@ -452,15 +262,205 @@ Attributes:
     analysis_workflow_request:
         Since 6.4
 """
-ListConfigsByKitResponse.ConfigList.__doc__ = """Attributes:
-    configs:
-        List of configuration names, to be used in
-        ``StartBasecallingRequest.configuration``
+WatchResponse.__doc__ = """Attributes:
+    runs:
+        The current state of some of the runs.
+    values:
+        The values that have changed.  The first received message will
+        contain the current state of all the watched values.
+        Subsequent messages will only contain the values that changed.
+    removed_values:
+        The values that have been removed.
+"""
+RunInfo.__doc__ = """Attributes:
+    id:
+        The ID of the run, as returned by start().
+    start_request_oneof:
+        The original message used to start the run.
+    start_basecalling_request:
+        Set if basecalling reads
+    start_barcoding_request:
+        Set if barcoding reads
+    start_alignment_request:
+        Set if aligning reads
+    start_post_processing_protocol_request:
+        Set if aligning reads
+    state:
+        What state the run is in.  While the basecalling is running
+        the state field will be ``STATE_RUNNING``.
+    errors:
+        If state is STATE_ERROR, this will contain (some of) the
+        errors encountered.  Note that if there are a lot of errors,
+        only some may be returned.
+    files_discovered:
+        The number of files selected for input.
+    progress_current:
+        The current basecalling progress (with respect to
+        progress_total).  This is intended to be an estimate of how
+        close to completion the basecalling run is. The numbers have
+        no particular meaning other than as a proportion of
+        progress_total.  Note that this only really has useful meaning
+        while state is STATE_RUNNING. On STATE_SUCCESS, it will always
+        be the same as progress_total. On STATE_ERROR or
+        STATE_CANCELLED, it may give some indication of how far
+        through basecalling was when it failed or was cancelled.
+    progress_total:
+        The maximum value of progress_current.  (progress_current /
+        progress_total) * 100 will give a percentage completion.  If
+        this is 0, it should be interpreted as "unknown progress".
+    start_time:
+        When basecalling was started (UTC).
+    end_time:
+        When basecalling ended (UTC).  Unset if basecalling is still
+        running.
+    estimated_end_time:
+        An estimate for when basecalling will end (UTC).  Unset if
+        basecalling has finished, or if an estimate cannot be
+        calculated (eg: because the baescalling software does not
+        support it).  Since 3.6.
+"""
+StartPostProcessingProtocolRequest.__doc__ = """Attributes:
+    identifier:
+        identifier value from a protocol returned from
+        list_post_processing_protocols.
+    sequencing_protocol_run_id:
+        Optionally specify a sequencing protocol that is linked with
+        this analysis.
+    input_fast5_directory:
+        Input directories for the protocol (omit those which the
+        protocol doesn't require).
+    sample_sheet_path:
+        Path to the sample sheet output by minknow
+    output_directory:
+        Output directory where the analysed output should be written.
+    setting_values:
+        Configured values for display settings for the protocol (see
+        basecaller.list_settings_for_protocol) keys missing from the
+        original protocol will cause errors.
+"""
+WatchRequest.__doc__ = """Attributes:
+    send_finished_runs:
+        By default, no information will be sent about runs that were
+        already finished when this call was made. Setting this to true
+        will cause the state of already-finished runs to be returned.
+    names:
+        The names of the values you wish to watch.
+    allow_missing:
+        Whether to allow missing values.  If set, names that are not
+        present in the store will be omitted from the first response,
+        but will still be watched. If and when they are added, a
+        message will be sent with the set values. Otherwise, missing
+        values will cause an immediate error.  Defaults to 'false'
 """
 StartAlignmentResponse.__doc__ = """Attributes:
     id:
         An identifier for the alignment run that was started. This can
         be used to monitor or cancel the run.
+"""
+ListConfigsByKitResponse.__doc__ = """Attributes:
+    flow_cell_configs:
+        Key: flow cell type (eg: "FLO-MIN107") Value: FlowCellConfigs
+        describing configurations available for that flow cell.
+"""
+PostProcessingProtocolInfo.__doc__ = """Attributes:
+    identifier:
+        System identifier for the protocol
+    name:
+        Readable name for the protocol (appropriate for use as a key
+        in translation database).  Note that this may not be unique:
+        in particular, the EPI2ME provider lists every version of a
+        workflow as a separate post-processing protocol.
+    version:
+        Protocol version.  This might not be set for all protocols or
+        all providers.
+    description:
+        A description of the protocol.
+    provider:
+        The source of the post-processing protocol.
+"""
+ListSettingsForPostProcessingProtocolRequest.__doc__ = """Attributes:
+    identifier:
+        specify the protocol with a string containing all the
+        protocol's identifying components, eg:
+        "SYSTEM:post_processing/artic"
+"""
+StartBarcodingResponse.__doc__ = """Attributes:
+    id:
+        An identifier for the basecalling run that was started. This
+        can be used to monitor or cancel the run.
+"""
+MakeAlignmentIndexRequest.__doc__ = """Attributes:
+    input_alignment_reference:
+        Input fasta reference to use for building the index.
+    output_alignment_index:
+        Output file path to write index (mmi file) to.  Must have a
+        ".mmi" extension, and the paths parent directory must exist.
+"""
+UpdateProgressRequest.__doc__ = """Attributes:
+    id:
+        id of the protocol to update (stored in environment variable
+        for python process)
+    progress:
+        Progress indicator, 0-1.
+"""
+SendPingRequest.__doc__ = """Since 5.0
+
+Attributes:
+    ping_data:
+        The json data to send as a ping.  note: if this string is not
+        a valid json object, an error will be raised.
+    days_until_expiry:
+        Should the ping fail to send, the number of days the ping will
+        be stored before being cleaned up.
+"""
+GetInfoResponse.__doc__ = """Attributes:
+    runs:
+        Information about the requested runs.
+"""
+StartAlignmentRequest.__doc__ = """Attributes:
+    name:
+        User specified name to identify the alignment run.
+    input_reads_directories:
+        Input directories to search for reads to be aligned.
+        Currently, only one directory can be specified, but this
+        definition allows for multiple in the future without breaking
+        compatibility.
+    output_reads_directory:
+        Output directory where aligned reads will be placed.
+    recursive:
+        Recursively find fast5 files to align in the
+        `input_reads_directories`.  If False, only the fast5 files
+        directly in one of the `input_reads_directories` will be
+        aligned. If True, subdirectories of those directories will
+        also be searched recursively.
+    alignment_configuration:
+        Options to control alignment performed once basecalling reads
+        is complete.
+"""
+ListConfigsByKitResponse.PerFlowCell.__doc__ = """Attributes:
+    kit_configs:
+        Key: kit name (eg: "SQK-LSK109") Value: list of configuration
+        names
+"""
+StartBasecallingResponse.__doc__ = """Attributes:
+    id:
+        An identifier for the basecalling run that was started. This
+        can be used to monitor or cancel the run.
+"""
+ListSettingsForPostProcessingProtocolResponse.__doc__ = """Attributes:
+    requires_fast5_input:
+        Does the protocol require fast5 files as input
+    requires_fastq_input:
+        Does the protocol require fastq files as input
+    requires_bam_input:
+        Does the protocol require bam files as input
+    protocol_settings:
+        List of protocol settings used by the post processing protocol
+"""
+ListConfigsByKitResponse.ConfigList.__doc__ = """Attributes:
+    configs:
+        List of configuration names, to be used in
+        ``StartBasecallingRequest.configuration``
 """
 StartBasecallingRequest.__doc__ = """Attributes:
     name:

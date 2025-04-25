@@ -299,25 +299,388 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   _globals['_CHECKPATHINFORESPONSE_TYPE']._serialized_end=13484
   _globals['_MANAGERSERVICE']._serialized_start=13941
   _globals['_MANAGERSERVICE']._serialized_end=18489
-ListSettingsForProtocolResponse.RunOptions.__doc__ = """Run options
+GetBarcodeKeysRequest.__doc__ = """Attributes:
+    barcode_kit_names:
+        Names of barcode kits to obtain barcode names for  Fails with
+        INVALID_ARGUMENT if any of the requested `barcode_kit_names`
+        are unavailable
+    lamp_kit_name:
+        Name of lamp kit to obtain barcode names for.  Fails with
+        INVALID_ARGUMENT if the requested `lamp_kit_name` is
+        unavailable.  DEPRECATED 6.0: Lamp support has been removed
+        and this option will be ignored.
+"""
+GetSequencingKitsRequest.__doc__ = """Request message for `ManagerService.get_sequencing_kits`.
 
 Attributes:
-    active_channel_selection:
-         bool
-    mux_scan_period:
-         in hours
+    flow_cell_product_code:
+        The product code of the flow cell that will be used for
+        sequencing.  Only kits compatible with this flow cell type
+        will be returned (currently, this means that there is at least
+        one (sequencing or control) protocol that is compatible with
+        both the kit and this flow cell product code).  This may also
+        affect the returned information about the kit. For example, if
+        it isn't possible to basecall on the flow cell, none of the
+        kits will claim to be barcoding capable (or compatible with
+        any barcoding expansion kits).
 """
-BasecallerApiResponse.__doc__ = """Attributes:
+GetLampKitInfoRequest.__doc__ = """DEPRECATED 6.0: Lamp support has been removed."""
+FlowCellPosition.RpcPorts.__doc__ = """Attributes:
     secure:
-        The port to use to access the minknow_api.basecaller API using
-        the standard gRPC protocol over TLS
+        A port providing the standard gRPC protocol over TLS
     secure_grpc_web:
-        The port to use to access the minknow_api.basecaller API using
-        the gRPC-Web protocol over TLS
+        A port providing the gRPC-Web protocol over TLS
 """
-Feature.__doc__ = """Attributes:
-    enabled:
-        Enable or disable the feature
+FilesystemDiskSpaceInfo.__doc__ = """disk-usage information for one file-system
+
+Attributes:
+    filesystem_id:
+        The name of the file-system
+    bytes_available:
+        How much space is left on the file-system
+    bytes_capacity:
+        The total capacity of the file-system when empty.
+    what:
+        A list of what MinKNOW stores on this file-system, eg: reads,
+        logs, intermediate-files
+    bytes_to_stop_cleanly:
+        MinKNOW needs this much space to stop experiments. If
+        bytes_available goes below this number, data could be lost!
+    bytes_when_alert_issued:
+        The amount of space left on the file-system when
+        recommend_alert was set true.
+    recommend_alert:
+        MinKNOW recommends that you alert someone about the disk-usage
+    recommend_stop:
+        MinKNOW recommends that you stop experiments due to disk-usage
+        concerns
+    bytes_per_second:
+        Rate of change in bytes_available (per second) +'ve numbers
+        indicate that bytes_available is decreasing and space is being
+        used A value of 0 can indicate that this has not applicable or
+        not available.
+    file_types_stored:
+        A list of what types of file MinKNOW stores on this file-
+        system, eg: reads, logs, intermediate-files, etc.
+"""
+CheckBedFileRequest.__doc__ = """Attributes:
+    bed_file_path:
+        The path to the BED file to validate
+    index_file_path:
+        The path to the index file that the BED file should validate
+        against  Can be a .fasta, .fai or .mmi file
+    strict:
+        Strictly conforms to the BED file specification and allows
+        both tabs and spaces to be used as delimiters between columns
+    stranded:
+        Check strand values are allowed
+"""
+GetLampKitInfoResponse.__doc__ = """DEPRECATED 6.0: Lamp support has been removed and this response will
+always be empty.
+
+Attributes:
+    lamp_kits:
+        Lamp kit names
+"""
+RevokeDeveloperApiTokenRequest.__doc__ = """Attributes:
+    id:
+        The id passed back from [CreateDeveloperApiTokenRequest] or
+        [DeveloperApiToken].
+"""
+ListSettingsForProtocolResponse.__doc__ = """Attributes:
+    protocol_settings:
+        Any protocol settings not covered by the above structures, for
+        example those required for custom-scripts.
+"""
+ListProtocolOutputDirFilesRequest.__doc__ = """Attributes:
+    path:
+        Specify the root path to list files from. If the path is left
+        empty, then the base protocol output directory will be used.
+        Note that the path specified HAS to be a descendant of the
+        protocol output directory, otherwise a INVALID_ARGUMENT error
+        will be returned  If the path is left empty, and the path
+        specified in the user config doesn't exist, then the NOT_FOUND
+        error code will be returned
+"""
+GetFlowCellTypesResponse.__doc__ = """Response message for `ManagerService.get_flow_cell_types`.
+
+Attributes:
+    types:
+        The flow cell types.
+"""
+CreateDirectoryRequest.__doc__ = """Attributes:
+    parent_path:
+        The path at which to create the directory.  This must exist,
+        be a directory, and be within the protocol output directory.
+        This can be determined via calls to
+        list_protocol_output_dir_files().
+    name:
+        The name of the directory to create.  This must be a single
+        path component (ie: it cannot contain '/' or '\'). There may
+        be other restrictions on valid characters, depending on the
+        operating system.
+"""
+AddSimulatedDeviceRequest.__doc__ = """Attributes:
+    name:
+        The name of the position, this must be unique and the correct
+        format:  For MinION Mk1B and Mk1C: "MS" followed by five
+        digits, eg: "MS12345". For GridION: "GS" followed by five
+        digits, eg: "GS12345". For P2 Solo: "P2S_" followed by five
+        digits, and then "-A" or "-B" eg: "P2S_12345-A".  PromethION
+        and P2 Solo position-names have no format restriction, but
+        must be unique. It is strongly recommended to follow standard
+        naming conventions:  For PromethION: start with "1A" and then
+        increase the number and/or the letter as you add more
+        positions. For P2 Solo: use "P2S_00000-A" and "P2S_00000-B"
+        (these fit the format of real P2 Solo devices, but do not
+        correspond to any real device).  Future versions might
+        constrain PromethION and P2 Solo device names. Using the above
+        suggestions should ensure that your code will continue to
+        work.  Note that MinKNOW Core 5.5 and earlier required the P2
+        Solo device name to be "P2S" followed by four digits. This is
+        no longer recommended.
+    type:
+        The type of the simulated device to create.  If left at
+        default (AUTO), then a sensible default device type is
+        selected.
+"""
+GetFlowCellTypesResponse.Info.__doc__ = """Information about a flow cell type.
+
+Attributes:
+    product_code:
+        The product code for the flow cell type.  This is the user-
+        visible name for the flow cell type. It is the name used to
+        order flow cells, and is also displayed on the packaging.
+        While most product codes are 10 characters, be aware that
+        longer product codes can exist and have been used in the past.
+        Example: "FLO-MIN106".
+    connector_type:
+        The connector type of this flow cell type.  This determines
+        which flow cell positions it is possible to insert this flow
+        cell into. The connector type for a given flow cell position
+        can be determined using
+        `minknow_api.device.DeviceService.get_device_state`.  This
+        will never be ``FCCON_NOT_SET``.
+    cannot_live_basecall:
+        Indicates that live basecalling is not possible on the flow
+        cell.  Note that almost all flow cell types can be basecalled
+        on: that is why this indicates a negative (saving some bytes
+        on the wire by allowing the common case of basecalling being
+        possible to be omitted entirely).
+"""
+GetBarcodeKeysResponse.__doc__ = """Attributes:
+    barcode_keys:
+        Returned barcode keys.
+    lamp_keys:
+        Returned lamp barcode ids.  DEPRECATED 6.0: Lamp support has
+        been removed and this value will always be empty.
+    combined_keys:
+        Combined barcode and lamp keys.  Returned keys are joined
+        strings of all requested barcode kits, giving the caller a
+        unique string to identify each barcode pair.  eg. if both a
+        lamp kit + barcode kit are specified, NxM barcode keys are
+        returned:  - barcode01_lamp01  - barcode01_lamp02  -
+        barcode01_lamp03  - barcode02_lamp01  - barcode02_lamp02  -
+        barcode02_lamp03  DEPRECATED 6.0: Lamp support has been
+        removed and this value will always be the same as
+        barcode_keys.
+"""
+WatchFlowCellPositionsResponse.__doc__ = """Each flow cell position will first be listed in `additions`. After
+that, it may appear in `changes` in zero or more messages. Then, it
+may appear in `removals` once, after which it will either never appear
+again, or appear in `additions` again (restarting the cycle).  No
+position will ever appear in more than one field in the same response
+message.
+
+Attributes:
+    additions:
+        Flow cell positions that are new (to this call).  Contains
+        flow cell positions that have not been seen before on this
+        call (or have re-appeared after being removed).  Note that a
+        flow cell position being listed here does not mean it is
+        available. In particular, integrated flow cell positions (eg:
+        on GridIONs or PromethIONs) will always be provided, so that
+        they can be positioned appropriately.
+    changes:
+        Flow cell positions that have changed state.  Every flow cell
+        position provided in this list will have previously been
+        provided in `additions`.
+    removals:
+        A flow cell position has been removed.  Note that this can
+        only happen with MinIONs - integrated flow cell positions are
+        never removed (if they become unavailable, this will be noted
+        in the `changes` field).
+"""
+CheckPathInfoResponse.__doc__ = """Attributes:
+    type:
+        The type of the passed file path.
+    is_readable:
+        Is the file path passed readable?
+    is_writable:
+        Is the file path passed writable?
+    bytes_used:
+        How many bytes have been used for existing content on the
+        disk.
+    bytes_available:
+        How many bytes are available for content on the disk.
+    bytes_capacity:
+        How many bytes capacity is in total size of the disk.
+"""
+AssociationDeviceCodeResponse.__doc__ = """DEPRECATED: since 6.2 device association is no-longer required.
+
+Attributes:
+    code:
+        The code required to associate the device with an account.  If
+        the request had `offline` set, this code is suitable for use
+        in the customer portal offline association page. Otherwise, it
+        is suitable for the online association APIs.
+"""
+DescribeHostResponse.__doc__ = """Attributes:
+    product_code:
+        The product code for the host, if applicable.  If this is an
+        integrated Oxford Nanopore device, this will be the product
+        code of the device, or the part of the device that runs
+        MinKNOW (eg: several PromethION models have separate product
+        codes for the sequencing unit where the flow cells are
+        inserted and the compute unit - this would be the product code
+        for the compute unit).  Some example product codes:
+        ============  ================= Product Code  Name
+        ============  ================= GRD-X5B001    GridION X5
+        GRD-X5B002    GridION X5 GRD-X5B003    GridION X5 Mk1 MIN-101C
+        MinION Mk1C PRO-PRMC01    PromethION Beta PRO-PRC024
+        PromethION 24 PRO-PRC048    PromethION 48 ONT-314
+        PromethION (Production)  If MinKNOW is running on a machine
+        that is not provided by Oxford Nanopore (ie: their own laptop
+        or desktop machine with a MinION plugged in), this field will
+        be empty.
+    description:
+        A human-readable name for the type of host.  If `product_code`
+        is set, it will be the name of the model of instrument (see
+        the table in the `product_code` field). Otherwise it will be
+        empty.
+    serial:
+        The serial of Nanopore device.  If `product_code` is empty,
+        this will also be empty.  This uniquely identifies the device.
+        See also `network_name`.
+    network_name:
+        The network name of the host.  This is the name the host
+        system believes it has on the network. This can be useful if
+        an IP address was used to connect to the RPC system.  For
+        customer computers, this is the only available identifying
+        information for the system.
+    needs_association:
+        This device has not been associated with an account.
+        Association must be completed before using the device.  Note
+        that this will only ever be set for hosts that also have a
+        `product_code` and `serial`.  If this is true, all positions
+        will report as ``STATE_NEEDS_ASSOCIATION`` until the device is
+        associated. Even if this is false, however, removable
+        sequencing units (eg: the MinION Mk1B) may require their own
+        association (in which case they will individually report as
+        ``STATE_NEEDS_ASSOCIATION`` - see the `flow_cell_positions`
+        RPC).  Since 4.4 DEPRECATED since 6.2 device association is
+        no-longer required, this will always be false.
+    can_sequence_offline:
+        Whether the device can sequence while offline.  Not all
+        sequencing devices can sequence without an internet
+        connection. This indicates whether it is possible for the
+        integrated sequencing positions. Note that this will only be
+        set if `needs_association` is true.  Since 4.4
+    can_connect_to_usb_device:
+        Whether or not the host system can connect to a USB sequencer.
+        Only on iOS hosts do we expect to see
+        HOST_USB_SEQUENCER_DRIVER_DISABLED if the driver that is
+        shipped with the app has not been enabled in the system
+        settings.  Otherwise all other systems should report
+        HOST_USB_SEQUENCER_AVAILABLE  Since 6.1
+    can_basecall:
+        Whether the device can currently provide basecalling
+    current_basecalling_hardware:
+        Information about the hardware being used right now by the
+        basecaller.
+    available_basecalling_hardware:
+        If more than one possible basecalling hardware selection can
+        be made, this field provides the details of those options.
+        Typically this will be a list of 'unused' GPUs.
+"""
+FindBasecallConfigurationsResponse.SimplexModel.__doc__ = """Attributes:
+    name:
+        The name of the simplex model.
+    outdated:
+        Is this model outdated - ie. there is a newer model for the
+        same run condition.
+    variant:
+        The variant of this model (eg. FAST, HAC, SUP)
+    default_q_score_cutoff:
+        The default q score cutoff to use for this model.
+    modified_models:
+        Available modified bases for this simplex model.
+    stereo_models:
+        Available stereo models for this simplex model.
+"""
+CheckPathInfoRequest.__doc__ = """Attributes:
+    file_path:
+        The file path to query.
+"""
+RemoveSimulatedDeviceRequest.__doc__ = """Attributes:
+    name:
+        The name of the simulated device to be removed
+"""
+GetGuppyInfoResponse.__doc__ = """Attributes:
+    port:
+        The port the basecaller is listening on.
+    ipc_path:
+        The path to an ipc file the basecaller is using. Use
+        "ipc://<ipc_path>" for a basecaller connection string.
+    version:
+        The basecaller server version.
+"""
+FindBasecallConfigurationsResponse.BasecallConfiguration.__doc__ = """Attributes:
+    name:
+        The name of this condition, for example `rna002_70bps` or
+        `dna_r10.4.1_e8.2_400bps_5khz`.
+    sample_type:
+        A string identifying the sample type this configuration is to
+        be used with.
+    sampling_rate:
+        The sample rate this configuration requires.
+    flowcells:
+        The flowcell types this configuration is compatible with.
+    kits:
+        The kits this configuration is compatible with.
+    simplex_models:
+        The models that are available for this configuration.
+"""
+LocalAuthenticationTokenPathResponse.__doc__ = """Attributes:
+    path:
+        The full path of the local authentication token
+"""
+ListProtocolOutputDirFilesResponse.__doc__ = """Attributes:
+    directories:
+        List of sub-directories in the directory specified
+    files:
+        List of files in the directory specified
+    current_listed_path:
+        The absolute directory that is being listed within this
+        response
+"""
+ApplyOfflineAssociationUnlockCodeRequest.__doc__ = """DEPRECATED: since 6.2 device association is no-longer required.
+
+Attributes:
+    position_name:
+        The flow cell position to unlock.  This should be set (or not
+        set) to match the corresponding call to
+        `offline_association_device_code`.
+    unlock_code:
+        The unlock code provided by the user.  This the code given by
+        the customer support portal when the corresponding device code
+        is entered into the device association page.
+"""
+FeatureList.__doc__ = """Attributes:
+    feature_flags:
+        feature_flags is a special value If false, turns off all other
+        feature flags If true, allows individual flags to be enabled
+        and disabled
 """
 FlowCellPosition.__doc__ = """Attributes:
     name:
@@ -412,115 +775,6 @@ FlowCellPosition.__doc__ = """Attributes:
         always an estimate - it is recommended to round larger values,
         like "about 2 minutes remaining".
 """
-ResetPositionRequest.__doc__ = """Attributes:
-    positions:
-        The names of positions to restart.
-    force:
-        Force the software to be restarted even when it appears to be
-        in a healthy state (ie: STATE_RUNNING).
-"""
-CheckBedFileRequest.__doc__ = """Attributes:
-    bed_file_path:
-        The path to the BED file to validate
-    index_file_path:
-        The path to the index file that the BED file should validate
-        against  Can be a .fasta, .fai or .mmi file
-    strict:
-        Strictly conforms to the BED file specification and allows
-        both tabs and spaces to be used as delimiters between columns
-    stranded:
-        Check strand values are allowed
-"""
-GetGuppyInfoResponse.__doc__ = """Attributes:
-    port:
-        The port the basecaller is listening on.
-    ipc_path:
-        The path to an ipc file the basecaller is using. Use
-        "ipc://<ipc_path>" for a basecaller connection string.
-    version:
-        The basecaller server version.
-"""
-ApplyOfflineAssociationUnlockCodeRequest.__doc__ = """DEPRECATED: since 6.2 device association is no-longer required.
-
-Attributes:
-    position_name:
-        The flow cell position to unlock.  This should be set (or not
-        set) to match the corresponding call to
-        `offline_association_device_code`.
-    unlock_code:
-        The unlock code provided by the user.  This the code given by
-        the customer support portal when the corresponding device code
-        is entered into the device association page.
-"""
-CheckPathInfoRequest.__doc__ = """Attributes:
-    file_path:
-        The file path to query.
-"""
-StreamDiskSpaceInfoRequest.__doc__ = """Attributes:
-    period:
-        Disk space information will be streamed with this value
-        determining the period in seconds between updates. A period of
-        0 is invalid
-"""
-ListSettingsForProtocolResponse.Output.__doc__ = """Output
-
-Attributes:
-    read_filtering_min_duplex_qscore:
-        Since 5.8
-"""
-GetBarcodeKitInfoResponse.__doc__ = """Attributes:
-    barcode_kit_info:
-        Map of barcode kit name to barcode kit info
-"""
-WatchFlowCellPositionsResponse.__doc__ = """Each flow cell position will first be listed in `additions`. After
-that, it may appear in `changes` in zero or more messages. Then, it
-may appear in `removals` once, after which it will either never appear
-again, or appear in `additions` again (restarting the cycle).  No
-position will ever appear in more than one field in the same response
-message.
-
-Attributes:
-    additions:
-        Flow cell positions that are new (to this call).  Contains
-        flow cell positions that have not been seen before on this
-        call (or have re-appeared after being removed).  Note that a
-        flow cell position being listed here does not mean it is
-        available. In particular, integrated flow cell positions (eg:
-        on GridIONs or PromethIONs) will always be provided, so that
-        they can be positioned appropriately.
-    changes:
-        Flow cell positions that have changed state.  Every flow cell
-        position provided in this list will have previously been
-        provided in `additions`.
-    removals:
-        A flow cell position has been removed.  Note that this can
-        only happen with MinIONs - integrated flow cell positions are
-        never removed (if they become unavailable, this will be noted
-        in the `changes` field).
-"""
-GetBarcodeKeysRequest.__doc__ = """Attributes:
-    barcode_kit_names:
-        Names of barcode kits to obtain barcode names for  Fails with
-        INVALID_ARGUMENT if any of the requested `barcode_kit_names`
-        are unavailable
-    lamp_kit_name:
-        Name of lamp kit to obtain barcode names for.  Fails with
-        INVALID_ARGUMENT if the requested `lamp_kit_name` is
-        unavailable.  DEPRECATED 6.0: Lamp support has been removed
-        and this option will be ignored.
-"""
-FlowCellPositionsResponse.__doc__ = """Attributes:
-    total_count:
-        How many positions are available in total.  This is the same
-        in every message returned from a single call, and allows the
-        caller to easily see how many further positions might be in
-        subsequent messages.
-    positions:
-        Known flow cell positions.  Note that not all positions listed
-        here are necessarily available. In particular, integrated flow
-        cell positions (eg: on GridIONs or PromethIONs) will always be
-        listed.
-"""
 AssociationDeviceCodeRequest.__doc__ = """Offline association is now the default workflow  The following are
 therefore reserved/deprecated
 
@@ -535,107 +789,19 @@ Attributes:
         field set to true.  Passing a integrated flow cell position
         will return the code/key for the whole sequencing device.
 """
-ListSettingsForProtocolRequest.__doc__ = """Attributes:
-    identifier:
-        specify the protocol with a string containing all the
-        protocol's identifying components, eg:
-        "sequencing/sequencing_MIN106_DNA:FLO-MIN106:SQK-RPB004"
-    components:
-        specify the protocol providing the identifying components
-        individually. All components are optional, if more than one
-        protocol matches given strings, information about the first
-        will be returned.
-    flow_cell_connector:
-        The flow-cell connector type identifies the type of hardware
-        and is used to identify the correct protocol. The flow-cell
-        connector types applicable to the device are listed by the
-        get_flow_cell_types rpc in this service and the
-        get_device_state rpc in the device service.
+FindProtocolsResponse.__doc__ = """Attributes:
+    protocols:
+        Protocols available for starting.
 """
-FindBasecallConfigurationsResponse.StereoModel.__doc__ = """Attributes:
-    name:
-        The name of the stereo model.
-    outdated:
-        Is this model outdated - ie. there is a newer model for the
-        same run condition.
-"""
-GetFlowCellTypesRequest.__doc__ = """Request message for `ManagerService.get_flow_cell_types`."""
-FindBasecallConfigurationsResponse.SimplexModel.__doc__ = """Attributes:
-    name:
-        The name of the simplex model.
-    outdated:
-        Is this model outdated - ie. there is a newer model for the
-        same run condition.
-    variant:
-        The variant of this model (eg. FAST, HAC, SUP)
-    default_q_score_cutoff:
-        The default q score cutoff to use for this model.
-    modified_models:
-        Available modified bases for this simplex model.
-    stereo_models:
-        Available stereo models for this simplex model.
-"""
-AssociationDeviceCodeResponse.__doc__ = """DEPRECATED: since 6.2 device association is no-longer required.
-
-Attributes:
-    code:
-        The code required to associate the device with an account.  If
-        the request had `offline` set, this code is suitable for use
-        in the customer portal offline association page. Otherwise, it
-        is suitable for the online association APIs.
-"""
-GetBasecallerFeaturesResponse.__doc__ = """Attributes:
-    is_live_basecalling_with_adaptive_sampling_recommended:
-        Is live basecalling with adaptive sampling recommended on this
-        hardware Currently not recommended for Apple or Mk1C  Since
-        5.9
-"""
-GetBarcodeKitInfoResponse.BarcodeKitInfo.__doc__ = """Attributes:
-    is_dual:
-        DEPRECATED 6.0: Dual barcoding support has been removed and
-        this value will always false.
-"""
-RevokeDeveloperApiTokenRequest.__doc__ = """Attributes:
-    id:
-        The id passed back from [CreateDeveloperApiTokenRequest] or
-        [DeveloperApiToken].
-"""
-FeatureList.__doc__ = """Attributes:
-    feature_flags:
-        feature_flags is a special value If false, turns off all other
-        feature flags If true, allows individual flags to be enabled
-        and disabled
-"""
-GetAlignmentReferenceInformationResponse.__doc__ = """Attributes:
-    estimated_load_time_seconds:
-        Estimated load time of the reference in seconds.
-    estimated_reference_size_bases:
-        Estimated size of the reference file in bases.
-    recommended_live_usage:
-        Does the reference file fit within the recommended live usage
-        memory size?  This uses an estimate of how much memory a
-        reference may use when running in the basecaller and compares
-        to the amount of memory in the sequencer. It does not account
-        for whether the reference will run in real time.
-    recommended_adaptive_sampling_usage:
-        True if adaptive sampling is recommended based on reference
-        file size in bases, and device type  Since 6.0
-    max_recommended_adaptive_sampling_bases:
-        The maximum limit for adaptive sampling number of bases based
-        on device type  Since 6.0
-"""
-ListProtocolOutputDirFilesResponse.__doc__ = """Attributes:
-    directories:
-        List of sub-directories in the directory specified
-    files:
-        List of files in the directory specified
-    current_listed_path:
-        The absolute directory that is being listed within this
-        response
-"""
-CreateDirectoryResponse.__doc__ = """Attributes:
-    path:
-        The path to the created directory.
+FlowCellPosition.Location.__doc__ = """Attributes:
+    x:
+        The column (counting from 0, left-to-right) of the flow cell
+        position on the sequencing unit when viewed from above/in
+        front.
+    y:
+        The row (counting from 0, top-to-bottom) of the flow cell
+        position on the sequencing unit when viewed from above/in
+        front.
 """
 ListDeveloperApiTokensResponse.DeveloperApiToken.__doc__ = """Attributes:
     id:
@@ -646,325 +812,9 @@ ListDeveloperApiTokensResponse.DeveloperApiToken.__doc__ = """Attributes:
     expiry:
         Optional expiry of the token.
 """
-GetSequencingKitsRequest.__doc__ = """Request message for `ManagerService.get_sequencing_kits`.
-
-Attributes:
-    flow_cell_product_code:
-        The product code of the flow cell that will be used for
-        sequencing.  Only kits compatible with this flow cell type
-        will be returned (currently, this means that there is at least
-        one (sequencing or control) protocol that is compatible with
-        both the kit and this flow cell product code).  This may also
-        affect the returned information about the kit. For example, if
-        it isn't possible to basecall on the flow cell, none of the
-        kits will claim to be barcoding capable (or compatible with
-        any barcoding expansion kits).
-"""
-RemoveSimulatedDeviceRequest.__doc__ = """Attributes:
-    name:
-        The name of the simulated device to be removed
-"""
-ListSettingsForProtocolResponse.__doc__ = """Attributes:
-    protocol_settings:
-        Any protocol settings not covered by the above structures, for
-        example those required for custom-scripts.
-"""
-GetLampKitInfoRequest.__doc__ = """DEPRECATED 6.0: Lamp support has been removed."""
-GetBarcodeKeysResponse.__doc__ = """Attributes:
-    barcode_keys:
-        Returned barcode keys.
-    lamp_keys:
-        Returned lamp barcode ids.  DEPRECATED 6.0: Lamp support has
-        been removed and this value will always be empty.
-    combined_keys:
-        Combined barcode and lamp keys.  Returned keys are joined
-        strings of all requested barcode kits, giving the caller a
-        unique string to identify each barcode pair.  eg. if both a
-        lamp kit + barcode kit are specified, NxM barcode keys are
-        returned:  - barcode01_lamp01  - barcode01_lamp02  -
-        barcode01_lamp03  - barcode02_lamp01  - barcode02_lamp02  -
-        barcode02_lamp03  DEPRECATED 6.0: Lamp support has been
-        removed and this value will always be the same as
-        barcode_keys.
-"""
-ApplyOfflineAssociationUnlockCodeResponse.__doc__ = """DEPRECATED: since 6.2 device association is no-longer required.
-
-Attributes:
-    associated:
-        True if the association was successful (the unlock_code was
-        accepted), false otherwise.
-"""
-FindProtocolsResponse.__doc__ = """Attributes:
-    protocols:
-        Protocols available for starting.
-"""
-FindBasecallConfigurationsRequest.__doc__ = """Attributes:
-    flow_cell_product_code:
-        Find basecall configurations that are compatible with this
-        flow cell product code.  Set to empty string to find protocols
-        matching all flow cell product codes.
-    sequencing_kit:
-        Limit to basecall configurations that are compatible with this
-        sequencing kit.  Set to empty string to find protocols
-        matching all kits.
-    sampling_rate:
-        Limit to basecall configurations that are compatible with this
-        sampling rate.  Set to zero to find all possible sampling
-        rates.
-    include_remote_configurations:
-        Should configurations and models that are not already on disk
-        be included in the responses.  This may include research or
-        one off models, or models not appropriate for the current
-        platform.
-    include_outdated:
-        Should outdated configurations be included in the response.
-"""
-FindBasecallConfigurationsResponse.BasecallConfiguration.__doc__ = """Attributes:
-    name:
-        The name of this condition, for example `rna002_70bps` or
-        `dna_r10.4.1_e8.2_400bps_5khz`.
-    sample_type:
-        A string identifying the sample type this configuration is to
-        be used with.
-    sampling_rate:
-        The sample rate this configuration requires.
-    flowcells:
-        The flowcell types this configuration is compatible with.
-    kits:
-        The kits this configuration is compatible with.
-    simplex_models:
-        The models that are available for this configuration.
-"""
-CheckPathInfoResponse.__doc__ = """Attributes:
-    type:
-        The type of the passed file path.
-    is_readable:
-        Is the file path passed readable?
-    is_writable:
-        Is the file path passed writable?
-    bytes_used:
-        How many bytes have been used for existing content on the
-        disk.
-    bytes_available:
-        How many bytes are available for content on the disk.
-    bytes_capacity:
-        How many bytes capacity is in total size of the disk.
-"""
-GetSequencingKitsResponse.__doc__ = """Response message for `ManagerService.get_sequencing_kits`.
-
-Attributes:
-    kits:
-        The known sequencing kits.
-    barcoding_expansion_kits:
-        The possible barcoding expansion kits.  These are kits that
-        can be used in combination with certain sequencing kits to add
-        (or extend) barcoding functionality.
-"""
-FlowCellPosition.RpcPorts.__doc__ = """Attributes:
-    secure:
-        A port providing the standard gRPC protocol over TLS
-    secure_grpc_web:
-        A port providing the gRPC-Web protocol over TLS
-"""
-ListProtocolOutputDirFilesRequest.__doc__ = """Attributes:
-    path:
-        Specify the root path to list files from. If the path is left
-        empty, then the base protocol output directory will be used.
-        Note that the path specified HAS to be a descendant of the
-        protocol output directory, otherwise a INVALID_ARGUMENT error
-        will be returned  If the path is left empty, and the path
-        specified in the user config doesn't exist, then the NOT_FOUND
-        error code will be returned
-"""
-CreateDeveloperApiTokenRequest.__doc__ = """Attributes:
-    name:
-        User facing name describing the token.
-    expiry:
-        Optional expiry time for the token.
-"""
-GetLampKitInfoResponse.__doc__ = """DEPRECATED 6.0: Lamp support has been removed and this response will
-always be empty.
-
-Attributes:
-    lamp_kits:
-        Lamp kit names
-"""
-GetFlowCellTypesResponse.Info.__doc__ = """Information about a flow cell type.
-
-Attributes:
-    product_code:
-        The product code for the flow cell type.  This is the user-
-        visible name for the flow cell type. It is the name used to
-        order flow cells, and is also displayed on the packaging.
-        While most product codes are 10 characters, be aware that
-        longer product codes can exist and have been used in the past.
-        Example: "FLO-MIN106".
-    connector_type:
-        The connector type of this flow cell type.  This determines
-        which flow cell positions it is possible to insert this flow
-        cell into. The connector type for a given flow cell position
-        can be determined using
-        `minknow_api.device.DeviceService.get_device_state`.  This
-        will never be ``FCCON_NOT_SET``.
-    cannot_live_basecall:
-        Indicates that live basecalling is not possible on the flow
-        cell.  Note that almost all flow cell types can be basecalled
-        on: that is why this indicates a negative (saving some bytes
-        on the wire by allowing the common case of basecalling being
-        possible to be omitted entirely).
-"""
-CreateDirectoryRequest.__doc__ = """Attributes:
-    parent_path:
-        The path at which to create the directory.  This must exist,
-        be a directory, and be within the protocol output directory.
-        This can be determined via calls to
-        list_protocol_output_dir_files().
-    name:
-        The name of the directory to create.  This must be a single
-        path component (ie: it cannot contain '/' or '\'). There may
-        be other restrictions on valid characters, depending on the
-        operating system.
-"""
-CreateDeveloperApiTokenResponse.__doc__ = """Attributes:
-    id:
-        Unique ID assigned to the token for identification purposes.
-        Not valid as an authentication token.
-    token:
-        Created token, available to be used with minknow API's
-        immediately.
-"""
-FindProtocolsResponse.Protocol.__doc__ = """Attributes:
-    identifier:
-        An identifying string for protocol, of the form:
-        LOCATION:relative/path/to/protocol  The identifier uniquely
-        identifies the protocol.
-    requires_flow_cell_product_code:
-        Whether the protocol requires a flow cell product code in
-        order to start.
-    requires_sequencing_kit:
-        Whether the protocol requires a sequencing kit in order to
-        start.
-"""
-DescribeHostResponse.__doc__ = """Attributes:
-    product_code:
-        The product code for the host, if applicable.  If this is an
-        integrated Oxford Nanopore device, this will be the product
-        code of the device, or the part of the device that runs
-        MinKNOW (eg: several PromethION models have separate product
-        codes for the sequencing unit where the flow cells are
-        inserted and the compute unit - this would be the product code
-        for the compute unit).  Some example product codes:
-        ============  ================= Product Code  Name
-        ============  ================= GRD-X5B001    GridION X5
-        GRD-X5B002    GridION X5 GRD-X5B003    GridION X5 Mk1 MIN-101C
-        MinION Mk1C PRO-PRMC01    PromethION Beta PRO-PRC024
-        PromethION 24 PRO-PRC048    PromethION 48 ONT-314
-        PromethION (Production)  If MinKNOW is running on a machine
-        that is not provided by Oxford Nanopore (ie: their own laptop
-        or desktop machine with a MinION plugged in), this field will
-        be empty.
-    description:
-        A human-readable name for the type of host.  If `product_code`
-        is set, it will be the name of the model of instrument (see
-        the table in the `product_code` field). Otherwise it will be
-        empty.
-    serial:
-        The serial of Nanopore device.  If `product_code` is empty,
-        this will also be empty.  This uniquely identifies the device.
-        See also `network_name`.
-    network_name:
-        The network name of the host.  This is the name the host
-        system believes it has on the network. This can be useful if
-        an IP address was used to connect to the RPC system.  For
-        customer computers, this is the only available identifying
-        information for the system.
-    needs_association:
-        This device has not been associated with an account.
-        Association must be completed before using the device.  Note
-        that this will only ever be set for hosts that also have a
-        `product_code` and `serial`.  If this is true, all positions
-        will report as ``STATE_NEEDS_ASSOCIATION`` until the device is
-        associated. Even if this is false, however, removable
-        sequencing units (eg: the MinION Mk1B) may require their own
-        association (in which case they will individually report as
-        ``STATE_NEEDS_ASSOCIATION`` - see the `flow_cell_positions`
-        RPC).  Since 4.4 DEPRECATED since 6.2 device association is
-        no-longer required, this will always be false.
-    can_sequence_offline:
-        Whether the device can sequence while offline.  Not all
-        sequencing devices can sequence without an internet
-        connection. This indicates whether it is possible for the
-        integrated sequencing positions. Note that this will only be
-        set if `needs_association` is true.  Since 4.4
-    can_connect_to_usb_device:
-        Whether or not the host system can connect to a USB sequencer.
-        Only on iOS hosts do we expect to see
-        HOST_USB_SEQUENCER_DRIVER_DISABLED if the driver that is
-        shipped with the app has not been enabled in the system
-        settings.  Otherwise all other systems should report
-        HOST_USB_SEQUENCER_AVAILABLE  Since 6.1
-    can_basecall:
-        Whether the device can currently provide basecalling
-    current_basecalling_hardware:
-        Information about the hardware being used right now by the
-        basecaller.
-    available_basecalling_hardware:
-        If more than one possible basecalling hardware selection can
-        be made, this field provides the details of those options.
-        Typically this will be a list of 'unused' GPUs.
-"""
-GetSequencingKitsResponse.BarcodingExpansionKit.__doc__ = """Information about a barcoding expansion kit.  In the future, this may
-include compatibility information for dual barcoding, for example.
-
-Attributes:
-    product_code:
-        The product code for the barcoding expansion kit.  This is the
-        user-visible name for the kit. It is the name used to order
-        kits, and is also displayed on the packaging.  While most
-        product codes are 10 characters, be aware that longer product
-        codes can exist.  Example: "EXP-NBD104".
-"""
-GetFlowCellTypesResponse.__doc__ = """Response message for `ManagerService.get_flow_cell_types`.
-
-Attributes:
-    types:
-        The flow cell types.
-"""
-FilesystemDiskSpaceInfo.__doc__ = """disk-usage information for one file-system
-
-Attributes:
-    filesystem_id:
-        The name of the file-system
-    bytes_available:
-        How much space is left on the file-system
-    bytes_capacity:
-        The total capacity of the file-system when empty.
-    what:
-        A list of what MinKNOW stores on this file-system, eg: reads,
-        logs, intermediate-files
-    bytes_to_stop_cleanly:
-        MinKNOW needs this much space to stop experiments. If
-        bytes_available goes below this number, data could be lost!
-    bytes_when_alert_issued:
-        The amount of space left on the file-system when
-        recommend_alert was set true.
-    recommend_alert:
-        MinKNOW recommends that you alert someone about the disk-usage
-    recommend_stop:
-        MinKNOW recommends that you stop experiments due to disk-usage
-        concerns
-    bytes_per_second:
-        Rate of change in bytes_available (per second) +'ve numbers
-        indicate that bytes_available is decreasing and space is being
-        used A value of 0 can indicate that this has not applicable or
-        not available.
-    file_types_stored:
-        A list of what types of file MinKNOW stores on this file-
-        system, eg: reads, logs, intermediate-files, etc.
-"""
-LocalAuthenticationTokenPathResponse.__doc__ = """Attributes:
-    path:
-        The full path of the local authentication token
+Feature.__doc__ = """Attributes:
+    enabled:
+        Enable or disable the feature
 """
 GetAlignmentReferenceInformationRequest.__doc__ = """Attributes:
     path:
@@ -990,19 +840,7 @@ Attributes:
         The context for this modified basecall model.  Expected to be
         one of: "A", "C", "T", "G", "CG", "DRACH".
 """
-DescribeHostResponse.BasecallerSubstrate.__doc__ = """Details about the hardware on which basecalling may be run.
-
-Attributes:
-    is_gpu:
-        If false, this indicates that CPU basecalling is selected. In
-        this case, the 'gpus' field should be omitted or empty.
-    gpus:
-        Provides human-readable strings describing the GPUs available
-        for use by the basecaller. Note that even if 'is_gpu' is true,
-        this may be empty if no further details are available. This
-        field being empty _does not_ imply that CPU basecalling is in
-        use.
-"""
+GetFlowCellTypesRequest.__doc__ = """Request message for `ManagerService.get_flow_cell_types`."""
 GetSequencingKitsResponse.Kit.__doc__ = """Information about a sequencing kit.
 
 Attributes:
@@ -1049,15 +887,139 @@ Attributes:
     pcr_free:
         The kit can be used without a PCR step.
 """
-FlowCellPosition.Location.__doc__ = """Attributes:
-    x:
-        The column (counting from 0, left-to-right) of the flow cell
-        position on the sequencing unit when viewed from above/in
-        front.
-    y:
-        The row (counting from 0, top-to-bottom) of the flow cell
-        position on the sequencing unit when viewed from above/in
-        front.
+StreamDiskSpaceInfoRequest.__doc__ = """Attributes:
+    period:
+        Disk space information will be streamed with this value
+        determining the period in seconds between updates. A period of
+        0 is invalid
+"""
+CreateDeveloperApiTokenRequest.__doc__ = """Attributes:
+    name:
+        User facing name describing the token.
+    expiry:
+        Optional expiry time for the token.
+"""
+ListSettingsForProtocolResponse.Output.__doc__ = """Output
+
+Attributes:
+    read_filtering_min_duplex_qscore:
+        Since 5.8
+"""
+FindBasecallConfigurationsRequest.__doc__ = """Attributes:
+    flow_cell_product_code:
+        Find basecall configurations that are compatible with this
+        flow cell product code.  Set to empty string to find protocols
+        matching all flow cell product codes.
+    sequencing_kit:
+        Limit to basecall configurations that are compatible with this
+        sequencing kit.  Set to empty string to find protocols
+        matching all kits.
+    sampling_rate:
+        Limit to basecall configurations that are compatible with this
+        sampling rate.  Set to zero to find all possible sampling
+        rates.
+    include_remote_configurations:
+        Should configurations and models that are not already on disk
+        be included in the responses.  This may include research or
+        one off models, or models not appropriate for the current
+        platform.
+    include_outdated:
+        Should outdated configurations be included in the response.
+"""
+GetBarcodeKitInfoResponse.BarcodeKitInfo.__doc__ = """Attributes:
+    is_dual:
+        DEPRECATED 6.0: Dual barcoding support has been removed and
+        this value will always false.
+"""
+GetSequencingKitsResponse.BarcodingExpansionKit.__doc__ = """Information about a barcoding expansion kit.  In the future, this may
+include compatibility information for dual barcoding, for example.
+
+Attributes:
+    product_code:
+        The product code for the barcoding expansion kit.  This is the
+        user-visible name for the kit. It is the name used to order
+        kits, and is also displayed on the packaging.  While most
+        product codes are 10 characters, be aware that longer product
+        codes can exist.  Example: "EXP-NBD104".
+"""
+BasecallerApiResponse.__doc__ = """Attributes:
+    secure:
+        The port to use to access the minknow_api.basecaller API using
+        the standard gRPC protocol over TLS
+    secure_grpc_web:
+        The port to use to access the minknow_api.basecaller API using
+        the gRPC-Web protocol over TLS
+"""
+CreateDirectoryResponse.__doc__ = """Attributes:
+    path:
+        The path to the created directory.
+"""
+ApplyOfflineAssociationUnlockCodeResponse.__doc__ = """DEPRECATED: since 6.2 device association is no-longer required.
+
+Attributes:
+    associated:
+        True if the association was successful (the unlock_code was
+        accepted), false otherwise.
+"""
+ListSettingsForProtocolResponse.RunOptions.__doc__ = """Run options
+
+Attributes:
+    active_channel_selection:
+         bool
+    mux_scan_period:
+         in hours
+"""
+GetSequencingKitsResponse.__doc__ = """Response message for `ManagerService.get_sequencing_kits`.
+
+Attributes:
+    kits:
+        The known sequencing kits.
+    barcoding_expansion_kits:
+        The possible barcoding expansion kits.  These are kits that
+        can be used in combination with certain sequencing kits to add
+        (or extend) barcoding functionality.
+"""
+GetAlignmentReferenceInformationResponse.__doc__ = """Attributes:
+    estimated_load_time_seconds:
+        Estimated load time of the reference in seconds.
+    estimated_reference_size_bases:
+        Estimated size of the reference file in bases.
+    recommended_live_usage:
+        Does the reference file fit within the recommended live usage
+        memory size?  This uses an estimate of how much memory a
+        reference may use when running in the basecaller and compares
+        to the amount of memory in the sequencer. It does not account
+        for whether the reference will run in real time.
+    recommended_adaptive_sampling_usage:
+        True if adaptive sampling is recommended based on reference
+        file size in bases, and device type  Since 6.0
+    max_recommended_adaptive_sampling_bases:
+        The maximum limit for adaptive sampling number of bases based
+        on device type  Since 6.0
+"""
+ListSettingsForProtocolRequest.__doc__ = """Attributes:
+    identifier:
+        specify the protocol with a string containing all the
+        protocol's identifying components, eg:
+        "sequencing/sequencing_MIN106_DNA:FLO-MIN106:SQK-RPB004"
+    components:
+        specify the protocol providing the identifying components
+        individually. All components are optional, if more than one
+        protocol matches given strings, information about the first
+        will be returned.
+    flow_cell_connector:
+        The flow-cell connector type identifies the type of hardware
+        and is used to identify the correct protocol. The flow-cell
+        connector types applicable to the device are listed by the
+        get_flow_cell_types rpc in this service and the
+        get_device_state rpc in the device service.
+"""
+FindBasecallConfigurationsResponse.StereoModel.__doc__ = """Attributes:
+    name:
+        The name of the stereo model.
+    outdated:
+        Is this model outdated - ie. there is a newer model for the
+        same run condition.
 """
 FindProtocolsRequest.__doc__ = """Attributes:
     flow_cell_product_code:
@@ -1070,28 +1032,66 @@ FindProtocolsRequest.__doc__ = """Attributes:
     experiment_type:
         Limit response to certain protocol types.
 """
-AddSimulatedDeviceRequest.__doc__ = """Attributes:
-    name:
-        The name of the position, this must be unique and the correct
-        format:  For MinION Mk1B and Mk1C: "MS" followed by five
-        digits, eg: "MS12345". For GridION: "GS" followed by five
-        digits, eg: "GS12345". For P2 Solo: "P2S_" followed by five
-        digits, and then "-A" or "-B" eg: "P2S_12345-A".  PromethION
-        and P2 Solo position-names have no format restriction, but
-        must be unique. It is strongly recommended to follow standard
-        naming conventions:  For PromethION: start with "1A" and then
-        increase the number and/or the letter as you add more
-        positions. For P2 Solo: use "P2S_00000-A" and "P2S_00000-B"
-        (these fit the format of real P2 Solo devices, but do not
-        correspond to any real device).  Future versions might
-        constrain PromethION and P2 Solo device names. Using the above
-        suggestions should ensure that your code will continue to
-        work.  Note that MinKNOW Core 5.5 and earlier required the P2
-        Solo device name to be "P2S" followed by four digits. This is
-        no longer recommended.
-    type:
-        The type of the simulated device to create.  If left at
-        default (AUTO), then a sensible default device type is
-        selected.
+FindProtocolsResponse.Protocol.__doc__ = """Attributes:
+    identifier:
+        An identifying string for protocol, of the form:
+        LOCATION:relative/path/to/protocol  The identifier uniquely
+        identifies the protocol.
+    requires_flow_cell_product_code:
+        Whether the protocol requires a flow cell product code in
+        order to start.
+    requires_sequencing_kit:
+        Whether the protocol requires a sequencing kit in order to
+        start.
+"""
+FlowCellPositionsResponse.__doc__ = """Attributes:
+    total_count:
+        How many positions are available in total.  This is the same
+        in every message returned from a single call, and allows the
+        caller to easily see how many further positions might be in
+        subsequent messages.
+    positions:
+        Known flow cell positions.  Note that not all positions listed
+        here are necessarily available. In particular, integrated flow
+        cell positions (eg: on GridIONs or PromethIONs) will always be
+        listed.
+"""
+ResetPositionRequest.__doc__ = """Attributes:
+    positions:
+        The names of positions to restart.
+    force:
+        Force the software to be restarted even when it appears to be
+        in a healthy state (ie: STATE_RUNNING).
+"""
+GetBarcodeKitInfoResponse.__doc__ = """Attributes:
+    barcode_kit_info:
+        Map of barcode kit name to barcode kit info
+"""
+GetBasecallerFeaturesResponse.__doc__ = """Attributes:
+    is_live_basecalling_with_adaptive_sampling_recommended:
+        Is live basecalling with adaptive sampling recommended on this
+        hardware Currently not recommended for Apple or Mk1C  Since
+        5.9
+"""
+DescribeHostResponse.BasecallerSubstrate.__doc__ = """Details about the hardware on which basecalling may be run.
+
+Attributes:
+    is_gpu:
+        If false, this indicates that CPU basecalling is selected. In
+        this case, the 'gpus' field should be omitted or empty.
+    gpus:
+        Provides human-readable strings describing the GPUs available
+        for use by the basecaller. Note that even if 'is_gpu' is true,
+        this may be empty if no further details are available. This
+        field being empty _does not_ imply that CPU basecalling is in
+        use.
+"""
+CreateDeveloperApiTokenResponse.__doc__ = """Attributes:
+    id:
+        Unique ID assigned to the token for identification purposes.
+        Not valid as an authentication token.
+    token:
+        Created token, available to be used with minknow API's
+        immediately.
 """
 # @@protoc_insertion_point(module_scope)
