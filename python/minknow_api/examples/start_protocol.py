@@ -273,6 +273,12 @@ def parse_args():
         help="Duration (in seconds) of a single bam file batch; if set to 0, time-based batching is disabled",
     )
 
+    parser.add_argument(
+        "--output-path",
+        type=str,
+        help="Path to output data to.",
+    )
+
     # Read until
     parser.add_argument(
         "--read-until-reference",
@@ -1034,6 +1040,7 @@ def main():
             mux_scan_period=args.mux_scan_period,
             stop_criteria=stop_criteria,
             simulation_path=args.simulation,
+            output_path=args.output_path,
             args=args.extra_args,  # Any extra args passed.
         )
 

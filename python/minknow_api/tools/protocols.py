@@ -2,18 +2,19 @@
 
 import collections
 import dataclasses
-from pathlib import Path
 import logging
-from typing import Optional, List, Sequence, Tuple
+from pathlib import Path
+from typing import List, Optional, Sequence, Tuple
 
 import grpc
 
-from .. import Connection
-from minknow_api import protocol_pb2, run_until_pb2, acquisition_pb2
+from minknow_api import acquisition_pb2, protocol_pb2, run_until_pb2
+from minknow_api.analysis_workflows_pb2 import AnalysisWorkflowRequest
 from minknow_api.manager_pb2 import FindBasecallConfigurationsResponse
 from minknow_api.protocol_pb2 import BarcodeUserData
-from minknow_api.analysis_workflows_pb2 import AnalysisWorkflowRequest
 from minknow_api.tools.any_helpers import make_float_any, make_uint64_any
+
+from .. import Connection
 
 LOGGER = logging.getLogger(__name__)
 
@@ -57,7 +58,6 @@ def find_simplex_model(
     ],
     simplex_model_name: str,
 ) -> Tuple[FindBasecallConfigurationsResponse.SimplexModel]:
-
     searched_configs = set()
     for config in available_basecall_configs:
         for simplex in config.simplex_models:
@@ -269,6 +269,7 @@ def make_protocol_arguments(
     disable_active_channel_selection: bool = False,
     mux_scan_period: float = 1.5,
     simulation_path: Optional[Path] = None,
+    output_path: Optional[Path] = None,
     args: Optional[List[str]] = None,
     is_flongle: bool = False,
 ) -> List[str]:
@@ -286,6 +287,7 @@ def make_protocol_arguments(
         disable_active_channel_selection(bool): Disable active channel selection
         mux_scan_period(float):                 Period of time between mux scans in hours.
         simulation_path(:obj:`Path`):           An optional fast5 bulk path to use for simulated playback.
+        output_path(:obj:`Path`):                An optional output path.
         args(:obj:`list`):                      Extra arguments to pass to protocol.
         is_flongle(bool):                       Specify if the flow cell to be sequenced on is a flongle.
 
@@ -441,6 +443,11 @@ def make_protocol_arguments(
             )
         protocol_args.extend(["--simulation", str(simulation_path)])
 
+    if output_path:
+        if not output_path.exists():
+            raise Exception(f"Non-existent path '{output_path}' passed for output.")
+        protocol_args.extend(["--output_path", str(output_path)])
+
     if args:
         protocol_args.extend(args)
 
@@ -500,6 +507,7 @@ def start_protocol(
     stop_criteria: Optional[CriteriaValues] = None,
     experiment_duration: Optional[float] = None,
     analysis_workflow_request: Optional[AnalysisWorkflowRequest] = None,
+    output_path: Optional[Path] = None,
     *args,
     **kwargs,
 ) -> str:
@@ -551,6 +559,11 @@ def start_protocol(
     additional_params = {}
     if analysis_workflow_request is not None:
         additional_params["analysis_workflow_request"] = analysis_workflow_request
+
+    if output_path:
+        additional_params["offload_location_info"] = protocol_pb2.OffloadLocationInfo(
+            offload_location_path=output_path
+        )
 
     result = device_connection.protocol.start_protocol(
         identifier=identifier,
