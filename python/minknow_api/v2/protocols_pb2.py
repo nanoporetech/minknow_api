@@ -14,10 +14,10 @@ _sym_db = _symbol_database.Default()
 
 from minknow_api import acquisition_pb2 as minknow__api_dot_acquisition__pb2
 from minknow_api import protocol_pb2 as minknow__api_dot_protocol__pb2
-from util import status_pb2 as util_dot_status__pb2
+from google.rpc import status_pb2 as google_dot_rpc_dot_status__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x1eminknow_api/v2/protocols.proto\x12\x17minknow_api.v2.protocol\x1a\x1dminknow_api/acquisition.proto\x1a\x1aminknow_api/protocol.proto\x1a\x11util/status.proto\"\xdf\x01\n\x15\x42\x65ginProtocolsRequest\x12R\n\x08requests\x18\x01 \x03(\x0b\x32@.minknow_api.v2.protocol.BeginProtocolsRequest.IndividualRequest\x1ar\n\x11IndividualRequest\x12\x1f\n\x17\x66low_cell_position_name\x18\x01 \x01(\t\x12<\n\x08settings\x18\x02 \x01(\x0b\x32*.minknow_api.protocol.BeginProtocolRequest\"\x99\x02\n\x16\x42\x65ginProtocolsResponse\x12U\n\tresponses\x18\x01 \x03(\x0b\x32\x42.minknow_api.v2.protocol.BeginProtocolsResponse.IndividualResponse\x1a\xa7\x01\n\x12IndividualResponse\x12\x1f\n\x17\x66low_cell_position_name\x18\x01 \x01(\t\x12?\n\x08response\x18\x02 \x01(\x0b\x32+.minknow_api.protocol.BeginProtocolResponseH\x00\x12$\n\x06status\x18\x03 \x01(\x0b\x32\x12.google.rpc.StatusH\x00\x42\t\n\x07payload\"\xdf\x01\n\x15StartProtocolsRequest\x12R\n\x08requests\x18\x01 \x03(\x0b\x32@.minknow_api.v2.protocol.StartProtocolsRequest.IndividualRequest\x1ar\n\x11IndividualRequest\x12\x1f\n\x17\x66low_cell_position_name\x18\x01 \x01(\t\x12<\n\x08settings\x18\x02 \x01(\x0b\x32*.minknow_api.protocol.StartProtocolRequest\"\x99\x02\n\x16StartProtocolsResponse\x12U\n\tresponses\x18\x01 \x03(\x0b\x32\x42.minknow_api.v2.protocol.StartProtocolsResponse.IndividualResponse\x1a\xa7\x01\n\x12IndividualResponse\x12\x1f\n\x17\x66low_cell_position_name\x18\x01 \x01(\t\x12?\n\x08response\x18\x02 \x01(\x0b\x32+.minknow_api.protocol.StartProtocolResponseH\x00\x12$\n\x06status\x18\x03 \x01(\x0b\x32\x12.google.rpc.StatusH\x00\x42\t\n\x07payload\"S\n\x14StopProtocolsRequest\x12;\n\x08requests\x18\x01 \x03(\x0b\x32).minknow_api.protocol.StopProtocolRequest\"\x85\x02\n\x15StopProtocolsResponse\x12T\n\tresponses\x18\x01 \x03(\x0b\x32\x41.minknow_api.v2.protocol.StopProtocolsResponse.IndividualResponse\x1a\x95\x01\n\x12IndividualResponse\x12\x0e\n\x06run_id\x18\x01 \x01(\t\x12>\n\x08response\x18\x02 \x01(\x0b\x32*.minknow_api.protocol.StopProtocolResponseH\x00\x12$\n\x06status\x18\x03 \x01(\x0b\x32\x12.google.rpc.StatusH\x00\x42\t\n\x07payload\"\xc9\x01\n\x12GroupFilteringInfo\x12M\n\x15\x65xperiment_start_time\x18\x01 \x01(\x0b\x32..minknow_api.protocol.FilteringInfo.TimeFilter\x12P\n\x0forder_direction\x18\x02 \x01(\x0e\x32\x32.minknow_api.protocol.FilteringInfo.OrderDirectionH\x00\x88\x01\x01\x42\x12\n\x10_order_direction\"W\n\x13ListGroupIdsRequest\x12@\n\x0b\x66ilter_info\x18\x01 \x01(\x0b\x32+.minknow_api.v2.protocol.GroupFilteringInfo2\xe2\x08\n\x10ProtocolsService\x12t\n\x0f\x62\x65gin_protocols\x12..minknow_api.v2.protocol.BeginProtocolsRequest\x1a/.minknow_api.v2.protocol.BeginProtocolsResponse\"\x00\x12t\n\x0fstart_protocols\x12..minknow_api.v2.protocol.StartProtocolsRequest\x1a/.minknow_api.v2.protocol.StartProtocolsResponse\"\x00\x12q\n\x0estop_protocols\x12-.minknow_api.v2.protocol.StopProtocolsRequest\x1a..minknow_api.v2.protocol.StopProtocolsResponse\"\x00\x12\x63\n\x0cget_run_info\x12\'.minknow_api.protocol.GetRunInfoRequest\x1a%.minknow_api.protocol.ProtocolRunInfo\"\x03\x90\x02\x01\x12x\n\x12list_protocol_runs\x12-.minknow_api.protocol.ListProtocolRunsRequest\x1a..minknow_api.protocol.ListProtocolRunsResponse\"\x03\x90\x02\x01\x12\x8f\x01\n\x1c\x63lear_protocols_history_data\x12\x35.minknow_api.protocol.ClearProtocolHistoryDataRequest\x1a\x36.minknow_api.protocol.ClearProtocolHistoryDataResponse\"\x00\x12z\n\x13generate_run_report\x12..minknow_api.protocol.GenerateRunReportRequest\x1a/.minknow_api.protocol.GenerateRunReportResponse\"\x00\x30\x01\x12\x7f\n\x14get_acquisition_info\x12\x35.minknow_api.acquisition.GetAcquisitionRunInfoRequest\x1a+.minknow_api.acquisition.AcquisitionRunInfo\"\x03\x90\x02\x01\x12\x80\x01\n\x17list_protocol_group_ids\x12,.minknow_api.v2.protocol.ListGroupIdsRequest\x1a\x32.minknow_api.protocol.ListProtocolGroupIdsResponse\"\x03\x90\x02\x01\x42\x61\n\x1f\x63om.nanoporetech.minknow_api.v2Z6github.com/nanoporetech/minknow_api/go/gen/v2/protocol\xa2\x02\x05MKAPIb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x1eminknow_api/v2/protocols.proto\x12\x17minknow_api.v2.protocol\x1a\x1dminknow_api/acquisition.proto\x1a\x1aminknow_api/protocol.proto\x1a\x17google/rpc/status.proto\"\xdf\x01\n\x15\x42\x65ginProtocolsRequest\x12R\n\x08requests\x18\x01 \x03(\x0b\x32@.minknow_api.v2.protocol.BeginProtocolsRequest.IndividualRequest\x1ar\n\x11IndividualRequest\x12\x1f\n\x17\x66low_cell_position_name\x18\x01 \x01(\t\x12<\n\x08settings\x18\x02 \x01(\x0b\x32*.minknow_api.protocol.BeginProtocolRequest\"\x99\x02\n\x16\x42\x65ginProtocolsResponse\x12U\n\tresponses\x18\x01 \x03(\x0b\x32\x42.minknow_api.v2.protocol.BeginProtocolsResponse.IndividualResponse\x1a\xa7\x01\n\x12IndividualResponse\x12\x1f\n\x17\x66low_cell_position_name\x18\x01 \x01(\t\x12?\n\x08response\x18\x02 \x01(\x0b\x32+.minknow_api.protocol.BeginProtocolResponseH\x00\x12$\n\x06status\x18\x03 \x01(\x0b\x32\x12.google.rpc.StatusH\x00\x42\t\n\x07payload\"\xdf\x01\n\x15StartProtocolsRequest\x12R\n\x08requests\x18\x01 \x03(\x0b\x32@.minknow_api.v2.protocol.StartProtocolsRequest.IndividualRequest\x1ar\n\x11IndividualRequest\x12\x1f\n\x17\x66low_cell_position_name\x18\x01 \x01(\t\x12<\n\x08settings\x18\x02 \x01(\x0b\x32*.minknow_api.protocol.StartProtocolRequest\"\x99\x02\n\x16StartProtocolsResponse\x12U\n\tresponses\x18\x01 \x03(\x0b\x32\x42.minknow_api.v2.protocol.StartProtocolsResponse.IndividualResponse\x1a\xa7\x01\n\x12IndividualResponse\x12\x1f\n\x17\x66low_cell_position_name\x18\x01 \x01(\t\x12?\n\x08response\x18\x02 \x01(\x0b\x32+.minknow_api.protocol.StartProtocolResponseH\x00\x12$\n\x06status\x18\x03 \x01(\x0b\x32\x12.google.rpc.StatusH\x00\x42\t\n\x07payload\"S\n\x14StopProtocolsRequest\x12;\n\x08requests\x18\x01 \x03(\x0b\x32).minknow_api.protocol.StopProtocolRequest\"\x85\x02\n\x15StopProtocolsResponse\x12T\n\tresponses\x18\x01 \x03(\x0b\x32\x41.minknow_api.v2.protocol.StopProtocolsResponse.IndividualResponse\x1a\x95\x01\n\x12IndividualResponse\x12\x0e\n\x06run_id\x18\x01 \x01(\t\x12>\n\x08response\x18\x02 \x01(\x0b\x32*.minknow_api.protocol.StopProtocolResponseH\x00\x12$\n\x06status\x18\x03 \x01(\x0b\x32\x12.google.rpc.StatusH\x00\x42\t\n\x07payload\"\xff\x01\n\x12GroupFilteringInfo\x12M\n\x15\x65xperiment_start_time\x18\x01 \x01(\x0b\x32..minknow_api.protocol.FilteringInfo.TimeFilter\x12P\n\x0forder_direction\x18\x02 \x01(\x0e\x32\x32.minknow_api.protocol.FilteringInfo.OrderDirectionH\x00\x88\x01\x01\x12\x1e\n\x11protocol_group_id\x18\x03 \x01(\tH\x01\x88\x01\x01\x42\x12\n\x10_order_directionB\x14\n\x12_protocol_group_id\"W\n\x13ListGroupIdsRequest\x12@\n\x0b\x66ilter_info\x18\x01 \x01(\x0b\x32+.minknow_api.v2.protocol.GroupFilteringInfo2\xe2\x08\n\x10ProtocolsService\x12t\n\x0f\x62\x65gin_protocols\x12..minknow_api.v2.protocol.BeginProtocolsRequest\x1a/.minknow_api.v2.protocol.BeginProtocolsResponse\"\x00\x12t\n\x0fstart_protocols\x12..minknow_api.v2.protocol.StartProtocolsRequest\x1a/.minknow_api.v2.protocol.StartProtocolsResponse\"\x00\x12q\n\x0estop_protocols\x12-.minknow_api.v2.protocol.StopProtocolsRequest\x1a..minknow_api.v2.protocol.StopProtocolsResponse\"\x00\x12\x63\n\x0cget_run_info\x12\'.minknow_api.protocol.GetRunInfoRequest\x1a%.minknow_api.protocol.ProtocolRunInfo\"\x03\x90\x02\x01\x12x\n\x12list_protocol_runs\x12-.minknow_api.protocol.ListProtocolRunsRequest\x1a..minknow_api.protocol.ListProtocolRunsResponse\"\x03\x90\x02\x01\x12\x8f\x01\n\x1c\x63lear_protocols_history_data\x12\x35.minknow_api.protocol.ClearProtocolHistoryDataRequest\x1a\x36.minknow_api.protocol.ClearProtocolHistoryDataResponse\"\x00\x12z\n\x13generate_run_report\x12..minknow_api.protocol.GenerateRunReportRequest\x1a/.minknow_api.protocol.GenerateRunReportResponse\"\x00\x30\x01\x12\x7f\n\x14get_acquisition_info\x12\x35.minknow_api.acquisition.GetAcquisitionRunInfoRequest\x1a+.minknow_api.acquisition.AcquisitionRunInfo\"\x03\x90\x02\x01\x12\x80\x01\n\x17list_protocol_group_ids\x12,.minknow_api.v2.protocol.ListGroupIdsRequest\x1a\x32.minknow_api.protocol.ListProtocolGroupIdsResponse\"\x03\x90\x02\x01\x42\x61\n\x1f\x63om.nanoporetech.minknow_api.v2Z6github.com/nanoporetech/minknow_api/go/gen/v2/protocol\xa2\x02\x05MKAPIb\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -33,48 +33,50 @@ if not _descriptor._USE_C_DESCRIPTORS:
   _globals['_PROTOCOLSSERVICE'].methods_by_name['get_acquisition_info']._serialized_options = b'\220\002\001'
   _globals['_PROTOCOLSSERVICE'].methods_by_name['list_protocol_group_ids']._loaded_options = None
   _globals['_PROTOCOLSSERVICE'].methods_by_name['list_protocol_group_ids']._serialized_options = b'\220\002\001'
-  _globals['_BEGINPROTOCOLSREQUEST']._serialized_start=138
-  _globals['_BEGINPROTOCOLSREQUEST']._serialized_end=361
-  _globals['_BEGINPROTOCOLSREQUEST_INDIVIDUALREQUEST']._serialized_start=247
-  _globals['_BEGINPROTOCOLSREQUEST_INDIVIDUALREQUEST']._serialized_end=361
-  _globals['_BEGINPROTOCOLSRESPONSE']._serialized_start=364
-  _globals['_BEGINPROTOCOLSRESPONSE']._serialized_end=645
-  _globals['_BEGINPROTOCOLSRESPONSE_INDIVIDUALRESPONSE']._serialized_start=478
-  _globals['_BEGINPROTOCOLSRESPONSE_INDIVIDUALRESPONSE']._serialized_end=645
-  _globals['_STARTPROTOCOLSREQUEST']._serialized_start=648
-  _globals['_STARTPROTOCOLSREQUEST']._serialized_end=871
-  _globals['_STARTPROTOCOLSREQUEST_INDIVIDUALREQUEST']._serialized_start=757
-  _globals['_STARTPROTOCOLSREQUEST_INDIVIDUALREQUEST']._serialized_end=871
-  _globals['_STARTPROTOCOLSRESPONSE']._serialized_start=874
-  _globals['_STARTPROTOCOLSRESPONSE']._serialized_end=1155
-  _globals['_STARTPROTOCOLSRESPONSE_INDIVIDUALRESPONSE']._serialized_start=988
-  _globals['_STARTPROTOCOLSRESPONSE_INDIVIDUALRESPONSE']._serialized_end=1155
-  _globals['_STOPPROTOCOLSREQUEST']._serialized_start=1157
-  _globals['_STOPPROTOCOLSREQUEST']._serialized_end=1240
-  _globals['_STOPPROTOCOLSRESPONSE']._serialized_start=1243
-  _globals['_STOPPROTOCOLSRESPONSE']._serialized_end=1504
-  _globals['_STOPPROTOCOLSRESPONSE_INDIVIDUALRESPONSE']._serialized_start=1355
-  _globals['_STOPPROTOCOLSRESPONSE_INDIVIDUALRESPONSE']._serialized_end=1504
-  _globals['_GROUPFILTERINGINFO']._serialized_start=1507
-  _globals['_GROUPFILTERINGINFO']._serialized_end=1708
-  _globals['_LISTGROUPIDSREQUEST']._serialized_start=1710
-  _globals['_LISTGROUPIDSREQUEST']._serialized_end=1797
-  _globals['_PROTOCOLSSERVICE']._serialized_start=1800
-  _globals['_PROTOCOLSSERVICE']._serialized_end=2922
-StartProtocolsRequest.IndividualRequest.__doc__ = """Attributes:
-    flow_cell_position_name:
-        The position on which to start this protocol.
-"""
-BeginProtocolsRequest.IndividualRequest.__doc__ = """Attributes:
-    flow_cell_position_name:
-        The position on which to start this protocol.
-"""
-BeginProtocolsResponse.IndividualResponse.__doc__ = """Represents the response from the proxied call to 'begin_protocol' on a
-specific flow cell."""
+  _globals['_BEGINPROTOCOLSREQUEST']._serialized_start=144
+  _globals['_BEGINPROTOCOLSREQUEST']._serialized_end=367
+  _globals['_BEGINPROTOCOLSREQUEST_INDIVIDUALREQUEST']._serialized_start=253
+  _globals['_BEGINPROTOCOLSREQUEST_INDIVIDUALREQUEST']._serialized_end=367
+  _globals['_BEGINPROTOCOLSRESPONSE']._serialized_start=370
+  _globals['_BEGINPROTOCOLSRESPONSE']._serialized_end=651
+  _globals['_BEGINPROTOCOLSRESPONSE_INDIVIDUALRESPONSE']._serialized_start=484
+  _globals['_BEGINPROTOCOLSRESPONSE_INDIVIDUALRESPONSE']._serialized_end=651
+  _globals['_STARTPROTOCOLSREQUEST']._serialized_start=654
+  _globals['_STARTPROTOCOLSREQUEST']._serialized_end=877
+  _globals['_STARTPROTOCOLSREQUEST_INDIVIDUALREQUEST']._serialized_start=763
+  _globals['_STARTPROTOCOLSREQUEST_INDIVIDUALREQUEST']._serialized_end=877
+  _globals['_STARTPROTOCOLSRESPONSE']._serialized_start=880
+  _globals['_STARTPROTOCOLSRESPONSE']._serialized_end=1161
+  _globals['_STARTPROTOCOLSRESPONSE_INDIVIDUALRESPONSE']._serialized_start=994
+  _globals['_STARTPROTOCOLSRESPONSE_INDIVIDUALRESPONSE']._serialized_end=1161
+  _globals['_STOPPROTOCOLSREQUEST']._serialized_start=1163
+  _globals['_STOPPROTOCOLSREQUEST']._serialized_end=1246
+  _globals['_STOPPROTOCOLSRESPONSE']._serialized_start=1249
+  _globals['_STOPPROTOCOLSRESPONSE']._serialized_end=1510
+  _globals['_STOPPROTOCOLSRESPONSE_INDIVIDUALRESPONSE']._serialized_start=1361
+  _globals['_STOPPROTOCOLSRESPONSE_INDIVIDUALRESPONSE']._serialized_end=1510
+  _globals['_GROUPFILTERINGINFO']._serialized_start=1513
+  _globals['_GROUPFILTERINGINFO']._serialized_end=1768
+  _globals['_LISTGROUPIDSREQUEST']._serialized_start=1770
+  _globals['_LISTGROUPIDSREQUEST']._serialized_end=1857
+  _globals['_PROTOCOLSSERVICE']._serialized_start=1860
+  _globals['_PROTOCOLSSERVICE']._serialized_end=2982
 GroupFilteringInfo.__doc__ = """Limit the filtering to time-related filters only.
 
 Attributes:
     order_direction:
         Default of DESCENDING
+    protocol_group_id:
+        Filter runs by a specific protocol_group_id
 """
+BeginProtocolsRequest.IndividualRequest.__doc__ = """Attributes:
+    flow_cell_position_name:
+        The position on which to start this protocol.
+"""
+StartProtocolsRequest.IndividualRequest.__doc__ = """Attributes:
+    flow_cell_position_name:
+        The position on which to start this protocol.
+"""
+BeginProtocolsResponse.IndividualResponse.__doc__ = """Represents the response from the proxied call to 'begin_protocol' on a
+specific flow cell."""
 # @@protoc_insertion_point(module_scope)

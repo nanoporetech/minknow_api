@@ -101,56 +101,12 @@ if not _descriptor._USE_C_DESCRIPTORS:
   _globals['_STREAMUPDATESRESPONSE']._serialized_end=2887
   _globals['_RUNUNTILSERVICE']._serialized_start=2890
   _globals['_RUNUNTILSERVICE']._serialized_end=3395
-ScriptUpdate.Started.__doc__ = """Indicates that the run-until script has started and is running"""
-CriteriaValues.__doc__ = """A map of criterion name -> value  This message is deliberately
-flexible, to allow custom Run-Until Scripts to expand the range and
-types of available criteria."""
-ErrorUpdate.InvalidCriteria.__doc__ = """Indicates that one or more of the supplied target criteria is not
-recognised by the  Run-Until Script.  Unrecognised target criteria
-will not be used to pause or stop the run."""
+ScriptUpdate.CriteriaUpdated.__doc__ = """Indicates the the Run-Until Script has update its criteria in response
+to receiving a `StreamTargetCriteriaResponse` message"""
 WriteUpdatesRequest.__doc__ = """Attributes:
     acquisition_run_id:
         The acquisition this Run-Until update applies to
 """
-EstimatedTimeRemainingUpdate.NotEstimated.__doc__ = """Indicates that a time is not estimated"""
-EstimatedTimeRemainingUpdate.__doc__ = """Indicates the estimated time remaining  An estimated time may be
-provided for each Run-Until Criterion that is specified as an end-
-point."""
-ScriptUpdate.CriteriaUpdated.__doc__ = """Indicates the the Run-Until Script has update its criteria in response
-to receiving a `StreamTargetCriteriaResponse` message"""
-EstimatedTimeRemainingUpdate.EstimatedTimes.__doc__ = """Map of Run-Until Criterion to `EstimatedTime` when the criterion will
-be fulfilled  Only criteria for which an update is being provided are
-contained in the map."""
-Update.__doc__ = """Attributes:
-    current_progress_update:
-        Gives the current values of the criteria (Compare to
-        stream_target_criteria call to see %)
-    other:
-        Space for custom updates from custom Run-Until scripts
-"""
-ErrorUpdate.__doc__ = """Indicates that a problem has been encountered by the Run-Until Script"""
-EstimatedTimeRemainingUpdate.Estimated.__doc__ = """ These times are estimates of the (UTC) time at which the condition
-will be fulfilled  Some idea of the expected accuracy of this estimate
-can be obtained by comparing `min_time` with `max_time`.  If the
-estimated time is believed to be accurate (e.g. for a "runtime"
-criterion), then `min_time` may be equal to `max_time`.  Otherwise, if
-the estimate is believed to be inaccurate (e.g. for a "pore_scan"
-criterion which is not close to being fulfilled), then `min_time` and
-`max_time` may differ significantly.
-
-Attributes:
-    min_time:
-        Estimated lower bound on the time at which the condition will
-        occur (UTC)
-    max_time:
-        Estimated upper bound on the time at which the condition will
-        occur (UTC)
-"""
-StreamTargetCriteriaRequest.__doc__ = """Attributes:
-    acquisition_run_id:
-        The acquisition to obtain the Run-Until Criteria for
-"""
-ErrorUpdate.OtherError.__doc__ = """An error that is not covered by one of the other error types, above."""
 StreamUpdatesRequest.__doc__ = """Attributes:
     acquisition_run_id:
         The acquisition to stream Run-Until updates for
@@ -171,6 +127,35 @@ StreamUpdatesRequest.__doc__ = """Attributes:
         means that all updates from the first update onwards will be
         sent.
 """
+ScriptUpdate.Started.__doc__ = """Indicates that the run-until script has started and is running"""
+EstimatedTimeRemainingUpdate.__doc__ = """Indicates the estimated time remaining  An estimated time may be
+provided for each Run-Until Criterion that is specified as an end-
+point."""
+CriteriaValues.__doc__ = """A map of criterion name -> value  This message is deliberately
+flexible, to allow custom Run-Until Scripts to expand the range and
+types of available criteria."""
+ActionUpdate.__doc__ = """Indicates that an action has been performed  When a request is sent
+using `write_updates()`, MinKNOW performs the specified action.
+
+Attributes:
+    criteria:
+        The criteria associated with this action
+"""
+EstimatedTimeRemainingUpdate.EstimatedTimes.__doc__ = """Map of Run-Until Criterion to `EstimatedTime` when the criterion will
+be fulfilled  Only criteria for which an update is being provided are
+contained in the map."""
+ErrorUpdate.__doc__ = """Indicates that a problem has been encountered by the Run-Until Script"""
+ErrorUpdate.OtherError.__doc__ = """An error that is not covered by one of the other error types, above."""
+Update.__doc__ = """Attributes:
+    current_progress_update:
+        Gives the current values of the criteria (Compare to
+        stream_target_criteria call to see %)
+    other:
+        Space for custom updates from custom Run-Until scripts
+"""
+ErrorUpdate.InvalidCriteria.__doc__ = """Indicates that one or more of the supplied target criteria is not
+recognised by the  Run-Until Script.  Unrecognised target criteria
+will not be used to pause or stop the run."""
 StreamUpdatesResponse.__doc__ = """Attributes:
     idx:
         The index of this update  The index is incremented after each
@@ -183,15 +168,30 @@ StreamUpdatesResponse.__doc__ = """Attributes:
     update:
         The update data itself
 """
-ActionUpdate.__doc__ = """Indicates that an action has been performed  When a request is sent
-using `write_updates()`, MinKNOW performs the specified action.
-
-Attributes:
-    criteria:
-        The criteria associated with this action
-"""
+EstimatedTimeRemainingUpdate.NotEstimated.__doc__ = """Indicates that a time is not estimated"""
 WriteTargetCriteriaRequest.__doc__ = """Attributes:
     acquisition_run_id:
         The acquisition to set the Run-Until Criteria for
+"""
+StreamTargetCriteriaRequest.__doc__ = """Attributes:
+    acquisition_run_id:
+        The acquisition to obtain the Run-Until Criteria for
+"""
+EstimatedTimeRemainingUpdate.Estimated.__doc__ = """ These times are estimates of the (UTC) time at which the condition
+will be fulfilled  Some idea of the expected accuracy of this estimate
+can be obtained by comparing `min_time` with `max_time`.  If the
+estimated time is believed to be accurate (e.g. for a "runtime"
+criterion), then `min_time` may be equal to `max_time`.  Otherwise, if
+the estimate is believed to be inaccurate (e.g. for a "pore_scan"
+criterion which is not close to being fulfilled), then `min_time` and
+`max_time` may differ significantly.
+
+Attributes:
+    min_time:
+        Estimated lower bound on the time at which the condition will
+        occur (UTC)
+    max_time:
+        Estimated upper bound on the time at which the condition will
+        occur (UTC)
 """
 # @@protoc_insertion_point(module_scope)

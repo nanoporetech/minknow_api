@@ -43,9 +43,17 @@ service PebbleDeviceService {
 message WaveformSettings {
     // The waveform data applied to the device (in millivolts)
     //
+    // Cannot be set at the same time as dac_values
     // INVALID_ARGUMENT will be returned if the length of voltages is greater than 254
     // INVALID_ARGUMENT will be returned if one of the voltages is outside of [-Vref..Vref]mV
     repeated double voltages = 1;
+
+    // The waveform data applied to the device (in raw DAC units).
+    //
+    // Cannot be set at the same time as voltages
+    // INVALID_ARGUMENT will be returned if the length of voltages is greater than 254
+    // INVALID_ARGUMENT will be returned if one of the values is outside of [0-4095] (vce_dac_range)
+    repeated uint32 dac_values = 3;
 
     // The number of samples each wavetable entry will be valid for
     //
@@ -178,12 +186,16 @@ message DeviceSettings {
     // This size of the capacitance used is based on the provided setting
     // with a value of [0..31]
     //
+    // Setting the least significant bit (LSB) is not supported. This reduces the set of
+    // valid values to [0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30].
+    //
     // Refer to §2.3.1 of the OG2 ASIC documentation for both the nominal
     // and measured capacitance that each setting produces.
     //
     // This value is applied globally to all QUADs and therefore all channels
     //
     // INVALID_ARGUMENT will be returned if outside the range of [0..31]
+    // INVALID_ARGUMENT will be returned if the least significant bit is set (value is odd).
     google.protobuf.Int32Value int_capacitor = 10;
 
     // Low pass filter time constant

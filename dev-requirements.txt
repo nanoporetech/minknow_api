@@ -1,4 +1,4 @@
-cryptography~=42.0
+cryptography
 grpcio
 grpcio-tools
 minknow-api-service-plugin

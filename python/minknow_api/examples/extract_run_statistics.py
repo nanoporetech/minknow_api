@@ -145,7 +145,7 @@ def main():
     )
     parser.add_argument(
         "--protocol",
-        help="Extract information for a specific protocol run-id (eg. 04462a44-eed3-4550-af0d-bc9683352583 returned form protocol.list_protocol_runs). Defaults to last run protocol.",
+        help="Extract information for a specific protocol run-id (eg. 04462a44-eed3-4550-af0d-bc9683352583 returned from protocol.list_protocol_runs). Defaults to last run protocol.",
     )
     parser.add_argument(
         "--output-dir",

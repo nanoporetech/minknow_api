@@ -74,16 +74,6 @@ if not _descriptor._USE_C_DESCRIPTORS:
   _globals['_WATCHRESPONSE_VALUESENTRY']._serialized_end=314
   _globals['_KEYSTORESERVICE']._serialized_start=1061
   _globals['_KEYSTORESERVICE']._serialized_end=1510
-RemoveRequest.__doc__ = """Attributes:
-    names:
-        The names of the values you wish to remove.
-    allow_missing:
-        Whether to allow missing values.  If set, names that are not
-        present in the store will be ignored, but any present values
-        will still be removed. Otherwise, missing values will cause an
-        error to be returned (in which case nothing will be removed).
-        Defaults to 'false'
-"""
 GetOneRequest.__doc__ = """Attributes:
     name:
         The name of the value to fetch.
@@ -136,6 +126,16 @@ WatchResponse.__doc__ = """Attributes:
 GetOneResponse.__doc__ = """Attributes:
     value:
         The requested value.
+"""
+RemoveRequest.__doc__ = """Attributes:
+    names:
+        The names of the values you wish to remove.
+    allow_missing:
+        Whether to allow missing values.  If set, names that are not
+        present in the store will be ignored, but any present values
+        will still be removed. Otherwise, missing values will cause an
+        error to be returned (in which case nothing will be removed).
+        Defaults to 'false'
 """
 StoreRequest.__doc__ = """Attributes:
     values:

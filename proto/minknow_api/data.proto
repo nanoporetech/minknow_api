@@ -1042,7 +1042,8 @@ message GetExperimentYieldInfoResponse{
         uint64 bytes_to_move_failed = 5;
         uint64 bytes_to_move_completed = 6;
 
-        FileTypeInfo fast5 = 7;
+        // DEPRECATED since 6.10: fast5 support will be removed in a future release
+        FileTypeInfo fast5 = 7 [deprecated=true];
         FileTypeInfo fastq = 8;
     }
 

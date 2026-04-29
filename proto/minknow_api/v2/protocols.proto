@@ -8,7 +8,7 @@ option go_package = "github.com/nanoporetech/minknow_api/go/gen/v2/protocol";
 
 import "minknow_api/acquisition.proto";
 import "minknow_api/protocol.proto";
-import "util/status.proto";
+import "google/rpc/status.proto";
 
 service ProtocolsService
 {
@@ -187,6 +187,9 @@ message GroupFilteringInfo {
 
     // Default of DESCENDING
     optional minknow_api.protocol.FilteringInfo.OrderDirection order_direction = 2;
+
+    // Filter runs by a specific protocol_group_id
+    optional string protocol_group_id = 3;
 }
 
 message ListGroupIdsRequest{

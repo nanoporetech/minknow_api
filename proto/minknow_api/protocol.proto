@@ -267,7 +267,7 @@ service ProtocolService {
     // Also clears any persistence data that has been written to disk for those protocols -- this
     // data will not be available after a restart.
     //
-    // Does NOT clear experiment results (fast5, fastq, sequencing_summary, etc)
+    // Does NOT clear experiment results (POD5, fastq, sequencing_summary, etc)
     //
     // Since 4.4
     //

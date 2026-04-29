@@ -8,6 +8,7 @@ import minknow_api.manager
 class ProtocolPaths(typing.NamedTuple):
     output: Path
     input_fastq: typing.Optional[Path]
+    # DEPRECATED: fast5 support will be removed in a future release
     input_fast5: typing.Optional[Path]
     input_bam: typing.Optional[Path]
     sample_sheet: typing.Optional[Path]

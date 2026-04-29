@@ -49,32 +49,6 @@ if not _descriptor._USE_C_DESCRIPTORS:
   _globals['_SIMULATEFRAMELOSSRESPONSE']._serialized_end=820
   _globals['_DEBUGSERVICE']._serialized_start=823
   _globals['_DEBUGSERVICE']._serialized_end=1432
-GetBasecallServerResponse.__doc__ = """Attributes:
-    server_state:
-        This debug string with internal debug data, in practice it
-        generally a JSON-formatted string.
-"""
-GetBasecallClientResponse.__doc__ = """Attributes:
-    client_state:
-        This debug string with internal debug data, in practice it
-        generally a JSON-formatted string.
-"""
-SimulateFrameLossRequest.__doc__ = """Attributes:
-    frame_loss_duration:
-        The duration for which the frame loss will occur.
-    start_frame:
-        The frame index from which the frame loss will begin  For
-        simulated PromethIONs this equates to the frame index within a
-        section
-    start_section:
-        Optional section index from which the frame loss will begin
-        For simulated PromethIONs a section equates to a completed
-        scatterlist
-    repeats:
-        Optional number of times to repeat the failed transfers  This
-        will reset the frame loss on starting a new acquisition or
-        resuming acquisition on an existing signal reader.
-"""
 ConnectFlowCellRequest.__doc__ = """Attributes:
     flow_cell_id:
         The unique identifier for the flow cell.  This should be same
@@ -102,5 +76,31 @@ ConnectFlowCellRequest.__doc__ = """Attributes:
         cell being inserted that has exceeded the use count limit.
     flow_cell_partner:
         The partner the flow cell was produced for.
+"""
+GetBasecallClientResponse.__doc__ = """Attributes:
+    client_state:
+        This debug string with internal debug data, in practice it
+        generally a JSON-formatted string.
+"""
+GetBasecallServerResponse.__doc__ = """Attributes:
+    server_state:
+        This debug string with internal debug data, in practice it
+        generally a JSON-formatted string.
+"""
+SimulateFrameLossRequest.__doc__ = """Attributes:
+    frame_loss_duration:
+        The duration for which the frame loss will occur.
+    start_frame:
+        The frame index from which the frame loss will begin  For
+        simulated PromethIONs this equates to the frame index within a
+        section
+    start_section:
+        Optional section index from which the frame loss will begin
+        For simulated PromethIONs a section equates to a completed
+        scatterlist
+    repeats:
+        Optional number of times to repeat the failed transfers  This
+        will reset the frame loss on starting a new acquisition or
+        resuming acquisition on an existing signal reader.
 """
 # @@protoc_insertion_point(module_scope)

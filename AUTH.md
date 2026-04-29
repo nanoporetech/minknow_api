@@ -59,8 +59,17 @@ with connections they make to MinKNOW. This is only necessary if other authentic
 methods are not used.
 
 The `minknow_api` Python package handles this for you. If you are not using this
-package, see the the `manager.local_authentication_token_path()` RPC documentation for
+package, see the `manager.local_authentication_token_path()` RPC documentation for
 how to obtain this token.
+
+Note that, as of the 26.01 release (minknow-core 6.10), to access this token you need
+to be a member of a specific group. On Windows, you just need to be logged in
+interactively (eg: via a desktop session). On Linux, you need to be a member of the
+same group that would give you the ability to manage MinKNOW's output files:
+`minknow` on standalone installations, `prom` on PromethIONs and `grid` on GridIONs.
+
+If you are creating any sort of automated system (such as integration with a LIMS),
+it is strongly recommended that you use client certificates instead.
 
 
 Developer API Tokens

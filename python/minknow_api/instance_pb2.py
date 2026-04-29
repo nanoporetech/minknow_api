@@ -97,27 +97,6 @@ if not _descriptor._USE_C_DESCRIPTORS:
   _globals['_STREAMINSTANCEACTIVITYRESPONSE_FLOWCELLHEALTH_CHANNELSTATEPERCENTAGESENTRY']._serialized_end=2704
   _globals['_INSTANCESERVICE']._serialized_start=2723
   _globals['_INSTANCESERVICE']._serialized_end=3885
-GetMachineIdResponse.__doc__ = """Attributes:
-    machine_id:
-        The machine_id MinKNOW uses for this host.
-"""
-BasecallSpeed.__doc__ = """Attributes:
-    mean_basecall_speed:
-        Mean basecall speed, in bases per second.  This value is only
-        streamed for acquisitions where basecalling is enabled.  The
-        value reported here is the value stored in last completed
-        basecall boxplot bucket Each boxplot bucket covers a duration
-        of `boxplot_time_coverage_in_minutes`
-"""
-N50.__doc__ = """Attributes:
-    n50:
-        N50 data, in basecalled bases  This value is only streamed for
-        acquisitions where basecalling is enabled.  The latest value
-        is sent once per minute
-    estimated_n50:
-        N50 data, in estimated bases  The latest value is sent once
-        per minute
-"""
 OutputDirectories.__doc__ = """Attributes:
     output:
         The base output directory. Anything that is output to files is
@@ -127,25 +106,12 @@ OutputDirectories.__doc__ = """Attributes:
     reads:
         Base directory where reads will be outputted.
 """
-StreamDiskSpaceInfoRequest.__doc__ = """Attributes:
-    period:
-        Disk space information will be streamed with this value
-        determining the period in seconds between updates. A period of
-        0 is invalid
-"""
 StreamInstanceActivityResponse.FlowCellHealth.__doc__ = """Attributes:
     channel_state_percentages:
         Map between channel state name and a percentage of how much
         time that state has been active with respect to all other
         channel states  This is over one minute of time this is
         calculated over
-"""
-DeviceInfo.__doc__ = """Attributes:
-    device_state:
-        The current state of the device
-    device_info:
-        Information about the connected device (or no content if
-        disconnected see: device_state)
 """
 StreamInstanceActivityResponse.__doc__ = """Attributes:
     device_info:
@@ -176,6 +142,72 @@ StreamInstanceActivityResponse.__doc__ = """Attributes:
         basecalled bases and estimated bases  Note: basecalled bases
         only available if an acquisition with basecalling enabled is
         in progress
+"""
+BasecallSpeed.__doc__ = """Attributes:
+    mean_basecall_speed:
+        Mean basecall speed, in bases per second.  This value is only
+        streamed for acquisitions where basecalling is enabled.  The
+        value reported here is the value stored in last completed
+        basecall boxplot bucket Each boxplot bucket covers a duration
+        of `boxplot_time_coverage_in_minutes`
+"""
+DeviceInfo.__doc__ = """Attributes:
+    device_state:
+        The current state of the device
+    device_info:
+        Information about the connected device (or no content if
+        disconnected see: device_state)
+"""
+FilesystemDiskSpaceInfo.__doc__ = """disk-usage information for one file-system
+
+Attributes:
+    filesystem_id:
+        The name of the file-system
+    bytes_available:
+        How much space is left on the file-system
+    bytes_capacity:
+        The total capacity of the file-system when empty.
+    what:
+        A list of what MinKNOW stores on this file-system, eg: reads,
+        logs, intermediate-files
+    bytes_to_stop_cleanly:
+        MinKNOW needs this much space to stop experiments. If
+        bytes_available goes below this number, data could be lost!
+    bytes_when_alert_issued:
+        The amount of space left on the file-system when
+        recommend_alert was set true.
+    recommend_alert:
+        MinKNOW recommends that you alert someone about the disk-usage
+    recommend_stop:
+        MinKNOW recommends that you stop experiments due to disk-usage
+        concerns
+    bytes_per_second:
+        Rate of change in bytes_available (per second) +'ve numbers
+        indicate that bytes_available is decreasing and space is being
+        used A value of 0 can indicate that this has not applicable or
+        not available.
+    file_types_stored:
+        A list of what types of file MinKNOW stores on this file-
+        system, eg: reads, logs, intermediate-files, etc.
+"""
+StreamDiskSpaceInfoRequest.__doc__ = """Attributes:
+    period:
+        Disk space information will be streamed with this value
+        determining the period in seconds between updates. A period of
+        0 is invalid
+"""
+N50.__doc__ = """Attributes:
+    n50:
+        N50 data, in basecalled bases  This value is only streamed for
+        acquisitions where basecalling is enabled.  The latest value
+        is sent once per minute
+    estimated_n50:
+        N50 data, in estimated bases  The latest value is sent once
+        per minute
+"""
+GetMachineIdResponse.__doc__ = """Attributes:
+    machine_id:
+        The machine_id MinKNOW uses for this host.
 """
 GetVersionInfoResponse.__doc__ = """Version of the basecaller MinKNOW is running with.  Since 5.0 This
 field has been updated since 6.0  guppy_connected_version
@@ -212,37 +244,5 @@ Attributes:
         The installation type of MinKNOW.  The installation type may
         affect the available features, or the update process.  Since
         4.1
-"""
-FilesystemDiskSpaceInfo.__doc__ = """disk-usage information for one file-system
-
-Attributes:
-    filesystem_id:
-        The name of the file-system
-    bytes_available:
-        How much space is left on the file-system
-    bytes_capacity:
-        The total capacity of the file-system when empty.
-    what:
-        A list of what MinKNOW stores on this file-system, eg: reads,
-        logs, intermediate-files
-    bytes_to_stop_cleanly:
-        MinKNOW needs this much space to stop experiments. If
-        bytes_available goes below this number, data could be lost!
-    bytes_when_alert_issued:
-        The amount of space left on the file-system when
-        recommend_alert was set true.
-    recommend_alert:
-        MinKNOW recommends that you alert someone about the disk-usage
-    recommend_stop:
-        MinKNOW recommends that you stop experiments due to disk-usage
-        concerns
-    bytes_per_second:
-        Rate of change in bytes_available (per second) +'ve numbers
-        indicate that bytes_available is decreasing and space is being
-        used A value of 0 can indicate that this has not applicable or
-        not available.
-    file_types_stored:
-        A list of what types of file MinKNOW stores on this file-
-        system, eg: reads, logs, intermediate-files, etc.
 """
 # @@protoc_insertion_point(module_scope)

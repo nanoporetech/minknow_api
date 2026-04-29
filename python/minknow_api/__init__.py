@@ -378,6 +378,30 @@ def get_protocol_token_credentials(
         return None
 
 
+def _try_to_make_helpful_warning_about_lat_permissions(token_path: Path) -> bool:
+    if platform.system() != "Linux":
+        # any reasonable user should already have access on macOS and Windows
+        return False
+
+    try:
+        token_folder = token_path.parent
+        stat_info = token_folder.stat()
+
+        import grp
+
+        group = grp.getgrgid(stat_info.st_gid)[0]
+
+        logger.warning(
+            'Could not access local authentication token at "%s", '
+            'maybe you need to be added to the "%s" group?',
+            token_path,
+            group,
+        )
+        return True
+    except Exception:
+        return False
+
+
 def get_local_auth_token_credentials(
     manager_port: Optional[int], ca_cert: Optional[bytes] = None
 ) -> Optional[grpc.ChannelCredentials]:
@@ -398,16 +422,25 @@ def get_local_auth_token_credentials(
     )
     logger.debug("Retrieving local token from file: '%s'", local_auth_path)
     if local_auth_path:
-        if os.path.exists(local_auth_path):
-            return grpc.metadata_call_credentials(
-                LocalAuthTokenCredentials(local_auth_path)
-            )
-        else:
-            logger.warning(
-                'Local authentication token should be at "%s", '
-                + "but that file does not exist",
-                local_auth_path,
-            )
+        local_auth_path = Path(local_auth_path)
+        try:
+            if local_auth_path.exists():
+                return grpc.metadata_call_credentials(
+                    LocalAuthTokenCredentials(local_auth_path)
+                )
+            else:
+                logger.warning(
+                    'Local authentication token should be at "%s", '
+                    "but that file does not exist",
+                    local_auth_path,
+                )
+        except OSError:
+            if not _try_to_make_helpful_warning_about_lat_permissions(local_auth_path):
+                logger.warning(
+                    'Could not access local authentication token at "%s", '
+                    "check file permissions",
+                    local_auth_path,
+                )
 
     return None
 

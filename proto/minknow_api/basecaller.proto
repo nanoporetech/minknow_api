@@ -190,7 +190,7 @@ message StartBasecallingRequest {
     // This causes .fast5 files to be output in addition to FASTQ files.
     //
     // DEPRECATED: This option does not have any effect - the basecaller no longer has the ability to write fast5 files.
-    bool fast5_out = 4;
+    bool fast5_out = 4 [deprecated=true];
 
     // Enable gzip compression of output FASTQ files.
     bool compress_fastq = 5;
@@ -201,11 +201,11 @@ message StartBasecallingRequest {
     // efficient (and produces smaller files) to disable them.
     //
     // This has no effect if ``fast5_out`` is not enabled.
-    bool disable_events = 6;
+    bool disable_events = 6 [deprecated=true];
 
-    // Recursively find fast5 files to basecall in the `input_reads_directories`.
+    // Recursively find input files to basecall in the `input_reads_directories`.
     //
-    // If False, only the fast5 files directly in one of the `input_reads_directories` will be
+    // If False, only the input files directly in one of the `input_reads_directories` will be
     // basecalled. If True, subdirectories of those directories will also be searched recursively.
     bool recursive = 7;
 
@@ -263,9 +263,9 @@ message StartBarcodingRequest {
     // DEPRECATED: This option does not have any effect - the offline barcoding no longer has the ability to compress fastq output.
     bool compress_fastq = 4;
 
-    // Recursively find fast5 files to basecall in the `input_reads_directories`.
+    // Recursively find input files to basecall in the `input_reads_directories`.
     //
-    // If False, only the fast5 files directly in one of the `input_reads_directories` will be
+    // If False, only the input files directly in one of the `input_reads_directories` will be
     // basecalled. If True, subdirectories of those directories will also be searched recursively.
     bool recursive = 5;
 
@@ -300,9 +300,9 @@ message StartAlignmentRequest {
     // Output directory where aligned reads will be placed.
     string output_reads_directory = 2 [(may_contain_user_data) = true];
 
-    // Recursively find fast5 files to align in the `input_reads_directories`.
+    // Recursively find input files to align in the `input_reads_directories`.
     //
-    // If False, only the fast5 files directly in one of the `input_reads_directories` will be
+    // If False, only the input files directly in one of the `input_reads_directories` will be
     // aligned. If True, subdirectories of those directories will also be searched recursively.
     bool recursive = 4;
 
@@ -324,7 +324,7 @@ message StartPostProcessingProtocolRequest {
     string sequencing_protocol_run_id = 7 [(may_contain_user_data) = false];
 
     // Input directories for the protocol (omit those which the protocol doesn't require).
-    string input_fast5_directory = 2 [(may_contain_user_data) = true];
+    string input_fast5_directory = 2 [(may_contain_user_data) = true, deprecated=true];
     string input_fastq_directory = 3 [(may_contain_user_data) = true];
     string input_bam_directory = 4 [(may_contain_user_data) = true];
 
@@ -571,7 +571,7 @@ message ListSettingsForPostProcessingProtocolRequest {
 
 message ListSettingsForPostProcessingProtocolResponse {
     // Does the protocol require fast5 files as input
-    bool requires_fast5_input = 1;
+    bool requires_fast5_input = 1 [deprecated=true];
 
     // Does the protocol require fastq files as input
     bool requires_fastq_input = 2;

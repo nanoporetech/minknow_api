@@ -381,6 +381,12 @@ def make_protocol_arguments(
 
     protocol_args.append("--fast5=" + on_off(fast5_arguments))
     if fast5_arguments:
+        import warnings
+
+        warnings.warn(
+            "fast5 output is deprecated and will be removed in a future release",
+            DeprecationWarning,
+        )
         protocol_args.extend(
             ["--fast5_data", "trace_table", "fastq", "raw", "vbz_compress"]
         )

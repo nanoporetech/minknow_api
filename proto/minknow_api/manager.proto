@@ -372,6 +372,7 @@ message DescribeHostResponse {
     // GRD-X5B003    GridION X5 Mk1
     // PRO-PRMC01    PromethION Beta
     // PRO-PRC024    PromethION 24
+    // PRO-PRCX01    PromethION 24
     // PRO-PRC048    PromethION 48
     // ONT-314       PromethION (Production)
     //
@@ -486,6 +487,19 @@ message DescribeHostResponse {
     // If more than one possible basecalling hardware selection can be made, this field provides the details of those options.
     // Typically this will be a list of 'unused' GPUs.
     repeated BasecallerSubstrate available_basecalling_hardware = 8;
+
+    // Describes what type of device the host is
+    enum HostDevice {
+      HOST_GRIDION = 0;
+      HOST_P2 = 1;
+      HOST_P24 = 2;
+      HOST_P48 = 3;
+      HOST_PROMETHION_OTHER = 4;
+      HOST_ELYSION = 5;
+      HOST_OTHER = 6;
+    };
+
+    HostDevice type_of_host_device = 9;
 }
 
 message GetBasecallerFeaturesRequest {}
@@ -541,9 +555,8 @@ message FlowCellPosition {
         // unit when viewed from above/in front.
         int32 y = 2;
     }
-    // For integrated flow cell positions, indicates where it is on the sequencing unit.
-    //
-    // This information is not provided for MinIONs.
+
+    // Indicates the location of the flow cell position in the sequencing unit.
     Location location = 2;
 
     enum State {
@@ -1363,76 +1376,95 @@ message ListSettingsForProtocolRequest {
 
 
 message ListSettingsForProtocolResponse {
-    // Run options
-    message RunOptions {
-        protocol_settings.ProtocolSetting run_length = 1;
-        protocol_settings.ProtocolSetting bias_voltage = 2;
-        protocol_settings.ProtocolSetting read_until_enabled = 3;
-        protocol_settings.ProtocolSetting read_until_ref_file = 4;
-        protocol_settings.ProtocolSetting read_until_channels = 5;
-        protocol_settings.ProtocolSetting read_until_bed_file_enabled = 6;
-        protocol_settings.ProtocolSetting read_until_bed_file = 7;
-        protocol_settings.ProtocolSetting read_until_enrichment = 8;
-        protocol_settings.ProtocolSetting active_channel_selection = 9; // bool
-        protocol_settings.ProtocolSetting mux_scan_period = 10; // in hours
-        protocol_settings.ProtocolSetting group_change_period = 11;
-    }
 
     message Basecalling {
+        reserved 2, 3, 5 to 19;
         protocol_settings.ProtocolSetting basecalling_enabled = 1;
-        protocol_settings.ProtocolSetting barcoding_enabled = 2;
-        protocol_settings.ProtocolSetting barcoding_kits = 3;
         protocol_settings.ProtocolSetting basecall_model = 4;
-        protocol_settings.ProtocolSetting trim_barcodes_enabled = 5;
-        protocol_settings.ProtocolSetting require_barcodes_both_ends = 6;
-        protocol_settings.ProtocolSetting ignore_unspecified_barcodes = 7;
-        protocol_settings.ProtocolSetting alignment_enabled = 13;
-        protocol_settings.ProtocolSetting alignment_ref_file = 14;
-        protocol_settings.ProtocolSetting alignment_bed_file = 16;
-        protocol_settings.ProtocolSetting model_names_simplex_model = 17;
-        protocol_settings.ProtocolSetting model_names_modified_models = 18;
-        protocol_settings.ProtocolSetting model_names_stereo_model = 19;
+
+        // Since 6.8
+        protocol_settings.ProtocolSetting modified_basecalling_models = 20;
+        protocol_settings.ProtocolSetting poly_a_tail_length_estimation_enabled = 21;
     }
 
-    // Output
-    message Output {
-        protocol_settings.ProtocolSetting output_location = 1;
-        protocol_settings.ProtocolSetting fast_q_enabled = 2;
-        protocol_settings.ProtocolSetting fast_q_reads_per_file = 3;
-        protocol_settings.ProtocolSetting fast_q_data_compression = 4;
-        protocol_settings.ProtocolSetting fast_5_enabled = 5;
-        protocol_settings.ProtocolSetting fast_5_reads_per_file = 6;
-        protocol_settings.ProtocolSetting fast_5_data_trace_table = 7;
-        protocol_settings.ProtocolSetting fast_5_data_move_table = 8;
-        protocol_settings.ProtocolSetting fast_5_data_fast_q = 9;
-        protocol_settings.ProtocolSetting fast_5_data_raw = 10;
-        protocol_settings.ProtocolSetting fast_5_data_compression = 11;
-        protocol_settings.ProtocolSetting bam_enabled = 12;
-        protocol_settings.ProtocolSetting read_filtering_enabled = 13;
-        protocol_settings.ProtocolSetting read_filtering_min_qscore = 14;
-        protocol_settings.ProtocolSetting read_filtering_min_read_length = 15;
-        protocol_settings.ProtocolSetting read_filtering_max_read_length = 16;
-        protocol_settings.ProtocolSetting bulk_file_enabled = 17;
-        protocol_settings.ProtocolSetting bulk_file_raw = 18;
-        protocol_settings.ProtocolSetting bulk_file_events = 19;
-        protocol_settings.ProtocolSetting bulk_file_read_table = 20;
-        protocol_settings.ProtocolSetting bulk_file_raw_enabled = 21;
-        protocol_settings.ProtocolSetting bulk_file_events_enabled = 22;
-        protocol_settings.ProtocolSetting bulk_file_read_table_enabled = 23;
+    // Since 6.8
+    message Miscellaneous {
+        protocol_settings.ProtocolSetting mux_scan_period = 1;
+        protocol_settings.ProtocolSetting reserved_pores = 2;
+    }
 
-        // Since 5.8
-        protocol_settings.ProtocolSetting read_filtering_min_duplex_qscore = 24;
+    // Since 6.8
+    message Barcoding {
+        protocol_settings.ProtocolSetting trim_barcodes_enabled = 1;
+        protocol_settings.ProtocolSetting require_barcodes_both_ends = 2;
+        protocol_settings.ProtocolSetting custom_barcode_selection = 3;
+    }
+
+    // Since 6.8
+    message Alignment {
+        protocol_settings.ProtocolSetting alignment_ref_file = 1;
+        protocol_settings.ProtocolSetting alignment_bed_file = 2;
+    }
+
+    // Since 6.8
+    // DataOutput
+    message DataOutput {
+        protocol_settings.ProtocolSetting fast_q_enabled = 1;
+        protocol_settings.ProtocolSetting fast_q_reads_per_file = 2;
+        protocol_settings.ProtocolSetting fast_q_data_compression = 3;
+        protocol_settings.ProtocolSetting bam_enabled = 4;
+        protocol_settings.ProtocolSetting pod5_enabled = 5;
+        protocol_settings.ProtocolSetting bam_reads_per_file = 6;
+        protocol_settings.ProtocolSetting fast_q_batch_duration = 7;
+        protocol_settings.ProtocolSetting bam_batch_duration = 8;
+        protocol_settings.ProtocolSetting pod5_batch_duration = 9;
+        protocol_settings.ProtocolSetting split_fastq_files_by_barcode = 10;
+        protocol_settings.ProtocolSetting split_bam_files_by_barcode = 11;
+        protocol_settings.ProtocolSetting split_pod5_files_by_barcode = 12;
+        protocol_settings.ProtocolSetting bulk_file_raw= 13;
+        protocol_settings.ProtocolSetting bulk_file_events= 14;
+        protocol_settings.ProtocolSetting bulk_file_read_table = 15;
+    }
+
+    // Since 6.8
+    message AdaptiveSampling {
+        protocol_settings.ProtocolSetting ref_file = 1;
+        protocol_settings.ProtocolSetting bed_file = 2;
+        protocol_settings.ProtocolSetting channel_start = 3;
+        protocol_settings.ProtocolSetting channel_end = 4;
+    }
+
+    // Since 6.8
+    message Filtering {
+        protocol_settings.ProtocolSetting read_filtering_min_qscore = 1;
+        protocol_settings.ProtocolSetting read_filtering_min_read_length = 2;
+        protocol_settings.ProtocolSetting read_filtering_max_read_length = 3;
+        protocol_settings.ProtocolSetting filter_unaligned = 4;
+
     }
 
     protocol_settings.ProtocolIdentifierComponents protocol = 1;
 
-    RunOptions run_options = 2;
+    reserved "run_options";
+    reserved 2;
+
     Basecalling basecalling = 3;
-    Output output = 4;
+
+    reserved "output";
+    reserved 4;
 
     // Any protocol settings not covered by the above structures, for example
     // those required for custom-scripts.
     repeated protocol_settings.ProtocolSetting protocol_settings = 5;
+
+    // Since 6.8
+    Miscellaneous miscellaneous = 6;
+    Barcoding barcoding = 7;
+    Alignment alignment= 8;
+    DataOutput data_output= 9;
+    AdaptiveSampling adaptive_sampling= 10;
+    Filtering filtering = 11;
+
 }
 
 

@@ -75,6 +75,15 @@ if not _descriptor._USE_C_DESCRIPTORS:
   _globals['_SEQUENCERINFO_POSITION']._serialized_end=3121
   _globals['_HARDWARECHECKREPORTDATA']._serialized_start=3124
   _globals['_HARDWARECHECKREPORTDATA']._serialized_end=3293
+SequencerInfo.Position.__doc__ = """Attributes:
+    position_id:
+        The id of the position.  For MinIONs, this is the name of the
+        MinION (eg: MN12345). For integrated positions, this is the
+        label for the position on the sequencer (eg: X1 for GridION,
+        1-A1-D1 for PromethION).  This corresponds to the
+        `PositionCheckResult.position_id` in a given hardware check
+        result
+"""
 BasecallerInformation.DoradoModelName.__doc__ = """github.com/nanoporetech/dorado#decoding-dorado-model-names Document
 what the model names are
 
@@ -92,6 +101,13 @@ Attributes:
     model_version:
          version number/string
 """
+HardwareCheckReportData.__doc__ = """Attributes:
+    sequencer_info:
+        Information about the sequencer the hardware check was run on
+        SequencerInfo will only be included for those sequencers where
+        hardware check results are being reported for at least one
+        position on the sequencer
+"""
 ReportData.__doc__ = """This field has been removed  Since 5.6
 
 Attributes:
@@ -105,15 +121,6 @@ Attributes:
     report_data_generation_time:
         The time at which the report data was generated (UTC)
 """
-SequencerInfo.Position.__doc__ = """Attributes:
-    position_id:
-        The id of the position.  For MinIONs, this is the name of the
-        MinION (eg: MN12345). For integrated positions, this is the
-        label for the position on the sequencer (eg: X1 for GridION,
-        1-A1-D1 for PromethION).  This corresponds to the
-        `PositionCheckResult.position_id` in a given hardware check
-        result
-"""
 BasecallerInformation.__doc__ = """Attributes:
     modifications:
         Each string presents all modifications for a modified model
@@ -121,6 +128,13 @@ BasecallerInformation.__doc__ = """Attributes:
         github.com/nanoporetech/dorado#decoding-dorado-model-names
         Example format: ["5mC in CG contexts", "5hmC & 5mC in CG
         contexts"]
+"""
+SequencerInfo.__doc__ = """Information describing the sequencer and sequencing positions that the
+Hardware Check was run on
+
+Attributes:
+    device_type:
+        Device Type (e.g. MinION, PromethION)
 """
 AcquistionReportData.__doc__ = """This is spelt incorrectly (should be AcquisitionReportData)
 
@@ -140,18 +154,4 @@ Attributes:
 """
 Host.__doc__ = """This is a subset of the information available from the describe_host()
 call"""
-SequencerInfo.__doc__ = """Information describing the sequencer and sequencing positions that the
-Hardware Check was run on
-
-Attributes:
-    device_type:
-        Device Type (e.g. MinION, PromethION)
-"""
-HardwareCheckReportData.__doc__ = """Attributes:
-    sequencer_info:
-        Information about the sequencer the hardware check was run on
-        SequencerInfo will only be included for those sequencers where
-        hardware check results are being reported for at least one
-        position on the sequencer
-"""
 # @@protoc_insertion_point(module_scope)

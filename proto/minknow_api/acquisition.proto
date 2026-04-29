@@ -738,7 +738,9 @@ message AcquisitionConfigSummary {
     repeated string reads_fallback_directories = 3 [(may_contain_user_data) = true];
 
     // Determine if fast5 reads were enabled for the run.
-    bool fast5_reads_enabled = 4;
+    //
+    // DEPRECATED since 6.10: fast5 support will be removed in a future release
+    bool fast5_reads_enabled = 4 [deprecated=true];
     // Determine if fastq reads were enabled for the run.
     bool fastq_reads_enabled = 5;
     // Determine if pod5 reads were enabled for the run.
@@ -772,6 +774,11 @@ message AcquisitionConfigSummary {
     //
     // Since 3.3
     uint32 channel_count = 12;
+
+    // The configuration for the signal reader.
+    //
+    // Since 6.10
+    GetSignalReaderResponse signal_reader_config = 27;
 }
 
 // Provides information about how mux scans are configured.
@@ -829,6 +836,20 @@ message MuxScanMetadata {
     // Describes the preferred way to present mux scan categories to users. Groups should be
     // presented in the order of this list.
     repeated CategoryGroup category_groups = 2;
+
+    // Pore reserve
+    bool enable_reserve_pore = 3;
+}
+
+message ReadUntilInfo {
+    // Filter type. Example values include enrich, deplete, unblock_all, _run_until_barcode_coverage, _run_until_barcode_read_count
+    string filter_type = 1 [(may_contain_user_data) = false];
+
+    // A string path to the reference file, only one is currently permitted
+    repeated string reference_files = 2 [(may_contain_user_data) = true];
+
+    // Bed file path
+    string bed_file = 3 [(may_contain_user_data) = true];
 }
 
 // A report of the states of channel muxes (wells) across the flow cell.
@@ -886,6 +907,8 @@ message BreamInfo {
     // request a tighter range, or it may adjust the temperature it is requesting throughout the
     // run). This intended only to provide context when presenting data to users.
     Range target_temperature = 5;
+
+    ReadUntilInfo read_until_info = 6;
 }
 
 message TargetRunUntilCriteria {
@@ -1023,7 +1046,7 @@ message GetSignalReaderResponse {
     SetSignalReaderRequest.SignalReaderType reader = 1 [(rpc_required) = true];
 
     // The following is only set if the signal reader is a playback source.
-    string playback_source = 2;
+    string playback_source = 2 [(may_contain_user_data) = false];
 
     SetSignalReaderRequest.SourceFileMode playback_mode = 3;
 

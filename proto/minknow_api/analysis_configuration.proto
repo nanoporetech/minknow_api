@@ -522,6 +522,9 @@ message ReadClassificationParams {
 
     bool disable_reset_selected_tracker_on_mux_change = 16;
     bool disable_reset_open_pore_tracker_on_mux_change = 17;
+
+    // The maximum delta from chunk mean to consider values for acf computations.
+    float acf_delta_limit = 18;
 }
 
 message ChannelStates {
@@ -1098,7 +1101,7 @@ message SetPoreTypeConfigurationResponse {}
 // placed in the required file.
 // The tokens used to expand depend on the file type:
 //
-// Read centric files (fastq, (multi-)fast5, protobuf):
+// Read centric files (fastq, protobuf):
 //  - batch_number:         The batch number of this read, evaluated based on the destination file.
 //  - read_id:              Unique read id for each read, formatted as a hash.
 //  - channel_name:         The name of the channel which produced the read.
@@ -1212,7 +1215,7 @@ message WriterConfiguration {
 
         // The pattern used to find a fast5 files name.
         //
-        // default: fast5{basecall_status}/{flow_cell_id}_{run_id}_{batch_number}.fast5
+        // default: fast5{_basecall_status}/{flow_cell_id}_{run_id}_{batch_number}.fast5
         // Where each {xxx} section is replaced with an attribute from the minknow state
         // when the file is written.
         //
@@ -1262,7 +1265,7 @@ message WriterConfiguration {
 
         // The pattern used to find a fastq files name.
         //
-        // default: fastq{basecall_status}/{flow_cell_id}_{run_id}_{batch_number}.fastq
+        // default: fastq{_basecall_status}/{flow_cell_id}_{run_id}_{batch_number}.fastq
         // Where each {xxx} section is replaced with an attribute from the minknow state when the file is written.
         //
         // See file pattern attributes above.
@@ -1323,7 +1326,7 @@ message WriterConfiguration {
 
         // The pattern used to find a BAM files name.
         //
-        // default: bam{basecall_status}/{flow_cell_id}_{run_id}_{batch_number}.bam
+        // default: bam{_basecall_status}/{flow_cell_id}_{run_id}_{batch_number}.bam
         // Where each {xxx} section is replaced with an attribute from the minknow state when the file is written.
         //
         // See file pattern attributes above.
@@ -1376,7 +1379,7 @@ message WriterConfiguration {
 
         // The pattern used to find a POD5 files name.
         //
-        // default: pod5{basecall_status}/{flow_cell_id}_{run_id}_{batch_number}.pod5
+        // default: pod5{_basecall_status}/{flow_cell_id}_{run_id}_{batch_number}.pod5
         // Where each {xxx} section is replaced with an attribute from the minknow state when the file is written.
         //
         // See file pattern attributes above.
@@ -1457,10 +1460,39 @@ message WriterConfiguration {
         // See file pattern attributes above.
         string file_pattern = 14 [(may_contain_user_data) = false];
 
-        // Raw data, stored with channel calibration data
+        // Raw data (after any signal fixing is applied), stored with channel
+        // calibration data
         //
-        // Stored under /Raw/Channel_*/Signal
+        // Stored under /Raw/Channel_*/ProcessedSignal
         ChannelConfiguration raw = 3;
+
+        // Raw data before signal fixing is applied.
+        //
+        // If signal fixing is not enabled, this will just be a duplicate of the
+        // data in the corresponding ProcessedSignal dataset. In this case, it
+        // is recommended to leave this unset, and configure the `raw` field
+        // instead.
+        //
+        // Stored under /Raw/Channel_*/UnprocessedSignal
+        ChannelConfiguration unprocessed_raw = 17;
+
+        // Control which raw signal stream has the "Signal" dataset.
+        //
+        // There are two signal stream datasets that can be written to the
+        // bulk: /Raw/Channel_*/ProcessedSignal (controlled by the "raw" field)
+        // and /Raw/Channel_*/UnprocessedSignal (controlled by the
+        // "unprocessed_raw" field). By default, /Raw/Channel_*/Signal will be
+        // linked to the corresponding ProcessedSignal dataset (if it exists).
+        // Set this to true to instead link it to the UnprocessedSignal dataset.
+        //
+        // The Signal dataset is what is used in playback.
+        //
+        // Note that there is no fallback. If channel 1 has a ProcessedSignal
+        // dataset but not an UnprocessedSignal dataset, and this is true, there
+        // will be no Signal dataset. Likewise, if it has an UnprocessedSignal
+        // but not ProcessedSignal dataset and this is false, there will also be
+        // no Signal dataset.
+        bool default_raw_is_unprocessed = 18;
 
         // Minknow event data
         //
@@ -1509,7 +1541,7 @@ message WriterConfiguration {
         // The pattern used to find the pdf report filename. If left empty but output is
         // enabled a default pattern is used.
         //
-        // default: report_{flow_cell_id}_{daq_start_time}_{short_protocol_run_id}.pdf
+        // default: report_{flow_cell_id}_{protocol_start_time}_{short_protocol_run_id}.pdf
         // Where each {xxx} section is replaced with an attribute from the minknow
         // state when the file is written.
         //
@@ -1519,7 +1551,7 @@ message WriterConfiguration {
         // The pattern used to find the json report filename. If left empty but output is
         // enabled a default pattern is used.
         //
-        // default: report_{flow_cell_id}_{daq_start_time}_{short_protocol_run_id}.json
+        // default: report_{flow_cell_id}_{protocol_start_time}_{short_protocol_run_id}.json
         // Where each {xxx} section is replaced with an attribute from the minknow
         // state when the file is written.
         //
@@ -1529,7 +1561,7 @@ message WriterConfiguration {
         // The pattern used to find the html report filename. If left empty but output is
         // enabled a default pattern is used.
         //
-        // default: report_{flow_cell_id}_{daq_start_time}_{short_protocol_run_id}.html
+        // default: report_{flow_cell_id}_{protocol_start_time}_{short_protocol_run_id}.html
         // Where each {xxx} section is replaced with an attribute from the minknow
         // state when the file is written.
         //
@@ -1539,7 +1571,7 @@ message WriterConfiguration {
         // The pattern used to find the markdown report filename. If left empty but output is
         // enabled a default pattern is used.
         //
-        // default: report_{flow_cell_id}_{daq_start_time}_{short_protocol_run_id}.md
+        // default: report_{flow_cell_id}_{protocol_start_time}_{short_protocol_run_id}.md
         // Where each {xxx} section is replaced with an attribute from the minknow
         // state when the file is written.
         //
@@ -1589,7 +1621,7 @@ message WriterConfiguration {
         // The pattern used to name the sample sheet report. If left empty but output is
         // enabled a default pattern is used.
         //
-        // default: sample_sheet_{flow_cell_id}_{daq_start_time}_{short_protocol_run_id}.csv
+        // default: sample_sheet_{flow_cell_id}_{protocol_start_time}_{short_protocol_run_id}.csv
         // Where each {xxx} section is replaced with an attribute from the minknow
         // state when the file is written.
         //
@@ -1611,7 +1643,7 @@ message WriterConfiguration {
         // The pattern used to name the output hash file. If left empty but output is
         // enabled a default pattern is used.
         //
-        // default: output_hash_{flow_cell_id}_{daq_start_time}_{short_protocol_run_id}.csv
+        // default: output_hash_{flow_cell_id}_{protocol_start_time}_{short_protocol_run_id}.csv
         // Where each {xxx} section is replaced with an attribute from the minknow
         // state when the file is written.
         //
@@ -1622,7 +1654,9 @@ message WriterConfiguration {
     // Configuration for the fast5 writer.
     //
     // If not specified, no multi fast5 outputs are generated.
-    ReadFast5Configuration read_fast5 = 2;
+    //
+    // DEPRECATED since 6.10: read fast5 support will be removed in a future release.
+    ReadFast5Configuration read_fast5 = 2 [deprecated=true];
 
     // Configuration for the fastq writer.
     //
@@ -1678,6 +1712,116 @@ message GetReadClassificationsResponse {
     map<int32, string> read_classifications = 1;
 }
 
+message SignalFixingParams
+{
+    message ReferenceChannel
+    {
+        // The name of the channel (1-indexed).
+        uint32 channel = 1;
+        // The baseline against which the offset for this channel can be
+        // calculated in picoamps. This is expected to have been produced
+        // based on the statistics for this channel calculated over a
+        // time window.
+        float baseline_pa = 2;
+    }
+
+    // Whether to enable signal fixing.
+    //
+    // If this is false, no other fields need to be provided.
+    bool enabled = 1;
+
+    // A list of reference channels to use for signal fixing.
+    //
+    // This field is required if enabled is set to true.
+    //
+    // These channels must be set to a membrane-only well. The list should
+    // be in preference order - MinKNOW will try to use channels from the
+    // start of the list before channels from the end.
+    repeated ReferenceChannel reference_channels = 2;
+
+    // The maximum permitted deviation of any given reference channel from
+    // the median reference channel value.
+    //
+    // This is used to filter the refernece_channels list (to exclude
+    // channels that saturate, get a spike of electrical noise, or otherwise
+    // "go wrong"). It is expressed in standard deviations.
+    //
+    // Must be greater than 0. If omitted, a default of 1.0 is used.
+    float max_per_sample_deviation = 3;
+
+    // How many bad samples to allow before discarding a reference channel.
+    //
+    // If a reference channel fails the quality filter (see
+    // max_per_sample_deviation) for this many samples in a row, it will be
+    // permanently removed from the list of reference channels.
+    //
+    // Must be between 1 and 32000. If omitted, a default of 5000 is used.
+    uint32 max_bad_samples_before_discarding = 4;
+
+    // The minimum number of reference channels.
+    //
+    // If filtering reduces the number of reference channels to less than
+    // this number, signal fixing will be disabled.
+    //
+    // There must be at least this many reference channels in the list.
+    //
+    // If omitted, a default of 3 is used.
+    uint32 min_active_reference_channels = 5;
+
+    // The maximum number of reference channels to use.
+    //
+    // The first `max_active_reference_channels` will be used from the filtered
+    // list of reference channels.
+    //
+    // If this is equal to or larger than the number of reference channels, it
+    // has no effect.
+    //
+    // If omitted, a default of 10 is used.
+    uint32 max_active_reference_channels = 6;
+
+    message WellCapacitances
+    {
+        // The capaticance for each well on a channel, in picoamps.
+        //
+        // There must always be as many entries as there are wells per channel
+        // (typically 4, but 1 on flongles, for example). If not, the RPC will
+        // be rejected.
+        repeated float wells = 1;
+    }
+
+    // For each channel, a list of capacitances for each well on the channel.
+    //
+    // There must be one entry for each channel on the flow cell. Alternatively,
+    // this can be omitted entirely to do no scaling.
+    repeated WellCapacitances capacitances = 7;
+
+    // The minimum level of the baseline.
+    //
+    // This value is in pA/pF. Note that this is a difference, rather than
+    // an absolute value, so when converting to ADC/pF the offset from the
+    // calibration will not be applied. Instead, the mean of the scaling
+    // of the reference channels (see `reference_channels`) will be used.
+    //
+    // If the baseline is below this level for
+    // `max_bad_samples_before_discarding` continuous samples, all the
+    // reference channels that are active for that final sample will be
+    // removed from the list of reference channels.
+    //
+    // Note that this value does not *prevent* the baseline from going
+    // below this level, it just attempts to correct situations where
+    // several reference channels converge on an obviously-incorrect
+    // baseline.
+    //
+    // If omitted, there is no lower limit on the baseline.
+    optional float min_baseline = 8;
+
+    // The maximum level of the baseline.
+    //
+    // This behaves like `min_baseline`, but checks for the baseline
+    // going over this value.
+    optional float max_baseline = 9;
+}
+
 message DynamicAnalysisConfiguration {
 
     message ReadScaleTracking {
@@ -1720,6 +1864,18 @@ message DynamicAnalysisConfiguration {
     repeated read_end_reason.ReadEndReason force_veto_end_reasons = 3;
 
     repeated ChannelWellInfo channel_well_info = 4;
+
+    // Configure signal fixing.
+    //
+    // Signal fixing compensates for current spikes across the flow cell (as can happen
+    // when unblocking, for example) by using membrane-only channels as a reference.
+    //
+    // This is normally called by the protocol while acquisition is running. The protocol
+    // is expected to use data from the acquisition to determine which channels to use
+    // for signal fixing.
+    //
+    // Since 6.7
+    SignalFixingParams signal_fixing_params = 5;
 }
 
 message GetDynamicAnalysisConfigurationRequest {}
