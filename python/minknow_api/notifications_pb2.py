@@ -47,22 +47,17 @@ if not _descriptor._USE_C_DESCRIPTORS:
   _globals['_CREATENOTIFICATIONRESPONSE']._serialized_end=1108
   _globals['_NOTIFICATIONSSERVICE']._serialized_start=1111
   _globals['_NOTIFICATIONSSERVICE']._serialized_end=1560
-StreamNotificationsRequest.__doc__ = """Attributes:
-    include_updates_for_existing:
-        Whether updates to existing notifications (e.g., marking as
-        read) should be included in the stream. Defaults to false
-"""
-CreateNotificationResponse.__doc__ = """Attributes:
-    notification:
-        The created notification
-"""
-StreamNotificationsResponse.__doc__ = """Attributes:
-    notifications:
-        List of notifications. If new notifications are generated they
-        may be streamed as single values in the list. A delay of 1
-        second is set prior to notifications being sent, to prevent
-        multiple updates potentially spamming the stream in quick
-        succession
+NotificationContent.__doc__ = """Attributes:
+    notification_text:
+        Text relating to a specific notification
+    notification_code:
+        A code unique to each notification. This enables the client to
+        handle the text to display, which can then be translated or
+        operated on separately. If an unknown notification_code is
+        sent the client may fall-back to using `notification_text`
+    extra_data:
+        Any extra data associated with the notification, as a map from
+        key to data.
 """
 Notification.__doc__ = """Attributes:
     id:
@@ -77,9 +72,17 @@ Notification.__doc__ = """Attributes:
     content:
         Content attached to the notification
 """
-CreateNotificationRequest.__doc__ = """Attributes:
-    content:
-        Content to set for a new notification
+CreateNotificationResponse.__doc__ = """Attributes:
+    notification:
+        The created notification
+"""
+StreamNotificationsResponse.__doc__ = """Attributes:
+    notifications:
+        List of notifications. If new notifications are generated they
+        may be streamed as single values in the list. A delay of 1
+        second is set prior to notifications being sent, to prevent
+        multiple updates potentially spamming the stream in quick
+        succession
 """
 MarkNotificationsAsReadRequest.__doc__ = """Attributes:
     ids:
@@ -87,16 +90,13 @@ MarkNotificationsAsReadRequest.__doc__ = """Attributes:
         set the `read` attribute to `true`. If `read` is already
         `true` for a specific ID then it is not updated.
 """
-NotificationContent.__doc__ = """Attributes:
-    notification_text:
-        Text relating to a specific notification
-    notification_code:
-        A code unique to each notification. This enables the client to
-        handle the text to display, which can then be translated or
-        operated on separately. If an unknown notification_code is
-        sent the client may fall-back to using `notification_text`
-    extra_data:
-        Any extra data associated with the notification, as a map from
-        key to data.
+StreamNotificationsRequest.__doc__ = """Attributes:
+    include_updates_for_existing:
+        Whether updates to existing notifications (e.g., marking as
+        read) should be included in the stream. Defaults to false
+"""
+CreateNotificationRequest.__doc__ = """Attributes:
+    content:
+        Content to set for a new notification
 """
 # @@protoc_insertion_point(module_scope)

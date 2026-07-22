@@ -42,12 +42,6 @@ if not _descriptor._USE_C_DESCRIPTORS:
   _globals['_PROTOCOLSETTING_CATEGORY']._serialized_end=1399
   _globals['_PROTOCOLSETTING_UNIT']._serialized_start=1402
   _globals['_PROTOCOLSETTING_UNIT']._serialized_end=1606
-ProtocolSetting.__doc__ = """Attributes:
-    identifier:
-        Identifier is the unique primary-key for referring to
-        protocol-settings, dependencies refer to other settings via
-        their identifier.
-"""
 ProtocolIdentifierComponents.__doc__ = """Attributes:
     location:
         If not specified, will default to "ANY"
@@ -62,5 +56,11 @@ ProtocolIdentifierComponents.__doc__ = """Attributes:
         eg: "FLO-MIN106"
     kit:
         eg: "SQK-RPB004"
+"""
+ProtocolSetting.__doc__ = """Attributes:
+    identifier:
+        Identifier is the unique primary-key for referring to
+        protocol-settings, dependencies refer to other settings via
+        their identifier.
 """
 # @@protoc_insertion_point(module_scope)

@@ -61,6 +61,10 @@ if not _descriptor._USE_C_DESCRIPTORS:
   _globals['_LISTGROUPIDSREQUEST']._serialized_end=1857
   _globals['_PROTOCOLSSERVICE']._serialized_start=1860
   _globals['_PROTOCOLSSERVICE']._serialized_end=2982
+StartProtocolsRequest.IndividualRequest.__doc__ = """Attributes:
+    flow_cell_position_name:
+        The position on which to start this protocol.
+"""
 GroupFilteringInfo.__doc__ = """Limit the filtering to time-related filters only.
 
 Attributes:
@@ -69,14 +73,10 @@ Attributes:
     protocol_group_id:
         Filter runs by a specific protocol_group_id
 """
+BeginProtocolsResponse.IndividualResponse.__doc__ = """Represents the response from the proxied call to 'begin_protocol' on a
+specific flow cell."""
 BeginProtocolsRequest.IndividualRequest.__doc__ = """Attributes:
     flow_cell_position_name:
         The position on which to start this protocol.
 """
-StartProtocolsRequest.IndividualRequest.__doc__ = """Attributes:
-    flow_cell_position_name:
-        The position on which to start this protocol.
-"""
-BeginProtocolsResponse.IndividualResponse.__doc__ = """Represents the response from the proxied call to 'begin_protocol' on a
-specific flow cell."""
 # @@protoc_insertion_point(module_scope)

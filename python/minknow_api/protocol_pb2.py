@@ -384,22 +384,172 @@ if not _descriptor._USE_C_DESCRIPTORS:
   _globals['_SETPROTOCOLRESTARTABLERESPONSE']._serialized_end=12977
   _globals['_PROTOCOLSERVICE']._serialized_start=14415
   _globals['_PROTOCOLSERVICE']._serialized_end=17832
-ResumeProtocolRequest.__doc__ = """Attributes:
-    protocol_run_id:
-        The protocol run id of the protocol to resume  If empty,
-        resumes the currently running protocol (if any) Otherwise,
-        resumes the specified protocol if it is currently in progress
-        Since 6.4
+ProtocolGroupIdInfo.__doc__ = """timestamp for the last activity for experiment ordering since 5.6
+
+Attributes:
+    start_time:
+        Most recent start time for the protocol group id
+    pooled_output:
+        Whether the protocol group has its data pooled or not See
+        `pool_output` in `ProtocolRunUserInfo` for more info since 6.7
 """
-GetRunInfoRequest.__doc__ = """Attributes:
+BeginProtocolResponse.__doc__ = """Attributes:
     run_id:
-        The protocol run to get information about.
+        UUID generated when the protocol is started, to uniquely
+        represent this protocol instance
 """
-AssociatedPostProcessingAnalysis.__doc__ = """Attributes:
-    started_id:
-        Id of analysis if this has been triggered (otherwise empty).
-    start_request:
-        Start request for analysis
+RequestOrigin.MinKNOW.__doc__ = """A request from minknow will usually come in the form of something
+ending naturally, or an error occurring where minknow has to take
+action
+
+Attributes:
+    cause:
+        Optional further details on the cause of the request
+"""
+StartProtocolResponse.__doc__ = """Attributes:
+    run_id:
+        UUID generated when the protocol is started, to uniquely
+        represent this protocol instance
+"""
+ProtocolRunUserInfo.__doc__ = """Attributes:
+    protocol_group_id:
+        The group which the experiment should be held in.  note: This
+        value could be unset if a user did not specify a group_id when
+        starting the protocol.
+    sample_id:
+        sample_id created by the user
+    pool_output:
+        Ordinarily, data is split into separate top-level per-protocol
+        directories  If `pool_output` is set to true, the splitting
+        into per-protocol directories happens at the bottom level
+        instead.  This in turn means that the output files for
+        protocols with the same `protocol_group_id` and `sample_id`
+        are stored next to each other, in subdirectories under the
+        output type directory  (The precise configuration is
+        controlled by the `protocol_output_pattern` and
+        `pooled_protocol_output_pattern` user configuration values)
+    barcode_user_info:
+        User supplied info for barcodes
+    user_specified_flow_cell_id:
+        user_specified_flow_cell_id created by the user
+    user_specified_product_code:
+        user_specified_product_code created by the user
+    kit_info:
+        Kit information the user requested
+"""
+BeginPlatformQcResponse.__doc__ = """Attributes:
+    run_id:
+        UUID generated when the protocol is started, to uniquely
+        represent this protocol instance
+"""
+GenerateRunReportResponse.__doc__ = """Attributes:
+    protocol_run_id:
+        Protocol ID the run report is for.
+    report_data:
+        A section of the run report data (note the api to return this
+        data may stream back several sections).
+    remaining_length:
+        How many further characters of data remain after this message
+        (excluding of this message).
+    input_data:
+        If include_input_data was set, this will be a section of that
+        data (note the api to return this data may stream back several
+        sections).
+    remaining_input_length:
+        If include_input_data was set, how many further characters of
+        input data remain after this message (excluding of this
+        message).
+"""
+ProtocolPhaseSnapshot.__doc__ = """Attributes:
+    phase:
+        The new protocol phase when the phase request happened
+    timestamp:
+        UTC timestamp of when the protocol phase changed was requested
+    origin:
+        Who requested the phase change  Candidates:
+        ProtocolPhaseMangement: Through protocol_phase_management API
+        MinKNOW: When the protocol ends and the phase is marked
+        PHASE_COMPLETED
+"""
+OffloadLocationInfo.__doc__ = """Attributes:
+    offload_location_ids:
+        Data offload locations to use to store protocol data,
+        specified using their `location_id`.  Valid `location_id`s can
+        be retrieved using
+        mooneye.offload_manager.list_offload_locations()  If any
+        `offload_location_ids` are specified, then:   - Data is not
+        stored locally   - `offload_location_path` must NOT be set (or
+        must be set to an empty value)      - The
+        `offload_location_ids` indicate that data should be offloaded,
+        rather than        stored locally; the `offload_location_path`
+        is used to set a local storage location.      - If both are
+        set, an error is returned  This requires a running instance of
+        Mooneye  Since 5.0.
+    offload_location_path:
+        Local, e.g., internal / external drive, paths to where the
+        protocol output will be stored.  This setting overrides the
+        default output locations (as set through configuration files
+        and/or the instance service).  If `offload_location_path` is
+        set to a non-empty value, then:  -  `offload_location_ids`
+        MUST be empty      - The `offload_location_ids` indicate that
+        data should be offloaded, rather than        stored locally;
+        the `offload_location_path` is used to set a local storage
+        location.      - If both are set, an error is returned  This
+        does not require a running instance of Mooneye  Since 5.0
+"""
+GetVersionInfoResponse.__doc__ = """Version of the basecaller MinKNOW is running with.  Since 5.0 This
+field has been updated since 6.0  guppy_connected_version
+
+Attributes:
+    minknow:
+        What minknow version is installed. Split into major, minor and
+        patch versions Also includes the full version as a string,
+        which contain the major, minor and patch numbers as well as if
+        the version is pre-release version (~pre), whether it is a
+        release candidate (~rc#) or whether it is a variant version
+        (i.e. for conferences) (-variant). For non-release builds it
+        also includes the hash of the commit it is based on, and
+        whether the working copy is different from that has (-dirty)
+    bream:
+        The version of Bream that is installed.  An invalid
+        installation will cause this to return "0.0.0".  Prior to 5.0,
+        this field was called "protocols".  Since 5.0
+    distribution_version:
+        Describes the distribution that this MinKNOW installation is
+        part of, usually this will be the Metapackage version
+        number/identity, this will be "unknown" if the distribution-
+        version hasn't been set. This information is also communicated
+        in the Manager's DaemonMessage in daemon.proto
+    distribution_status:
+        Indicates if the MinKNOW distribution including components
+        such as Bream are stable, unstable or have been modified.
+    protocol_configuration:
+        The version of the protocol configuration files that is
+        installed.  An invalid installation will cause this to return
+        "0.0.0".  Prior to 5.0, this field was called "configuration".
+        Since 5.0
+    installation_type:
+        The installation type of MinKNOW.  The installation type may
+        affect the available features, or the update process.  Since
+        4.1
+"""
+SetProtocolRestartableRequest.__doc__ = """Attributes:
+    protocol_run_id:
+        Protocol ID to flag as restartable.  This protocol must
+        currently be active.
+    is_restartable:
+        Set the protocol script as restartable.
+"""
+HardwareCheckTemperatureResults.__doc__ = """Attributes:
+    failure_reason:
+        `failure_reason` is guaranteed to be:  - `NoError` if `status`
+        is NOT `Failed`  - NOT `NoError` if `status` is `Failed`
+    target_temperature:
+        Target temperature to maintain during temperature test
+    mean_heatsink_temperature:
+        Mean achieved temperature during temperature test
+    temperature_tolerance:
+        allowed temperature tolerance range
 """
 AnalysisWorkflowInfo.__doc__ = """Attributes:
     request:
@@ -423,123 +573,42 @@ AnalysisWorkflowInfo.__doc__ = """Attributes:
         the report(s) are able to be retrieved from the Reception
         server
 """
-AssociatePostProcessingAnalysisResponse.__doc__ = """Attributes:
-    id:
-        Id of the basecaller.proto post processing task that was
-        triggered, if the post processing analysis was executed
-        immediately (protocol was finished).
+PauseProtocolRequest.__doc__ = """Attributes:
+    protocol_run_id:
+        The protocol run id of the protocol to pause  If empty, pause
+        the currently running protocol (if any) Otherwise, pauses the
+        specified protocol if it is currently in progress  Since 6.4
 """
-HardwareCheckResult.__doc__ = """The data sent to the UI
-
-Attributes:
+AssociatedPostProcessingAnalysis.__doc__ = """Attributes:
+    started_id:
+        Id of analysis if this has been triggered (otherwise empty).
+    start_request:
+        Start request for analysis
+"""
+StopProtocolRequest.__doc__ = """Attributes:
+    protocol_run_id:
+        The protocol run id of the protocol to stop  If empty, stops
+        the currently running protocol (if any) Otherwise, stops the
+        specified protocol if it is currently in progress  Since 6.4
+    data_action_on_stop:
+        Specify how any running acquisition should be handled when
+        stopping the protocol.  Protocol state will enter
+        PROTOCOL_WAITING_FOR_ACQUISITION whilst any running
+        acquisition is finished.  If a script ends on its own any
+        analysis that was started is stopped, and it is allowed to
+        catchup. If the caller wants to end catchup they can call
+        stop_protocol to end catchup.  Since 1.15
+"""
+HardwareCheckCalibrationResults.__doc__ = """Attributes:
     failure_reason:
         `failure_reason` is guaranteed to be:  - `NoError` if `status`
         is NOT `Failed`  - NOT `NoError` if `status` is `Failed`
-    calibration_results:
-        Results data for calibration test
-    temperature_results:
-        Results data for temperature test
-    hardware_check_id:
-        The ID of this hardware check result.
-    start_time:
-        The time (UTC) when the hardware check was started.
-    end_time:
-        The time (UTC) when the hardware check completed.  Unset if
-        the check is still running.
-    hardware_check_script_data:
-        The data from the hardware check script
-    state:
-        Indicates the current state of the hardware check run.
 """
-ProtocolPhaseManagementRequest.Capabilities.__doc__ = """Attributes:
-    can_pause:
-        Indicate that the protocol will respond to pause and resume
-        requests.
-    can_trigger_mux_scan:
-        Indicate that the protocol will respond to mux scan requests.
-"""
-SetProtocolRestartableRequest.__doc__ = """Attributes:
-    protocol_run_id:
-        Protocol ID to flag as restartable.  This protocol must
-        currently be active.
-    is_restartable:
-        Set the protocol script as restartable.
-"""
-ProtocolPhaseSnapshot.__doc__ = """Attributes:
-    phase:
-        The new protocol phase when the phase request happened
-    timestamp:
-        UTC timestamp of when the protocol phase changed was requested
-    origin:
-        Who requested the phase change  Candidates:
-        ProtocolPhaseMangement: Through protocol_phase_management API
-        MinKNOW: When the protocol ends and the phase is marked
-        PHASE_COMPLETED
-"""
-RequestOrigin.ProtocolPhaseManagement.__doc__ = """The protocol script/bream is mainly responsible for making changes via
-protocol_phase_management"""
-FilteringInfo.__doc__ = """Attributes:
-    pqc_filter:
-        Filter by runs that have platform QC results  Just
-        initialising this message is enough to filter out runs with
-        platform QC results from ones that don't  Further filtering on
-        the platform QC results can be applied by using the fields
-        within PlatformQcFilter
-    flow_cell_id:
-        Flow cell ID for any given protocol run must match this
-        _exactly_ to pass filtering. Note that this is intended to be
-        position-agnostic, so doesn't include the position identifier.
-        Will be checked against both the 'original' ID and the user-
-        specified ID. If either one matches, this will pass filtering.
-    hardware_check_filter:
-        Filter by runs that have hardware check results  Initialising
-        this message means that only runs with a hardware check result
-        will be returned
-    protocol_group_id:
-        Filter runs by a specific protocol_group_id
-    count:
-        Restrict the number of returned run_ids. If unset returns all
-        run_ids.
-    offset:
-        Defines which run ID index to offset by for the run_ids that
-        are returned.  If count is set and offset is unset or zero
-        then the dataset containing the first run_id[0] to
-        run_id[count] is returned.  If offset is set to a value that
-        is beyond the bounds of the dataset then the last valid set of
-        run_ids are returned that satisfies the specified count.
-    order_by:
-        Default of START_TIME
-    order_direction:
-        Default of DESCENDING
-"""
-StartProtocolRequest.__doc__ = """ passenger_info
-
-Attributes:
-    identifier:
-        The identifier of the protocol, as provided by
-        list_protocols().
-    args:
-        The arguments to pass to the protocol.
-    user_info:
-        User input describing the protocol.
-    offload_location_info:
-        Information about data offload locations to use to store data
-        Since 5.0.
-    target_run_until_criteria:
-        Initial Target Run-Until Criteria to use when starting an
-        acquisition for this protocol. These can be updated during the
-        acquisition using the Run-Until API.  Since 5.3
-    analysis_workflow_request:
-        Workflow request that should be started when the protocol is
-        started
-"""
-ExternalOffload.__doc__ = """Attributes:
-    offload_ids:
-        The `id`s associated with active external data offloads
-        associated with the protocol The offload status can be queried
-        using `mooneye.offload_manager.watch_offloads()``
-    offload_locations:
-        mooneye offload location information
+ListProtocolGroupIdsResponse.__doc__ = """Attributes:
+    protocol_group_ids_info:
+        A list of the most recent start time for each protocol group
+        id on this instance of minknow.  guaranteed to be ordered by
+        most recent start time since 5.6
 """
 ProtocolRunInfo.__doc__ = """ epi2me workflows
 
@@ -647,135 +716,112 @@ Attributes:
         Can this protocol be restarted if the script exits with an
         error.  Since 6.7
 """
-PauseProtocolRequest.__doc__ = """Attributes:
-    protocol_run_id:
-        The protocol run id of the protocol to pause  If empty, pause
-        the currently running protocol (if any) Otherwise, pauses the
-        specified protocol if it is currently in progress  Since 6.4
+ProtocolPhaseManagementRequest.Capabilities.__doc__ = """Attributes:
+    can_pause:
+        Indicate that the protocol will respond to pause and resume
+        requests.
+    can_trigger_mux_scan:
+        Indicate that the protocol will respond to mux scan requests.
 """
-ProtocolGroupIdInfo.__doc__ = """timestamp for the last activity for experiment ordering since 5.6
-
-Attributes:
-    start_time:
-        Most recent start time for the protocol group id
-    pooled_output:
-        Whether the protocol group has its data pooled or not See
-        `pool_output` in `ProtocolRunUserInfo` for more info since 6.7
+WaitForFinishedRequest.__doc__ = """Attributes:
+    run_id:
+        Only consider a specific protocol run.
+    state:
+        Control what to wait for.  Specifying
+        NOTIFY_BEFORE_TERMINATION allows a caller to be notified the
+        script will be ended _soon_, and do final work to end cleanly.
+        Since 1.11
+    timeout:
+        Timeout to wait for finished, if the timeout expires before
+        the protocol is complete (in the state requested) then the
+        response returns.  By default the timeout will wait forever.
+        Since 1.15
 """
-ExternalOffload.OffloadLocation.__doc__ = """An adapted version of mooneye.OffloadLocation  Since 6.5
-
-Attributes:
-    id:
-        unique id of this offload location (uuid)
-    name:
-        name of this offload location
-    path:
-        Path of directory to offload to Each worker actually offloads
-        to a unique directory generated at path which is
-        "OffloadLocation.path / OffloadWorker.id" path is s3 bucket if
-        LocationType.S3
-    location_type:
-        location type
+FilteringInfo.HardwareCheckFilter.__doc__ = """Attributes:
+    only_succeeded_or_failed:
+        Set to true to only return hardware check results that have a
+        status of `SUCCEEDED` or `FAILED`.
 """
-SetPlatformQcResultRequest.__doc__ = """Attributes:
-    protocol_run_id:
-        The protocol_run_id that was given when the pqc run was
-        started
-"""
-ProtocolPhaseManagementRequest.__doc__ = """Attributes:
-    set_capabilities:
-        Update the set of capabilities (messages that will be
-        responded to by the protocol).
-    phase:
-        Update the protocol phase.  Leave empty (ie: PHASE_UNKNOWN) to
-        keep the previous phase.
-"""
-GetVersionInfoResponse.__doc__ = """Version of the basecaller MinKNOW is running with.  Since 5.0 This
-field has been updated since 6.0  guppy_connected_version
-
-Attributes:
-    minknow:
-        What minknow version is installed. Split into major, minor and
-        patch versions Also includes the full version as a string,
-        which contain the major, minor and patch numbers as well as if
-        the version is pre-release version (~pre), whether it is a
-        release candidate (~rc#) or whether it is a variant version
-        (i.e. for conferences) (-variant). For non-release builds it
-        also includes the hash of the commit it is based on, and
-        whether the working copy is different from that has (-dirty)
-    bream:
-        The version of Bream that is installed.  An invalid
-        installation will cause this to return "0.0.0".  Prior to 5.0,
-        this field was called "protocols".  Since 5.0
-    distribution_version:
-        Describes the distribution that this MinKNOW installation is
-        part of, usually this will be the Metapackage version
-        number/identity, this will be "unknown" if the distribution-
-        version hasn't been set. This information is also communicated
-        in the Manager's DaemonMessage in daemon.proto
-    distribution_status:
-        Indicates if the MinKNOW distribution including components
-        such as Bream are stable, unstable or have been modified.
-    protocol_configuration:
-        The version of the protocol configuration files that is
-        installed.  An invalid installation will cause this to return
-        "0.0.0".  Prior to 5.0, this field was called "configuration".
-        Since 5.0
-    installation_type:
-        The installation type of MinKNOW.  The installation type may
-        affect the available features, or the update process.  Since
-        4.1
-"""
-ListProtocolGroupIdsResponse.__doc__ = """Attributes:
-    protocol_group_ids_info:
-        A list of the most recent start time for each protocol group
-        id on this instance of minknow.  guaranteed to be ordered by
-        most recent start time since 5.6
-"""
-ListProtocolRunsResponse.__doc__ = """Attributes:
-    total_count:
-        The total number of stored run_ids
-    offset:
-        The offset of the first returned run_id, when ordered
-        according to the criteria in the request
+ListProtocolsRequest.__doc__ = """Attributes:
+    force_reload:
+        If this is false, then will try to use the cached value of the
+        protocol list where possible (still subject to changes in flow
+        cell). If this is true, then will force a reload of the
+        protocol list  Defaults to false
 """
 AssociatePostProcessingAnalysisRequest.__doc__ = """Attributes:
     run_id:
         Protocol id to associate analysis with:
 """
-HardwareCheckTemperatureResults.__doc__ = """Attributes:
-    failure_reason:
-        `failure_reason` is guaranteed to be:  - `NoError` if `status`
-        is NOT `Failed`  - NOT `NoError` if `status` is `Failed`
-    target_temperature:
-        Target temperature to maintain during temperature test
-    mean_heatsink_temperature:
-        Mean achieved temperature during temperature test
-    temperature_tolerance:
-        allowed temperature tolerance range
+KitInfo.__doc__ = """Attributes:
+    sequencing_kit:
+        The sequencing kit used to select the protocol e.g. "SQK-
+        LSK108"
+    barcode_expansion_kits:
+        The expansion barcoding kits that the protocol supports e.g.
+        "EXP-NBD104"
 """
-GenerateRunReportResponse.__doc__ = """Attributes:
+RequestOrigin.RunUntil.__doc__ = """A request made by the run until script due to certain criteria being
+met
+
+Attributes:
+    criteria:
+        What criteria caused the state change
+"""
+GenerateRunReportRequest.__doc__ = """Attributes:
     protocol_run_id:
-        Protocol ID the run report is for.
-    report_data:
-        A section of the run report data (note the api to return this
-        data may stream back several sections).
-    remaining_length:
-        How many further characters of data remain after this message
-        (excluding of this message).
-    input_data:
-        If include_input_data was set, this will be a section of that
-        data (note the api to return this data may stream back several
-        sections).
-    remaining_input_length:
-        If include_input_data was set, how many further characters of
-        input data remain after this message (excluding of this
-        message).
+        The protocol_run_id to generate a report for.
+    include_input_data:
+        Optionally return the input data used to generate the report.
+        This input data is represented as the data seen in
+        report_data.proto
 """
-HardwareCheckCalibrationResults.__doc__ = """Attributes:
-    failure_reason:
-        `failure_reason` is guaranteed to be:  - `NoError` if `status`
-        is NOT `Failed`  - NOT `NoError` if `status` is `Failed`
+FilteringInfo.__doc__ = """Attributes:
+    pqc_filter:
+        Filter by runs that have platform QC results  Just
+        initialising this message is enough to filter out runs with
+        platform QC results from ones that don't  Further filtering on
+        the platform QC results can be applied by using the fields
+        within PlatformQcFilter
+    flow_cell_id:
+        Flow cell ID for any given protocol run must match this
+        _exactly_ to pass filtering. Note that this is intended to be
+        position-agnostic, so doesn't include the position identifier.
+        Will be checked against both the 'original' ID and the user-
+        specified ID. If either one matches, this will pass filtering.
+    hardware_check_filter:
+        Filter by runs that have hardware check results  Initialising
+        this message means that only runs with a hardware check result
+        will be returned
+    protocol_group_id:
+        Filter runs by a specific protocol_group_id
+    count:
+        Restrict the number of returned run_ids. If unset returns all
+        run_ids.
+    offset:
+        Defines which run ID index to offset by for the run_ids that
+        are returned.  If count is set and offset is unset or zero
+        then the dataset containing the first run_id[0] to
+        run_id[count] is returned.  If offset is set to a value that
+        is beyond the bounds of the dataset then the last valid set of
+        run_ids are returned that satisfies the specified count.
+    order_by:
+        Default of START_TIME
+    order_direction:
+        Default of DESCENDING
+"""
+BeginHardwareCheckResponse.__doc__ = """Attributes:
+    run_id:
+        UUID generated when the protocol is started, to uniquely
+        represent this protocol instance
+"""
+RequestOrigin.User.__doc__ = """'User' based changes will typically come from calls made by the UI
+such as 'stop_protocol'
+
+Attributes:
+    identity:
+        If available then provide any identity information MinKNOW has
+        about the client that made the RPC request
 """
 ProtocolPhaseManagementResponse.__doc__ = """Attributes:
     action:
@@ -786,30 +832,120 @@ ProtocolPhaseManagementResponse.__doc__ = """Attributes:
         this is set to ACTION_NONE, the message should be ignored
         (this is for future compatibility).
 """
-RequestOrigin.RunUntil.__doc__ = """A request made by the run until script due to certain criteria being
-met
+ResumeProtocolRequest.__doc__ = """Attributes:
+    protocol_run_id:
+        The protocol run id of the protocol to resume  If empty,
+        resumes the currently running protocol (if any) Otherwise,
+        resumes the specified protocol if it is currently in progress
+        Since 6.4
+"""
+BarcodeUserData.__doc__ = """Attributes:
+    barcode_name:
+        Barcode name the user data applies to, eg: "barcode02".  Acts
+        as the external barcode name `barcode_name_internal` is also
+        set for dual barcoding
+    barcode_name_internal:
+        The internal barcode name if using dual barcode
+    lamp_barcode_id:
+        Lamp barcode id the user data applies to, eg: "FIP04"
+        DEPRECATED 6.0: Lamp support has been removed and this value
+        will always be empty.
+    alias:
+        User defined string alias for the barcode.
+    type:
+        Sample type grouping for the barcode.
+    passenger_info:
+        Extra context per barcode
+"""
+StartProtocolRequest.__doc__ = """ passenger_info
 
 Attributes:
-    criteria:
-        What criteria caused the state change
+    identifier:
+        The identifier of the protocol, as provided by
+        list_protocols().
+    args:
+        The arguments to pass to the protocol.
+    user_info:
+        User input describing the protocol.
+    offload_location_info:
+        Information about data offload locations to use to store data
+        Since 5.0.
+    target_run_until_criteria:
+        Initial Target Run-Until Criteria to use when starting an
+        acquisition for this protocol. These can be updated during the
+        acquisition using the Run-Until API.  Since 5.3
+    analysis_workflow_request:
+        Workflow request that should be started when the protocol is
+        started
 """
-BeginProtocolResponse.__doc__ = """Attributes:
+GetRunInfoRequest.__doc__ = """Attributes:
     run_id:
-        UUID generated when the protocol is started, to uniquely
-        represent this protocol instance
+        The protocol run to get information about.
 """
-BeginHardwareCheckResponse.__doc__ = """Attributes:
-    run_id:
-        UUID generated when the protocol is started, to uniquely
-        represent this protocol instance
+RequestOrigin.ProtocolPhaseManagement.__doc__ = """The protocol script/bream is mainly responsible for making changes via
+protocol_phase_management"""
+PlatformQcResult.__doc__ = """Attributes:
+    flow_cell_id:
+        The flow cell id that the pqc was performed for
+    passed:
+        Whether the flow cell passed the platform qc check
+    total_pore_count:
+        Total number of pores that were found on the flow cell, across
+        all muxes.
 """
-GenerateRunReportRequest.__doc__ = """Attributes:
+HardwareCheckResult.__doc__ = """The data sent to the UI
+
+Attributes:
+    failure_reason:
+        `failure_reason` is guaranteed to be:  - `NoError` if `status`
+        is NOT `Failed`  - NOT `NoError` if `status` is `Failed`
+    calibration_results:
+        Results data for calibration test
+    temperature_results:
+        Results data for temperature test
+    hardware_check_id:
+        The ID of this hardware check result.
+    start_time:
+        The time (UTC) when the hardware check was started.
+    end_time:
+        The time (UTC) when the hardware check completed.  Unset if
+        the check is still running.
+    hardware_check_script_data:
+        The data from the hardware check script
+    state:
+        Indicates the current state of the hardware check run.
+"""
+ExternalOffload.__doc__ = """Attributes:
+    offload_ids:
+        The `id`s associated with active external data offloads
+        associated with the protocol The offload status can be queried
+        using `mooneye.offload_manager.watch_offloads()``
+    offload_locations:
+        mooneye offload location information
+"""
+SetHardwareCheckResultRequest.__doc__ = """Attributes:
     protocol_run_id:
-        The protocol_run_id to generate a report for.
-    include_input_data:
-        Optionally return the input data used to generate the report.
-        This input data is represented as the data seen in
-        report_data.proto
+        The protocol_run_id that was given when the hardware check run
+        was started
+"""
+ProtocolPhaseManagementRequest.__doc__ = """Attributes:
+    set_capabilities:
+        Update the set of capabilities (messages that will be
+        responded to by the protocol).
+    phase:
+        Update the protocol phase.  Leave empty (ie: PHASE_UNKNOWN) to
+        keep the previous phase.
+"""
+SetPlatformQcResultRequest.__doc__ = """Attributes:
+    protocol_run_id:
+        The protocol_run_id that was given when the pqc run was
+        started
+"""
+AssociatePostProcessingAnalysisResponse.__doc__ = """Attributes:
+    id:
+        Id of the basecaller.proto post processing task that was
+        triggered, if the post processing analysis was executed
+        immediately (protocol was finished).
 """
 BeginProtocolRequest.__doc__ = """ passenger_info
 
@@ -842,162 +978,26 @@ Attributes:
         Simulation source for playback device data, either an hdf file
         or directory for use with arrow playback files.  Since 6.2
 """
-SetHardwareCheckResultRequest.__doc__ = """Attributes:
-    protocol_run_id:
-        The protocol_run_id that was given when the hardware check run
-        was started
-"""
-BeginPlatformQcResponse.__doc__ = """Attributes:
-    run_id:
-        UUID generated when the protocol is started, to uniquely
-        represent this protocol instance
-"""
-BarcodeUserData.__doc__ = """Attributes:
-    barcode_name:
-        Barcode name the user data applies to, eg: "barcode02".  Acts
-        as the external barcode name `barcode_name_internal` is also
-        set for dual barcoding
-    barcode_name_internal:
-        The internal barcode name if using dual barcode
-    lamp_barcode_id:
-        Lamp barcode id the user data applies to, eg: "FIP04"
-        DEPRECATED 6.0: Lamp support has been removed and this value
-        will always be empty.
-    alias:
-        User defined string alias for the barcode.
-    type:
-        Sample type grouping for the barcode.
-    passenger_info:
-        Extra context per barcode
-"""
-ListProtocolsRequest.__doc__ = """Attributes:
-    force_reload:
-        If this is false, then will try to use the cached value of the
-        protocol list where possible (still subject to changes in flow
-        cell). If this is true, then will force a reload of the
-        protocol list  Defaults to false
-"""
-WaitForFinishedRequest.__doc__ = """Attributes:
-    run_id:
-        Only consider a specific protocol run.
-    state:
-        Control what to wait for.  Specifying
-        NOTIFY_BEFORE_TERMINATION allows a caller to be notified the
-        script will be ended _soon_, and do final work to end cleanly.
-        Since 1.11
-    timeout:
-        Timeout to wait for finished, if the timeout expires before
-        the protocol is complete (in the state requested) then the
-        response returns.  By default the timeout will wait forever.
-        Since 1.15
-"""
-KitInfo.__doc__ = """Attributes:
-    sequencing_kit:
-        The sequencing kit used to select the protocol e.g. "SQK-
-        LSK108"
-    barcode_expansion_kits:
-        The expansion barcoding kits that the protocol supports e.g.
-        "EXP-NBD104"
-"""
-RequestOrigin.User.__doc__ = """'User' based changes will typically come from calls made by the UI
-such as 'stop_protocol'
+ExternalOffload.OffloadLocation.__doc__ = """An adapted version of mooneye.OffloadLocation  Since 6.5
 
 Attributes:
-    identity:
-        If available then provide any identity information MinKNOW has
-        about the client that made the RPC request
+    id:
+        unique id of this offload location (uuid)
+    name:
+        name of this offload location
+    path:
+        Path of directory to offload to Each worker actually offloads
+        to a unique directory generated at path which is
+        "OffloadLocation.path / OffloadWorker.id" path is s3 bucket if
+        LocationType.S3
+    location_type:
+        location type
 """
-FilteringInfo.HardwareCheckFilter.__doc__ = """Attributes:
-    only_succeeded_or_failed:
-        Set to true to only return hardware check results that have a
-        status of `SUCCEEDED` or `FAILED`.
-"""
-ProtocolRunUserInfo.__doc__ = """Attributes:
-    protocol_group_id:
-        The group which the experiment should be held in.  note: This
-        value could be unset if a user did not specify a group_id when
-        starting the protocol.
-    sample_id:
-        sample_id created by the user
-    pool_output:
-        Ordinarily, data is split into separate top-level per-protocol
-        directories  If `pool_output` is set to true, the splitting
-        into per-protocol directories happens at the bottom level
-        instead.  This in turn means that the output files for
-        protocols with the same `protocol_group_id` and `sample_id`
-        are stored next to each other, in subdirectories under the
-        output type directory  (The precise configuration is
-        controlled by the `protocol_output_pattern` and
-        `pooled_protocol_output_pattern` user configuration values)
-    barcode_user_info:
-        User supplied info for barcodes
-    user_specified_flow_cell_id:
-        user_specified_flow_cell_id created by the user
-    user_specified_product_code:
-        user_specified_product_code created by the user
-    kit_info:
-        Kit information the user requested
-"""
-StopProtocolRequest.__doc__ = """Attributes:
-    protocol_run_id:
-        The protocol run id of the protocol to stop  If empty, stops
-        the currently running protocol (if any) Otherwise, stops the
-        specified protocol if it is currently in progress  Since 6.4
-    data_action_on_stop:
-        Specify how any running acquisition should be handled when
-        stopping the protocol.  Protocol state will enter
-        PROTOCOL_WAITING_FOR_ACQUISITION whilst any running
-        acquisition is finished.  If a script ends on its own any
-        analysis that was started is stopped, and it is allowed to
-        catchup. If the caller wants to end catchup they can call
-        stop_protocol to end catchup.  Since 1.15
-"""
-OffloadLocationInfo.__doc__ = """Attributes:
-    offload_location_ids:
-        Data offload locations to use to store protocol data,
-        specified using their `location_id`.  Valid `location_id`s can
-        be retrieved using
-        mooneye.offload_manager.list_offload_locations()  If any
-        `offload_location_ids` are specified, then:   - Data is not
-        stored locally   - `offload_location_path` must NOT be set (or
-        must be set to an empty value)      - The
-        `offload_location_ids` indicate that data should be offloaded,
-        rather than        stored locally; the `offload_location_path`
-        is used to set a local storage location.      - If both are
-        set, an error is returned  This requires a running instance of
-        Mooneye  Since 5.0.
-    offload_location_path:
-        Local, e.g., internal / external drive, paths to where the
-        protocol output will be stored.  This setting overrides the
-        default output locations (as set through configuration files
-        and/or the instance service).  If `offload_location_path` is
-        set to a non-empty value, then:  -  `offload_location_ids`
-        MUST be empty      - The `offload_location_ids` indicate that
-        data should be offloaded, rather than        stored locally;
-        the `offload_location_path` is used to set a local storage
-        location.      - If both are set, an error is returned  This
-        does not require a running instance of Mooneye  Since 5.0
-"""
-StartProtocolResponse.__doc__ = """Attributes:
-    run_id:
-        UUID generated when the protocol is started, to uniquely
-        represent this protocol instance
-"""
-RequestOrigin.MinKNOW.__doc__ = """A request from minknow will usually come in the form of something
-ending naturally, or an error occurring where minknow has to take
-action
-
-Attributes:
-    cause:
-        Optional further details on the cause of the request
-"""
-PlatformQcResult.__doc__ = """Attributes:
-    flow_cell_id:
-        The flow cell id that the pqc was performed for
-    passed:
-        Whether the flow cell passed the platform qc check
-    total_pore_count:
-        Total number of pores that were found on the flow cell, across
-        all muxes.
+ListProtocolRunsResponse.__doc__ = """Attributes:
+    total_count:
+        The total number of stored run_ids
+    offset:
+        The offset of the first returned run_id, when ordered
+        according to the criteria in the request
 """
 # @@protoc_insertion_point(module_scope)

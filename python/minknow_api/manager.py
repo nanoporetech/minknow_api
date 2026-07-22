@@ -24,7 +24,6 @@ import minknow_api
 import minknow_api.basecaller_service
 import minknow_api.keystore_service
 import minknow_api.log_service
-import minknow_api.ui.sequencing_run.presets_service
 import minknow_api.hardware_check_service
 import minknow_api.notifications_service
 import minknow_api.manager_pb2 as manager_pb2
@@ -428,17 +427,6 @@ class Manager(ServiceBase):
             The wrapper for the Protocols gRPC service.
         """
         return minknow_api.v2.protocols_service.ProtocolsService(self.channel)
-
-    def presets(self) -> minknow_api.ui.sequencing_run.presets_service.PresetsService:
-        """
-        Find the presets service running for this manager.
-
-        Returns:
-            PresetsService: The gRPC service for the manager level presets service.
-        """
-        return minknow_api.ui.sequencing_run.presets_service.PresetsService(
-            self.channel
-        )
 
     def notifications_service(
         self,

@@ -76,6 +76,33 @@ GetUserMessagesRequest.__doc__ = """Attributes:
         that were sent previously.  note: there is a limit on how many
         messages are recorded for replay.
 """
+SendUserMessageRequest.__doc__ = """Attributes:
+    severity:
+        The severity of the message to send  note: TRACE messages
+        cannot be sent using this interface (will throw an error).
+    identifier:
+        A short unique textual identifier for the message Used to
+        identify the message for translation purposes
+    user_message:
+        The user message to send to any listeners.
+    extra_data:
+        Any extra data associated with the user message, as a map from
+        key to data.
+"""
+UserMessage.__doc__ = """Attributes:
+    time:
+        Timestamp for when the log message was emitted
+    severity:
+        The severity of the message
+    identifier:
+        A short unique textual identifier for the message Used to
+        identify the message for translation purposes
+    user_message:
+        A long user readable description of the message
+    extra_data:
+        Any extra data associated with the user message, as a map from
+        key to data.
+"""
 SendPingRequest.__doc__ = """Since 5.0
 
 Attributes:
@@ -96,32 +123,5 @@ CollectPingsRequest.__doc__ = """Attributes:
     include_previously_colleced_pings:
         Normally previously collected pings are ignored, but by
         setting this they will be included. Defaults to False.
-"""
-UserMessage.__doc__ = """Attributes:
-    time:
-        Timestamp for when the log message was emitted
-    severity:
-        The severity of the message
-    identifier:
-        A short unique textual identifier for the message Used to
-        identify the message for translation purposes
-    user_message:
-        A long user readable description of the message
-    extra_data:
-        Any extra data associated with the user message, as a map from
-        key to data.
-"""
-SendUserMessageRequest.__doc__ = """Attributes:
-    severity:
-        The severity of the message to send  note: TRACE messages
-        cannot be sent using this interface (will throw an error).
-    identifier:
-        A short unique textual identifier for the message Used to
-        identify the message for translation purposes
-    user_message:
-        The user message to send to any listeners.
-    extra_data:
-        Any extra data associated with the user message, as a map from
-        key to data.
 """
 # @@protoc_insertion_point(module_scope)

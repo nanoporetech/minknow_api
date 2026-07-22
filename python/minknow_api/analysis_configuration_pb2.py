@@ -285,68 +285,123 @@ if not _descriptor._USE_C_DESCRIPTORS:
   _globals['_FINDBASECALLCONFIGURATIONDEFAULTSRESPONSE']._serialized_end=16389
   _globals['_ANALYSISCONFIGURATIONSERVICE']._serialized_start=16392
   _globals['_ANALYSISCONFIGURATIONSERVICE']._serialized_end=19328
-WriterConfiguration.__doc__ = """Configuration for the output writers for MinKNOWs analysis pipeline.
-Each writer has its own section in this message, where individual data
-elements can be enabled or disabled.  File pattern attributes
------------------------ Writers have a 'file_pattern' field which
-controls where individual files will be written to. The pattern is
-expanded for each individual read, and then the read placed in the
-required file. The tokens used to expand depend on the file type:
-Read centric files (fastq, protobuf):  - batch_number:         The
-batch number of this read, evaluated based on the destination file.  -
-read_id:              Unique read id for each read, formatted as a
-hash.  - channel_name:         The name of the channel which produced
-the read.  - read_start_time:      Read start time formatted in
-rfc3339 format.  - basecall_status:      Basecalling output status
-(derived from WriterDefaults section in analysis config).  -
-pore_type:            Type of pore (as specified by
-#set_pore_type_configuration).  General attributes:  - daq_start_time:
-Data acquisition start time formatted as YYYYMMDD_hhmm.  -
-protocol_start_time:  Time the current protocol was started.  -
-run_id:               Acquisition run id formatted as hash.  -
-short_run_id:         Shortened version of acquisition run id
-formatted as hash.  - protocol_run_id:      Protocol run id formatted
-as hash.  - short_protocol_run_id: Shortened protocol run id formatted
-as hash.  - asic_id:              Integer id assigned to the asic in
-the connected flow cell.  - flow_cell_id:         Flow cell integer as
-read from eeprom.  - machine_id:           Name of the machine
-(hostname or machine identifier depending on the sequencer type).  -
-device_id:            Name of the connected sequencing device (eg.
-MN12345).  - sample_id:            Sample id entered by the user when
-starting a protocol.  - version_string:       Version string of the
-running MinKNOW instance  - protocol_group_id:    Protocol group
-entered by user when starting a protocol.  - protocol_purpose:
-Prupose of protocol (see protocol.set_protocol_purpose())
+ReadDetectionParams.__doc__ = """Attributes:
+    open_pore_min:
+        The minimum level which is considered open pore (this value is
+        relative to open_pore_default or the tracked open_pore
+        section, if tracking is being used.)  This value must be <=
+        0.0 if tracking is being used.
+    open_pore_max:
+        The maximum level which is considered open pore (this value is
+        relative to open_pore_default or the tracked open_pore
+        section, if tracking is being used.)  This value must be >=
+        0.0 if tracking is being used.
+    open_pore_default:
+        The default value to use for open pore, either when tracking
+        isn't being used, or when open pore tracking has no value
+        currently.
+    open_pore_seconds_required:
+        Minimum number of seconds events must lie within the open pore
+        ranges defined above in order to allow a read to break.
+    selected_min:
+        The minimum level which is considered open pore (this value is
+        relative to selected_default or the tracked selected section,
+        if tracking is being used.)  This value must be <= 0.0 if
+        tracking is being used.  Note cannot be used at the same time
+        as the `open_pore_*` fields above.
+    selected_max:
+        The maximum level which is considered open pore (this value is
+        relative to selected_default or the tracked selected section,
+        if tracking is being used.)  This value must be >= 0.0 if
+        tracking is being used.  Note cannot be used at the same time
+        as the `open_pore_*` fields above.
+    selected_default:
+        The default value to use for open pore, either when tracking
+        isn't being used, or when open pore tracking has no value
+        currently.  Note cannot be used at the same time as the
+        `open_pore_*` fields above.
+    selected_seconds_required:
+        Minimum number of seconds events must lie within the selected
+        ranges defined above in order to allow a read to break.
+"""
+DynamicAnalysisConfiguration.__doc__ = """Attributes:
+    read_scale_tracking:
+        Parameters for read scale tracking:
+    force_veto_all_reads:
+        Force MinKNOW to not write or basecall all data from the live
+        sequencing stream.  This may be useful if there is a section
+        of data that is not wanted in the final output files and
+        reports.
+    force_veto_end_reasons:
+        Force MinKNOW to not write or basecall data with specific end
+        reasons.  This may be useful if there is a section of data
+        that is not wanted in the final output files and reports.
+    signal_fixing_params:
+        Configure signal fixing.  Signal fixing compensates for
+        current spikes across the flow cell (as can happen when
+        unblocking, for example) by using membrane-only channels as a
+        reference.  This is normally called by the protocol while
+        acquisition is running. The protocol is expected to use data
+        from the acquisition to determine which channels to use for
+        signal fixing.  Since 6.7
+"""
+BasecallerConfiguration.ReadFiltering.__doc__ = """ Removed as of 6.1 as this option is no longer supported.
 
 Attributes:
-    read_fast5:
-        Configuration for the fast5 writer.  If not specified, no
-        multi fast5 outputs are generated.  DEPRECATED since 6.10:
-        read fast5 support will be removed in a future release.
-    read_fastq:
-        Configuration for the fastq writer.  If not specified, no
-        fastq outputs are generated.
-    read_bam:
-        Configuration for the BAM writer.  If not specified, no BAM
-        outputs are generated.
-    read_pod5:
-        Configuration for the POD5 writer.  If not specified no POD5
-        outputs are generated.
-    sequencing_summary:
-        Configuration for Sequencing Summary file  If not specified,
-        no summary file is generated.
-    bulk:
-        Configuration for the bulk writer.  If not specified, a basic
-        bulk output is generated.
-    report:
-        Configuration for the report writer  If
-        acquisition.StartRequest.generate_report is set for the
-        acquisition period, and empty paths (or no report config) are
-        supplied for reports default paths are used.
-    read_filters:
-        Parameters for filtering reads for writing.  If not present,
-        then no filtering will be applied, so no reads will be
-        excluded.
+    min_duplex_qscore:
+        Since 5.8
+"""
+FindBasecallConfigurationDefaultsResponse.__doc__ = """Attributes:
+    default_variant:
+        The default variant to be used.  This can be used to search
+        the results of manager.find_basecall_configurations for a
+        simplex model with a matching variant.
+"""
+WriterConfiguration.ReadFastqConfiguration.__doc__ = """Attributes:
+    enable:
+        Control if a fastq file should be generated per channel.
+    file_pattern:
+        The pattern used to find a fastq files name.  default: fastq{_
+        basecall_status}/{flow_cell_id}_{run_id}_{batch_number}.fastq
+        Where each {xxx} section is replaced with an attribute from
+        the minknow state when the file is written.  See file pattern
+        attributes above.
+    header_pattern:
+        The pattern used to find a fastq header.  default: {read_id}
+        runid={run_id} ch={channel_name} start_time={read_start_time}
+        Where each {xxx} section is replaced with an attribute from
+        the minknow state when the fastq is generated.
+    batch_count:
+        How many reads are placed in each batch (after batch_count
+        reads {batch_number} is increased in the pattern).
+    bases_per_batch:
+        Number of estimated bases within a batch before it rotates to
+        a new batch
+    no_output_based_batching:
+        Do not perform batching based on output (time-based batching
+        is still performed, if specified)
+    compression:
+        Compress fastq files with gzip compression. default: false
+    disable_writing_passed_reads:
+        Since 5.8 Prevent reads which have successfully basecalled
+        being written to fastq.
+    disable_writing_failed_reads:
+        Prevent reads which have failed basecalling being written to
+        fastq.
+    disable_writing_force_skipped_reads:
+        disable writing reads which have been force skipped by the
+        basecaller.
+    batch_duration:
+        The batch duration, for time-based batching  If time-based
+        batching is enabled then, in addition to completing batches
+        when the `batch_count` or `bases_per_batch` target (above) is
+        reached, batches will also be completed when: - At least one
+        read has been written to the batch, AND - `batch_duration` has
+        elapsed since the last batch was completed (or since the start
+        of the acquisition, for the first batch)  If this field is not
+        set, then the default time-based batching configuration will
+        be used.  If this field is set to zero or a negative value,
+        then time-based batching will be disabled.  Since 5.6
 """
 WriterConfiguration.ReadBamConfiguration.__doc__ = """Attributes:
     enable:
@@ -390,88 +445,6 @@ WriterConfiguration.ReadBamConfiguration.__doc__ = """Attributes:
         be used.  If this field is set to zero or a negative value,
         then time-based batching will be disabled.  Since 5.6
 """
-PoreTypeConfiguration.ChannelWellPoreTypeConfigurations.__doc__ = """Attributes:
-    pore_types:
-        Map with pore type as key, mapped to the list of wells to set
-        for.  It is undefined what will happen if one call sets the
-        pore type of a channel and well to two pore types.
-"""
-ChannelStates.Logic.Ranges.__doc__ = """Dont really like this way of doing it, but it has to match the old
-way..."""
-SignalFixingParams.__doc__ = """Attributes:
-    enabled:
-        Whether to enable signal fixing.  If this is false, no other
-        fields need to be provided.
-    reference_channels:
-        A list of reference channels to use for signal fixing.  This
-        field is required if enabled is set to true.  These channels
-        must be set to a membrane-only well. The list should be in
-        preference order - MinKNOW will try to use channels from the
-        start of the list before channels from the end.
-    max_per_sample_deviation:
-        The maximum permitted deviation of any given reference channel
-        from the median reference channel value.  This is used to
-        filter the refernece_channels list (to exclude channels that
-        saturate, get a spike of electrical noise, or otherwise "go
-        wrong"). It is expressed in standard deviations.  Must be
-        greater than 0. If omitted, a default of 1.0 is used.
-    max_bad_samples_before_discarding:
-        How many bad samples to allow before discarding a reference
-        channel.  If a reference channel fails the quality filter (see
-        max_per_sample_deviation) for this many samples in a row, it
-        will be permanently removed from the list of reference
-        channels.  Must be between 1 and 32000. If omitted, a default
-        of 5000 is used.
-    min_active_reference_channels:
-        The minimum number of reference channels.  If filtering
-        reduces the number of reference channels to less than this
-        number, signal fixing will be disabled.  There must be at
-        least this many reference channels in the list.  If omitted, a
-        default of 3 is used.
-    max_active_reference_channels:
-        The maximum number of reference channels to use.  The first
-        `max_active_reference_channels` will be used from the filtered
-        list of reference channels.  If this is equal to or larger
-        than the number of reference channels, it has no effect.  If
-        omitted, a default of 10 is used.
-    capacitances:
-        For each channel, a list of capacitances for each well on the
-        channel.  There must be one entry for each channel on the flow
-        cell. Alternatively, this can be omitted entirely to do no
-        scaling.
-    min_baseline:
-        The minimum level of the baseline.  This value is in pA/pF.
-        Note that this is a difference, rather than an absolute value,
-        so when converting to ADC/pF the offset from the calibration
-        will not be applied. Instead, the mean of the scaling of the
-        reference channels (see `reference_channels`) will be used.
-        If the baseline is below this level for
-        `max_bad_samples_before_discarding` continuous samples, all
-        the reference channels that are active for that final sample
-        will be removed from the list of reference channels.  Note
-        that this value does not *prevent* the baseline from going
-        below this level, it just attempts to correct situations where
-        several reference channels converge on an obviously-incorrect
-        baseline.  If omitted, there is no lower limit on the
-        baseline.
-    max_baseline:
-        The maximum level of the baseline.  This behaves like
-        `min_baseline`, but checks for the baseline going over this
-        value.
-"""
-AnalysisConfiguration.__doc__ = """Attributes:
-    read_scaling:
-        Add read scale tracking to the pipeline. If this message is
-        unspecified, read scaling is not enabled.  DEPRECATED since
-        6.7 read scaling is no longer supported, these parameters will
-        be ignored.
-"""
-FindBasecallConfigurationDefaultsResponse.__doc__ = """Attributes:
-    default_variant:
-        The default variant to be used.  This can be used to search
-        the results of manager.find_basecall_configurations for a
-        simplex model with a matching variant.
-"""
 BarcodingConfiguration.__doc__ = """Since 3.5
 
 Attributes:
@@ -490,11 +463,231 @@ Attributes:
         If set, barcodes that aren't in barcode user data list will be
         ignored  Since 5.6
 """
+AlignmentConfiguration.__doc__ = """Since 4.0
+
+Attributes:
+    reference_files:
+        Provide an index to align reads against once basecalled.  Any
+        acceptable reference format to the basecaller can be passed
+        here:   - fasta reference file   - minimap index file
+    bed_file:
+        Provide a bed file for use indicating areas of interest in
+        alignment results.  Note: alignment_index must be provided for
+        this argument to be valid.
+    minimum_coverage:
+        Minimum coverage for the basecaller to accept an alignment.
+        If not specified a default value is used.  Note: this option
+        cannot be used during live basecalling.
+    aggregate_statistics_for_multiple_bed_hits:
+        Control how statistics for bed results are aggregated.  If set
+        to false only the bed hit with the highest overlap is used
+        when computing heatmap/throughput graphs with bed hits.  If
+        set to true each bed hit is considered and bases for all hits
+        are counted. This may give more honest representation of
+        individual bed hit results but will skew read count statistics
+        - as each hit will be counted for every bed hit.  Note: this
+        option has no effect in offline basecalling.
+"""
+GetBasecallerConfigurationRequest.__doc__ = """Attributes:
+    run_id:
+        The unique identifier assigned to this acquisition run.  Since
+        6.0
+"""
 WriterConfiguration.ChannelConfiguration.__doc__ = """Used to control which channels for a specific data type emit data
 
 Attributes:
     channels:
         Control the way channels are enabled for this data type.
+"""
+WriterConfiguration.ChannelConfiguration.ChannelList.__doc__ = """Attributes:
+    channels:
+        List of channel names (one based) which should be enabled for
+        writing.
+"""
+BasecallerConfiguration.__doc__ = """Since 3.0
+
+Attributes:
+    enable:
+        Choose if the basecaller is enabled or disabled.  If set to
+        false then no basecalling will take place, and the rest of the
+        config is ignored.
+    config_filename:
+        The basecaller cfg file with all the settings.  Filename can
+        be absolute, or a basename (eg dna_r9.4_450bps.cfg) which the
+        basecaller should locate (see basecaller application config
+        entry: "data_path")
+    model_names:
+        Specify the models to run by name (see
+        find_basecall_configurations in manager.proto)  Model names
+        should be taken from the `name` field of the above RPC
+        directly.  Since 6.3
+    align_filter:
+        Enable or disable pass/fail filtering based on alignment.
+        When enabled, reads which do not align to any references will
+        be marked as "failed", and written to the folder specified in
+        MinKNOW configuration for failed reads.  The setting applies
+        to both regular read filtering and target filtering; if it is
+        enabled, then a read will not be marked as a target read if it
+        does not align to a reference.  Default setting is false, i.e.
+        disabled.  Since 5.4
+    read_filtering:
+        Control how read filtering is applied to output of basecaller.
+        These settings determine whether a read is marked as "passed"
+        or "failed".  Reads are written to different folders based on
+        the result of this filtering.  Those folders are specified in
+        MinKNOW configuration.  If no filtering parameters are
+        provided then reads will not be filtered.
+    barcoding_configuration:
+        Control the barcoding configuration. If no barcoding
+        configuration is supplied, barcoding is disabled.  Since 3.5
+    target_filtering:
+        Control how target filtering is applied to output of
+        basecaller. Reads which pass these filtering criteria will be
+        marked as "target" reads, and will be written to a separate
+        folder; this folder is specified in MinKNOW configuration.
+        Reads which do not pass these criteria will have the regular
+        read filtering applied to them, as specified by the `read-
+        filtering` settings above.  If no filtering parameters are
+        provided then reads will not be target-filtered.  Since 3.7
+    alignment_configuration:
+        Alignment configuration parameters. If no configuration is
+        specified alignment is disabled.  Since 4.0
+    lamp_configuration:
+        Lamp configuration parameters. If no configuration is
+        specified lamp is disabled.  Since 4.1  DEPRECATED 6.0: Lamp
+        support has been removed and this option will be ignored.
+    enable_read_splitting:
+        Enable read splitting in the basecaller.  Since 4.5  Note:
+        Since 5.9 this option has no effect, the basecaller is
+        responsible for deciding when read splitting should be
+        enabled.
+    min_score_read_splitting:
+        Override score to use for the basecaller read splitting. If
+        not specified a default value is used from the basecaller.
+        Since 4.5  Note: Since 5.9 this option has no effect, the
+        basecaller is responsible for deciding read splitting score.
+    estimate_poly_a:
+        Enable poly a tail estimation.  Since 6.3
+    poly_a_config_path:
+        Configure the polya behaviour of the basecaller.  This field
+        is expected to be a path to a on the local disk that the
+        basecaller process can read.  Since 6.8
+"""
+GetWriterConfigurationRequest.__doc__ = """Attributes:
+    run_id:
+        The unique identifier assigned to this acquisition run.  Since
+        6.0
+"""
+ReadFilters.__doc__ = """Parameters for filtering out reads from being written.  The tests are
+combined using a logical AND: if any given test fails, the read will
+not be written. Only reads that pass all (non-zero) tests will be
+written out.  Currently, it is only possible to filter on read length.
+This can be given in samples or MinKNOW events.
+
+Attributes:
+    read_length_min:
+        Only write reads that contain at least this many samples.  The
+        default zero value will not exclude any reads.
+    read_length_max:
+        Only write reads that contain at most this many samples.  If
+        set to zero (the default), this test is not applied (as though
+        it had been set to a value longer than any possible read).
+    event_count_min:
+        Only write reads that contain at least this many MinKNOW
+        events.  The default zero value will not exclude any reads.
+    event_count_max:
+        Only write reads that contain at most this many MinKNOW
+        events.  If set to zero (the default), this test is not
+        applied (as though it had been set to a value longer than any
+        possible read).
+    skip_rejected_reads:
+        Control whether reads unblocked using from
+        `DataService::get_live_reads()` should be filtered.  When set
+        to true, reads which are unblocked by `get_live_reads` are
+        filtered and therefore not basecalled. When set to false,
+        reads that are unblocked by `get_live_reads` will not be
+        filtered and therefore will be basecalled.
+"""
+ChannelStates.Group.__doc__ = """ TODO: group styling and description should not be defined here, as
+this allows channel states to declare themselves as being part of the
+same group but specify different styling and descriptions."""
+ChannelStates.Logic.__doc__ = """Attributes:
+    rank:
+        Specifies the order in which channel state criteria will be
+        evaluated; the smaller the number, the earlier it will be
+        evaluated. The first criteria to match will be selected
+    pattern:
+        Note that this is a regex based pattern for describing a read
+        classification sequence. For example you can specify:
+        "unavailableunavailable" or:      "(unavailable)(unavailable)"
+        to recognise two consecutive read chunks classified as
+        unavailable.  You can also use "?" at the end of one of the
+        classifications in the sequence to indicate that it may or may
+        not be present at that point. For example:
+        "(pore)(transition)?(event)"  This will match both of the
+        sequences:      pore, transition, event      pore, event  The
+        technical documentation has more information on the range of
+        regex patterns you can apply.
+        https://minknow.git.oxfordnanolabs.local/minknow-
+        core/analysis/channel-states.html
+    ranges:
+        Range is [lower_pa, upper_pa)
+"""
+WriterConfiguration.ReadPod5Configuration.__doc__ = """Attributes:
+    enable:
+        Control if a POD5 file should be generated per channel.
+    file_pattern:
+        The pattern used to find a POD5 files name.  default: pod5{_ba
+        secall_status}/{flow_cell_id}_{run_id}_{batch_number}.pod5
+        Where each {xxx} section is replaced with an attribute from
+        the minknow state when the file is written.  See file pattern
+        attributes above.
+    batch_count:
+        How many reads are placed in each batch (after batch_count
+        reads {batch_number} is increased in the pattern).
+    bases_per_batch:
+        Number of estimated bases within a batch before it rotates to
+        a new batch
+    no_output_based_batching:
+        Do not perform batching based on output (time-based batching
+        is still performed, if specified)
+    disable_writing_passed_reads:
+        Prevent reads which have successfully basecalled being written
+        to pod5.
+    disable_writing_failed_reads:
+        Prevent reads which have failed basecalling being written to
+        pod5.
+    disable_writing_force_skipped_reads:
+        disable writing reads which have been force skipped by the
+        basecaller.
+    batch_duration:
+        The batch duration, for time-based batching  If time-based
+        batching is enabled then, in addition to completing batches
+        when the `batch_count` or `bases_per_batch` target (above) is
+        reached, batches will also be completed when: - At least one
+        read has been written to the batch, AND - `batch_duration` has
+        elapsed since the last batch was completed (or since the start
+        of the acquisition, for the first batch)  If this field is not
+        set, then the default time-based batching configuration will
+        be used.  If this field is set to zero or a negative value,
+        then time-based batching will be disabled.  Since 5.6
+"""
+WriterConfiguration.SequencingSummaryConfiguration.__doc__ = """Attributes:
+    enable:
+        Should a sequencing summary file be generated
+    file_pattern:
+        The pattern used to find a summary files name.  default:
+        sequencing_summary_{flow_cell_id}_{short_run_id}.txt Where
+        each {xxx} section is replaced with an attribute from the
+        minknow state when the file is written.  See file pattern
+        attributes above.
+"""
+AnalysisConfiguration.__doc__ = """Attributes:
+    read_scaling:
+        Add read scale tracking to the pipeline. If this message is
+        unspecified, read scaling is not enabled.  DEPRECATED since
+        6.7 read scaling is no longer supported, these parameters will
+        be ignored.
 """
 WriterConfiguration.ReportConfiguration.__doc__ = """Control settings for the report writer
 
@@ -579,189 +772,66 @@ Attributes:
         attribute from the minknow state when the file is written.
         See file pattern attributes above.
 """
+ReadClassificationParams.MetricsEwma.__doc__ = """Attributes:
+    read_chunks_required_for_ewma:
+        How many read chunks are required before an ewma is
+        calculated.  If we don't use ewma, a straight mean of all
+        samples so far is used instead.  Default value is 0: Always
+        use ewma.
+"""
 BasecallerConfiguration.TargetFiltering.__doc__ = """Since 3.7"""
-GetChannelStatesDescResponse.ChannelState.__doc__ = """Attributes:
-    id:
-        The numeric identifier of the state.  This is what is reported
-        in any other APIs that return a channel state ID.
-    name:
-        The internal name of the state.  This is what is reported in
-        any other APIs that return a channel state name.
-    style:
-        How to render the channel state in a graphical user interface.
-        Note that the style may be missing from some channel states
-        (such as the ones that are built in to MinKNOW).
-    global_order:
-        An order ranking for the channel states when they are
-        ungrouped.  This can be used to order the channel states after
-        merging the groups.
-"""
-GetChannelStatesDescResponse.Group.__doc__ = """Attributes:
-    name:
-        The name of the group.
-    style:
-        How to render the group in a graphical user interface.  Note
-        that the style may be missing from some groups (such as the
-        ones that are built in to MinKNOW).
-    states:
-        The channel states contained in the group.  The groups are
-        ordered according to the "order" attribute of the channel
-        state style in the channel states configuration.
-"""
-WriterConfiguration.ChannelConfiguration.ChannelRanges.__doc__ = """Attributes:
-    ranges:
-        List of start/end paired channel numbers which should be
-        enabled for writing.  All channels in inclusive ranges should
-        be enabled.
-"""
-GetBasecallerConfigurationRequest.__doc__ = """Attributes:
-    run_id:
-        The unique identifier assigned to this acquisition run.  Since
-        6.0
-"""
-PoreTypeConfiguration.ChannelWell.__doc__ = """Attributes:
+SignalFixingParams.ReferenceChannel.__doc__ = """Attributes:
     channel:
-        Channel number to control pore type for.  Must be less than
-        channel count for the current platform
-    well:
-        Well to control pore type for.  Wells outside the available
-        wells on the flowcell are ignored.
+        The name of the channel (1-indexed).
+    baseline_pa:
+        The baseline against which the offset for this channel can be
+        calculated in picoamps. This is expected to have been produced
+        based on the statistics for this channel calculated over a
+        time window.
 """
-ChannelStates.Group.__doc__ = """ TODO: group styling and description should not be defined here, as
-this allows channel states to declare themselves as being part of the
-same group but specify different styling and descriptions."""
-WriterConfiguration.SequencingSummaryConfiguration.__doc__ = """Attributes:
-    enable:
-        Should a sequencing summary file be generated
-    file_pattern:
-        The pattern used to find a summary files name.  default:
-        sequencing_summary_{flow_cell_id}_{short_run_id}.txt Where
-        each {xxx} section is replaced with an attribute from the
-        minknow state when the file is written.  See file pattern
-        attributes above.
+ChannelStates.Logic.Behaviour.__doc__ = """Attributes:
+    reset_on_mux_change:
+        TODO: MinKNOW 5: replace int32 with bool for these options
+        these are ints but act like bools
+    latch:
+        If the latch value is set to true, then when the criteria for
+        this channel state is active, then the latch will keep it
+        active until the channel state is reset.
+    reset_on_effective_mux_change:
+        An 'effective mux change' is any mux change apart from the one
+        triggered with the purpose of disconnecting a channel (turning
+        a channel off). For example, if a channel is in pore, and the
+        user changes the channel configuration to 'disconnected', that
+        mux change will not be an effective mux change. Any other mux
+        change is considered an 'effective mux change'. So if a
+        channel saturates, the mux change to disconnected is an
+        effective mux change. Similarly, a change from disconnected to
+        a pore is an effective mux change.  Use this reset mode to
+        make the channel state persist on non-effective mux changes.
+        For example, if a channel state is in 'multiple' and the user
+        triggers a channel configuration change to 'disconnected', the
+        state will remain in multiple if it has this option on. The
+        multiple state will be reset at all other mux changes (i.e.
+        effective mux changes).
+    reset_on_effective_well_change:
+        An 'effective well change' is any well change apart from the
+        one triggered with the purpose of disconnecting a channel
+        (turning a channel off). For example, if a channel is in
+        well_1, and the user changes the channel configuration to
+        'unblock_1', that change will not be an effective well change.
+        A change to disconnected is also not considered an effective
+        well change.  Use this reset mode to make the channel state
+        persist on non-effective well changes. For example, if a
+        channel state is in 'multiple' and the user triggers a channel
+        configuration change to 'disconnected', the state will remain
+        in multiple if it has this option on. The multiple state will
+        be reset then when the mux is set to a different setting.
 """
-LampConfiguration.__doc__ = """Since 4.1  DEPRECATED 6.0: Lamp support has been removed and all of
-these options will be ignored.
-
-Attributes:
-    lamp_kit:
-        Set the lamp kit being used.
-    min_score_barcodes:
-        Optionally specify a min score to detect a valid lamp barcode.
-    min_score_masks:
-        Optionally set the minimimum valid score for a lamp mask.
-    min_score_targets:
-        Optionally specify a minimum score for lamp targets.
-"""
-GetChannelStatesDescResponse.Style.__doc__ = """Attributes:
-    label:
-        The human-readable name to display when rendering this channel
-        state or group.
-    description:
-        A sentence describing the meaning of the channel state or
-        group.  This can be used as a tooltip, for example.
-    colour:
-        The colour to use when rendering this channel state or group.
-        This is a six-digit hex string describing an RGB colour (eg:
-        "ff00ff" for purple).
-"""
-EventDetection.__doc__ = """Attributes:
-    window_size:
-        The window size that the tstats are calculated from
-    threshold:
-        The peak detection must be above this threshold at a minimum
-        for it to be detected as an event.
-    peak_height:
-        When analysing the tstat peaks, if the jump between one value
-        and another is higher than than 'peak_height', then it will
-        "arm" the peak detector and move onto the next phase.  And
-        what goes up must come down. Once it has detected a peak going
-        up, it will also have to go down by 'peak_height' in order for
-        the peak to be classified as a found event  Note: only used
-        for MULTITTEST detector.
-    events_to_base_ratio:
-        Conversion factor used to convert from events to bases.  This
-        is used to estimate bases for various rpc feeds from minknow.
-    break_on_mux_changes:
-        Whether to break events on mux changes.  This will eliminate
-        "mux_uncertain" events and reads. Note that this will cause
-        starting or stopping unblocking to break events as well (even
-        though the mux does not normally change in this case).  Note:
-        no longer used.
-    max_mux_change_back_shift:
-        Control the number of samples MinKNOW will shift mux changes
-        back by in order to align mux changes with event boundaries.
-        When break on mux changes is enabled its possible that mux
-        changes recorded from the device and signal deltas caused by
-        the config changes will not align exactly (the signal delta
-        happen prior to the mux change due to the recorded sample
-        indicating the command is fully applied). Setting this value
-        to > 0 will allow minknow to record the mux change as active
-        up to this number of samples _before_ the device recorded the
-        change as active. Mux changes are never shifted forwards.  A
-        value of 0 will disable shifting of mux changes.  Note: no
-        longer used.
-    force_detect_events_when_disconnected:
-        Force minknow to detect events even when channels are
-        disconnected  If set to false (the default) events are not
-        detected when channels are set outside well 1-4.  If set to
-        true events are always detected.
-"""
-DynamicAnalysisConfiguration.ReadScaleTracking.__doc__ = """Attributes:
-    conductance_scan_voltage:
-        Set the voltage the most recent conductance scan occurred at.
-    channel_conductance:
-        Per channel/well conductance values
-"""
-SignalFixingParams.WellCapacitances.__doc__ = """Attributes:
-    wells:
-        The capaticance for each well on a channel, in picoamps.
-        There must always be as many entries as there are wells per
-        channel (typically 4, but 1 on flongles, for example). If not,
-        the RPC will be rejected.
-"""
-GetSummaryResponse.__doc__ = """Attributes:
-    analysis_enabled:
-        Whether any analysis is enabled.  If this is false, everything
-        else will be false as well.
-    basecalling_enabled:
-        Whether basecalling is enabled.
-"""
-ReadFilters.__doc__ = """Parameters for filtering out reads from being written.  The tests are
-combined using a logical AND: if any given test fails, the read will
-not be written. Only reads that pass all (non-zero) tests will be
-written out.  Currently, it is only possible to filter on read length.
-This can be given in samples or MinKNOW events.
-
-Attributes:
-    read_length_min:
-        Only write reads that contain at least this many samples.  The
-        default zero value will not exclude any reads.
-    read_length_max:
-        Only write reads that contain at most this many samples.  If
-        set to zero (the default), this test is not applied (as though
-        it had been set to a value longer than any possible read).
-    event_count_min:
-        Only write reads that contain at least this many MinKNOW
-        events.  The default zero value will not exclude any reads.
-    event_count_max:
-        Only write reads that contain at most this many MinKNOW
-        events.  If set to zero (the default), this test is not
-        applied (as though it had been set to a value longer than any
-        possible read).
-    skip_rejected_reads:
-        Control whether reads unblocked using from
-        `DataService::get_live_reads()` should be filtered.  When set
-        to true, reads which are unblocked by `get_live_reads` are
-        filtered and therefore not basecalled. When set to false,
-        reads that are unblocked by `get_live_reads` will not be
-        filtered and therefore will be basecalled.
-"""
-GetChannelStatesDescResponse.__doc__ = """Attributes:
-    groups:
-        The groups of channel states.  The groups are ordered
-        according to the "order" attribute of the group style in the
-        channel states configuration.
+PoreTypeConfiguration.ChannelWellPoreTypeConfigurations.__doc__ = """Attributes:
+    pore_types:
+        Map with pore type as key, mapped to the list of wells to set
+        for.  It is undefined what will happen if one call sets the
+        pore type of a channel and well to two pore types.
 """
 WriterConfiguration.ReadFast5Configuration.__doc__ = """Attributes:
     compression_level:
@@ -829,6 +899,36 @@ WriterConfiguration.ReadFast5Configuration.__doc__ = """Attributes:
         be used.  If this field is set to zero or a negative value,
         then time-based batching will be disabled.  Since 5.6
 """
+ChannelStates.Logic.Ranges.__doc__ = """Dont really like this way of doing it, but it has to match the old
+way..."""
+GetChannelStatesDescResponse.Group.__doc__ = """Attributes:
+    name:
+        The name of the group.
+    style:
+        How to render the group in a graphical user interface.  Note
+        that the style may be missing from some groups (such as the
+        ones that are built in to MinKNOW).
+    states:
+        The channel states contained in the group.  The groups are
+        ordered according to the "order" attribute of the channel
+        state style in the channel states configuration.
+"""
+GetChannelStatesDescResponse.ChannelState.__doc__ = """Attributes:
+    id:
+        The numeric identifier of the state.  This is what is reported
+        in any other APIs that return a channel state ID.
+    name:
+        The internal name of the state.  This is what is reported in
+        any other APIs that return a channel state name.
+    style:
+        How to render the channel state in a graphical user interface.
+        Note that the style may be missing from some channel states
+        (such as the ones that are built in to MinKNOW).
+    global_order:
+        An order ranking for the channel states when they are
+        ungrouped.  This can be used to order the channel states after
+        merging the groups.
+"""
 PoreTypeConfiguration.__doc__ = """The pore type configuration  The ways of specifying a configuration
 are as follows: - global_pore_type: all wells have a pore type of
 global_pore_type. - channel_well_pore_types: channels are allowed
@@ -842,111 +942,168 @@ Attributes:
         Set channel/wells to different pore types.  Pore types can be
         created without being used by adding an empty entry.
 """
+BasecallerConfiguration.ModelNames.__doc__ = """A set of model names to run in the basecaller.
+
+Attributes:
+    simplex_model:
+        Simplex model to use when basecalling.  This field is not
+        optional - empty values are invalid.
+    modified_models:
+        An optional list of modified bases to use, the caller is
+        responsible for ensuring these are compatible modifications.
+        An empty list will lead to no modified base calling.
+    stereo_model:
+        An optional stereo model to use for calling.  And empty string
+        will perform no stereo step.
+"""
+WriterConfiguration.__doc__ = """Configuration for the output writers for MinKNOWs analysis pipeline.
+Each writer has its own section in this message, where individual data
+elements can be enabled or disabled.  File pattern attributes
+----------------------- Writers have a 'file_pattern' field which
+controls where individual files will be written to. The pattern is
+expanded for each individual read, and then the read placed in the
+required file. The tokens used to expand depend on the file type:
+Read centric files (fastq, protobuf):  - batch_number:         The
+batch number of this read, evaluated based on the destination file.  -
+read_id:              Unique read id for each read, formatted as a
+hash.  - channel_name:         The name of the channel which produced
+the read.  - read_start_time:      Read start time formatted in
+rfc3339 format.  - basecall_status:      Basecalling output status
+(derived from WriterDefaults section in analysis config).  -
+pore_type:            Type of pore (as specified by
+#set_pore_type_configuration).  General attributes:  - daq_start_time:
+Data acquisition start time formatted as YYYYMMDD_hhmm.  -
+protocol_start_time:  Time the current protocol was started.  -
+run_id:               Acquisition run id formatted as hash.  -
+short_run_id:         Shortened version of acquisition run id
+formatted as hash.  - protocol_run_id:      Protocol run id formatted
+as hash.  - short_protocol_run_id: Shortened protocol run id formatted
+as hash.  - asic_id:              Integer id assigned to the asic in
+the connected flow cell.  - flow_cell_id:         Flow cell integer as
+read from eeprom.  - machine_id:           Name of the machine
+(hostname or machine identifier depending on the sequencer type).  -
+device_id:            Name of the connected sequencing device (eg.
+MN12345).  - sample_id:            Sample id entered by the user when
+starting a protocol.  - version_string:       Version string of the
+running MinKNOW instance  - protocol_group_id:    Protocol group
+entered by user when starting a protocol.  - protocol_purpose:
+Prupose of protocol (see protocol.set_protocol_purpose())
+
+Attributes:
+    read_fast5:
+        Configuration for the fast5 writer.  If not specified, no
+        multi fast5 outputs are generated.  DEPRECATED since 6.10:
+        read fast5 support will be removed in a future release.
+    read_fastq:
+        Configuration for the fastq writer.  If not specified, no
+        fastq outputs are generated.
+    read_bam:
+        Configuration for the BAM writer.  If not specified, no BAM
+        outputs are generated.
+    read_pod5:
+        Configuration for the POD5 writer.  If not specified no POD5
+        outputs are generated.
+    sequencing_summary:
+        Configuration for Sequencing Summary file  If not specified,
+        no summary file is generated.
+    bulk:
+        Configuration for the bulk writer.  If not specified, a basic
+        bulk output is generated.
+    report:
+        Configuration for the report writer  If
+        acquisition.StartRequest.generate_report is set for the
+        acquisition period, and empty paths (or no report config) are
+        supplied for reports default paths are used.
+    read_filters:
+        Parameters for filtering reads for writing.  If not present,
+        then no filtering will be applied, so no reads will be
+        excluded.
+"""
+EventDetection.__doc__ = """Attributes:
+    window_size:
+        The window size that the tstats are calculated from
+    threshold:
+        The peak detection must be above this threshold at a minimum
+        for it to be detected as an event.
+    peak_height:
+        When analysing the tstat peaks, if the jump between one value
+        and another is higher than than 'peak_height', then it will
+        "arm" the peak detector and move onto the next phase.  And
+        what goes up must come down. Once it has detected a peak going
+        up, it will also have to go down by 'peak_height' in order for
+        the peak to be classified as a found event  Note: only used
+        for MULTITTEST detector.
+    events_to_base_ratio:
+        Conversion factor used to convert from events to bases.  This
+        is used to estimate bases for various rpc feeds from minknow.
+    break_on_mux_changes:
+        Whether to break events on mux changes.  This will eliminate
+        "mux_uncertain" events and reads. Note that this will cause
+        starting or stopping unblocking to break events as well (even
+        though the mux does not normally change in this case).  Note:
+        no longer used.
+    max_mux_change_back_shift:
+        Control the number of samples MinKNOW will shift mux changes
+        back by in order to align mux changes with event boundaries.
+        When break on mux changes is enabled its possible that mux
+        changes recorded from the device and signal deltas caused by
+        the config changes will not align exactly (the signal delta
+        happen prior to the mux change due to the recorded sample
+        indicating the command is fully applied). Setting this value
+        to > 0 will allow minknow to record the mux change as active
+        up to this number of samples _before_ the device recorded the
+        change as active. Mux changes are never shifted forwards.  A
+        value of 0 will disable shifting of mux changes.  Note: no
+        longer used.
+    force_detect_events_when_disconnected:
+        Force minknow to detect events even when channels are
+        disconnected  If set to false (the default) events are not
+        detected when channels are set outside well 1-4.  If set to
+        true events are always detected.
+"""
+GetChannelStatesDescResponse.Style.__doc__ = """Attributes:
+    label:
+        The human-readable name to display when rendering this channel
+        state or group.
+    description:
+        A sentence describing the meaning of the channel state or
+        group.  This can be used as a tooltip, for example.
+    colour:
+        The colour to use when rendering this channel state or group.
+        This is a six-digit hex string describing an RGB colour (eg:
+        "ff00ff" for purple).
+"""
+LampConfiguration.__doc__ = """Since 4.1  DEPRECATED 6.0: Lamp support has been removed and all of
+these options will be ignored.
+
+Attributes:
+    lamp_kit:
+        Set the lamp kit being used.
+    min_score_barcodes:
+        Optionally specify a min score to detect a valid lamp barcode.
+    min_score_masks:
+        Optionally set the minimimum valid score for a lamp mask.
+    min_score_targets:
+        Optionally specify a minimum score for lamp targets.
+"""
+DynamicAnalysisConfiguration.ReadScaleTracking.__doc__ = """Attributes:
+    conductance_scan_voltage:
+        Set the voltage the most recent conductance scan occurred at.
+    channel_conductance:
+        Per channel/well conductance values
+"""
+PoreTypeConfiguration.ChannelWell.__doc__ = """Attributes:
+    channel:
+        Channel number to control pore type for.  Must be less than
+        channel count for the current platform
+    well:
+        Well to control pore type for.  Wells outside the available
+        wells on the flowcell are ignored.
+"""
 GetAnalysisConfigurationRequest.__doc__ = """Attributes:
     run_id:
         The unique identifier assigned to this acquisition run.  Since
         6.2
-"""
-ReadClassificationParams.Parameters.__doc__ = """Attributes:
-    rules_in_execution_order:
-        An execution rule has the following format:  "pore =
-        (median,gt,185)&(median,lt,260)&(median_sd,lt,40)"  "median"
-        and "median_sd" are apart of a small subset of variable values
-        describing a read or read chunk, that are exposed to execution
-        rules. The full list of variable values and their descriptions
-        are documented here:
-        https://minknow.git.oxfordnanolabs.local/minknow-
-        core/analysis/reads.html  "gt" and "lt" describe how data can
-        be compared: gt: greater than lt: less than eq: equal ne: not
-        equal  Constant values like "185" or "260" can also be
-        specified. These can be real numbers also.  Note that
-        variables dont always have to be on the left and const values
-        on the right. The following sub rules are also valid:
-        (200,lt,median_sd) (median_before,gt,median) (5,lt,10)
-"""
-DynamicAnalysisConfiguration.__doc__ = """Attributes:
-    read_scale_tracking:
-        Parameters for read scale tracking:
-    force_veto_all_reads:
-        Force MinKNOW to not write or basecall all data from the live
-        sequencing stream.  This may be useful if there is a section
-        of data that is not wanted in the final output files and
-        reports.
-    force_veto_end_reasons:
-        Force MinKNOW to not write or basecall data with specific end
-        reasons.  This may be useful if there is a section of data
-        that is not wanted in the final output files and reports.
-    signal_fixing_params:
-        Configure signal fixing.  Signal fixing compensates for
-        current spikes across the flow cell (as can happen when
-        unblocking, for example) by using membrane-only channels as a
-        reference.  This is normally called by the protocol while
-        acquisition is running. The protocol is expected to use data
-        from the acquisition to determine which channels to use for
-        signal fixing.  Since 6.7
-"""
-ChannelStates.Logic.Behaviour.__doc__ = """Attributes:
-    reset_on_mux_change:
-        TODO: MinKNOW 5: replace int32 with bool for these options
-        these are ints but act like bools
-    latch:
-        If the latch value is set to true, then when the criteria for
-        this channel state is active, then the latch will keep it
-        active until the channel state is reset.
-    reset_on_effective_mux_change:
-        An 'effective mux change' is any mux change apart from the one
-        triggered with the purpose of disconnecting a channel (turning
-        a channel off). For example, if a channel is in pore, and the
-        user changes the channel configuration to 'disconnected', that
-        mux change will not be an effective mux change. Any other mux
-        change is considered an 'effective mux change'. So if a
-        channel saturates, the mux change to disconnected is an
-        effective mux change. Similarly, a change from disconnected to
-        a pore is an effective mux change.  Use this reset mode to
-        make the channel state persist on non-effective mux changes.
-        For example, if a channel state is in 'multiple' and the user
-        triggers a channel configuration change to 'disconnected', the
-        state will remain in multiple if it has this option on. The
-        multiple state will be reset at all other mux changes (i.e.
-        effective mux changes).
-    reset_on_effective_well_change:
-        An 'effective well change' is any well change apart from the
-        one triggered with the purpose of disconnecting a channel
-        (turning a channel off). For example, if a channel is in
-        well_1, and the user changes the channel configuration to
-        'unblock_1', that change will not be an effective well change.
-        A change to disconnected is also not considered an effective
-        well change.  Use this reset mode to make the channel state
-        persist on non-effective well changes. For example, if a
-        channel state is in 'multiple' and the user triggers a channel
-        configuration change to 'disconnected', the state will remain
-        in multiple if it has this option on. The multiple state will
-        be reset then when the mux is set to a different setting.
-"""
-AlignmentConfiguration.__doc__ = """Since 4.0
-
-Attributes:
-    reference_files:
-        Provide an index to align reads against once basecalled.  Any
-        acceptable reference format to the basecaller can be passed
-        here:   - fasta reference file   - minimap index file
-    bed_file:
-        Provide a bed file for use indicating areas of interest in
-        alignment results.  Note: alignment_index must be provided for
-        this argument to be valid.
-    minimum_coverage:
-        Minimum coverage for the basecaller to accept an alignment.
-        If not specified a default value is used.  Note: this option
-        cannot be used during live basecalling.
-    aggregate_statistics_for_multiple_bed_hits:
-        Control how statistics for bed results are aggregated.  If set
-        to false only the bed hit with the highest overlap is used
-        when computing heatmap/throughput graphs with bed hits.  If
-        set to true each bed hit is considered and bases for all hits
-        are counted. This may give more honest representation of
-        individual bed hit results but will skew read count statistics
-        - as each hit will be counted for every bed hit.  Note: this
-        option has no effect in offline basecalling.
 """
 WriterConfiguration.BulkConfiguration.__doc__ = """Control settings for the bulk writer
 
@@ -1015,6 +1172,93 @@ Attributes:
         Force all read metrics to be generated and written to bulk. If
         not, only used metrics will be generated and written to bulk.
 """
+SignalFixingParams.__doc__ = """Attributes:
+    enabled:
+        Whether to enable signal fixing.  If this is false, no other
+        fields need to be provided.
+    reference_channels:
+        A list of reference channels to use for signal fixing.  This
+        field is required if enabled is set to true.  These channels
+        must be set to a membrane-only well. The list should be in
+        preference order - MinKNOW will try to use channels from the
+        start of the list before channels from the end.
+    max_per_sample_deviation:
+        The maximum permitted deviation of any given reference channel
+        from the median reference channel value.  This is used to
+        filter the refernece_channels list (to exclude channels that
+        saturate, get a spike of electrical noise, or otherwise "go
+        wrong"). It is expressed in standard deviations.  Must be
+        greater than 0. If omitted, a default of 1.0 is used.
+    max_bad_samples_before_discarding:
+        How many bad samples to allow before discarding a reference
+        channel.  If a reference channel fails the quality filter (see
+        max_per_sample_deviation) for this many samples in a row, it
+        will be permanently removed from the list of reference
+        channels.  Must be between 1 and 32000. If omitted, a default
+        of 5000 is used.
+    min_active_reference_channels:
+        The minimum number of reference channels.  If filtering
+        reduces the number of reference channels to less than this
+        number, signal fixing will be disabled.  There must be at
+        least this many reference channels in the list.  If omitted, a
+        default of 3 is used.
+    max_active_reference_channels:
+        The maximum number of reference channels to use.  The first
+        `max_active_reference_channels` will be used from the filtered
+        list of reference channels.  If this is equal to or larger
+        than the number of reference channels, it has no effect.  If
+        omitted, a default of 10 is used.
+    capacitances:
+        For each channel, a list of capacitances for each well on the
+        channel.  There must be one entry for each channel on the flow
+        cell. Alternatively, this can be omitted entirely to do no
+        scaling.
+    min_baseline:
+        The minimum level of the baseline.  This value is in pA/pF.
+        Note that this is a difference, rather than an absolute value,
+        so when converting to ADC/pF the offset from the calibration
+        will not be applied. Instead, the mean of the scaling of the
+        reference channels (see `reference_channels`) will be used.
+        If the baseline is below this level for
+        `max_bad_samples_before_discarding` continuous samples, all
+        the reference channels that are active for that final sample
+        will be removed from the list of reference channels.  Note
+        that this value does not *prevent* the baseline from going
+        below this level, it just attempts to correct situations where
+        several reference channels converge on an obviously-incorrect
+        baseline.  If omitted, there is no lower limit on the
+        baseline.
+    max_baseline:
+        The maximum level of the baseline.  This behaves like
+        `min_baseline`, but checks for the baseline going over this
+        value.
+"""
+DynamicAnalysisConfiguration.ChannelWellInfo.__doc__ = """Attributes:
+    channel:
+        The channel the info describes (one based)
+    well:
+        The well the info describes (one based)
+    selected_default:
+        The default level of selected reads for tracking
+        initialisation.
+"""
+DynamicAnalysisConfiguration.ReadScaleTracking.ChannelConductance.__doc__ = """Attributes:
+    well_conductance:
+        Per well conductance values.
+"""
+SignalFixingParams.WellCapacitances.__doc__ = """Attributes:
+    wells:
+        The capaticance for each well on a channel, in picoamps.
+        There must always be as many entries as there are wells per
+        channel (typically 4, but 1 on flongles, for example). If not,
+        the RPC will be rejected.
+"""
+GetChannelStatesDescResponse.__doc__ = """Attributes:
+    groups:
+        The groups of channel states.  The groups are ordered
+        according to the "order" attribute of the group style in the
+        channel states configuration.
+"""
 ReadScalingParams.__doc__ = """Since 5.3  Quantile Information:
 
 Attributes:
@@ -1057,13 +1301,6 @@ Attributes:
     conductance_factor_shift:
         Scale factor applied to conductance to produce a basic shift
         estimate.
-"""
-ReadClassificationParams.MetricsEwma.__doc__ = """Attributes:
-    read_chunks_required_for_ewma:
-        How many read chunks are required before an ewma is
-        calculated.  If we don't use ewma, a straight mean of all
-        samples so far is used instead.  Default value is 0: Always
-        use ewma.
 """
 ReadClassificationParams.__doc__ = """Attributes:
     max_sample_size:
@@ -1169,271 +1406,34 @@ ReadClassificationParams.__doc__ = """Attributes:
         The maximum delta from chunk mean to consider values for acf
         computations.
 """
-BasecallerConfiguration.ModelNames.__doc__ = """A set of model names to run in the basecaller.
-
-Attributes:
-    simplex_model:
-        Simplex model to use when basecalling.  This field is not
-        optional - empty values are invalid.
-    modified_models:
-        An optional list of modified bases to use, the caller is
-        responsible for ensuring these are compatible modifications.
-        An empty list will lead to no modified base calling.
-    stereo_model:
-        An optional stereo model to use for calling.  And empty string
-        will perform no stereo step.
+GetSummaryResponse.__doc__ = """Attributes:
+    analysis_enabled:
+        Whether any analysis is enabled.  If this is false, everything
+        else will be false as well.
+    basecalling_enabled:
+        Whether basecalling is enabled.
 """
-WriterConfiguration.ChannelConfiguration.ChannelList.__doc__ = """Attributes:
-    channels:
-        List of channel names (one based) which should be enabled for
-        writing.
-"""
-WriterConfiguration.ReadPod5Configuration.__doc__ = """Attributes:
-    enable:
-        Control if a POD5 file should be generated per channel.
-    file_pattern:
-        The pattern used to find a POD5 files name.  default: pod5{_ba
-        secall_status}/{flow_cell_id}_{run_id}_{batch_number}.pod5
-        Where each {xxx} section is replaced with an attribute from
-        the minknow state when the file is written.  See file pattern
-        attributes above.
-    batch_count:
-        How many reads are placed in each batch (after batch_count
-        reads {batch_number} is increased in the pattern).
-    bases_per_batch:
-        Number of estimated bases within a batch before it rotates to
-        a new batch
-    no_output_based_batching:
-        Do not perform batching based on output (time-based batching
-        is still performed, if specified)
-    disable_writing_passed_reads:
-        Prevent reads which have successfully basecalled being written
-        to pod5.
-    disable_writing_failed_reads:
-        Prevent reads which have failed basecalling being written to
-        pod5.
-    disable_writing_force_skipped_reads:
-        disable writing reads which have been force skipped by the
-        basecaller.
-    batch_duration:
-        The batch duration, for time-based batching  If time-based
-        batching is enabled then, in addition to completing batches
-        when the `batch_count` or `bases_per_batch` target (above) is
-        reached, batches will also be completed when: - At least one
-        read has been written to the batch, AND - `batch_duration` has
-        elapsed since the last batch was completed (or since the start
-        of the acquisition, for the first batch)  If this field is not
-        set, then the default time-based batching configuration will
-        be used.  If this field is set to zero or a negative value,
-        then time-based batching will be disabled.  Since 5.6
-"""
-DynamicAnalysisConfiguration.ReadScaleTracking.ChannelConductance.__doc__ = """Attributes:
-    well_conductance:
-        Per well conductance values.
-"""
-BasecallerConfiguration.ReadFiltering.__doc__ = """ Removed as of 6.1 as this option is no longer supported.
-
-Attributes:
-    min_duplex_qscore:
-        Since 5.8
-"""
-ReadDetectionParams.__doc__ = """Attributes:
-    open_pore_min:
-        The minimum level which is considered open pore (this value is
-        relative to open_pore_default or the tracked open_pore
-        section, if tracking is being used.)  This value must be <=
-        0.0 if tracking is being used.
-    open_pore_max:
-        The maximum level which is considered open pore (this value is
-        relative to open_pore_default or the tracked open_pore
-        section, if tracking is being used.)  This value must be >=
-        0.0 if tracking is being used.
-    open_pore_default:
-        The default value to use for open pore, either when tracking
-        isn't being used, or when open pore tracking has no value
-        currently.
-    open_pore_seconds_required:
-        Minimum number of seconds events must lie within the open pore
-        ranges defined above in order to allow a read to break.
-    selected_min:
-        The minimum level which is considered open pore (this value is
-        relative to selected_default or the tracked selected section,
-        if tracking is being used.)  This value must be <= 0.0 if
-        tracking is being used.  Note cannot be used at the same time
-        as the `open_pore_*` fields above.
-    selected_max:
-        The maximum level which is considered open pore (this value is
-        relative to selected_default or the tracked selected section,
-        if tracking is being used.)  This value must be >= 0.0 if
-        tracking is being used.  Note cannot be used at the same time
-        as the `open_pore_*` fields above.
-    selected_default:
-        The default value to use for open pore, either when tracking
-        isn't being used, or when open pore tracking has no value
-        currently.  Note cannot be used at the same time as the
-        `open_pore_*` fields above.
-    selected_seconds_required:
-        Minimum number of seconds events must lie within the selected
-        ranges defined above in order to allow a read to break.
-"""
-ChannelStates.Logic.__doc__ = """Attributes:
-    rank:
-        Specifies the order in which channel state criteria will be
-        evaluated; the smaller the number, the earlier it will be
-        evaluated. The first criteria to match will be selected
-    pattern:
-        Note that this is a regex based pattern for describing a read
-        classification sequence. For example you can specify:
-        "unavailableunavailable" or:      "(unavailable)(unavailable)"
-        to recognise two consecutive read chunks classified as
-        unavailable.  You can also use "?" at the end of one of the
-        classifications in the sequence to indicate that it may or may
-        not be present at that point. For example:
-        "(pore)(transition)?(event)"  This will match both of the
-        sequences:      pore, transition, event      pore, event  The
-        technical documentation has more information on the range of
-        regex patterns you can apply.
-        https://minknow.git.oxfordnanolabs.local/minknow-
-        core/analysis/channel-states.html
+WriterConfiguration.ChannelConfiguration.ChannelRanges.__doc__ = """Attributes:
     ranges:
-        Range is [lower_pa, upper_pa)
+        List of start/end paired channel numbers which should be
+        enabled for writing.  All channels in inclusive ranges should
+        be enabled.
 """
-DynamicAnalysisConfiguration.ChannelWellInfo.__doc__ = """Attributes:
-    channel:
-        The channel the info describes (one based)
-    well:
-        The well the info describes (one based)
-    selected_default:
-        The default level of selected reads for tracking
-        initialisation.
-"""
-BasecallerConfiguration.__doc__ = """Since 3.0
-
-Attributes:
-    enable:
-        Choose if the basecaller is enabled or disabled.  If set to
-        false then no basecalling will take place, and the rest of the
-        config is ignored.
-    config_filename:
-        The basecaller cfg file with all the settings.  Filename can
-        be absolute, or a basename (eg dna_r9.4_450bps.cfg) which the
-        basecaller should locate (see basecaller application config
-        entry: "data_path")
-    model_names:
-        Specify the models to run by name (see
-        find_basecall_configurations in manager.proto)  Model names
-        should be taken from the `name` field of the above RPC
-        directly.  Since 6.3
-    align_filter:
-        Enable or disable pass/fail filtering based on alignment.
-        When enabled, reads which do not align to any references will
-        be marked as "failed", and written to the folder specified in
-        MinKNOW configuration for failed reads.  The setting applies
-        to both regular read filtering and target filtering; if it is
-        enabled, then a read will not be marked as a target read if it
-        does not align to a reference.  Default setting is false, i.e.
-        disabled.  Since 5.4
-    read_filtering:
-        Control how read filtering is applied to output of basecaller.
-        These settings determine whether a read is marked as "passed"
-        or "failed".  Reads are written to different folders based on
-        the result of this filtering.  Those folders are specified in
-        MinKNOW configuration.  If no filtering parameters are
-        provided then reads will not be filtered.
-    barcoding_configuration:
-        Control the barcoding configuration. If no barcoding
-        configuration is supplied, barcoding is disabled.  Since 3.5
-    target_filtering:
-        Control how target filtering is applied to output of
-        basecaller. Reads which pass these filtering criteria will be
-        marked as "target" reads, and will be written to a separate
-        folder; this folder is specified in MinKNOW configuration.
-        Reads which do not pass these criteria will have the regular
-        read filtering applied to them, as specified by the `read-
-        filtering` settings above.  If no filtering parameters are
-        provided then reads will not be target-filtered.  Since 3.7
-    alignment_configuration:
-        Alignment configuration parameters. If no configuration is
-        specified alignment is disabled.  Since 4.0
-    lamp_configuration:
-        Lamp configuration parameters. If no configuration is
-        specified lamp is disabled.  Since 4.1  DEPRECATED 6.0: Lamp
-        support has been removed and this option will be ignored.
-    enable_read_splitting:
-        Enable read splitting in the basecaller.  Since 4.5  Note:
-        Since 5.9 this option has no effect, the basecaller is
-        responsible for deciding when read splitting should be
-        enabled.
-    min_score_read_splitting:
-        Override score to use for the basecaller read splitting. If
-        not specified a default value is used from the basecaller.
-        Since 4.5  Note: Since 5.9 this option has no effect, the
-        basecaller is responsible for deciding read splitting score.
-    estimate_poly_a:
-        Enable poly a tail estimation.  Since 6.3
-    poly_a_config_path:
-        Configure the polya behaviour of the basecaller.  This field
-        is expected to be a path to a on the local disk that the
-        basecaller process can read.  Since 6.8
-"""
-WriterConfiguration.ReadFastqConfiguration.__doc__ = """Attributes:
-    enable:
-        Control if a fastq file should be generated per channel.
-    file_pattern:
-        The pattern used to find a fastq files name.  default: fastq{_
-        basecall_status}/{flow_cell_id}_{run_id}_{batch_number}.fastq
-        Where each {xxx} section is replaced with an attribute from
-        the minknow state when the file is written.  See file pattern
-        attributes above.
-    header_pattern:
-        The pattern used to find a fastq header.  default: {read_id}
-        runid={run_id} ch={channel_name} start_time={read_start_time}
-        Where each {xxx} section is replaced with an attribute from
-        the minknow state when the fastq is generated.
-    batch_count:
-        How many reads are placed in each batch (after batch_count
-        reads {batch_number} is increased in the pattern).
-    bases_per_batch:
-        Number of estimated bases within a batch before it rotates to
-        a new batch
-    no_output_based_batching:
-        Do not perform batching based on output (time-based batching
-        is still performed, if specified)
-    compression:
-        Compress fastq files with gzip compression. default: false
-    disable_writing_passed_reads:
-        Since 5.8 Prevent reads which have successfully basecalled
-        being written to fastq.
-    disable_writing_failed_reads:
-        Prevent reads which have failed basecalling being written to
-        fastq.
-    disable_writing_force_skipped_reads:
-        disable writing reads which have been force skipped by the
-        basecaller.
-    batch_duration:
-        The batch duration, for time-based batching  If time-based
-        batching is enabled then, in addition to completing batches
-        when the `batch_count` or `bases_per_batch` target (above) is
-        reached, batches will also be completed when: - At least one
-        read has been written to the batch, AND - `batch_duration` has
-        elapsed since the last batch was completed (or since the start
-        of the acquisition, for the first batch)  If this field is not
-        set, then the default time-based batching configuration will
-        be used.  If this field is set to zero or a negative value,
-        then time-based batching will be disabled.  Since 5.6
-"""
-SignalFixingParams.ReferenceChannel.__doc__ = """Attributes:
-    channel:
-        The name of the channel (1-indexed).
-    baseline_pa:
-        The baseline against which the offset for this channel can be
-        calculated in picoamps. This is expected to have been produced
-        based on the statistics for this channel calculated over a
-        time window.
-"""
-GetWriterConfigurationRequest.__doc__ = """Attributes:
-    run_id:
-        The unique identifier assigned to this acquisition run.  Since
-        6.0
+ReadClassificationParams.Parameters.__doc__ = """Attributes:
+    rules_in_execution_order:
+        An execution rule has the following format:  "pore =
+        (median,gt,185)&(median,lt,260)&(median_sd,lt,40)"  "median"
+        and "median_sd" are apart of a small subset of variable values
+        describing a read or read chunk, that are exposed to execution
+        rules. The full list of variable values and their descriptions
+        are documented here:
+        https://minknow.git.oxfordnanolabs.local/minknow-
+        core/analysis/reads.html  "gt" and "lt" describe how data can
+        be compared: gt: greater than lt: less than eq: equal ne: not
+        equal  Constant values like "185" or "260" can also be
+        specified. These can be real numbers also.  Note that
+        variables dont always have to be on the left and const values
+        on the right. The following sub rules are also valid:
+        (200,lt,median_sd) (median_before,gt,median) (5,lt,10)
 """
 # @@protoc_insertion_point(module_scope)

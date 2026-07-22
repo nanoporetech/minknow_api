@@ -94,13 +94,11 @@ if not _descriptor._USE_C_DESCRIPTORS:
   _globals['_CHANGERESEARCHONLYSETTINGSRESPONSE']._serialized_end=3364
   _globals['_PEBBLEDEVICESERVICE']._serialized_start=3367
   _globals['_PEBBLEDEVICESERVICE']._serialized_end=4124
-ResearchOnlySettings.AsicRegisterWrite.__doc__ = """Attributes:
+ResearchOnlySettings.InstrumentRegisterWrite.__doc__ = """Attributes:
     address:
-        Register to write to, value between 0..254
+        Register to write
     value:
-        Value to write to the register, value between 0..255 Note: If
-        value over two registers (high and low) then two separate
-        writes required
+        Value
     delay:
         Delay to add after this write, before the next
 """
@@ -134,6 +132,22 @@ GetChannelSettingsRequest.__doc__ = """Attributes:
     channels:
         The channels (one based) to return data for.
 """
+ChannelSettings.__doc__ = """Attributes:
+    input:
+        The input to be digitised
+    mode:
+        The channel mode
+"""
+ResearchOnlySettings.AsicRegisterWrite.__doc__ = """Attributes:
+    address:
+        Register to write to, value between 0..254
+    value:
+        Value to write to the register, value between 0..255 Note: If
+        value over two registers (high and low) then two separate
+        writes required
+    delay:
+        Delay to add after this write, before the next
+"""
 ResearchOnlySettings.__doc__ = """Attributes:
     asic_writes:
         List of ASIC register writes to append Use at own risk as no
@@ -151,49 +165,6 @@ ResearchOnlySettings.__doc__ = """Attributes:
 GetChannelSettingsResponse.__doc__ = """Attributes:
     channels:
         List of all requested pixel settings, in the order requested.
-"""
-ResearchOnlySettings.InstrumentRegisterWrite.__doc__ = """Attributes:
-    address:
-        Register to write
-    value:
-        Value
-    delay:
-        Delay to add after this write, before the next
-"""
-ChangeDeviceSettingsResponse.__doc__ = """Attributes:
-    real_sample_rate:
-        The sampling frequency actually applied to the hardware, as
-        close as possible to the requested rate.  Note: only returned
-        if sampling rate was set as part of this call.
-    real_sampling_frequency:
-        The sampling frequency actually applied to the hardware, as
-        close as possible to the requested rate.  Note: only returned
-        if sampling rate was set as part of this call.
-"""
-OverloadProtectionConfig.__doc__ = """Attributes:
-    enabled:
-        Set to enable or disable hardware based overload protection
-        (saturation).
-    periods:
-        Threshold for the number of periods counted over threshold
-        before disconnection. Valid value must be between [0..7]
-        INVALID_ARGUMENT will be returned if not between these values
-    min_adc:
-        The minimum adc value that is not a saturation.  If this value
-        is not specified, the previous value is kept. Valid value must
-        be between [-2047..2047] INVALID_ARGUMENT will be returned if
-        not between these values
-    max_adc:
-        The maximum adc value that is not a saturation.  If this value
-        is not specified, the previous value is kept. Valid value must
-        be between [-2047..2047] INVALID_ARGUMENT will be returned if
-        not between these values
-"""
-ChannelSettings.__doc__ = """Attributes:
-    input:
-        The input to be digitised
-    mode:
-        The channel mode
 """
 DeviceSettings.__doc__ = """Attributes:
     sample_rate:
@@ -304,5 +275,34 @@ ChangeChannelSettingsRequest.__doc__ = """Attributes:
         If supplied, contains settings applied to every channel before
         then applying any specific settings in the per channel
         settings.
+"""
+ChangeDeviceSettingsResponse.__doc__ = """Attributes:
+    real_sample_rate:
+        The sampling frequency actually applied to the hardware, as
+        close as possible to the requested rate.  Note: only returned
+        if sampling rate was set as part of this call.
+    real_sampling_frequency:
+        The sampling frequency actually applied to the hardware, as
+        close as possible to the requested rate.  Note: only returned
+        if sampling rate was set as part of this call.
+"""
+OverloadProtectionConfig.__doc__ = """Attributes:
+    enabled:
+        Set to enable or disable hardware based overload protection
+        (saturation).
+    periods:
+        Threshold for the number of periods counted over threshold
+        before disconnection. Valid value must be between [0..7]
+        INVALID_ARGUMENT will be returned if not between these values
+    min_adc:
+        The minimum adc value that is not a saturation.  If this value
+        is not specified, the previous value is kept. Valid value must
+        be between [-2047..2047] INVALID_ARGUMENT will be returned if
+        not between these values
+    max_adc:
+        The maximum adc value that is not a saturation.  If this value
+        is not specified, the previous value is kept. Valid value must
+        be between [-2047..2047] INVALID_ARGUMENT will be returned if
+        not between these values
 """
 # @@protoc_insertion_point(module_scope)

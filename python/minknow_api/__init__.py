@@ -159,7 +159,6 @@ _services: Dict[str, Service] = {
     "promethion_device": Service(["PromethionDeviceService"]),
     "protocol": Service(["ProtocolService"]),
     "protocols": Service(["ProtocolsService"], ".v2"),
-    "presets": Service(["PresetsService"], ".ui.sequencing_run"),
     "run_until": Service(["RunUntilService"]),
     "statistics": Service(["StatisticsService"]),
 }

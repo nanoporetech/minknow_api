@@ -65,64 +65,11 @@ if not _descriptor._USE_C_DESCRIPTORS:
   _globals['_GENERATEHARDWARECHECKREPORTRESPONSE']._serialized_end=1608
   _globals['_HARDWARECHECKSERVICE']._serialized_start=1969
   _globals['_HARDWARECHECKSERVICE']._serialized_end=2775
-StartHardwareCheckRequest.__doc__ = """Attributes:
-    position_ids:
-        A list of position IDs to start a hardware check on e.g.
-        `['X1', X2', 'X5']`.
-"""
-HardwareCheckScriptData.__doc__ = """The data received from the hardware check script
-
-Attributes:
-    position_check_results:
-        A list of results for each position.
-    progress_percent:
-        Indicates progress of the overall hardware check procedure.
-        This field will always have values between 0 and 100
-        (inclusive), and the value will increase over time. It is
-        intended for displaying a progress bar or similar.  When the
-        hardware check has completed this value will be 100.
-    progress_eta_seconds:
-        Indicates roughly how much time is remaining for the hardware
-        check.  If no ETA can be calculated, or the hardware check is
-        complete, this will be zero.  Note that it is always an
-        estimate - it is recommended to round larger values, like
-        "about 2 minutes remaining".
-    overall_result:
-        Final overall pass/fail across all tests and positions
-    protocol_run_ids:
-        protocol_run_ids that have been started by the hardware check
-        If any protocol listed here is still running when the hardware
-        check finishes, that protocol will be stopped.
-"""
-StreamHardwareCheckResultsResponse.__doc__ = """Attributes:
-    hardware_check_result:
-        Returns the hardware check results.  If no ID is provided,
-        returns persisted hardware check results, if persisted results
-        exist. It will then stay connected, and any newly started
-        hardware checks, triggered via `start_hardware_check`, will be
-        sent individually, as well as any progress updates.  If an ID
-        is provided for a persisted record, it will return the result
-        and end. If an ID is provided for the current hardware check,
-        it will stay connected for new updates and end when the check
-        is completed.  Each result will be returned individually.
-"""
-StartHardwareCheckResponse.__doc__ = """Attributes:
+UpdateHardwareCheckResultsRequest.__doc__ = """Attributes:
     hardware_check_id:
-        The unique ID for the newly created hardware check.
-"""
-PositionCheckResult.__doc__ = """Each position result
-
-Attributes:
-    position_id:
-        The ID of the position that performed the hardware check.
-    device_type:
-        The type of the device the hardware check is running on.
-    hardware_check_result:
-        The position hardware check result This is the
-        HardwareCheckResult message from the protocol
-    adapter_id:
-        The unique identifier of an attached flongle adapter. This
-        should be same as the value printed onto the adapter casing.
+        The unique ID for a hardware check.
+    hardware_check_script_data:
+        The data from the hardware check script
 """
 GenerateHardwareCheckReportResponse.__doc__ = """Attributes:
     hardware_check_id:
@@ -130,28 +77,6 @@ GenerateHardwareCheckReportResponse.__doc__ = """Attributes:
     report_data:
         A section of the hardware check report data (note the api to
         return this data may stream back several sections).
-"""
-HardwareCheckResult.__doc__ = """The data sent to the UI
-
-Attributes:
-    failure_reason:
-        `failure_reason` is guaranteed to be:  - `NoError` if `status`
-        is NOT `Failed`  - NOT `NoError` if `status` is `Failed`
-    calibration_results:
-        Results data for calibration test
-    temperature_results:
-        Results data for temperature test
-    hardware_check_id:
-        The ID of this hardware check result.
-    start_time:
-        The time (UTC) when the hardware check was started.
-    end_time:
-        The time (UTC) when the hardware check completed.  Unset if
-        the check is still running.
-    hardware_check_script_data:
-        The data from the hardware check script
-    state:
-        Indicates the current state of the hardware check run.
 """
 StreamHardwareCheckResultsRequest.__doc__ = """Attributes:
     hardware_check_id:
@@ -188,14 +113,89 @@ GenerateHardwareCheckReportRequest.__doc__ = """Attributes:
     hardware_check_id:
         The ID of the hardware check to generate a report for.
 """
+StreamHardwareCheckResultsResponse.__doc__ = """Attributes:
+    hardware_check_result:
+        Returns the hardware check results.  If no ID is provided,
+        returns persisted hardware check results, if persisted results
+        exist. It will then stay connected, and any newly started
+        hardware checks, triggered via `start_hardware_check`, will be
+        sent individually, as well as any progress updates.  If an ID
+        is provided for a persisted record, it will return the result
+        and end. If an ID is provided for the current hardware check,
+        it will stay connected for new updates and end when the check
+        is completed.  Each result will be returned individually.
+"""
+HardwareCheckResult.__doc__ = """The data sent to the UI
+
+Attributes:
+    failure_reason:
+        `failure_reason` is guaranteed to be:  - `NoError` if `status`
+        is NOT `Failed`  - NOT `NoError` if `status` is `Failed`
+    calibration_results:
+        Results data for calibration test
+    temperature_results:
+        Results data for temperature test
+    hardware_check_id:
+        The ID of this hardware check result.
+    start_time:
+        The time (UTC) when the hardware check was started.
+    end_time:
+        The time (UTC) when the hardware check completed.  Unset if
+        the check is still running.
+    hardware_check_script_data:
+        The data from the hardware check script
+    state:
+        Indicates the current state of the hardware check run.
+"""
 StopHardwareCheckRequest.__doc__ = """Attributes:
     hardware_check_id:
         The unique ID for a hardware check.
 """
-UpdateHardwareCheckResultsRequest.__doc__ = """Attributes:
+StartHardwareCheckRequest.__doc__ = """Attributes:
+    position_ids:
+        A list of position IDs to start a hardware check on e.g.
+        `['X1', X2', 'X5']`.
+"""
+StartHardwareCheckResponse.__doc__ = """Attributes:
     hardware_check_id:
-        The unique ID for a hardware check.
-    hardware_check_script_data:
-        The data from the hardware check script
+        The unique ID for the newly created hardware check.
+"""
+PositionCheckResult.__doc__ = """Each position result
+
+Attributes:
+    position_id:
+        The ID of the position that performed the hardware check.
+    device_type:
+        The type of the device the hardware check is running on.
+    hardware_check_result:
+        The position hardware check result This is the
+        HardwareCheckResult message from the protocol
+    adapter_id:
+        The unique identifier of an attached flongle adapter. This
+        should be same as the value printed onto the adapter casing.
+"""
+HardwareCheckScriptData.__doc__ = """The data received from the hardware check script
+
+Attributes:
+    position_check_results:
+        A list of results for each position.
+    progress_percent:
+        Indicates progress of the overall hardware check procedure.
+        This field will always have values between 0 and 100
+        (inclusive), and the value will increase over time. It is
+        intended for displaying a progress bar or similar.  When the
+        hardware check has completed this value will be 100.
+    progress_eta_seconds:
+        Indicates roughly how much time is remaining for the hardware
+        check.  If no ETA can be calculated, or the hardware check is
+        complete, this will be zero.  Note that it is always an
+        estimate - it is recommended to round larger values, like
+        "about 2 minutes remaining".
+    overall_result:
+        Final overall pass/fail across all tests and positions
+    protocol_run_ids:
+        protocol_run_ids that have been started by the hardware check
+        If any protocol listed here is still running when the hardware
+        check finishes, that protocol will be stopped.
 """
 # @@protoc_insertion_point(module_scope)
