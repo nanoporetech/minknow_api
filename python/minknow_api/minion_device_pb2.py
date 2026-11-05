@@ -74,13 +74,11 @@ if not _descriptor._USE_C_DESCRIPTORS:
   _globals['_GETFANSPEEDRESPONSE']._serialized_end=3715
   _globals['_MINIONDEVICESERVICE']._serialized_start=3718
   _globals['_MINIONDEVICESERVICE']._serialized_end=4097
-ChangeSettingsRequest.__doc__ = """Attributes:
+GetSettingsResponse.__doc__ = """Response for MinionDeviceService.get_settings
+
+Attributes:
     settings:
         MinION device settings
-    channel_config_default:
-        The default channel configuration.  This provides the default
-        configuration to apply to any channels not listed in
-        settings.channel_config.
 """
 TemperatureRange.__doc__ = """Temperature range.
 
@@ -98,6 +96,7 @@ Attributes:
         equal to min.  When soft temperature control is enabled, this
         is used as the target temperature, and ``min`` is not used.
 """
+GetSettingsRequest.__doc__ = """Request for MinionDeviceService.get_settings"""
 MinionDeviceSettings.__doc__ = """Describes the MinION device settings.  Both unset structures and
 *_KEEP values in enums indicate "no change". When changing settings,
 these are the default values.
@@ -268,13 +267,14 @@ Attributes:
         later - if left blank this property will remain unchanged.
         Must contain a value in the range [2, 64]
 """
-GetSettingsResponse.__doc__ = """Response for MinionDeviceService.get_settings
-
-Attributes:
+ChangeSettingsRequest.__doc__ = """Attributes:
     settings:
         MinION device settings
+    channel_config_default:
+        The default channel configuration.  This provides the default
+        configuration to apply to any channels not listed in
+        settings.channel_config.
 """
-GetSettingsRequest.__doc__ = """Request for MinionDeviceService.get_settings"""
 SamplingFrequencyParameters.__doc__ = """These values control the sampling frequency.
 
 Attributes:

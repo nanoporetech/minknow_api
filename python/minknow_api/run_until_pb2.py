@@ -101,24 +101,6 @@ if not _descriptor._USE_C_DESCRIPTORS:
   _globals['_STREAMUPDATESRESPONSE']._serialized_end=2887
   _globals['_RUNUNTILSERVICE']._serialized_start=2890
   _globals['_RUNUNTILSERVICE']._serialized_end=3395
-ErrorUpdate.OtherError.__doc__ = """An error that is not covered by one of the other error types, above."""
-StreamUpdatesResponse.__doc__ = """Attributes:
-    idx:
-        The index of this update  The index is incremented after each
-        "interesting" update (i.e. an update that contains information
-        besides an `estimated_time_remaining_update` or a
-        `current_progress_update`). See `Update History`, above, for
-        further information.
-    time:
-        The timestamp of this update (UTC)
-    update:
-        The update data itself
-"""
-WriteTargetCriteriaRequest.__doc__ = """Attributes:
-    acquisition_run_id:
-        The acquisition to set the Run-Until Criteria for
-"""
-ScriptUpdate.Started.__doc__ = """Indicates that the run-until script has started and is running"""
 Update.__doc__ = """Attributes:
     current_progress_update:
         Gives the current values of the criteria (Compare to
@@ -126,8 +108,35 @@ Update.__doc__ = """Attributes:
     other:
         Space for custom updates from custom Run-Until scripts
 """
+ScriptUpdate.Started.__doc__ = """Indicates that the run-until script has started and is running"""
+WriteUpdatesRequest.__doc__ = """Attributes:
+    acquisition_run_id:
+        The acquisition this Run-Until update applies to
+"""
+WriteTargetCriteriaRequest.__doc__ = """Attributes:
+    acquisition_run_id:
+        The acquisition to set the Run-Until Criteria for
+"""
+EstimatedTimeRemainingUpdate.EstimatedTimes.__doc__ = """Map of Run-Until Criterion to `EstimatedTime` when the criterion will
+be fulfilled  Only criteria for which an update is being provided are
+contained in the map."""
+ActionUpdate.__doc__ = """Indicates that an action has been performed  When a request is sent
+using `write_updates()`, MinKNOW performs the specified action.
+
+Attributes:
+    criteria:
+        The criteria associated with this action
+"""
+ErrorUpdate.InvalidCriteria.__doc__ = """Indicates that one or more of the supplied target criteria is not
+recognised by the  Run-Until Script.  Unrecognised target criteria
+will not be used to pause or stop the run."""
+EstimatedTimeRemainingUpdate.NotEstimated.__doc__ = """Indicates that a time is not estimated"""
+ErrorUpdate.OtherError.__doc__ = """An error that is not covered by one of the other error types, above."""
 ScriptUpdate.CriteriaUpdated.__doc__ = """Indicates the the Run-Until Script has update its criteria in response
 to receiving a `StreamTargetCriteriaResponse` message"""
+EstimatedTimeRemainingUpdate.__doc__ = """Indicates the estimated time remaining  An estimated time may be
+provided for each Run-Until Criterion that is specified as an end-
+point."""
 StreamUpdatesRequest.__doc__ = """Attributes:
     acquisition_run_id:
         The acquisition to stream Run-Until updates for
@@ -148,18 +157,18 @@ StreamUpdatesRequest.__doc__ = """Attributes:
         means that all updates from the first update onwards will be
         sent.
 """
-ErrorUpdate.InvalidCriteria.__doc__ = """Indicates that one or more of the supplied target criteria is not
-recognised by the  Run-Until Script.  Unrecognised target criteria
-will not be used to pause or stop the run."""
-StreamTargetCriteriaRequest.__doc__ = """Attributes:
-    acquisition_run_id:
-        The acquisition to obtain the Run-Until Criteria for
+StreamUpdatesResponse.__doc__ = """Attributes:
+    idx:
+        The index of this update  The index is incremented after each
+        "interesting" update (i.e. an update that contains information
+        besides an `estimated_time_remaining_update` or a
+        `current_progress_update`). See `Update History`, above, for
+        further information.
+    time:
+        The timestamp of this update (UTC)
+    update:
+        The update data itself
 """
-EstimatedTimeRemainingUpdate.__doc__ = """Indicates the estimated time remaining  An estimated time may be
-provided for each Run-Until Criterion that is specified as an end-
-point."""
-ErrorUpdate.__doc__ = """Indicates that a problem has been encountered by the Run-Until Script"""
-EstimatedTimeRemainingUpdate.NotEstimated.__doc__ = """Indicates that a time is not estimated"""
 CriteriaValues.__doc__ = """A map of criterion name -> value  This message is deliberately
 flexible, to allow custom Run-Until Scripts to expand the range and
 types of available criteria."""
@@ -180,18 +189,9 @@ Attributes:
         Estimated upper bound on the time at which the condition will
         occur (UTC)
 """
-WriteUpdatesRequest.__doc__ = """Attributes:
+ErrorUpdate.__doc__ = """Indicates that a problem has been encountered by the Run-Until Script"""
+StreamTargetCriteriaRequest.__doc__ = """Attributes:
     acquisition_run_id:
-        The acquisition this Run-Until update applies to
+        The acquisition to obtain the Run-Until Criteria for
 """
-ActionUpdate.__doc__ = """Indicates that an action has been performed  When a request is sent
-using `write_updates()`, MinKNOW performs the specified action.
-
-Attributes:
-    criteria:
-        The criteria associated with this action
-"""
-EstimatedTimeRemainingUpdate.EstimatedTimes.__doc__ = """Map of Run-Until Criterion to `EstimatedTime` when the criterion will
-be fulfilled  Only criteria for which an update is being provided are
-contained in the map."""
 # @@protoc_insertion_point(module_scope)

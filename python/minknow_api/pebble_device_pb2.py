@@ -102,41 +102,27 @@ ResearchOnlySettings.InstrumentRegisterWrite.__doc__ = """Attributes:
     delay:
         Delay to add after this write, before the next
 """
-WaveformSettings.__doc__ = """Attributes:
-    voltages:
-        The waveform data applied to the device (in millivolts)  Must
-        contain 32, 128 or 1024 values, in order to be a valid
-        waveform when specified as a frequency When used as a "precise
-        waveform", may have between 1 and 1024 entries.
-    dac_values:
-        The waveform data applied to the device (in raw DAC units).
-        Cannot be set at the same time as voltages INVALID_ARGUMENT
-        will be returned if the length of voltages is greater than 254
-        INVALID_ARGUMENT will be returned if one of the values is
-        outside of [0-4095] (vce_dac_range)
-    samples_per_entry:
-        The number of samples each wavetable entry will be valid for
-        Valid value must be between [1..31] INVALID_ARGUMENT will be
-        returned if not between these values
-    frequency:
-        The frequency of the applied waveform, in Hz. This is ignored
-        if "precise_waveform" is set true.  Valid values are between
-        7.8125Hz and 500Hz.
-    precise_waveform:
-        When true the voltages in the waveform are applied at a rate
-        of one entry per frame, (and then repeated), rather than
-        repeating the whole table of voltages at the frequency
-        specified.  Not all hardware supports precise waveforms.
-"""
-GetChannelSettingsRequest.__doc__ = """Attributes:
-    channels:
-        The channels (one based) to return data for.
-"""
 ChannelSettings.__doc__ = """Attributes:
     input:
         The input to be digitised
     mode:
         The channel mode
+"""
+ChangeChannelSettingsRequest.__doc__ = """Attributes:
+    channels:
+        1 based map of up to 400 different channel settings
+    channel_default:
+        If supplied, contains settings applied to every channel before
+        then applying any specific settings in the per channel
+        settings.
+"""
+GetChannelSettingsResponse.__doc__ = """Attributes:
+    channels:
+        List of all requested pixel settings, in the order requested.
+"""
+GetChannelSettingsRequest.__doc__ = """Attributes:
+    channels:
+        The channels (one based) to return data for.
 """
 ResearchOnlySettings.AsicRegisterWrite.__doc__ = """Attributes:
     address:
@@ -148,23 +134,15 @@ ResearchOnlySettings.AsicRegisterWrite.__doc__ = """Attributes:
     delay:
         Delay to add after this write, before the next
 """
-ResearchOnlySettings.__doc__ = """Attributes:
-    asic_writes:
-        List of ASIC register writes to append Use at own risk as no
-        validation is performed on the address or value of the
-        individual writes.  The number of writes in single request
-        limited to 128 due to internal MinKNOW limitations
-        INVALID_ARGUMENT will be returned if greater than this limit
-    instrument_writes:
-        List of instrument register writes Use at own risk as no
-        validation is performed on the address or value of the
-        individual writes.  The number of writes in single request
-        limited to 16 due to internal MinKNOW limitations
-        INVALID_ARGUMENT will be returned if greater than this limit
-"""
-GetChannelSettingsResponse.__doc__ = """Attributes:
-    channels:
-        List of all requested pixel settings, in the order requested.
+ChangeDeviceSettingsResponse.__doc__ = """Attributes:
+    real_sample_rate:
+        The sampling frequency actually applied to the hardware, as
+        close as possible to the requested rate.  Note: only returned
+        if sampling rate was set as part of this call.
+    real_sampling_frequency:
+        The sampling frequency actually applied to the hardware, as
+        close as possible to the requested rate.  Note: only returned
+        if sampling rate was set as part of this call.
 """
 DeviceSettings.__doc__ = """Attributes:
     sample_rate:
@@ -268,24 +246,6 @@ DeviceSettings.__doc__ = """Attributes:
         processes. The message includes a way of returning to default
         timings.  This value cannot be changed during acquisition
 """
-ChangeChannelSettingsRequest.__doc__ = """Attributes:
-    channels:
-        1 based map of up to 400 different channel settings
-    channel_default:
-        If supplied, contains settings applied to every channel before
-        then applying any specific settings in the per channel
-        settings.
-"""
-ChangeDeviceSettingsResponse.__doc__ = """Attributes:
-    real_sample_rate:
-        The sampling frequency actually applied to the hardware, as
-        close as possible to the requested rate.  Note: only returned
-        if sampling rate was set as part of this call.
-    real_sampling_frequency:
-        The sampling frequency actually applied to the hardware, as
-        close as possible to the requested rate.  Note: only returned
-        if sampling rate was set as part of this call.
-"""
 OverloadProtectionConfig.__doc__ = """Attributes:
     enabled:
         Set to enable or disable hardware based overload protection
@@ -304,5 +264,45 @@ OverloadProtectionConfig.__doc__ = """Attributes:
         is not specified, the previous value is kept. Valid value must
         be between [-2047..2047] INVALID_ARGUMENT will be returned if
         not between these values
+"""
+WaveformSettings.__doc__ = """Attributes:
+    voltages:
+        The waveform data applied to the device (in millivolts)  Must
+        contain 32, 128 or 1024 values, in order to be a valid
+        waveform when specified as a frequency When used as a "precise
+        waveform", may have between 1 and 1024 entries.
+    dac_values:
+        The waveform data applied to the device (in raw DAC units).
+        Cannot be set at the same time as voltages INVALID_ARGUMENT
+        will be returned if the length of voltages is greater than 254
+        INVALID_ARGUMENT will be returned if one of the values is
+        outside of [0-4095] (vce_dac_range)
+    samples_per_entry:
+        The number of samples each wavetable entry will be valid for
+        Valid value must be between [1..31] INVALID_ARGUMENT will be
+        returned if not between these values
+    frequency:
+        The frequency of the applied waveform, in Hz. This is ignored
+        if "precise_waveform" is set true.  Valid values are between
+        7.8125Hz and 500Hz.
+    precise_waveform:
+        When true the voltages in the waveform are applied at a rate
+        of one entry per frame, (and then repeated), rather than
+        repeating the whole table of voltages at the frequency
+        specified.  Not all hardware supports precise waveforms.
+"""
+ResearchOnlySettings.__doc__ = """Attributes:
+    asic_writes:
+        List of ASIC register writes to append Use at own risk as no
+        validation is performed on the address or value of the
+        individual writes.  The number of writes in single request
+        limited to 128 due to internal MinKNOW limitations
+        INVALID_ARGUMENT will be returned if greater than this limit
+    instrument_writes:
+        List of instrument register writes Use at own risk as no
+        validation is performed on the address or value of the
+        individual writes.  The number of writes in single request
+        limited to 16 due to internal MinKNOW limitations
+        INVALID_ARGUMENT will be returned if greater than this limit
 """
 # @@protoc_insertion_point(module_scope)

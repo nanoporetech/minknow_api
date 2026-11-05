@@ -68,27 +68,6 @@ if not _descriptor._USE_C_DESCRIPTORS:
   _globals['_COLLECTPINGSRESPONSE']._serialized_end=984
   _globals['_LOGSERVICE']._serialized_start=1287
   _globals['_LOGSERVICE']._serialized_end=1683
-GetUserMessagesRequest.__doc__ = """Attributes:
-    include_old_messages:
-        If set, any messages which have already been sent to listeners
-        will be sent to the new stream again, before new messages are
-        sent.  If not specified - the default will not send messages
-        that were sent previously.  note: there is a limit on how many
-        messages are recorded for replay.
-"""
-SendUserMessageRequest.__doc__ = """Attributes:
-    severity:
-        The severity of the message to send  note: TRACE messages
-        cannot be sent using this interface (will throw an error).
-    identifier:
-        A short unique textual identifier for the message Used to
-        identify the message for translation purposes
-    user_message:
-        The user message to send to any listeners.
-    extra_data:
-        Any extra data associated with the user message, as a map from
-        key to data.
-"""
 UserMessage.__doc__ = """Attributes:
     time:
         Timestamp for when the log message was emitted
@@ -103,16 +82,6 @@ UserMessage.__doc__ = """Attributes:
         Any extra data associated with the user message, as a map from
         key to data.
 """
-SendPingRequest.__doc__ = """Since 5.0
-
-Attributes:
-    ping_data:
-        The json data to send as a ping.  note: if this string is not
-        a valid json object, an error will be raised.
-    days_until_expiry:
-        Should the ping fail to send, the number of days the ping will
-        be stored before being cleaned up.
-"""
 CollectPingsRequest.__doc__ = """Attributes:
     collected_ping_file:
         Any pings that are queued to be sent will be collected into a
@@ -123,5 +92,36 @@ CollectPingsRequest.__doc__ = """Attributes:
     include_previously_colleced_pings:
         Normally previously collected pings are ignored, but by
         setting this they will be included. Defaults to False.
+"""
+GetUserMessagesRequest.__doc__ = """Attributes:
+    include_old_messages:
+        If set, any messages which have already been sent to listeners
+        will be sent to the new stream again, before new messages are
+        sent.  If not specified - the default will not send messages
+        that were sent previously.  note: there is a limit on how many
+        messages are recorded for replay.
+"""
+SendPingRequest.__doc__ = """Since 5.0
+
+Attributes:
+    ping_data:
+        The json data to send as a ping.  note: if this string is not
+        a valid json object, an error will be raised.
+    days_until_expiry:
+        Should the ping fail to send, the number of days the ping will
+        be stored before being cleaned up.
+"""
+SendUserMessageRequest.__doc__ = """Attributes:
+    severity:
+        The severity of the message to send  note: TRACE messages
+        cannot be sent using this interface (will throw an error).
+    identifier:
+        A short unique textual identifier for the message Used to
+        identify the message for translation purposes
+    user_message:
+        The user message to send to any listeners.
+    extra_data:
+        Any extra data associated with the user message, as a map from
+        key to data.
 """
 # @@protoc_insertion_point(module_scope)

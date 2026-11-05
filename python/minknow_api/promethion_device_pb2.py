@@ -116,44 +116,15 @@ if not _descriptor._USE_C_DESCRIPTORS:
   _globals['_GETTEMPERATURERESPONSE']._serialized_end=5444
   _globals['_PROMETHIONDEVICESERVICE']._serialized_start=5447
   _globals['_PROMETHIONDEVICESERVICE']._serialized_end=6525
-GetPixelSettingsRequest.__doc__ = """Attributes:
-    pixels:
-        The channels (one based) to return data for. A sparse map is
-        accepted
-"""
-ChangePixelBlockSettingsRequest.__doc__ = """Attributes:
-    pixel_blocks:
-        1 based map of different pixel blocks settings, a sparse map
-        is accepted, keys should be integers between 1 and 12.
-    pixel_block_default:
-        If supplied, contains settings applied to every block before
-        then applying any specific settings in the per block settings.
-"""
-WaveformSettings.__doc__ = """Attributes:
-    voltages:
-        The waveform data applied to the device (in millivolts)  Must
-        contain 32, 128 or 1024 values, in order to be a valid
-        waveform when specified as a frequency When used as a "precise
-        waveform", may have between 1 and 1024 entries.
-    dac_values:
-        The waveform data applied to the device (in raw DAC units).
-        Cannot be set at the same time as voltages INVALID_ARGUMENT
-        will be returned if the length of voltages is greater than 254
-        INVALID_ARGUMENT will be returned if one of the values is
-        outside of [0-4095] (vce_dac_range)
-    samples_per_entry:
-        The number of samples each wavetable entry will be valid for
-        Valid value must be between [1..31] INVALID_ARGUMENT will be
-        returned if not between these values
-    frequency:
-        The frequency of the applied waveform, in Hz. This is ignored
-        if "precise_waveform" is set true.  Valid values are between
-        7.8125Hz and 500Hz.
-    precise_waveform:
-        When true the voltages in the waveform are applied at a rate
-        of one entry per frame, (and then repeated), rather than
-        repeating the whole table of voltages at the frequency
-        specified.  Not all hardware supports precise waveforms.
+StreamTemperatureRequest.__doc__ = """Attributes:
+    period_seconds:
+        How often temperature updates should be sent Defaults to a
+        period of 1 second, if not specified, or set to 0
+    acquisition_run_id:
+        The acquisition id of the experiment.
+    data_selection:
+        The desired data selection.  The units for all values are
+        `seconds since the start of the experiment`.
 """
 PixelSettings.__doc__ = """Attributes:
     input:
@@ -190,19 +161,22 @@ PixelSettings.__doc__ = """Attributes:
         amplifier. If it is set to off, no signal readings can be
         made.
 """
+ChangePixelBlockSettingsRequest.__doc__ = """Attributes:
+    pixel_blocks:
+        1 based map of different pixel blocks settings, a sparse map
+        is accepted, keys should be integers between 1 and 12.
+    pixel_block_default:
+        If supplied, contains settings applied to every block before
+        then applying any specific settings in the per block settings.
+"""
+GetPixelBlockSettingsResponse.__doc__ = """Attributes:
+    pixel_blocks:
+        1 based map of different pixel blocks settings, containing 12
+        entries.
+"""
 GetPixelSettingsResponse.__doc__ = """Attributes:
     pixels:
         List of all requested pixel settings, in the order requested.
-"""
-StreamTemperatureRequest.__doc__ = """Attributes:
-    period_seconds:
-        How often temperature updates should be sent Defaults to a
-        period of 1 second, if not specified, or set to 0
-    acquisition_run_id:
-        The acquisition id of the experiment.
-    data_selection:
-        The desired data selection.  The units for all values are
-        `seconds since the start of the experiment`.
 """
 ChangePixelSettingsRequest.__doc__ = """Attributes:
     pixels:
@@ -239,6 +213,30 @@ PixelBlockSettings.__doc__ = """Attributes:
     unblock_voltage:
         The unblock voltage to apply when a pixel is unblocking.  The
         acceptable input range is -1000..1000 (inclusive)
+"""
+ChangeDeviceSettingsResponse.__doc__ = """Attributes:
+    real_sample_rate:
+        The sampling frequency actually applied to the hardware, as
+        close as possible to the requested rate.  Note: only returned
+        if sampling rate was set as part of this call.
+    real_sampling_frequency:
+        The sampling frequency actually applied to the hardware, as
+        close as possible to the requested rate.  Note: only returned
+        if sampling rate was set as part of this call.
+"""
+GetTemperatureResponse.__doc__ = """Attributes:
+    target_temperature:
+        Return the temperature target the device is aiming to reach.
+    starting_temperature:
+        Starting temperature value  Since 6.0
+    flowcell_temperature:
+        Temperature as measured by thermistor TH2 on the P-Chip.
+    chamber_temperature:
+        Flow-cell chamber-temperature, calculated from the pixel-block
+        temperatures
+    pixel_block_temperature:
+        Temperature measured at each sensor in the ASIC, there are 12
+        sensors, one sensor per pixel-block
 """
 DeviceSettings.__doc__ = """Attributes:
     sample_rate:
@@ -342,11 +340,6 @@ DeviceSettings.__doc__ = """Attributes:
         processes. The message includes a way of returning to default
         timings.  This value cannot be changed during acquisition
 """
-GetPixelBlockSettingsResponse.__doc__ = """Attributes:
-    pixel_blocks:
-        1 based map of different pixel blocks settings, containing 12
-        entries.
-"""
 TimingEnginePeriods.__doc__ = """buf:lint:ignore FIELD_LOWER_SNAKE_CASE  Timing-engine periods are
 specified in 5ns units. Some of the timing mechanism can only achieve
 10ns accuracy, so even numbers are preferred.  Note: There is a timing
@@ -393,28 +386,35 @@ Attributes:
         periods you previously entered are the same as the default
         values.
 """
-ChangeDeviceSettingsResponse.__doc__ = """Attributes:
-    real_sample_rate:
-        The sampling frequency actually applied to the hardware, as
-        close as possible to the requested rate.  Note: only returned
-        if sampling rate was set as part of this call.
-    real_sampling_frequency:
-        The sampling frequency actually applied to the hardware, as
-        close as possible to the requested rate.  Note: only returned
-        if sampling rate was set as part of this call.
+WaveformSettings.__doc__ = """Attributes:
+    voltages:
+        The waveform data applied to the device (in millivolts)  Must
+        contain 32, 128 or 1024 values, in order to be a valid
+        waveform when specified as a frequency When used as a "precise
+        waveform", may have between 1 and 1024 entries.
+    dac_values:
+        The waveform data applied to the device (in raw DAC units).
+        Cannot be set at the same time as voltages INVALID_ARGUMENT
+        will be returned if the length of voltages is greater than 254
+        INVALID_ARGUMENT will be returned if one of the values is
+        outside of [0-4095] (vce_dac_range)
+    samples_per_entry:
+        The number of samples each wavetable entry will be valid for
+        Valid value must be between [1..31] INVALID_ARGUMENT will be
+        returned if not between these values
+    frequency:
+        The frequency of the applied waveform, in Hz. This is ignored
+        if "precise_waveform" is set true.  Valid values are between
+        7.8125Hz and 500Hz.
+    precise_waveform:
+        When true the voltages in the waveform are applied at a rate
+        of one entry per frame, (and then repeated), rather than
+        repeating the whole table of voltages at the frequency
+        specified.  Not all hardware supports precise waveforms.
 """
-GetTemperatureResponse.__doc__ = """Attributes:
-    target_temperature:
-        Return the temperature target the device is aiming to reach.
-    starting_temperature:
-        Starting temperature value  Since 6.0
-    flowcell_temperature:
-        Temperature as measured by thermistor TH2 on the P-Chip.
-    chamber_temperature:
-        Flow-cell chamber-temperature, calculated from the pixel-block
-        temperatures
-    pixel_block_temperature:
-        Temperature measured at each sensor in the ASIC, there are 12
-        sensors, one sensor per pixel-block
+GetPixelSettingsRequest.__doc__ = """Attributes:
+    pixels:
+        The channels (one based) to return data for. A sparse map is
+        accepted
 """
 # @@protoc_insertion_point(module_scope)

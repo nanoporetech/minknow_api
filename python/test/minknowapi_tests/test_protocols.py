@@ -197,8 +197,8 @@ def test_make_target_run_until_criteria():
     """Check that `make_target_run_until_criteria` behaves as expected:
 
     - No arguments supplied -> empty message returned
-    - One argument supplied -> correct corresponding protobuf message returned
-    - Two arguments supplied -> throws
+    - Both `stop_criteria` and `experiment_duration` arguments supplied -> throws
+    - Any other cases -> correct corresponding protobuf message returned
 
     """
     # Not supplying any criteria
@@ -235,13 +235,47 @@ def test_make_target_run_until_criteria():
 
     assert actual == expected
 
-    # Supplying both
+    # Supplying both stop_criteria and experiment_duration
 
     with pytest.raises(ValueError):
         protocols.make_target_run_until_criteria(
             stop_criteria=protocols.CriteriaValues(runtime=123),
             experiment_duration=123.0,
         )
+
+    # Supplying only `pause_criteria`
+    pause_criteria_values = protocols.CriteriaValues(available_pores=42.125)
+
+    expected = minknow_api.acquisition_pb2.TargetRunUntilCriteria()
+    expected.pause_criteria.criteria["available_pores"].CopyFrom(
+        any_helpers.make_float_any(42.125)
+    )
+
+    actual = protocols.make_target_run_until_criteria(
+        pause_criteria=pause_criteria_values
+    )
+    assert actual == expected
+
+    # Supplying both `stop_criteria` and `pause_criteria`
+    stop_criteria_values = protocols.CriteriaValues(runtime=123, estimated_bases=456)
+    pause_criteria_values = protocols.CriteriaValues(available_pores=42.125)
+
+    expected = minknow_api.acquisition_pb2.TargetRunUntilCriteria()
+    expected.stop_criteria.criteria["runtime"].CopyFrom(
+        any_helpers.make_uint64_any(123)
+    )
+    expected.stop_criteria.criteria["estimated_bases"].CopyFrom(
+        any_helpers.make_uint64_any(456)
+    )
+    expected.pause_criteria.criteria["available_pores"].CopyFrom(
+        any_helpers.make_float_any(42.125)
+    )
+
+    actual = protocols.make_target_run_until_criteria(
+        stop_criteria=stop_criteria_values,
+        pause_criteria=pause_criteria_values,
+    )
+    assert actual == expected
 
 
 class DeviceServiceMock:
@@ -296,6 +330,27 @@ def test_start_protocol():
     start_protocol_args = device_connection.protocol.start_protocol_args
     assert run_id == device_connection.protocol.result.run_id
     assert start_protocol_args["analysis_workflow_request"] == workflow_params
+
+    # Test with pause criteria
+
+    pause_criteria_values = protocols.CriteriaValues(available_pores=42.125)
+    expected = minknow_api.acquisition_pb2.TargetRunUntilCriteria()
+    expected.pause_criteria.criteria["available_pores"].CopyFrom(
+        any_helpers.make_float_any(42.125)
+    )
+
+    run_id = protocols.start_protocol(
+        device_connection,
+        identifier="",
+        sample_id="",
+        experiment_group="",
+        barcode_info=None,
+        pause_criteria=pause_criteria_values,
+    )
+
+    start_protocol_args = device_connection.protocol.start_protocol_args
+    assert run_id == device_connection.protocol.result.run_id
+    assert start_protocol_args["target_run_until_criteria"] == expected
 
     # Test with empty AnalysisWorkflowRequest data
 

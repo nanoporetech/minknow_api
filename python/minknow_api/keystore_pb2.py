@@ -74,17 +74,28 @@ if not _descriptor._USE_C_DESCRIPTORS:
   _globals['_WATCHRESPONSE_VALUESENTRY']._serialized_end=314
   _globals['_KEYSTORESERVICE']._serialized_start=1061
   _globals['_KEYSTORESERVICE']._serialized_end=1510
-GetOneRequest.__doc__ = """Attributes:
-    name:
-        The name of the value to fetch.
+StoreRequest.__doc__ = """Attributes:
+    values:
+        The values to store.  See the notes in the KeyStore service
+        documentation about names - in short, for any values not
+        documented elsewhere, you should be prefixing the name with
+        "<product>:", where <product> is the name of your software
+        product.
+    lifetime:
+        Specify the lifetime of a value.  When storing values in the
+        manager, the only valid values are `UNTIL_INSTANCE_END` and
+        `PERSIST_ACROSS_RESTARTS`.  Using any other value will cause
+        the call to fail with `INVALID_ARGUMENT`  Note that calling
+        remove() will remove the value regardless of this setting.
 """
-GetRequest.__doc__ = """Attributes:
+RemoveRequest.__doc__ = """Attributes:
     names:
-        The names of the values you wish to fetch.
+        The names of the values you wish to remove.
     allow_missing:
         Whether to allow missing values.  If set, names that are not
-        present in the store will simply be omitted from the response.
-        Otherwise, missing values will cause an error to be returned.
+        present in the store will be ignored, but any present values
+        will still be removed. Otherwise, missing values will cause an
+        error to be returned (in which case nothing will be removed).
         Defaults to 'false'
 """
 WatchRequest.__doc__ = """Attributes:
@@ -109,37 +120,13 @@ WatchRequest.__doc__ = """Attributes:
         message will be sent with the set values. Otherwise, missing
         values will cause an immediate error.  Defaults to 'false'
 """
-GetOneResponse.__doc__ = """Attributes:
-    value:
-        The requested value.
-"""
-StoreRequest.__doc__ = """Attributes:
-    values:
-        The values to store.  See the notes in the KeyStore service
-        documentation about names - in short, for any values not
-        documented elsewhere, you should be prefixing the name with
-        "<product>:", where <product> is the name of your software
-        product.
-    lifetime:
-        Specify the lifetime of a value.  When storing values in the
-        manager, the only valid values are `UNTIL_INSTANCE_END` and
-        `PERSIST_ACROSS_RESTARTS`.  Using any other value will cause
-        the call to fail with `INVALID_ARGUMENT`  Note that calling
-        remove() will remove the value regardless of this setting.
+GetOneRequest.__doc__ = """Attributes:
+    name:
+        The name of the value to fetch.
 """
 GetResponse.__doc__ = """Attributes:
     values:
         The requested values.
-"""
-RemoveRequest.__doc__ = """Attributes:
-    names:
-        The names of the values you wish to remove.
-    allow_missing:
-        Whether to allow missing values.  If set, names that are not
-        present in the store will be ignored, but any present values
-        will still be removed. Otherwise, missing values will cause an
-        error to be returned (in which case nothing will be removed).
-        Defaults to 'false'
 """
 WatchResponse.__doc__ = """Attributes:
     runs:
@@ -150,5 +137,18 @@ WatchResponse.__doc__ = """Attributes:
         Subsequent messages will only contain the values that changed.
     removed_values:
         The values that have been removed.
+"""
+GetRequest.__doc__ = """Attributes:
+    names:
+        The names of the values you wish to fetch.
+    allow_missing:
+        Whether to allow missing values.  If set, names that are not
+        present in the store will simply be omitted from the response.
+        Otherwise, missing values will cause an error to be returned.
+        Defaults to 'false'
+"""
+GetOneResponse.__doc__ = """Attributes:
+    value:
+        The requested value.
 """
 # @@protoc_insertion_point(module_scope)

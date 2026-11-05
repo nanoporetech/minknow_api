@@ -456,19 +456,25 @@ def make_protocol_arguments(
 def make_target_run_until_criteria(
     stop_criteria: Optional[CriteriaValues] = None,
     experiment_duration: Optional[float] = None,
+    pause_criteria: Optional[CriteriaValues] = None,
 ) -> acquisition_pb2.TargetRunUntilCriteria:
     """Make an `acquisition.TargetRunUntilCriteria` message based on the supplied parameters
 
-    If `stop_criteria` is supplied, then the `stop_criteria` in the returned message are set to match the supplied
-    criteria.  Otherwise, if `experiment_duration` is supplied, then the "runtime" stop criterion in the returned
-    message is set to match the supplied `experiment_duration`.
+    If `stop_criteria` is supplied, then the `stop_criteria` in the returned message are set to
+    match the supplied criteria.  Otherwise, if `experiment_duration` is supplied, then the
+    "runtime" stop criterion in the returned message is set to match the supplied
+    `experiment_duration`. If both arguments are supplied, a `ValueError` is raised, since only
+    one or the other argument may be supplied.
 
-    If no arguments are supplied, the returned message will be empty.  If both arguments are supplied, a `ValueError`
-    is raised, since only one or the other argument may be supplied
+    If `pause_criteria` is supplied, then the `pause_criteria` in the returned message are set to
+    match the supplied criteria.
+
+    If no arguments are supplied, the returned message will be empty.
 
     Args:
         stop_criteria(:obj:`CriteriaValues`):   Stop criteria to set.
         experiment_duration(float):             Length of the experiment in hours.
+        pause_criteria(:obj:`CriteriaValues`):  Pause criteria to set.
 
     Returns:
         An `acquisition.TargetRunUntilCriteria` message with the specified criteria
@@ -488,9 +494,18 @@ def make_target_run_until_criteria(
         # `runtime` is in seconds
         stop_criteria = CriteriaValues(runtime=int(experiment_duration * 60 * 60))
 
-    if stop_criteria:
+    if stop_criteria and pause_criteria:
+        return acquisition_pb2.TargetRunUntilCriteria(
+            stop_criteria=stop_criteria.as_protobuf(),
+            pause_criteria=pause_criteria.as_protobuf(),
+        )
+    elif stop_criteria:
         return acquisition_pb2.TargetRunUntilCriteria(
             stop_criteria=stop_criteria.as_protobuf()
+        )
+    elif pause_criteria:
+        return acquisition_pb2.TargetRunUntilCriteria(
+            pause_criteria=pause_criteria.as_protobuf()
         )
     else:
         # Empty target criteria
@@ -505,6 +520,7 @@ def start_protocol(
     barcode_info: Optional[Sequence[BarcodeUserData]],
     stop_criteria: Optional[CriteriaValues] = None,
     experiment_duration: Optional[float] = None,
+    pause_criteria: Optional[CriteriaValues] = None,
     analysis_workflow_request: Optional[AnalysisWorkflowRequest] = None,
     offload_location_info: Optional[OffloadLocationInfo] = None,
     *args,
@@ -523,6 +539,7 @@ def start_protocol(
                 Analysis workflow request message
         stop_criteria(::obj::`TargetCriteria`): When to stop the acquisition
         experiment_duration(float):             Length of the experiment in hours.
+        pause_criteria(::obj::`TargetCriteria`): When to pause the acquisition
         offload_location_info(::obj::`OffloadLocationInfo`): Data Offload location info.
         *args: Additional arguments forwarded to {make_protocol_arguments}
         **kwargs: Additional arguments forwarded to {make_protocol_arguments}
@@ -553,6 +570,7 @@ def start_protocol(
     target_run_until_criteria = make_target_run_until_criteria(
         stop_criteria=stop_criteria,
         experiment_duration=experiment_duration,
+        pause_criteria=pause_criteria,
     )
 
     # Only pass analysis_workflow_request to start_protocol() if the user explicitly supplied it

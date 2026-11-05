@@ -75,61 +75,15 @@ if not _descriptor._USE_C_DESCRIPTORS:
   _globals['_SEQUENCERINFO_POSITION']._serialized_end=3121
   _globals['_HARDWARECHECKREPORTDATA']._serialized_start=3124
   _globals['_HARDWARECHECKREPORTDATA']._serialized_end=3293
-BasecallerInformation.__doc__ = """Attributes:
-    modifications:
-        Each string presents all modifications for a modified model
-        Link for a list of all compatible mods
-        github.com/nanoporetech/dorado#decoding-dorado-model-names
-        Example format: ["5mC in CG contexts", "5hmC & 5mC in CG
-        contexts"]
-"""
-ReportData.__doc__ = """This field has been removed  Since 5.6
+SequencerInfo.__doc__ = """Information describing the sequencer and sequencing positions that the
+Hardware Check was run on
 
 Attributes:
-    protocol_run_info:
-        Information about the executed protocol.
-    acquisitions:
-        Information about the acquisitions that are a part of the
-        protocol.
-    user_messages:
-        All the user messages from protocol start to protocol end.
-    report_data_generation_time:
-        The time at which the report data was generated (UTC)
-"""
-SequencerInfo.Position.__doc__ = """Attributes:
-    position_id:
-        The id of the position.  For MinIONs, this is the name of the
-        MinION (eg: MN12345). For integrated positions, this is the
-        label for the position on the sequencer (eg: X1 for GridION,
-        1-A1-D1 for PromethION).  This corresponds to the
-        `PositionCheckResult.position_id` in a given hardware check
-        result
-"""
-AcquistionReportData.__doc__ = """This is spelt incorrectly (should be AcquisitionReportData)
-
-Attributes:
-    acquisition_run_info:
-        Information about the executed acquisition
-    bucket_size:
-        Size of buckets for all statistics data, in minutes.
-    duty_time:
-        Statistics snapshots for the acquisition period. Formatted
-        into the same bucket size for all datatypes, computed from the
-        length of the experiment.
-    writer_config:
-        Information about the writer configuration  Since 5.9
-    basecaller_config:
-        Information about the basecaller configuration  Since 5.9
+    device_type:
+        Device Type (e.g. MinION, PromethION)
 """
 Host.__doc__ = """This is a subset of the information available from the describe_host()
 call"""
-HardwareCheckReportData.__doc__ = """Attributes:
-    sequencer_info:
-        Information about the sequencer the hardware check was run on
-        SequencerInfo will only be included for those sequencers where
-        hardware check results are being reported for at least one
-        position on the sequencer
-"""
 BasecallerInformation.DoradoModelName.__doc__ = """github.com/nanoporetech/dorado#decoding-dorado-model-names Document
 what the model names are
 
@@ -147,11 +101,57 @@ Attributes:
     model_version:
          version number/string
 """
-SequencerInfo.__doc__ = """Information describing the sequencer and sequencing positions that the
-Hardware Check was run on
+BasecallerInformation.__doc__ = """Attributes:
+    modifications:
+        Each string presents all modifications for a modified model
+        Link for a list of all compatible mods
+        github.com/nanoporetech/dorado#decoding-dorado-model-names
+        Example format: ["5mC in CG contexts", "5hmC & 5mC in CG
+        contexts"]
+"""
+AcquistionReportData.__doc__ = """This is spelt incorrectly (should be AcquisitionReportData)
 
 Attributes:
-    device_type:
-        Device Type (e.g. MinION, PromethION)
+    acquisition_run_info:
+        Information about the executed acquisition
+    bucket_size:
+        Size of buckets for all statistics data, in minutes.
+    duty_time:
+        Statistics snapshots for the acquisition period. Formatted
+        into the same bucket size for all datatypes, computed from the
+        length of the experiment.
+    writer_config:
+        Information about the writer configuration  Since 5.9
+    basecaller_config:
+        Information about the basecaller configuration  Since 5.9
+"""
+ReportData.__doc__ = """This field has been removed  Since 5.6
+
+Attributes:
+    protocol_run_info:
+        Information about the executed protocol.
+    acquisitions:
+        Information about the acquisitions that are a part of the
+        protocol.
+    user_messages:
+        All the user messages from protocol start to protocol end.
+    report_data_generation_time:
+        The time at which the report data was generated (UTC)
+"""
+HardwareCheckReportData.__doc__ = """Attributes:
+    sequencer_info:
+        Information about the sequencer the hardware check was run on
+        SequencerInfo will only be included for those sequencers where
+        hardware check results are being reported for at least one
+        position on the sequencer
+"""
+SequencerInfo.Position.__doc__ = """Attributes:
+    position_id:
+        The id of the position.  For MinIONs, this is the name of the
+        MinION (eg: MN12345). For integrated positions, this is the
+        label for the position on the sequencer (eg: X1 for GridION,
+        1-A1-D1 for PromethION).  This corresponds to the
+        `PositionCheckResult.position_id` in a given hardware check
+        result
 """
 # @@protoc_insertion_point(module_scope)
