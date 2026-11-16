@@ -94,36 +94,6 @@ if not _descriptor._USE_C_DESCRIPTORS:
   _globals['_CHANGERESEARCHONLYSETTINGSRESPONSE']._serialized_end=3364
   _globals['_PEBBLEDEVICESERVICE']._serialized_start=3367
   _globals['_PEBBLEDEVICESERVICE']._serialized_end=4124
-ResearchOnlySettings.InstrumentRegisterWrite.__doc__ = """Attributes:
-    address:
-        Register to write
-    value:
-        Value
-    delay:
-        Delay to add after this write, before the next
-"""
-ChannelSettings.__doc__ = """Attributes:
-    input:
-        The input to be digitised
-    mode:
-        The channel mode
-"""
-ChangeChannelSettingsRequest.__doc__ = """Attributes:
-    channels:
-        1 based map of up to 400 different channel settings
-    channel_default:
-        If supplied, contains settings applied to every channel before
-        then applying any specific settings in the per channel
-        settings.
-"""
-GetChannelSettingsResponse.__doc__ = """Attributes:
-    channels:
-        List of all requested pixel settings, in the order requested.
-"""
-GetChannelSettingsRequest.__doc__ = """Attributes:
-    channels:
-        The channels (one based) to return data for.
-"""
 ResearchOnlySettings.AsicRegisterWrite.__doc__ = """Attributes:
     address:
         Register to write to, value between 0..254
@@ -134,15 +104,27 @@ ResearchOnlySettings.AsicRegisterWrite.__doc__ = """Attributes:
     delay:
         Delay to add after this write, before the next
 """
-ChangeDeviceSettingsResponse.__doc__ = """Attributes:
-    real_sample_rate:
-        The sampling frequency actually applied to the hardware, as
-        close as possible to the requested rate.  Note: only returned
-        if sampling rate was set as part of this call.
-    real_sampling_frequency:
-        The sampling frequency actually applied to the hardware, as
-        close as possible to the requested rate.  Note: only returned
-        if sampling rate was set as part of this call.
+ResearchOnlySettings.InstrumentRegisterWrite.__doc__ = """Attributes:
+    address:
+        Register to write
+    value:
+        Value
+    delay:
+        Delay to add after this write, before the next
+"""
+ResearchOnlySettings.__doc__ = """Attributes:
+    asic_writes:
+        List of ASIC register writes to append Use at own risk as no
+        validation is performed on the address or value of the
+        individual writes.  The number of writes in single request
+        limited to 128 due to internal MinKNOW limitations
+        INVALID_ARGUMENT will be returned if greater than this limit
+    instrument_writes:
+        List of instrument register writes Use at own risk as no
+        validation is performed on the address or value of the
+        individual writes.  The number of writes in single request
+        limited to 16 due to internal MinKNOW limitations
+        INVALID_ARGUMENT will be returned if greater than this limit
 """
 DeviceSettings.__doc__ = """Attributes:
     sample_rate:
@@ -246,6 +228,16 @@ DeviceSettings.__doc__ = """Attributes:
         processes. The message includes a way of returning to default
         timings.  This value cannot be changed during acquisition
 """
+GetChannelSettingsResponse.__doc__ = """Attributes:
+    channels:
+        List of all requested pixel settings, in the order requested.
+"""
+ChannelSettings.__doc__ = """Attributes:
+    input:
+        The input to be digitised
+    mode:
+        The channel mode
+"""
 OverloadProtectionConfig.__doc__ = """Attributes:
     enabled:
         Set to enable or disable hardware based overload protection
@@ -264,6 +256,24 @@ OverloadProtectionConfig.__doc__ = """Attributes:
         is not specified, the previous value is kept. Valid value must
         be between [-2047..2047] INVALID_ARGUMENT will be returned if
         not between these values
+"""
+ChangeDeviceSettingsResponse.__doc__ = """Attributes:
+    real_sample_rate:
+        The sampling frequency actually applied to the hardware, as
+        close as possible to the requested rate.  Note: only returned
+        if sampling rate was set as part of this call.
+    real_sampling_frequency:
+        The sampling frequency actually applied to the hardware, as
+        close as possible to the requested rate.  Note: only returned
+        if sampling rate was set as part of this call.
+"""
+ChangeChannelSettingsRequest.__doc__ = """Attributes:
+    channels:
+        1 based map of up to 400 different channel settings
+    channel_default:
+        If supplied, contains settings applied to every channel before
+        then applying any specific settings in the per channel
+        settings.
 """
 WaveformSettings.__doc__ = """Attributes:
     voltages:
@@ -291,18 +301,8 @@ WaveformSettings.__doc__ = """Attributes:
         repeating the whole table of voltages at the frequency
         specified.  Not all hardware supports precise waveforms.
 """
-ResearchOnlySettings.__doc__ = """Attributes:
-    asic_writes:
-        List of ASIC register writes to append Use at own risk as no
-        validation is performed on the address or value of the
-        individual writes.  The number of writes in single request
-        limited to 128 due to internal MinKNOW limitations
-        INVALID_ARGUMENT will be returned if greater than this limit
-    instrument_writes:
-        List of instrument register writes Use at own risk as no
-        validation is performed on the address or value of the
-        individual writes.  The number of writes in single request
-        limited to 16 due to internal MinKNOW limitations
-        INVALID_ARGUMENT will be returned if greater than this limit
+GetChannelSettingsRequest.__doc__ = """Attributes:
+    channels:
+        The channels (one based) to return data for.
 """
 # @@protoc_insertion_point(module_scope)

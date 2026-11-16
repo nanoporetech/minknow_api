@@ -49,11 +49,6 @@ if not _descriptor._USE_C_DESCRIPTORS:
   _globals['_SIMULATEFRAMELOSSRESPONSE']._serialized_end=820
   _globals['_DEBUGSERVICE']._serialized_start=823
   _globals['_DEBUGSERVICE']._serialized_end=1432
-GetBasecallClientResponse.__doc__ = """Attributes:
-    client_state:
-        This debug string with internal debug data, in practice it
-        generally a JSON-formatted string.
-"""
 GetBasecallServerResponse.__doc__ = """Attributes:
     server_state:
         This debug string with internal debug data, in practice it
@@ -102,5 +97,10 @@ SimulateFrameLossRequest.__doc__ = """Attributes:
         Optional number of times to repeat the failed transfers  This
         will reset the frame loss on starting a new acquisition or
         resuming acquisition on an existing signal reader.
+"""
+GetBasecallClientResponse.__doc__ = """Attributes:
+    client_state:
+        This debug string with internal debug data, in practice it
+        generally a JSON-formatted string.
 """
 # @@protoc_insertion_point(module_scope)

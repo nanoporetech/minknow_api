@@ -214,13 +214,9 @@ if not _descriptor._USE_C_DESCRIPTORS:
   _globals['_APPENDMUXSCANRESULTRESPONSE']._serialized_end=7655
   _globals['_ACQUISITIONSERVICE']._serialized_start=8738
   _globals['_ACQUISITIONSERVICE']._serialized_end=10355
-GetProgressResponse.RawPerChannel.__doc__ = """Attributes:
-    acquired:
-        Number of samples (per channel) acquired from the device.
-    processed:
-        Number of samples (per channel) passed to the analysis
-        pipeline for processing.  This can be compared to acquired to
-        see how far behind the analysis is lagging.
+GetAcquisitionRunInfoRequest.__doc__ = """Attributes:
+    run_id:
+        The acquisition period to get information about.
 """
 MuxScanResult.__doc__ = """A report of the states of channel muxes (wells) across the flow cell.
 Every channel mux (well) is assigned to a specific category describing
@@ -239,149 +235,37 @@ Attributes:
         When this mux scan result was added (Seconds since the start
         of the acquisition).
 """
-AcquisitionConfigSummary.__doc__ = """This field has been removed Since 5.8
-
-Attributes:
-    purpose:
-        The purpose, as supplied to `acquisition.start()`
-    basecalling_enabled:
-        Was basecalling enabled for the run.
-    basecalling_config_filename:
-        Basecalling configuration filename (if basecalling enabled)
-    basecalling_model_names:
-        Specify the models to run by name (see
-        find_basecall_configurations in manager.proto)  Model names
-        should be taken from the `name` field of the above RPC
-        directly.  Since 6.3
-    basecalling_model_version:
-        Basecalling model version (empty if basecalling not enabled)
-        Since 6.0
-    duplex_enabled:
-        Was the experiment a duplex basecalling experiment (false if
-        basecalling is disabled)
-    barcoding_enabled:
-        Is barcoding enabled for the run
-    barcoding_kits:
-        / Barcoding kit(s) used (if barcoding enabled)
-    alignment_enabled:
-        Is alignment enabled for the run
-    alignment_reference_files:
-        Alignment reference file(s) used (if alignment enabled)
-    alignment_bed_file:
-        bed file used (if alignment enabled, and bed file specified)
-    lamp_enabled:
-        Is lamp enabled for the run  DEPRECATED 6.0: Lamp support has
-        been removed and this value will always be false.
-    lamp_kit:
-        The LAMP kit used (if LAMP enabled)  DEPRECATED 6.0: Lamp
-        support has been removed and this value will always be empty.
-    reads_directory:
-        Root directory reads were written to for the run.  Empty if no
-        reads were enabled.
-    reads_fallback_directories:
-        Directories reads are written to if the reads_directory is on
-        the network and writes to it fail.  Empty if no reads were
-        enabled.
-    fast5_reads_enabled:
-        Determine if fast5 reads were enabled for the run.  DEPRECATED
-        since 6.10: fast5 support will be removed in a future release
-    fastq_reads_enabled:
-        Determine if fastq reads were enabled for the run.
-    pod5_reads_enabled:
-        Determine if pod5 reads were enabled for the run.
-    bam_reads_enabled:
-        Determine if bam reads were enabled for the run
-    bulk_file_path:
-        The path of the bulk file for the run.  Empty if no reads were
-        enabled.
-    bulk_file_enabled:
-        Find if the bulk writer was enabled for a run.
-    channel_state_info:
-        Channel state styling information
-    events_to_base_ratio:
-        Number of bases per event
-    sample_rate:
-        Sample rate for the acquisition.  Since 3.3
-    channel_count:
-        Channel count used in the acquisition.  Since 3.3
-    signal_reader_config:
-        The configuration for the signal reader.  Since 6.10
+SetBreamInfoRequest.__doc__ = """Attributes:
+    info:
+        The information to set.  Note that, other than treating the
+        top-level fields independently (see the other flags on this
+        request), MinKNOW Core will not do anything special to the
+        data. In particular, the caller must fill in the
+        `mux_scan_timestamp` field in `MuxScanResult` messages.
+    overwrite_unset_fields:
+        If any `BreamInfo` fields were set in a previous call, but are
+        unset in the `info` field of this call, then use the old value
+        for them.  For example, to just update the mux_scan_metadata
+        field, use a BreamInfo object with only the
+        `mux_scan_metadata` field set, and leave this as False. To
+        clear the entire BreamInfo structure, leave `info` empty and
+        set this to True.
 """
-MuxScanMetadata.CategoryGroup.__doc__ = """Attributes:
+ChannelStateInfo.ChannelState.__doc__ = """Attributes:
+    id:
+        The numeric identifier of the state.  This is what is reported
+        in any other APIs that return a channel state ID.
     name:
-        The name of the group.
+        The internal name of the state.  This is what is reported in
+        any other APIs that return a channel state name.
     style:
-        How to render the group in a graphical user interface.
-    category:
-        The categories contained in the group.  Within this group,
-        categories should be presented in the order of this list.
-"""
-ChannelStateInfo.__doc__ = """Attributes:
-    groups:
-        The groups of channel states.  The groups are ordered
-        according to the "order" attribute of the group style in the
-        channel states configuration.
-"""
-AcquisitionYieldSummary.TotalsPerDuplexCategory.__doc__ = """Note: If duplex isn't enabled, all reads and basecalls will be classed
-as 'simplex' and the 'duplex' fields will be 0."""
-BreamInfo.__doc__ = """Information provided by Bream.  Note that this is provided by the
-protocol, and some protocols may choose not to provide this.
-
-Attributes:
-    mux_scan_metadata:
-        Presentation information for mux scan results.
-    mux_scan_results:
-        Mux scan results.
-    target_translocation_speed:
-        The ideal translocation speed range.  This can be used to
-        provide context for speed graphs (see the statistics RPCs),
-        showing what range is considered "good".
-    target_q_score:
-        The ideal quality (Q) score range.  This can be used to
-        provide context for q-score graphs (see the statistics RPCs),
-        showing what range is considered "good".
-    target_temperature:
-        The ideal temperature range.  This can be used to provide
-        context for temperature (see the statistics RPCs), showing
-        what range is considered "good".  Note that a protocol may
-        request a different temperature range than this (eg: it might
-        request a tighter range, or it may adjust the temperature it
-        is requesting throughout the run). This intended only to
-        provide context when presenting data to users.
-"""
-StopRequest.__doc__ = """Attributes:
-    wait_until_ready:
-        Defaults to false If false will return as soon as minknow
-        enters the FINISHING state. If true then returns as soon as
-        minknow enters the READY state.
-    keep_power_on:
-        Force the MinION/GridION ASIC power to be kept on after the
-        current acquisition finishes  Keeping the ASIC power on has
-        two main effects:       - The flow-cell will remain at the
-        correct operating temperature between acquisitions;
-        this allows following acquisition to be started more quickly.
-        - MinION/GridION flow cells may be damaged if they are removed
-        or plugged in while the        ASIC power is turned on.
-        Therefore, this option should be set to `true` if and only if
-        another acquisition will be performed using the same flow-
-        cell, soon after the acquisition that is being stopped.
-        Otherwise it should be set to `false` (or left unset) to
-        prevent potential damage to MinION/GridION flow-cells.  If
-        this option is set to `false` (or is left unset), then the
-        application configuration determines whether the power will be
-        left on when the acquisition finishes -- see the
-        `powered_when_idle` and `flongle_powered_when_idle`
-        configuration options for further details.  This option has no
-        effect on PromethIONs.  Since 1.15.2
-"""
-GetAcquisitionRunInfoRequest.__doc__ = """Attributes:
-    run_id:
-        The acquisition period to get information about.
-"""
-GetProgressResponse.__doc__ = """Attributes:
-    raw_per_channel:
-        The amount of raw data (per channel) that has been acquired
-        and processed.
+        How to render the channel state in a graphical user interface.
+        Note that the style may be missing from some channel states
+        (such as the ones that are built in to MinKNOW).
+    global_order:
+        An order ranking for the channel states when they are
+        ungrouped.  This can be used to order the channel states after
+        merging the groups.
 """
 AcquisitionYieldSummary.__doc__ = """Attributes:
     read_count:
@@ -456,12 +340,121 @@ AcquisitionYieldSummary.__doc__ = """Attributes:
         bases, if "alignment_matches" is 2500, then
         "alignment_coverage" will be 0.5  Since 4.3
 """
+GetProgressResponse.__doc__ = """Attributes:
+    raw_per_channel:
+        The amount of raw data (per channel) that has been acquired
+        and processed.
+"""
+GetProgressResponse.RawPerChannel.__doc__ = """Attributes:
+    acquired:
+        Number of samples (per channel) acquired from the device.
+    processed:
+        Number of samples (per channel) passed to the analysis
+        pipeline for processing.  This can be compared to acquired to
+        see how far behind the analysis is lagging.
+"""
+AcquisitionConfigSummary.__doc__ = """This field has been removed Since 5.8
+
+Attributes:
+    purpose:
+        The purpose, as supplied to `acquisition.start()`
+    basecalling_enabled:
+        Was basecalling enabled for the run.
+    basecalling_config_filename:
+        Basecalling configuration filename (if basecalling enabled)
+    basecalling_model_names:
+        Specify the models to run by name (see
+        find_basecall_configurations in manager.proto)  Model names
+        should be taken from the `name` field of the above RPC
+        directly.  Since 6.3
+    basecalling_model_version:
+        Basecalling model version (empty if basecalling not enabled)
+        Since 6.0
+    duplex_enabled:
+        Was the experiment a duplex basecalling experiment (false if
+        basecalling is disabled)
+    barcoding_enabled:
+        Is barcoding enabled for the run
+    barcoding_kits:
+        / Barcoding kit(s) used (if barcoding enabled)
+    alignment_enabled:
+        Is alignment enabled for the run
+    alignment_reference_files:
+        Alignment reference file(s) used (if alignment enabled)
+    alignment_bed_file:
+        bed file used (if alignment enabled, and bed file specified)
+    lamp_enabled:
+        Is lamp enabled for the run  DEPRECATED 6.0: Lamp support has
+        been removed and this value will always be false.
+    lamp_kit:
+        The LAMP kit used (if LAMP enabled)  DEPRECATED 6.0: Lamp
+        support has been removed and this value will always be empty.
+    reads_directory:
+        Root directory reads were written to for the run.  Empty if no
+        reads were enabled.
+    reads_fallback_directories:
+        Directories reads are written to if the reads_directory is on
+        the network and writes to it fail.  Empty if no reads were
+        enabled.
+    fast5_reads_enabled:
+        Determine if fast5 reads were enabled for the run.  DEPRECATED
+        since 6.10: fast5 support will be removed in a future release
+    fastq_reads_enabled:
+        Determine if fastq reads were enabled for the run.
+    pod5_reads_enabled:
+        Determine if pod5 reads were enabled for the run.
+    bam_reads_enabled:
+        Determine if bam reads were enabled for the run
+    bulk_file_path:
+        The path of the bulk file for the run.  Empty if no reads were
+        enabled.
+    bulk_file_enabled:
+        Find if the bulk writer was enabled for a run.
+    channel_state_info:
+        Channel state styling information
+    events_to_base_ratio:
+        Number of bases per event
+    sample_rate:
+        Sample rate for the acquisition.  Since 3.3
+    channel_count:
+        Channel count used in the acquisition.  Since 3.3
+    signal_reader_config:
+        The configuration for the signal reader.  Since 6.10
+"""
+BreamInfo.Range.__doc__ = """Represents a range of values."""
+StopRequest.__doc__ = """Attributes:
+    wait_until_ready:
+        Defaults to false If false will return as soon as minknow
+        enters the FINISHING state. If true then returns as soon as
+        minknow enters the READY state.
+    keep_power_on:
+        Force the MinION/GridION ASIC power to be kept on after the
+        current acquisition finishes  Keeping the ASIC power on has
+        two main effects:       - The flow-cell will remain at the
+        correct operating temperature between acquisitions;
+        this allows following acquisition to be started more quickly.
+        - MinION/GridION flow cells may be damaged if they are removed
+        or plugged in while the        ASIC power is turned on.
+        Therefore, this option should be set to `true` if and only if
+        another acquisition will be performed using the same flow-
+        cell, soon after the acquisition that is being stopped.
+        Otherwise it should be set to `false` (or left unset) to
+        prevent potential damage to MinION/GridION flow-cells.  If
+        this option is set to `false` (or is left unset), then the
+        application configuration determines whether the power will be
+        left on when the acquisition finishes -- see the
+        `powered_when_idle` and `flongle_powered_when_idle`
+        configuration options for further details.  This option has no
+        effect on PromethIONs.  Since 1.15.2
+"""
 StartResponse.__doc__ = """Attributes:
     run_id:
         Globally-unique identifier generated when the acquisition is
         started.  This is guaranteed to unique, including aross
         sequencing devices.
 """
+AcquisitionYieldSummary.TotalsPerDuplexCategory.__doc__ = """Note: If duplex isn't enabled, all reads and basecalls will be classed
+as 'simplex' and the 'duplex' fields will be 0."""
 MuxScanMetadata.Style.__doc__ = """Presentation information for a category or group.
 
 Attributes:
@@ -476,6 +469,59 @@ Attributes:
         is a six-digit hex string describing an RGB colour (eg:
         "ff0000" for red).
 """
+MuxScanMetadata.Category.__doc__ = """A category that a channel mux can be assigned.
+
+Attributes:
+    name:
+        Name of the category.  This is the value that will be in the
+        `MuxScanResult.counts` field.  The user should not be shown
+        this. Instead, `style.label` should be displayed.
+    style:
+        How to render the category in a graphical user interface.
+    global_order:
+        An order ranking for the category when displaying them without
+        using groups.
+"""
+SetSignalReaderRequest.__doc__ = """Attributes:
+    reader:
+        The type of signal reader to use
+    hdf_source:
+        The following settings are optional, and only used when
+        setting the reader to hdf5
+    hdf_mode:
+         Defaults to UNSPECIFIED, since this setting is optional
+"""
+BreamInfo.__doc__ = """Information provided by Bream.  Note that this is provided by the
+protocol, and some protocols may choose not to provide this.
+
+Attributes:
+    mux_scan_metadata:
+        Presentation information for mux scan results.
+    mux_scan_results:
+        Mux scan results.
+    target_translocation_speed:
+        The ideal translocation speed range.  This can be used to
+        provide context for speed graphs (see the statistics RPCs),
+        showing what range is considered "good".
+    target_q_score:
+        The ideal quality (Q) score range.  This can be used to
+        provide context for q-score graphs (see the statistics RPCs),
+        showing what range is considered "good".
+    target_temperature:
+        The ideal temperature range.  This can be used to provide
+        context for temperature (see the statistics RPCs), showing
+        what range is considered "good".  Note that a protocol may
+        request a different temperature range than this (eg: it might
+        request a tighter range, or it may adjust the temperature it
+        is requesting throughout the run). This intended only to
+        provide context when presenting data to users.
+"""
+ChannelStateInfo.__doc__ = """Attributes:
+    groups:
+        The groups of channel states.  The groups are ordered
+        according to the "order" attribute of the group style in the
+        channel states configuration.
+"""
 AcquisitionWriterSummary.__doc__ = """Attributes:
     bytes_to_write_produced:
         Number of bytes which minknow needs to write in order to
@@ -486,6 +532,107 @@ AcquisitionWriterSummary.__doc__ = """Attributes:
         fallback/tmp locations.
     bytes_to_write_completed:
         Number of bytes which minknow has written to final location.
+"""
+GetSignalReaderResponse.__doc__ = """Attributes:
+    reader:
+        The type of signal reader to use
+    playback_source:
+        The following is only set if the signal reader is a playback
+        source.
+"""
+MuxScanMetadata.CategoryGroup.__doc__ = """Attributes:
+    name:
+        The name of the group.
+    style:
+        How to render the group in a graphical user interface.
+    category:
+        The categories contained in the group.  Within this group,
+        categories should be presented in the order of this list.
+"""
+AcquisitionRunInfo.__doc__ = """Attributes:
+    run_id:
+        The unique identifier assigned to this acquisition run.  This
+        is guaranteed to be made of ASCII characters, and at most 40
+        characters. It is globally unique across all acquisitions on
+        all MinKNOW instances.
+    startup_state:
+        Current startup task (or STARTUP_UNKNOWN if not starting up).
+    startup_state_estimated_end:
+        Estimated time for current startup state to end.  In some
+        cases this field is left unset, to indicate no estimation.
+    startup_state_estimated_percent_complete:
+        Estimate startup state completion percent (0 - 1).  In some
+        cases this field is left at 0, indicating no estimation.
+    state:
+        Indicates the current state of the acquisition.
+    finishing_state:
+        If the experiment is finishing, an extra piece of state
+        describing the current finishing state.
+    finishing_state_percent_complete:
+        Progress through the current finishing state, ranges from 0 -
+        1.  This will increase from 0 -> 1 for each individual
+        finishing state, then reset.
+    stop_reason:
+        The reason the acquisition period was ended.
+    start_time:
+        When the acquisition period was started (UTC).
+    data_read_start_time:
+        When MinKNOW began acquiring data (UTC).  Unset if the
+        acquisition is still starting up.
+    data_read_end_time:
+        When the MinKNOW stopped acquiring data (UTC).  Unset if the
+        acquisition is still acquiring.
+    end_time:
+        When the acquisition terminated (UTC).  Unset if the
+        acquisition period is still running.
+    yield_summary:
+        Summary of acquisition yields.  Since 1.12
+    config_summary:
+        Summary of the configuration settings for a run.  Since 1.14
+    writer_summary:
+        Summary of writer yields.  Since 4.0
+    bream_info:
+        Set information provided by the Bream toolkit.
+    target_run_until_criteria:
+        Target Run-Until Criteria, used to determine when the
+        acquisition should be paused or stopped.  Since 5.3
+"""
+ReadUntilInfo.__doc__ = """Attributes:
+    filter_type:
+        Filter type. Example values include enrich, deplete,
+        unblock_all, _run_until_barcode_coverage,
+        _run_until_barcode_read_count
+    reference_files:
+        A string path to the reference file, only one is currently
+        permitted
+    bed_file:
+        Bed file path
+"""
+ChannelStateInfo.Group.__doc__ = """Attributes:
+    name:
+        The name of the group.
+    style:
+        How to render the group in a graphical user interface.  Note
+        that the style may be missing from some groups (such as the
+        ones that are built in to MinKNOW).
+    states:
+        The channel states contained in the group.  The groups are
+        ordered according to the "order" attribute of the channel
+        state style in the channel states configuration.
+"""
+MuxScanMetadata.__doc__ = """Provides information about how mux scans are configured.  This
+primarily information to help present mux scan results to the user
+(see `MuxScanResult`).
+
+Attributes:
+    auto_mux_scan_period_hours:
+        How frequently automatic scans are scheduled to occur.
+    category_groups:
+        Presentation information for categories.  Describes the
+        preferred way to present mux scan categories to users. Groups
+        should be presented in the order of this list.
+    enable_reserve_pore:
+        Pore reserve
 """
 StartRequest.__doc__ = """ Protobuf messages for input/output of RPC calls
 
@@ -575,152 +722,5 @@ ChannelStateInfo.Style.__doc__ = """Attributes:
         The colour to use when rendering this channel state or group.
         This is a six-digit hex string describing an RGB colour (eg:
         "ff00ff" for purple).
-"""
-ChannelStateInfo.ChannelState.__doc__ = """Attributes:
-    id:
-        The numeric identifier of the state.  This is what is reported
-        in any other APIs that return a channel state ID.
-    name:
-        The internal name of the state.  This is what is reported in
-        any other APIs that return a channel state name.
-    style:
-        How to render the channel state in a graphical user interface.
-        Note that the style may be missing from some channel states
-        (such as the ones that are built in to MinKNOW).
-    global_order:
-        An order ranking for the channel states when they are
-        ungrouped.  This can be used to order the channel states after
-        merging the groups.
-"""
-MuxScanMetadata.__doc__ = """Provides information about how mux scans are configured.  This
-primarily information to help present mux scan results to the user
-(see `MuxScanResult`).
-
-Attributes:
-    auto_mux_scan_period_hours:
-        How frequently automatic scans are scheduled to occur.
-    category_groups:
-        Presentation information for categories.  Describes the
-        preferred way to present mux scan categories to users. Groups
-        should be presented in the order of this list.
-    enable_reserve_pore:
-        Pore reserve
-"""
-MuxScanMetadata.Category.__doc__ = """A category that a channel mux can be assigned.
-
-Attributes:
-    name:
-        Name of the category.  This is the value that will be in the
-        `MuxScanResult.counts` field.  The user should not be shown
-        this. Instead, `style.label` should be displayed.
-    style:
-        How to render the category in a graphical user interface.
-    global_order:
-        An order ranking for the category when displaying them without
-        using groups.
-"""
-SetSignalReaderRequest.__doc__ = """Attributes:
-    reader:
-        The type of signal reader to use
-    hdf_source:
-        The following settings are optional, and only used when
-        setting the reader to hdf5
-    hdf_mode:
-         Defaults to UNSPECIFIED, since this setting is optional
-"""
-ReadUntilInfo.__doc__ = """Attributes:
-    filter_type:
-        Filter type. Example values include enrich, deplete,
-        unblock_all, _run_until_barcode_coverage,
-        _run_until_barcode_read_count
-    reference_files:
-        A string path to the reference file, only one is currently
-        permitted
-    bed_file:
-        Bed file path
-"""
-BreamInfo.Range.__doc__ = """Represents a range of values."""
-SetBreamInfoRequest.__doc__ = """Attributes:
-    info:
-        The information to set.  Note that, other than treating the
-        top-level fields independently (see the other flags on this
-        request), MinKNOW Core will not do anything special to the
-        data. In particular, the caller must fill in the
-        `mux_scan_timestamp` field in `MuxScanResult` messages.
-    overwrite_unset_fields:
-        If any `BreamInfo` fields were set in a previous call, but are
-        unset in the `info` field of this call, then use the old value
-        for them.  For example, to just update the mux_scan_metadata
-        field, use a BreamInfo object with only the
-        `mux_scan_metadata` field set, and leave this as False. To
-        clear the entire BreamInfo structure, leave `info` empty and
-        set this to True.
-"""
-ChannelStateInfo.Group.__doc__ = """Attributes:
-    name:
-        The name of the group.
-    style:
-        How to render the group in a graphical user interface.  Note
-        that the style may be missing from some groups (such as the
-        ones that are built in to MinKNOW).
-    states:
-        The channel states contained in the group.  The groups are
-        ordered according to the "order" attribute of the channel
-        state style in the channel states configuration.
-"""
-AcquisitionRunInfo.__doc__ = """Attributes:
-    run_id:
-        The unique identifier assigned to this acquisition run.  This
-        is guaranteed to be made of ASCII characters, and at most 40
-        characters. It is globally unique across all acquisitions on
-        all MinKNOW instances.
-    startup_state:
-        Current startup task (or STARTUP_UNKNOWN if not starting up).
-    startup_state_estimated_end:
-        Estimated time for current startup state to end.  In some
-        cases this field is left unset, to indicate no estimation.
-    startup_state_estimated_percent_complete:
-        Estimate startup state completion percent (0 - 1).  In some
-        cases this field is left at 0, indicating no estimation.
-    state:
-        Indicates the current state of the acquisition.
-    finishing_state:
-        If the experiment is finishing, an extra piece of state
-        describing the current finishing state.
-    finishing_state_percent_complete:
-        Progress through the current finishing state, ranges from 0 -
-        1.  This will increase from 0 -> 1 for each individual
-        finishing state, then reset.
-    stop_reason:
-        The reason the acquisition period was ended.
-    start_time:
-        When the acquisition period was started (UTC).
-    data_read_start_time:
-        When MinKNOW began acquiring data (UTC).  Unset if the
-        acquisition is still starting up.
-    data_read_end_time:
-        When the MinKNOW stopped acquiring data (UTC).  Unset if the
-        acquisition is still acquiring.
-    end_time:
-        When the acquisition terminated (UTC).  Unset if the
-        acquisition period is still running.
-    yield_summary:
-        Summary of acquisition yields.  Since 1.12
-    config_summary:
-        Summary of the configuration settings for a run.  Since 1.14
-    writer_summary:
-        Summary of writer yields.  Since 4.0
-    bream_info:
-        Set information provided by the Bream toolkit.
-    target_run_until_criteria:
-        Target Run-Until Criteria, used to determine when the
-        acquisition should be paused or stopped.  Since 5.3
-"""
-GetSignalReaderResponse.__doc__ = """Attributes:
-    reader:
-        The type of signal reader to use
-    playback_source:
-        The following is only set if the signal reader is a playback
-        source.
 """
 # @@protoc_insertion_point(module_scope)

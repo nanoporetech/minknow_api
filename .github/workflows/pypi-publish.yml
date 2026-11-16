@@ -8,13 +8,16 @@ jobs:
   build-n-publish:
       name: Build and publish minknow-api to pypi
       runs-on: ubuntu-latest
+      permissions:
+        contents: read
+        id-token: write   # lets the job request a PyPI token through OIDC
 
       steps:
-        - uses: actions/checkout@master
-        - name: Set up Python 3.10
-          uses: actions/setup-python@v1
+        - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        - name: Set up Python 3.13
+          uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
           with:
-            python-version: "3.10"
+            python-version: "3.13"
 
         - name: Install pypa/build
           run: python -m pip install build==0.7.0 --user
@@ -25,7 +28,4 @@ jobs:
             python -m build --sdist --wheel --outdir ../dist .
 
         - name: Publish to PyPI
-          uses: pypa/gh-action-pypi-publish@master
-          with:
-            user: __token__
-            password: ${{ secrets.PYPI_API_TOKEN }}
+          uses: pypa/gh-action-pypi-publish@7245906fb61fa33a13554f9d5fb856fe61758086 # v1.14.3
